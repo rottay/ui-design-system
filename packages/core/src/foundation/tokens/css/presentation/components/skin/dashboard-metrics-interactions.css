@@ -10,10 +10,10 @@
 /* minimal ----------------------------------------------------------------- */
 
 :where(.ds-metrics-minimal) .minimal-metric-row {
-  animation: ds-metrics-minimal-slide-in 0.4s ease-out both;
+  animation: ds-metrics-minimal-slide-in var(--ds-motion-reveal) var(--ds-motion-ease-enter, ease-out) both;
   /* Cadence re-anchored to the motion rungs (the 200ms fallback is the exact
-     duration it replaces); only rows/minimal scopes were retuned in this
-     pass — cards/chart keep their pinned literals for their owner. */
+     duration it replaces). C-08: cards/chart scopes were retuned to the same
+     rungs by their owner; directional slide-ins mirror under RTL (below). */
   transition:
     background-color var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out),
     border-color var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out),
@@ -52,6 +52,23 @@
   }
 }
 
+/* Entrance direction is logical: the slide walks in from inline-start, so it
+   mirrors under RTL (the reduced-motion block below neutralizes both). */
+@keyframes ds-metrics-minimal-slide-in-rtl {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+[dir='rtl'] :where(.ds-metrics-minimal) .minimal-metric-row {
+  animation-name: ds-metrics-minimal-slide-in-rtl;
+}
+
 @keyframes ds-metrics-minimal-glow {
   0%, 100% {
     box-shadow: 0 0 4px var(--ds-signal-card-badge-color, var(--ds-color-success)), 0 0 8px var(--ds-signal-card-badge-color, var(--ds-color-success));
@@ -81,16 +98,29 @@
 
 /* cards ------------------------------------------------------------------- */
 
+/* C-08 retune (this canary owns cards/chart): the playful bounce is retired
+   for the governed rungs — a calm rise on `--ds-motion-reveal` /
+   `--ds-motion-ease-enter`, and the transition fallback mirrors the
+   rows/minimal token pattern (the `--ds-metric-card-*` tenant sockets keep
+   winning verbatim). */
 :where(.ds-metrics-cards) .metric-card-v3 {
-  animation: ds-metrics-cards-card-enter 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-  transition: var(--ds-metric-card-transition, all 0.4s cubic-bezier(0.4, 0, 0.2, 1));
+  animation: ds-metrics-cards-card-enter var(--ds-motion-reveal) var(--ds-motion-ease-enter, ease-out) both;
+  transition: var(
+    --ds-metric-card-transition,
+    border-color var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out),
+    color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out)
+  );
 }
 
-/* Hover law: hover-capable pointers only (touch never leaves a stuck lift). */
+/* Hover law: hover-capable pointers only (touch never leaves a stuck lift).
+   The default lift is a precise 2px rise — no cartoon scale; the
+   `--ds-metric-card-hover-transform` socket stays the tenant override. */
 @media (hover: hover) {
   :where(.ds-metrics-cards) .metric-card-v3:hover {
     border-color: var(--ds-metric-card-border-hover, var(--ds-signal-card-border-hover, var(--ds-color-primary-200)));
-    transform: var(--ds-metric-card-hover-transform, translateY(-6px) scale(1.02));
+    transform: var(--ds-metric-card-hover-transform, translateY(-2px));
     box-shadow: var(--ds-metric-card-shadow-hover, var(--ds-metric-card-shadow, var(--ds-signal-card-shadow-hover, none)));
   }
 
@@ -106,11 +136,11 @@
 @keyframes ds-metrics-cards-card-enter {
   from {
     opacity: 0;
-    transform: translateY(30px) scale(0.9);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
   }
 }
 
@@ -144,7 +174,7 @@
 /* chart ------------------------------------------------------------------- */
 
 :where(.ds-metrics-chart) .metric-chart-row-v3 {
-  animation: ds-metrics-chart-slide-in 0.4s ease-out both;
+  animation: ds-metrics-chart-slide-in var(--ds-motion-reveal) var(--ds-motion-ease-enter, ease-out) both;
   transition:
     background-color var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out),
     border-color var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out),
@@ -183,6 +213,21 @@
   }
 }
 
+@keyframes ds-metrics-chart-slide-in-rtl {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+[dir='rtl'] :where(.ds-metrics-chart) .metric-chart-row-v3 {
+  animation-name: ds-metrics-chart-slide-in-rtl;
+}
+
 @keyframes ds-metrics-chart-glow {
   0%, 100% {
     box-shadow: 0 0 3px var(--ds-signal-card-badge-color, var(--ds-color-success)), 0 0 6px var(--ds-signal-card-badge-color, var(--ds-color-success));
@@ -213,7 +258,7 @@
 /* rows -------------------------------------------------------------------- */
 
 :where(.ds-metrics-rows) .metric-row-v3 {
-  animation: ds-metrics-rows-row-slide-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation: ds-metrics-rows-row-slide-in var(--ds-motion-reveal) var(--ds-motion-ease-enter, ease-out) both;
   transition:
     border-color var(--ds-motion-slow) var(--ds-motion-ease-out, ease-out),
     box-shadow var(--ds-motion-slow) var(--ds-motion-ease-out, ease-out),
@@ -250,12 +295,27 @@
 @keyframes ds-metrics-rows-row-slide-in {
   from {
     opacity: 0;
-    transform: translateX(-30px);
+    transform: translateX(-12px);
   }
   to {
     opacity: 1;
     transform: translateX(0);
   }
+}
+
+@keyframes ds-metrics-rows-row-slide-in-rtl {
+  from {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+[dir='rtl'] :where(.ds-metrics-rows) .metric-row-v3 {
+  animation-name: ds-metrics-rows-row-slide-in-rtl;
 }
 
 @keyframes ds-metrics-rows-shimmer {
@@ -296,8 +356,9 @@
 
 /* Reduced motion: every keyframed loop (entrances, glows, shimmer) and every
    shared transition goes quiet — the own skins already kill their part-level
-   transitions; this block owns the loops declared above. Placed last so it
-   wins on equal `:where()` weight. */
+   transitions; this block owns the loops declared above. The RTL entrance
+   mirrors outrank the base selectors, so they are neutralized explicitly.
+   Placed last so it wins on equal `:where()` weight. */
 @media (prefers-reduced-motion: reduce) {
   :where(.ds-metrics-minimal) .minimal-metric-row,
   :where(.ds-metrics-minimal) .live-dot,
@@ -307,7 +368,10 @@
   :where(.ds-metrics-chart) .live-dot-chart,
   :where(.ds-metrics-rows) .metric-row-v3,
   :where(.ds-metrics-rows) .live-dot-v3,
-  :where(.ds-metrics-rows) .metric-row-v3:hover .row-shimmer {
+  :where(.ds-metrics-rows) .metric-row-v3:hover .row-shimmer,
+  [dir='rtl'] :where(.ds-metrics-minimal) .minimal-metric-row,
+  [dir='rtl'] :where(.ds-metrics-chart) .metric-chart-row-v3,
+  [dir='rtl'] :where(.ds-metrics-rows) .metric-row-v3 {
     animation: none;
     transition: none;
   }

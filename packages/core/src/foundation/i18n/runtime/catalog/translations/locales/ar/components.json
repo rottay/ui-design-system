@@ -1016,7 +1016,9 @@
     "moreOptions": "خيارات إضافية",
     "export": "تصدير",
     "active": "نشطة",
-    "clearAll": "مسح الكل"
+    "clearAll": "مسح الكل",
+    "draft": "مسودة",
+    "invalid": "غير صالح"
   },
   "liveFeed": {
     "refresh": "تحديث",
@@ -1187,7 +1189,9 @@
     "clearAll": "مسح الكل",
     "addFilter": "إضافة مرشح",
     "more_count": "+{count} أخرى",
-    "show_less": "عرض أقل"
+    "show_less": "عرض أقل",
+    "state_draft": "مسودة",
+    "state_invalid": "غير صالح"
   },
   "columnMenu": {
     "alwaysVisible": "مرئية دائمًا في الجدول",

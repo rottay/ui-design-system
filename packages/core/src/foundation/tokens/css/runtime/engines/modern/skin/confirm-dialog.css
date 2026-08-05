@@ -31,10 +31,12 @@
  * 40% alpha this component always painted) and gains the frost tint + blur
  * from the `--ds-glass-*` family, both scaling with `--ds-effect-intensity`.
  *
- * SURFACE (spec section 3): overlay elevation via `--ds-elevation-3`, the
- * dark-aware luminance step (`--ds-elevation-surface-4` lift layer — inert
- * where `--ds-elevation-lift-strength` is 0) and a hairline
- * `--ds-color-border-subtle` edge so the panel reads on dark surfaces.
+ * SURFACE (spec section 3): the decision chamber's elevation via
+ * `--ds-modal-shadow` (rung-4 floor), the dark-aware luminance step
+ * (`--ds-elevation-surface-4` lift layer — inert where
+ * `--ds-elevation-lift-strength` is 0), the family's common-light zenith
+ * keyline, and a hairline `--ds-color-border-subtle` edge so the panel reads
+ * on dark surfaces.
  *
  * MOTION (spec section 2): panel and scrim enter on the shared
  * `--ds-motion-normal` / `--ds-motion-ease-out` cadence with engine-namespaced
@@ -113,7 +115,13 @@
     var(--ds-motion-ease-out) both;
 }
 
-/* ---- dialog card: overlay material (fill + dark lift + elevation) ---- */
+/* ---- dialog card: the decision chamber's material (fill + dark lift +
+        elevation), aligned with alert-dialog.css: a blocking confirm reads
+        the chamber channels (--ds-modal-bg fill, --ds-modal-radius geometry,
+        --ds-modal-shadow elevation with a rung-4 floor) instead of sitting
+        on the contextual band — this panel previously painted --ds-elevation-3,
+        the same rung as the dropdowns and popovers it blocks, flattening the
+        stratigraphy. The zenith keyline is the family's common light model. ---- */
 .rottay-confirm-dialog--modern[data-part='backdrop'] > [data-part='surface'] {
   /* The lift overlay is its own layer directly above the fill so the fallback
      chain stays untouched; it is inert until a dark surface raises
@@ -122,10 +130,12 @@
      `position: relative` is drained from the engine's former inline static
      (Pass-2 P0): it keeps the panel painting above the positioned scrim. */
   position: relative;
-  background-color: var(--ds-surface-card);
+  background-color: var(--ds-modal-bg, var(--ds-surface-card));
   background-image: linear-gradient(var(--ds-elevation-surface-4), var(--ds-elevation-surface-4));
-  border-radius: var(--ds-radius-lg);
-  box-shadow: var(--ds-elevation-3);
+  border-radius: var(--ds-modal-radius, var(--ds-radius-lg));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(72% * var(--ds-effect-intensity, 1)), transparent),
+    var(--ds-modal-shadow, var(--ds-elevation-4));
   inline-size: 100%;
   max-inline-size: min(
     var(--ds-confirm-dialog-max-width, 24rem),
@@ -249,6 +259,29 @@
     animation-duration: 1ms;
     animation-timing-function: linear;
     transform: none;
+  }
+}
+
+/* The runtime motion switch (not just the OS media query) retires the
+   entrance too — popover.css's `data-ds-motion` idiom, which this skin was
+   missing (alert-dialog.css parity). */
+html[data-ds-motion='reduced']
+  .rottay-confirm-dialog--modern[data-part='backdrop'] > [data-part='scrim'],
+html[data-ds-motion='reduced']
+  .rottay-confirm-dialog--modern[data-part='backdrop'] > [data-part='surface'] {
+  animation-duration: 1ms;
+  animation-timing-function: linear;
+  transform: none;
+}
+
+/* Reduced transparency: the glass layer retires entirely — no blur, no frost
+   tint (overlay-modal.css's law, which this skin was missing). The authored
+   scrim fill stays; it is a flat veil, not a see-through panel. */
+@media (prefers-reduced-transparency: reduce) {
+  .rottay-confirm-dialog--modern[data-part='backdrop'] > [data-part='scrim'] {
+    background-image: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
 }
 

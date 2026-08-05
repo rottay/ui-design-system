@@ -8,10 +8,14 @@
  * `200% 100%` sizing (identical across all eight, so one selector list owns it);
  * the `ds-skeleton-shimmer` animation reference (the shared canon keyframe in
  * foundation/animations/keyframes.css) stays inline on each block. Corner radii
- * are per-part static
- * values except Avatar/Button,
- * whose shape-conditional radius rides a hatch stamped inline
- * (--ds-skeleton-avatar-radius / --ds-skeleton-button-radius).
+ * anticipate the content they replace: Avatar/Button keep their
+ * shape-conditional inline hatch (--ds-skeleton-avatar-radius /
+ * --ds-skeleton-button-radius), while every line/label/cell placeholder reads
+ * the family channel --ds-skeleton-line-radius (the same one the engine skin
+ * consumes) with an edge-dial fallback -- `calc(<historical px> *
+ * var(--ds-radius-scale, 1))` -- so the preview's corners follow the tenant
+ * radius personality instead of sitting on frozen literals (scale 1 renders
+ * byte-identical to the historical 4px/6px/8px).
  *
  * LAYOUT (P2 second pass): all static geometry that used to ride inline styles
  * in the compound TSX — column stacks, row grids, gaps, paddings, block sizes
@@ -83,7 +87,7 @@
 }
 .rottay-skeleton-card [data-part='title'],
 .rottay-skeleton-card [data-part='line'] {
-  border-radius: 4px;
+  border-radius: var(--ds-skeleton-line-radius, calc(4px * var(--ds-radius-scale, 1)));
 }
 /* Title line is 60% width at title height to read as the card's heading. */
 .rottay-skeleton-card [data-part='title'] {
@@ -110,11 +114,14 @@
 }
 .rottay-skeleton-form [data-part='label'] {
   block-size: 0.875rem;
-  border-radius: 4px;
+  border-radius: var(--ds-skeleton-line-radius, calc(4px * var(--ds-radius-scale, 1)));
 }
 .rottay-skeleton-form [data-part='input'],
 .rottay-skeleton-form [data-part='action'] {
-  border-radius: 6px;
+  /* Control-shaped placeholders mirror the tenant edge dial (6px at scale 1,
+     byte-identical to the historical literal) so the preview anticipates the
+     real input/button corners. */
+  border-radius: calc(6px * var(--ds-radius-scale, 1));
 }
 .rottay-skeleton-form [data-part='input'] {
   block-size: 2.375rem;
@@ -148,7 +155,7 @@
 .rottay-skeleton-list-item [data-part='line'] {
   block-size: 0.75rem;
   inline-size: 80%;
-  border-radius: 4px;
+  border-radius: var(--ds-skeleton-line-radius, calc(4px * var(--ds-radius-scale, 1)));
 }
 /* Order matters: `:last-child` precedes `:first-child` so a single line
    resolves to the first/title geometry (40% at title height), exactly like
@@ -169,7 +176,7 @@
 }
 .rottay-skeleton-paragraph [data-part='line'] {
   block-size: var(--ds-skeleton-line-height, 1rem);
-  border-radius: 4px;
+  border-radius: var(--ds-skeleton-line-radius, calc(4px * var(--ds-radius-scale, 1)));
 }
 
 /* ---- Text ---------------------------------------------------------------- */
@@ -180,7 +187,7 @@
 }
 .rottay-skeleton-text [data-part='line'] {
   block-size: var(--ds-skeleton-line-height, 1rem);
-  border-radius: 4px;
+  border-radius: var(--ds-skeleton-line-radius, calc(4px * var(--ds-radius-scale, 1)));
 }
 /* Natural text ending; the instance `width` prop rides inline on the other
    lines and always wins over this rule. */
@@ -193,7 +200,9 @@
   overflow: hidden;
 }
 .rottay-skeleton-table.rottay-skeleton-table[data-part='root'][data-part='root'] {
-  border-radius: 8px;
+  /* The frame anticipates the real table's corners: 8px at scale 1 (the
+     historical literal), scaled by the tenant edge dial. */
+  border-radius: calc(8px * var(--ds-radius-scale, 1));
   border: 1px solid var(--ds-skeleton-border, var(--ds-color-border));
 }
 .rottay-skeleton-table [data-part='row'] {
@@ -203,7 +212,7 @@
   padding-inline: var(--ds-spacing-4);
 }
 .rottay-skeleton-table [data-part='cell'] {
-  border-radius: 4px;
+  border-radius: var(--ds-skeleton-line-radius, calc(4px * var(--ds-radius-scale, 1)));
 }
 .rottay-skeleton-table [data-part='row'][data-row='header'] [data-part='cell'] {
   block-size: 0.875rem;

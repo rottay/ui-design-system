@@ -129,6 +129,7 @@ export function WidgetBoardEngine({
   onItemsChange,
   onReset,
   emptyState,
+  error,
   loading = false,
   className,
   style,
@@ -723,6 +724,28 @@ export function WidgetBoardEngine({
     .filter(Boolean)
     .join(" ");
 
+  /*
+   * Skeleton with the final composition's footprint. Until the first load
+   * produces a visible widget the board used to render the EMPTY state, so
+   * every initial load flashed "no widgets" and then jumped. Instead, the
+   * loading board renders quiet placeholder cells on the SAME 12-track grid:
+   * when the items are already known their declared sizes are mirrored (the
+   * footprint the solver will reserve, so late widgets never jump), and only
+   * a fully unknown board falls back to a representative 3-up composition.
+   * Decorative only: the root's aria-busy already announces the state.
+   */
+  const skeletonSizes = useMemo<readonly WidgetBoardSize[]>(() => {
+    if (!loading || visible.length > 0) return [];
+    if (items.length > 0) {
+      return items
+        .slice()
+        .sort((a, b) => a.order - b.order)
+        .slice(0, 6)
+        .map((item) => item.size);
+    }
+    return ["md", "md", "md"] as const;
+  }, [loading, visible.length, items]);
+
   return (
     <section
       className={rootClassName}
@@ -989,7 +1012,11 @@ export function WidgetBoardEngine({
         </Sheet>
       ) : null}
 
-      {visible.length > 0 ? (
+      {error ? (
+        <div className="ds-widget-board__error" data-part="error-state">
+          {error}
+        </div>
+      ) : visible.length > 0 ? (
         <div
           className="ds-widget-board__grid"
           data-part="grid"
@@ -1292,6 +1319,55 @@ export function WidgetBoardEngine({
               </article>
             );
           })}
+        </div>
+      ) : loading ? (
+        <div
+          className="ds-widget-board__grid"
+          data-part="grid"
+          data-narrow={narrow ? "true" : "false"}
+          data-skeleton="true"
+          aria-hidden
+        >
+          {skeletonSizes.map((size, index) => (
+            <div
+              key={`${size}-${index}`}
+              className="ds-widget-board__cell ds-widget-board__cell--skeleton"
+              data-part="skeleton-cell"
+              data-size={size}
+            >
+              <div
+                className="ds-widget-board__skeleton-header"
+                data-part="skeleton-header"
+              >
+                <span
+                  className="ds-widget-board__skeleton-icon"
+                  data-part="skeleton-icon"
+                />
+                <span
+                  className="ds-widget-board__skeleton-title"
+                  data-part="skeleton-title"
+                />
+              </div>
+              <div
+                className="ds-widget-board__skeleton-body"
+                data-part="skeleton-body"
+              >
+                <span
+                  className="ds-widget-board__skeleton-line"
+                  data-part="skeleton-line"
+                />
+                <span
+                  className="ds-widget-board__skeleton-line"
+                  data-part="skeleton-line"
+                />
+                <span
+                  className="ds-widget-board__skeleton-line"
+                  data-part="skeleton-line"
+                  data-width="short"
+                />
+              </div>
+            </div>
+          ))}
         </div>
       ) : (
         <div className="ds-widget-board__empty" data-part="empty-state">

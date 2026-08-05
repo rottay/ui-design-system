@@ -29,6 +29,15 @@
  * visibility-toggle grammar). The clear-button base rule keeps its (0,4,0)
  * via the always-stamped `[type='button']` instead of the forbidden doubled
  * `[data-part='clear-button']` repetition.
+ *
+ * C-02 SECOND PASS (Phase C1, 2026-08-03): frame + state paint join the
+ * field family -- border-style rides `--ds-input-border-style` (no literal
+ * solid), the control surface reads the certified `--ds-input-bg` before
+ * the generic `--ds-color-bg-input` (broken under TMM's dark-text theme),
+ * every status frame passes through the family's state border channel AND
+ * gains the family's tinted control surface (never hue alone), the filled
+ * well reads `--ds-input-filled-bg`, disabled ink reads the family channel,
+ * and the field wrapper gains the scroll-margin mobile-keyboard posture.
  */
 
 .ds-textarea-field[data-part='field'] {
@@ -38,6 +47,9 @@
   inline-size: 100%;
   min-inline-size: 0;
   gap: var(--ds-textarea-message-gap, var(--ds-input-message-gap, var(--ds-spacing-1)));
+  /* Mobile keyboard posture: one rhythm of clearance on the OS focus scroll
+     (Input/Select/FormField/Form carry the same). */
+  scroll-margin-block: var(--ds-spacing-6, 1.5rem);
 }
 
 .ds-textarea.ds-textarea--modern[data-part='root'] {
@@ -49,9 +61,14 @@
   color: var(--ds-textarea-color, var(--ds-color-text-primary));
   caret-color: var(--ds-textarea-caret-color, var(--ds-input-border-focus, var(--ds-color-primary)));
   border-width: var(--ds-input-border-width);
-  border-style: solid;
+  /* The frame speaks the field family's border grammar (C-02): style rides
+     the tenant's input channel instead of a literal solid. */
+  border-style: var(--ds-input-border-style);
   border-radius: var(--ds-textarea-radius, var(--ds-radius-input, var(--ds-radius-md)));
-  background-color: var(--ds-textarea-bg, var(--ds-color-bg-input, var(--ds-surface-control)));
+  /* The control surface reads the certified Input family's `--ds-input-bg`
+     before the generic `--ds-color-bg-input` (which resolves near-black
+     under TMM's dark-text theme, axe-reproduced on the InputNumber lane). */
+  background-color: var(--ds-textarea-bg, var(--ds-input-bg, var(--ds-color-bg-input, var(--ds-surface-control))));
   font-family: var(--ds-input-font-family);
   font-weight: var(--ds-input-font-weight, var(--ds-font-weight-normal));
   letter-spacing: var(--ds-input-letter-spacing);
@@ -104,12 +121,13 @@
   background: var(--ds-input-selection-bg);
 }
 
-/* background: filled, then disabled (disabled wins the tie when both). */
+/* background: filled, then disabled (disabled wins the tie when both). The
+   filled well reads the field family's filled channel first (C-02). */
 .ds-textarea.ds-textarea--modern[data-part='root'][data-variant='filled'] {
-  background-color: var(--ds-textarea-filled-bg, var(--ds-color-bg-input, var(--ds-surface-inset)));
+  background-color: var(--ds-textarea-filled-bg, var(--ds-input-filled-bg, var(--ds-color-bg-input, var(--ds-surface-inset))));
 }
 .ds-textarea.ds-textarea--modern[data-part='root'][data-disabled='true'] {
-  color: var(--ds-color-text-disabled);
+  color: var(--ds-input-color-disabled, var(--ds-color-text-disabled));
   /* Optional foundation surface: terminate the chain so an unset
      --ds-surface-disabled cannot make this declaration invalid at
      computed-value time (same terminal Select authors for this state). */
@@ -120,33 +138,39 @@
 }
 
 /* border color: borderless (transparent, wins over all), then per-status rest,
-   then hover, then the default-status focus override. */
+   then hover, then the default-status focus override. Status frames keep the
+   Input grammar (C-02): the tenant's textarea channel first, then the field
+   family's state channel, PLUS the family's tinted control surface so the
+   state never travels by hue alone. */
 .ds-textarea.ds-textarea--modern[data-part='root'][data-variant='borderless'] {
   border-color: transparent;
 }
 .ds-textarea.ds-textarea--modern[data-part='root']:not([data-variant='borderless'])[data-status='default'] {
-  border-color: var(--ds-textarea-border, var(--ds-color-border));
+  border-color: var(--ds-textarea-border, var(--ds-input-border, var(--ds-color-border)));
 }
 .ds-textarea.ds-textarea--modern[data-part='root']:not([data-variant='borderless'])[data-status='error'] {
-  border-color: var(--ds-textarea-error-border, var(--ds-color-error));
+  border-color: var(--ds-textarea-error-border, var(--ds-input-error-border, var(--ds-color-error)));
+  background-color: var(--ds-input-error-bg, var(--ds-input-bg, var(--ds-surface-control)));
 }
 .ds-textarea.ds-textarea--modern[data-part='root']:not([data-variant='borderless'])[data-status='warning'] {
-  border-color: var(--ds-textarea-warning-border, var(--ds-color-warning));
+  border-color: var(--ds-textarea-warning-border, var(--ds-input-warning-border, var(--ds-color-warning)));
+  background-color: var(--ds-input-warning-bg, var(--ds-input-bg, var(--ds-surface-control)));
 }
 .ds-textarea.ds-textarea--modern[data-part='root']:not([data-variant='borderless'])[data-status='success'] {
-  border-color: var(--ds-textarea-success-border, var(--ds-color-success));
+  border-color: var(--ds-textarea-success-border, var(--ds-input-success-border, var(--ds-color-success)));
+  background-color: var(--ds-input-success-bg, var(--ds-input-bg, var(--ds-surface-control)));
 }
 /* Hover is pointer-capable only (4th-tanda hover law); the coarse-pointer
    equivalent rides `:active` below, and the focused tap paints the focus
    grammar which already follows. */
 @media (hover: hover) {
   .ds-textarea.ds-textarea--modern[data-part='root']:not([data-variant='borderless'])[data-status='default']:hover:not([data-disabled='true']):not([data-readonly='true']):not(:focus) {
-    border-color: var(--ds-textarea-border-hover, var(--ds-color-border-hover));
+    border-color: var(--ds-textarea-border-hover, var(--ds-input-border-hover, var(--ds-color-border-hover)));
   }
 }
 /* Touch/active equivalent of the hover border. */
 .ds-textarea.ds-textarea--modern[data-part='root']:not([data-variant='borderless'])[data-status='default']:active:not([data-disabled='true']):not([data-readonly='true']) {
-  border-color: var(--ds-textarea-border-hover, var(--ds-color-border-hover));
+  border-color: var(--ds-textarea-border-hover, var(--ds-input-border-hover, var(--ds-color-border-hover)));
 }
 .ds-textarea.ds-textarea--modern[data-part='root']:not([data-variant='borderless'])[data-status='default']:focus:not([data-disabled='true']) {
   border-color: var(--ds-textarea-border-focus, var(--ds-input-border-focus, var(--ds-color-primary)));

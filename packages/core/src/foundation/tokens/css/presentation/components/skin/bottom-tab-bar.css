@@ -48,6 +48,21 @@
  * The tab button's `border: none` is a color-free reset, exempt from the
  * floor. Non-border paint (background, color, border-radius, box-shadow)
  * wins at (0,2,0)+.
+ *
+ * PHASE C0 CANARY C-11 pass:
+ * - MOTION: transitions bind to the intent cadence (`--ds-motion-feedback` /
+ *   `--ds-motion-reveal`, exact fast/slow fallbacks) and the entrance rise
+ *   rides `--ds-motion-intensity` (notification.css idiom) — motion.dial
+ *   reaches the bar without changing a single default duration.
+ * - INDICATOR GRAMMAR (protos): `--_ds-bottom-tab-bar-pill-bg` carries
+ *   the active icon pill fill (fallback = today's 12% primary wash, the
+ *   preserved shape+color+weight grammar), and
+ *   `--_ds-bottom-tab-bar-active-rule-size|-ink` paint a block-start
+ *   ink rule across the active tab (fallback 0px = invisible) for editorial
+ *   profiles that mark current with a rule instead of a filled pill.
+ * - TRUNCATION: tab labels now ellipsize within their 1/5 column instead of
+ *   wrapping taller than the bar (320px + long locale); the full label
+ *   survives in the accessible name (`aria-label`), so nothing is lost.
  */
 
 /* ---- root: fixed navigation bar, safe-area aware. Positioning was inline
@@ -66,7 +81,7 @@
   padding-block-end: env(safe-area-inset-bottom, 0px);
   background: var(--ds-color-bg-primary);
   box-shadow: var(--ds-bottom-tab-bar-shadow, var(--ds-elevation-2));
-  animation: ds-bottom-tab-bar-enter var(--ds-motion-slow, 320ms)
+  animation: ds-bottom-tab-bar-enter var(--ds-motion-reveal, var(--ds-motion-slow))
     var(--ds-motion-ease-out, ease-out) both;
 }
 
@@ -96,12 +111,28 @@
   min-inline-size: 44px;
   min-block-size: 44px;
   padding-block: 6px 2px;
+  padding-inline: 2px;
   background: none;
   border: none;
   cursor: pointer;
   text-decoration: none;
   -webkit-tap-highlight-color: transparent;
-  transition: color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+  transition: color var(--ds-motion-feedback, var(--ds-motion-fast)) var(--ds-motion-ease-out, ease-out);
+}
+
+/* Editorial current rule (C-11 proto): a block-start ink mark across the
+   active tab for profiles that read selection as a typographic rule rather
+   than a filled pill. Logical insets keep it centered in both directions;
+   fallback 0px renders nothing (today's pill-only grammar untouched). */
+.rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true']::before {
+  content: '';
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 18%;
+  block-size: var(--_ds-bottom-tab-bar-active-rule-size, 0px);
+  border-radius: 0 0 var(--ds-radius-full) var(--ds-radius-full);
+  background: var(--_ds-bottom-tab-bar-active-rule-ink, var(--ds-color-primary));
+  pointer-events: none;
 }
 
 .rottay-bottom-tab-bar__tab[data-part='tab-button']:focus-visible {
@@ -143,12 +174,15 @@
   padding-inline: 10px;
   border-radius: var(--ds-radius-full, 9999px);
   transition:
-    background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+    background var(--ds-motion-feedback, var(--ds-motion-fast)) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-feedback, var(--ds-motion-fast)) var(--ds-motion-ease-out, ease-out);
 }
 
 .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__icon-wrap {
-  background: color-mix(in srgb, var(--ds-color-primary) 12%, transparent);
+  background: var(
+    --_ds-bottom-tab-bar-pill-bg,
+    color-mix(in srgb, var(--ds-color-primary) 12%, transparent)
+  );
 }
 
 @media (hover: hover) {
@@ -207,11 +241,15 @@
         selected weight was a JS ternary, now keyed on data-selected. ---- */
 .rottay-bottom-tab-bar__label[data-part='label'] {
   margin-block-start: 2px;
+  max-inline-size: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
   font-weight: 400;
   letter-spacing: 0.01em;
   line-height: 14px;
-  transition: color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+  transition: color var(--ds-motion-feedback, var(--ds-motion-fast)) var(--ds-motion-ease-out, ease-out);
 }
 
 .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__label {
@@ -221,7 +259,7 @@
 @keyframes ds-bottom-tab-bar-enter {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(calc(8px * var(--ds-motion-intensity, 1)));
   }
   to {
     opacity: 1;
@@ -247,6 +285,10 @@
   }
 
   .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__icon-wrap {
+    background: Highlight;
+  }
+
+  .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true']::before {
     background: Highlight;
   }
 

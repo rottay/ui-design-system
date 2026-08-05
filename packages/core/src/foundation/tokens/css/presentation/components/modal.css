@@ -57,11 +57,35 @@
      CONTENT
      Main modal content area
      ======================================================================== */
+  /* NOT DELEGATED -- held, deliberately, and not an oversight. Unlike the shadow
+     default below, a background position tolerates per-layer `none` by grammar,
+     so this var carries no shadow-splice hazard and delegation stays reachable
+     in principle. What blocks it is reach, not safety:
+     --ds-material-overlay-background IS declared on `:root`, so delegating here
+     would resolve unconditionally and move ALL nine consumers of this var at
+     once -- five outside the overlay cohort (AlertDialog, ConfirmDialog and
+     three rustic skins). The one theme that would actually change is evnto,
+     which authors no modal chrome: evnto light already resolves #ffffff, but
+     evnto dark would move from bare white to #2A2820. That is an intended fix
+     for a latent "white modal on a dark theme" defect, and it needs a sighted
+     look before it lands. Reported rather than absorbed silently. */
   --ds-modal-bg: var(--ds-color-white);
   --ds-modal-color: var(--ds-color-neutral-900);
   --ds-modal-border-radius: var(--ds-radius-xl);
   --ds-modal-border-width: 0;
   --ds-modal-border-color: transparent;
+  /* NOT DELEGATED -- DEFERRED, and Modal's shadow causal cell is STRUCK for this
+     round. This default briefly read
+     `var(--ds-material-overlay-shadow, var(--ds-shadow-modal))` under adjudicated
+     option (C) and has been restored to the plain literal by forward edit.
+     AlertDialog and ConfirmDialog consume this var and splice it as a non-sole
+     item in a comma shadow list. While this default stays un-delegated the var
+     is NOT none-reachable, so those two splices are dormant and compliant, not
+     defective -- there is no live trap. Delegating would make them reachable and
+     turn a tenant's legitimate `none` into an invalid declaration at both sites,
+     and neither dialog can currently be isolated: their surfaces scroll, so a
+     pseudo does not anchor, and they have no tight wrapper of equal geometry to
+     carry the depth instead. */
   --ds-modal-shadow: var(--ds-shadow-modal);
 
   /* Padding variants */

@@ -121,9 +121,10 @@ export function appearancePostureToVariables(
         ),
       );
     }
-    if (motion.ambient === 'off' || motion.ambient === 'subtle') {
-      vars['--ds-motion-ambient'] = motion.ambient;
-    }
+    // `ambient` is a behavioral policy, not a CSS value. It stays in the
+    // normalized appearance document and is consumed by MotionProvider; a
+    // keyword custom property had no productive CSS reader and previously
+    // invited accidental use in <time> positions.
   }
 
   if (posture.elevation) {

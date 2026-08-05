@@ -52,11 +52,17 @@
 /* ---- backdrop: scrim + glass. Outranks personality's blur(4px), as the inline
         filter did. The scrim alpha consumes the --ds-drawer-overlay-opacity
         hatch (the maskOpacity prop, rustic parity); unset, it keeps the 0.8
-        fill this rule has always painted. ---- */
+        strength this rule has always painted. The TINT now composes from the
+        family's scrim-material protos over a dim ink (sheet.css/modal
+        coherence): the raw canvas fill it used before lightened the page in
+        light themes (a milky veil) while the modal dimmed it. Unset protos
+        keep a plain dim; a profile's --_ds-modal-scrim-tint retints
+        every overlay veil from one place (warm editorial vs cold
+        operational). ---- */
 .rottay-drawer-backdrop--modern[data-part='backdrop'] {
   background-color: color-mix(
     in srgb,
-    var(--ds-color-bg-primary) calc(var(--ds-drawer-overlay-opacity, 0.8) * 100%),
+    var(--_ds-modal-scrim-tint, var(--ds-color-black)) calc(var(--ds-drawer-overlay-opacity, 0.8) * 100%),
     transparent
   );
   background-image: linear-gradient(var(--ds-glass-scrim-tint), var(--ds-glass-scrim-tint));
@@ -65,19 +71,89 @@
 }
 
 /* ---- panel surface: fill + elevation + the default (right-placement) radius,
-        which the per-placement rules below override. ---- */
+        which the per-placement rules below override. Completed with the two
+        family marks this panel lacked (sheet.css parity): the dark-aware
+        luminance lift at level 4 (matching its elevation band; inert where
+        --ds-elevation-lift-strength is 0) and the common-light zenith keyline
+        (card.css's C-03 recipe, scaled by --ds-effect-intensity) composed with
+        the tenant elevation. ---- */
+/* SEMANTIC GROUP: overlay. (R1 Cohort 1)
+
+   A drawer panel is an OVERLAY surface, and the design system already ships a
+   governed role vocabulary for that group. `popover.css` consumes it; this
+   family did not, so a tenant that authored the overlay role reached the popover
+   and not the drawer — four members of one group painting the same ground four
+   different ways.
+
+   --ds-material-overlay-texture, -highlight, -shadow and -border are
+   tenant-writable AND not declared on `:root`, so their var() fallbacks
+   genuinely fire: today's paint is preserved byte-for-byte and each becomes
+   causal the moment a tenant authors it. The split was recorded in
+   cohort-1-role-adoptability.json.
+
+   --ds-material-overlay-background is the ONE deliberate exception, added
+   after the same audit found it declared-but-dead here. It IS declared on
+   `:root` (foundation/themes/default.css) as var(--ds-surface-overlay), so the
+   fallback arm on the ground gradient's mid stop below is dead and the role
+   resolves in every theme. Without that, a tenant could not move this panel's
+   ground at all. Under the default theme the role and the literal both resolve
+   to --ds-color-bg-elevated, so the band is unchanged; a tenant that splits
+   --ds-surface-overlay from --ds-surface-card (BitHire does, in dark) now has
+   the drawer follow the overlay side, with popover, dropdown and modal. */
 .rottay-drawer--modern[data-part='surface'] {
   max-width: 100vw;
   background:
+    var(--ds-material-overlay-texture, none),
+    linear-gradient(var(--ds-elevation-surface-4), var(--ds-elevation-surface-4)),
     linear-gradient(
       180deg,
       color-mix(in srgb, var(--ds-color-bg-primary) 98%, var(--ds-color-primary) 2%) 0%,
-      var(--ds-surface-card) 32%,
+      var(--ds-material-overlay-background, var(--ds-surface-card)) 32%,
       var(--ds-color-bg-primary) 100%
     );
-  box-shadow: var(--ds-elevation-4, var(--ds-elevation-3));
+  /* WHOLE-VALUE ISOLATION. The depth chain is the SOLE box-shadow of this
+     panel. --ds-material-overlay-highlight used to ride here as a second list
+     entry, which was a defect: the channel is publicly none-capable, and in CSS
+     `none` is legal only as a WHOLE box-shadow value, so a tenant authoring it
+     produced `box-shadow: none, <depth>` -- an invalid declaration that voids
+     the ENTIRE value and silently amputated the panel's depth. The keyline
+     moved to the decoration pseudo below, where it is a whole-value read and an
+     authored `none` can only switch the keyline off. */
+  box-shadow: var(--ds-material-overlay-shadow, var(--ds-elevation-4, var(--ds-elevation-3)));
   border-radius: var(--ds-radius-lg) 0 0 var(--ds-radius-lg);
   isolation: isolate;
+}
+
+/* Decoration slot: carries the intensity-governed zenith keyline (card.css's
+   common light model, shared by every elevated overlay layer) as its SOLE
+   box-shadow, so the none-capable role channel sits in a whole-value position
+   and can never invalidate the depth stack next door. The value is an INSET
+   LITERAL and must stay one (FAB-05): it does NOT read
+   --ds-material-overlay-highlight, whose reads were deliberately removed from
+   this family, dropping its consumer count across the overlay four to zero --
+   a channel being retired, not a capability lost. The DECLARED VALUE is the same
+   literal this rung carried inside the surface list, and `z-index: -1`
+   reproduces an inset shadow's paint order -- above the panel's own fill and
+   lift layers, below the header, body and footer -- inside the stacking context
+   the rule above already isolates.
+   BUT THE PAINTED RESULT IS NOT EQUIVALENT, and this comment must not claim it
+   is. A pseudo's inset shadow is drawn against a different box and radius than
+   the surface's own, so on any surface with BOTH a border and a radius -- which
+   this one has -- the corner arcs diverge (measured in Chromium; the delta grows
+   with radius and with device pixel ratio, and radius compensation reduces but
+   does not close it). This relocation is an IN-SCOPE VISUAL DELTA awaiting
+   adjudication, NOT mechanical isolation. The panel is NON-SCROLLING
+   (the body is the scrollport), which is the precondition that makes a pseudo
+   anchor-correct here. The slot paints no fill of its own and never intercepts
+   pointer input. */
+.rottay-drawer--modern[data-part='surface']::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(72% * var(--ds-effect-intensity, 1)), transparent);
+  pointer-events: none;
 }
 
 .rottay-drawer--modern.rottay-drawer--modern[data-part='surface'][data-part='surface'] {
@@ -85,8 +161,12 @@
   border-right-width: 1px;
   border-bottom-width: 1px;
   border-left-width: 1px;
-  border-style: solid;
-  border-color: var(--ds-color-border-subtle);
+  /* EDGE AXIS adoption (R1 Cohort 1). Width and style come from the edge axis,
+     colour from the overlay role. Both tenants now emit the edge axis -- TMM
+     ruled, BitHire hairline -- so this was the divergence receipt's last silent
+     axis and it is the same chain the field group just adopted. */
+  border-style: var(--ds-edge-standard-style, solid);
+  border-color: var(--ds-material-overlay-border, var(--ds-color-border-subtle));
 }
 
 /* ---- rounded on the inward-facing edge only; the sliding edge sits flush.
@@ -132,29 +212,36 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--ds-spacing-3);
-  min-height: 4.5rem;
-  padding-block: var(--ds-spacing-4);
-  padding-inline: clamp(var(--ds-spacing-4), 2vw, var(--ds-spacing-6));
+  /* Section rhythm rides the tenant density axis (the engine re-stamps the
+     anchor lineage on the portaled root): a compact product shortens the
+     chrome, a spacious one lets the panel breathe. At scale 1 every value is
+     byte-identical to the historical literals. */
+  min-height: calc(4.5rem * var(--ds-density-effective-scale, 1));
+  padding-block: calc(var(--ds-spacing-4) * var(--ds-density-effective-scale, 1));
+  padding-inline: calc(
+    clamp(var(--ds-spacing-4), 2vw, var(--ds-spacing-6)) *
+      var(--ds-density-effective-scale, 1)
+  );
   flex-shrink: 0;
-  background:
-    linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-color-bg-primary)) 0%,
-      color-mix(in srgb, var(--ds-color-bg-primary) 97%, var(--ds-color-primary) 3%) 56%,
-      var(--ds-color-bg-primary) 100%
-    );
+  /* The header reads the panel's own material, like the modal's (family law,
+     spec section 5 -- no gradient makeup): the decorative 135deg brand band
+     is retired. Hierarchy rides the divider hairline, the title's type and
+     the footer rail below -- not a tinted wash. */
+  background: transparent;
   position: relative;
-  overflow: hidden;
 }
 .rottay-drawer--modern.rottay-drawer--modern > [data-part='footer'][data-part='footer'] {
   border-top: 1px solid var(--ds-color-border-subtle);
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: var(--ds-spacing-2);
-  min-height: 4.5rem;
-  padding-block: var(--ds-spacing-4);
-  padding-inline: clamp(var(--ds-spacing-4), 2vw, var(--ds-spacing-6));
+  gap: calc(var(--ds-spacing-2) * var(--ds-density-effective-scale, 1));
+  min-height: calc(4.5rem * var(--ds-density-effective-scale, 1));
+  padding-block: calc(var(--ds-spacing-4) * var(--ds-density-effective-scale, 1));
+  padding-inline: calc(
+    clamp(var(--ds-spacing-4), 2vw, var(--ds-spacing-6)) *
+      var(--ds-density-effective-scale, 1)
+  );
   flex-shrink: 0;
   background: color-mix(in srgb, var(--ds-color-bg-secondary) 74%, transparent);
   /* Glass is OPT-IN through the family contract (sheet.css idiom): unset, the
@@ -195,9 +282,13 @@
   font-weight: var(--ds-font-weight-semibold);
   line-height: var(--ds-line-height-tight);
   letter-spacing: var(--ds-letter-spacing-tight);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  min-inline-size: 0;
+  /* The family's title law is the modal's: a long title WRAPS with balanced
+     measure -- it never clips. Truncation without access to the full text is
+     a defect, not a layout strategy (the heading-group shrinks to 0 and the
+     close keeps its touch floor either way). */
+  overflow-wrap: anywhere;
+  text-wrap: balance;
 }
 
 .rottay-drawer--modern > [data-part='body'] {
@@ -208,7 +299,10 @@
   min-block-size: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: clamp(var(--ds-spacing-4), 2vw, var(--ds-spacing-6));
+  padding: calc(
+    clamp(var(--ds-spacing-4), 2vw, var(--ds-spacing-6)) *
+      var(--ds-density-effective-scale, 1)
+  );
   color: var(--ds-color-text-primary);
   scrollbar-gutter: stable;
   scrollbar-width: thin;
@@ -217,9 +311,14 @@
      material carries the region (spec section 5 -- no gradient makeup). */
 }
 
-/* ---- close button (geometry + rest state). The interaction rules below
-        reproduce the deleted mouseenter/mouseleave `.style.backgroundColor`
-        writes. ---- */
+/* ---- close button: the overlay family's shared close grammar (modal /
+        sheet / modal-compounds idiom) — a ghost control at rest, a gated
+        hover wash for hover-capable pointers, the `:active` wash as the
+        touch equivalent, and the shared `--ds-focus-ring-*` keyboard ring.
+        The former framed button (border + fill + elevation-1) read as a
+        second action competing with the panel's real actions; the dismiss
+        affordance is chrome, not an action. Geometry stays the drawer's own
+        2.25rem square. ---- */
 .rottay-drawer--modern > [data-part='header'] [data-part='close-button'] {
   width: 2.25rem;
   height: 2.25rem;
@@ -228,39 +327,25 @@
   justify-content: center;
   flex: 0 0 auto;
   cursor: pointer;
-  border: 1px solid var(--ds-color-border-subtle);
+  border: none;
   border-radius: var(--ds-radius-md);
-  background: color-mix(in srgb, var(--ds-color-bg-primary) 88%, transparent);
+  background-color: transparent;
   color: var(--ds-color-text-secondary);
-  box-shadow: var(--ds-elevation-1);
   transition:
-    transform var(--ds-motion-fast) var(--ds-motion-ease-out),
     background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
+    color var(--ds-motion-fast) var(--ds-motion-ease-out);
   position: relative;
   z-index: 1;
 }
-/* ---- close button states. Hover is hover-capable-only (4th-wave law); a
-        held press settles the lift through `:active`, so touch and keyboard
-        get the same affordance. Focus rides the shared `--ds-focus-ring-*`
-        channels (Modal/overlay grammar parity). ---- */
 @media (hover: hover) {
   .rottay-drawer--modern > [data-part='header'] [data-part='close-button']:hover {
-    transform: translateY(-1px);
     background-color: var(--ds-surface-highlight);
-    border-color: color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-color-border-subtle));
     color: var(--ds-color-text-primary);
-    box-shadow: var(--ds-elevation-2);
   }
 }
 .rottay-drawer--modern > [data-part='header'] [data-part='close-button']:active {
-  transform: scale(var(--ds-state-press-scale));
   background-color: var(--ds-surface-highlight);
-  border-color: color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-color-border-subtle));
   color: var(--ds-color-text-primary);
-  box-shadow: var(--ds-elevation-1);
 }
 .rottay-drawer--modern > [data-part='header'] [data-part='close-button']:focus-visible {
   outline: var(--ds-focus-ring-width) solid
@@ -283,6 +368,25 @@
   }
 }
 
+/* ---- reduced transparency: the glass layer retires entirely. The scrim
+        re-asserts as an opaque fill (overlay-modal.css's law — nothing behind
+        the panel bleeds through; the modal's authored veil wins before the
+        canvas fill) and the footer's opt-in blur drops out while its
+        translucent mix becomes an opaque semantic fill. ---- */
+@media (prefers-reduced-transparency: reduce) {
+  .rottay-drawer-backdrop--modern[data-part='backdrop'] {
+    background-color: var(--ds-modal-overlay-bg, var(--ds-color-bg-primary));
+    background-image: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .rottay-drawer--modern.rottay-drawer--modern > [data-part='footer'][data-part='footer'] {
+    background: var(--ds-color-bg-secondary);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
 /* ---- forced colors: surface, frame, scrim and controls in system colors.
         The scrim keeps a see-through system-color mix (a solid Canvas would
         hide the page); the flush-edge zeroed borders stay zero. ---- */
@@ -299,6 +403,13 @@
     box-shadow: none;
     color: CanvasText;
   }
+  /* The zenith keyline lives on the decoration slot now, so the surface's own
+     `box-shadow: none` above no longer reaches it. The slot is reset here
+     explicitly to keep the forced palette exactly as flat as it was when both
+     shadows shared one declaration. */
+  .rottay-drawer.rottay-drawer--modern[data-part='surface'][data-placement]::before {
+    box-shadow: none;
+  }
   .rottay-drawer.rottay-drawer--modern[data-part='surface'] > [data-part='header'],
   .rottay-drawer.rottay-drawer--modern[data-part='surface'] > [data-part='footer'] {
     border-color: ButtonText;
@@ -308,7 +419,7 @@
   }
   .rottay-drawer--modern > [data-part='header'] [data-part='header-icon'],
   .rottay-drawer--modern > [data-part='header'] [data-part='close-button'] {
-    border-color: ButtonText;
+    border: 1px solid ButtonText;
     background: Canvas;
     box-shadow: none;
     color: CanvasText;

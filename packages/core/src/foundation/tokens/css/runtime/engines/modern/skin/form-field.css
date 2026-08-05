@@ -22,6 +22,9 @@
   inline-size: 100%;
   min-inline-size: 0;
   color: var(--ds-input-color);
+  /* Mobile keyboard posture: the browser's focus scroll keeps one rhythm of
+     clearance so the label never lands flush under sticky chrome. */
+  scroll-margin-block: var(--ds-spacing-6, 1.5rem);
 }
 
 .ds-form-field.ds-form-field--modern[data-part='root'] [data-part='layout'] {
@@ -80,6 +83,11 @@
   font-weight: var(--ds-input-label-font-weight, var(--ds-font-weight-medium));
   letter-spacing: var(--ds-input-label-letter-spacing, normal);
   line-height: var(--ds-input-label-line-height, var(--ds-line-height-snug));
+  /* The form label speaks the tenant's LABEL type role: technical/geometric
+     profiles author uppercase capsule labels here while editorial stays in
+     title case -- the governed `--ds-type-label-text-transform` channel
+     (default `none`, so the unset render is byte-identical). */
+  text-transform: var(--ds-type-label-text-transform, none);
   hyphens: auto;
   overflow-wrap: anywhere;
   transition: color var(--ds-input-transition-duration) var(--ds-input-transition-timing);

@@ -782,6 +782,25 @@ function validateEnvelopeShape(
       message: "Payload must be JSON-serializable",
     });
   }
+  // The override-key vocabulary is wider than the per-document budget, so the
+  // closed tokenOverrides key schema cannot enforce the entry count by itself.
+  const visualFoundation = input.visualFoundation;
+  const advancedTier = isPlainObject(visualFoundation)
+    ? visualFoundation.advanced
+    : undefined;
+  const tokenOverrides = isPlainObject(advancedTier)
+    ? advancedTier.tokenOverrides
+    : undefined;
+  if (isPlainObject(tokenOverrides)) {
+    const overrideCount = Object.keys(tokenOverrides).length;
+    if (overrideCount > limits.maxTokenOverrides) {
+      issues.push({
+        code: "invalid_value",
+        path: "$.visualFoundation.advanced.tokenOverrides",
+        message: `Maximum tokenOverrides entries is ${limits.maxTokenOverrides}; received ${overrideCount}`,
+      });
+    }
+  }
   validateNode(input, schemas[input.mode], "$", issues);
   return issues;
 }

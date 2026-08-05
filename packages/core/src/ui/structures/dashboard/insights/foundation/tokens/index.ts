@@ -45,6 +45,25 @@ export const METRIC_CARD_METER_FILL_SUCCESS = 'var(--ds-metric-card-meter-fill-s
 export const METRIC_CARD_METER_FILL_WARNING = 'var(--ds-metric-card-meter-fill-warning, linear-gradient(90deg, var(--ds-color-warning), var(--ds-color-error)))';
 export const METRIC_CARD_METER_FILL_ERROR = 'var(--ds-metric-card-meter-fill-error, linear-gradient(90deg, var(--ds-color-warning), var(--ds-color-error)))';
 export const METRIC_MONO_FONT = 'var(--ds-font-family-mono, monospace)';
+/**
+ * KPI figure voice (C-08/C1): the value rides the tenant's NUMERIC type role
+ * instead of a hardcoded mono face — BitHire renders its authored grotesk
+ * tabular, an editorial tenant its display face, the neutral default its base
+ * family (all three resolve `--ds-type-numeric-font-family` in shipped
+ * themes). The mono chain stays as the exact pre-C1 fallback for bundles
+ * where the numeric role is undeclared. Tabular alignment is orthogonal and
+ * stays on `--ds-metric-card-number-font-variant`.
+ */
+export const METRIC_VALUE_FONT =
+  'var(--ds-type-numeric-font-family, var(--ds-font-family-mono, monospace))';
+/**
+ * Eyebrow case grammar (overline → label channel, the C-03/C-12 chain): a
+ * technical profile keeps the uppercase render (the fallback is the exact
+ * pre-C1 literal), an editorial one renders its authored label case. Mono
+ * family and tracking stay family-local per the C-12 label recipe.
+ */
+export const METRIC_LABEL_TEXT_TRANSFORM =
+  'var(--ds-page-header-eyebrow-text-transform, var(--ds-typography-label-transform, uppercase))';
 
 /**
  * Splits a display value like "18d" / "4.8%" into a countable number, its

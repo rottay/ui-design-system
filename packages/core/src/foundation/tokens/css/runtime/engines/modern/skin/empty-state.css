@@ -37,9 +37,16 @@
   justify-content: center;
   overflow: hidden;
   padding: var(--ds-empty-state-padding, clamp(var(--ds-spacing-xl), 5vw, var(--ds-spacing-3xl)));
-  border: var(--ds-empty-state-border-width, 1px) solid var(--ds-empty-state-border-color, var(--ds-color-border));
+  /* The frame rides the tenant edge grammar (hairline / ruled / inset-double):
+     the family hook still wins, the grammar is the fallback, 1px solid the
+     floor -- three layers, one declaration. */
+  border: var(--ds-empty-state-border-width, var(--ds-edge-standard-width, 1px)) var(--ds-edge-standard-style, solid) var(--ds-empty-state-border-color, var(--ds-color-border));
   border-radius: var(--ds-empty-state-radius, var(--ds-radius-xl));
-  background: var(--ds-empty-state-surface, var(--ds-surface-card, var(--ds-color-bg-elevated)));
+  /* Material facet above the flat surface (SemanticSurface idiom): `none` on
+     flat postures keeps the historical paint; a paper posture reads on the
+     placeholder region without touching content contrast. */
+  background: var(--ds-material-panel-texture, none),
+    var(--ds-empty-state-surface, var(--ds-surface-card, var(--ds-color-bg-elevated)));
   box-shadow: var(--ds-empty-state-shadow, none);
   color: var(--ds-color-text-primary);
   text-align: center;
@@ -75,9 +82,14 @@
   block-size: var(--ds-empty-state-visual-size, 5rem);
   place-items: center;
   overflow: hidden;
-  border: 1px solid var(--ds-empty-state-visual-border, color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border)));
+  /* The quietest member of the family's glyph-well grammar: tenant hairline
+     frame + the optical keyline every feedback well carries, scaled by the
+     effect-intensity dial (at 0 the keyline dissolves; tint and frame carry
+     the accent on their own). */
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-empty-state-visual-border, color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border)));
   border-radius: var(--ds-empty-state-visual-radius, var(--ds-radius-xl));
   background: var(--ds-empty-state-visual-bg, color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card, var(--ds-color-bg-elevated))));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) calc(48% * var(--ds-effect-intensity)), transparent);
   color: var(--ds-color-primary);
 }
 
@@ -118,7 +130,12 @@
   font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
   font-size: var(--ds-empty-state-title-size, var(--ds-font-size-xl));
   font-weight: var(--ds-font-weight-bold);
-  letter-spacing: var(--ds-letter-spacing-tight);
+  /* The family's biggest feedback title consumes the same heading-tracking
+     channel the Alert/Toast/Notification titles already read (fallback: the
+     historical tight tracking, so the untyped default renders unchanged) --
+     an editorial posture rests its serif at 0, a technical one tightens, and
+     the Arabic zero-tracking override propagates here too. */
+  letter-spacing: var(--ds-letter-spacing-heading, var(--ds-letter-spacing-tight));
   line-height: var(--ds-line-height-tight);
   text-wrap: balance;
 }
@@ -153,7 +170,8 @@
 }
 
 /* ---- loading spinner: local keyframes (the `ds-spin` name only exists in
-        other files' scopes), duration on the glacial rung. ---- */
+        other files' scopes), duration on the glacial rung scaled by the
+        tenant duration dial (scale 1 = the historical cadence). ---- */
 .ds-pattern-empty-state.ds-engine-modern[data-part='root'] .ds-empty-state__spinner[data-part='spinner'] {
   display: inline-block;
   inline-size: 1.75rem;
@@ -162,7 +180,7 @@
   border-block-start-color: var(--ds-color-primary);
   border-radius: 50%;
   animation: ds-empty-state-spin
-    var(--ds-empty-state-spinner-duration, var(--ds-motion-glacial)) linear infinite;
+    var(--ds-empty-state-spinner-duration, calc(var(--ds-motion-glacial) * var(--ds-motion-duration-scale, 1))) linear infinite;
 }
 
 @keyframes ds-empty-state-spin {
@@ -188,6 +206,7 @@
 
   .ds-pattern-empty-state.ds-engine-modern[data-part='root'] .ds-empty-state__visual[data-part='visual'] {
     border-color: ButtonText;
+    box-shadow: none;
     color: CanvasText;
   }
 

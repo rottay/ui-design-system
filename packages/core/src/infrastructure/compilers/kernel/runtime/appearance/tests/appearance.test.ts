@@ -120,7 +120,7 @@ describe('appearanceGeneralToVariables', () => {
     expect(vars['--ds-density-mode-factor']).toBeUndefined();
   });
 
-  it('emits the bounded motion dial for CSS-only pre-hydration seams', () => {
+  it('emits numeric motion dials while keeping ambient in the policy layer', () => {
     const vars = appearanceGeneralToVariables({
       motion: {
         intensity: 0.72,
@@ -132,8 +132,8 @@ describe('appearanceGeneralToVariables', () => {
     expect(vars).toMatchObject({
       '--ds-motion-intensity': '0.72',
       '--ds-motion-duration-scale': '1.25',
-      '--ds-motion-ambient': 'subtle',
     });
+    expect(vars['--ds-motion-ambient']).toBeUndefined();
   });
 
   it('clamps finite motion numbers to the public dial bounds', () => {
@@ -348,7 +348,7 @@ describe('appearanceAdvancedToVariables', () => {
     ['without chrome', undefined],
     ['with chrome', { sidebar: { bg: '#1a1a2e' } }],
   ])(
-    'caps raw tokenOverrides at the schema limits authority %s',
+    'rejects raw tokenOverrides above the schema limits authority %s',
     (_name, chrome) => {
       const cap = TENANT_THEME_CONFIG_SCHEMA.limits.maxTokenOverrides;
       expect(cap).toBe(200);
@@ -356,16 +356,41 @@ describe('appearanceAdvancedToVariables', () => {
       for (let index = 0; index < cap + 25; index++) {
         tokenOverrides[`--ds-example-${String(index).padStart(3, '0')}`] = '1px';
       }
-      const vars = appearanceAdvancedToVariables({
-        ...(chrome ? { chrome } : {}),
-        tokenOverrides,
-      });
-      const emitted = Object.keys(vars).filter((key) =>
-        key.startsWith('--ds-example-')
-      );
-      expect(emitted.length).toBe(cap);
+      expect(() =>
+        appearanceAdvancedToVariables({
+          ...(chrome ? { chrome } : {}),
+          tokenOverrides,
+        })
+      ).toThrow(new RegExp(`${cap + 25} entries.*bound is ${cap}`));
     }
   );
+
+  it('accepts exactly the cap of tokenOverrides entries (boundary)', () => {
+    const cap = TENANT_THEME_CONFIG_SCHEMA.limits.maxTokenOverrides;
+    const tokenOverrides: Record<string, string> = {};
+    for (let index = 0; index < cap; index++) {
+      tokenOverrides[`--ds-example-${String(index).padStart(3, '0')}`] = '1px';
+    }
+    const vars = appearanceAdvancedToVariables({ tokenOverrides });
+    const emitted = Object.keys(vars).filter((key) =>
+      key.startsWith('--ds-example-')
+    );
+    expect(emitted.length).toBe(cap);
+  });
+
+  it('does not count keys outside the --ds- allowlist toward the budget', () => {
+    const cap = TENANT_THEME_CONFIG_SCHEMA.limits.maxTokenOverrides;
+    const tokenOverrides: Record<string, string> = {};
+    for (let index = 0; index < cap; index++) {
+      tokenOverrides[`--ds-example-${String(index).padStart(3, '0')}`] = '1px';
+    }
+    tokenOverrides['color'] = 'red';
+    const vars = appearanceAdvancedToVariables({ tokenOverrides });
+    expect(vars['color']).toBeUndefined();
+    expect(
+      Object.keys(vars).filter((key) => key.startsWith('--ds-example-')).length
+    ).toBe(cap);
+  });
 });
 
 describe('appearanceToVariables', () => {

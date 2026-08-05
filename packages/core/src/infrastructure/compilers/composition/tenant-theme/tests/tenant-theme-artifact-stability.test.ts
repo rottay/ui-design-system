@@ -42,6 +42,7 @@ const readFixture = (name: string): TenantThemeArtifact =>
 const CHART_SERIES_TOKEN = /^--ds-chart-series-(?:[1-9]|10)$/;
 const DENSITY_MODE_FACTOR_TOKEN = "--ds-density-mode-factor";
 const ON_PRIMARY_INK_TOKEN = "--ds-color-text-on-primary";
+const BEHAVIOR_ONLY_AMBIENT_TOKEN = "--ds-motion-ambient";
 
 /** The artifact css minus its digest banner line. */
 const cssBody = (artifact: Pick<TenantThemeArtifact, "css">): string =>
@@ -51,6 +52,17 @@ const withoutDensityModeFactor = (css: string): string =>
   css
     .split("\n")
     .filter((line) => !line.includes(DENSITY_MODE_FACTOR_TOKEN))
+    .join("\n");
+
+/**
+ * `motion.ambient` remains part of normalized appearance and is consumed by
+ * MotionProvider. It is intentionally absent from CSS because off|subtle is a
+ * policy keyword, not a CSS time or scalar.
+ */
+const withoutBehaviorOnlyAmbient = (css: string): string =>
+  css
+    .split("\n")
+    .filter((line) => !line.includes(BEHAVIOR_ONLY_AMBIENT_TOKEN))
     .join("\n");
 
 function expectStableEmission(
@@ -63,8 +75,10 @@ function expectStableEmission(
   expect(JSON.stringify(artifact.scopes)).toBe(JSON.stringify(fixture.scopes));
   expect(artifact.adjustments).toBeUndefined();
   for (const [token, value] of Object.entries(fixture.variables)) {
+    if (token === BEHAVIOR_ONLY_AMBIENT_TOKEN) continue;
     expect(artifact.variables[token], token).toBe(value);
   }
+  expect(artifact.variables[BEHAVIOR_ONLY_AMBIENT_TOKEN]).toBeUndefined();
   const additions = Object.keys(artifact.variables).filter(
     (token) => fixture.variables[token] === undefined
   );
@@ -163,7 +177,7 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
     const fixture = readFixture("null-override-artifact.fixture.json");
     const additions = expectStableEmission(artifact, fixture);
     expect(additions).toEqual([]);
-    expect(cssBody(artifact)).toBe(cssBody(fixture));
+    expect(cssBody(artifact)).toBe(withoutBehaviorOnlyAmbient(cssBody(fixture)));
   });
 
   it("keeps the populated simple document stable modulo the generated chart series", () => {
@@ -212,7 +226,9 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
     const additions = expectStableEmission(artifact, fixture);
     expect(additions).toEqual([DENSITY_MODE_FACTOR_TOKEN]);
     expect(artifact.variables[DENSITY_MODE_FACTOR_TOKEN]).toBe("0.85");
-    expect(withoutDensityModeFactor(cssBody(artifact))).toBe(cssBody(fixture));
+    expect(withoutDensityModeFactor(cssBody(artifact))).toBe(
+      withoutBehaviorOnlyAmbient(cssBody(fixture))
+    );
   });
 
   it("emits variables in deterministic UTF-16 code-unit order", () => {

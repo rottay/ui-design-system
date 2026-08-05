@@ -6,11 +6,13 @@
  * reconstructing the component.
  *
  * Material stack (governed six layers): the opaque base fill and the
- * elevation lift live on the surface background; the bounded tint/highlight
- * and the tenant motif (layers 2-3) ride a private `::before` decoration
- * slot whose opacity is the governed `--ds-effect-intensity` dial -- at 0
- * the decoration dissolves while fill, edge, elevation and focus ring keep
- * the hierarchy. Glass is deliberately ABSENT: this is a panel, and the
+ * elevation lift live on the surface background; the tenant motif (layer 3)
+ * rides a private `::before` decoration slot whose opacity is the governed
+ * `--ds-effect-intensity` dial -- at 0 the decoration dissolves while fill,
+ * edge, elevation and focus ring keep the hierarchy. Layer 2 (the bounded
+ * tint/sheen) is deliberately EMPTY on this family: the surface already
+ * declares the intensity-governed zenith keyline in its own box-shadow, and
+ * a second top-light on the same surface is what OVL-PV-01 struck. Glass is deliberately ABSENT: this is a panel, and the
  * lane's grammar sanctions backdrop blur on overlay backdrops only
  * (hover-card.css precedent). Because the shared overlay material channel
  * may still resolve translucent, `prefers-reduced-transparency` forces an
@@ -90,21 +92,33 @@
     --ds-popover-bordered-shadow,
     var(
       --ds-material-overlay-shadow,
-      var(--ds-popover-shadow, var(--ds-elevation-3, var(--ds-shadow-lg)))
+      var(
+        --ds-popover-shadow,
+        var(
+          --_ds-popover-layer-step-shadow,
+          var(--ds-elevation-3, var(--ds-shadow-lg))
+        )
+      )
     )
   );
   --ds-popover-texture-current: var(
     --ds-popover-bordered-texture,
     var(--ds-material-overlay-texture, none)
   );
-  --ds-popover-highlight-current: var(
-    --ds-popover-bordered-highlight,
-    linear-gradient(
-      150deg,
-      color-mix(in srgb, currentColor 5%, transparent),
-      transparent 48%
-    )
-  );
+  /* OVL-PV-01 (R1 Cohort 1, option A): the family sheen that used to sit here
+     -- a 150deg gradient carried by a private --ds-popover-highlight-current
+     channel -- is DELETED, not gated. The surface below declares the
+     intensity-governed zenith keyline in its own box-shadow, so this was a
+     SECOND top-light on the same surface, and stacked decorative gradients are
+     the exact smell both tenant directions forbid. It is the third
+     engine-authored sheen struck in this cohort; the dropdown 145deg sweep and
+     the popover title sheen went first. The private -current channel is removed
+     with it -- here, in every recipe, and at the two accessibility guards --
+     because an unused private var is census bait and a reintroduction seam.
+     BitHire loses a 5% currentColor sheen on popovers; the inverse and rich
+     recipes lose their 8%/7% variants. Declared, accepted, in-round deltas. If
+     a sighted look wants the top-light stronger it retunes the zenith keyline,
+     never a second gradient. */
   --ds-popover-padding-block-current: var(
     --ds-popover-bordered-padding-block,
     var(--ds-spacing-md)
@@ -186,6 +200,14 @@
   background:
     linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
     var(--ds-popover-surface);
+  /* WHOLE-VALUE ISOLATION, state 1 of 2 on this family. The depth chain is the
+     SOLE box-shadow. --ds-popover-shadow-current forwards transitively to
+     --ds-material-overlay-shadow (through --ds-popover-bordered-shadow), so the
+     keyline riding beside it as a comma-list item meant an authored `none`
+     expanded to `inset <literal>, none` -- invalid, voiding the declaration and
+     amputating this panel's depth. The forwarding is why a resolver that only
+     greps for a literal --ds-material-* occurrence misses this site. The
+     keyline moved to the decoration slot below. */
   box-shadow: var(--ds-popover-shadow-current);
   color: var(--ds-popover-ink);
   font-family: var(--ds-font-family-base);
@@ -202,22 +224,60 @@
   will-change: opacity, transform;
 }
 
-/* Material layers 2-3 (bounded tint/gradient + tenant motif) ride this
- * private decoration slot instead of the surface background so the governed
- * --ds-effect-intensity dial scales them directly: at 0 the decoration
- * dissolves while the opaque fill, lift layer, edge, elevation and focus
- * ring keep the hierarchy (button.css/card.css idiom). Title, body and the
- * arrow paint above it; it never intercepts pointer input. */
+/* Material layer 3 (the tenant motif) rides this private decoration slot
+ * instead of the surface background so the governed --ds-effect-intensity
+ * dial scales it directly: at 0 the decoration dissolves while the opaque
+ * fill, lift layer, edge, elevation and focus ring keep the hierarchy
+ * (button.css/card.css idiom). The slot carries the motif ONLY -- the layer-2
+ * sheen it used to stack underneath was struck by OVL-PV-01, since the
+ * surface's own zenith keyline already supplies the top-light. Title, body
+ * and the arrow paint above it; it never intercepts pointer input. */
 .rottay-popover--modern[data-part="trigger"]
   > [data-part="surface"][data-part="surface"]::before {
   position: absolute;
   z-index: 0;
   inset: 0;
   border-radius: inherit;
-  background-image: var(--ds-popover-texture-current),
-    var(--ds-popover-highlight-current);
+  background-image: var(--ds-popover-texture-current);
   content: "";
   opacity: var(--ds-effect-intensity);
+  pointer-events: none;
+}
+
+/* Decoration slot for the zenith keyline, deliberately SEPARATE from the motif
+   slot above. The motif slot scales its whole layer by `opacity:
+   var(--ds-effect-intensity)`, and this keyline already scales its own alpha by
+   the same dial inside the color-mix -- sharing one slot would apply the
+   intensity twice and darken the hairline at every setting below 1. That is the
+   two-authorities defect in dial space: one dial applied twice. Keeping the
+   slots separate is load-bearing, so do NOT merge them in a future cleanup; the
+   shipped intensity-linearity probe fails if anyone does.
+   The value is an INSET LITERAL and must stay one (FAB-05): it does NOT read
+   --ds-material-overlay-highlight, whose reads were deliberately removed across
+   the overlay four, dropping its consumer count there to zero -- a channel
+   being retired, not a capability lost. The DECLARED VALUE is exactly what it
+   carried inside the surface's shadow list. `z-index: -1` inside the stacking
+   context the surface isolates reproduces the inset shadow's paint order, and
+   one slot on the base surface covers every state including the
+   collision-adjusted one.
+   BUT THE PAINTED RESULT IS NOT EQUIVALENT, and this comment must not claim it
+   is. A pseudo's inset shadow is drawn against a different box and radius than
+   the surface's own, so on any surface with BOTH a border and a radius -- which
+   this one has -- the corner arcs diverge (measured in Chromium; the delta grows
+   with radius and with device pixel ratio, and radius compensation reduces but
+   does not close it). This relocation is an IN-SCOPE VISUAL DELTA awaiting
+   adjudication, NOT mechanical isolation.
+   The surface is NON-SCROLLING (`overflow: visible`; the body is the
+   scrollport), which is the precondition that makes a pseudo anchor-correct
+   here. */
+.rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"][data-part="surface"]::after {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(72% * var(--ds-effect-intensity, 1)), transparent);
+  content: "";
   pointer-events: none;
 }
 
@@ -306,7 +366,6 @@
     var(--ds-shadow-md)
   );
   --ds-popover-texture-current: var(--ds-popover-minimal-texture, none);
-  --ds-popover-highlight-current: var(--ds-popover-minimal-highlight, none);
   --ds-popover-padding-block-current: var(
     --ds-popover-minimal-padding-block,
     var(--ds-spacing-sm)
@@ -345,14 +404,6 @@
     var(--ds-shadow-xl)
   );
   --ds-popover-texture-current: var(--ds-popover-inverse-texture, none);
-  --ds-popover-highlight-current: var(
-    --ds-popover-inverse-highlight,
-    linear-gradient(
-      155deg,
-      color-mix(in srgb, currentColor 8%, transparent),
-      transparent 58%
-    )
-  );
 }
 
 .rottay-popover--modern[data-part="trigger"]
@@ -384,14 +435,6 @@
   --ds-popover-texture-current: var(
     --ds-popover-rich-texture,
     var(--ds-material-raised-texture, none)
-  );
-  --ds-popover-highlight-current: var(
-    --ds-popover-rich-highlight,
-    linear-gradient(
-      145deg,
-      color-mix(in srgb, currentColor 7%, transparent),
-      transparent 54%
-    )
   );
   --ds-popover-padding-block-current: var(
     --ds-popover-rich-padding-block,
@@ -452,11 +495,37 @@
   );
 }
 
+/* WHOLE-VALUE ISOLATION, state 2 of 2. This state carried the SAME defect as
+   the base surface, with a narrower trigger, and a state-scoped fix that only
+   held in the default state would have been the same defect wearing a
+   condition. --ds-popover-collision-shadow is declared NOWHERE in the repo, so
+   its fallback always resolves to --ds-popover-shadow-current, which forwards
+   on to --ds-material-overlay-shadow: an authored `none` therefore expanded to
+   `inset <literal>, none` here too. Depth is now the sole box-shadow; the
+   decoration slot supplies the keyline in every state, so this state needs no
+   keyline of its own. */
 .rottay-popover--modern[data-part="trigger"]
   > [data-part="surface"][data-collision-adjusted="true"] {
   box-shadow: var(
     --ds-popover-collision-shadow,
     var(--ds-popover-shadow-current)
+  );
+}
+
+/* Nested-layer grammar: a popover that opens INSIDE a modal (the modal's
+ * top-layer host keeps the surface in the dialog's subtree) steps one rung
+ * up the elevation ramp so the layering reads without a z-index war. The
+ * private bridge slots into the base shadow chain AFTER every authored
+ * channel, so a tenant shadow or a deliberate material recipe still wins
+ * and only the unauthored default gains the step. The step targets rung 5:
+ * the modal chamber's own floor moved to rung 4 (overlay-modal.css), so
+ * rung 4 here would sit the contextual surface level with its parent. */
+.rottay-overlay-modal-shell--modern
+  .rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"][data-part="surface"] {
+  --_ds-popover-layer-step-shadow: var(
+    --ds-elevation-5,
+    var(--ds-elevation-4, var(--ds-elevation-3, var(--ds-shadow-lg)))
   );
 }
 
@@ -484,14 +553,24 @@
     );
   border-start-start-radius: inherit;
   border-start-end-radius: inherit;
-  background: var(
-    --ds-popover-title-background,
-    linear-gradient(
-      145deg,
-      color-mix(in srgb, var(--ds-color-primary) 7%, transparent),
-      transparent 64%
-    )
-  );
+  /* OVL-PV-02: the TITLE sheen crosses title content, which contentSafeZone
+     forbids even for sanctioned motifs, and it mixes from --ds-color-primary
+     rather than currentColor so it tints toward the brand hue on a surface the
+     ledger wants monochrome. Same remedy: the tenant-reachable role channel goes
+     between the family channel and the literal, so a direction that forbids
+     glossy gradients can turn it off without a component branch. */
+  /* TITLE SHEEN DELETED, symmetric with the dropdown sweep ruling. Two laws
+     converge here. ONE CHANNEL, ONE PAINT SITE PER FAMILY: the panel already
+     consumes the texture channel for its pseudo-element and arrow, so a nested
+     part re-reading a tenant channel paints it twice. And a third decoration on
+     top of keyline plus texture is the stacked-decoration smell both tenant
+     directions forbid — the same reason the dropdown sweep went. The title now
+     reads NO tenant channel at all; it inherits the surface's resolved material.
+     If a BitHire title sheen is wanted back it returns engine-owned and
+     image-typed inside the existing texture-current stack, alpha scaled by
+     --ds-effect-intensity so the ledger zeroes it — never as a new channel and
+     never crossing text at full alpha. */
+  background: var(--ds-popover-title-background, none);
   color: var(--ds-popover-title-color, var(--ds-popover-ink));
   font: var(
     --ds-popover-title-type,
@@ -753,7 +832,6 @@ html[data-ds-motion="reduced"]
 @media (prefers-reduced-transparency: reduce) {
   .rottay-popover--modern[data-part="trigger"]
     > [data-part="surface"][data-part="surface"] {
-    --ds-popover-highlight-current: none;
     --ds-popover-texture-current: none;
   }
 
@@ -772,13 +850,20 @@ html[data-ds-motion="reduced"]
 @media (forced-colors: active) {
   .rottay-popover--modern[data-part="trigger"]
     > [data-part="surface"][data-part="surface"] {
-    --ds-popover-highlight-current: none;
     --ds-popover-texture-current: none;
 
     border-color: CanvasText;
     background: Canvas;
     box-shadow: none;
     color: CanvasText;
+  }
+
+  /* The keyline moved to the decoration slot, so the reset above no longer
+     reaches it. Cleared explicitly so the forced palette stays as flat as it
+     was when both shadows shared one declaration. */
+  .rottay-popover--modern[data-part="trigger"]
+    > [data-part="surface"][data-part="surface"]::after {
+    box-shadow: none;
   }
 
   .rottay-popover--modern[data-part="trigger"]

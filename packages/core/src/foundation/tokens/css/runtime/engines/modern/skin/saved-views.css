@@ -40,13 +40,50 @@
   display: flex;
   align-items: center;
   gap: var(--ds-saved-views-gap, 6px);
-  min-block-size: var(--ds-saved-views-bar-min-height, 40px);
+  /* Density law: the bar's floor height scales with the governed density
+     channel (compact 0.9 sits lower, spacious gains air); the authored
+     --ds-saved-views-bar-min-height always wins untouched. */
+  min-block-size: calc(
+    var(--ds-saved-views-bar-min-height, 40px) *
+    var(--ds-density-effective-scale, 1)
+  );
   padding-inline: var(--ds-saved-views-bar-padding-inline, 8px);
   overflow-x: auto;
   scrollbar-width: none;
+  /* C1 scroll affordance: the bar hides its scrollbar, so the inline-end
+     fade is the only honest "more views" cue. When nothing overflows, the
+     end zone is empty padding and the fade self-hides (pills pack at the
+     inline start; loading centers the spinner, also clear of the fade). */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    #000 0%,
+    #000 calc(100% - 1.5rem),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    #000 0%,
+    #000 calc(100% - 1.5rem),
+    transparent 100%
+  );
   /* Narrow-composition probe (tabs.css `ds-tabs` idiom): the compact rhythm
      is driven by the bar's own width, never the viewport. */
   container: ds-saved-views / inline-size;
+}
+
+[dir='rtl'] .ds-pattern-saved-views.ds-engine-modern[data-part='root'] {
+  -webkit-mask-image: linear-gradient(
+    to left,
+    #000 0%,
+    #000 calc(100% - 1.5rem),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to left,
+    #000 0%,
+    #000 calc(100% - 1.5rem),
+    transparent 100%
+  );
 }
 
 .ds-pattern-saved-views.ds-engine-modern[data-part='root']::-webkit-scrollbar {
@@ -73,13 +110,37 @@
   flex-shrink: 0;
   align-items: center;
   gap: var(--ds-saved-views-pill-gap, 6px);
-  padding-block: var(--ds-saved-views-pill-padding-block, 4px);
+  /* Density law: the block padding scales with the governed density channel,
+     so a compact profile sits tighter and a spacious one breathes — the
+     authored --ds-saved-views-pill-padding-block always wins untouched. */
+  padding-block: calc(
+    var(--ds-saved-views-pill-padding-block, 4px) *
+    var(--ds-density-effective-scale, 1)
+  );
   padding-inline: var(--ds-saved-views-pill-padding-inline, 12px);
   color: var(--ds-color-text);
-  font-size: var(--ds-saved-views-pill-font-size, 13px);
+  /* Typography law: the pill rung follows the tenant type scale (1 default;
+     1.04 on the editorial profile), not a hardcoded absolute. */
+  font-size: calc(
+    var(--ds-saved-views-pill-font-size, 13px) * var(--ds-type-scale, 1)
+  );
   line-height: var(--ds-saved-views-pill-line-height, 20px);
+  /* C1 tag voice: view names read as authored TAGS, not body text — the
+     tenant's governed label tracking and numeric channels give a technical
+     profile tracked, tabular view names while an editorial one keeps quiet
+     ink (both channels pre-resolve per personality; default = designed
+     neutral). */
+  letter-spacing: var(--ds-type-label-letter-spacing, normal);
+  font-variant-numeric: var(--ds-type-numeric-font-variant-numeric, normal);
   background: transparent;
-  border-radius: var(--ds-radius-full, 9999px);
+  /* PROTO (--_ds-saved-views-pill-radius): pill geometry as one authored
+     radius. Fallback keeps the shipped full-pill silhouette; a technical
+     profile keeps the capsule (BitHire) while an editorial one can author a
+     near-rect paper tag (The Management, radiusScale 0.76) — same DOM. */
+  border-radius: var(
+    --_ds-saved-views-pill-radius,
+    var(--ds-radius-full, 9999px)
+  );
   box-shadow: none;
   user-select: none;
   transition:
@@ -97,9 +158,17 @@
 
 .ds-pattern-saved-views.ds-engine-modern
   .ds-saved-views__pill[data-part='pill'][data-active='true'] {
-  color: var(--ds-color-primary-foreground);
-  background: var(--ds-color-primary);
-  border-color: var(--ds-color-primary);
+  /* PROTOs (active treatment): the selected view is one authored ink + fill
+     pair plus an optional inner rule. Fallbacks preserve the shipped
+     solid-primary pill; an editorial profile can author a transparent fill
+     with its own ink and a bottom rule (`--_ds-saved-views-active-rule:
+     inset 0 -2px 0 0 <ink>`) to read the selection as a typographic mark
+     instead of a filled box, while a technical profile keeps the solid
+     control. */
+  color: var(--_ds-saved-views-active-ink, var(--ds-color-primary-foreground));
+  background: var(--_ds-saved-views-active-fill, var(--ds-color-primary));
+  border-color: var(--_ds-saved-views-active-fill, var(--ds-color-primary));
+  box-shadow: var(--_ds-saved-views-active-rule, none);
 }
 
 @media (hover: hover) {
@@ -179,19 +248,37 @@
 }
 
 /* ---- unsaved dot + default star (geometry was engine inline styles). ---- */
+/* The unsaved indicator is a ringed nucleus — a SHAPE (ring + filled core),
+   never hue alone: it stays legible in monochrome, on the active pill's own
+   fill, and under forced colors (system ButtonText below). */
 .ds-pattern-saved-views.ds-engine-modern
   .ds-saved-views__unsaved-dot[data-part='unsaved-dot'] {
   display: inline-block;
   flex-shrink: 0;
-  inline-size: var(--ds-saved-views-unsaved-dot-size, 6px);
-  block-size: var(--ds-saved-views-unsaved-dot-size, 6px);
+  inline-size: var(--ds-saved-views-unsaved-dot-size, 7px);
+  block-size: var(--ds-saved-views-unsaved-dot-size, 7px);
   border-radius: 50%;
   background: var(--ds-color-primary);
+  /* C1: the unsaved-work signal must be caught peripherally, not found —
+     the tonal ring around the nucleus is strengthened so the ringed shape
+     reads on the quiet pill and on the active pill's own fill. */
+  box-shadow: 0 0 0 1.5px
+    color-mix(in srgb, var(--ds-color-primary) 62%, transparent);
 }
 
 .ds-pattern-saved-views.ds-engine-modern
   .ds-saved-views__unsaved-dot[data-part='unsaved-dot'][data-active='true'] {
-  background: var(--ds-color-primary-foreground);
+  background: var(
+    --_ds-saved-views-active-ink,
+    var(--ds-color-primary-foreground)
+  );
+  box-shadow: 0 0 0 1.5px
+    color-mix(
+      in srgb,
+      var(--_ds-saved-views-active-ink, var(--ds-color-primary-foreground))
+        72%,
+      transparent
+    );
 }
 
 /* ---- default-view marker (governed status.featured role). The icon contract
@@ -206,7 +293,10 @@
 .ds-pattern-saved-views.ds-engine-modern
   .ds-saved-views__pill[data-active='true']
   .ds-saved-views__default-star[data-part='default-star'] {
-  color: var(--ds-color-primary-foreground);
+  color: var(
+    --_ds-saved-views-active-ink,
+    var(--ds-color-primary-foreground)
+  );
 }
 
 /* ---- menu trigger: icon Button, revealed on pill hover / while open (the
@@ -340,9 +430,18 @@
   padding-block: var(--ds-saved-views-create-button-padding-block, 4px);
   padding-inline: var(--ds-saved-views-create-button-padding-inline, 10px);
   background: transparent;
-  border-radius: var(--ds-radius-full, 9999px);
+  /* Same geometry proto as the pills: one authored corner for the whole bar,
+     so the create affordance never drifts from the view tags it sits beside. */
+  border-radius: var(
+    --_ds-saved-views-pill-radius,
+    var(--ds-radius-full, 9999px)
+  );
   color: var(--ds-color-text-muted);
-  font-size: var(--ds-saved-views-pill-font-size, 13px);
+  font-size: calc(
+    var(--ds-saved-views-pill-font-size, 13px) * var(--ds-type-scale, 1)
+  );
+  /* Same tag voice as the view pills beside it — one bar, one voice. */
+  letter-spacing: var(--ds-type-label-letter-spacing, normal);
   font-weight: var(--ds-saved-views-create-button-font-weight, var(--ds-font-weight-medium, 500));
   cursor: pointer;
   transition:
@@ -430,6 +529,26 @@
     .ds-saved-views__pill[data-part='pill'][data-active='true'] {
     background: Highlight;
     color: HighlightText;
+    /* The editorial active rule (a box-shadow) is stripped with every other
+       shadow; the Highlight fill above carries selection on its own. */
+    box-shadow: none;
+  }
+
+  /* The unsaved dot's tonal ring is stripped; re-assert it as a system-ink
+     outline so the ringed-nucleus SHAPE survives color stripping. */
+  .ds-pattern-saved-views.ds-engine-modern
+    .ds-saved-views__unsaved-dot[data-part='unsaved-dot'] {
+    forced-color-adjust: none;
+    background: ButtonText;
+    box-shadow: none;
+    outline: 1.5px solid ButtonText;
+    outline-offset: 1px;
+  }
+
+  .ds-pattern-saved-views.ds-engine-modern
+    .ds-saved-views__unsaved-dot[data-part='unsaved-dot'][data-active='true'] {
+    background: HighlightText;
+    outline-color: HighlightText;
   }
 
   /* The drop indicator's inset shadow is stripped: the drag target keeps a

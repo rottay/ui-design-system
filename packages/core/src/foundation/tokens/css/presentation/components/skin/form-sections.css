@@ -64,6 +64,29 @@
  * `RecordSummaryStrip`'s five variants share two byte-identical border formulas.
  * They are deliberately NOT unified: each component resolves its own literal
  * today, and a future edit to one must not move the other's pixels.
+ *
+ * C-12 WAVE (record/detail composition):
+ *  - DENSITY: the private `--_ds-form-sections-density` channel (canonical
+ *    `--ds-density-global-effective-scale`, fallback 1) scales the family's
+ *    deliberate px paddings/rhythm — compact vs spacious tenant postures
+ *    change the section grid's air without a tenant selector.
+ *  - TYPOGRAPHY AXIS: facts labels + eyebrow ride the personality channel
+ *    `--ds-typography-label-transform` (fallback `uppercase`, exact pre-wave
+ *    render); fact values ride `--ds-type-numeric-font-variant-numeric`
+ *    (fallback `normal`) — tabular lining vs oldstyle by type profile.
+ *  - GEOMETRY/EDGE: card radii resolve `--ds-radius-*` with exact pre-wave
+ *    fallbacks; the divided separator, the div-header rule and the facts
+ *    ledger rules resolve `--ds-divider-width`/`--ds-divider-style` (floors
+ *    1px solid), so a ruled/dashed tenant divider grammar reaches the
+ *    section grammar (editorial "rules over boxes" vs technical hairlines).
+ *  - STATES: `data-error` paints a header chip (semantic status icon +
+ *    copy, never colour-only) and, on framed appearances, the error frame;
+ *    FormFactsCard `data-loading` reserves each row's label/value footprint
+ *    with Skeleton bars; the index/toggle wells are zoom-resilient
+ *    (min-size floor instead of a fixed box).
+ *  - REFLOW: the facts card is an inline-size container; below the cut the
+ *    ledger rows stack label over value with the alignment preserved —
+ *    the two-column-to-stack rule of the detail composition.
  */
 
 /* --- Tone token sets ------------------------------------------------------- */
@@ -71,6 +94,8 @@
 .ds-structure.ds-form-sections[data-part='root'] {
   container-type: inline-size;
   container-name: ds-form-sections;
+  /* One private density factor for the family's deliberate px geometry. */
+  --_ds-form-sections-density: var(--ds-density-global-effective-scale, 1);
 }
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] {
@@ -147,7 +172,7 @@
 /* card (default): the open section lifts -- brighter surface, firmer border, and
    the only box-shadow in the family. */
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='card'] {
-  border-radius: 18px;
+  border-radius: var(--ds-radius-xl, 18px);
   border: 1px solid var(--ds-form-sections-border);
   background: var(--ds-form-sections-muted-surface);
   box-shadow: none;
@@ -164,7 +189,7 @@
 }
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='soft'] {
-  border-radius: 18px;
+  border-radius: var(--ds-radius-xl, 18px);
   border: 1px solid var(--ds-form-sections-border);
   background: var(--ds-form-sections-muted-surface);
   box-shadow: none;
@@ -180,17 +205,29 @@
   box-shadow: none;
 }
 
-/* The divided rhythm is a rule BETWEEN sections, so the first one carries none. */
+/* The divided rhythm is a rule BETWEEN sections, so the first one carries none.
+   Divider grammar channels: ruled/dashed tenant divider postures reach the
+   separator; floors keep the exact 1px solid pre-wave render. */
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='divided']:not(:first-child) {
-  border-top: 1px solid var(--ds-form-sections-divider);
+  border-top: var(--ds-divider-width, 1px) var(--ds-divider-style, solid) var(--ds-form-sections-divider);
+}
+
+/* Section-level error (C-12): on framed appearances the shell takes the error
+   frame — `data-appearance` is always stamped, so the chain ties the open-state
+   rule at (0,6,0) and wins by sorting after it; the header chip below carries
+   the icon + copy, so the state never reads through colour alone. Divided
+   sections have no frame by design: the chip is their cue. */
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance][data-error='true']:not([data-appearance='divided']) {
+  border-color: color-mix(in srgb, var(--ds-color-error) 62%, var(--ds-color-border-secondary));
 }
 
 /* --- Section header -------------------------------------------------------- */
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] {
-  /* Geometry drained from the engine (the former `headerShellStyle`). */
+  /* Geometry drained from the engine (the former `headerShellStyle`);
+     density-scaled by the family's private factor (C-12). */
   inline-size: 100%;
-  padding: 18px 18px 16px;
+  padding: calc(18px * var(--_ds-form-sections-density, 1)) calc(18px * var(--_ds-form-sections-density, 1)) calc(16px * var(--_ds-form-sections-density, 1));
   color: var(--ds-color-text-primary);
   background-color: color-mix(in srgb, var(--ds-color-bg-secondary) 62%, transparent);
   background-image:
@@ -220,16 +257,17 @@
 }
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='divided'] > [data-part='section-header'] {
-  padding: 16px 10px 14px;
+  padding: calc(16px * var(--_ds-form-sections-density, 1)) calc(10px * var(--_ds-form-sections-density, 1)) calc(14px * var(--_ds-form-sections-density, 1));
   background-color: color-mix(in srgb, var(--ds-color-bg-secondary) 52%, transparent);
 }
 
 /* See the P-78 note in this file's header: the collapsible header is a <button>
    and has NEVER had a bottom border. These two rules are not interchangeable —
    the div branch is matched by `:not([aria-expanded])` because the collapsible
-   button ALWAYS stamps aria-expanded (no attribute is ever repeated). */
+   button ALWAYS stamps aria-expanded (no attribute is ever repeated). The rule
+   itself rides the tenant divider grammar (floors 1px solid). */
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > div[data-part='section-header']:not([aria-expanded]) {
-  border-bottom: 1px solid var(--ds-form-sections-divider);
+  border-bottom: var(--ds-divider-width, 1px) var(--ds-divider-style, solid) var(--ds-form-sections-divider);
 }
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > button[data-part='section-header'] {
@@ -258,9 +296,13 @@
 /* --- Section index --------------------------------------------------------- */
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-index'] {
-  /* Geometry + mono numeral drained from the engine (a Box, so skin-owned). */
-  inline-size: 28px;
-  block-size: 28px;
+  /* Geometry + mono numeral drained from the engine (a Box, so skin-owned).
+     The 28px frame is a FLOOR, not a fixed box: at high zoom/type-scale the
+     numeral grows the well instead of overflowing it (C-12). */
+  min-inline-size: 28px;
+  min-block-size: 28px;
+  padding-inline: 4px;
+  box-sizing: border-box;
   display: flex;
   flex-shrink: 0;
   align-items: center;
@@ -268,7 +310,7 @@
   font-family: var(--ds-font-family-mono, monospace);
   font-size: var(--ds-font-size-2xs);
   font-weight: 700;
-  border-radius: 9px;
+  border-radius: var(--ds-radius-md, 9px);
   border: 1px solid var(--ds-form-sections-border);
   background: transparent;
   color: var(--ds-color-text-tertiary);
@@ -360,16 +402,39 @@
   text-transform: uppercase;
 }
 
+/* --- Section error chip (C-12) ----------------------------------------------
+   Same pill grammar as the required/optional chip, in the error voice: the
+   semantic status icon is the shape cue, the copy carries the meaning, and
+   the frame/tint are the colour reinforcement — never the only signal. */
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-error'] {
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--ds-color-error) 38%, var(--ds-color-border-secondary));
+  background: color-mix(in srgb, var(--ds-color-error) 7%, transparent);
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-error-icon'],
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-error-copy'] {
+  color: var(--ds-color-error);
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-error-copy'] {
+  line-height: var(--ds-line-height-none, 1);
+}
+
 /* --- Toggle ----------------------------------------------------------------- */
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-toggle'] {
-  /* Geometry drained from the engine (the 28px chevron well). */
-  inline-size: 28px;
-  block-size: 28px;
+  /* Geometry drained from the engine (the 28px chevron well) — a floor, not
+     a fixed box, so the chevron survives high zoom/type-scale (C-12). */
+  min-inline-size: 28px;
+  min-block-size: 28px;
+  padding-inline: 4px;
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 9px;
+  border-radius: var(--ds-radius-md, 9px);
   border: 1px solid var(--ds-form-sections-border);
   background: transparent;
   transform: rotate(0deg);
@@ -397,14 +462,14 @@
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > * > * > [data-part='section-content'] {
   /* Card/soft content padding drained from the engine (the divided cut is
-     overridden below). */
-  padding: 18px 18px 20px;
+     overridden below); density-scaled by the family's private factor. */
+  padding: calc(18px * var(--_ds-form-sections-density, 1)) calc(18px * var(--_ds-form-sections-density, 1)) calc(20px * var(--_ds-form-sections-density, 1));
   color: var(--ds-color-text-primary);
   transform: translateY(-10px);
 }
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='divided'] > * > * > [data-part='section-content'] {
-  padding: 20px 10px 6px;
+  padding: calc(20px * var(--_ds-form-sections-density, 1)) calc(10px * var(--_ds-form-sections-density, 1)) calc(6px * var(--_ds-form-sections-density, 1));
 }
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > * > * > [data-part='section-content'][data-open='true'] {
@@ -478,10 +543,17 @@
   .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-index'],
   .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-summary'],
   .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'],
+  .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-error'],
   .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-toggle'],
   div.ds-structure.ds-form-sections[data-part='facts-card'],
   div[data-part='facts-card'] [data-part='facts-card-item'] {
     border-color: ButtonText;
+  }
+
+  /* The section error keeps its icon shape + copy (never paint alone). */
+  .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-error-icon'],
+  .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-error-copy'] {
+    color: CanvasText;
   }
 }
 
@@ -499,27 +571,32 @@
 
 /* A standalone sibling card: it has no tone, so it takes the `default` tone's
    surface, border and divider as literals rather than reading the tone tokens
-   above (which are declared on `[data-part='section']`, not on this root). */
+   above (which are declared on `[data-part='section']`, not on this root).
+   It is also its own inline-size container: the ledger rows below stack
+   label over value under the narrow cut (C-12 two-column-to-stack rule). */
 div.ds-structure.ds-form-sections[data-part='facts-card'] {
+  container-type: inline-size;
+  --_ds-form-sections-density: var(--ds-density-global-effective-scale, 1);
   inline-size: 100%;
-  border-radius: 16px;
+  border-radius: var(--ds-radius-lg, 16px);
   border: 1px solid var(--ds-color-border-secondary);
   background: var(--ds-surface-card, var(--ds-color-bg-elevated));
   color: var(--ds-color-text-primary);
 }
 
 /* Body + list geometry drained from the engine (the former inline padding on
-   the body Box, the items stack's margin, and each row's block padding). */
+   the body Box, the items stack's margin, and each row's block padding);
+   density-scaled by the family's private factor (C-12). */
 div.ds-structure.ds-form-sections[data-part='facts-card'] > [data-part='facts-card-body'] {
-  padding: 20px;
+  padding: calc(20px * var(--_ds-form-sections-density, 1));
 }
 
 .ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-items'] {
-  margin-block-start: 18px;
+  margin-block-start: calc(18px * var(--_ds-form-sections-density, 1));
 }
 
 div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item'] {
-  padding-block: 10px;
+  padding-block: calc(10px * var(--_ds-form-sections-density, 1));
 }
 
 .ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-eyebrow'][data-size],
@@ -543,7 +620,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    end-alignment and break strategy — all formerly inline in the engine. */
 .ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-eyebrow'] {
   letter-spacing: 0.14em;
-  text-transform: uppercase;
+  /* Personality channel: tenant label casing reaches the facts eyebrow;
+     absent a personality the exact pre-wave uppercase stands (C-12). */
+  text-transform: var(--ds-typography-label-transform, uppercase);
   font-family: var(--ds-font-family-mono, monospace);
 }
 
@@ -558,14 +637,19 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 .ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item-label'] {
   letter-spacing: 0.12em;
-  text-transform: uppercase;
+  text-transform: var(--ds-typography-label-transform, uppercase);
   font-family: var(--ds-font-family-mono, monospace);
 }
 
 .ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item-value'] {
-  max-inline-size: 180px;
+  /* Ledger measure: scales with the card instead of a dead 180px cap — no
+     squeezed values at 390px, no absurd wraps in wide cards (C-12). */
+  max-inline-size: min(52%, 15rem);
   text-align: end;
   word-break: break-word;
+  /* Numeric posture channel: tabular lining under a technical profile,
+     oldstyle under an editorial one; the floor keeps the pre-wave `normal`. */
+  font-variant-numeric: var(--ds-type-numeric-font-variant-numeric, normal);
 }
 
 .ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item-value'][data-mono='true'] {
@@ -575,7 +659,45 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* BUG FIX (was `.ds-structure.ds-form-sectionsdiv[data-part='facts-card']` —
    a fused selector that matched nothing, so fact rows shipped with no
    divider). The divider reads BETWEEN facts: the last row carries none, so
-   the card's bottom padding does not double as a hanging rule. */
+   the card's bottom padding does not double as a hanging rule. The rule
+   rides the tenant divider grammar (floors 1px solid) — ruled/dashed
+   postures reach the ledger. */
 div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item']:not(:last-child) {
-  border-bottom: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 78%, transparent);
+  border-bottom: var(--ds-divider-width, 1px) var(--ds-divider-style, solid) color-mix(in srgb, var(--ds-color-border-secondary) 78%, transparent);
+}
+
+/* Two-column-to-stack reflow (C-12): below the cut the ledger row stops
+   splitting label | value across the measure and stacks them, label first,
+   value start-aligned with no residual cap — the label→value alignment
+   survives and long ES/AR labels never fight a squeezed value column. The
+   Flex's own row direction is a (0,1,0) skin rule, so this chained rule
+   outranks it; `row-gap` likewise outranks the gap channel's row axis. */
+@container (inline-size < 24rem) {
+  div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item'] {
+    flex-direction: column;
+    row-gap: 2px;
+  }
+
+  div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item-value'] {
+    max-inline-size: none;
+    text-align: start;
+  }
+}
+
+/* Loading (C-12): the skeleton pair reserves the row's final footprint — a
+   label bar on the copy side, a shorter value bar on the measure side. */
+.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item-skeleton-label'],
+.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item-skeleton-value'] {
+  display: flex;
+  align-items: center;
+}
+
+.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item-skeleton-label'] {
+  flex: 1;
+  min-inline-size: 0;
+  block-size: calc(var(--ds-font-size-xs, 0.75rem) * 1.35);
+}
+
+.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item-skeleton-value'] {
+  block-size: calc(var(--ds-font-size-sm, 0.875rem) * 1.5);
 }

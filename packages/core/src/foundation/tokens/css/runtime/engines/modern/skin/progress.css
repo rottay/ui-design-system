@@ -99,7 +99,14 @@
 .rottay-progress-shell.rottay-progress-shell--modern [data-part='fill']::-webkit-progress-value {
   border-radius: inherit;
   background: var(--ds-progress-resolved-fill, var(--ds-color-primary));
-  transition: width var(--ds-motion-normal) var(--ds-motion-ease-out);
+  /* Completion is deliberate and CONTINUOUS: the fill settles on the reveal
+     rung, which the tenant duration-scale dial multiplies (scale 1 = the
+     historical 200ms), and the terminal color shift (primary -> success /
+     error) crossfades on that same rung instead of hard-cutting at the exact
+     moment the meter arrives -- the arrival is a settle, not a swap. */
+  transition:
+    width var(--ds-motion-reveal, var(--ds-motion-normal)) var(--ds-motion-ease-out),
+    background-color var(--ds-motion-reveal, var(--ds-motion-normal)) var(--ds-motion-ease-out);
 }
 
 .rottay-progress-shell.rottay-progress-shell--modern [data-part='fill']::-moz-progress-bar {
@@ -149,7 +156,9 @@
 @media (prefers-reduced-motion: no-preference) {
   .rottay-progress-shell.rottay-progress-shell--modern[data-status='active'] [data-part='fill']::-webkit-progress-value,
   .rottay-progress-shell.rottay-progress-shell--modern[data-status='active'] [data-part='fill']::-moz-progress-bar {
-    animation: ds-progress-active-stripes-modern calc(var(--ds-motion-glacial) * 2) linear infinite;
+    /* Ambient cadence rides the tenant duration-scale dial (scale 1 = the
+       historical calc). */
+    animation: ds-progress-active-stripes-modern calc(var(--ds-motion-glacial) * 2 * var(--ds-motion-duration-scale, 1)) linear infinite;
   }
 }
 
@@ -182,7 +191,7 @@
 @media (prefers-reduced-motion: no-preference) {
   .rottay-progress-shell.rottay-progress-shell--modern [data-part='indeterminate'][data-part='indeterminate'] {
     animation: ds-foundation-progress-indeterminate
-      calc(var(--ds-motion-glacial) * 3)
+      calc(var(--ds-motion-glacial) * 3 * var(--ds-motion-duration-scale, 1))
       var(--ds-motion-ease-in-out) infinite;
   }
 }
@@ -216,6 +225,31 @@
   color: var(--ds-progress-resolved-fill, var(--ds-color-primary));
 }
 
+/* Completion ceremony (transient cadence law): the terminal glyph SETTLES
+   into place on the reveal rung -- the same cadence the fill's completion
+   uses -- instead of popping into existence at the exact arrival moment.
+   Depth rides the motion-intensity dial (fallback 1 = scale 0.6 -> 1).
+   Line and circle share the one rule; reduced motion skips the block below
+   entirely, so the glyph appears instantly exactly as it always has. */
+@keyframes ds-progress-status-arrive-modern {
+  from {
+    opacity: 0;
+    transform: scale(calc(1 - 0.4 * var(--ds-motion-intensity, 1)));
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .rottay-progress-shell.rottay-progress-shell--modern [data-part='status-icon'] {
+    animation: ds-progress-status-arrive-modern
+      var(--ds-motion-reveal, var(--ds-motion-normal))
+      var(--ds-motion-ease-out) both;
+  }
+}
+
 /* ==========================================================================
    CIRCLE (Progress state mapped onto the shared arc substrate)
    ========================================================================== */
@@ -237,7 +271,7 @@
 /* Indeterminate circle: the quarter arc stamped by the engine spins calmly. */
 @media (prefers-reduced-motion: no-preference) {
   .rottay-progress-shell.rottay-progress-shell--modern[data-type='circle'][data-indeterminate='true']::before {
-    animation: ds-foundation-spin calc(var(--ds-motion-glacial) * 2.4) linear infinite;
+    animation: ds-foundation-spin calc(var(--ds-motion-glacial) * 2.4 * var(--ds-motion-duration-scale, 1)) linear infinite;
   }
 }
 

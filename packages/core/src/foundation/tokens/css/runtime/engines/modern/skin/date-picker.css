@@ -79,6 +79,21 @@
  * box-shadow, outline, border-radius) and pure `border: none` resets win
  * unlayered at (0,3,0) or lower.
  *
+ * C-02 SECOND PASS (Phase C1, 2026-08-03): the trigger joins the field
+ * family outright. Its surface/frame/edge/placeholder/state paint now pass
+ * through the certified `--ds-input-*` channels (never the generic
+ * `--ds-color-bg-input`, broken under TMM's dark-text theme; never a
+ * literal 1px/md-radius frame); per-size private relays land the Input
+ * radius chain and the height-as-floor grammar
+ * (`--_ds-datepicker-trigger-radius` / `--_ds-datepicker-trigger-height`,
+ * min-block-size x density with the coarse block recomputing
+ * max(relay, 44px) -- the engine keeps NO block-axis inline style, so the
+ * touch floor can actually win); status frames keep hue + tinted surface
+ * THROUGH focus (the Input focus-within grammar -- the generic focus rule
+ * used to wash the error border back to primary); disabled reads the
+ * family's terminated disabled chain; the range-active endpoint ring rides
+ * the tenant's `--ds-input-shadow-focus`.
+ *
  * B5-03 (Phase B second pass): locale-safe geometry and range grammar.
  * - Grid gutter + day-cell SIZE moved here from inline styles so a RANGE
  *   panel (`[data-range='true']`, stamped by the engine whenever the
@@ -124,6 +139,9 @@
 .rottay-datepicker.rottay-datepicker--modern[data-part='root'] {
   position: relative;
   inline-size: 100%;
+  /* Mobile keyboard posture: one rhythm of clearance on the OS focus scroll
+     (Input/Select/FormField/Form carry the same). */
+  scroll-margin-block: var(--ds-spacing-6, 1.5rem);
 }
 
 .rottay-datepicker-range.rottay-datepicker-range--modern[data-part='root'] {
@@ -131,6 +149,7 @@
   align-items: center;
   gap: var(--ds-spacing-2);
   inline-size: 100%;
+  scroll-margin-block: var(--ds-spacing-6, 1.5rem);
 }
 
 .rottay-datepicker-range.rottay-datepicker-range--modern [data-part='separator'] {
@@ -147,33 +166,94 @@
   cursor: pointer;
 }
 
+/* FIELD-FAMILY FRAME LAW (C-02): the trigger is the DatePicker's Input-face,
+   so its surface, frame, edge, placeholder and state paint pass through the
+   certified `--ds-input-*` channels -- never the generic `--ds-color-bg-input`
+   (resolves near-black under TMM's dark-text theme, axe-reproduced on the
+   InputNumber lane) and never a literal 1px/md-radius frame. The per-size
+   rules below write two private relays off the Input per-size chains: the
+   radius relay (edge) and the height relay (min-block-size x density plane,
+   the C-02 height-as-floor grammar -- the engine keeps no block-axis inline
+   style, so the coarse-pointer block can recompute max(relay, touch floor)
+   and type scale can grow the field). Relays are private implementation,
+   NOT customization knobs. */
+.rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'][data-size='sm'],
+.rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'][data-size='sm'] {
+  --_ds-datepicker-trigger-radius: var(--ds-input-sm-radius, var(--ds-input-sm-border-radius, var(--ds-radius-input, var(--ds-radius-md))));
+  --_ds-datepicker-trigger-height: calc(var(--ds-input-sm-height) * var(--ds-density-effective-scale));
+}
+.rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'][data-size='md'],
+.rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'][data-size='md'] {
+  --_ds-datepicker-trigger-radius: var(--ds-input-md-radius, var(--ds-input-md-border-radius, var(--ds-radius-input, var(--ds-radius-md))));
+  --_ds-datepicker-trigger-height: calc(var(--ds-input-md-height) * var(--ds-density-effective-scale));
+}
+.rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'][data-size='lg'],
+.rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'][data-size='lg'] {
+  --_ds-datepicker-trigger-radius: var(--ds-input-lg-radius, var(--ds-input-lg-border-radius, var(--ds-radius-input, var(--ds-radius-md))));
+  --_ds-datepicker-trigger-height: calc(var(--ds-input-lg-height) * var(--ds-density-effective-scale));
+}
+
+.rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input']::placeholder,
+.rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input']::placeholder {
+  color: var(--ds-input-color-placeholder, var(--ds-color-text-muted));
+  opacity: var(--ds-input-placeholder-opacity);
+}
+
 /* ---- trigger (in-tree): single ---- */
 
 .rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'] {
-  border-radius: var(--ds-radius-md);
-  background: var(--ds-color-bg-input, var(--ds-surface-control));
-  color: var(--ds-color-text-primary);
+  /* Height is a FLOOR (the relay the per-size rules write), never a ceiling:
+     the field grows with type scale instead of trapping the line box. */
+  min-block-size: var(--_ds-datepicker-trigger-height);
+  border-radius: var(--_ds-datepicker-trigger-radius, var(--ds-radius-input, var(--ds-radius-md)));
+  background: var(--ds-input-bg, var(--ds-material-control-background, var(--ds-surface-control)));
+  color: var(--ds-input-color, var(--ds-color-text-primary));
   outline: none;
+  transition:
+    border-color var(--ds-input-transition-duration, var(--ds-motion-fast)) var(--ds-input-transition-timing, var(--ds-motion-ease-out)),
+    background-color var(--ds-input-transition-duration, var(--ds-motion-fast)) var(--ds-input-transition-timing, var(--ds-motion-ease-out)),
+    box-shadow var(--ds-input-transition-duration, var(--ds-motion-fast)) var(--ds-input-transition-timing, var(--ds-motion-ease-out));
 }
 .rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'][data-status] {
-  border: 1px solid var(--ds-color-border);
+  border: var(--ds-input-border-width) var(--ds-input-border-style)
+    var(--ds-input-border, var(--ds-color-border));
 }
 .rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'][data-status='error'] {
-  border-color: var(--ds-color-error);
+  border-color: var(--ds-input-error-border, var(--ds-color-error));
+  background: var(--ds-input-error-bg, var(--ds-input-bg, var(--ds-surface-control)));
 }
 .rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'][data-status='warning'] {
-  border-color: var(--ds-color-warning);
+  border-color: var(--ds-input-warning-border, var(--ds-color-warning));
+  background: var(--ds-input-warning-bg, var(--ds-input-bg, var(--ds-surface-control)));
 }
 .rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'][data-status]:where(:hover):not(:disabled):not([data-status='error']):not([data-status='warning']) {
-  border-color: var(--ds-datepicker-border-hover, var(--ds-color-border-hover));
+  border-color: var(--ds-datepicker-border-hover, var(--ds-input-border-hover, var(--ds-color-border-hover)));
+  background: var(--ds-input-bg-hover, var(--ds-input-bg, var(--ds-surface-control)));
 }
 .rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'][data-status]:focus-visible {
-  border-color: var(--ds-datepicker-border-focus, var(--ds-color-primary));
+  border-color: var(--ds-datepicker-border-focus, var(--ds-input-border-focus, var(--ds-color-primary)));
+}
+/* State borders survive focus (Input focus-within grammar, C-02): an
+   invalid/warning trigger keeps its state hue + tint while the ring arrives
+   -- the focus read never washes out the validation read. */
+.rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'][data-status='error']:focus-visible {
+  border-color: var(--ds-input-error-border, var(--ds-color-error));
+  background: var(--ds-input-error-bg, var(--ds-input-bg, var(--ds-surface-control)));
+}
+.rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'][data-status='warning']:focus-visible {
+  border-color: var(--ds-input-warning-border, var(--ds-color-warning));
+  background: var(--ds-input-warning-bg, var(--ds-input-bg, var(--ds-surface-control)));
 }
 .rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input']:focus-visible {
-  box-shadow: var(--ds-datepicker-shadow-focus, var(--ds-shadow-focus-ring));
+  box-shadow: var(--ds-datepicker-shadow-focus, var(--ds-input-shadow-focus, var(--ds-shadow-focus-ring)));
 }
 .rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input']:disabled {
+  color: var(--ds-input-color-disabled, var(--ds-color-text-disabled));
+  /* Optional foundation surface: terminate the chain so an unset
+     --ds-surface-disabled cannot make this declaration invalid at
+     computed-value time (same terminal Select authors for this state). */
+  background: var(--ds-input-bg-disabled, var(--ds-surface-disabled, var(--ds-surface-subtle, var(--ds-surface-canvas))));
+  border-color: var(--ds-input-border-disabled, var(--ds-color-border-disabled));
   opacity: var(--ds-disabled-opacity, 0.5);
   cursor: not-allowed;
 }
@@ -181,7 +261,8 @@
 .rottay-datepicker.rottay-datepicker--modern [data-part='clear-button'] {
   /* Positioning geometry drained from the inline style (P2); the icon is
      sized by the icon role, so no font-size is needed. Logical inset keeps
-     the control on the inline-END edge under RTL. */
+     the control on the inline-END edge under RTL. The ink rides the field
+     family's clear-action channels (C-02). */
   position: absolute;
   inset-inline-end: var(--ds-spacing-4);
   inset-block-start: 50%;
@@ -194,57 +275,83 @@
   background: none;
   border: none;
   border-radius: 50%;
-  color: var(--ds-color-text-primary);
+  color: var(--ds-input-clear-color, var(--ds-color-text-primary));
   opacity: var(--ds-datepicker-clear-opacity, 0.5);
   transition: opacity var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 .rottay-datepicker.rottay-datepicker--modern [data-part='clear-button']:hover {
+  color: var(--ds-input-clear-color-hover, var(--ds-color-text-primary));
   opacity: 1;
 }
 
 .rottay-datepicker.rottay-datepicker--modern [data-part='calendar-icon'] {
-  /* Positioning geometry drained from the inline style (P2). */
+  /* Positioning geometry drained from the inline style (P2). Affix ink joins
+     the field family (C-02). */
   position: absolute;
   inset-inline-end: var(--ds-spacing-2);
   inset-block-start: 50%;
   display: flex;
   pointer-events: none;
   transform: translateY(-50%);
-  color: var(--ds-color-text-muted);
+  color: var(--ds-input-affix-color, var(--ds-color-text-muted));
 }
 
 /* ---- trigger (in-tree): range ---- */
 
 .rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'] {
-  border-radius: var(--ds-radius-md);
-  background: var(--ds-color-bg-input, var(--ds-surface-control));
-  color: var(--ds-color-text-primary);
+  min-block-size: var(--_ds-datepicker-trigger-height);
+  border-radius: var(--_ds-datepicker-trigger-radius, var(--ds-radius-input, var(--ds-radius-md)));
+  background: var(--ds-input-bg, var(--ds-material-control-background, var(--ds-surface-control)));
+  color: var(--ds-input-color, var(--ds-color-text-primary));
   outline: none;
+  transition:
+    border-color var(--ds-input-transition-duration, var(--ds-motion-fast)) var(--ds-input-transition-timing, var(--ds-motion-ease-out)),
+    background-color var(--ds-input-transition-duration, var(--ds-motion-fast)) var(--ds-input-transition-timing, var(--ds-motion-ease-out)),
+    box-shadow var(--ds-input-transition-duration, var(--ds-motion-fast)) var(--ds-input-transition-timing, var(--ds-motion-ease-out));
 }
 .rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'][data-status] {
-  border: 1px solid var(--ds-color-border);
+  border: var(--ds-input-border-width) var(--ds-input-border-style)
+    var(--ds-input-border, var(--ds-color-border));
 }
 .rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'][data-status='error'] {
-  border-color: var(--ds-color-error);
+  border-color: var(--ds-input-error-border, var(--ds-color-error));
+  background: var(--ds-input-error-bg, var(--ds-input-bg, var(--ds-surface-control)));
 }
 .rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'][data-status='warning'] {
-  border-color: var(--ds-color-warning);
+  border-color: var(--ds-input-warning-border, var(--ds-color-warning));
+  background: var(--ds-input-warning-bg, var(--ds-input-bg, var(--ds-surface-control)));
 }
 .rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'][data-status]:where(:hover):not(:disabled):not([data-status='error']):not([data-status='warning']) {
-  border-color: var(--ds-datepicker-border-hover, var(--ds-color-border-hover));
+  border-color: var(--ds-datepicker-border-hover, var(--ds-input-border-hover, var(--ds-color-border-hover)));
+  background: var(--ds-input-bg-hover, var(--ds-input-bg, var(--ds-surface-control)));
 }
 .rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'][data-status]:focus-visible {
-  border-color: var(--ds-datepicker-border-focus, var(--ds-color-primary));
+  border-color: var(--ds-datepicker-border-focus, var(--ds-input-border-focus, var(--ds-color-primary)));
+}
+/* State borders survive focus (Input focus-within grammar, C-02) -- the
+   range endpoints speak the same validation language as the single trigger. */
+.rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'][data-status='error']:focus-visible {
+  border-color: var(--ds-input-error-border, var(--ds-color-error));
+  background: var(--ds-input-error-bg, var(--ds-input-bg, var(--ds-surface-control)));
+}
+.rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'][data-status='warning']:focus-visible {
+  border-color: var(--ds-input-warning-border, var(--ds-color-warning));
+  background: var(--ds-input-warning-bg, var(--ds-input-bg, var(--ds-surface-control)));
 }
 .rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input']:focus-visible {
-  box-shadow: var(--ds-datepicker-shadow-focus, var(--ds-shadow-focus-ring));
+  box-shadow: var(--ds-datepicker-shadow-focus, var(--ds-input-shadow-focus, var(--ds-shadow-focus-ring)));
 }
 .rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input']:disabled {
+  color: var(--ds-input-color-disabled, var(--ds-color-text-disabled));
+  background: var(--ds-input-bg-disabled, var(--ds-surface-disabled, var(--ds-surface-subtle, var(--ds-surface-canvas))));
+  border-color: var(--ds-input-border-disabled, var(--ds-color-border-disabled));
   opacity: var(--ds-disabled-opacity, 0.5);
   cursor: not-allowed;
 }
 .rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'][data-active='true'] {
-  box-shadow: 0 0 0 2px var(--ds-color-primary);
+  /* The active endpoint reads through the field family's focus ring (the
+     tenant's ring grammar) instead of a literal 2px primary halo. */
+  box-shadow: var(--ds-input-shadow-focus, 0 0 0 2px var(--ds-color-primary));
 }
 
 .rottay-datepicker-range.rottay-datepicker-range--modern [data-part='separator'] {
@@ -252,7 +359,8 @@
 }
 
 .rottay-datepicker-range.rottay-datepicker-range--modern [data-part='clear-button'] {
-  /* 24px square + centering drained from the inline style (P2). */
+  /* 24px square + centering drained from the inline style (P2). The ink
+     rides the field family's clear-action channels (C-02). */
   inline-size: 24px;
   block-size: 24px;
   display: inline-flex;
@@ -263,13 +371,14 @@
   cursor: pointer;
   font-size: var(--ds-font-size-xs);
   background: transparent;
-  color: var(--ds-color-text-primary);
+  color: var(--ds-input-clear-color, var(--ds-color-text-primary));
   border-radius: 50%;
   border: none;
   opacity: var(--ds-datepicker-clear-opacity, 0.5);
   transition: opacity var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 .rottay-datepicker-range.rottay-datepicker-range--modern [data-part='clear-button']:hover {
+  color: var(--ds-input-clear-color-hover, var(--ds-color-text-primary));
   opacity: 1;
 }
 
@@ -278,9 +387,12 @@
    while the focus ring and the error/warning border-color channels keep
    their own rules. The doubled data-part keeps the border-color declaration
    above the Platform (0,3,1) floor. */
-.rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'][data-variant='filled'],
-.rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'][data-variant='filled'] {
-  background: var(--ds-surface-inset, var(--ds-color-bg-input, var(--ds-surface-control)));
+.rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'][data-variant='filled']:not([data-status='error']):not([data-status='warning']),
+.rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'][data-variant='filled']:not([data-status='error']):not([data-status='warning']) {
+  /* The inset well reads the field family's filled channel first (Input
+     grammar), never the generic bg-input. A semantic state keeps its own
+     tinted surface -- the well never washes out the validation read. */
+  background: var(--ds-input-filled-bg, var(--ds-surface-inset, var(--ds-color-bg-input, var(--ds-surface-control))));
 }
 .rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'][data-part='trigger-input'][data-status][data-variant='borderless'],
 .rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'][data-part='trigger-input'][data-status][data-variant='borderless'] {
@@ -659,7 +771,13 @@
 @media (hover: none) and (pointer: coarse) {
   .rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'],
   .rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'] {
-    min-block-size: var(--ds-datepicker-touch-target-min, var(--ds-touch-target-min, 44px));
+    /* The touch floor is recomputed against the SAME resolved-height relay
+       the base rule consumes, so a spacious step larger than 44px keeps its
+       height (C-02 height-as-floor grammar). */
+    min-block-size: max(
+      var(--_ds-datepicker-trigger-height, 0px),
+      var(--ds-datepicker-touch-target-min, var(--ds-touch-target-min, 44px))
+    );
   }
   .rottay-datepicker-panel.rottay-datepicker-panel--modern[data-mode='date'] {
     inline-size: max-content;
@@ -682,6 +800,8 @@
   .rottay-datepicker-panel.rottay-datepicker-panel--modern {
     animation: none;
   }
+  .rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'],
+  .rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'],
   .rottay-datepicker.rottay-datepicker--modern [data-part='clear-button'],
   .rottay-datepicker-range.rottay-datepicker-range--modern [data-part='clear-button'],
   .rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='nav-button'],

@@ -306,10 +306,68 @@ export const evntoBrandTheme: BrandTheme = {
       gridOpacity: 0,
     },
     controls: {
-      buttonPrimary: { bg: '#171717', bgHover: '#262626', text: '#ffffff', color: '#ffffff', border: 'transparent', shadow: '0 1px 2px rgba(0, 0, 0, 0.08)' },
-      buttonSecondary: { bg: 'transparent', bgHover: 'rgba(0, 0, 0, 0.04)', text: '#171717', color: '#171717', border: 'rgba(0, 0, 0, 0.15)' },
-      buttonDefault: { bg: '#FFFFFF', bgHover: '#FAFAFA', text: '#171717', color: '#171717', border: 'rgba(0, 0, 0, 0.1)' },
-      buttonGhost: { bg: 'transparent', bgHover: 'rgba(0, 0, 0, 0.03)', text: '#525252', color: '#525252' },
+      // ---- CTRL-04 PRESERVATION PINS (R1 Cohort 1) ----
+      // NOT new product decisions. Each value is what this vertical ALREADY
+      // resolves today, moved from an implicit engine-tier default onto
+      // explicit ownership so the engine defaults can be deleted without
+      // changing what this vertical paints. Pinned BY REFERENCE because
+      // --ds-shadow-* are dark-aware and a literal would regress dark mode.
+      // Generated from receipts/cohort-1-button-shadow-state-census.json.
+      buttonAI: {
+        shadow: "var(--ds-shadow-button-rest)",
+        shadowHover: "var(--ds-shadow-button-hover)",
+        shadowActive: "var(--ds-shadow-button-rest)",
+      },
+      buttonInfo: {
+        shadow: "var(--ds-shadow-button-rest)",
+        shadowHover: "var(--ds-button-info-shadow)",
+        shadowActive: "var(--ds-button-info-shadow)",
+      },
+      buttonError: {
+        shadow: "var(--ds-shadow-error-sm)",
+        shadowHover: "var(--ds-shadow-error-sm)",
+        shadowActive: "var(--ds-shadow-error-sm)",
+      },
+      buttonWarning: {
+        shadow: "var(--ds-shadow-warning-sm)",
+        shadowHover: "var(--ds-button-warning-shadow)",
+        shadowActive: "var(--ds-button-warning-shadow)",
+      },
+      buttonSuccess: {
+        shadow: "var(--ds-shadow-success-sm)",
+        shadowHover: "var(--ds-button-success-shadow)",
+        shadowActive: "var(--ds-button-success-shadow)",
+      },
+      buttonLink: {
+        shadow: "none",
+        shadowHover: "var(--ds-button-link-shadow)",
+        shadowActive: "var(--ds-button-link-shadow)",
+      },
+      buttonText: {
+        shadow: "none",
+        shadowHover: "var(--ds-button-text-shadow)",
+        shadowActive: "var(--ds-button-text-shadow)",
+      },
+      buttonDashed: {
+        shadow: "none",
+        shadowHover: "var(--ds-button-dashed-shadow)",
+        shadowActive: "var(--ds-button-dashed-shadow)",
+      },
+      buttonPrimary: {
+        shadowHover: "var(--ds-shadow-button-hover)",
+        shadowActive: "var(--ds-shadow-button-rest)", bg: '#171717', bgHover: '#262626', text: '#ffffff', color: '#ffffff', border: 'transparent', shadow: '0 1px 2px rgba(0, 0, 0, 0.08)' },
+      buttonSecondary: {
+        shadow: "var(--ds-shadow-button-rest)",
+        shadowHover: "var(--ds-shadow-button-hover)",
+        shadowActive: "var(--ds-shadow-button-rest)", bg: 'transparent', bgHover: 'rgba(0, 0, 0, 0.04)', text: '#171717', color: '#171717', border: 'rgba(0, 0, 0, 0.15)' },
+      buttonDefault: {
+        shadow: "var(--ds-shadow-button-rest)",
+        shadowHover: "var(--ds-shadow-button-hover)",
+        shadowActive: "var(--ds-shadow-button-rest)", bg: '#FFFFFF', bgHover: '#FAFAFA', text: '#171717', color: '#171717', border: 'rgba(0, 0, 0, 0.1)' },
+      buttonGhost: {
+        shadow: "none",
+        shadowHover: "var(--ds-button-ghost-shadow)",
+        shadowActive: "var(--ds-button-ghost-shadow)", bg: 'transparent', bgHover: 'rgba(0, 0, 0, 0.03)', text: '#525252', color: '#525252' },
       disabled: { opacity: 0.4, bg: '#FAFAFA', text: 'rgba(0, 0, 0, 0.25)', border: 'rgba(0, 0, 0, 0.06)', borderColor: 'rgba(0, 0, 0, 0.06)' },
       input: {
         bg: '#ffffff',

@@ -20,23 +20,25 @@
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  /* The toolbar's separation from the board below is board-level room and takes
-     rhythm. Its own gap and padding deliberately do NOT: the bar wraps inside a
-     fixed `min-height` with `overflow: hidden`, so a scaled inline gap can push
-     a control to a second row that then gets clipped. That needs a sighted
-     check before it moves. */
   gap: var(--ds-spacing-3, 12px);
   margin-bottom: calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1));
+  /* The bar is a FLOOR, never a clip: when a scaled gap or a long locale wraps
+     a control to a second row, the bar grows — the retired `overflow: hidden`
+     amputated exactly those wrapped controls (and any focus ring near the
+     edge). min-height keeps the rest posture byte-identical; content only
+     ever exceeds it in the previously-defective case. */
   min-height: 72px;
   padding: var(--ds-spacing-3, 12px) var(--ds-spacing-4, 16px);
-  overflow: hidden;
   border: 1px solid
     var(--ds-surface-card-border-strong, var(--ds-color-border-primary));
   border-radius: var(--ds-radius-xl, 16px);
+  /* The band angle is direction-aware: 112deg physical in LTR, mirrored to
+     68deg under RTL via the private channel below (the tenant channel
+     `--ds-card-header-bg` always wins verbatim when authored). */
   background: var(
     --ds-card-header-bg,
     linear-gradient(
-      112deg,
+      var(--_ds-widget-board-band-angle, 112deg),
       color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card-bg)),
       var(--ds-surface-card-bg) 54%,
       color-mix(
@@ -110,7 +112,13 @@
   font-weight: var(--ds-font-weight-semibold, 600);
   letter-spacing: 0.11em;
   line-height: 1.25;
-  text-transform: uppercase;
+  /* Eyebrow case follows the overline → label grammar (C-03/C-12 chain):
+     technical profiles keep the uppercase render (exact fallback), editorial
+     ones take their authored label case. Mono + tracking stay family-local. */
+  text-transform: var(
+    --ds-page-header-eyebrow-text-transform,
+    var(--ds-typography-label-transform, uppercase)
+  );
 }
 
 .ds-pattern-widget-board .ds-widget-board__toolbar-title {
@@ -249,7 +257,11 @@
   font-weight: var(--ds-font-weight-semibold, 600);
   letter-spacing: 0.08em;
   line-height: 1.2;
-  text-transform: uppercase;
+  /* Overline → label case grammar (same chain as the toolbar context). */
+  text-transform: var(
+    --ds-page-header-eyebrow-text-transform,
+    var(--ds-typography-label-transform, uppercase)
+  );
 }
 
 :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
@@ -352,6 +364,11 @@
 
 .ds-pattern-widget-board .ds-widget-board__grid[data-narrow="true"] {
   grid-template-columns: minmax(0, 1fr);
+  /* The narrow (no-solver) stack owns its rows: tracks size to each cell's
+     content. The 8px quantum is only meaningful when the runtime stamps row
+     spans — in narrow mode no cell carries one, so a fixed 8px implicit row
+     would let every stacked cell overflow into the next. */
+  grid-auto-rows: auto;
   gap: calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1));
 }
 
@@ -601,6 +618,7 @@
   .ds-pattern-widget-board .ds-widget-board__toolbar,
   .ds-pattern-widget-board .ds-widget-board__cell,
   .ds-pattern-widget-board .ds-widget-board__empty,
+  .ds-pattern-widget-board .ds-widget-board__error,
   :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
     .ds-widget-board__catalog-item,
   :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
@@ -647,6 +665,19 @@
     outline-offset: 1px;
     box-shadow: none;
   }
+
+  /* Skeleton: the frame survives (cell + header hairline above); the
+     placeholder blocks read as disabled system paint and the pulse stops. */
+  .ds-pattern-widget-board .ds-widget-board__skeleton-header {
+    border-color: ButtonText;
+  }
+
+  .ds-pattern-widget-board .ds-widget-board__skeleton-icon,
+  .ds-pattern-widget-board .ds-widget-board__skeleton-title,
+  .ds-pattern-widget-board .ds-widget-board__skeleton-line {
+    background: GrayText;
+    animation: none;
+  }
 }
 
 .ds-pattern-widget-board .ds-widget-board__cell[data-resizing="true"] {
@@ -676,14 +707,19 @@
    beat is painted in the later `rottay-engines` layer, unreachable from this
    `rottay-components` skin without `!important`. */
 
+/* The drop target reads as an insertion slot by SHAPE, not only by color:
+   a dashed, offset outline is the system's "drop here" grammar (solid rings
+   stay reserved for focus), so the state survives achromatic vision and
+   forced colors alike. */
 .ds-pattern-widget-board .ds-widget-board__cell[data-drop-target="true"] {
   border-color: color-mix(
     in srgb,
     var(--ds-color-primary) 62%,
     var(--ds-surface-card-border)
   );
-  outline: 2px solid
-    color-mix(in srgb, var(--ds-color-primary) 38%, transparent);
+  outline: 2px dashed
+    color-mix(in srgb, var(--ds-color-primary) 46%, transparent);
+  outline-offset: 2px;
 }
 
 .ds-pattern-widget-board .ds-widget-board__content {
@@ -717,7 +753,7 @@
   background: var(
     --ds-card-header-bg,
     linear-gradient(
-      112deg,
+      var(--_ds-widget-board-band-angle, 112deg),
       color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card-bg)),
       var(--ds-surface-card-bg) 56%,
       color-mix(
@@ -740,6 +776,15 @@
   .ds-widget-board__cell:active
   > .ds-widget-board__item-header {
   background-position: 100% 50%;
+}
+
+/* Direction-aware band: the header/toolbar gradient angle is physical by
+   design (a light-sweep across the band), so it mirrors about the vertical
+   axis under RTL — 112deg ↔ 68deg — through one private channel. LTR keeps
+   the exact fallback; an authored `--ds-card-header-bg` is unaffected. */
+[dir='rtl'] .ds-pattern-widget-board .ds-widget-board__toolbar,
+[dir='rtl'] .ds-pattern-widget-board .ds-widget-board__item-header {
+  --_ds-widget-board-band-angle: 68deg;
 }
 
 .ds-pattern-widget-board .ds-widget-board__item-heading {
@@ -787,7 +832,11 @@
   font-weight: var(--ds-font-weight-semibold, 600);
   letter-spacing: 0.11em;
   line-height: 1.25;
-  text-transform: uppercase;
+  /* Overline → label case grammar (same chain as the toolbar context). */
+  text-transform: var(
+    --ds-page-header-eyebrow-text-transform,
+    var(--ds-typography-label-transform, uppercase)
+  );
 }
 
 .ds-pattern-widget-board .ds-widget-board__item-title {
@@ -1278,6 +1327,36 @@
   user-select: none;
 }
 
+/* Coarse pointers: edit chrome grows toward the 44px touch floor on the
+   PRIMARY resize axis. Inline edge strips start below the 44px drag bar so
+   they never steal the move control's taps (the handle sits above the bar in
+   the z ladder); the bottom strip grows to 32px — a full 44px would blanket
+   the content's bottom edge — and the bottom corners stay proportional. Drag
+   on coarse remains the full-width controls bar (already 44px). The block-end
+   separator keeps keyboard operation, so height stays fully operable. */
+@media (pointer: coarse) {
+  .ds-pattern-widget-board
+    .ds-widget-board__resize-handle[data-edge="inline-start"],
+  .ds-pattern-widget-board
+    .ds-widget-board__resize-handle[data-edge="inline-end"] {
+    inset-block-start: 56px;
+    width: 44px;
+  }
+
+  .ds-pattern-widget-board
+    .ds-widget-board__resize-handle[data-edge="block-end"] {
+    height: 32px;
+  }
+
+  .ds-pattern-widget-board
+    .ds-widget-board__resize-handle[data-edge="block-end-inline-start"],
+  .ds-pattern-widget-board
+    .ds-widget-board__resize-handle[data-edge="block-end-inline-end"] {
+    width: 36px;
+    height: 36px;
+  }
+}
+
 /* Loading is a quiet state, not a repaint: the house idiom (decision-comparison)
    is a progress cursor while the engine marks the region aria-busy. */
 .ds-pattern-widget-board[data-loading="true"] {
@@ -1299,6 +1378,123 @@
   border-radius: var(--ds-radius-xl, 16px);
   background: var(--ds-empty-state-bg, var(--ds-surface-panel-bg));
   color: var(--ds-color-text-secondary);
+}
+
+/* Board-level error: the same quiet framed region as the empty state, keyed
+   to the error role (tinted frame, never error paint alone — the consumer's
+   composed content carries the copy, icon and recovery action). */
+.ds-pattern-widget-board .ds-widget-board__error {
+  display: grid;
+  min-height: 220px;
+  padding: var(--ds-spacing-6, 24px);
+  place-items: center;
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--ds-color-error) 32%,
+      var(--ds-surface-card-border, var(--ds-color-border-primary))
+    );
+  border-radius: var(--ds-radius-xl, 16px);
+  background: color-mix(
+    in srgb,
+    var(--ds-color-error) 4%,
+    var(--ds-empty-state-bg, var(--ds-surface-panel-bg))
+  );
+  color: var(--ds-color-text-secondary);
+}
+
+/* Loading skeleton: quiet placeholder cells on the SAME 12-track grid, so
+   the first paint already owns the final composition's footprint and the
+   swap to real content is paint-only (FLIP then covers the settle). Cells
+   reuse the card frame class, keeping border/radius/background identical to
+   real widgets; the row span reserves a representative widget height (18
+   tracks ≈ 18 × row quantum + seams, measured by the same formula the
+   runtime solves with). Non-interactive by construction. */
+.ds-pattern-widget-board .ds-widget-board__grid[data-skeleton="true"] {
+  pointer-events: none;
+}
+
+.ds-pattern-widget-board
+  .ds-widget-board__grid[data-skeleton="true"]:not([data-narrow="true"])
+  .ds-widget-board__cell {
+  grid-row: span 18;
+}
+
+/* Full-width tiers mirror the declared size vocabulary; the mid/single-tier
+   container queries above already re-span these same `[data-size]` cells,
+   and the narrow stack places them full-width by its own rule. */
+@container ds-widget-board (min-width: 840px) {
+  .ds-pattern-widget-board
+    .ds-widget-board__grid[data-skeleton="true"]:not([data-narrow="true"])
+    .ds-widget-board__cell[data-size="sm"] {
+    grid-column: span 3;
+  }
+  .ds-pattern-widget-board
+    .ds-widget-board__grid[data-skeleton="true"]:not([data-narrow="true"])
+    .ds-widget-board__cell[data-size="md"] {
+    grid-column: span 4;
+  }
+  .ds-pattern-widget-board
+    .ds-widget-board__grid[data-skeleton="true"]:not([data-narrow="true"])
+    .ds-widget-board__cell[data-size="lg"] {
+    grid-column: span 6;
+  }
+  .ds-pattern-widget-board
+    .ds-widget-board__grid[data-skeleton="true"]:not([data-narrow="true"])
+    .ds-widget-board__cell[data-size="wide"] {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Skeleton anatomy mirrors the widget's: an icon+title header row over a
+   line stack, with the same padding and hairline, so the placeholder reads
+   as the card it stands for. The pulse rides the canonical attention rung
+   and goes quiet under reduced motion (block below). */
+.ds-pattern-widget-board .ds-widget-board__skeleton-header {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-3, 12px);
+  min-height: 70px;
+  padding: var(--ds-spacing-4, 16px) var(--ds-spacing-5, 20px);
+  border-bottom: 1px solid
+    var(--ds-surface-card-border, var(--ds-color-border-primary));
+}
+
+.ds-pattern-widget-board .ds-widget-board__skeleton-body {
+  display: grid;
+  gap: var(--ds-spacing-3, 12px);
+  padding: var(--ds-spacing-4, 16px) var(--ds-spacing-5, 20px);
+}
+
+.ds-pattern-widget-board .ds-widget-board__skeleton-icon,
+.ds-pattern-widget-board .ds-widget-board__skeleton-title,
+.ds-pattern-widget-board .ds-widget-board__skeleton-line {
+  background: var(--ds-surface-panel-bg, var(--ds-color-bg-secondary));
+  animation: ds-foundation-pulse
+    var(--ds-motion-attention, 1.5s)
+    var(--ds-motion-ease-in-out, ease-in-out) infinite;
+}
+
+.ds-pattern-widget-board .ds-widget-board__skeleton-icon {
+  inline-size: 38px;
+  block-size: 38px;
+  border-radius: var(--ds-radius-lg, 11px);
+}
+
+.ds-pattern-widget-board .ds-widget-board__skeleton-title {
+  inline-size: 42%;
+  block-size: 14px;
+  border-radius: 999px;
+}
+
+.ds-pattern-widget-board .ds-widget-board__skeleton-line {
+  block-size: 12px;
+  border-radius: 999px;
+}
+
+.ds-pattern-widget-board
+  .ds-widget-board__skeleton-line[data-width="short"] {
+  inline-size: 58%;
 }
 
 @keyframes ds-widget-board-cell-enter {
@@ -1408,6 +1604,9 @@
   .ds-pattern-widget-board .ds-widget-board__resize-handle,
   .ds-pattern-widget-board .ds-widget-board__resize-rail,
   .ds-pattern-widget-board .ds-widget-board__resize-indicator,
+  .ds-pattern-widget-board .ds-widget-board__skeleton-icon,
+  .ds-pattern-widget-board .ds-widget-board__skeleton-title,
+  .ds-pattern-widget-board .ds-widget-board__skeleton-line,
   :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
     .ds-widget-board__catalog-item {
     animation: none;

@@ -394,13 +394,27 @@
       0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 12%, transparent)
     )
   );
+  /* Third layer repair (C0): the expressive material profiles author
+     `--ds-material-card-highlight` as a COLOR (or `none`), and a bare color
+     in a box-shadow LIST position invalidates the whole declaration — for
+     soft-depth/luminous tenants the entire depth stack silently dropped to
+     `none`. Wrapping the channel in the inset-keyline form keeps the list
+     valid for color-typed values (the highlight becomes the top keyline,
+     which is exactly its semantic), renders byte-identical when the channel
+     is unset (the fallback is the same color the old full-shadow fallback
+     carried), and behaves no worse than today for `none` (declaration
+     drops, same as the old bare-`none` list). Compiler-side recommendation,
+     owned by Codex: emit `transparent` instead of `none` for this
+     color-typed channel so the keyline dissolves without dropping the
+     stack. */
   --ds-premium-card-depth: 0 1px 2px
       color-mix(in srgb, var(--ds-card-color) 4%, transparent),
     0 12px 28px color-mix(in srgb, var(--ds-color-primary) 6%, transparent),
-    var(
-      --ds-material-card-highlight,
-      inset 0 1px 0 color-mix(in srgb, var(--ds-card-bg) 72%, transparent)
-    );
+    inset 0 1px 0
+      var(
+        --ds-material-card-highlight,
+        color-mix(in srgb, var(--ds-card-bg) 72%, transparent)
+      );
   --ds-premium-card-texture: var(--ds-material-card-texture, none);
   --ds-premium-card-sheen: linear-gradient(
     90deg,
@@ -609,7 +623,13 @@
   z-index: 0;
   pointer-events: none;
   border-radius: inherit;
-  background-image: var(--ds-card-texture), var(--ds-card-overlay);
+  /* The expressive material profile's texture facet (paper tint, or the
+     explicit `none` of a flat-material tenant) outranks the default grid:
+     the primitive finally reads the same `--ds-material-card-texture` the
+     SemanticSurface card role and the premium pattern cards already read.
+     Unset, the historical grid wash renders byte-identical; `none` simply
+     drops the first layer and keeps the tint overlay. */
+  background-image: var(--ds-material-card-texture, var(--ds-card-texture)), var(--ds-card-overlay);
   background-size: var(--ds-card-texture-size), auto;
   opacity: var(--ds-card-texture-opacity);
   mask-image: linear-gradient(

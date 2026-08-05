@@ -1,9 +1,20 @@
-/** Modern Alert: semantic, framed feedback surface with tenant-authored tenor. */
+/** Modern Alert: semantic, framed feedback surface with tenant-authored tenor.
+ *
+ * STATE LANGUAGE (lifecycle-feedback canon): the alert is the IN-FLOW member of
+ * the single urgency grammar shared with Toast and Notification — one accent
+ * channel per tone drives four coordinated, never-color-only cues: the glyph
+ * well (shape + tint + frame), the framed surface (edge-grammar width/style),
+ * the quiet accent wash, and the label's severity WEIGHT ramp (warning/error
+ * read heavier than info/success). Travel depth and entry cadence respond to
+ * the tenant motion dial (--ds-motion-intensity, fallback 1 = the historical
+ * render) so a calm technical posture and an expressive editorial one diverge
+ * on the same DOM. */
 
 @keyframes ds-alert-enter-modern {
   from {
     opacity: 0;
-    transform: translateY(var(--ds-motion-offset-in)) scale(0.99);
+    transform: translateY(calc(var(--ds-motion-offset-in) * var(--ds-motion-intensity, 1)))
+      scale(calc(1 - 0.01 * var(--ds-motion-intensity, 1)));
   }
   to {
     opacity: 1;
@@ -26,7 +37,7 @@
     --ds-alert-responsive-padding,
     var(--ds-alert-padding, clamp(var(--ds-spacing-md), 2vw, var(--ds-spacing-lg)))
   );
-  border: var(--ds-alert-border-width, 1px) solid color-mix(in srgb, var(--ds-alert-tone) 30%, var(--ds-color-border));
+  border: var(--ds-alert-border-width, var(--ds-edge-standard-width, 1px)) var(--ds-edge-standard-style, solid) color-mix(in srgb, var(--ds-alert-tone) 30%, var(--ds-color-border));
   border-radius: var(--ds-alert-radius, var(--ds-radius-lg));
   background-color: color-mix(in srgb, var(--ds-alert-tone) 7%, var(--ds-color-surface));
   background-image: var(--ds-gradient-surface);
@@ -54,20 +65,31 @@
   padding: var(--ds-alert-compact-padding, var(--ds-spacing-sm) var(--ds-spacing-md));
 }
 
+/* Per-tone accent + severity ink relay (the Callout AUT-1 authority, family
+   adoption): the glyph reads the AA-measured `--ds-color-{tone}-ink` -- info's
+   ink is the raw hue by construction; warning/error/success deepen toward the
+   tenant neutral because the raw hue reads ~2.2:1 on the tinted well, under
+   the 3:1 floor for a semantic glyph. Frames and washes keep the raw tone
+   (decorative, not signal). Fallbacks are the raw tone: a bundle without the
+   authority paints exactly as before. */
 .rottay-alert-shell.rottay-alert-shell--modern[data-part='root'][data-tone='info'] {
   --ds-alert-tone: var(--ds-color-info);
+  --_ds-alert-tone-ink: var(--ds-color-info-ink, var(--ds-alert-tone));
 }
 
 .rottay-alert-shell.rottay-alert-shell--modern[data-part='root'][data-tone='success'] {
   --ds-alert-tone: var(--ds-color-success);
+  --_ds-alert-tone-ink: var(--ds-color-success-ink, var(--ds-alert-tone));
 }
 
 .rottay-alert-shell.rottay-alert-shell--modern[data-part='root'][data-tone='warning'] {
   --ds-alert-tone: var(--ds-color-warning);
+  --_ds-alert-tone-ink: var(--ds-color-warning-ink, var(--ds-alert-tone));
 }
 
 .rottay-alert-shell.rottay-alert-shell--modern[data-part='root'][data-tone='error'] {
   --ds-alert-tone: var(--ds-color-error);
+  --_ds-alert-tone-ink: var(--ds-color-error-ink, var(--ds-alert-tone));
 }
 
 .rottay-alert-shell.rottay-alert-shell--modern > .rottay-alert-shell__icon[data-part='icon'][data-part='icon'] {
@@ -76,11 +98,13 @@
   block-size: var(--ds-alert-icon-well-size, 2.5rem);
   flex: 0 0 auto;
   place-items: center;
-  border: 1px solid color-mix(in srgb, var(--ds-alert-tone) 34%, var(--ds-color-border));
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-alert-tone) 34%, var(--ds-color-border));
   border-radius: var(--ds-alert-icon-well-radius, var(--ds-radius-md));
   background: color-mix(in srgb, var(--ds-alert-tone) 11%, var(--ds-color-surface-raised));
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) calc(48% * var(--ds-effect-intensity)), transparent);
-  color: var(--ds-alert-tone);
+  /* The glyph carries the severity INK, never the raw hue: on a tinted well
+     the raw warning/error/success hues fall under the 3:1 glyph floor. */
+  color: var(--_ds-alert-tone-ink, var(--ds-alert-tone));
 }
 
 .rottay-alert-shell.rottay-alert-shell--modern[data-compact='true'] > .rottay-alert-shell__icon[data-part='icon'][data-part='icon'] {
@@ -107,6 +131,14 @@
   /* Long-copy resilience: unbroken strings (URLs, long ES/AR compounds) wrap
      inside the content grid track instead of protruding past the action. */
   overflow-wrap: break-word;
+}
+
+/* Severity weight ramp (state language): warning/error escalate the label to
+   bold so urgency reads in TYPE, never in hue alone — the same ramp Toast and
+   Notification apply to their titles. Info/success keep the semibold voice. */
+.rottay-alert-shell.rottay-alert-shell--modern[data-part='root'][data-tone='warning'] .rottay-alert-shell__content[data-part='content'] > [data-part='label'],
+.rottay-alert-shell.rottay-alert-shell--modern[data-part='root'][data-tone='error'] .rottay-alert-shell__content[data-part='content'] > [data-part='label'] {
+  font-weight: var(--ds-font-weight-bold);
 }
 
 .rottay-alert-shell.rottay-alert-shell--modern .rottay-alert-shell__content[data-part='content'] > [data-part='description'] {

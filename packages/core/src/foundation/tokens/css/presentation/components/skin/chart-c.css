@@ -57,12 +57,14 @@
   color: var(--ds-color-text-secondary);
 }
 
-/* Entrance reveal ---------------------------------------------------------- */
+/* Entrance reveal ----------------------------------------------------------
+ * Consumes the shared `--_ds-chart-reveal-*` bridges so the grammar
+ * motion posture dials cadence exactly like the bar/line families. */
 
 @keyframes ds-chart-scatter-reveal {
   from {
     opacity: 0;
-    transform: translateY(4px);
+    transform: translateY(var(--_ds-chart-reveal-rise, 4px));
   }
   to {
     opacity: 1;
@@ -71,7 +73,8 @@
 }
 
 .ds-chart-scatter [data-part='chart-svg'] {
-  animation: ds-chart-scatter-reveal var(--ds-motion-reveal, var(--ds-motion-calm))
+  animation: ds-chart-scatter-reveal
+    var(--_ds-chart-reveal-duration, var(--ds-motion-reveal, var(--ds-motion-calm)))
     var(--ds-motion-ease-enter, ease-out) both;
 }
 

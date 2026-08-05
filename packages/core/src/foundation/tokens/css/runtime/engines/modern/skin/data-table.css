@@ -77,6 +77,15 @@
       box-shadow var(--ds-motion-feedback)
         var(--ds-motion-ease-move, ease-out)
   );
+  /* Quiet row actions (C1): trailing per-row actions rest as quiet ink and
+     reveal deliberately on hover/focus/selection, so the row's content keeps
+     primacy at rest. `--_ds-data-table-actions-rest-opacity` is a
+     private proto — registry row: paint domain, byte-exact fallback 1 (the
+     pre-C1 always-on render), values 1 / 0.4 (dense-operative quiet vs
+     editorial always-visible divergence), consumed by the reveal grammar
+     block below; candidate recipe-axis "action reveal posture". Assigned
+     here as the designed default: an owner override on root or part wins. */
+  --_ds-data-table-actions-rest-opacity: 0.4;
 
   width: 100%;
   min-width: 0;
@@ -107,6 +116,11 @@
     0 0.5rem
   );
   --ds-modern-table-control-size: var(--ds-table-control-size-compact, 1.75rem);
+  /* Compact is a coordinated posture, not ±2px: chrome bars, skeleton bars
+     and the type step below all move together on the family's shared density
+     factor channel. */
+  --ds-table-pagination-min-height: 2.75rem;
+  --ds-table-bulk-bar-min-height: 3rem;
 }
 
 .ds-pattern-data-table.ds-engine-modern[data-part="root"][data-density="spacious"] {
@@ -127,6 +141,77 @@
     0 0.75rem
   );
   --ds-modern-table-control-size: var(--ds-table-control-size-spacious, 2.25rem);
+  --ds-table-pagination-min-height: 3.75rem;
+  --ds-table-bulk-bar-min-height: 4rem;
+}
+
+/* Density type/rhythm ladder: the cell type step and its line-height track
+   the posture on the family's shared density factor channels (the same names
+   the mobile-card skin consumes for card padding), so compact reads as a
+   dense technical ledger and spacious as an editorial record — the tenant
+   --ds-table-cell-font-size channel remains the base both factors scale. */
+.ds-pattern-data-table.ds-engine-modern[data-part="root"][data-density="compact"]
+  [data-part="data-cell"] {
+  font-size: calc(
+    var(--ds-table-cell-font-size, var(--ds-font-size-sm)) *
+      var(--ds-density-factor-compact, 0.85)
+  );
+  /* The shared line-height channel stays the tenant override; only the
+     posture floor changes (1.25 here, 1.35 base, 1.55 spacious). */
+  line-height: var(--ds-table-cell-line-height, 1.25);
+}
+
+.ds-pattern-data-table.ds-engine-modern[data-part="root"][data-density="spacious"]
+  [data-part="data-cell"] {
+  font-size: calc(
+    var(--ds-table-cell-font-size, var(--ds-font-size-sm)) *
+      var(--ds-density-factor-spacious, 1.15)
+  );
+  line-height: var(--ds-table-cell-line-height, 1.55);
+}
+
+/* The header label joins the SAME ladder (height + type + chrome + skeleton
+   move together): compact tightens the header toward the ledger's caption
+   register — floored so an already-small authored header size never
+   collapses into illegibility — and spacious opens it toward the editorial
+   register. The header control size and the skeleton header bars already
+   scale on these same channels. */
+.ds-pattern-data-table.ds-engine-modern[data-part="root"][data-density="compact"]
+  [data-part="header-cell"] {
+  font-size: max(
+    calc(
+      var(--ds-table-header-font-size, 13px) *
+        var(--ds-density-factor-compact, 0.85)
+    ),
+    0.6875rem
+  );
+}
+
+.ds-pattern-data-table.ds-engine-modern[data-part="root"][data-density="spacious"]
+  [data-part="header-cell"] {
+  font-size: calc(
+    var(--ds-table-header-font-size, 13px) *
+      var(--ds-density-factor-spacious, 1.15)
+  );
+}
+
+/* The loading skeleton keeps the posture's exact footprint: bar heights move
+   with the same factor the rows resolve, per density. */
+.ds-pattern-data-table.ds-engine-modern[data-part="root"][data-density="compact"]
+  [data-part="skeleton-cell"] {
+  height: calc(14px * var(--ds-density-factor-compact, 0.85));
+}
+.ds-pattern-data-table.ds-engine-modern[data-part="root"][data-density="compact"]
+  [data-part="skeleton-header-col"] {
+  height: calc(10px * var(--ds-density-factor-compact, 0.85));
+}
+.ds-pattern-data-table.ds-engine-modern[data-part="root"][data-density="spacious"]
+  [data-part="skeleton-cell"] {
+  height: calc(14px * var(--ds-density-factor-spacious, 1.15));
+}
+.ds-pattern-data-table.ds-engine-modern[data-part="root"][data-density="spacious"]
+  [data-part="skeleton-header-col"] {
+  height: calc(10px * var(--ds-density-factor-spacious, 1.15));
 }
 
 .ds-pattern-data-table.ds-engine-modern [data-part="inline-edit-actions"] {
@@ -193,6 +278,23 @@
   scrollbar-gutter: stable both-edges;
   border-radius: inherit;
   scrollbar-color: var(--ds-color-border-secondary) transparent;
+  /* Horizontal-overflow affordance (the primitive table.css scroll-shadow
+     recipe, ported verbatim): two `scroll`-attached radial shadows mark a
+     clipped edge, two `local`-attached covers of the table base fill erase
+     each shadow as its edge is reached. The base fill matches the card's
+     --ds-table-bg, so nothing changes at rest; pinned/sticky cells paint
+     opaque above it. Physical gradients track the physical scrollport, so
+     the affordance self-mirrors under RTL. */
+  background-color: var(--ds-table-bg, var(--ds-surface-card));
+  background-image:
+    linear-gradient(to right, var(--ds-table-bg, var(--ds-surface-card)) 30%, transparent),
+    linear-gradient(to left, var(--ds-table-bg, var(--ds-surface-card)) 30%, transparent),
+    radial-gradient(farthest-side at 0% 50%, color-mix(in srgb, var(--ds-color-text-primary) 16%, transparent), transparent),
+    radial-gradient(farthest-side at 100% 50%, color-mix(in srgb, var(--ds-color-text-primary) 16%, transparent), transparent);
+  background-position: left top, right top, left top, right top;
+  background-size: 24px 100%, 24px 100%, 10px 100%, 10px 100%;
+  background-repeat: no-repeat;
+  background-attachment: local, local, scroll, scroll;
 }
 
 .ds-pattern-data-table.ds-engine-modern
@@ -712,6 +814,11 @@
 .ds-pattern-data-table.ds-engine-modern [data-part="expanded-row-content"] {
   width: 100%;
   padding: var(--ds-table-expanded-padding, 0.875rem 1rem 1rem);
+  /* Disclosure continuity: the detail arrives from the row that spawned it,
+     on the semantic reveal dial (quieted wholesale by the RM block). */
+  animation: ds-data-table-expanded-enter
+    var(--ds-motion-reveal, var(--ds-motion-normal))
+    var(--ds-motion-ease-enter, var(--ds-motion-ease-out, ease-out));
 }
 
 .ds-pattern-data-table.ds-engine-modern [data-part="group-header-cell"] {
@@ -870,6 +977,10 @@
   /* Last chrome region: keep the card's bottom radius unbroken. */
   border-end-start-radius: var(--ds-table-radius, var(--ds-radius-lg));
   border-end-end-radius: var(--ds-table-radius, var(--ds-radius-lg));
+  /* Selection continuity: the bar arrives from the table's top edge on first
+     selection (keyframes owned by data-table-interactions.css). */
+  animation: ds-bulk-slide-down var(--ds-motion-reveal, var(--ds-motion-normal))
+    var(--ds-motion-ease-enter, var(--ds-motion-ease-out, ease-out));
 }
 
 .ds-pattern-data-table.ds-engine-modern [data-part="bulk-bar-count"] {
@@ -927,7 +1038,10 @@
 }
 .ds-pattern-data-table.ds-engine-modern
   [data-part="skeleton-header"][data-part="skeleton-header"] {
-  border-bottom: 1px solid var(--ds-table-border, var(--ds-color-border-subtle));
+  /* The skeleton reproduces the header's terminal emphasis rule too, so the
+     loading handoff keeps the exact footprint at any tenant edge width. */
+  border-bottom: var(--ds-table-header-rule-width, 1px) solid
+    var(--ds-table-border, var(--ds-color-border-subtle));
 }
 .ds-pattern-data-table.ds-engine-modern [data-part="skeleton-header-col"] {
   border-radius: var(--ds-radius-sm, 6px);
@@ -1009,20 +1123,36 @@
 /* ---- thead sticky shadow, governed by scroll: the engine stamps
         data-scrolled on the scroll region once rows actually move beneath the
         sticky header, so the elevation cue appears only when content slides
-        under it — at rest the header-row hairline alone carries the split. ---- */
+        under it — at rest the header-row hairline alone carries the split.
+        `--_ds-data-table-header-sticky-shadow` is the adjudicated
+        private proto for this capability (roadmap registry row: paint domain,
+        flat vs elevated divergence, candidate promote sticky-elevation); the
+        fallbacks below are byte-exact the rendered values it was registered
+        with. ---- */
 .ds-pattern-data-table.ds-engine-modern
   [data-part="table-head"][data-sticky="true"] {
-  box-shadow: none;
+  box-shadow: var(--_ds-data-table-header-sticky-shadow, none);
   transition: box-shadow var(--ds-motion-normal)
     var(--ds-motion-ease-move, ease-out);
 }
 .ds-pattern-data-table.ds-engine-modern
   [data-part="scroll"][data-scrolled="true"]
   [data-part="table-head"][data-sticky="true"] {
-  box-shadow: var(--ds-elevation-1);
+  box-shadow: var(
+    --_ds-data-table-header-sticky-shadow,
+    var(--ds-elevation-1)
+  );
 }
 
-/* ---- header row ---- */
+/* ---- header row: the plan header ANCHORS the composition. It carries the
+        tenant band and closes with the shared emphasis terminal rule (the
+        `--ds-table-header-rule-width` edge channel the primitive table.css
+        already consumes: 1px where the tenant edge profile is a hairline,
+        wider where the profile is emphatic — a printed rule, not a row
+        divider). The band does NOT perform: there is no band-wide hover —
+        the header is not one more row. Interactivity is announced at the
+        sortable CELL level, where data-table-interactions.css keeps the
+        `--ds-table-header-bg-hover` channel alive. ---- */
 .ds-pattern-data-table.ds-engine-modern [data-part="header-row"] {
   background: var(
     --ds-table-header-bg,
@@ -1048,26 +1178,13 @@
     inset 0 -1px 0 var(--ds-table-header-border, var(--ds-table-border))
   );
   /* `--ds-motion-ambient` is a semantic keyword consumed by MotionProvider,
-     not a CSS time. Reading it here made `off|subtle` invalidate the entire
-     background-position transition. The bounded duration role is canonical. */
-  transition: background-position var(--ds-motion-slow)
-      var(--ds-motion-ease-move, ease-out),
-    background-color var(--ds-motion-feedback, var(--ds-motion-fast))
-      var(--ds-motion-ease-move, ease-out);
-}
-@media (hover: hover) {
-  .ds-pattern-data-table.ds-engine-modern
-    [data-part="header-row"]:hover {
-    background: var(
-      --ds-table-header-bg-hover,
-      var(--ds-table-header-bg, var(--ds-surface-inset))
-    );
-    background-position: 100% 50%;
-  }
+     not a CSS time; the bounded feedback role is canonical. */
+  transition: background-color var(--ds-motion-feedback, var(--ds-motion-fast))
+    var(--ds-motion-ease-move, ease-out);
 }
 .ds-pattern-data-table.ds-engine-modern
   [data-part="header-row"][data-part="header-row"] {
-  border-bottom: 1px solid
+  border-bottom: var(--ds-table-header-rule-width, 1px) solid
     var(
       --ds-table-header-border,
       var(--ds-table-border, var(--ds-color-border-subtle))
@@ -1081,6 +1198,13 @@
         the pinned fill, exactly as the JSX ternary did. ---- */
 .ds-pattern-data-table.ds-engine-modern [data-part="header-cell"] {
   color: var(--ds-table-header-color, var(--ds-color-text-secondary));
+}
+/* The sorted column's label steps up to full ink: sort state reads at once
+   as tinta (label), forma (the active glyph well) and keyline (the 2px
+   ordering rule below) — structure, never color alone. */
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="header-cell"]:is([data-sort-state="asc"], [data-sort-state="desc"]) {
+  color: var(--ds-color-text-primary);
 }
 .ds-pattern-data-table.ds-engine-modern[data-recipe="grid"]
   [data-part="header-cell"][data-part="header-cell"]:not(:first-child) {
@@ -1173,6 +1297,15 @@
     --ds-table-row-bg-selected,
     color-mix(in srgb, var(--ds-color-primary) 9%, transparent)
   );
+}
+/* The state ring lives on the CELLS, never on the row box: with
+   border-collapse: collapse a box-shadow stamped on a <tr> does not paint
+   (the primitive table.css selection keyline follows the same td rule for
+   exactly this reason). Ring-per-cell composes the identical band: adjacent
+   cells share each interior boundary, so the doubled inset lines land on the
+   exact same pixels and the band keeps its all-around reading. */
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="body-row"][data-selected="true"] > td {
   box-shadow: var(
     --ds-table-row-selected-shadow,
     inset 0 0 0 1px
@@ -1186,6 +1319,9 @@
     --ds-table-row-bg-selected,
     color-mix(in srgb, var(--ds-color-primary) 7%, transparent)
   );
+}
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="body-row"]:focus-visible > td {
   box-shadow: var(
     --ds-table-row-focus-shadow,
     inset 0 0 0 2px
@@ -1201,6 +1337,11 @@
       --ds-table-row-bg-hover,
       color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
     );
+  }
+  .ds-pattern-data-table.ds-engine-modern
+    [data-part="body-row"][data-hoverable="true"]:not(
+    [data-selected="true"]
+  ):hover > td {
     box-shadow: var(
       --ds-table-row-hover-shadow,
       inset 0 0 0 1px
@@ -1251,7 +1392,18 @@
   background-color: var(--ds-surface-card);
 }
 
-/* ---- expanded row: the wrapper td's not-last divider + the inner content fill ---- */
+/* ---- expanded row: the wrapper td's not-last divider + the inner content fill.
+        Disclosure continuity: the row that spawns an expanded panel drops its
+        own bottom hairline, so the panel's fill meets the row directly — the
+        detail reads as the row's own unfolding, not as the next row in the
+        sea (both flat and grouped branches render the panel as the row's
+        immediate sibling). ---- */
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="body-row"][data-last="false"]:has(
+    + tr > [data-part="expanded-row"]
+  ) {
+  border-bottom: 0;
+}
 .ds-pattern-data-table.ds-engine-modern
   [data-part="expanded-row"][data-last="false"] {
   border-bottom: 1px solid
@@ -1275,6 +1427,13 @@
 }
 .ds-pattern-data-table.ds-engine-modern
   [data-part="group-header-row"][data-part="group-header-row"] {
+  /* A group band is a section break, not another hairline: its block-start
+     edge rides the same emphasis-rule channel as the plan header, so an
+     emphatic edge profile prints a section rule while a hairline profile
+     stays precise. Under border-collapse it composes with the previous
+     row's divider — the wider edge wins the seam. */
+  border-top: var(--ds-table-header-rule-width, 1px) solid
+    var(--ds-table-border, var(--ds-color-border-subtle));
   border-bottom: 1px solid
     var(--ds-modern-table-divider);
 }
@@ -1290,7 +1449,10 @@
   transform: rotate(-90deg);
 }
 .ds-pattern-data-table.ds-engine-modern [data-part="group-header-count-pill"] {
-  border-radius: var(--ds-radius-full, 9999px);
+  /* The count chip follows the family's control-radius channel: a squarer
+     edge profile reads as a framed figure, a soft one as a pill. The
+     fallback keeps the historic full-pill render byte-exact. */
+  border-radius: var(--ds-table-control-radius, var(--ds-radius-full, 9999px));
   background: color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent);
   color: var(--ds-color-text-secondary);
 }
@@ -1382,7 +1544,9 @@
   border-top: 1px solid var(--ds-color-border-subtle);
 }
 .ds-pattern-data-table.ds-engine-modern [data-part="bulk-bar-count"] {
-  color: var(--ds-color-text-secondary);
+  /* The selection count is the band's fact: full ink, tabular figures. */
+  color: var(--ds-color-text-primary);
+  font-variant-numeric: tabular-nums;
 }
 .ds-pattern-data-table.ds-engine-modern [data-part="bulk-bar-action"] {
   color: var(--ds-color-text-primary);
@@ -1398,6 +1562,38 @@
 .ds-pattern-data-table.ds-engine-modern
   [data-part="bulk-bar-action"][data-variant="primary"] {
   color: var(--ds-color-primary);
+}
+
+/* ===========================================================================
+ * Quiet row actions (C1) — the reveal grammar
+ *
+ * On fine pointers the trailing per-row actions rest as quiet ink (the proto
+ * assigned on the root) so the row's CONTENT keeps primacy; they reveal
+ * deliberately on row hover and on any focus within the row — keyboard users
+ * always meet them — and stay revealed while the row is selected. Coarse
+ * pointers never dim (there is no hover to reveal with), forced-colors
+ * restores full opacity below, and reduced-motion drops the fade but keeps
+ * the posture. Opacity only: no layout shift, no display toggle, hit areas
+ * never move.
+ * ======================================================================== */
+@media (hover: hover) and (pointer: fine) {
+  .ds-pattern-data-table.ds-engine-modern [data-part="actions-content"] {
+    opacity: var(--_ds-data-table-actions-rest-opacity, 1);
+    transition: opacity var(--ds-motion-feedback, var(--ds-motion-fast))
+      var(--ds-motion-ease-move, ease-out);
+  }
+
+  .ds-pattern-data-table.ds-engine-modern
+    [data-part="body-row"]:hover
+    [data-part="actions-content"],
+  .ds-pattern-data-table.ds-engine-modern
+    [data-part="body-row"]:focus-within
+    [data-part="actions-content"],
+  .ds-pattern-data-table.ds-engine-modern
+    [data-part="body-row"][data-selected="true"]
+    [data-part="actions-content"] {
+    opacity: 1;
+  }
 }
 
 /* ===========================================================================
@@ -1529,9 +1725,21 @@
   opacity: 1;
 }
 
+/* The sorted column carries a quiet ordering keyline under its header cell —
+   a structural marker that reads without color and survives the header
+   band's own hairline (it sits 1px above it). BitHire reads it as a precise
+   scan marker; an editorial tenant reads it as a rule, both from the same
+   sort channel family. */
 .ds-pattern-data-table.ds-engine-modern
-  [data-part="sort-icon"][data-sort-state="asc"] {
-  transform: rotate(180deg);
+  [data-part="header-cell"][data-sort-state="asc"],
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="header-cell"][data-sort-state="desc"] {
+  box-shadow: inset 0 -2px 0 0
+    color-mix(
+      in srgb,
+      var(--ds-table-sort-color-active, var(--ds-color-primary)) 42%,
+      transparent
+    );
 }
 
 .ds-pattern-data-table.ds-engine-modern
@@ -1645,6 +1853,155 @@
   );
 }
 
+/* ===========================================================================
+ * Pinned free-edge grammar (directional border shadow)
+ *
+ * A pinned column separates from the content scrolling beneath it with a
+ * hairline glued to its FREE edge: inline-end for a start-pinned column,
+ * inline-start for an end-pinned one (the always-sticky actions column
+ * already owns an equivalent border-inline-start). Pin sides are LOGICAL, so
+ * the physical shadow edge mirrors under RTL — the private shadow values are
+ * defined once on the root and swapped in one :dir(rtl) block, keeping every
+ * composition rule below direction-free. Box-shadow, never border: the D3
+ * sticky-offset calc() sums equal the declared column widths exactly, and a
+ * real border would drift that equality. Values ride the tenant table-border
+ * channel; no new public hook.
+ * ======================================================================== */
+
+.ds-pattern-data-table.ds-engine-modern[data-part="root"] {
+  --_ds-data-table-pin-edge-start: inset -1px 0 0 0
+    var(--ds-table-border, var(--ds-color-border-secondary));
+  --_ds-data-table-pin-edge-end: inset 1px 0 0 0
+    var(--ds-table-border, var(--ds-color-border-secondary));
+}
+.ds-pattern-data-table.ds-engine-modern[data-part="root"]:dir(rtl) {
+  --_ds-data-table-pin-edge-start: inset 1px 0 0 0
+    var(--ds-table-border, var(--ds-color-border-secondary));
+  --_ds-data-table-pin-edge-end: inset -1px 0 0 0
+    var(--ds-table-border, var(--ds-color-border-secondary));
+}
+
+/* The always-sticky actions column carries data-pinned/data-pin-side as well,
+   but it already owns its directional border + --ds-table-action-shadow
+   channel, so the edge grammar below skips it. */
+.ds-pattern-data-table.ds-engine-modern
+  :is([data-part="header-cell"], [data-part="data-cell"])[data-pinned="true"][data-pin-side="left"]:not([data-cell-kind="actions"]) {
+  box-shadow: var(--_ds-data-table-pin-edge-start);
+}
+.ds-pattern-data-table.ds-engine-modern
+  :is([data-part="header-cell"], [data-part="data-cell"])[data-pinned="true"][data-pin-side="right"]:not([data-cell-kind="actions"]) {
+  box-shadow: var(--_ds-data-table-pin-edge-end);
+}
+
+/* Row states compose WITH the edge keyline on pinned cells: the state band
+   (painted per cell, above) and the pin hairline occupy different shadow
+   slots, so a selected/hovered/focused row keeps both readings. */
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="body-row"][data-selected="true"]
+  > [data-part="data-cell"][data-pinned="true"][data-pin-side="left"] {
+  box-shadow: var(
+      --ds-table-row-selected-shadow,
+      inset 0 0 0 1px
+        color-mix(in srgb, var(--ds-color-primary) 30%, transparent)
+    ),
+    var(--_ds-data-table-pin-edge-start);
+}
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="body-row"][data-selected="true"]
+  > [data-part="data-cell"][data-pinned="true"][data-pin-side="right"] {
+  box-shadow: var(
+      --ds-table-row-selected-shadow,
+      inset 0 0 0 1px
+        color-mix(in srgb, var(--ds-color-primary) 30%, transparent)
+    ),
+    var(--_ds-data-table-pin-edge-end);
+}
+@media (hover: hover) {
+  .ds-pattern-data-table.ds-engine-modern
+    [data-part="body-row"][data-hoverable="true"]:not([data-selected="true"]):hover
+    > [data-part="data-cell"][data-pinned="true"][data-pin-side="left"] {
+    box-shadow: var(
+        --ds-table-row-hover-shadow,
+        inset 0 0 0 1px
+          color-mix(in srgb, var(--ds-color-primary) 10%, transparent)
+      ),
+      var(--_ds-data-table-pin-edge-start);
+  }
+  .ds-pattern-data-table.ds-engine-modern
+    [data-part="body-row"][data-hoverable="true"]:not([data-selected="true"]):hover
+    > [data-part="data-cell"][data-pinned="true"][data-pin-side="right"] {
+    box-shadow: var(
+        --ds-table-row-hover-shadow,
+        inset 0 0 0 1px
+          color-mix(in srgb, var(--ds-color-primary) 10%, transparent)
+      ),
+      var(--_ds-data-table-pin-edge-end);
+  }
+}
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="body-row"]:focus-visible
+  > [data-part="data-cell"][data-pinned="true"][data-pin-side="left"] {
+  box-shadow: var(
+      --ds-table-row-focus-shadow,
+      inset 0 0 0 2px
+        color-mix(in srgb, var(--ds-color-primary) 52%, transparent)
+    ),
+    var(--_ds-data-table-pin-edge-start);
+}
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="body-row"]:focus-visible
+  > [data-part="data-cell"][data-pinned="true"][data-pin-side="right"] {
+  box-shadow: var(
+      --ds-table-row-focus-shadow,
+      inset 0 0 0 2px
+        color-mix(in srgb, var(--ds-color-primary) 52%, transparent)
+    ),
+    var(--_ds-data-table-pin-edge-end);
+}
+
+/* A pinned SORTABLE header cell keeps its keyboard ring without losing the
+   edge keyline. */
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="header-cell"][data-sortable="true"]:focus-visible[data-pinned="true"][data-pin-side="left"] {
+  box-shadow: var(
+      --ds-table-header-focus-shadow,
+      inset 0 0 0 2px
+        color-mix(in srgb, var(--ds-color-primary) 48%, transparent)
+    ),
+    var(--_ds-data-table-pin-edge-start);
+}
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="header-cell"][data-sortable="true"]:focus-visible[data-pinned="true"][data-pin-side="right"] {
+  box-shadow: var(
+      --ds-table-header-focus-shadow,
+      inset 0 0 0 2px
+        color-mix(in srgb, var(--ds-color-primary) 48%, transparent)
+    ),
+    var(--_ds-data-table-pin-edge-end);
+}
+
+/* A pinned sorted header keeps its ordering keyline next to the edge line. */
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="header-cell"]:is([data-sort-state="asc"], [data-sort-state="desc"])[data-pinned="true"][data-pin-side="left"] {
+  box-shadow: inset 0 -2px 0 0
+      color-mix(
+        in srgb,
+        var(--ds-table-sort-color-active, var(--ds-color-primary)) 42%,
+        transparent
+      ),
+    var(--_ds-data-table-pin-edge-start);
+}
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="header-cell"]:is([data-sort-state="asc"], [data-sort-state="desc"])[data-pinned="true"][data-pin-side="right"] {
+  box-shadow: inset 0 -2px 0 0
+      color-mix(
+        in srgb,
+        var(--ds-table-sort-color-active, var(--ds-color-primary)) 42%,
+        transparent
+      ),
+    var(--_ds-data-table-pin-edge-end);
+}
+
 /* ---- virtual-scroll spacer rows/cells: the defensive `border: none` reset ---- */
 .ds-pattern-data-table.ds-engine-modern [data-part="virtual-spacer"] {
   border: none;
@@ -1693,8 +2050,13 @@
   border-bottom: 0;
 }
 
+/* Zebra parity is the engine's per-row stamp, never DOM position: every data
+   row carries `data-striped` computed from its DATA index, so expansion rows,
+   group headers and virtualized spacers can never shift the pattern's parity.
+   The retired `:nth-of-type(even)` rule counted expansion <tr> nodes and
+   repainted the wrong rows after any expanded disclosure (C-06 debt). */
 .ds-pattern-data-table.ds-engine-modern[data-recipe="zebra"]
-  [data-part="body-row"]:nth-of-type(even):not([data-selected="true"]) {
+  [data-part="body-row"][data-striped="true"]:not([data-selected="true"]) {
   background-color: var(
     --ds-table-row-bg-striped,
     color-mix(in srgb, var(--ds-surface-inset) 68%, transparent)
@@ -1732,11 +2094,16 @@
 }
 
 @media (hover: hover) {
+  /* The editorial hover elevation rides the CELLS: a box-shadow or transform
+     stamped on the <tr> does not paint under border-collapse (and transforms
+     on internal table boxes are unreliable cross-engine), so the row lifts
+     nothing — the quiet elevation alone carries the affordance. Pinned cells
+     keep their edge keyline instead of the elevation (composition below). */
   .ds-pattern-data-table.ds-engine-modern[data-recipe="editorial"]
     [data-part="body-row"][data-hoverable="true"]:not(
     [data-selected="true"]
-  ):hover {
-    transform: translateY(-1px);
+  ):hover
+    > td:not([data-pinned="true"]) {
     box-shadow: var(--ds-table-editorial-row-shadow, var(--ds-elevation-1));
   }
 }
@@ -1829,6 +2196,17 @@
   }
 }
 
+@keyframes ds-data-table-expanded-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* ---- coarse pointers: the pattern's own chrome reaches the 44px touch floor.
         Header affordances keep their visual size and grow an invisible hit
         surface instead, so the header row does not change geometry on touch;
@@ -1911,6 +2289,15 @@
   transform: scaleX(-1);
 }
 
+/* The disclosure chevron mirrors too: collapsed it must point inline-end
+   (right in LTR, left in RTL); expanded it is the symmetric down-chevron,
+   so one rule serves both states. */
+.ds-pattern-data-table.ds-engine-modern:dir(rtl)
+  [data-part="expand-button"]
+  svg {
+  transform: scaleX(-1);
+}
+
 .ds-pattern-data-table.ds-engine-modern:dir(rtl)
   [data-part="group-header-chevron"][data-collapsed="true"] {
   transform: rotate(90deg);
@@ -1927,16 +2314,15 @@
   .ds-pattern-data-table.ds-engine-modern [data-part="resize-handle-bar"],
   .ds-pattern-data-table.ds-engine-modern [data-part="sort-icon"],
   .ds-pattern-data-table.ds-engine-modern [data-part="expand-button"],
+  .ds-pattern-data-table.ds-engine-modern [data-part="expanded-row-content"],
+  .ds-pattern-data-table.ds-engine-modern [data-part="bulk-bar"],
   .ds-pattern-data-table.ds-engine-modern [data-part="group-header-chevron"],
-  .ds-pattern-data-table.ds-engine-modern [data-part="bulk-bar-action"] {
+  .ds-pattern-data-table.ds-engine-modern [data-part="bulk-bar-action"],
+  .ds-pattern-data-table.ds-engine-modern [data-part="actions-content"] {
     animation: none;
     transition: none;
   }
 
-  .ds-pattern-data-table.ds-engine-modern[data-recipe="editorial"]
-    [data-part="body-row"][data-hoverable="true"]:not(
-      [data-selected="true"]
-    ):hover,
   .ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"]:hover,
   .ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"]:focus-visible,
   .ds-pattern-data-table.ds-engine-modern [data-part="expand-button"]:hover,
@@ -1976,6 +2362,29 @@
     border-color: Highlight;
     background: Highlight;
     box-shadow: none;
+  }
+
+  /* Box-shadows are stripped: the pinned-column edge keylines re-express as
+     system-color outlines (shape, no geometry shift), and the sorted column
+     keeps its state through an underline on the label — never color alone. */
+  .ds-pattern-data-table.ds-engine-modern
+    :is([data-part="header-cell"], [data-part="data-cell"])[data-pinned="true"]:not([data-cell-kind="actions"]) {
+    outline: 1px solid CanvasText;
+    outline-offset: -1px;
+  }
+
+  .ds-pattern-data-table.ds-engine-modern
+    [data-part="header-cell"]:is([data-sort-state="asc"], [data-sort-state="desc"])
+    [data-part="header-label"] {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+  }
+
+  /* Quiet actions never stay dimmed in forced colors: full opacity, the
+     reveal grammar is inert. */
+  .ds-pattern-data-table.ds-engine-modern [data-part="actions-content"] {
+    opacity: 1;
   }
 }
 

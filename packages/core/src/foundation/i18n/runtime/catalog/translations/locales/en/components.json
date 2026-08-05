@@ -1024,7 +1024,9 @@
     "moreOptions": "More options",
     "export": "Export",
     "active": "active",
-    "clearAll": "Clear all"
+    "clearAll": "Clear all",
+    "draft": "draft",
+    "invalid": "invalid"
   },
   "liveFeed": {
     "refresh": "Refresh",
@@ -1187,7 +1189,9 @@
     "clearAll": "Clear all",
     "addFilter": "Add filter",
     "more_count": "+{count} more",
-    "show_less": "Show less"
+    "show_less": "Show less",
+    "state_draft": "draft",
+    "state_invalid": "invalid"
   },
   "columnMenu": {
     "alwaysVisible": "Always visible in the table",

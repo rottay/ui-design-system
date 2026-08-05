@@ -762,7 +762,9 @@
     "moreOptions": "Plus d’options",
     "export": "Exporter",
     "active": "actifs",
-    "clearAll": "Tout effacer"
+    "clearAll": "Tout effacer",
+    "draft": "brouillon",
+    "invalid": "invalide"
   },
   "dataTerminalCard": {
     "live": "EN DIRECT",
@@ -1028,7 +1030,9 @@
     "clearAll": "Tout effacer",
     "addFilter": "Ajouter un filtre",
     "more_count": "+{count} autres",
-    "show_less": "Afficher moins"
+    "show_less": "Afficher moins",
+    "state_draft": "brouillon",
+    "state_invalid": "invalide"
   },
   "liveFeed": {
     "refresh": "Actualiser",

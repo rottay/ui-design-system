@@ -307,13 +307,25 @@ describe("compileBrandTheme", () => {
     // The four visible radius steps stay byte-identical because bithire
     // authors them as literals; the dial records the declared posture for
     // every non-overridden consumer.
+    // R1 Cohort 1: the dial moved 0.85 -> 1.25 because BitHire's expressive
+    // geometry axis moved `sharp` -> `rounded`. That is the authorized
+    // direction change, not drift: the art-direction contract names the sharp,
+    // hairline, flat posture as this tenant's leading contradiction against an
+    // approachable professional-network north star. 'rounded' was chosen over
+    // 'soft' deliberately -- The Management already holds 'soft', and taking it
+    // here collapsed the geometry axis in the two-system acid test.
+    // The four visible radius steps are still authored as literals by the
+    // theme, so this records the declared posture for non-overridden consumers
+    // rather than repainting the authored ramp. Pill CONTROLS remain forbidden
+    // and are governed by the recipe profile, not by this dial.
     expect(result.cssVariables).toMatchObject({
       "--ds-type-scale": "1",
-      "--ds-radius-scale": "0.85",
+      "--ds-radius-scale": "1.25",
       "--ds-density-scale": "0.9",
     });
     expect(result.cssString).toContain("--ds-type-scale: 1;");
-    expect(result.cssString).toContain("--ds-radius-scale: 0.85;");
+    // Same R1 Cohort 1 geometry move as the dial assertion above.
+    expect(result.cssString).toContain("--ds-radius-scale: 1.25;");
     expect(result.cssString).toContain("--ds-density-scale: 0.9;");
   });
 

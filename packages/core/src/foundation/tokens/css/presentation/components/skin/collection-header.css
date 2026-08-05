@@ -36,6 +36,19 @@
  * `titleTreatment` / `compactLayout` / `layoutVariant` are STATE-SELECTED over
  * static tokens → keyed on the stamped `data-title-treatment` / `data-compact-layout`
  * / `data-editorial-tech`. `item.tone` → `data-tone`.
+ *
+ * C0-07: `loading` stamps `data-loading` on the root and renders the
+ * hierarchy skeleton — eyebrow/title/subtitle/action/meta blocks whose
+ * geometry lives here keyed on data-block (page-shell/cockpit-header idiom),
+ * with the pulse cadence on the motion channel, stopped under
+ * prefers-reduced-motion and re-asserted as GrayText under forced colors.
+ * The loading root is quiet: no sheen layer and no enter animation.
+ *
+ * C1 (visual elevation): the subtitle-row hairline retires in the compact
+ * composition (rhythm carries the separation on narrow measures) and the
+ * primary-first action partition gains a hairline seam
+ * (data-part='action-divider') so the dominant group reads apart from the
+ * quiet cluster without another box.
  */
 
 /* root -------------------------------------------------------------------------- */
@@ -188,9 +201,25 @@
   background: linear-gradient(90deg, color-mix(in srgb, var(--ds-color-border-subtle) 76%, transparent) 0%, color-mix(in srgb, var(--ds-color-border-subtle) 40%, transparent) 40%, color-mix(in srgb, var(--ds-color-border-subtle) 18%, transparent) 72%, transparent 100%);
 }
 /* subtitle-row: the default-branch subtitle wrapper. The root ancestor buys
-   (0,4,0) so its top border clears the tenant border-color floor at (0,3,1). */
+   (0,4,0) so its top border clears the tenant border-color floor at (0,3,1).
+   Compact: the rule retires — on a narrow measure rhythm alone separates
+   title from supporting copy; the hairline read as chrome noise between two
+   stacked text blocks (its padding retires with it, engine-side). */
 .ds-structure.ds-collection-header[data-part='root'] [data-part='subtitle-row'] {
   border-top: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 72%, transparent);
+}
+.ds-structure.ds-collection-header[data-part='root'] [data-part='subtitle-row'][data-compact-layout='true'] {
+  border-top: none;
+}
+
+/* action partition divider: the hairline seam between the dominant primary
+   group and the quiet cluster (engine renders it only when both exist). */
+.ds-structure.ds-collection-header [data-part='action-divider'] {
+  flex-shrink: 0;
+  align-self: center;
+  inline-size: var(--ds-edge-hairline-width, 1px);
+  block-size: var(--ds-spacing-5, 20px);
+  background: var(--ds-color-border-subtle);
 }
 
 /* subtitle (Text) — two variants; the root ancestor + the contract
@@ -269,6 +298,46 @@
   background: var(--ds-surface-panel);
 }
 
+/* loading skeleton (C0-07): quiet root + per-block geometry keyed on
+   data-block; blocks reserve the final hierarchy footprint so late content
+   lands without a jump. */
+
+.ds-structure.ds-collection-header[data-part='root'][data-loading='true'] {
+  animation: none;
+}
+.ds-structure.ds-collection-header[data-part='root'][data-loading='true']::after {
+  display: none;
+}
+
+.ds-structure.ds-collection-header [data-part='skeleton'] {
+  border-radius: var(--ds-radius-sm, 4px);
+  background: var(--ds-color-neutral-100);
+  animation: ds-foundation-pulse var(--ds-motion-attention) ease-in-out infinite;
+}
+.ds-structure.ds-collection-header [data-part='skeleton'][data-block='title'] {
+  inline-size: min(320px, 72%);
+  block-size: clamp(28px, 4vw, 40px);
+}
+.ds-structure.ds-collection-header [data-part='skeleton'][data-block='subtitle'] {
+  inline-size: min(220px, 88%);
+  block-size: 14px;
+}
+.ds-structure.ds-collection-header [data-part='skeleton'][data-block='eyebrow'] {
+  inline-size: 96px;
+  block-size: var(--ds-spacing-6, 24px);
+  border-radius: 999px;
+}
+.ds-structure.ds-collection-header [data-part='skeleton'][data-block='action'] {
+  inline-size: 96px;
+  block-size: var(--ds-spacing-8, 32px);
+  border-radius: 999px;
+}
+.ds-structure.ds-collection-header [data-part='skeleton'][data-block='meta-item'] {
+  inline-size: 72px;
+  block-size: var(--ds-spacing-6, 24px);
+  border-radius: 999px;
+}
+
 @keyframes ds-collection-header-enter {
   from { opacity: 0; transform: translateY(8px) scale(0.995); }
   to { opacity: 1; transform: translateY(0) scale(1); }
@@ -315,6 +384,17 @@
     -webkit-text-fill-color: CanvasText;
     -webkit-text-stroke-width: 0;
   }
+
+  /* The partition seam re-asserts as a system-ink rule (it is structure,
+     not decoration). */
+  .ds-structure.ds-collection-header [data-part='action-divider'] {
+    background: ButtonText;
+  }
+
+  .ds-structure.ds-collection-header [data-part='skeleton'] {
+    background: GrayText;
+    animation: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -323,5 +403,11 @@
   .ds-structure.ds-collection-header [data-part='quick-actions'] {
     animation: none;
     transition: none;
+  }
+
+  /* The skeleton pulse is ambient motion: the reserved footprint stays,
+     the cadence stops. */
+  .ds-structure.ds-collection-header [data-part='skeleton'] {
+    animation: none;
   }
 }

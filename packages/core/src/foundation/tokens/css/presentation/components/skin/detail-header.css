@@ -36,6 +36,31 @@
  * `data-archetype`, so per-archetype rules reach it through the root. The
  * `--ds-detail-header-tab-active-bg` channel remains as the tenant override in
  * every rule's fallback chain.
+ *
+ * C-12 WAVE (record/detail composition):
+ *  - TYPOGRAPHY AXIS: the h1's tracking chains the personality heading channel
+ *    (`--ds-typography-heading-letter-spacing`: BitHire's authored -0.025em
+ *    grotesk vs The Management's 0em serif) behind the family's own override
+ *    channel; the eyebrow chains the overline channel
+ *    `--ds-page-header-eyebrow-text-transform` over the label personality
+ *    channel; the metadata chip label rides the label personality channel —
+ *    every fallback preserves the exact pre-wave render.
+ *  - GEOMETRY/EDGE: radii resolve `--ds-radius-*` with the exact pre-wave
+ *    literals as fallbacks; the top-bar and tab-strip rules resolve
+ *    `--ds-divider-width`/`--ds-divider-style` (floors 1px solid).
+ *  - ICONS: the action icons ride the Button's governed
+ *    `--ds-button-sm-icon-size` channel and the metadata chip glyph frame is
+ *    skin-owned (both drained from inline 14px paint).
+ *  - COARSE: the tab hit area meets the 44px floor like the top-bar actions.
+ *
+ * C1 WAVE (visual elevation): the hero h1 converges on the authored
+ * page-title typography role (page hierarchy grammar — detail and list
+ * pages share one type language). Lawful precedence per channel: family
+ * channel first, `--ds-type-page-title-*` second, exact pre-C1 chains
+ * last; a role-less artifact renders byte-identical. Per-archetype sizes
+ * keep their literal fallbacks (caller anatomy outranks tenant voice) and
+ * the compact query keeps its deliberate 26px de-escalation while its
+ * tracking follows the role.
  */
 
 /* ─── hero-panel archetype gradient (buildPatternStyle × getArchetypeStyles) ─ */
@@ -105,7 +130,9 @@
   margin-block-end: var(--ds-detail-header-root-margin-block-end, 24px);
   overflow: hidden;
   background: var(--ds-surface-card, var(--ds-color-bg-elevated));
-  border-radius: var(--ds-detail-header-radius, 22px);
+  /* The family's own channel stays first; the tenant geometry ramp supplies
+     the posture when the channel is not authored (fallback keeps 22px). */
+  border-radius: var(--ds-detail-header-radius, var(--ds-radius-xl, 22px));
   box-shadow: var(--ds-detail-header-shadow, 0 14px 36px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent));
   transition:
     border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
@@ -125,7 +152,8 @@
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-secondary) 92%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-color-bg-secondary) 78%, var(--ds-surface-card)));
 }
 .ds-structure.ds-detail-header [data-part='top-bar'][data-part='top-bar'] {
-  border-bottom: 1px solid var(--ds-color-border-secondary);
+  /* Tenant divider grammar reaches the chrome seam (floors 1px solid). */
+  border-bottom: var(--ds-divider-width, 1px) var(--ds-divider-style, solid) var(--ds-color-border-secondary);
 }
 
 /* ─── back button + breadcrumb divider ─────────────────────────────────────── */
@@ -138,7 +166,7 @@
 
 .ds-structure.ds-detail-header [data-part='back-button'] {
   padding: var(--ds-detail-header-back-button-padding, 7px 12px);
-  border-radius: 11px;
+  border-radius: var(--ds-radius-md, 11px);
   background: transparent;
   transition:
     background var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
@@ -184,7 +212,7 @@
   block-size: var(--ds-detail-header-avatar-size, 68px);
   overflow: hidden;
   flex-shrink: 0;
-  border-radius: 18px;
+  border-radius: var(--ds-radius-xl, 18px);
   box-shadow:
     0 0 0 4px color-mix(in srgb, var(--ds-surface-card) 78%, transparent),
     0 12px 30px -18px color-mix(in srgb, var(--ds-color-text-primary) 42%, transparent);
@@ -216,7 +244,9 @@
   color: var(--ds-color-text-muted);
   font-family: var(--ds-font-family-mono, monospace);
   letter-spacing: var(--ds-detail-header-eyebrow-tracking, 0.14em);
-  text-transform: uppercase;
+  /* Overline channel first (the type profile's eyebrow posture), then the
+     label personality channel; the fallback keeps the pre-wave uppercase. */
+  text-transform: var(--ds-page-header-eyebrow-text-transform, var(--ds-typography-label-transform, uppercase));
 }
 /* the title is a `Box as="h1"` (NOT typography), so its display type lives here
    and wins unlayered at (0,3,0); the per-archetype size keys on the stamped
@@ -227,8 +257,22 @@
   font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
   font-size: var(--ds-detail-header-title-size, 32px);
   font-weight: var(--ds-detail-header-title-weight, 720);
-  letter-spacing: var(--ds-detail-header-title-tracking, -0.04em);
+  /* The family channel stays first; the personality heading channel carries
+     the tenant's authored tracking (BitHire's -0.025em grotesk vs The
+     Management's 0em serif) when the family channel is not authored. */
+  letter-spacing: var(--ds-detail-header-title-tracking, var(--ds-typography-heading-letter-spacing, -0.04em));
   line-height: var(--ds-detail-header-title-leading, 1.02);
+  /* C1: the hero converges on the authored page-title typography role (page
+     hierarchy grammar — a detail page speaks the same type language as a
+     list page). Lawful precedence: the family's own channels first, the
+     role second, the exact pre-C1 chains last — a role-less artifact
+     renders byte-identical, while an authored role turns the hero
+     serif/zero-track (editorial) or grotesk/tight (technical). */
+  font-family: var(--ds-type-page-title-font-family, var(--ds-font-family-heading, var(--ds-font-family-base)));
+  font-size: var(--ds-detail-header-title-size, var(--ds-type-page-title-font-size, 32px));
+  font-weight: var(--ds-detail-header-title-weight, var(--ds-type-page-title-font-weight, 700));
+  letter-spacing: var(--ds-detail-header-title-tracking, var(--ds-type-page-title-letter-spacing, var(--ds-typography-heading-letter-spacing, -0.04em)));
+  line-height: var(--ds-detail-header-title-leading, var(--ds-type-page-title-line-height, 1.2));
   text-wrap: balance;
 }
 .ds-structure.ds-detail-header [data-part='title'][data-archetype='editorial'] {
@@ -266,7 +310,7 @@
 .ds-structure.ds-detail-header [data-part='metadata-card'] {
   margin-block-start: var(--ds-detail-header-metadata-card-margin-block-start, 24px);
   padding: var(--ds-detail-header-metadata-card-padding, 16px 18px 18px);
-  border-radius: 18px;
+  border-radius: var(--ds-radius-xl, 18px);
   background:
     radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--ds-color-text-primary) 7%, transparent) 0%, transparent 34%),
     radial-gradient(circle at 82% 100%, color-mix(in srgb, var(--ds-color-text-secondary) 6%, transparent) 0%, transparent 36%),
@@ -291,7 +335,7 @@
 .ds-structure.ds-detail-header [data-part='metadata-chip'] {
   min-inline-size: 0;
   padding: var(--ds-detail-header-metadata-chip-padding, 9px 12px);
-  border-radius: 14px;
+  border-radius: var(--ds-radius-lg, 14px);
   background: color-mix(in srgb, var(--ds-color-bg-secondary) 58%, transparent);
   color: var(--ds-color-text-muted);
   transition:
@@ -302,11 +346,24 @@
 .ds-structure.ds-detail-header [data-part='metadata-chip'][data-part='metadata-chip'] {
   border: 1px solid var(--ds-color-border-secondary);
 }
+/* Icon well drained from the engine's inline 14px: the frame is skin-owned
+   and the glyph (a consumer component) inherits the chip's muted ink. */
+.ds-structure.ds-detail-header [data-part='metadata-chip-icon'] {
+  display: flex;
+  flex-shrink: 0;
+  inline-size: 14px;
+  block-size: 14px;
+}
+.ds-structure.ds-detail-header [data-part='metadata-chip-icon'] > :first-child {
+  inline-size: 100%;
+  block-size: 100%;
+}
 .ds-structure.ds-detail-header [data-part='metadata-chip-label'][data-part='metadata-chip-label'][data-part='metadata-chip-label'] {
   color: var(--ds-color-text-muted);
   font-family: var(--ds-font-family-mono, monospace);
   letter-spacing: var(--ds-detail-header-metadata-chip-label-tracking, 0.12em);
-  text-transform: uppercase;
+  /* Label personality channel (fallback keeps the pre-wave uppercase). */
+  text-transform: var(--ds-typography-label-transform, uppercase);
 }
 .ds-structure.ds-detail-header [data-part='metadata-chip-value'][data-part='metadata-chip-value'][data-part='metadata-chip-value'] {
   word-break: break-word;
@@ -334,14 +391,15 @@
   background: color-mix(in srgb, var(--ds-color-bg-secondary) 96%, transparent);
 }
 .ds-structure.ds-detail-header [data-part='tab-strip'][data-part='tab-strip'] {
-  border-top: 1px solid var(--ds-color-border-secondary);
+  /* Tenant divider grammar reaches the strip seam (floors 1px solid). */
+  border-top: var(--ds-divider-width, 1px) var(--ds-divider-style, solid) var(--ds-color-border-secondary);
 }
 
 .ds-structure.ds-detail-header [data-part='tab'] {
   padding: var(--ds-detail-header-tab-padding, 10px 12px 12px);
   cursor: pointer;
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
+  border-top-left-radius: var(--ds-radius-lg, 12px);
+  border-top-right-radius: var(--ds-radius-lg, 12px);
   background: transparent;
   transform: translateY(0px);
   transition:
@@ -472,7 +530,9 @@
   }
   .ds-structure.ds-detail-header[data-part='root'] [data-part='title'] {
     font-size: var(--ds-detail-header-title-size-compact, 26px);
-    letter-spacing: var(--ds-detail-header-title-tracking-compact, -0.03em);
+    /* Compact de-escalates the size deliberately, but tracking follows the
+       authored role (serifs refuse negative tracking at every measure). */
+    letter-spacing: var(--ds-detail-header-title-tracking-compact, var(--ds-type-page-title-letter-spacing, -0.025em));
   }
   .ds-structure.ds-detail-header [data-part='avatar'] {
     inline-size: var(--ds-detail-header-avatar-size-compact, 56px);
@@ -487,11 +547,19 @@
 
 /* every direct action in the top bar meets the 44px physical floor;
    min-block-size composes with Button's own height instead of fighting its
-   specificity (same contract as ActionDock) */
+   specificity (same contract as ActionDock). The tab strip is a tablist of
+   direct actions too: the tab's own padding already composes, and the floor
+   only grows the compact cases (C-12). */
 @media (pointer: coarse) {
   .ds-structure.ds-detail-header [data-part='back-button'],
-  .ds-structure.ds-detail-header [data-part='actions'] :where(button, a) {
+  .ds-structure.ds-detail-header [data-part='actions'] :where(button, a),
+  .ds-structure.ds-detail-header [data-part='tab'] {
     min-block-size: max(44px, var(--ds-size-touch-target, 44px));
+  }
+
+  .ds-structure.ds-detail-header [data-part='tab'] {
+    display: flex;
+    align-items: center;
   }
 }
 

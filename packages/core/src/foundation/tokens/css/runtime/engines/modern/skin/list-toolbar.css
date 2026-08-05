@@ -84,11 +84,20 @@
       --ds-toolbar-border,
       var(--ds-material-panel-border, var(--ds-color-border))
     );
-  border-bottom: 1px solid
-    var(
-      --ds-toolbar-border-bottom,
-      var(--ds-toolbar-border, var(--ds-color-border))
-    );
+  /* PROTO (--_ds-list-toolbar-keyline): the shell's bottom rule as one
+     authored border shorthand. The fallback is byte-identical to the shipped
+     1px solid rule, so the current render is preserved; an editorial profile
+     can author e.g. `3px double <ink>` to separate the toolbar by typographic
+     rule instead of by box edge (The Management direction) while a technical
+     profile keeps the single hairline (BitHire direction). */
+  border-bottom: var(
+    --_ds-list-toolbar-keyline,
+    1px solid
+      var(
+        --ds-toolbar-border-bottom,
+        var(--ds-toolbar-border, var(--ds-color-border))
+      )
+  );
   border-radius: var(--ds-list-toolbar-radius-shell);
   color: var(
     --ds-toolbar-color,
@@ -156,6 +165,38 @@
   > [data-part='filter-chips-strip'] {
   position: relative;
   z-index: 1;
+}
+
+/* Loading: a busy hairline pinned to the shell's bottom edge. It is absolute,
+   so the bar keeps its exact footprint while the collection refreshes (no
+   layout shift), and it never blocks the controls — a slow refresh must not
+   strand the search mid-typing. The sweep is one compositor-friendly
+   background-position pass, scaled from the deliberate motion rung. */
+.ds-pattern-list-toolbar.ds-engine-modern[data-part='root'][data-loading='true']::after {
+  content: '';
+  position: absolute;
+  z-index: 2;
+  inset-inline: 0;
+  inset-block-end: 0;
+  block-size: 2px;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--ds-color-primary) 38%,
+    var(--ds-color-primary) 62%,
+    transparent 100%
+  );
+  background-size: 42% 100%;
+  background-repeat: no-repeat;
+  animation: ds-list-toolbar-busy
+    calc(var(--ds-motion-deliberate, 360ms) * 3)
+    linear infinite;
+}
+
+[dir='rtl']
+  .ds-pattern-list-toolbar.ds-engine-modern[data-part='root'][data-loading='true']::after {
+  animation-direction: reverse;
 }
 
 /* Shared controls --------------------------------------------------------- */
@@ -309,6 +350,18 @@
   opacity: 0.48;
 }
 
+/* C1 priority grammar: the ONLY divider inside the controls cluster is the
+   ACT boundary — it separates the quiet presentation instruments (view
+   switch, export, settings) from the primary action. It reads slightly
+   taller and stronger than the intra-row hairlines; the authored
+   --ds-toolbar-divider-opacity channel keeps its proportion everywhere. */
+.ds-pattern-list-toolbar.ds-engine-modern
+  .ds-list-toolbar__controls[data-part='controls']
+  .ds-list-toolbar__divider[data-part='divider'] {
+  block-size: 1.5rem;
+  opacity: min(calc(var(--ds-toolbar-divider-opacity, 0.6) * 1.5), 1);
+}
+
 /* Filter controls --------------------------------------------------------- */
 
 .ds-list-toolbar__filter-menu[data-part='filter-menu'] {
@@ -350,7 +403,17 @@
     --ds-filter-pill-radius,
     var(--ds-list-toolbar-radius-control, var(--ds-radius-sm, 6px))
   );
-  border: 1px solid var(--ds-filter-pill-border, transparent);
+  /* C1 priority grammar: a filter trigger is a PARAMETER control (label +
+     value + disclosure), not an action button — it must never read as a
+     twin of the quiet icon buttons. The frame states that role at rest:
+     authored --ds-filter-pill-border/--ds-toolbar-control-border channels
+     always win (both verticals author them), and the default theme gains a
+     quiet hairline instead of naked text. */
+  border: 1px solid
+    var(
+      --ds-filter-pill-border,
+      var(--ds-toolbar-control-border, var(--ds-color-border))
+    );
   background: var(--ds-filter-pill-bg, transparent);
   color: var(--ds-filter-pill-color, var(--ds-color-text-secondary));
   box-shadow: var(--ds-filter-pill-shadow, none);
@@ -380,6 +443,22 @@
     --ds-filter-pill-active-shadow,
     var(--ds-filter-pill-shadow, none)
   );
+}
+
+/* Filter lifecycle on the trigger, expressed as border STYLE (never hue
+   alone): a draft value is chosen but uncommitted, so its frame loosens to a
+   dash; an invalid value needs repair, so its frame tightens to a dotted rule
+   and the ink shifts to the semantic error role. */
+.ds-pattern-list-toolbar.ds-engine-modern
+  .ds-list-toolbar__filter-trigger.rottay-button[data-part='trigger'][data-state='draft'] {
+  border-style: dashed;
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern
+  .ds-list-toolbar__filter-trigger.rottay-button[data-part='trigger'][data-state='invalid'] {
+  border-style: dotted;
+  border-color: var(--ds-color-error);
+  color: var(--ds-color-error);
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
@@ -590,11 +669,22 @@
 
 .ds-pattern-list-toolbar.ds-engine-modern
   .ds-list-toolbar__main-row[data-part='main-row'] {
-  min-height: var(--ds-toolbar-min-height, 3.75rem);
+  /* Density law: the fallbacks scale with the tenant's governed density
+     channel, so a compact profile (BitHire 0.9) reads tighter and a spacious
+     one (The Management) gains real air — an authored --ds-toolbar-* value
+     always wins untouched. */
+  min-height: var(
+    --ds-toolbar-min-height,
+    calc(3.75rem * var(--ds-density-effective-scale, 1))
+  );
   min-inline-size: 0;
   flex-wrap: nowrap;
   gap: var(--ds-toolbar-gap, calc(0.625rem * var(--ds-rhythm-effective-scale, 1)));
-  padding: var(--ds-toolbar-padding, 0.625rem 1rem);
+  padding: var(
+    --ds-toolbar-padding,
+    calc(0.625rem * var(--ds-density-effective-scale, 1))
+      calc(1rem * var(--ds-density-effective-scale, 1))
+  );
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern[data-has-active-filters='true']
@@ -625,27 +715,37 @@
     --ds-toolbar-icon-radius,
     var(--ds-list-toolbar-radius-inner, var(--ds-radius-md, 8px))
   );
+  /* Quiet material tile, not a jewel: the family's icon-well idiom (drawer
+     header-icon, status tiles) is a flat primary wash + the hairline channel
+     + the zenith keyline. The 145deg directional gradient and the 8% glow
+     shadow made a decorative gem out of a functional mark — retired, the
+     --ds-toolbar-icon-* channels stay sovereign for an authored tile. */
   background: var(
     --ds-toolbar-icon-bg,
-    linear-gradient(
-      145deg,
-      color-mix(in srgb, var(--ds-color-primary) 11%, var(--ds-surface-card)),
-      color-mix(in srgb, var(--ds-color-primary) 3%, var(--ds-surface-inset))
-    )
+    color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card))
   );
   color: var(--ds-toolbar-icon-color, var(--ds-color-primary));
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent),
-    0 4px 12px color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
+  box-shadow: inset 0 1px 0
+    color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent);
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
   .ds-list-toolbar__title.ds-list-toolbar__title.ds-list-toolbar__title {
   color: var(--ds-toolbar-color, var(--ds-color-text-primary));
-  font-family: var(--ds-toolbar-title-font-family, var(--ds-font-family-heading));
+  /* Typography law: family and tracking fall back to the tenant's governed
+     section-title role, so an editorial profile (serif heading, wider
+     tracking) and a technical one (humanist sans, tight tracking) diverge on
+     the same DOM; size stays at the toolbar's own rung. */
+  font-family: var(
+    --ds-toolbar-title-font-family,
+    var(--ds-type-section-title-font-family, var(--ds-font-family-heading))
+  );
   font-size: var(--ds-toolbar-title-font-size, var(--ds-font-size-md));
   font-weight: var(--ds-toolbar-title-font-weight, var(--ds-font-weight-semibold, 600));
-  letter-spacing: var(--ds-toolbar-title-letter-spacing, -0.015em);
+  letter-spacing: var(
+    --ds-toolbar-title-letter-spacing,
+    var(--ds-type-section-title-letter-spacing, -0.015em)
+  );
   min-inline-size: 0;
   max-inline-size: var(--ds-toolbar-title-max-width, 18rem);
   overflow: hidden;
@@ -829,7 +929,11 @@
 .ds-pattern-list-toolbar.ds-engine-modern
   .ds-list-toolbar__filter-chips-strip[data-part='filter-chips-strip'][data-part='filter-chips-strip'] {
   gap: var(--ds-spacing-2, 0.5rem);
-  padding: var(--ds-toolbar-filter-strip-padding, 0.5rem 1rem);
+  padding: var(
+    --ds-toolbar-filter-strip-padding,
+    calc(0.5rem * var(--ds-density-effective-scale, 1))
+      calc(1rem * var(--ds-density-effective-scale, 1))
+  );
   border-top: 1px solid
     var(
       --ds-toolbar-border-bottom,
@@ -872,6 +976,14 @@
   .ds-list-toolbar__filter-chips-count.ds-list-toolbar__filter-chips-count {
   font-weight: var(--ds-type-label-font-weight, 600);
   white-space: nowrap;
+  /* C1: the "N active" summary speaks the same eyebrow voice as the
+     ActiveFiltersBar count pill (sibling surfaces, one grammar) — tracked
+     label figures in the tenant's resolved label-transform, so a technical
+     profile reads an uppercase tracked counter and an editorial one a
+     capitalized quiet one. */
+  letter-spacing: var(--ds-type-label-letter-spacing, 0.04em);
+  text-transform: var(--ds-typography-label-transform, none);
+  font-variant-numeric: tabular-nums;
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
@@ -913,6 +1025,59 @@
   font-size: var(--ds-type-label-font-size, 0.75rem);
   font-weight: var(--ds-type-label-font-weight, 600);
   line-height: var(--ds-type-label-line-height, 1.3);
+  /* Values scan as data: tabular figures keep same-width numerals when a
+     chip carries counts, dates or ids (the status-filter-pills idiom). */
+  font-variant-numeric: tabular-nums;
+}
+
+/* Filter lifecycle on the applied-chips strip. The engine stamps
+   data-state='draft'|'invalid' and mounts the governed status-draft /
+   status-error glyph inside the Tag's icon slot; the skin completes the
+   multimodal grammar with border style and text treatment, so the state
+   survives hue stripping and forced colors:
+   - draft: dashed frame, hollow fill, regular-weight value — chosen but not
+     yet committed;
+   - invalid: error-role frame and ink plus a wavy underline on the value —
+     the universal "needs repair" mark that reads without color. */
+.ds-pattern-list-toolbar.ds-engine-modern
+  .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-state='draft'] {
+  border-style: dashed;
+  background: transparent;
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern
+  .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-state='invalid'] {
+  border-color: var(--ds-color-error);
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern
+  .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-state='draft']
+  [data-part='icon'] {
+  color: var(--ds-filter-pill-color, var(--ds-color-text-secondary));
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern
+  .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-state='invalid']
+  [data-part='icon'] {
+  color: var(--ds-color-error);
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern
+  .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-state='draft']
+  .ds-list-toolbar__filter-chip-value.ds-list-toolbar__filter-chip-value {
+  /* C1: draft must read at two meters — hollow dashed frame + REGULAR weight
+     + quieted ink, so the provisional chip is visibly ghosted next to the
+     solid applied chip even before the status glyph registers. */
+  color: var(--ds-color-text-secondary);
+  font-weight: var(--ds-font-weight-normal, 400);
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern
+  .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-state='invalid']
+  .ds-list-toolbar__filter-chip-value.ds-list-toolbar__filter-chip-value {
+  color: var(--ds-color-error);
+  text-decoration: underline wavy var(--ds-color-error);
+  text-underline-offset: 0.18em;
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
@@ -975,7 +1140,11 @@
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__mobile-layout[data-part='mobile-layout'] {
     gap: var(--ds-spacing-3, 0.75rem);
-    padding: var(--ds-toolbar-compact-padding, 0.75rem 1rem);
+    padding: var(
+      --ds-toolbar-compact-padding,
+      calc(0.75rem * var(--ds-density-effective-scale, 1))
+        calc(1rem * var(--ds-density-effective-scale, 1))
+    );
   }
 
   .ds-pattern-list-toolbar.ds-engine-modern
@@ -1014,21 +1183,68 @@
 
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__filter-rail[data-part='filter-rail'][data-part='filter-rail'] {
-    margin-inline: 0;
-    padding: var(--ds-toolbar-mobile-rail-padding, 0);
+    /* C1 designed compaction: the rail bleeds to the shell's compact inline
+       padding so pills scroll edge to edge instead of reading as an inset
+       boxed strip, and the inline-end fade is the honest "more pills"
+       affordance — when nothing overflows the end zone is empty padding,
+       so the fade self-hides. The bleed mirrors the compact layout's own
+       inline rhythm (a tenant that authors --ds-toolbar-compact-padding
+       keeps its frame there). Block padding now falls back to the base
+       rule's focus-ring clearance: the retired full `padding` shorthand
+       silently overrode it to 0 and the rail's overflow clipped trigger
+       focus rings in compact. */
+    margin-inline: calc(-1rem * var(--ds-density-effective-scale, 1));
+    padding-block: var(
+      --ds-toolbar-mobile-rail-padding,
+      var(--ds-toolbar-rail-focus-clearance, 0.25rem)
+    );
+    padding-inline: calc(1rem * var(--ds-density-effective-scale, 1));
     border: 1px solid var(--ds-toolbar-mobile-rail-border, transparent);
     border-radius: var(
       --ds-toolbar-mobile-rail-radius,
       var(--ds-list-toolbar-radius-inner, var(--ds-radius-md, 8px))
     );
     background: var(--ds-toolbar-mobile-rail-bg, transparent);
+    -webkit-mask-image: linear-gradient(
+      to right,
+      #000 0%,
+      #000 calc(100% - 1.25rem),
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to right,
+      #000 0%,
+      #000 calc(100% - 1.25rem),
+      transparent 100%
+    );
+  }
+
+  [dir='rtl']
+    .ds-pattern-list-toolbar.ds-engine-modern
+    .ds-list-toolbar__filter-rail[data-part='filter-rail'] {
+    -webkit-mask-image: linear-gradient(
+      to left,
+      #000 0%,
+      #000 calc(100% - 1.25rem),
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to left,
+      #000 0%,
+      #000 calc(100% - 1.25rem),
+      transparent 100%
+    );
   }
 }
 
 @container (max-width: 480px) {
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__mobile-layout[data-part='mobile-layout'] {
-    padding: var(--ds-toolbar-phone-padding, 0.625rem 0.75rem);
+    padding: var(
+      --ds-toolbar-phone-padding,
+      calc(0.625rem * var(--ds-density-effective-scale, 1))
+        calc(0.75rem * var(--ds-density-effective-scale, 1))
+    );
   }
 
   .ds-pattern-list-toolbar.ds-engine-modern
@@ -1039,13 +1255,25 @@
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__filter-chips-strip[data-part='filter-chips-strip'] {
     align-items: flex-start;
-    padding: var(--ds-toolbar-phone-filter-strip-padding, 0.625rem 0.75rem);
+    padding: var(
+      --ds-toolbar-phone-filter-strip-padding,
+      calc(0.625rem * var(--ds-density-effective-scale, 1))
+        calc(0.75rem * var(--ds-density-effective-scale, 1))
+    );
   }
 
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__filter-chips-strip
     .ds-list-toolbar__divider--compact {
     display: none;
+  }
+
+  /* Phone: the compact layout's inline rhythm steps down to 0.75rem — the
+     rail bleed follows it so pills keep scrolling flush to the shell edge. */
+  .ds-pattern-list-toolbar.ds-engine-modern
+    .ds-list-toolbar__filter-rail[data-part='filter-rail'][data-part='filter-rail'] {
+    margin-inline: calc(-0.75rem * var(--ds-density-effective-scale, 1));
+    padding-inline: calc(0.75rem * var(--ds-density-effective-scale, 1));
   }
 }
 
@@ -1120,6 +1348,15 @@
   }
 }
 
+@keyframes ds-list-toolbar-busy {
+  from {
+    background-position: -42% 0;
+  }
+  to {
+    background-position: 142% 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   /* Selectors here must match the specificity of the rules they neutralize
      (the base strip rule repeats its part twice to reach (0,5,0)); equal
@@ -1148,6 +1385,14 @@
     ).rottay-button[data-part='trigger'] {
     animation: none;
     transition: none;
+  }
+
+  /* Reduced motion keeps the loading signal as a static, centered hairline
+     segment — the state stays readable with zero movement. */
+  .ds-pattern-list-toolbar.ds-engine-modern[data-part='root'][data-loading='true']::after {
+    animation: none;
+    background-position: 50% 0;
+    opacity: 0.55;
   }
 }
 
@@ -1182,6 +1427,46 @@
     .ds-list-toolbar__filter-chips-strip[data-part='filter-chips-strip'][data-part='filter-chips-strip'] {
     background: Canvas;
     color: CanvasText;
+  }
+
+  /* Filter lifecycle in system colors: the state reads from border STYLE and
+     the text mark alone — draft loosens to a dash, invalid becomes a double
+     rule (wide enough to render both lines) plus the wavy value underline,
+     which forced colors preserves by remapping it to CanvasText. */
+  .ds-pattern-list-toolbar.ds-engine-modern
+    .ds-list-toolbar__filter-trigger.rottay-button[data-part='trigger'][data-state='draft'],
+  .ds-pattern-list-toolbar.ds-engine-modern
+    .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-part='filter-chip'][data-state='draft'] {
+    border-style: dashed;
+    background: Canvas;
+    color: CanvasText;
+  }
+
+  .ds-pattern-list-toolbar.ds-engine-modern
+    .ds-list-toolbar__filter-trigger.rottay-button[data-part='trigger'][data-state='invalid'],
+  .ds-pattern-list-toolbar.ds-engine-modern
+    .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-part='filter-chip'][data-state='invalid'] {
+    border-color: ButtonText;
+    color: CanvasText;
+  }
+
+  .ds-pattern-list-toolbar.ds-engine-modern
+    .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-part='filter-chip'][data-state='invalid'] {
+    border-style: double;
+    border-width: 3px;
+  }
+
+  .ds-pattern-list-toolbar.ds-engine-modern
+    .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-state='invalid']
+    .ds-list-toolbar__filter-chip-value.ds-list-toolbar__filter-chip-value {
+    color: CanvasText;
+    text-decoration-color: CanvasText;
+  }
+
+  /* The busy hairline's gradient is stripped; a solid system-highlight rule
+     keeps the loading signal. */
+  .ds-pattern-list-toolbar.ds-engine-modern[data-part='root'][data-loading='true']::after {
+    background: Highlight;
   }
 }
 

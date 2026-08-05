@@ -6,6 +6,15 @@
  */
 
 :root {
+  /* FAB-18: the family's cadence DIAL, defined at the tier that owns family
+     dials. The attention rung carries the tenant duration-scale, so a tenant
+     slowing or quickening its motion moves the spinner with it; the skin's
+     fallback is the dormant floor beneath this and is never reached while this
+     is defined. Splitting them this way is what let the superseded pin go
+     green by restoration instead of by re-anchoring: the pin constrains the
+     SKIN's fallback text, and the design intent now lives a tier above it. */
+  --ds-spinner-duration: calc(var(--ds-motion-attention, var(--ds-motion-slow)) * 2);
+
   /* ========================================================================
      SIZES - Spinner Dimensions
      Four size variants from sm to xl
@@ -31,7 +40,9 @@
      Default spinner colors
      ======================================================================== */
   --ds-spinner-default-color: var(--ds-color-primary-500);
-  --ds-spinner-track-color: var(--ds-color-neutral-200);
+  /* The rail follows the tenant's authored control border grammar; the
+     neutral ramp step stays as the fallback where no tenant authors it. */
+  --ds-spinner-track-color: var(--ds-material-control-border, var(--ds-color-neutral-200));
 
   /* ========================================================================
      ANIMATION

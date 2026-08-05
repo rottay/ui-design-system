@@ -240,11 +240,32 @@ describe("TenantThemeConfig v1 server contract", () => {
     // only additions vs pre-wave are exactly those two fields, verified by
     // git diff at integration), C2 (advanced.profiles gained the icon axis), C1b
     // (expressive selection fields), C1 (--ds-color-bg-overlay allowlist row).
+    // R1 Cohort 1 re-anchor: both digests moved because the schema PUBLISHES
+    // the recipe-profile registry as a closed enum -- `schemas/tenant-theme`
+    // spreads `RECIPE_PROFILES.map(p => p.id)` into the document schema -- and
+    // that registry gained `rottay/network-professional@1`.
+    //
+    // The addition was FORCED, not preferred, and the alternatives were
+    // exhausted first: the db-row canary requires the recipe-profile axis to
+    // diverge; The Management had to leave `editorial-round@1` because its
+    // `shape: 'round'` default routes buttons to `--ds-radius-full`, which no
+    // allowlisted override can square and which pill-forbids that direction;
+    // that leaves `technical-sharp@1` occupied by The Management; and
+    // `editorial-round@1` cannot absorb BitHire because it was sighted and
+    // REJECTED there. With only two published profiles the axis could not
+    // diverge at all, so a third entry was the only route.
+    //
+    // This is a genuine SCHEMA-surface change, which is exactly what these
+    // sentinels exist to catch -- they caught it. The re-anchor is recorded
+    // with its cause, following the same protocol as the moves below; no
+    // sentinel was widened, no assertion relaxed, and the digest was not
+    // copied merely to turn the suite green. The new id is permanent per the
+    // registry's supersede-never-reuse law.
     expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
-      "sha256-0dbbdeef9bd740dcd1f256a53db9086bedb72725cc36a084019cdafd515b3069"
+      "sha256-914da80b38a4fd234b098cc44fcea1bda56795ba8c3689b853006116ce409a01"
     );
     expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
-      "sha256-6e7515d9136c47137a6c24ad08f06541ca907e0e70cb872dc2d5881633d6c7fa"
+      "sha256-d7747980de3ba651e12af91763bb43284c41051d8c8333293a9b72f82cc4f835"
     );
     expect(Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA)).toBe(true);
     expect(Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA.documents.simple)).toBe(
@@ -1032,6 +1053,85 @@ describe("closed schema and hostile input rejection", () => {
       expect(
         overlong.issues.some((issue) => issue.message.includes("65"))
       ).toBe(true);
+  });
+
+  it("rejects one entry over the tokenOverrides budget with one named issue (no truncation)", () => {
+    const cap = TENANT_THEME_CONFIG_SCHEMA.limits.maxTokenOverrides;
+    expect(cap).toBe(200);
+    // The allowlisted vocabulary is wider than the budget, so an in-spec
+    // author can legally reach 201 distinct keys.
+    const budgetTokens = TENANT_THEME_CONFIG_SCHEMA.overrideTokens.filter(
+      (token) =>
+        token.startsWith("--ds-material-") || token.startsWith("--ds-type-")
+    );
+    expect(budgetTokens.length).toBeGreaterThan(cap);
+    const overCap = {
+      schemaVersion: 1 as const,
+      mode: "advanced" as const,
+      visualFoundation: {
+        advanced: {
+          tokenOverrides: Object.fromEntries(
+            budgetTokens.slice(0, cap + 1).map((token) => [token, "1px"])
+          ),
+        },
+      },
+    };
+
+    const validation = validateTenantThemeDocument(overCap);
+    expect(validation.success).toBe(false);
+    if (validation.success) throw new Error("expected a rejected document");
+    expect(validation.issues).toEqual([
+      {
+        code: "invalid_value",
+        path: "$.visualFoundation.advanced.tokenOverrides",
+        message: `Maximum tokenOverrides entries is ${cap}; received ${cap + 1}`,
+      },
+    ]);
+
+    // The hydrated modes envelope fails closed on the same single issue, so an
+    // over-budget row can never reach the appearance compiler through the
+    // canonical compile path.
+    try {
+      compileTenantThemeConfig(
+        { ...overCap, ...IDENTITY },
+        { verticalEnvelope: BITHIRE_TEST_ENVELOPE }
+      );
+      throw new Error("expected compileTenantThemeConfig to reject");
+    } catch (error) {
+      expect(error).toBeInstanceOf(TenantThemeValidationError);
+      const issues = (error as TenantThemeValidationError).issues;
+      expect(issues).toHaveLength(1);
+      expect(issues[0].path).toBe("$.visualFoundation.advanced.tokenOverrides");
+      expect(issues[0].message).toContain(String(cap + 1));
+    }
+  });
+
+  it("accepts exactly the tokenOverrides budget (boundary) and emits every entry", () => {
+    const cap = TENANT_THEME_CONFIG_SCHEMA.limits.maxTokenOverrides;
+    const budgetTokens = TENANT_THEME_CONFIG_SCHEMA.overrideTokens
+      .filter(
+        (token) =>
+          token.startsWith("--ds-material-") || token.startsWith("--ds-type-")
+      )
+      .slice(0, cap);
+    const boundary = {
+      schemaVersion: 1 as const,
+      mode: "advanced" as const,
+      visualFoundation: {
+        advanced: {
+          tokenOverrides: Object.fromEntries(
+            budgetTokens.map((token) => [token, "1px"])
+          ),
+        },
+      },
+    };
+    expect(validateTenantThemeDocument(boundary).success).toBe(true);
+    const artifact = compileTenantThemeConfig(hydrate(boundary), {
+      verticalEnvelope: BITHIRE_TEST_ENVELOPE,
+    });
+    for (const token of budgetTokens) {
+      expect(artifact.variables[token]).toBe("1px");
+    }
   });
 
   it("requires an explicit, matching vertical envelope for Advanced compilation", () => {

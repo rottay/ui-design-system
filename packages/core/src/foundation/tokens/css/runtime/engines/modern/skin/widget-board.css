@@ -64,3 +64,66 @@
   cursor: grabbing;
   user-select: none;
 }
+
+/* ==========================================================================
+   C-08 premium pass (Modern only — every rule scoped to `.ds-engine-modern`)
+   ==========================================================================
+   Two governed capabilities the shared skin cannot express per-engine:
+   1. DENSITY: the tenant density plane (`--ds-density-effective-scale`,
+      Button-skin idiom) scales the board's literal chrome floors. Spacing-
+      token paddings already scale through the projected ramp; these
+      min-heights were the only density-blind geometry left, so a compact
+      operational dashboard and an airy editorial one now diverge for real.
+      The 44px controls bar is a touch floor and deliberately NOT scaled
+      (density.css law: fixed-size accessibility floors never shrink).
+   2. MATERIAL: the cell's corner accent rides the private proto
+      `--_ds-widget-board-cell-tint` (fallback 6% = today's render, so
+      an unset channel is byte-identical): a technical profile can silence
+      the tint for pure hairline cards, an editorial one can warm it. The
+      accent origin is directional and mirrors under RTL. */
+
+.ds-pattern-widget-board.ds-engine-modern .ds-widget-board__toolbar {
+  min-height: calc(72px * var(--ds-density-effective-scale, 1));
+}
+
+.ds-pattern-widget-board.ds-engine-modern .ds-widget-board__cell {
+  min-height: calc(132px * var(--ds-density-effective-scale, 1));
+}
+
+.ds-pattern-widget-board.ds-engine-modern .ds-widget-board__item-header,
+.ds-pattern-widget-board.ds-engine-modern .ds-widget-board__skeleton-header {
+  min-height: calc(70px * var(--ds-density-effective-scale, 1));
+}
+
+.ds-pattern-widget-board.ds-engine-modern .ds-widget-board__empty,
+.ds-pattern-widget-board.ds-engine-modern .ds-widget-board__error {
+  min-height: calc(220px * var(--ds-density-effective-scale, 1));
+}
+
+.ds-pattern-widget-board.ds-engine-modern .ds-widget-board__cell {
+  --_ds-widget-board-tint-origin: 100% 0%;
+  background: radial-gradient(
+      circle at var(--_ds-widget-board-tint-origin),
+      color-mix(
+        in srgb,
+        var(--ds-color-primary) var(--_ds-widget-board-cell-tint, 6%),
+        transparent
+      ),
+      transparent 34%
+    ),
+    linear-gradient(
+      180deg,
+      var(--ds-surface-card-bg, var(--ds-color-bg-elevated)),
+      color-mix(
+        in srgb,
+        var(--ds-surface-panel-bg, var(--ds-color-bg-secondary)) 38%,
+        var(--ds-surface-card-bg, var(--ds-color-bg-elevated))
+      )
+    );
+}
+
+[dir='rtl']
+  .ds-pattern-widget-board.ds-engine-modern
+  .ds-widget-board__cell {
+  --_ds-widget-board-tint-origin: 0% 0%;
+}

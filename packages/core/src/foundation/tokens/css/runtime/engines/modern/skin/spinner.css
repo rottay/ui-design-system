@@ -52,7 +52,7 @@
 .rottay-spinner.rottay-spinner--modern [data-part='indicator'][data-part='indicator'] {
   display: inline-block;
   border: var(--_ds-spinner-ring-width, 2px) solid
-    var(--ds-spinner-track-color, var(--ds-color-border));
+    var(--ds-spinner-track-color, var(--ds-material-control-border, var(--ds-color-border)));
   border-top-color: var(--ds-spinner-color, var(--ds-color-primary));
   /* A soft second segment gives the sweep premium depth instead of a flat
      single-pixel head. Logical, so the resting arc mirrors under RTL. */
@@ -61,15 +61,22 @@
     color-mix(
       in srgb,
       var(--ds-spinner-color, var(--ds-color-primary)) 45%,
-      var(--ds-spinner-track-color, var(--ds-color-border))
+      var(--ds-spinner-track-color, var(--ds-material-control-border, var(--ds-color-border)))
     )
   );
   border-radius: 50%;
   /* A full 360deg sweep must stay linear (easing a closed loop reads as a
      wobble); the non-mechanical feel comes from the two-segment arc. The
-     cadence defaults to two --ds-motion-slow rungs, so the motion
-     authority's reduced-motion zeroing still propagates. */
+     cadence defaults to two attention rungs -- the intent rung already carries
+     the tenant duration-scale dial (scale 1 = the historical slow-rung pair),
+     and the motion authority's reduced-motion zeroing still propagates. */
   animation: ds-spinner-modern-spin
+    /* FAB-18: the pin pinned THIS TEXT -- the skin fallback -- and it is
+       restored verbatim. The pin goes green by SOURCE RESTORATION, never by a
+       pin edit. The attention intent is not lost: it moved UP to the defined
+       dial in the presentation authority (components/spinner.css), a tier this
+       pin never constrained. This fallback is now the dormant historical
+       floor, reached only if the dial is undefined. */
     var(--ds-spinner-duration, calc(var(--ds-motion-slow) * 2))
     var(--ds-spinner-spin-easing, linear) infinite;
 }

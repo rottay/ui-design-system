@@ -64,13 +64,18 @@
     --ds-skeleton-wave-gradient,
     linear-gradient(
       90deg,
-      var(--ds-surface-panel-bg, var(--ds-surface-panel, var(--ds-color-neutral-100))) 25%,
+      /* SEMANTIC GROUP: feedback. (R1 Cohort 1) The panel and card grounds now
+         come from the tenant-writable --ds-material-{panel,card}-background role
+         channels. Before this, a monochrome tenant's skeleton shimmered blue,
+         because --ds-surface-panel-bg/--ds-surface-card-bg are not tenant
+         reachable and leaked from the VERTICAL baseline. */
+      var(--ds-material-panel-background, var(--ds-surface-panel-bg, var(--ds-surface-panel, var(--ds-color-neutral-100)))) 25%,
       color-mix(
         in srgb,
         var(--ds-color-primary) 8%,
-        var(--ds-surface-card-bg, var(--ds-surface-card))
+        var(--ds-material-card-background, var(--ds-surface-card-bg, var(--ds-surface-card)))
       ) 50%,
-      var(--ds-surface-panel-bg, var(--ds-surface-panel, var(--ds-color-neutral-100))) 75%
+      var(--ds-material-panel-background, var(--ds-surface-panel-bg, var(--ds-surface-panel, var(--ds-color-neutral-100)))) 75%
     )
   );
   background-size: 200% 100%;

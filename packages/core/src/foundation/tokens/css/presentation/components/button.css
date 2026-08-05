@@ -74,6 +74,16 @@
   /* Default size */
   --ds-button-gap: var(--ds-button-md-gap);
 
+  /* Component-private selected well. It deliberately derives from the two
+     tenant palette authorities instead of reading the static-only tint
+     artifact: static verticals and DB tenants therefore get the same selected
+     grammar without opening another public customization channel. */
+  --_ds-button-selected-bg: color-mix(
+    in oklch,
+    var(--ds-color-primary) 8%,
+    var(--ds-color-bg-primary)
+  );
+
   /* ========================================================================
      VARIANTS - Button Visual Styles
      Different button variants for various use cases
@@ -89,9 +99,6 @@
   --ds-button-primary-border: var(--ds-color-primary-600);
   --ds-button-primary-border-hover: var(--ds-color-primary-700);
   --ds-button-primary-border-active: var(--ds-color-primary-800);
-  --ds-button-primary-shadow: var(--ds-shadow-button-rest);
-  --ds-button-primary-shadow-hover: var(--ds-shadow-button-hover);
-  --ds-button-primary-shadow-active: var(--ds-shadow-button-rest);
   --ds-button-primary-border-color: var(--ds-button-primary-border);
 
   /* SECONDARY - Secondary actions */
@@ -104,9 +111,6 @@
   --ds-button-secondary-border: var(--ds-color-secondary-600);
   --ds-button-secondary-border-hover: var(--ds-color-secondary-700);
   --ds-button-secondary-border-active: var(--ds-color-secondary-800);
-  --ds-button-secondary-shadow: var(--ds-shadow-button-rest);
-  --ds-button-secondary-shadow-hover: var(--ds-shadow-button-hover);
-  --ds-button-secondary-shadow-active: var(--ds-shadow-button-rest);
 
   /* DEFAULT - Neutral actions */
   --ds-button-default-bg: var(--ds-color-white);
@@ -118,9 +122,6 @@
   --ds-button-default-border: var(--ds-color-neutral-300);
   --ds-button-default-border-hover: var(--ds-color-neutral-400);
   --ds-button-default-border-active: var(--ds-color-neutral-500);
-  --ds-button-default-shadow: var(--ds-shadow-button-rest);
-  --ds-button-default-shadow-hover: var(--ds-shadow-button-hover);
-  --ds-button-default-shadow-active: var(--ds-shadow-button-rest);
 
   /* GHOST - Minimal appearance */
   --ds-button-ghost-bg: transparent;
@@ -132,9 +133,6 @@
   --ds-button-ghost-border: transparent;
   --ds-button-ghost-border-hover: transparent;
   --ds-button-ghost-border-active: transparent;
-  --ds-button-ghost-shadow: none;
-  --ds-button-ghost-shadow-hover: var(--ds-button-ghost-shadow);
-  --ds-button-ghost-shadow-active: var(--ds-button-ghost-shadow);
 
   /* DASHED - Outlined with dashed border */
   --ds-button-dashed-bg: transparent;
@@ -147,9 +145,6 @@
   --ds-button-dashed-border-hover: var(--ds-color-neutral-400);
   --ds-button-dashed-border-active: var(--ds-color-neutral-500);
   --ds-button-dashed-border-style: dashed;
-  --ds-button-dashed-shadow: none;
-  --ds-button-dashed-shadow-hover: var(--ds-button-dashed-shadow);
-  --ds-button-dashed-shadow-active: var(--ds-button-dashed-shadow);
 
   /* TEXT - Text-only button */
   --ds-button-text-bg: transparent;
@@ -161,9 +156,6 @@
   --ds-button-text-border: transparent;
   --ds-button-text-border-hover: var(--ds-button-text-border);
   --ds-button-text-border-active: var(--ds-button-text-border);
-  --ds-button-text-shadow: none;
-  --ds-button-text-shadow-hover: var(--ds-button-text-shadow);
-  --ds-button-text-shadow-active: var(--ds-button-text-shadow);
 
   /* LINK - Link-styled button */
   --ds-button-link-bg: transparent;
@@ -178,9 +170,6 @@
   --ds-button-link-text-decoration: none;
   --ds-button-link-text-decoration-hover: underline;
   --ds-button-link-underline-offset: 0.18em;
-  --ds-button-link-shadow: none;
-  --ds-button-link-shadow-hover: var(--ds-button-link-shadow);
-  --ds-button-link-shadow-active: var(--ds-button-link-shadow);
 
   /* ========================================================================
      SEMANTIC VARIANTS - Status Colors
@@ -197,9 +186,6 @@
   --ds-button-success-border: var(--ds-color-success-600);
   --ds-button-success-border-hover: var(--ds-color-success-700);
   --ds-button-success-border-active: var(--ds-color-success-800);
-  --ds-button-success-shadow: var(--ds-shadow-success-sm);
-  --ds-button-success-shadow-hover: var(--ds-button-success-shadow);
-  --ds-button-success-shadow-active: var(--ds-button-success-shadow);
 
   /* WARNING */
   --ds-button-warning-bg: var(--ds-color-warning-500);
@@ -211,9 +197,6 @@
   --ds-button-warning-border: var(--ds-color-warning-600);
   --ds-button-warning-border-hover: var(--ds-color-warning-700);
   --ds-button-warning-border-active: var(--ds-color-warning-800);
-  --ds-button-warning-shadow: var(--ds-shadow-warning-sm);
-  --ds-button-warning-shadow-hover: var(--ds-button-warning-shadow);
-  --ds-button-warning-shadow-active: var(--ds-button-warning-shadow);
 
   /* ERROR/DANGER */
   --ds-button-error-bg: var(--ds-color-error-500);
@@ -225,9 +208,6 @@
   --ds-button-error-border: var(--ds-color-error-600);
   --ds-button-error-border-hover: var(--ds-color-error-700);
   --ds-button-error-border-active: var(--ds-color-error-800);
-  --ds-button-error-shadow: var(--ds-shadow-error-sm);
-  --ds-button-error-shadow-hover: var(--ds-shadow-error-sm);
-  --ds-button-error-shadow-active: var(--ds-shadow-error-sm);
 
   /* INFO */
   --ds-button-info-bg: var(--ds-color-info-500);
@@ -239,9 +219,6 @@
   --ds-button-info-border: var(--ds-color-info-600);
   --ds-button-info-border-hover: var(--ds-color-info-700);
   --ds-button-info-border-active: var(--ds-color-info-800);
-  --ds-button-info-shadow: var(--ds-shadow-button-rest);
-  --ds-button-info-shadow-hover: var(--ds-button-info-shadow);
-  --ds-button-info-shadow-active: var(--ds-button-info-shadow);
 
   /* AI - Assisted/generative actions; every channel remains brand-authored. */
   --ds-button-ai-bg: var(--ds-color-primary-600);
@@ -253,9 +230,6 @@
   --ds-button-ai-border: var(--ds-color-primary-500);
   --ds-button-ai-border-hover: var(--ds-color-primary-600);
   --ds-button-ai-border-active: var(--ds-color-primary-700);
-  --ds-button-ai-shadow: var(--ds-shadow-button-rest);
-  --ds-button-ai-shadow-hover: var(--ds-shadow-button-hover);
-  --ds-button-ai-shadow-active: var(--ds-shadow-button-rest);
   --ds-button-ai-texture: var(--ds-material-control-texture, none);
 
   /* ========================================================================
@@ -313,7 +287,13 @@
   --ds-button-group-border-radius-first: var(--ds-radius-md) 0 0 var(--ds-radius-md);
   --ds-button-group-border-radius-last: 0 var(--ds-radius-md) var(--ds-radius-md) 0;
   --ds-button-group-border-radius-middle: 0;
-  --ds-button-group-divider-color: var(--ds-color-neutral-300);
+  /* The connected seam tracks the quiet variant's OWN border channel, so the
+     divider inside a joined cluster is the tenant's hairline (BitHire's cool
+     --ds-color-border, The Management's warm #96856D) instead of a detached
+     base gray. A tenant may still author this channel directly to separate
+     the seam from the border; the default chain is byte-identical to the
+     previous neutral-300 for the unauthored default tenant. */
+  --ds-button-group-divider-color: var(--ds-button-default-border, var(--ds-color-neutral-300));
 
   /* ========================================================================
      TRANSITIONS
@@ -330,7 +310,12 @@
   --ds-button-font-family: var(--ds-font-family-base);
   --ds-button-font-weight: var(--ds-font-weight-semibold);
   --ds-button-letter-spacing: -0.006em;
-  --ds-button-text-transform: none;
+  /* Label case rides the tenant's authored label role (labelStyle): BitHire's
+     'sentence' resolves to none (unchanged), an editorial 'capitalize' tenant
+     capitalizes its action labels, and a technical profile without an
+     authored shield uppercases. chrome.controls.buttonGeometry.textTransform
+     still wins when authored (compiler emission precedes this default). */
+  --ds-button-text-transform: var(--ds-type-label-text-transform, none);
   --ds-button-hover-transform: translateY(-1px);
   --ds-button-active-transform: scale(var(--ds-state-press-scale));
   --ds-button-icon-hover-transform: translateY(-0.03125rem);
@@ -365,7 +350,11 @@
      BORDERS
      Border width for different variants
      ======================================================================== */
-  --ds-button-border-width: 1px;
+  /* The button's frame width rides the tenant's edge grammar (expressive
+     edge axis): hairline and ruled resolve 1px (identical to the previous
+     literal), outlined renders 1.5px, inset-double 3px, borderless-shadow 0.
+     chrome.controls.buttonGeometry.borderWidth stays sovereign when authored. */
+  --ds-button-border-width: var(--ds-edge-standard-width, 1px);
   --ds-button-border-width-focus: 2px;
 
   /* ========================================================================

@@ -21,10 +21,12 @@ export const EXPRESSIVE_PROFILE_SCHEMA_VERSION = 1 as const;
  * Closed per-axis vocabularies.
  *
  * Every value is a reviewed DS posture, not a free knob: adding one is a
- * contract change with its own expansion rows, probes and drills. The `icon`
- * axis is declared vocabulary but ships FRONTIER in v1 — the tenant schemas
- * reject it until the generated icon pipeline can honor every value
- * (supplier weights/duotone are not yet governed emitter outputs).
+ * contract change with its own expansion rows, probes and drills.
+ *
+ * The `icon` axis opened in C2 and is an ACTIVE Pro capability: the capability
+ * registry marks `profiles.icon` active, the tenant schema accepts the axis,
+ * and `useActiveIconExpressiveProfile` feeds `resolveIconWeight` on every icon
+ * render. Read the registry's `status`, never a value's position in this list.
  */
 export const EXPRESSIVE_TYPE_PROFILES = [
   'technical',
@@ -104,7 +106,7 @@ export interface ExpressiveAxes {
   readonly material?: ExpressiveMaterialProfile;
   readonly elevation?: ExpressiveElevationProfile;
   readonly motif?: ExpressiveMotifProfile;
-  /** Declared vocabulary; FRONTIER in v1 (schemas reject the axis). */
+  /** Active Pro axis since C2; the tenant schema accepts it. */
   readonly icon?: ExpressiveIconProfile;
   readonly density?: 'compact' | 'normal' | 'spacious';
   readonly motion?: {

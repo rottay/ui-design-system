@@ -84,12 +84,16 @@ export interface SurfacePageChrome {
   hideHeader?: boolean;
   /** Secondary text or node shown below the title. */
   subtitle?: ReactNode;
+  /** Optional register-line metadata (counts, timestamps, owners) rendered below the subtitle. */
+  metadata?: ReactNode;
   /** Optional rich content rendered below the title/subtitle block inside the page header. */
   headerContent?: ReactNode;
   /** Breadcrumb trail for hierarchical navigation. */
   breadcrumbs?: SurfaceBreadcrumb[];
   /** Optional badge rendered inline with the title (e.g., status pill, count). */
   badge?: ReactNode;
+  /** When true, the shell header sticks to the top of the scrollport with governed stuck elevation. */
+  sticky?: boolean;
   /** Constrains the shell content width. Accepts CSS values or pixel numbers. */
   maxWidth?: number | string;
   /** Back navigation. When provided, the shell renders a back arrow/link. */

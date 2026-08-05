@@ -41,6 +41,19 @@
  * generated ok action paints the confirm ring; `data-open` selects the
  * enter/exit keyframe pair (the adaptive-fullscreen posture swaps them for
  * the Sheet-grammar bottom slide).
+ *
+ * PRIVATE PROTOS (capability ledger, all with exact-render fallbacks):
+ * `--_ds-modal-scrim-tint` / `--_ds-modal-scrim-strength` let a
+ * profile compose the fallback veil from its ink instead of the canvas fill
+ * (a warm editorial scrim vs a cold operational one) — one move retints
+ * every overlay veil: consumed here and in sheet.css/drawer.css, whose
+ * scrims resolve through the same chain after their own sovereign channels;
+ * `--_ds-modal-section-entry-opacity` / `-entry-rise` /
+ * `-section-stagger-step` let a profile arrive the panel's sections in a
+ * quiet stagger instead of one functional block (this file only). Unset,
+ * every proto composes byte-identically to the pre-proto render. Candidate
+ * destiny: recipe-axis (scrim material, section choreography) pending Codex
+ * review.
  */
 
 @keyframes ds-overlay-modal-backdrop-enter-modern {
@@ -82,6 +95,22 @@
   from { transform: translateY(0); }
   to   { transform: translateY(100%); }
 }
+/* Section-wise arrival (proto): an editorial profile can let the panel land
+   as one piece and then have header, body and footer arrive in a quiet
+   stagger instead of the whole panel reading as a single functional block.
+   The FROM state is proto-driven with the settled state as every fallback
+   (opacity 1, rise 0, step 0ms), so an unset tree composes byte-identically
+   to no animation at all; the keyframes still run but interpolate from the
+   final state to itself. A dense operational profile simply never authors
+   the capability. Under reduced motion the sections declare no animation
+   (the RM block at the bottom of this file). */
+@keyframes ds-overlay-modal-section-enter-modern {
+  from {
+    opacity: var(--_ds-modal-section-entry-opacity, 1);
+    transform: translateY(var(--_ds-modal-section-entry-rise, 0px));
+  }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
 /* ---- root: the native <dialog>, stripped of its UA chrome ---- */
 .rottay-overlay-modal-shell--modern[data-part='root'] {
@@ -92,13 +121,25 @@
 /* ---- backdrop: scrim + the glass layer (spec section 5). The frost tint and
         blur both scale with --ds-effect-intensity, collapsing to a plain scrim at
         0. Glass is sanctioned on overlay backdrops only. `--ds-modal-overlay-bg`
-        is a live BrandTheme token (chrome.modal.overlayBg). ---- */
+        is a live BrandTheme token (chrome.modal.overlayBg).
+
+        SCRIM MATERIAL (proto): the fallback tail composes the veil from two
+        private protos so a profile can dim with its INK (a warm editorial desk
+        reads as tinted ink, not a milky wash of its own paper) instead of the
+        canvas fill. Unset, tint = --ds-color-bg-primary and strength = 80%,
+        which composes byte-identically to the pre-proto mix. The instance and
+        chrome channels still win the chain untouched. ---- */
 .rottay-overlay-modal-shell--modern[data-part='root'] > [data-part='backdrop'] {
   background-color: var(
     --ds-modal-instance-overlay-bg,
     var(
       --ds-modal-overlay-bg,
-      color-mix(in srgb, var(--ds-color-bg-primary) 80%, transparent)
+      color-mix(
+        in srgb,
+        var(--_ds-modal-scrim-tint, var(--ds-color-bg-primary))
+          var(--_ds-modal-scrim-strength, 80%),
+        transparent
+      )
     )
   );
 }
@@ -116,7 +157,26 @@
 .rottay-overlay-modal-shell--modern[data-part='root'] > [data-part='surface'] {
   max-inline-size: var(--ds-modal-max-inline-size, 90vw);
   max-block-size: var(--ds-modal-max-block-size, 85vh);
-  background-color: var(--ds-modal-bg, var(--ds-material-card-background, var(--ds-surface-card)));
+  /* SEMANTIC GROUP: overlay. The blocking chamber read the CARD role here,
+     which is the wrong group -- a modal is not a card, and the tenant decision
+     that moves popover, dropdown and drawer skipped it. The overlay role now
+     occupies that rung. Be precise about what this does and does not achieve:
+     presentation/components/modal.css declares --ds-modal-bg on `:root`, so the
+     senior rung resolves unconditionally and EVERYTHING beneath it -- the role
+     channel included -- is still unreachable. The ordering is now correct and
+     the rung becomes causal the moment that `:root` default is retired; the
+     channel is NOT causal yet, and this edit changes no pixel.
+     The two shadow chains in this cohort solved the identical block by hoisting
+     the role above the family channel. That fix is NOT available here, and the
+     asymmetry is the whole reason: --ds-material-overlay-shadow is authored in
+     zero files, so hoisting it moves nothing today, whereas
+     --ds-material-overlay-background is declared on `:root` and in the BitHire
+     artifact, so hoisting it would resolve unconditionally and OVERRIDE the
+     --ds-modal-bg values Rottay (#1A1A1E dark, #FFFFFF light) and BitHire
+     (#FFFFFF) actively author. That is a regression, not an adoption. This cell
+     stays blocked until the `:root` default in presentation/components/modal.css
+     is retired -- a one-line change outside this file's write domain. */
+  background-color: var(--ds-modal-bg, var(--ds-material-overlay-background, var(--ds-surface-card)));
   background-image:
     linear-gradient(var(--ds-elevation-surface-4), var(--ds-elevation-surface-4)),
     var(--ds-gradient-surface);
@@ -124,6 +184,14 @@
   border-radius: var(--ds-overlay-modal-radius);
   box-shadow: none;
   outline: none;
+  /* The decoration slot below paints at `z-index: -1` to reproduce an inset
+     shadow's order (above this fill, below the header/body/footer). That is
+     only contained if this surface forms a stacking context, which
+     `position: relative` alone does not do -- without isolation the slot would
+     escape to the shell root and paint BEHIND this opaque fill, losing the
+     keyline entirely. Dropdown and drawer already isolate their panels; this
+     brings the third member in line. No layout effect. */
+  isolation: isolate;
 }
 .rottay-overlay-modal-shell--modern[data-part='root'] > [data-part='surface'][data-size='xs'] {
   inline-size: var(--ds-modal-width-xs, 360px);
@@ -163,11 +231,20 @@
 }
 /* Adaptive fullscreen (phone posture): the dynamic viewport when supported,
    with a 100vh fallback for older engines — kept in CSS so the fallback
-   coexists without `!important` or a second viewport subscription. */
+   coexists without `!important` or a second viewport subscription. The
+   full-viewport surface also absorbs the device safe areas (notch, home
+   indicator) with PHYSICAL insets — the sheet.css/drawer.css sanctioned
+   idiom — so the header's close control and the footer actions never slide
+   under the status bar or the gesture bar on notched hardware. */
 .rottay-overlay-modal-shell--modern[data-part='root']
   > [data-part='surface'][data-adaptive-fullscreen='true'] {
+  box-sizing: border-box;
   block-size: 100vh;
   max-block-size: 100vh;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
 }
 @supports (height: 100dvh) {
   .rottay-overlay-modal-shell--modern[data-part='root']
@@ -178,12 +255,75 @@
 }
 .rottay-overlay-modal-shell--modern[data-part='root']
   > [data-part='surface'][data-shadow='true']:not([data-adaptive-fullscreen='true']) {
-  box-shadow: var(--ds-modal-shadow, var(--ds-elevation-3));
+  /* Common light model (card.css's C-03 recipe, propagated across the overlay
+     family): every elevated layer shares the same zenith keyline, scaled by
+     the governed --ds-effect-intensity dial, composed with the tenant shadow
+     as an independent declaration in the same list. The blocking chamber
+     falls back to rung 4 — above the contextual band (popover/dropdown at
+     3) — so the stratigraphy reads even in a tree without the tenant
+     artifact; the authored --ds-modal-shadow channel still wins outright. */
+  /* SEMANTIC GROUP: overlay. (R1 Cohort 1) The blocking chamber is an OVERLAY
+     surface and reads the same governed role vocabulary as popover, dropdown
+     and drawer, so one tenant decision moves the whole group.
+     WHOLE-VALUE ISOLATION. The depth chain is the SOLE box-shadow of this
+     chamber. --ds-material-overlay-highlight used to ride here as a second list
+     entry, which was a defect: the channel is publicly none-capable, and in CSS
+     `none` is legal only as a WHOLE box-shadow value, so a tenant authoring it
+     produced `box-shadow: none, <depth>` -- an invalid declaration that voids
+     the ENTIRE value and silently amputated the chamber's depth. The keyline
+     moved to the decoration pseudo below, where it is a whole-value read and an
+     authored `none` can only switch the keyline off.
+     FAMILY CHROME STAYS SENIOR. --ds-modal-shadow is outermost, the role
+     channel is the next rung, the elevation literal closes the chain.
+     presentation/components/modal.css declares --ds-modal-shadow on `:root`, so
+     today the outer rung resolves unconditionally and the role rung is not
+     consulted -- this cell is NOT causal yet. It is made causal under
+     adjudicated option (C), the delegating default, which re-keys the family
+     var's OWN `:root` default to read the role. Hoisting the role above the
+     family var was tried and REJECTED: it inverts an adjudicated ordering, and
+     being a pixel no-op today is not contract-equivalence. */
+  box-shadow: var(--ds-modal-shadow, var(--ds-material-overlay-shadow, var(--ds-elevation-4)));
+}
+
+/* Decoration slot: carries the intensity-governed zenith keyline (card.css's
+   common light model, shared by every elevated overlay layer) as its SOLE
+   box-shadow, so the none-capable role channel sits in a whole-value position
+   and can never invalidate the depth stack next door. The selector repeats the
+   surface rule's conditions exactly -- the keyline has always been part of the
+   `data-shadow` treatment and must not appear on a shadowless or
+   adaptive-fullscreen chamber. The value is an INSET LITERAL and must stay one
+   (FAB-05): it does NOT read --ds-material-overlay-highlight, whose reads were
+   deliberately removed from this family, dropping its consumer count across the
+   overlay four to zero -- a channel being retired, not a capability lost. The
+   DECLARED VALUE is the same literal this rung carried inside the surface list,
+   and `z-index: -1` reproduces an inset shadow's paint order -- above the
+   chamber's own fill, below the header, body and footer, which matters because
+   tenant header backgrounds are opaque and have always covered this hairline.
+   BUT THE PAINTED RESULT IS NOT EQUIVALENT, and this comment must not claim it
+   is. A pseudo's inset shadow is drawn against a different box and radius than
+   the surface's own, so on any surface with BOTH a border and a radius -- which
+   this one has -- the corner arcs diverge (measured in Chromium; the delta grows
+   with radius and with device pixel ratio, and radius compensation reduces but
+   does not close it). This relocation is an IN-SCOPE VISUAL DELTA awaiting
+   adjudication, NOT mechanical isolation.
+   The chamber is NON-SCROLLING (`overflow: hidden` on the surface, with the
+   body carrying `overflow-y: auto`), which is the precondition that makes a
+   pseudo anchor-correct here. The slot paints no fill of its own and never
+   intercepts pointer input. */
+.rottay-overlay-modal-shell--modern[data-part='root']
+  > [data-part='surface'][data-shadow='true']:not([data-adaptive-fullscreen='true'])::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(72% * var(--ds-effect-intensity, 1)), transparent);
+  pointer-events: none;
 }
 /* a colored border SHORTHAND, held to the (0,4,0) floor by the repeated part */
 .rottay-overlay-modal-shell--modern[data-part='root']
   > [data-part='surface'][data-part='surface'][data-fullscreen='false'] {
-  border: var(--ds-modal-border-width, var(--ds-edge-standard-width, 1px)) var(--ds-edge-standard-style, solid) var(--ds-color-border-subtle);
+  border: var(--ds-modal-border-width, var(--ds-edge-standard-width, 1px)) var(--ds-edge-standard-style, solid) var(--ds-material-overlay-border, var(--ds-color-border-subtle));
 }
 .rottay-overlay-modal-shell--modern[data-part='root']
   > [data-part='surface'][data-part='surface'][data-fullscreen='true'] {
@@ -274,13 +414,20 @@
         `min-block-size: 0` lets the flex child actually shrink into a scroll
         container; `overscroll-behavior: contain` stops scroll chaining into
         the locked page behind; the header/footer stay put (flex siblings,
-        not sticky hacks) while long content scrolls. ---- */
+        not sticky hacks) while long content scrolls. The body is ONE piece
+        of the panel's material by default (transparent fallback): a second
+        fill here read as a box inside the box — most visibly in dark themes,
+        where the panel and the body resolved two different hues. A tenant
+        that wants an inset reading well still authors --ds-modal-body-bg. ---- */
 .rottay-overlay-modal-shell--modern[data-part='root']
   > [data-part='surface']
   > [data-part='body'] {
   min-block-size: 0;
   overscroll-behavior: contain;
-  background-color: var(--ds-modal-body-bg, var(--ds-color-surface));
+  /* A stable gutter keeps the section geometry from shifting when late
+     content crosses the scroll threshold (popover/drawer precedent). */
+  scrollbar-gutter: stable;
+  background-color: var(--ds-modal-body-bg, transparent);
   color: var(--ds-modal-body-color);
   scrollbar-width: var(--ds-modal-body-scrollbar-width, thin);
   scrollbar-color: var(--ds-color-border-secondary) transparent;
@@ -294,7 +441,13 @@
   display: flex;
   align-items: center;
   justify-content: var(--ds-modal-footer-justify);
-  gap: var(--ds-modal-footer-gap, var(--ds-spacing-2));
+  /* The actions' rhythm rides the same density axis as the section padding
+     (K-1 cluster law crossing the portal): compact tightens the action row,
+     spacious gives the commitments air. At scale 1, byte-identical. */
+  gap: calc(
+    var(--ds-modal-footer-gap, var(--ds-spacing-2)) *
+      var(--ds-density-effective-scale, 1)
+  );
   padding-block: var(
     --ds-modal-section-padding-block,
     var(--_ds-modal-section-pad-block, var(--ds-spacing-4))
@@ -306,6 +459,39 @@
   flex-shrink: 0;
   border-block-start: var(--ds-modal-section-border, none);
   background-color: var(--ds-modal-footer-bg);
+}
+
+/* ---- section-wise arrival (proto choreography, keyframes documented above).
+        Runs only while the panel is open; the exit is the panel's own recipe.
+        The header leads, body follows one stagger step, footer two — with the
+        zero-step fallback every delay collapses and the from-state equals the
+        settled state, so an unauthored tree renders exactly as before.
+        `both` fill keeps a delayed section in its (proto-defined) from state
+        instead of flashing early. ---- */
+.rottay-overlay-modal-shell--modern[data-part='root']
+  > [data-part='surface'][data-open='true']
+  > [data-part='header'] {
+  animation: ds-overlay-modal-section-enter-modern var(--ds-motion-normal)
+    var(--ds-motion-ease-out) both;
+}
+.rottay-overlay-modal-shell--modern[data-part='root']
+  > [data-part='surface'][data-open='true']
+  > [data-part='body'] {
+  animation: ds-overlay-modal-section-enter-modern var(--ds-motion-normal)
+    var(--ds-motion-ease-out) both;
+  animation-delay: var(
+    --_ds-modal-section-stagger-step,
+    calc(var(--ds-motion-instant) * 0)
+  );
+}
+.rottay-overlay-modal-shell--modern[data-part='root']
+  > [data-part='surface'][data-open='true']
+  > [data-part='footer'] {
+  animation: ds-overlay-modal-section-enter-modern var(--ds-motion-normal)
+    var(--ds-motion-ease-out) both;
+  animation-delay: calc(
+    var(--_ds-modal-section-stagger-step, calc(var(--ds-motion-instant) * 0)) * 2
+  );
 }
 
 /* ---- canonical generated actions. Custom footers remain caller-owned;
@@ -489,6 +675,36 @@
     > [data-part='close-button'] {
     transition: none;
   }
+  /* The section-arrival proto choreography also retires: sections land in
+     their settled state with the panel, matching the recipe's own posture. */
+  .rottay-overlay-modal-shell--modern[data-part='root']
+    > [data-part='surface'][data-open='true']
+    > [data-part='header'],
+  .rottay-overlay-modal-shell--modern[data-part='root']
+    > [data-part='surface'][data-open='true']
+    > [data-part='body'],
+  .rottay-overlay-modal-shell--modern[data-part='root']
+    > [data-part='surface'][data-open='true']
+    > [data-part='footer'] {
+    animation: none;
+  }
+}
+
+/* The runtime motion switch (not just the OS media query) retires the
+   section choreography too, popover.css's `data-ds-motion` idiom. */
+html[data-ds-motion='reduced']
+  .rottay-overlay-modal-shell--modern[data-part='root']
+  > [data-part='surface'][data-open='true']
+  > [data-part='header'],
+html[data-ds-motion='reduced']
+  .rottay-overlay-modal-shell--modern[data-part='root']
+  > [data-part='surface'][data-open='true']
+  > [data-part='body'],
+html[data-ds-motion='reduced']
+  .rottay-overlay-modal-shell--modern[data-part='root']
+  > [data-part='surface'][data-open='true']
+  > [data-part='footer'] {
+  animation: none;
 }
 
 /* Coarse pointers: the close button meets the 44px physical floor;

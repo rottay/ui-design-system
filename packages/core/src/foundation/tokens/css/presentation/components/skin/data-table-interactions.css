@@ -59,12 +59,19 @@
 .ds-engine-modern:where(.ds-pattern-data-table)
   tr[data-row-index]:focus-visible {
   outline: none;
-  box-shadow: inset 0 0 0 1px
-    color-mix(in srgb, var(--ds-color-primary) 48%, transparent);
   background-color: var(
     --ds-table-row-bg-selected,
     color-mix(in srgb, var(--ds-color-primary) 6%, transparent)
   );
+}
+/* The ring itself paints per cell: a box-shadow on the <tr> does not render
+   under border-collapse (same td rule the modern skin and the primitive
+   table.css selection keyline follow). */
+.ds-engine-modern:where(.ds-pattern-data-table)
+  tr[data-row-index]:focus-visible
+  > td {
+  box-shadow: inset 0 0 0 1px
+    color-mix(in srgb, var(--ds-color-primary) 48%, transparent);
 }
 
 .ds-engine-modern:where(.ds-pattern-data-table) td[data-editable="true"] {

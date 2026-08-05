@@ -1016,7 +1016,9 @@
     "moreOptions": "Más opciones",
     "export": "Exportar",
     "active": "activos",
-    "clearAll": "Limpiar todo"
+    "clearAll": "Limpiar todo",
+    "draft": "borrador",
+    "invalid": "inválido"
   },
   "liveFeed": {
     "refresh": "Actualizar",
@@ -1187,7 +1189,9 @@
     "clearAll": "Limpiar todo",
     "addFilter": "Agregar filtro",
     "more_count": "+{count} más",
-    "show_less": "Mostrar menos"
+    "show_less": "Mostrar menos",
+    "state_draft": "borrador",
+    "state_invalid": "inválido"
   },
   "columnMenu": {
     "alwaysVisible": "Siempre visible en la tabla",

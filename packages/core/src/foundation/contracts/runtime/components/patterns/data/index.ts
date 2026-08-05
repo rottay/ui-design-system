@@ -15,7 +15,24 @@ export interface SavedView {
   icon?: ReactNode;
   isDefault?: boolean;
   config: SavedViewConfig;
+  /**
+   * The view's live configuration has unsaved modifications relative to the
+   * persisted snapshot. Engines surface this as the governed unsaved-changes
+   * indicator; absent means pristine (the historical default).
+   */
+  isDirty?: boolean;
 }
+
+/**
+ * Lifecycle state of a single active filter value, shared by the ListToolbar
+ * chips, the ActiveFiltersBar rail and the filter triggers:
+ * - `applied` (default): the value drives the collection right now;
+ * - `draft`: the value is chosen but not yet applied (an explicit apply step
+ *   is pending);
+ * - `invalid`: the value no longer resolves (an orphaned option, a stale
+ *   saved view) and needs user attention.
+ */
+export type ActiveFilterState = 'applied' | 'draft' | 'invalid';
 
 export interface DataTableMobileCardInteractionEvent {
   stopPropagation?: () => void;
@@ -58,4 +75,9 @@ export interface ActiveFilter {
   value: string;
   displayValue?: string;
   field?: string;
+  /**
+   * Lifecycle state of this filter value (see {@link ActiveFilterState}).
+   * Optional; absent means `applied`, which preserves every existing caller.
+   */
+  state?: ActiveFilterState;
 }

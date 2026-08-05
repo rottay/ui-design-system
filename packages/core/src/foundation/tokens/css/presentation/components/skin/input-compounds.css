@@ -59,9 +59,20 @@
 .rottay-input-addon.ds-input-addon[data-part='root'] {
   box-sizing: border-box;
   display: inline-flex;
-  flex: 0 0 auto;
+  /* 0 1 auto (was 0 0 auto): at 320px a long addon (locale unit labels,
+     protocol prefixes) may SHRINK and clip with ellipsis instead of pushing
+     the joined control past the container edge; the clamp caps the worst
+     case at the group width so the input always keeps room. */
+  flex: 0 1 auto;
+  max-inline-size: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
   align-items: center;
   justify-content: center;
+  /* Height is a FLOOR (zoom posture), never a fixed box: the per-size rules
+     below write the `--_ds-input-addon-resolved-height` relay and the group
+     stretch keeps the join seam aligned when the sibling input grows. */
+  min-block-size: var(--_ds-input-addon-resolved-height);
   padding-inline: var(--ds-input-addon-padding-x);
   color: var(--ds-input-addon-color, var(--ds-color-text-secondary));
   background: var(--ds-input-addon-bg, var(--ds-surface-inset));
@@ -92,19 +103,19 @@
 }
 
 .rottay-input-addon.ds-input-addon[data-part='root'][data-size='xs'] {
-  block-size: calc(var(--ds-input-xs-height) * var(--ds-density-effective-scale)); font-size: var(--ds-input-xs-font-size);
+  --_ds-input-addon-resolved-height: calc(var(--ds-input-xs-height) * var(--ds-density-effective-scale)); font-size: var(--ds-input-xs-font-size);
 }
 .rottay-input-addon.ds-input-addon[data-part='root'][data-size='sm'] {
-  block-size: calc(var(--ds-input-sm-height) * var(--ds-density-effective-scale)); font-size: var(--ds-input-sm-font-size);
+  --_ds-input-addon-resolved-height: calc(var(--ds-input-sm-height) * var(--ds-density-effective-scale)); font-size: var(--ds-input-sm-font-size);
 }
 .rottay-input-addon.ds-input-addon[data-part='root'][data-size='md'] {
-  block-size: calc(var(--ds-input-md-height) * var(--ds-density-effective-scale)); font-size: var(--ds-input-md-font-size);
+  --_ds-input-addon-resolved-height: calc(var(--ds-input-md-height) * var(--ds-density-effective-scale)); font-size: var(--ds-input-md-font-size);
 }
 .rottay-input-addon.ds-input-addon[data-part='root'][data-size='lg'] {
-  block-size: calc(var(--ds-input-lg-height) * var(--ds-density-effective-scale)); font-size: var(--ds-input-lg-font-size);
+  --_ds-input-addon-resolved-height: calc(var(--ds-input-lg-height) * var(--ds-density-effective-scale)); font-size: var(--ds-input-lg-font-size);
 }
 .rottay-input-addon.ds-input-addon[data-part='root'][data-size='xl'] {
-  block-size: calc(var(--ds-input-xl-height) * var(--ds-density-effective-scale)); font-size: var(--ds-input-xl-font-size);
+  --_ds-input-addon-resolved-height: calc(var(--ds-input-xl-height) * var(--ds-density-effective-scale)); font-size: var(--ds-input-xl-font-size);
 }
 
 /* State sync across the compact join: a focused, invalid, warning, success or
@@ -143,6 +154,58 @@
   border-color: var(--ds-input-border-disabled, var(--ds-color-border-disabled));
 }
 
+/* Select joins the same seam (C-02 compound field): a Select shell as a
+   direct child of a compact group receives the same edge surgery the input
+   receives, so [Select][Input] / [Input][Select] / [Addon][Select] read as
+   ONE connected control instead of two adjacent rounded boxes. The negative
+   overlap and the focus z-index above already apply to EVERY group child;
+   only the radius zeroing is select-specific (it lives on the trigger). No
+   !important is needed here: these selectors outrank the trigger's own
+   radius rule without contesting the contractual boosters above. */
+.rottay-input-group[data-part='group'][data-compact='true'] > :first-child:not(:last-child) .ds-select-shell [data-part='trigger'] {
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
+}
+
+.rottay-input-group[data-part='group'][data-compact='true'] > :last-child:not(:first-child) .ds-select-shell [data-part='trigger'] {
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
+}
+
+.rottay-input-group[data-part='group'][data-compact='true'] > :not(:first-child):not(:last-child) .ds-select-shell [data-part='trigger'] {
+  border-radius: 0;
+}
+
+/* State sync across the seam, select side: the same five-state grammar the
+   input speaks, so a focused/invalid/warning/success/disabled select never
+   leaves a neutral addon seam beside its state border. */
+.rottay-input-group[data-part='group'][data-compact='true'] > .rottay-input-addon.ds-input-addon[data-part='root']:not([data-variant='transparent']):has(+ .ds-select-shell:focus-within),
+.rottay-input-group[data-part='group'][data-compact='true'] > .ds-select-shell:focus-within + .rottay-input-addon.ds-input-addon[data-part='root']:not([data-variant='transparent']) {
+  border-color: var(--ds-select-border-color-focus, var(--ds-input-border-focus, var(--ds-color-primary)));
+}
+
+.rottay-input-group[data-part='group'][data-compact='true'] > .rottay-input-addon.ds-input-addon[data-part='root']:not([data-variant='transparent']):has(+ .ds-select-shell:has([data-part='trigger'][data-status='error'])),
+.rottay-input-group[data-part='group'][data-compact='true'] > .ds-select-shell:has([data-part='trigger'][data-status='error']) + .rottay-input-addon.ds-input-addon[data-part='root']:not([data-variant='transparent']) {
+  border-color: var(--ds-select-error-border, var(--ds-input-error-border, var(--ds-color-error)));
+}
+
+.rottay-input-group[data-part='group'][data-compact='true'] > .rottay-input-addon.ds-input-addon[data-part='root']:not([data-variant='transparent']):has(+ .ds-select-shell:has([data-part='trigger'][data-status='warning'])),
+.rottay-input-group[data-part='group'][data-compact='true'] > .ds-select-shell:has([data-part='trigger'][data-status='warning']) + .rottay-input-addon.ds-input-addon[data-part='root']:not([data-variant='transparent']) {
+  border-color: var(--ds-select-warning-border, var(--ds-input-warning-border, var(--ds-color-warning)));
+}
+
+.rottay-input-group[data-part='group'][data-compact='true'] > .rottay-input-addon.ds-input-addon[data-part='root']:not([data-variant='transparent']):has(+ .ds-select-shell:has([data-part='trigger'][data-status='success'])),
+.rottay-input-group[data-part='group'][data-compact='true'] > .ds-select-shell:has([data-part='trigger'][data-status='success']) + .rottay-input-addon.ds-input-addon[data-part='root']:not([data-variant='transparent']) {
+  border-color: var(--ds-select-success-border, var(--ds-input-success-border, var(--ds-color-success)));
+}
+
+.rottay-input-group[data-part='group'][data-compact='true'] > .rottay-input-addon.ds-input-addon[data-part='root']:not([data-variant='transparent']):has(+ .ds-select-shell[data-disabled='true']),
+.rottay-input-group[data-part='group'][data-compact='true'] > .ds-select-shell[data-disabled='true'] + .rottay-input-addon.ds-input-addon[data-part='root']:not([data-variant='transparent']) {
+  color: var(--ds-input-color-disabled, var(--ds-color-text-disabled));
+  background: var(--ds-input-bg-disabled, var(--ds-surface-disabled, var(--ds-surface-subtle, var(--ds-surface-canvas))));
+  border-color: var(--ds-input-border-disabled, var(--ds-color-border-disabled));
+}
+
 /* TextArea --------------------------------------------------------------- */
 .rottay-textarea.ds-input-textarea[data-part='root'] {
   position: relative;
@@ -151,6 +214,9 @@
   inline-size: 100%;
   min-inline-size: 0;
   gap: var(--ds-input-message-gap, var(--ds-spacing-1));
+  /* Mobile keyboard posture: one rhythm of clearance on the OS focus scroll
+     (Input/Select/FormField/Form carry the same). */
+  scroll-margin-block: var(--ds-spacing-6, 1.5rem);
 }
 
 .rottay-textarea.ds-input-textarea[data-part='root'] [data-part='control'] {
@@ -289,7 +355,13 @@
 }
 
 .rottay-textarea.ds-input-textarea[data-part='root'][data-loading='true'] [data-part='control'] {
-  padding-inline-end: calc(var(--ds-textarea-padding-x) + var(--ds-input-loading-size) + var(--ds-input-gap));
+  /* The reservation tracks the SAME density-scaled indicator size the
+     loading-indicator rule paints, so the pair never drifts apart. */
+  padding-inline-end: calc(
+    var(--ds-textarea-padding-x) +
+      (var(--ds-input-loading-size) * var(--ds-density-effective-scale)) +
+      var(--ds-input-gap)
+  );
 }
 
 .rottay-textarea.ds-input-textarea[data-part='root'] > [data-part='loading-indicator'] {
@@ -298,8 +370,9 @@
   inset-inline-end: var(--ds-textarea-padding-x);
   display: inline-grid;
   place-items: center;
-  inline-size: var(--ds-input-loading-size);
-  block-size: var(--ds-input-loading-size);
+  /* Same density plane as the Input affix/action wells (C-02). */
+  inline-size: calc(var(--ds-input-loading-size) * var(--ds-density-effective-scale));
+  block-size: calc(var(--ds-input-loading-size) * var(--ds-density-effective-scale));
   color: var(--ds-input-loading-color);
 }
 
@@ -356,9 +429,14 @@
 @media (pointer: coarse) {
   /* The input grows to the 44px touch floor; the addon must grow with it or
      the joined pair steps by the difference (the input's explicit
-     min-block-size overrides stretch). Physical px, never rem. */
+     min-block-size overrides stretch). Physical px, never rem. The floor is
+     recomputed against the addon's own resolved-height relay so a spacious
+     step larger than 44px is preserved. */
   .rottay-input-addon.ds-input-addon[data-part='root'] {
-    min-block-size: var(--ds-input-touch-target-min);
+    min-block-size: max(
+      var(--_ds-input-addon-resolved-height, 0px),
+      var(--ds-input-touch-target-min)
+    );
   }
 
   .rottay-textarea.ds-input-textarea[data-part='root'] [data-part='control'] {

@@ -4,8 +4,14 @@
  * The React engine owns semantics and stamps the public anatomy; this file
  * owns every visual decision through documented `--ds-input-number-*`
  * channels so a vertical or DB-backed tenant never needs private selectors.
- * Geometry consumes the per-size `--ds-input-number-{size}-*` channels
- * multiplied by the three-plane density channel `--ds-density-effective-scale`.
+ * Geometry consumes the per-size `--ds-input-number-{size}-*` channels with
+ * the Input family's `--ds-input-{size}-*` channels as the middle fallback
+ * (the C-02 Select-trigger recipe: an InputNumber next to an Input reads as
+ * the SAME control family), multiplied by the three-plane density channel
+ * `--ds-density-effective-scale`. The block axis is a FLOOR through the
+ * private `--_ds-input-number-resolved-height` relay (C-02 height-as-floor
+ * idiom), and the edge lands the Input per-size radius chain through the
+ * private `--_ds-input-number-resolved-radius` relay.
  *
  * Cascade position (the P-47 preflight fight, current contract): this file is
  * imported into `layer(rottay-engines)`, which the cross-framework cascade
@@ -51,6 +57,11 @@
 .ds-input-number.ds-input-number--modern[data-part='root'] {
   box-sizing: border-box;
   inline-size: 100%;
+  /* Height is a FLOOR, never a ceiling (C-02 height-as-floor relay, the Input
+     idiom): the per-size rules write the private relay and the coarse block
+     recomputes max(relay, touch floor), so the field grows with type scale.
+     An unset relay reads as min-block-size: 0 (pre-size posture preserved). */
+  min-block-size: var(--_ds-input-number-resolved-height);
   /* The control-surface channel is the certified Input family's
      `--ds-input-bg` (NOT the generic `--ds-color-bg-input`): the TMM DB
      projection resolves `--ds-input-bg` to its light control surface
@@ -61,7 +72,16 @@
   color: var(--ds-color-text-primary);
   caret-color: var(--ds-input-caret-color, var(--ds-input-border-focus, var(--ds-color-primary)));
   outline: none;
-  border-radius: var(--ds-radius-md);
+  /* Edge joins the field family per size (C-02): the size rule's relay lands
+     the Input per-size radius chain (bithire 8/9/10px, editorial 5/6/7px)
+     instead of the engine-agnostic md radius. */
+  border-radius: var(--_ds-input-number-resolved-radius, var(--ds-radius-input, var(--ds-radius-md)));
+  /* Type speaks the field family's control grammar (Input skin idiom):
+     family/weight/tracking ride the tenant's input channels instead of
+     whatever the parent happens to set. */
+  font-family: var(--ds-input-font-family);
+  font-weight: var(--ds-input-font-weight, var(--ds-font-weight-normal));
+  letter-spacing: var(--ds-input-letter-spacing);
   transition:
     border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
     background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
@@ -104,24 +124,40 @@
   appearance: textfield;
 }
 
-/* Public size geometry (density-scaled, physical px channels). */
+/* Public size geometry (density-scaled). FIELD-FAMILY GEOMETRY LAW (C-02,
+   the Select trigger recipe): an InputNumber sitting next to an Input in the
+   same form must read as the SAME control family, so every per-size fallback
+   chain passes through the Input geometry channels (`--ds-input-{size}-*`,
+   tenant-authored) before the historical literal. The documented
+   `--ds-input-number-{size}-*` channels stay first: a tenant that authors
+   them keeps full control. Deltas are deliberate alignment, not drift. The
+   relays are private implementation, NOT customization knobs. */
 .ds-input-number.ds-input-number--modern[data-part='root'][data-size='sm'] {
-  block-size: calc(var(--ds-input-number-sm-height, 32px) * var(--ds-density-effective-scale));
-  padding-block: var(--ds-input-number-sm-padding-y, 4px);
-  padding-inline: var(--ds-input-number-sm-padding-x, 10px);
-  font-size: var(--ds-input-number-sm-font-size, 13px);
+  --_ds-input-number-resolved-height: calc(
+    var(--ds-input-number-sm-height, var(--ds-input-sm-height, 32px)) * var(--ds-density-effective-scale)
+  );
+  --_ds-input-number-resolved-radius: var(--ds-input-sm-radius, var(--ds-input-sm-border-radius, var(--ds-radius-input, var(--ds-radius-md))));
+  padding-block: var(--ds-input-number-sm-padding-y, var(--ds-input-sm-padding-y, 4px));
+  padding-inline: var(--ds-input-number-sm-padding-x, var(--ds-input-sm-padding-x, 10px));
+  font-size: var(--ds-input-number-sm-font-size, var(--ds-input-sm-font-size, 13px));
 }
 .ds-input-number.ds-input-number--modern[data-part='root'][data-size='md'] {
-  block-size: calc(var(--ds-input-number-md-height, 36px) * var(--ds-density-effective-scale));
-  padding-block: var(--ds-input-number-md-padding-y, 6px);
-  padding-inline: var(--ds-input-number-md-padding-x, 12px);
-  font-size: var(--ds-input-number-md-font-size, 14px);
+  --_ds-input-number-resolved-height: calc(
+    var(--ds-input-number-md-height, var(--ds-input-md-height, 36px)) * var(--ds-density-effective-scale)
+  );
+  --_ds-input-number-resolved-radius: var(--ds-input-md-radius, var(--ds-input-md-border-radius, var(--ds-radius-input, var(--ds-radius-md))));
+  padding-block: var(--ds-input-number-md-padding-y, var(--ds-input-md-padding-y, 6px));
+  padding-inline: var(--ds-input-number-md-padding-x, var(--ds-input-md-padding-x, 12px));
+  font-size: var(--ds-input-number-md-font-size, var(--ds-input-md-font-size, 14px));
 }
 .ds-input-number.ds-input-number--modern[data-part='root'][data-size='lg'] {
-  block-size: calc(var(--ds-input-number-lg-height, 40px) * var(--ds-density-effective-scale));
-  padding-block: var(--ds-input-number-lg-padding-y, 8px);
-  padding-inline: var(--ds-input-number-lg-padding-x, 14px);
-  font-size: var(--ds-input-number-lg-font-size, 16px);
+  --_ds-input-number-resolved-height: calc(
+    var(--ds-input-number-lg-height, var(--ds-input-lg-height, 40px)) * var(--ds-density-effective-scale)
+  );
+  --_ds-input-number-resolved-radius: var(--ds-input-lg-radius, var(--ds-input-lg-border-radius, var(--ds-radius-input, var(--ds-radius-md))));
+  padding-block: var(--ds-input-number-lg-padding-y, var(--ds-input-lg-padding-y, 8px));
+  padding-inline: var(--ds-input-number-lg-padding-x, var(--ds-input-lg-padding-x, 14px));
+  font-size: var(--ds-input-number-lg-font-size, var(--ds-input-lg-font-size, 16px));
 }
 
 /* Affix-aware logical padding: reserves room for the absolutely-positioned
@@ -190,25 +226,33 @@
 }
 
 .ds-input-number.ds-input-number--modern[data-part='root'][data-part='root'] {
-  border: 1px solid var(--ds-color-border);
+  /* The frame speaks the field family's border grammar (C-02): width/style/
+     ink ride the tenant's input channels instead of a literal 1px solid. */
+  border: var(--ds-input-border-width) var(--ds-input-border-style)
+    var(--ds-input-border, var(--ds-color-border));
 }
 /* Hover is hover-capable-only; touch gets the :active/focus path below. */
 @media (hover: hover) {
   .ds-input-number.ds-input-number--modern[data-part='root'][data-part='root']:where(:hover):not([data-disabled='true']):not([data-status='error']):not([data-status='warning']) {
-    border-color: var(--ds-input-number-border-hover, var(--ds-color-border-hover));
+    border-color: var(--ds-input-number-border-hover, var(--ds-input-border-hover, var(--ds-color-border-hover)));
   }
 }
 .ds-input-number.ds-input-number--modern[data-part='root'][data-part='root']:focus-visible {
-  border-color: var(--ds-input-number-border-focus, var(--ds-color-primary));
+  border-color: var(--ds-input-number-border-focus, var(--ds-input-border-focus, var(--ds-color-primary)));
 }
 .ds-input-number.ds-input-number--modern[data-part='root']:focus-visible {
-  box-shadow: var(--ds-input-number-shadow-focus, var(--ds-focus-ring));
+  box-shadow: var(--ds-input-number-shadow-focus, var(--ds-input-shadow-focus, var(--ds-focus-ring)));
 }
+/* Status frames keep the Input grammar: state hue on the border + the tinted
+   control surface, border-color ONLY so a tenant's frame width survives the
+   state (the former shorthand re-declared 1px solid, flattening both). */
 .ds-input-number.ds-input-number--modern[data-part='root'][data-part='root'][data-status='error'] {
-  border: 1px solid var(--ds-color-error);
+  border-color: var(--ds-input-error-border, var(--ds-color-error));
+  background: var(--ds-input-error-bg, var(--ds-input-bg, var(--ds-surface-control)));
 }
 .ds-input-number.ds-input-number--modern[data-part='root'][data-part='root'][data-status='warning'] {
-  border: 1px solid var(--ds-color-warning);
+  border-color: var(--ds-input-warning-border, var(--ds-color-warning));
+  background: var(--ds-input-warning-bg, var(--ds-input-bg, var(--ds-surface-control)));
 }
 /* Status rings: the focus shadow tints to the status hue (consuming the
    certified Input-family status-ring hooks) so error/warning never read as
@@ -268,10 +312,13 @@
   background: var(--ds-input-addon-bg, var(--ds-surface-inset));
   border: var(--ds-input-border-width) var(--ds-input-border-style)
     var(--ds-input-addon-border, var(--ds-input-border, var(--ds-color-border)));
-  border-start-start-radius: var(--ds-radius-md);
-  border-end-start-radius: var(--ds-radius-md);
+  /* The joined edge lands the field family's addon edge (C-02): the tenant's
+     addon-radius first, then the input edge, never the engine-agnostic md. */
+  border-start-start-radius: var(--ds-input-addon-radius, var(--ds-radius-input, var(--ds-radius-md)));
+  border-end-start-radius: var(--ds-input-addon-radius, var(--ds-radius-input, var(--ds-radius-md)));
   border-start-end-radius: 0;
   border-end-end-radius: 0;
+  font-weight: var(--ds-input-addon-font-weight, var(--ds-font-weight-medium));
   transition:
     border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
     background-color var(--ds-motion-fast) var(--ds-motion-ease-out);
@@ -288,8 +335,9 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
     var(--ds-input-addon-border, var(--ds-input-border, var(--ds-color-border)));
   border-start-start-radius: 0;
   border-end-start-radius: 0;
-  border-start-end-radius: var(--ds-radius-md);
-  border-end-end-radius: var(--ds-radius-md);
+  border-start-end-radius: var(--ds-input-addon-radius, var(--ds-radius-input, var(--ds-radius-md)));
+  border-end-end-radius: var(--ds-input-addon-radius, var(--ds-radius-input, var(--ds-radius-md)));
+  font-weight: var(--ds-input-addon-font-weight, var(--ds-font-weight-medium));
   margin-inline-start: var(--ds-input-group-overlap, calc(-1 * var(--ds-input-border-width)));
   transition:
     border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
@@ -338,10 +386,12 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
 [data-part='prefix']:has(~ .ds-input-number.ds-input-number--modern[data-part='root']) {
   position: absolute;
   inset-inline-start: var(--ds-input-number-prefix-inset, 0.5rem);
-  color: var(--ds-color-text-secondary);
+  /* Affix ink joins the field family (C-02): the tenant's affix channel
+     first, the neutral secondary as the terminal. */
+  color: var(--ds-input-affix-color, var(--ds-color-text-secondary));
 }
 .ds-input-number.ds-input-number--modern[data-part='root'] ~ * [data-part='suffix'] {
-  color: var(--ds-color-text-secondary);
+  color: var(--ds-input-affix-color, var(--ds-color-text-secondary));
 }
 
 .ds-input-number.ds-input-number--modern[data-part='root'] ~ * [data-part='stepper-button'] {
@@ -404,10 +454,16 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
 }
 
 /* Coarse-pointer floor: physical px, never rem (the fluid 15px root erodes
-   rem floors at narrow widths -- measured on the live bundle, Axe R0). */
+   rem floors at narrow widths -- measured on the live bundle, Axe R0). The
+   floor is recomputed against the SAME resolved-height relay the base rule
+   consumes, so a spacious step larger than 44px is preserved (C-02
+   height-as-floor grammar). */
 @media (pointer: coarse) {
   .ds-input-number.ds-input-number--modern[data-part='root'] {
-    min-block-size: var(--ds-input-number-touch-target-min, var(--ds-touch-target-min, 44px));
+    min-block-size: max(
+      var(--_ds-input-number-resolved-height, 0px),
+      var(--ds-input-number-touch-target-min, var(--ds-touch-target-min, 44px))
+    );
   }
 
   /* 44px hit targets for BOTH steppers: the stacked 22px column violated the

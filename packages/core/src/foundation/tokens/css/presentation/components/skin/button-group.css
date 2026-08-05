@@ -9,8 +9,41 @@
 .rottay-button-group[data-part='group'] {
   display: inline-flex;
   max-inline-size: 100%;
-  align-items: stretch;
-  gap: var(--ds-button-group-instance-gap, var(--ds-button-group-gap));
+  /* Children align on their shared baseline posture, never stretched: a mixed
+     cluster (label buttons + icon-only plates) must keep each control's own
+     resolved height — stretching an aspect-ratio'd icon button against a
+     taller sibling inflated it into a slab that dominated the cluster. */
+  align-items: center;
+  /* Cluster rhythm rides the tenant's density axis: a compact operational
+     product pulls its actions into a tight strip, a spacious editorial one
+     gives each commitment air. At scale 1 the gap is byte-identical to the
+     historical channel value. */
+  gap: calc(
+    var(--ds-button-group-instance-gap, var(--ds-button-group-gap)) *
+      var(--ds-density-effective-scale, 1)
+  );
+}
+
+/* Commitment breath: in a mixed horizontal cluster a solid action that
+   follows quiet instruments takes a governed extra separation, so the group
+   self-organizes into an instrument zone and a commitment zone without the
+   caller reordering anything. The breath scales with the same density axis —
+   tighter in a compact command bar, ceremonial in a spacious header. A solid
+   first child is already dominant and takes nothing. */
+.rottay-button-group[data-part='group'][data-orientation='horizontal']:not(
+    [data-connected='true']
+  )
+  > .rottay-button:is(
+    [data-variant='primary'],
+    [data-variant='danger'],
+    [data-variant='success'],
+    [data-variant='warning'],
+    [data-variant='info'],
+    [data-variant='ai']
+  ):not(:first-child) {
+  margin-inline-start: calc(
+    var(--ds-spacing-3) * var(--ds-density-effective-scale, 1)
+  );
 }
 
 .rottay-button-group[data-orientation='horizontal'] {
@@ -27,11 +60,50 @@
   overflow-inline: auto;
   overscroll-behavior-inline: contain;
   isolation: isolate;
+  /* A scroll container clips at its scrollport, so the children's focus ring
+     (offset + 2px keyline) was sliced at every edge of a joined cluster.
+     Reserve the ring's room as scrollport padding and claw the layout back
+     with the matching negative margin: the group's box is unchanged, the
+     ring paints fully, and keyboard scroll-into-view lands on the same
+     padding via scroll-padding. */
+  --_ds-button-group-ring-room: calc(
+    var(--ds-button-focus-ring-offset, 2px) + var(--ds-button-border-width-focus, 2px)
+  );
+  padding: var(--_ds-button-group-ring-room);
+  margin: calc(-1 * var(--_ds-button-group-ring-room));
+  scroll-padding: var(--_ds-button-group-ring-room);
 }
 
 .rottay-button-group[data-connected='true'] > .rottay-button {
   position: relative;
   border-radius: 0;
+}
+
+/* Connected seams: inside a joined quiet cluster the shared 1px edge is a
+   GOVERNED divider, not whichever border happens to win the overlap. The
+   channel defaults to the quiet variant's own border (see the component
+   token chain), so an unauthored tenant renders exactly what the overlap
+   painted before — while ghost children, whose rest border is transparent,
+   gain the hairline that makes a joined toolbar read as one control. Solid
+   variants are excluded on purpose: their self-border IS the seam. */
+.rottay-button-group[data-connected='true'][data-orientation='horizontal']
+  > .rottay-button:is(
+    [data-variant='default'],
+    [data-variant='outline'],
+    [data-variant='dashed'],
+    [data-variant='ghost']
+  ):not(:first-child):not([data-disabled='true']) {
+  border-inline-start-color: var(--ds-button-group-divider-color);
+}
+
+.rottay-button-group[data-connected='true'][data-orientation='vertical']
+  > .rottay-button:is(
+    [data-variant='default'],
+    [data-variant='outline'],
+    [data-variant='dashed'],
+    [data-variant='ghost']
+  ):not(:first-child):not([data-disabled='true']) {
+  border-block-start-color: var(--ds-button-group-divider-color);
 }
 
 .rottay-button-group[data-connected='true'][data-orientation='horizontal']

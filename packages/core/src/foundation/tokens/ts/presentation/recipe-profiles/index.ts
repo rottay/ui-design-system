@@ -87,6 +87,27 @@ export const RECIPE_PROFILES = [
     },
   },
   {
+    id: 'rottay/network-professional@1',
+    schemaVersion: RECIPE_PROFILE_SCHEMA_VERSION,
+    description:
+      'Approachable professional-network posture: filled primary actions at natural size, softly lifted containers, underlined navigation, information-rich but breathable data surfaces.',
+    families: {
+      // Filled and DEFAULT-shaped. A network product leads with one confident
+      // action, and `shape: 'default'` keeps it off the pill route that both
+      // tenant directions forbid for controls.
+      button: { shape: 'default', variant: 'primary' },
+      card: { variant: 'elevated' },
+      // Underline, not pills: pills-everywhere is a named forbiddenOutcome for
+      // this direction, and underline is the professional-network nav idiom.
+      tabs: { recipe: 'underline' },
+      // Tags are the exception where roundness is native to the idiom (skill
+      // and status chips); the forbidden thing is pill CONTROLS, not chips.
+      tag: { size: 'sm', radius: 'full', bordered: false, outlined: false },
+      sectionCard: { variant: 'elevated' },
+      dataTable: { density: 'comfortable', recipe: 'minimal' },
+    },
+  },
+  {
     id: 'rottay/editorial-round@1',
     schemaVersion: RECIPE_PROFILE_SCHEMA_VERSION,
     description:

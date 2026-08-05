@@ -27,6 +27,17 @@
  *   the warning feedback icon instead of the neutral supporting color.
  * - The error entrance motion is compositor-safe (opacity + translateY only;
  *   the former max-block-size interpolation caused per-frame layout).
+ *
+ * C-02 SECOND PASS (Phase C1, 2026-08-03):
+ * - LABEL GRAMMAR UNIFICATION: the Form.Item label now speaks the tenant's
+ *   field-family label voice (`--ds-input-label-*` as the middle truth for
+ *   color/family/size; every `--ds-form-label-*` channel stays first). The
+ *   measured drift this closes: bithire rendered Form.Item labels in Space
+ *   Grotesk 16px next to FormField's Public Sans 12px labels; editorial
+ *   rendered 18px where its own label decision is 13px/700/0.045em.
+ * - The FormField focus-within label tint grammar lands here too (same
+ *   private relay, guarded against error/disabled), so label and control
+ *   answer focus as one anatomy in BOTH form anatomies.
  */
 
 .ds-form.ds-form--modern[data-part='root'] {
@@ -39,20 +50,30 @@
 .ds-form.ds-form--modern[data-part='root'][data-layout='vertical'] {
   display: flex;
   flex-direction: column;
-  gap: var(--ds-form-gap, var(--ds-spacing-4));
+  /* Form rhythm rides the tenant's density axis like every other cluster in
+     the system (button groups, toolbars): a compact operational ledger pulls
+     its fields tighter, a spacious editorial document gives them air. At
+     scale 1 the gap is byte-identical to the historical channel value. */
+  gap: calc(
+    var(--ds-form-gap, var(--ds-spacing-4)) * var(--ds-density-effective-scale, 1)
+  );
 }
 
 .ds-form.ds-form--modern[data-part='root'][data-layout='horizontal'] {
   display: flex;
   flex-direction: column;
-  gap: var(--ds-form-gap, var(--ds-spacing-4));
+  gap: calc(
+    var(--ds-form-gap, var(--ds-spacing-4)) * var(--ds-density-effective-scale, 1)
+  );
 }
 
 .ds-form.ds-form--modern[data-part='root'][data-layout='inline'] {
   display: flex;
   align-items: flex-end;
   flex-flow: row wrap;
-  gap: var(--ds-form-gap, var(--ds-spacing-3));
+  gap: calc(
+    var(--ds-form-gap, var(--ds-spacing-3)) * var(--ds-density-effective-scale, 1)
+  );
 }
 
 .ds-form.ds-form--modern[data-part='root'][data-disabled='true'] {
@@ -90,7 +111,16 @@
   align-items: stretch;
   inline-size: 100%;
   min-inline-size: 0;
-  gap: var(--ds-form-item-gap, var(--ds-spacing-2));
+  /* The item's internal rhythm (label → control → message) scales with the
+     same density axis as the form's macro rhythm: a compact form tightens
+     inside each field too, an editorial one breathes at every level. At
+     scale 1, byte-identical to the historical channel value. */
+  gap: calc(
+    var(--ds-form-item-gap, var(--ds-spacing-2)) * var(--ds-density-effective-scale, 1)
+  );
+  /* Mobile keyboard posture: focus scroll keeps the item clear of the
+     viewport edge / sticky chrome (Input/Select/FormField carry the same). */
+  scroll-margin-block: var(--ds-spacing-6, 1.5rem);
 }
 
 /* Layout split (owned here since K2-V; previously inline, which silently
@@ -140,22 +170,52 @@
 
 .ds-form-item.ds-form-item--modern [data-part='label-text'] {
   min-inline-size: 0;
-  color: var(--ds-form-label-color, var(--ds-color-text-primary));
-  font-family: var(--ds-form-label-font-family, var(--ds-font-family-heading, var(--ds-font-family-base)));
+  /* LABEL GRAMMAR UNIFICATION (C-02 second pass): the Form.Item label speaks
+     the SAME label voice the tenant authored for the field family
+     (`--ds-input-label-*`, the FormField truth) instead of a second,
+     louder grammar. Every `--ds-form-label-*` channel stays FIRST so a
+     tenant's explicit form-label decision keeps winning; the field channels
+     sit between it and the historical literal. Measured drift this closes:
+     bithire rendered Form.Item labels in Space Grotesk 16px next to
+     FormField's Public Sans 12px labels -- two type treatments in one form. */
+  color: var(--ds-form-label-color, var(--ds-input-label-color, var(--ds-color-text-primary)));
+  font-family: var(--ds-form-label-font-family, var(--ds-input-label-font-family, var(--ds-input-font-family, var(--ds-font-family-heading, var(--ds-font-family-base)))));
   font-weight: var(--ds-form-label-font-weight, var(--ds-font-weight-medium));
-  letter-spacing: var(--ds-form-label-letter-spacing, -0.01em);
+  /* Tracking and case join the field family's label grammar (the FormField
+     label channels) so Form.Item and FormField labels can never drift into
+     two type treatments inside one tenant. `--ds-form-label-letter-spacing`
+     stays first: a tenant's explicit form-label decision keeps winning. */
+  letter-spacing: var(--ds-form-label-letter-spacing, var(--ds-input-label-letter-spacing, -0.01em));
+  text-transform: var(--ds-type-label-text-transform, none);
   line-height: var(--ds-form-label-line-height, 1.35);
+  /* The focus-within tint arrives on the family's transition cadence. */
+  transition: color var(--ds-input-transition-duration, var(--ds-motion-fast)) var(--ds-input-transition-timing, var(--ds-motion-ease-out));
 }
 
-/* Label size follows the form-level data-size channel. */
+/* Focus-within label tint (FormField grammar, C-02): the item answers
+   keyboard/pointer focus with the same governed ink shift, so label and
+   control read as one anatomy across BOTH form anatomies. Error and
+   disabled postures keep their own ink -- the tint never hijacks a
+   semantic state. The private relay is the one form-field.css owns:
+   one label-focus decision, two anatomies. */
+.ds-form.ds-form--modern:not([data-disabled='true']) .ds-form-item.ds-form-item--modern[data-part='item']:focus-within:not(:has([data-part='help-text'][data-error='true'])) [data-part='label-text'] {
+  color: var(--_ds-form-field-label-color-focus, var(--ds-color-primary));
+}
+
+/* Label size follows the form-level data-size channel, unified with the
+   field family's label voice (C-02): the form-label channel stays first,
+   the tenant's `--ds-input-label-font-size` (bithire 12px / editorial 13px)
+   is the middle truth, the historical literal is only the terminal. One
+   label voice per tenant -- hierarchy rides weight/tracking/case, not a
+   second size ramp that shouted over FormField labels. */
 .ds-form.ds-form--modern[data-size='sm'] .ds-form-item.ds-form-item--modern [data-part='label-text'] {
-  font-size: var(--ds-form-label-font-size-sm, 14px);
+  font-size: var(--ds-form-label-font-size-sm, var(--ds-form-field-sm-label-font-size, var(--ds-input-label-font-size, 14px)));
 }
 .ds-form.ds-form--modern[data-size='md'] .ds-form-item.ds-form-item--modern [data-part='label-text'] {
-  font-size: var(--ds-form-label-font-size-md, 16px);
+  font-size: var(--ds-form-label-font-size-md, var(--ds-input-label-font-size, 16px));
 }
 .ds-form.ds-form--modern[data-size='lg'] .ds-form-item.ds-form-item--modern [data-part='label-text'] {
-  font-size: var(--ds-form-label-font-size-lg, 18px);
+  font-size: var(--ds-form-label-font-size-lg, var(--ds-form-field-lg-label-font-size, var(--ds-input-label-font-size, 18px)));
 }
 
 .ds-form-item.ds-form-item--modern [data-part='required-mark'][data-kind='required'] {
@@ -377,6 +437,7 @@
 @media (prefers-reduced-motion: reduce) {
   .ds-form-item.ds-form-item--modern [data-part='feedback-icon'],
   .ds-form-item.ds-form-item--modern [data-part='tooltip-icon'],
+  .ds-form-item.ds-form-item--modern [data-part='label-text'],
   .ds-form-item.ds-form-item--modern [data-part='message'] {
     animation: none;
     transition: none;

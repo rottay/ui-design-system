@@ -66,12 +66,15 @@
   stroke-dasharray: var(--_ds-line-series-dash-5, 12 4);
 }
 
-/* Entrance reveal ---------------------------------------------------------- */
+/* Entrance reveal ----------------------------------------------------------
+ * Same governed cadence as the bar family: duration and rise consume the
+ * shared `--_ds-chart-reveal-*` bridges dialed by the grammar motion
+ * posture; fallbacks keep the historical cadence byte-equal. */
 
 @keyframes ds-chart-line-reveal {
   from {
     opacity: 0;
-    transform: translateY(4px);
+    transform: translateY(var(--_ds-chart-reveal-rise, 4px));
   }
   to {
     opacity: 1;
@@ -80,7 +83,8 @@
 }
 
 .ds-chart-line [data-part='chart-svg'] {
-  animation: ds-chart-line-reveal var(--ds-motion-reveal, var(--ds-motion-calm))
+  animation: ds-chart-line-reveal
+    var(--_ds-chart-reveal-duration, var(--ds-motion-reveal, var(--ds-motion-calm)))
     var(--ds-motion-ease-enter, ease-out) both;
 }
 

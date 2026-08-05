@@ -137,21 +137,121 @@
      (popover.css idiom): inert until a dark surface raises
      --ds-elevation-lift-strength. Level 3 matches the --ds-elevation-3 shadow
      this surface declares. */
+  /* SEMANTIC GROUP: overlay. (R1 Cohort 1) A dropdown panel is an OVERLAY
+     surface. Adopting the governed role vocabulary here is what lets one tenant
+     decision move popover, dropdown, drawer and modal together instead of
+     four families each authoring the same ground their own way.
+     ROLE CAUSALITY, per channel -- the split matters and is NOT uniform:
+     --ds-material-overlay-texture, -highlight and -shadow are absent from
+     `:root`, so their fallbacks genuinely fire and today's paint is preserved.
+     --ds-material-overlay-background is the exception: it IS declared on
+     `:root` (foundation/themes/default.css) as var(--ds-surface-overlay), so
+     the fallback arm on the ground rung below is DEAD and the role resolves in
+     every theme. That is deliberate. The channel was declared but never reached
+     this family's paint, so no tenant could move the panel's ground. Under the
+     default theme both sides resolve to --ds-color-bg-elevated and the ground
+     is unchanged; a tenant that splits --ds-surface-overlay from
+     --ds-surface-card (BitHire does, in dark) now has this panel follow the
+     overlay side -- the group it belongs to. */
+  /* OVL-DD-01 (R1 Cohort 1): the 145deg primary sweep that used to sit here was
+     DELETED, not gated. It was a bare background list entry outside every
+     channel — no tenant could zero it — which directly contradicted this file's
+     own comment above claiming every role channel here is tenant-writable. The
+     spec sanctions surface-tint as a ROLE, and a role must travel through a
+     channel a tenant can turn off; an ungoverned layer is a role violation, not
+     a role instance. It also crossed content, which contentSafeZone forbids even
+     for sanctioned motifs. The zenith keyline below already supplies the shared
+     top-light, so the sweep was a redundant second sheen — stacked decorative
+     gradients being the exact smell both tenant directions forbid. BitHire loses
+     a 5%-primary diagonal on menus: a declared in-round delta. If a sighted look
+     wants it back it returns via the popover idiom (a -current indirection
+     mixing from currentColor), never as a hardcode. */
   background:
-    linear-gradient(
-      145deg,
-      color-mix(in srgb, var(--ds-color-primary) 5%, transparent),
-      transparent 44%
-    ),
+    var(--ds-material-overlay-texture, none),
     linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
-    var(--ds-surface-card);
-  box-shadow: var(--ds-dropdown-shadow, var(--ds-elevation-3));
+    var(--ds-material-overlay-background, var(--ds-surface-card));
+  /* WHOLE-VALUE ISOLATION. The depth chain is the SOLE box-shadow of this
+     surface. --ds-material-overlay-highlight used to ride here as a second
+     list entry, which was a defect: the channel is publicly none-capable, and
+     in CSS `none` is legal only as a WHOLE box-shadow value, so a tenant
+     authoring it produced `box-shadow: none, <depth>` -- an invalid
+     declaration that voids the ENTIRE value and silently amputated the panel's
+     depth. Reproduced live: this surface collapsed to `none` while Popover,
+     which reads the same channel in an image position, kept its shadow. The
+     keyline moved to the decoration pseudo below, where it is a whole-value
+     read and an authored `none` can only switch the keyline off.
+     FAMILY CHROME STAYS SENIOR. --ds-dropdown-shadow is outermost, the role
+     channel is the next rung, the layer-step proto and the elevation literal
+     close the chain. foundation/themes/default.css declares --ds-dropdown-shadow
+     on `:root`, so today the outer rung resolves unconditionally and the role
+     rung is not consulted -- this cell is NOT causal yet. It is made causal
+     under adjudicated option (C), the delegating default, which re-keys the
+     family var's OWN `:root` default to read the role. Both properties then
+     hold at once: a family override still wins here, and the role reaches paint
+     whenever only the DS default exists. Hoisting the role above the family var
+     was tried and REJECTED -- it is a pixel no-op today only because nothing
+     authors the role, and it inverts an adjudicated ordering. */
+  box-shadow: var(
+    --ds-dropdown-shadow,
+    var(
+      --ds-material-overlay-shadow,
+      var(--_ds-dropdown-layer-step-shadow, var(--ds-elevation-3))
+    )
+  );
   transform-origin: center top;
 }
 
+/* Decoration slot: carries the intensity-governed zenith keyline (card.css's
+   common light model, shared by every elevated overlay layer) as its SOLE
+   box-shadow, so the none-capable role channel sits in a whole-value position
+   and can never invalidate the depth stack next door. The value is an INSET
+   LITERAL and must stay one (FAB-05): it does NOT read
+   --ds-material-overlay-highlight. That channel's reads were deliberately
+   removed from this family, so its consumer count across the overlay four is
+   zero -- a live-but-unclaimed channel being retired, NOT a capability lost and
+   NOT causal adoption anywhere. The DECLARED VALUE is the same literal this rung
+   carried inside the surface list, and `z-index: -1` reproduces an inset
+   shadow's paint order -- above the surface's own fill and lift layers, below
+   every child -- inside the stacking context the surface already isolates.
+   BUT THE PAINTED RESULT IS NOT EQUIVALENT, and this comment must not claim it
+   is. A pseudo's inset shadow is drawn against a different box and radius than
+   the surface's own, so on any surface with BOTH a border and a radius -- which
+   this one has -- the corner arcs diverge. Measured in Chromium: at radius 12
+   with a 1px border, ~100 px differ with a max channel delta near 140, and it
+   grows with radius and with device pixel ratio. Compensating the pseudo's
+   radius reduces the gap but does not close it. So this relocation is an
+   IN-SCOPE VISUAL DELTA awaiting adjudication, NOT mechanical isolation. This surface is NON-SCROLLING (`overflow: visible`; the list is the
+   scrollport), which is the precondition that makes a pseudo anchor-correct
+   here. The slot paints no fill of its own and never intercepts pointer
+   input. */
+.rottay-dropdown__surface.rottay-dropdown__surface[data-part='surface']::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(72% * var(--ds-effect-intensity, 1)), transparent);
+  pointer-events: none;
+}
+
+/* Nested-layer grammar (popover.css idiom): the surface renders inside the
+   modal's top-layer subtree, so the descendant selector reaches it across
+   the portal without any component knowing the tenant or the stack. The
+   step targets rung 5: the modal chamber's own floor moved to rung 4, so
+   rung 4 here would sit the menu level with its parent panel. */
+.rottay-overlay-modal-shell--modern
+  .rottay-dropdown__surface[data-part='surface'] {
+  --_ds-dropdown-layer-step-shadow: var(--ds-elevation-5, var(--ds-elevation-4, var(--ds-elevation-3)));
+}
+
 .rottay-dropdown__surface.rottay-dropdown__surface[data-part='surface'][data-part='surface'] {
-  border: var(--ds-dropdown-border-width, 1px) solid
-    var(--ds-dropdown-border-color, color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%));
+  /* The border NEVER touched the overlay role, which is why a monochrome tenant
+     measured a generic cool rgb(186,196,205) here while Popover — whose border
+     does chain through the role — resolved graphite. Family chrome stays senior,
+     the role channel comes next, the old mix survives as the terminal fallback. */
+  border: var(--ds-edge-standard-width, var(--ds-dropdown-border-width, 1px))
+    var(--ds-edge-standard-style, solid)
+    var(--ds-dropdown-border-color, var(--ds-material-overlay-border, color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%)));
 }
 
 .rottay-dropdown__surface[data-part='surface'][data-placement^='top'] {
@@ -242,6 +342,11 @@
   pointer-events: none;
 }
 
+/* Hover/focus is a QUIET WELL, not a lift: a menu is a scanning surface, and
+   raising every row under the pointer (translate + outer shadow) jittered the
+   whole list during keyboard/pointer sweeps. The well, border and inset
+   keyline carry the state while the geometry stays put; the press scale below
+   remains the family's motion contract. */
 .rottay-dropdown__surface[data-part='surface'] [data-part='item']:not(:disabled):hover,
 .rottay-dropdown__surface[data-part='surface'] [data-part='item']:not(:disabled):focus-visible {
   color: var(--ds-dropdown-item-color-hover, var(--ds-color-text-primary));
@@ -258,18 +363,15 @@
     )
   );
   box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 58%, transparent),
-    var(--ds-dropdown-item-shadow-hover, var(--ds-shadow-xs));
-  transform: translateY(-1px);
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 58%, transparent);
 }
 
 /* Keyboard focus gets the same hover treatment PLUS the visible focus ring
-   (spec section 4): the ring is appended to the hover shadow stack so the
-   top-light and lift survive underneath it. */
+   (spec section 4): the ring is appended to the keyline so the top-light
+   survives underneath it. */
 .rottay-dropdown__surface[data-part='surface'] [data-part='item']:not(:disabled):focus-visible {
   box-shadow:
     inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 58%, transparent),
-    var(--ds-dropdown-item-shadow-hover, var(--ds-shadow-xs)),
     var(--ds-shadow-focus-ring);
 }
 
@@ -279,8 +381,12 @@
   transform: scale(var(--ds-state-press-scale));
 }
 
+/* The hover sheen sweep rides the governed --ds-effect-intensity dial like
+   every other decorative effect in the system: a zero-intensity tenant
+   dissolves it, a sober profile quiets it, and reduced motion already kills
+   its travel in the block below. */
 .rottay-dropdown__surface[data-part='surface'] [data-part='item']:not(:disabled):hover::after {
-  opacity: 0.8;
+  opacity: calc(0.8 * var(--ds-effect-intensity, 1));
   transform: translateX(40%);
 }
 
@@ -298,9 +404,11 @@
       color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-card))
     )
   );
+  /* The selected well is a persistent state, not a floating layer: the inset
+     keyline frames it without a per-row outer shadow (the quiet-well law the
+     hover state above follows). */
   box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 60%, transparent),
-    var(--ds-shadow-xs);
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 60%, transparent);
 }
 
 .rottay-dropdown__surface[data-part='surface'] [data-part='item'][data-tone='danger'] {
@@ -442,15 +550,50 @@
   list-style: none;
   border-radius: var(--ds-dropdown-radius, var(--ds-radius-xl));
   background:
-    linear-gradient(145deg, color-mix(in srgb, var(--ds-color-primary) 5%, transparent), transparent 45%),
+    /* OVL-DD-01: submenu sweep deleted for the same reason as the panel. */
     linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
     var(--ds-surface-card);
-  box-shadow: var(--ds-dropdown-shadow, var(--ds-elevation-3));
+  /* Reads the same inherited layer-step proto as its parent surface, so a
+     submenu of a modal-nested dropdown keeps the stepped elevation.
+     WHOLE-VALUE ISOLATION, and here it is a SEQUENCING PREREQUISITE rather
+     than a live defect. The keyline used to sit as item 1 of a comma list with
+     this chain as item 2. That is safe only while --ds-dropdown-shadow cannot
+     resolve to `none` -- true today, since its `:root` default is a literal.
+     Option (C) re-keys that default to read the none-capable
+     --ds-material-overlay-shadow, at which point this splice would inherit
+     none-capability THROUGH the family var and expand to
+     `inset <literal>, none`: invalid, collapsing the whole declaration and
+     taking the submenu's depth with it. Isolating before delegating is a
+     correctness constraint, not an ordering preference. */
+  box-shadow: var(
+    --ds-dropdown-shadow,
+    var(--_ds-dropdown-layer-step-shadow, var(--ds-elevation-3))
+  );
+  isolation: isolate;
   animation: ds-dropdown-popover-enter-modern var(--ds-motion-fast) var(--ds-ease-standard, ease) both;
 }
 
+/* The submenu is a DISTINCT surface, so it carries its own decoration slot
+   rather than inheriting the panel's -- the panel's slot is bounded to the
+   panel box and never covered this element. Same terms as the panel: the
+   keyline is an INSET LITERAL and must stay one (FAB-05) -- it does NOT read
+   --ds-material-overlay-highlight, whose reads were deliberately removed from
+   this family. `z-index: -1` inside the stacking context isolated above
+   reproduces the inset shadow's paint order (above this fill, below the items).
+   The submenu declares NO overflow, so it is non-scrolling and a pseudo anchors
+   correctly here. */
+.rottay-dropdown__surface[data-part='surface'] [data-part='submenu']::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(72% * var(--ds-effect-intensity, 1)), transparent);
+  pointer-events: none;
+}
+
 .rottay-dropdown__surface[data-part='surface'] [data-part='submenu'][data-part='submenu'] {
-  border: 1px solid var(--ds-dropdown-border-color, var(--ds-color-border));
+  border: var(--ds-edge-standard-width, 1px) var(--ds-edge-standard-style, solid) var(--ds-dropdown-border-color, var(--ds-color-border));
 }
 
 .rottay-dropdown__surface[data-part='surface'] > [data-part='arrow'] {
@@ -458,7 +601,7 @@
   z-index: -1;
   inline-size: 0.72rem;
   block-size: 0.72rem;
-  border: 1px solid var(--ds-dropdown-border-color, var(--ds-color-border));
+  border: var(--ds-edge-standard-width, 1px) var(--ds-edge-standard-style, solid) var(--ds-dropdown-border-color, var(--ds-color-border));
   /* the same fill + dark-aware lift layer the surface declares, so the seam
      does not flash a lighter square where the arrow crosses the border */
   background:
@@ -499,6 +642,12 @@
     inset: auto;
     min-inline-size: 0;
     margin-block-start: 0.25rem;
+    box-shadow: none;
+  }
+  /* The keyline lives on the decoration slot now, so the reset above no longer
+     reaches it. Cleared explicitly to keep the inlined narrow-container
+     submenu as flat as it was when both shadows shared one declaration. */
+  .rottay-dropdown__surface[data-part='surface'] [data-part='submenu']::before {
     box-shadow: none;
   }
 }

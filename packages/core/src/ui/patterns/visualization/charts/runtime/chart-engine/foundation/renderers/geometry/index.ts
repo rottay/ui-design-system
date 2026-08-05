@@ -234,6 +234,13 @@ export interface BuildSvgBarGeometryOptions {
   readonly insets?: ChartGeometryInsets;
   readonly bandPadding?: number;
   readonly maxTicks?: number;
+  /**
+   * Category-axis-only tick cap. `maxTicks` caps value AND category ticks
+   * together (its original contract); this option lets a caller thin crowded
+   * category labels from a container measure without disturbing the value
+   * axis. When both are finite the smaller cap wins.
+   */
+  readonly maxCategoryTicks?: number;
 }
 
 export function buildSvgBarGeometry({
@@ -244,6 +251,7 @@ export function buildSvgBarGeometry({
   insets: insetsInput,
   bandPadding = 0.2,
   maxTicks,
+  maxCategoryTicks,
 }: BuildSvgBarGeometryOptions): SvgBarGeometry {
   const width = finiteSize(widthInput, 640);
   const height = finiteSize(heightInput, 360);
@@ -260,8 +268,14 @@ export function buildSvgBarGeometry({
     typeof maxTicks === 'number' && Number.isSafeInteger(maxTicks)
       ? Math.max(2, maxTicks)
       : null;
+  const explicitCategoryTickCount =
+    typeof maxCategoryTicks === 'number' && Number.isSafeInteger(maxCategoryTicks)
+      ? Math.max(2, maxCategoryTicks)
+      : null;
   const valueTickCount = explicitTickCount ?? 5;
-  const categoryTickCount = explicitTickCount ?? categories.length;
+  const categoryTickCount = explicitTickCount !== null && explicitCategoryTickCount !== null
+    ? Math.min(explicitTickCount, explicitCategoryTickCount)
+    : explicitCategoryTickCount ?? explicitTickCount ?? categories.length;
   const valueScale = scaleLinear()
     .domain(zeroAnchoredDomain(finiteData.map((datum) => datum.value)))
     .nice(valueTickCount)
@@ -387,6 +401,11 @@ export interface BuildSvgBarSeriesGeometryOptions {
   /** Inner band padding between grouped bars inside one category. */
   readonly groupPadding?: number;
   readonly maxTicks?: number;
+  /**
+   * Category-axis-only tick cap; see {@link BuildSvgBarGeometryOptions.maxCategoryTicks}.
+   * When both caps are finite the smaller one wins.
+   */
+  readonly maxCategoryTicks?: number;
 }
 
 /**
@@ -406,6 +425,7 @@ export function buildSvgBarSeriesGeometry({
   bandPadding = 0.2,
   groupPadding = 0.05,
   maxTicks,
+  maxCategoryTicks,
 }: BuildSvgBarSeriesGeometryOptions): SvgBarSeriesGeometry {
   const width = finiteSize(widthInput, 640);
   const height = finiteSize(heightInput, 360);
@@ -421,6 +441,10 @@ export function buildSvgBarSeriesGeometry({
   const explicitTickCount =
     typeof maxTicks === 'number' && Number.isSafeInteger(maxTicks)
       ? Math.max(2, maxTicks)
+      : null;
+  const explicitCategoryTickCount =
+    typeof maxCategoryTicks === 'number' && Number.isSafeInteger(maxCategoryTicks)
+      ? Math.max(2, maxCategoryTicks)
       : null;
   const valueTickCount = explicitTickCount ?? 5;
 
@@ -440,7 +464,9 @@ export function buildSvgBarSeriesGeometry({
     }
   }
   const seriesCount = cleanSeries.length;
-  const categoryTickCount = explicitTickCount ?? categories.length;
+  const categoryTickCount = explicitTickCount !== null && explicitCategoryTickCount !== null
+    ? Math.min(explicitTickCount, explicitCategoryTickCount)
+    : explicitCategoryTickCount ?? explicitTickCount ?? categories.length;
 
   // Resolve the value domain. Grouped keeps zero visible over raw values;
   // stacked accumulates per-category positive and negative extents.

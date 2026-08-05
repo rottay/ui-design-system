@@ -1,9 +1,20 @@
-/** Modern Callout: rich contextual guidance with semantic visual and action tray. */
+/** Modern Callout: rich contextual guidance with semantic visual and action tray.
+ *
+ * STATE LANGUAGE (lifecycle-feedback canon): the callout is the GUIDANCE
+ * member of the single urgency grammar shared with Alert, Toast, Notification
+ * and Message -- one accent channel per tone drives the glyph well (tint +
+ * hairline frame + the AUT-1 `-ink` authority this family adopted first), the
+ * edge-grammar surface frame, the quiet wash and the title's severity WEIGHT
+ * ramp (warning/error bold). Entry travel responds to the tenant motion dial
+ * (--ds-motion-intensity, fallback 1 = the historical render), matching the
+ * Alert grammar selector-for-selector. */
 
 @keyframes ds-callout-enter-modern {
   from {
     opacity: 0;
-    transform: translateY(var(--ds-motion-offset-in));
+    /* Alert parity: the offset rides the tenant motion-intensity dial
+       (fallback 1 = the historical --ds-motion-offset-in travel). */
+    transform: translateY(calc(var(--ds-motion-offset-in) * var(--ds-motion-intensity, 1)));
   }
   to {
     opacity: 1;
@@ -32,7 +43,9 @@
   gap: var(--ds-callout-gap, clamp(var(--ds-spacing-sm), 1.4vw, var(--ds-spacing-md)));
   overflow: hidden;
   padding: var(--ds-callout-padding, clamp(var(--ds-spacing-md), 2vw, var(--ds-spacing-lg)));
-  border: var(--ds-callout-border-width, 1px) solid color-mix(in srgb, var(--ds-callout-tone) 28%, var(--ds-color-border));
+  /* The frame rides the tenant edge grammar (Alert shape exactly: the family
+     hook wins, the grammar is the fallback, 1px solid the floor). */
+  border: var(--ds-callout-border-width, var(--ds-edge-standard-width, 1px)) var(--ds-edge-standard-style, solid) color-mix(in srgb, var(--ds-callout-tone) 28%, var(--ds-color-border));
   border-radius: var(--ds-callout-radius, var(--ds-radius-lg));
   background-color: color-mix(in srgb, var(--ds-callout-tone) 6%, var(--ds-color-surface));
   background-image:
@@ -78,7 +91,7 @@
   block-size: var(--ds-callout-icon-well-size, 2.75rem);
   flex: 0 0 auto;
   place-items: center;
-  border: 1px solid color-mix(in srgb, var(--ds-callout-tone) 34%, var(--ds-color-border));
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-callout-tone) 34%, var(--ds-color-border));
   border-radius: var(--ds-callout-icon-radius, var(--ds-radius-md));
   background: color-mix(in srgb, var(--ds-callout-tone) 11%, var(--ds-color-surface-raised));
   box-shadow:
@@ -102,6 +115,14 @@
   font-weight: var(--ds-font-weight-semibold);
   letter-spacing: var(--ds-letter-spacing-heading);
   line-height: var(--ds-line-height-tight);
+}
+
+/* Severity weight ramp (state language, Alert selector shape verbatim):
+   warning/error escalate the title to bold so urgency reads in TYPE, never
+   in hue alone. Info/success keep the semibold voice. */
+.rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-tone='warning'] .rottay-callout-shell__body[data-part='body'] > [data-part='title'],
+.rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-tone='error'] .rottay-callout-shell__body[data-part='body'] > [data-part='title'] {
+  font-weight: var(--ds-font-weight-bold);
 }
 
 .rottay-callout-shell.rottay-callout-shell--modern .rottay-callout-shell__body[data-part='body'] > [data-part='description'] {

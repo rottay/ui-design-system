@@ -52,6 +52,52 @@
  * engine wires the APG tab/tabpanel pairing (id + aria-controls +
  * aria-labelledby on `content`) and announces the terminal crumb with
  * aria-current="page".
+ *
+ * WAVE C0-07 (page hierarchy grammar):
+ * - TYPOGRAPHY ROLES: the title binds the authored `--ds-type-page-title-*`
+ *   role channels (single-writer precedence engine defaults < expressive
+ *   overlay < authored roles), so a technical tenant renders its sans/tight
+ *   scanable page title and an editorial tenant renders its serif/zero-track
+ *   display through the SAME rule. Each channel falls back to the exact
+ *   pre-wave declaration (kept as the first line of each pair), so a tenant
+ *   artifact without the role channels renders byte-identical to before.
+ * - EYEBROW: the family axis is the one overline facet no channel owns
+ *   (expressive type profiles move transform/tracking only — B1.2 keeps
+ *   metrics family-authored). `--_ds-page-hierarchy-eyebrow-family`
+ *   (shared with CollectionHeader) opens it with the mono fallback intact.
+ * - METADATA register line (`data-part='metadata'`): caption role channels,
+ *   muted ink, tabular numerals and a hairline separator — editorial tenants
+ *   read it as a register rule, technical tenants as a compact status line.
+ * - STICKY: `sticky` prop → `data-sticky` (+ `data-stuck` once the window
+ *   scrolls). Offset reads the existing `--ds-safe-area-top` channel; stuck
+ *   elevation trades the resting shadow for elevation-2 + a primary-tempered
+ *   hairline. No new public hooks.
+ * - SKELETON: the loading footprint now mirrors the requested anatomy
+ *   (eyebrow and per-tab blocks join breadcrumb/title/subtitle/actions) and
+ *   the pulse stops under prefers-reduced-motion.
+ * - Breadcrumb crumbs are `flex: none` + nowrap: overflow becomes the pill's
+ *   governed horizontal scroll instead of accidental mid-trail wrapping.
+ *
+ * WAVE C1 (visual elevation):
+ * - ACTIONS UNFRAMED: the actions cluster drops its toolbar frame (border,
+ *   tinted bg, inset shadow, padding) — hierarchy by proximity and the
+ *   caller's solid primary instead of a second nested box. The toolbar
+ *   channels stay with real toolbars; the glass channel remains opt-in;
+ *   forced colors re-assert a full system-ink frame.
+ * - PROGRESSIVE STUCK SEPARATION: the engine writes
+ *   `--_ds-page-shell-stuck-progress` (0→1, first 48px past the stuck
+ *   threshold) straight to the header node; the stuck border mix scales
+ *   with it (fallback 1 = exact pre-C1 18%) and a register hairline fades
+ *   in at the panel base (fallback 0 = absent, exact pre-C1 render).
+ * - SUPPORTING ROLE: the subtitle binds the full `--ds-type-supporting-*`
+ *   role (family since C0; size/weight/leading/tracking join with exact
+ *   fallbacks), so the descriptor is a real tenant-divergent voice.
+ * - INTELLIGENT MOBILE REORDER (640cqi): lead/titles dissolve into the
+ *   header-row flex context — back → eyebrow → title → subtitle → actions
+ *   → metadata — the primary action keeps thumb reach before the register
+ *   line, and the decorative identity tile yields its line to content.
+ * - SKELETON: the metadata register line joins the mirrored anatomy
+ *   (data-block='metadata') so a late register never shifts actions/tabs.
  */
 
 /* ---- named container (W6-A): the shell root owns the width every descendant
@@ -149,6 +195,56 @@
   z-index: 1;
 }
 
+/* ---- sticky posture (C0-07): the prop stamps data-sticky; data-stuck
+        arrives only after the scrollport moves, so the deeper elevation is a
+        STATE (content can pass beneath), never decoration. The offset reads
+        the governed safe-area channel — notched devices keep the header
+        clear of the sensor area. Sticky drops the radius and the animated
+        sheen: a bar pinned to the viewport edge reads as chrome, not as a
+        floating card. ---- */
+.ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='header'][data-sticky='true'] {
+  position: sticky;
+  inset-block-start: var(--ds-safe-area-top, env(safe-area-inset-top, 0px));
+  /* 100 (cockpit-header precedent, rule-local geometry): above flowed page
+     content, deliberately BELOW the governed dropdown layer (1000) so menus
+     opened from the actions cluster never render under the pinned bar. */
+  z-index: 100;
+  border-radius: 0;
+}
+.ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='header'][data-sticky='true']::after {
+  animation: none;
+  opacity: 0;
+}
+/* C1 progressive separation: a register hairline at the panel's base whose
+   opacity rides the engine-written `--_ds-page-shell-stuck-progress`
+   (0→1 over the first 48px past the stuck threshold). Fallback 0: an engine
+   that never writes the channel renders EXACTLY the pre-C1 binary stuck
+   state (elevation + tempered border only). The stuck border mix below
+   scales with the same ramp — fallback 1 = the exact pre-C1 18%. */
+.ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='header'][data-sticky='true']::before {
+  position: absolute;
+  z-index: 1;
+  inset-inline: 0;
+  inset-block-end: 0;
+  block-size: var(--ds-edge-hairline-width, 1px);
+  pointer-events: none;
+  content: '';
+  opacity: var(--_ds-page-shell-stuck-progress, 0);
+  background: color-mix(
+    in srgb,
+    var(--ds-color-primary) 18%,
+    var(--ds-toolbar-border, var(--ds-color-border-primary))
+  );
+}
+.ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='header'][data-sticky='true'][data-stuck='true'] {
+  border-color: color-mix(
+    in srgb,
+    var(--ds-color-primary) calc(18% * var(--_ds-page-shell-stuck-progress, 1)),
+    var(--ds-toolbar-border, var(--ds-color-border-primary))
+  );
+  box-shadow: var(--ds-elevation-2);
+}
+
 /* Header hover is decorative sheen-shift: it rides the hover guard (house
    hover law); there is no press state on a page panel. */
 @media (hover: hover) {
@@ -170,8 +266,8 @@
 .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='header-icon'] {
   display: inline-grid;
   flex: 0 0 auto;
-  width: var(--ds-page-header-icon-size, 40px);
-  height: var(--ds-page-header-icon-size, 40px);
+  width: var(--_ds-page-header-icon-size, 40px);
+  height: var(--_ds-page-header-icon-size, 40px);
   place-items: center;
   border: var(--ds-page-shell-border-width, var(--ds-edge-standard-width, 1px)) var(--ds-edge-standard-style, solid) var(--ds-workspace-card-icon-border, var(--ds-color-border-primary));
   border-radius: var(--ds-page-header-icon-radius, var(--ds-radius-lg));
@@ -186,7 +282,11 @@
 .ds-pattern-page-shell.ds-engine-modern [data-part='eyebrow'] {
   margin-bottom: 4px;
   color: var(--ds-color-text-muted);
-  font-family: var(--ds-font-family-mono, ui-monospace, monospace);
+  /* C0-07: the overline family is the one facet the expressive type axis
+     does not own (it moves case/tracking only, B1.2). The shared proto opens
+     it — an editorial profile can set the heading serif here while every
+     profile-less tenant keeps the exact mono render. */
+  font-family: var(--_ds-page-hierarchy-eyebrow-family, var(--ds-font-family-mono, ui-monospace, monospace));
   font-size: var(--ds-page-header-eyebrow-size, 10px);
   font-weight: var(--ds-font-weight-semibold, 600);
   letter-spacing: var(--ds-page-header-eyebrow-tracking, 0.11em);
@@ -207,22 +307,16 @@
   text-wrap: pretty;
 }
 
+/* ---- actions cluster (C1): the frame retires — the group reads through
+        proximity and rhythm, with the caller's solid primary action as the
+        dominant element, instead of a second toolbar box nested inside the
+        identity panel (panel > framed pill > framed cluster > framed tabs was
+        box-on-box, not hierarchy). The toolbar channels stay with the real
+        toolbars; the glass channel remains the opt-in (default none — a
+        default-ON blur taxed every scroll frame; cockpit-header PT29
+        precedent, Sheet glass contract). Forced colors re-assert the frame
+        below. ---- */
 .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='actions'] {
-  min-height: calc(var(--ds-control-height-sm, 32px) + 8px);
-  padding: 3px;
-  border: var(--ds-page-shell-border-width, var(--ds-edge-standard-width, 1px)) var(--ds-edge-standard-style, solid) var(--ds-toolbar-border, var(--ds-color-border-primary));
-  border-radius: var(--ds-toolbar-radius, var(--ds-radius-lg));
-  background: color-mix(
-    in srgb,
-    var(--ds-toolbar-control-bg, var(--ds-surface-card)) 88%,
-    transparent
-  );
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 90%, transparent),
-    0 8px 18px -16px color-mix(in srgb, var(--ds-color-text-primary) 30%, transparent);
-  /* Glass is opt-in (default none): a default-ON blur taxed every scroll
-     frame; tenants enable it through this channel (cockpit-header PT29
-     precedent, Sheet glass contract). */
   backdrop-filter: var(--ds-page-shell-actions-backdrop, none);
 }
 
@@ -270,7 +364,13 @@
 }
 
 .ds-pattern-page-shell.ds-engine-modern [data-part='crumb'] {
+  /* C0-07: crumbs never wrap mid-trail — when the trail exceeds the pill,
+     the overflow becomes the pill's governed horizontal scroll (the pill
+     already carries overflow-x: auto), not an accidental second line. */
+  flex: none;
+  max-width: 100%;
   font-weight: var(--ds-font-weight-medium, 500);
+  white-space: nowrap;
 }
 .ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='true'] {
   color: var(--ds-color-text-muted);
@@ -395,12 +495,66 @@
   font-weight: var(--ds-font-weight-bold);
   line-height: var(--ds-line-height-display);
   letter-spacing: var(--ds-letter-spacing-display);
+  /* C0-07: the same declaration pair, rebound to the authored page-title
+     typography role. Where the artifact emits `--ds-type-page-title-*`
+     (compiler role emitter, every tenant bundle), the authored family, size,
+     weight, measure and tracking govern — technical tenants keep their tight
+     sans scan, editorial tenants get their serif zero-track display. Where
+     the channels are absent the fallback chain resolves to the exact values
+     above. */
+  font-family: var(--ds-type-page-title-font-family, var(--ds-font-family-heading, var(--ds-font-family-base)));
+  font-size: var(--ds-type-page-title-font-size, var(--ds-font-size-fluid-2xl, 1.5rem));
+  font-weight: var(--ds-type-page-title-font-weight, var(--ds-font-weight-bold));
+  line-height: var(--ds-type-page-title-line-height, var(--ds-line-height-display));
+  letter-spacing: var(--ds-type-page-title-letter-spacing, var(--ds-letter-spacing-display));
+  text-transform: var(--ds-type-page-title-text-transform, none);
+  font-variant-numeric: var(--ds-type-page-title-font-variant-numeric, normal);
+  /* Long unbroken words (URLs, slugs, IDs) wrap instead of breaching the
+     32ch measure at 320/390px. */
+  overflow-wrap: break-word;
 }
 .ds-pattern-page-shell.ds-engine-modern [data-part='subtitle'] {
   margin: var(--ds-spacing-1, 4px) 0 0;
   color: var(--ds-color-text-secondary);
   font-size: var(--ds-font-size-md);
   line-height: var(--ds-line-height-body);
+  /* C0-07: the supporting role's family channel lets a vertical author its
+     descriptor voice (e.g. a technical mono deck) without touching the
+     title; absent the channel, the base family renders exactly as before. */
+  font-family: var(--ds-type-supporting-font-family, var(--ds-font-family-base));
+  /* C1: the full supporting role now governs the descriptor — authored
+     size/weight/leading/tracking apply where the artifact emits the role
+     (a compact technical deck vs an editorial standfirst); every channel
+     falls back to the exact declarations above for a role-less artifact. */
+  font-size: var(--ds-type-supporting-font-size, var(--ds-font-size-md));
+  font-weight: var(--ds-type-supporting-font-weight, var(--ds-font-weight-normal, 400));
+  line-height: var(--ds-type-supporting-line-height, var(--ds-line-height-body));
+  letter-spacing: var(--ds-type-supporting-letter-spacing, normal);
+}
+
+/* ---- metadata register line (C0-07): caption role + tabular numerals.
+        Editorial tenants read it as a ruled register (their authored caption
+        family/tracking governs); technical tenants as a compact status line.
+        The hairline spans only the title column (the part lives inside
+        `titles`), so it reads as structure, not as another box. ---- */
+.ds-pattern-page-shell.ds-engine-modern [data-part='metadata'] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--ds-spacing-1, 4px) var(--ds-spacing-3, 12px);
+  margin: var(--ds-spacing-2, 8px) 0 0;
+  padding-top: var(--ds-spacing-2, 8px);
+  color: var(--ds-color-text-muted);
+  font-family: var(--ds-type-caption-font-family, var(--ds-font-family-base));
+  font-size: var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px));
+  font-weight: var(--ds-type-caption-font-weight, var(--ds-font-weight-normal, 400));
+  line-height: var(--ds-type-caption-line-height, 1.35);
+  letter-spacing: var(--ds-type-caption-letter-spacing, 0.01em);
+  text-transform: var(--ds-type-caption-text-transform, none);
+  font-variant-numeric: var(--ds-type-caption-font-variant-numeric, tabular-nums);
+}
+.ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='metadata'] {
+  border-top: var(--ds-edge-hairline-width, 1px) solid var(--ds-toolbar-divider, var(--ds-color-border-subtle));
 }
 
 /* ---- separators: tab strip and the no-tabs rule (both 1px bottom border).
@@ -455,6 +609,11 @@
   flex-shrink: 0;
   align-items: center;
   gap: var(--ds-page-shell-action-gap);
+  /* Optical alignment: the cluster centers against the identity block's full
+     height, landing on the title's decision line — not on the breadcrumb's
+     chrome line, where `align-items: flex-start` parked it. In the ≤640px
+     reordered column this is a no-op (the actions go width:100%). */
+  align-self: center;
 }
 .ds-pattern-page-shell.ds-engine-modern [data-part='header-content'] {
   margin-top: var(--ds-page-shell-section-gap);
@@ -491,6 +650,15 @@
   display: flex;
   gap: var(--ds-page-shell-action-gap);
 }
+/* C0-07: the tab-strip skeleton reserves the strip's final row so late
+   content lands without a vertical jump. */
+.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton-tabs-row'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-tabs-gap, var(--ds-spacing-2, 8px));
+  margin-top: var(--ds-spacing-2, 8px);
+  padding: var(--ds-tabs-list-padding, 3px);
+}
 .ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'] {
   border-radius: var(--ds-page-shell-skeleton-radius, var(--ds-radius-sm));
   background: var(--ds-color-neutral-100);
@@ -499,6 +667,15 @@
 .ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'][data-block='breadcrumb'] {
   inline-size: 180px;
   block-size: 12px;
+}
+.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'][data-block='eyebrow'] {
+  inline-size: 120px;
+  max-inline-size: 40%;
+  block-size: 10px;
+}
+.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'][data-block='tab'] {
+  inline-size: 88px;
+  block-size: calc(var(--ds-tabs-md-height, 36px) - 6px);
 }
 .ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'][data-block='title'] {
   inline-size: 100%;
@@ -510,6 +687,13 @@
   max-inline-size: 100%;
   block-size: 14px;
 }
+/* C1: the register-line block mirrors the caption role footprint (12px bar
+   over a bounded measure), so the anatomy-matched skeleton covers metadata
+   exactly like the late content. */
+.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'][data-block='metadata'] {
+  inline-size: min(240px, 70%);
+  block-size: 12px;
+}
 .ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'][data-block='action-sm'] {
   inline-size: 80px;
   block-size: 32px;
@@ -520,26 +704,58 @@
 }
 
 @container ds-page (max-width: 640px) {
+  /* C1 intelligent reorder (not a stack): the lead/titles wrappers dissolve
+     into the header-row flex context, so every hierarchy unit orders
+     deliberately — back → eyebrow → title → supporting → ACTIONS → register
+     — instead of the desktop row collapsing verbatim. The primary action
+     keeps thumb reach straight after the title block; the metadata register
+     closes the hierarchy before the tab strip. */
   .ds-pattern-page-shell.ds-engine-modern [data-part='header-row'] {
     align-items: stretch;
     flex-direction: column;
   }
 
+  .ds-pattern-page-shell.ds-engine-modern [data-part='lead'],
+  .ds-pattern-page-shell.ds-engine-modern [data-part='titles'] {
+    display: contents;
+  }
+
+  .ds-pattern-page-shell.ds-engine-modern [data-part='eyebrow'] {
+    order: 1;
+  }
+
+  .ds-pattern-page-shell.ds-engine-modern [data-part='title-row'] {
+    order: 2;
+  }
+
+  .ds-pattern-page-shell.ds-engine-modern [data-part='subtitle'] {
+    order: 3;
+  }
+
   .ds-pattern-page-shell.ds-engine-modern [data-part='actions'] {
+    order: 4;
     width: 100%;
     overflow-x: auto;
+  }
+
+  .ds-pattern-page-shell.ds-engine-modern [data-part='metadata'] {
+    order: 5;
+  }
+
+  /* The dissolved lead's controls must not stretch to the track: the back
+     button keeps its natural box at the inline-start edge. */
+  .ds-pattern-page-shell.ds-engine-modern [data-part='back'] > .rottay-button {
+    align-self: flex-start;
   }
 
   .ds-pattern-page-shell.ds-engine-modern [data-part='actions'] > * {
     flex: 1 0 max-content;
   }
 
-  .ds-pattern-page-shell.ds-engine-modern [data-part='lead'] {
-    align-items: flex-start;
-  }
-
+  /* The identity tile is decorative (aria-hidden): on a narrow measure the
+     title alone carries identity and the tile's line is spent on content. */
   .ds-pattern-page-shell.ds-engine-modern [data-part='header-icon'] {
-    --ds-page-header-icon-size: 36px;
+    display: none;
   }
 }
 
@@ -577,6 +793,12 @@
   .ds-pattern-page-shell.ds-engine-modern [data-part='header']::after {
     animation: none;
   }
+
+  /* C0-07: the skeleton pulse is ambient motion — under reduced motion the
+     reserved footprint stays, the cadence stops. */
+  .ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'] {
+    animation: none;
+  }
 }
 
 /* forced-colors: the identity panel's gradients, sheen and shadows are forced
@@ -597,17 +819,30 @@
     display: none;
   }
   .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='header-icon'],
-  .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='actions'],
   .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='breadcrumb'],
   .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='tabs'] {
     border-color: ButtonText;
     background: Canvas;
     box-shadow: none;
   }
+  /* The quiet actions group carries no frame by default; under forced
+     colors the grouping boundary re-asserts as a full system-ink frame. */
+  .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='actions'] {
+    padding: 3px;
+    border: 1px solid ButtonText;
+    background: Canvas;
+  }
+  /* The progressive sticky hairline re-asserts in system ink — separation
+     must survive when the shadow and color-mix are forced away. */
+  .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='header'][data-sticky='true'][data-stuck='true']::before {
+    background: ButtonText;
+    opacity: 1;
+  }
   .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='header-icon'] {
     color: ButtonText;
   }
   .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='header-content'],
+  .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='metadata'],
   .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='rule'] {
     border-color: ButtonText;
   }

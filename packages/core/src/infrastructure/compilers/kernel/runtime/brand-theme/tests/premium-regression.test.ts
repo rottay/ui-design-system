@@ -19,6 +19,7 @@
  * the shared path too.
  */
 
+import postcss from 'postcss';
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
@@ -56,6 +57,55 @@ function readTenantCss(tenant: string): string {
     `src/foundation/tokens/css/facade/artifacts/${tenant}/index.css`
   );
   return readFileSync(cssPath, 'utf-8');
+}
+
+/**
+ * Collapses the incidental whitespace a value carries from its source
+ * formatting down to one canonical single-line form: internal line
+ * breaks/indentation from a multi-line declaration are collapsed, and
+ * spacing directly against a paren is removed. The whitespace around every
+ * comma is normalized DETERMINISTICALLY to exactly one space after and none
+ * before, regardless of what the source did — including a source with NO
+ * space after the comma at all, e.g. `var(--ds-surface-inset,#ffffff)`.
+ * That last rule is not optional: an earlier version of this function only
+ * stripped space BEFORE a comma, so a perfectly valid, correctly-authored
+ * declaration that simply omitted the space after its comma stayed
+ * permanently mismatched against the canonical expected string — the same
+ * false-negative class the line-anchored regex helper had, just moved one
+ * layer down. Used only by `collectDeclarationValues` below; a value already
+ * written in the canonical single-line form passes through unchanged.
+ */
+function normalizeDeclarationValue(rawValue: string): string {
+  return rawValue
+    .trim()
+    .replace(/\s+/g, ' ')
+    .replace(/\(\s+/g, '(')
+    .replace(/\s+\)/g, ')')
+    .replace(/\s*,\s*/g, ', ');
+}
+
+/**
+ * Collects every declaration for `property`, PARSED rather than pattern-
+ * matched — see the "SECOND HARDENING" note on the `it` block below for the
+ * regex-based helper this replaced (deleted, not merely retired) and why.
+ * `walkDecls(property, ...)` only visits actual
+ * Declaration nodes whose `prop` exactly equals `property`; PostCSS never
+ * turns a CSS comment into a Declaration node, so an occurrence sitting
+ * inside a comment contributes nothing to the result rather than a false
+ * match. A value spread across several physical lines is one Declaration
+ * with one `.value` to the parser regardless of its source line breaks, so
+ * normalization only has to collapse incidental whitespace, never
+ * reconstruct anything. Every occurrence is collected in document order —
+ * including a duplicate declared again later in the file — so the caller
+ * can assert on the count as well as the content; a single well-formed
+ * declaration is exactly a one-element array.
+ */
+function collectDeclarationValues(css: string, property: string): string[] {
+  const values: string[] = [];
+  postcss.parse(css).walkDecls(property, (decl) => {
+    values.push(normalizeDeclarationValue(decl.value));
+  });
+  return values;
 }
 
 // ── First-party tenant configs for testing ──────────────
@@ -334,12 +384,221 @@ describe('shared pipeline: chrome vars NOW generated (G1)', () => {
     expect(bithireCss).toContain('--ds-button-secondary-border: var(--ds-control-brand-border)');
   });
 
-  it('bithire generates input vars with correct values', () => {
-    expect(bithireCss).toContain('--ds-input-bg: #ffffff');
-    expect(bithireCss).toContain('--ds-input-border-focus: #3A6FB0');
-    expect(bithireCss).toContain(
-      '--ds-input-shadow-focus: 0 0 0 3px rgba(58, 111, 176, 0.16), 0 2px 8px rgba(20, 40, 59, 0.08)'
+  /**
+   * R1 Cohort 1 — semantic migration of three pins, authorized 2026-08-05.
+   *
+   * WHY THEY MOVED. BitHire's field chrome used to author flat literals, and
+   * those literals compile into the VERTICAL artifact, whose selector arm
+   * `:where([data-ds-root][data-vertical='bithire'])` matches EVERY tenant in
+   * the vertical. So they were not BitHire's paint, they were the whole
+   * vertical's paint, and no tenant could reach them: --ds-input-border and
+   * --ds-input-border-focus measured BYTE-IDENTICAL across two tenants whose
+   * grounds already diverged. Rebasing each onto its governed authority is what
+   * made the field group tenant-causal (now rgb(215,226,234) cool for BitHire
+   * vs rgb(201,195,182) warm for The Management).
+   *
+   * WHY THIS IS STRONGER, NOT LOOSER. The old assertions pinned one literal and
+   * said nothing about where it came from. Each replacement pins THREE facts:
+   * the channel is emitted, it resolves through the named authority, and
+   * BitHire's own value survives as the fallback so nothing moves for a tenant
+   * that authors no inset surface. The negative assertion then forbids the
+   * regression this round fought across eight separate instances — a channel
+   * silently reverting to a bare literal — which no previous pin expressed.
+   *
+   * HARDENING (post-migration audit, historical). The pins above were not
+   * line-anchored: `\s*` can cross newlines, so an unanchored regex could
+   * theoretically be satisfied by text spanning a comment or trailing an
+   * unrelated declaration. The three positive checks WENT THROUGH
+   * `extractDeclarationValue`, which anchored to a single physical
+   * declaration line (start of line, the exact property name, up to the
+   * terminating `;`, end of line) and compared the extracted value for exact
+   * string equality — strictly stronger than a substring `toMatch`, since
+   * nothing could follow the pinned value on that line either. The negative
+   * was also hex/rgba-specific, so `white`, `hsl(...)`, `color-mix(...)`, or
+   * a gradient literal would have slipped through uncaught. It became generic
+   * over shape: for these three properties, any declaration whose value did
+   * not begin with `var(` failed, anchored the same way so it could not be
+   * defeated by a comment or a neighboring line. `extractDeclarationValue`
+   * itself no longer exists — see SECOND HARDENING immediately below for why
+   * and for what replaced it; this paragraph is retained as history, not as
+   * a description of the code currently in this file.
+   *
+   * SECOND HARDENING — POSTCSS MIGRATION (Codex veto, 2026-08-05). The
+   * line-anchored regex above turned out to share the exact defect it was
+   * hardened to fix: it pattern-matches a structured language instead of
+   * parsing it. Three concrete holes, one root cause: `extractDeclarationValue`
+   * ACCEPTED a declaration sitting inside a multi-line block comment, because
+   * a regex has no concept of "inside a comment"; its negative counterpart
+   * MISSED a bare value split across multiple physical lines and a duplicate
+   * declaration re-declared later in the file, because a `^...$` per-line
+   * anchor cannot see past one line; and by the same limitation a
+   * legitimately multi-line `var(...)` declaration could itself fail the
+   * anchor, so a CORRECT value read as a missing property.
+   * `extractDeclarationValue` has been DELETED, not merely retired in place:
+   * once this block moved to `collectDeclarationValues`, nothing else in the
+   * file used it, and a known-defective helper left sitting in the file —
+   * with its own documentation still describing it as the current approach —
+   * is exactly the kind of stale, code-misdescribing comment this round has
+   * already been corrected for twice. Removing it is the fix, not a
+   * scope violation.
+   *
+   * `collectDeclarationValues` (above) replaces the anchor with an actual
+   * `postcss.parse(...).walkDecls(property, ...)` parse. PostCSS never emits
+   * a comment as a Declaration node, so a commented-out occurrence —
+   * single-line or spanning multiple lines — contributes nothing to the
+   * collected array rather than a false match. A value spread across
+   * physical lines is one Declaration with one `.value` regardless of its
+   * source line breaks, so `normalizeDeclarationValue` only has to collapse
+   * incidental whitespace (including a comma with no space after it in the
+   * source, which an earlier version of that normalizer still got wrong —
+   * see its own doc comment) to reach the same string a single-line writing
+   * would produce. Every occurrence — including a second, conflicting
+   * declaration later in the file — is collected, in order, so the assertion
+   * below is exact-ARRAY equality: a duplicate makes the array longer than
+   * one element and fails on length alone; a commented-out or altogether
+   * missing declaration makes it come up short; a wrong value fails on
+   * content. All three failure shapes are one assertion, not three separate
+   * regexes to keep in sync. The var()-shape check is kept as its own
+   * explicit, separate assertion afterward — not merely implied by the three
+   * expected strings happening to start with `var(` — so a future edit to
+   * what these channels resolve to cannot silently drop authority-routing
+   * coverage by coincidence, and it uses `startsWith`, not a substring test,
+   * specifically because a value like
+   * `color-mix(in srgb, var(--ds-surface-inset) 50%, white)` CONTAINS
+   * `var(--ds-surface-inset)` as a nested reference — a substring check
+   * would wrongly accept it as authority-routed when the declaration itself
+   * is not. Every claim in this paragraph — comment-hiding (single- and
+   * multi-line), multi-line normalization, the duplicate-declaration case,
+   * the bare-literal case, the bare-multi-line-value case, and the
+   * color-mix/startsWith case — is proven by a durable assertion inside the
+   * `it` body below, not only by this prose.
+   */
+  it('bithire generates input vars through their governed authorities', () => {
+    const INPUT_AUTHORITY_CHANNELS: Record<string, string> = {
+      '--ds-input-bg': 'var(--ds-surface-inset, #ffffff)',
+      '--ds-input-border-focus': 'var(--ds-material-control-border-active, #3A6FB0)',
+      '--ds-input-shadow-focus':
+        'var(--ds-material-control-focus-ring, 0 0 0 3px rgba(58, 111, 176, 0.16), 0 2px 8px rgba(20, 40, 59, 0.08))',
+    };
+
+    // Exactly one declaration per channel, and it is exactly the governed
+    // value. A duplicate (array length > 1), a commented-out declaration
+    // (walkDecls never visits it, so the array comes up short rather than
+    // falsely satisfied), and a multi-line-but-otherwise-correct value
+    // (normalizes to the same one-element array a single-line writing would)
+    // are all resolved by one array equality per channel.
+    for (const [property, expected] of Object.entries(INPUT_AUTHORITY_CHANNELS)) {
+      expect(collectDeclarationValues(bithireCss, property)).toEqual([expected]);
+    }
+
+    // Explicit, separate negative: every declaration collected for these
+    // three properties — not only the value each is expected to equal today
+    // — must be authority-routed through var(...). The channels must never
+    // regress to a bare literal again in ANY shape (hex, rgb/rgba, hsl, a
+    // named color, color-mix, a gradient, ...), not just the hex/rgba shapes
+    // a prior regression happened to take, and this stays a real parse
+    // rather than a resurrected regex.
+    const collectedAcrossAllThree = Object.keys(INPUT_AUTHORITY_CHANNELS).flatMap((property) =>
+      collectDeclarationValues(bithireCss, property).map((value) => ({ property, value }))
     );
+    expect(collectedAcrossAllThree.length).toBeGreaterThan(0);
+    expect(
+      collectedAcrossAllThree.map(({ property, value }) => ({
+        property,
+        isVarAuthority: value.startsWith('var('),
+      }))
+    ).toEqual(collectedAcrossAllThree.map(({ property }) => ({ property, isVarAuthority: true })));
+
+    // ── Adversarial proofs, durable ──────────────────────────────────
+    // Every fixture below is synthetic CSS run through the SAME
+    // `collectDeclarationValues` used against the real generated stylesheet
+    // above — not a parallel copy of the parsing logic that could silently
+    // drift from what actually protects the pins. Each assertion states the
+    // PRECISE result the parser must produce, not merely that it differs
+    // from the governed value, so a failure here says exactly what broke.
+
+    // (1) A declaration sitting inside a SINGLE-LINE comment contributes
+    // nothing: PostCSS never turns a comment into a Declaration node, so
+    // only the live literal below it is collected.
+    expect(
+      collectDeclarationValues(
+        `:root {\n  /* --ds-input-bg: var(--ds-surface-inset, #ffffff); */\n  --ds-input-bg: #ffffff;\n}`,
+        '--ds-input-bg'
+      )
+    ).toEqual(['#ffffff']);
+
+    // (2) The same, but the comment spans MULTIPLE physical lines — the
+    // exact shape of the regex hole this migration closed (`\s*` in the old
+    // pattern could theoretically cross into a comment; here there is no
+    // pattern to cross anything, only a parse that never emits one).
+    expect(
+      collectDeclarationValues(
+        `:root {\n  /*\n   * legacy note:\n   * --ds-input-bg: var(--ds-surface-inset, #ffffff);\n   * superseded below\n   */\n  --ds-input-bg: #ffffff;\n}`,
+        '--ds-input-bg'
+      )
+    ).toEqual(['#ffffff']);
+
+    // (3) A CORRECT declaration written across multiple physical lines
+    // normalizes to the exact canonical string a one-line writing would —
+    // the false NEGATIVE the original line-anchored regex had. Asserted
+    // against the governed constant, not a re-typed literal, so this proof
+    // cannot silently drift from what the real check expects.
+    expect(
+      collectDeclarationValues(
+        `:root {\n  --ds-input-border-focus: var(\n    --ds-material-control-border-active,\n    #3A6FB0\n  );\n}`,
+        '--ds-input-border-focus'
+      )
+    ).toEqual([INPUT_AUTHORITY_CHANNELS['--ds-input-border-focus']]);
+
+    // (4) A duplicate declaration re-declared later in the file is a SECOND
+    // array entry, not a silent overwrite — the exact-array equality above
+    // fails on length, not merely on content.
+    expect(
+      collectDeclarationValues(
+        `:root {\n  --ds-input-bg: var(--ds-surface-inset, #ffffff);\n}\nhtml[data-tenant='drift'] {\n  --ds-input-bg: #eeeeee;\n}`,
+        '--ds-input-bg'
+      )
+    ).toEqual([INPUT_AUTHORITY_CHANNELS['--ds-input-bg'], '#eeeeee']);
+
+    // (5) A bare named colour is collected verbatim: it fails the governed
+    // equality check and the var()-shape check the same way a hex or rgba
+    // literal would.
+    expect(collectDeclarationValues(`:root {\n  --ds-input-bg: white;\n}`, '--ds-input-bg')).toEqual([
+      'white',
+    ]);
+
+    // (6) A BARE (non-var()) value split across multiple physical lines —
+    // multi-line formatting alone must not make an incorrect value read as
+    // correct just because normalization also collapses it to one line.
+    expect(
+      collectDeclarationValues(
+        `:root {\n  --ds-input-shadow-focus: 0 0 0 3px\n    rgba(58, 111, 176, 0.16);\n}`,
+        '--ds-input-shadow-focus'
+      )
+    ).toEqual(['0 0 0 3px rgba(58, 111, 176, 0.16)']);
+
+    // (7) color-mix(...) CONTAINING a nested var() reference is collected
+    // whole and fails the var()-shape check via `startsWith` — the sharp
+    // case: a naive `.includes('var(')` would have wrongly passed it, since
+    // the nested reference is a genuine substring of the value.
+    const colorMixValues = collectDeclarationValues(
+      `:root {\n  --ds-input-bg: color-mix(in srgb, var(--ds-surface-inset) 50%, white);\n}`,
+      '--ds-input-bg'
+    );
+    expect(colorMixValues).toEqual(['color-mix(in srgb, var(--ds-surface-inset) 50%, white)']);
+    expect(colorMixValues[0]?.startsWith('var(')).toBe(false);
+    expect(colorMixValues[0]?.includes('var(')).toBe(true);
+
+    // (8) The exact no-space-after-comma input the doc comments above
+    // describe (`var(--ds-surface-inset,#ffffff)`) is proven here, through
+    // the same collectDeclarationValues path the real pins use, not only
+    // asserted in prose.
+    expect(
+      collectDeclarationValues(
+        `:root {\n  --ds-input-bg: var(--ds-surface-inset,#ffffff);\n}`,
+        '--ds-input-bg'
+      )
+    ).toEqual([INPUT_AUTHORITY_CHANNELS['--ds-input-bg']]);
   });
 
   it('rottay generates layout vars with correct values', () => {

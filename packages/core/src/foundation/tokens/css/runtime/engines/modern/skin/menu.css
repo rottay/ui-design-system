@@ -28,16 +28,92 @@
  * P2 (batch p2-21): the group panel indent is logical
  * (`padding-inline: X 0`) so it mirrors to the reading side under RTL — the
  * former physical `padding: 0 0 1px X` pinned it left in every direction.
+ *
+ * PHASE C0 CANARY C-11 (nav grammar pass):
+ * - DENSITY: every raw geometry literal (row block-size, padding, root
+ *   gap/padding, icon column, group rhythm, level indent) now resolves
+ *   through `var(--ds-density-effective-scale, 1)` — the same contract the
+ *   spacing ramp already honors — so density.mode (compact 0.85 / spacious
+ *   1.15) changes the rail's rhythm materially instead of ±2px. Absent the
+ *   dial every calc resolves to its prior literal byte-for-byte.
+ * - TYPOGRAPHY: raw font-size literals resolve through
+ *   `var(--ds-type-scale, 1)` (the font-ramp contract), so typography.scale
+ *   reaches nav rows and group eyebrows; the family axis already flows via
+ *   `--ds-menu-font-family`.
+ * - MOTION: transitions/animations bind to the intent cadence
+ *   (`--ds-motion-feedback` / `--ds-motion-disclosure` / `--ds-motion-reveal`,
+ *   exact `--ds-motion-fast|normal|slow` fallbacks) and distances/lifts ride
+ *   `--ds-motion-intensity` (alert.css idiom), so motion.dial reaches hover,
+ *   disclosure and entrance. Fallbacks are byte-identical when the dial is
+ *   absent.
+ * - CURRENT GRAMMAR (protos, fallback 0px/none = today's framed surface):
+ *   `--_ds-menu-current-tick-size|-ink` paints a LOGICAL inline-start
+ *   tick (mirrors under RTL; a state indicator, never a decorative rail) and
+ *   `--_ds-menu-current-rule-size|-ink` paints a block-end ink rule for
+ *   editorial profiles that mark current with a rule instead of a floating
+ *   box (pair with `--ds-menu-item-bg-active: transparent` +
+ *   `--ds-menu-item-border-active: transparent`, both existing channels).
+ * - ICON PLATE: `--_ds-menu-icon-plate-bg` (fallback = today's 6% ink
+ *   wash) lets a bare-ink editorial profile drop the plate while technical
+ *   profiles keep the contained well; weight/size keep flowing from the
+ *   governed icon policy (profiles.icon resolves at the icon component).
+ * - SIDEBAR-TONE: the group eyebrow ink chain now reads
+ *   `--ds-sidebar-text-muted` between `--ds-sidebar-group-color` and
+ *   `--ds-color-text-muted`, so navigation.sidebar-tone's muted ink reaches
+ *   section labels on strong/inverse rails (previously a dead channel here).
+ * - COLLAPSED RAIL A11Y BUG FIX: labels were `display: none` in the rail —
+ *   display:none leaves the accessibility tree, so icon-only rows lost their
+ *   accessible name (icons are decorative) — and submenu TRIGGER labels were
+ *   never hidden at all, rendering as a squished sliver. Labels (item AND
+ *   trigger) now collapse to the clipped 1px pattern: visually gone, layout
+ *   untouched (absolute), name preserved. Disclosure arrows and group
+ *   eyebrows keep `display: none` (decorative / non-interactive text).
+ *
+ * PHASE C1 CANARY C-11 (visual elevation — marca + hilo + voz + rail):
+ * - MARCA: the C0 current-tick proto is ASSIGNED at this root as the design
+ *   default (3px — the C-01 icon-plate assignment idiom), its ink chained to
+ *   the tenant's active-ink channel so the indicator always matches the
+ *   current label. Horizontal menubars swap the tick for the C0 block-end
+ *   rule (the same grammar on the appropriate axis). An owner setting either
+ *   proto on a part still wins; the 0px fallback keeps the pre-C1 render
+ *   available outside a modern root.
+ * - HILO: disclosure panels (engine-stamped `data-disclosure-panel`) hang a
+ *   logical inline-start thread centered on the indent gutter, so an open
+ *   submenu reads as a TREE instead of smaller rows. Width rides
+ *   `--ds-divider-width` and STYLE rides `--ds-divider-style` (personality
+ *   bridge: solid technical / dashed editorial — recipe 33 seam grammar);
+ *   ink is the new proto with a quiet text-primary hairline fallback. The
+ *   thread is suppressed in the collapsed rail and in horizontal mode, and
+ *   forced-colors re-keys it to CanvasText.
+ * - VOZ: the group eyebrow case chains the overline grammar
+ *   (`--ds-menu-group-text-transform` → `--ds-page-header-eyebrow-text-transform`
+ *   → `--ds-typography-label-transform` → uppercase floor) — the same chain
+ *   C-03/C-12 gave card and record eyebrows; the tenant-authored menu
+ *   channel still wins first, the floor keeps profile-less tenants
+ *   byte-neutral.
+ * - RAIL: collapsed inline-size resolves through the new
+ *   `--_ds-menu-collapsed-inline-size` proto (64px fallback = today's
+ *   standalone rail); the AppShell skin reassigns it to 100% inside its
+ *   collapsed navigation-body so the icon column centers in the shell-owned
+ *   track (default 96px) instead of pinning 64px against the reading edge.
  */
 
 .rottay-menu.rottay-menu--modern[data-part='root'] {
+  /* C1 design defaults (assigned protos — see the header block): the current
+     indicator is ON and its ink follows the tenant's active-ink chain; the
+     nested thread is ON and keyed to the divider seam channels. */
+  --_ds-menu-current-tick-size: 3px;
+  --_ds-menu-current-tick-ink: var(--ds-menu-item-color-active, var(--ds-sidebar-item-color-active, var(--ds-color-primary)));
+  --_ds-menu-current-rule-ink: var(--ds-menu-item-color-active, var(--ds-sidebar-item-color-active, var(--ds-color-primary)));
+  --_ds-menu-nested-thread-size: var(--ds-divider-width, 1px);
   position: relative;
   isolation: isolate;
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: calc(3px * var(--ds-density-effective-scale, 1));
   margin: 0;
-  padding: 10px 8px;
+  padding: calc(10px * var(--ds-density-effective-scale, 1))
+    calc(8px * var(--ds-density-effective-scale, 1));
   overflow: hidden;
   list-style: none;
   font-family: var(--ds-menu-font-family, var(--ds-font-family-base));
@@ -45,19 +121,29 @@
   border-radius: var(--ds-menu-radius, var(--ds-radius-xl));
   box-shadow: var(--ds-menu-shadow, var(--ds-shadow-xs));
   transition:
-    background var(--ds-motion-normal) var(--ds-ease-standard, ease),
-    box-shadow var(--ds-motion-normal) var(--ds-ease-standard, ease),
-    border-color var(--ds-motion-normal) var(--ds-ease-standard, ease);
+    background var(--ds-motion-reveal, var(--ds-motion-normal)) var(--ds-ease-standard, ease),
+    box-shadow var(--ds-motion-reveal, var(--ds-motion-normal)) var(--ds-ease-standard, ease),
+    border-color var(--ds-motion-reveal, var(--ds-motion-normal)) var(--ds-ease-standard, ease);
 }
 
 .rottay-menu.rottay-menu--modern[data-part='root'][data-mode='horizontal'] {
+  /* Horizontal current reads as the block-end rule, not the vertical tick;
+     the nested thread is a vertical-mode grammar (C1). */
+  --_ds-menu-current-tick-size: 0px;
+  --_ds-menu-current-rule-size: 3px;
+  --_ds-menu-nested-thread-size: 0px;
   flex-direction: row;
   gap: 4px;
   padding: 0 8px;
 }
 
 .rottay-menu.rottay-menu--modern[data-part='root'][data-collapsed='true'] {
-  inline-size: 64px;
+  /* Standalone rail keeps its 64px floor; the AppShell skin reassigns the
+     proto to 100% so a shell-composed rail fills the shell-owned track
+     instead of pinning 64px against the reading edge (C1). */
+  inline-size: var(--_ds-menu-collapsed-inline-size, 64px);
+  /* The thread belongs to the expanded tree; the rail shows icons only. */
+  --_ds-menu-nested-thread-size: 0px;
 }
 
 /* The row wrappers are pure structure: no list chrome, a hair of row rhythm. */
@@ -120,11 +206,11 @@
   -webkit-tap-highlight-color: transparent;
   outline: none;
   transition:
-    color var(--ds-motion-fast) var(--ds-ease-standard, ease),
-    background var(--ds-motion-fast) var(--ds-ease-standard, ease),
-    border-color var(--ds-motion-fast) var(--ds-ease-standard, ease),
-    box-shadow var(--ds-motion-fast) var(--ds-ease-standard, ease),
-    transform var(--ds-motion-fast) var(--ds-ease-standard, ease);
+    color var(--ds-motion-feedback, var(--ds-motion-fast)) var(--ds-ease-standard, ease),
+    background var(--ds-motion-feedback, var(--ds-motion-fast)) var(--ds-ease-standard, ease),
+    border-color var(--ds-motion-feedback, var(--ds-motion-fast)) var(--ds-ease-standard, ease),
+    box-shadow var(--ds-motion-feedback, var(--ds-motion-fast)) var(--ds-ease-standard, ease),
+    transform var(--ds-motion-feedback, var(--ds-motion-fast)) var(--ds-ease-standard, ease);
 }
 
 /* Level geometry: top rows keep the full item frame; children shrink and
@@ -140,22 +226,24 @@
    hijack the documented 62px frame with the compound's 40px. */
 .rottay-menu--modern[data-part='root'] [data-part='item'][data-level='top'],
 .rottay-menu--modern[data-part='root'] [data-part='trigger'][data-level='top'] {
+  /* min-block-size: 0 clears the legacy sidebar bridge (theme.css clamps every
+     row to 60px); the 62/45 geometry stays a fixed block-size per contract. */
   min-block-size: 0;
-  block-size: var(--ds-sidebar-item-height, 62px);
-  padding-inline: var(--ds-menu-item-padding-inline, var(--ds-sidebar-item-padding-inline, 16px));
-  font-size: var(--ds-menu-item-font-size, var(--ds-sidebar-item-font-size, 15.75px));
+  block-size: calc(var(--ds-sidebar-item-height, 62px) * var(--ds-density-effective-scale, 1));
+  padding-inline: var(--ds-menu-item-padding-inline, var(--ds-sidebar-item-padding-inline, calc(16px * var(--ds-density-effective-scale, 1))));
+  font-size: var(--ds-menu-item-font-size, var(--ds-sidebar-item-font-size, calc(15.75px * var(--ds-type-scale, 1))));
 }
 
 .rottay-menu--modern[data-part='root'] [data-part='item'][data-level='child'],
 .rottay-menu--modern[data-part='root'] [data-part='trigger'][data-level='child'] {
   min-block-size: 0;
-  block-size: var(--ds-menu-item-child-height, var(--ds-sidebar-item-child-height, 45px));
+  block-size: calc(var(--ds-menu-item-child-height, var(--ds-sidebar-item-child-height, 45px)) * var(--ds-density-effective-scale, 1));
   padding-inline-start: calc(
     var(--ds-menu-child-padding-inline, var(--ds-sidebar-child-padding-inline, 8px)) +
-    var(--rottay-menu-level, 0) * var(--rottay-menu-inline-indent, 24px)
+    var(--rottay-menu-level, 0) * var(--rottay-menu-inline-indent, calc(24px * var(--ds-density-effective-scale, 1)))
   );
   padding-inline-end: var(--ds-menu-child-padding-inline, var(--ds-sidebar-child-padding-inline, 8px));
-  font-size: var(--ds-menu-item-font-size-child, var(--ds-sidebar-item-font-size-child, 13.9px));
+  font-size: var(--ds-menu-item-font-size-child, var(--ds-sidebar-item-font-size-child, calc(13.9px * var(--ds-type-scale, 1))));
 }
 
 /* ---- coarse pointers: physical 44px floor, never a rem floor. ---- */
@@ -213,7 +301,7 @@
     );
     border-color: color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle));
     box-shadow: var(--ds-menu-item-shadow-hover, var(--ds-shadow-xs));
-    transform: translateY(-1px);
+    transform: translateY(calc(-1px * var(--ds-motion-intensity, 1)));
   }
 
   .rottay-menu--modern[data-part='root'] [data-part='item'][data-tone='danger']:not([data-disabled]):not([data-selected='true']):hover {
@@ -250,6 +338,36 @@
     inset 0 1px 0 color-mix(in srgb, var(--ds-color-white) 52%, transparent);
 }
 
+/* Current grammar beyond the framed surface (C-11 protos). Both markers are
+   logical-property state indicators (they mirror to the reading edge under
+   RTL), never decorative rails; both default to 0px = byte-identical to the
+   framed-only render above.
+   - tick: compact inline-start bar for technical profiles that want current
+     legible at a glance even on a strong/inverse rail;
+   - rule: block-end ink mark for editorial profiles that read current as a
+     typographic rule instead of a floating box (paired with transparent
+     `--ds-menu-item-bg-active` / `--ds-menu-item-border-active`). */
+.rottay-menu--modern[data-part='root'] [data-part='item'][data-selected='true']::after {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block: 22%;
+  inline-size: var(--_ds-menu-current-tick-size, 0px);
+  border-radius: var(--ds-radius-full);
+  background: var(--_ds-menu-current-tick-ink, var(--ds-color-primary));
+  pointer-events: none;
+}
+
+.rottay-menu--modern[data-part='root'] [data-part='item'][data-selected='true']::before {
+  content: '';
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline: 12px;
+  block-size: var(--_ds-menu-current-rule-size, 0px);
+  background: var(--_ds-menu-current-rule-ink, var(--ds-color-primary));
+  pointer-events: none;
+}
+
 .rottay-menu--modern[data-part='root'] [data-part='trigger'][data-open='true'],
 .rottay-menu--modern[data-part='root'] [data-part='trigger'][data-selected-descendant='true'] {
   color: var(--ds-menu-item-color-active, var(--ds-color-text-primary));
@@ -260,30 +378,30 @@
 .rottay-menu--modern[data-part='root'] [data-part='icon'] {
   display: flex;
   flex-shrink: 0;
-  inline-size: var(--ds-menu-icon-column-size, var(--ds-sidebar-icon-column-size, 22px));
-  block-size: var(--ds-menu-icon-column-size, var(--ds-sidebar-icon-column-size, 22px));
+  inline-size: var(--ds-menu-icon-column-size, var(--ds-sidebar-icon-column-size, calc(22px * var(--ds-density-effective-scale, 1))));
+  block-size: var(--ds-menu-icon-column-size, var(--ds-sidebar-icon-column-size, calc(22px * var(--ds-density-effective-scale, 1))));
   align-items: center;
   justify-content: flex-start;
   border-radius: var(--ds-radius-md);
   color: var(--ds-menu-icon-color, currentColor);
-  font-size: var(--ds-menu-icon-size, var(--ds-sidebar-icon-size, 17.25px));
-  background: color-mix(in srgb, currentColor 6%, transparent);
+  font-size: var(--ds-menu-icon-size, var(--ds-sidebar-icon-size, calc(17.25px * var(--ds-density-effective-scale, 1))));
+  background: var(--_ds-menu-icon-plate-bg, color-mix(in srgb, currentColor 6%, transparent));
   opacity: 0.7;
   transition:
-    opacity var(--ds-motion-fast) var(--ds-ease-standard, ease),
-    transform var(--ds-motion-fast) var(--ds-ease-spring);
+    opacity var(--ds-motion-feedback, var(--ds-motion-fast)) var(--ds-ease-standard, ease),
+    transform var(--ds-motion-feedback, var(--ds-motion-fast)) var(--ds-ease-spring);
 }
 
 .rottay-menu--modern[data-part='root'] [data-part='item'][data-selected='true'] [data-part='icon'] {
   opacity: 1;
-  transform: scale(1.04);
+  transform: scale(calc(1 + 0.04 * var(--ds-motion-intensity, 1)));
 }
 
 @media (hover: hover) {
   .rottay-menu--modern[data-part='root'] [data-part='item']:hover [data-part='icon'],
   .rottay-menu--modern[data-part='root'] [data-part='trigger']:hover [data-part='icon'] {
     opacity: 1;
-    transform: scale(1.04);
+    transform: scale(calc(1 + 0.04 * var(--ds-motion-intensity, 1)));
   }
 }
 
@@ -312,7 +430,7 @@
   border-radius: var(--ds-radius-full);
   background: color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent);
   opacity: 0.4;
-  transition: transform var(--ds-motion-fast) var(--ds-ease-standard, ease);
+  transition: transform var(--ds-motion-disclosure, var(--ds-motion-fast)) var(--ds-ease-standard, ease);
 }
 
 /* The disclosure chevron rotates open. RTL needs NO local flip: the governed
@@ -349,21 +467,49 @@
   background: color-mix(in srgb, var(--ds-surface-subtle, var(--ds-card-bg, var(--ds-surface-card))) 72%, transparent);
   /* `--ds-ease-decelerate` was consumed here and defined NOWHERE (orphan —
      spec §2): the canon deceleration curve is `--ds-motion-ease-out`. */
-  animation: ds-menu-panel-enter var(--ds-motion-normal) var(--ds-motion-ease-out);
+  animation: ds-menu-panel-enter var(--ds-motion-disclosure, var(--ds-motion-normal)) var(--ds-motion-ease-out);
+}
+
+/* Nested thread (C1): a logical seam hanging in the trigger's indent gutter
+   so an open submenu reads as a TREE, not just smaller rows. The
+   gutter-center offset resolves from the same geometry channels the child
+   rows consume (child base + (level + 0.5) × indent; the level is
+   engine-stamped on disclosure panels only, so group panels — sections, not
+   trees — never paint one). Width/style ride the divider seam channels
+   (recipe 33): `--ds-divider-style` makes the thread solid for technical
+   profiles and dashed for editorial ones; the proto gates the whole marker
+   (0px = pre-C1 render). Logical `border-inline-start` mirrors the thread
+   to the reading side under RTL. */
+.rottay-menu--modern[data-part='root'] [data-part='panel'][data-disclosure-panel='true']::before {
+  content: '';
+  position: absolute;
+  inset-block: 2px 4px;
+  inset-inline-start: calc(
+    var(--ds-menu-child-padding-inline, var(--ds-sidebar-child-padding-inline, 8px)) +
+    (var(--rottay-menu-level, 0) + 0.5) *
+    var(--rottay-menu-inline-indent, calc(24px * var(--ds-density-effective-scale, 1)))
+  );
+  border-inline-start: var(--_ds-menu-nested-thread-size, 0px)
+    var(--ds-divider-style, solid)
+    var(--_ds-menu-nested-thread-ink, color-mix(in srgb, var(--ds-color-text-primary) 14%, transparent));
+  pointer-events: none;
 }
 
 .rottay-menu--modern[data-part='root'] [data-part='group-label'] {
-  padding-block: var(--ds-sidebar-group-padding-top, 6px) 3px;
-  padding-inline: var(--ds-menu-item-padding-inline, var(--ds-sidebar-item-padding-inline, 16px));
+  padding-block: var(--ds-sidebar-group-padding-top, calc(6px * var(--ds-density-effective-scale, 1))) 3px;
+  padding-inline: var(--ds-menu-item-padding-inline, var(--ds-sidebar-item-padding-inline, calc(16px * var(--ds-density-effective-scale, 1))));
   border-radius: var(--ds-radius-sm);
-  color: var(--ds-menu-group-color, var(--ds-sidebar-group-color, var(--ds-color-text-muted)));
-  font-size: var(--ds-menu-group-font-size, var(--ds-sidebar-group-font-size, 10.9px));
+  /* sidebar-tone's muted ink reaches the eyebrow (was a dead channel here). */
+  color: var(--ds-menu-group-color, var(--ds-sidebar-group-color, var(--ds-sidebar-text-muted, var(--ds-color-text-muted))));
+  font-size: var(--ds-menu-group-font-size, var(--ds-sidebar-group-font-size, calc(10.9px * var(--ds-type-scale, 1))));
   font-weight: var(--ds-menu-group-font-weight, var(--ds-sidebar-group-font-weight, var(--ds-font-weight-semibold)));
   letter-spacing: var(--ds-menu-group-letter-spacing, var(--ds-sidebar-group-letter-spacing, 0.085em));
   line-height: 1.1;
-  /* Overline case rides the expressive type axis (C1b); fallback preserves
-     today's uppercase for every profile-less tenant. */
-  text-transform: var(--ds-menu-group-text-transform, uppercase);
+  /* Overline case rides the expressive type axis (C1b), now through the full
+     overline-grammar chain (C-03/C-12 idiom): tenant menu channel → header
+     eyebrow channel → personality label case → uppercase floor. The floor
+     preserves today's uppercase for every profile-less tenant. */
+  text-transform: var(--ds-menu-group-text-transform, var(--ds-page-header-eyebrow-text-transform, var(--ds-typography-label-transform, uppercase)));
   user-select: none;
   background: color-mix(in srgb, var(--ds-color-text-primary) 2%, transparent);
 }
@@ -406,7 +552,27 @@
   padding-inline: 0;
 }
 
+/* A11Y FIX (C-11): labels must leave the VISUAL box without leaving the
+   accessibility tree — `display: none` stripped the row's only accessible
+   name (the icon is decorative), so every icon-only rail row was a nameless
+   link. The clipped 1px pattern keeps the row's name for assistive tech
+   while absolute positioning keeps the icon optically centered. This also
+   covers TRIGGER labels, which were never hidden before and rendered as a
+   squished ellipsized sliver in the 64px rail. */
 .rottay-menu--modern[data-part='root'][data-collapsed='true'] [data-part='item'] [data-part='label'],
+.rottay-menu--modern[data-part='root'][data-collapsed='true'] [data-part='trigger'] [data-part='label'] {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
 .rottay-menu--modern[data-part='root'][data-collapsed='true'] [data-part='arrow-icon'],
 .rottay-menu--modern[data-part='root'][data-collapsed='true'] [data-part='group-label'] {
   display: none;
@@ -415,7 +581,7 @@
 @keyframes ds-menu-panel-enter {
   from {
     opacity: 0;
-    transform: translateY(var(--ds-menu-panel-enter-distance, -3px));
+    transform: translateY(calc(var(--ds-menu-panel-enter-distance, -3px) * var(--ds-motion-intensity, 1)));
   }
   to {
     opacity: 1;
@@ -444,6 +610,21 @@
   }
 }
 
+/* Reduced transparency: the translucent structural marks collapse to their
+   opaque counterparts (sheet.css precedent) — the panel wash reads as the
+   solid subtle surface and the nested thread as the solid subtle border.
+   Equal-specificity longhand, later in source: the atomic-border law is
+   honored (same specificity, never a weaker colour-only rule). */
+@media (prefers-reduced-transparency: reduce) {
+  .rottay-menu--modern[data-part='root'] [data-part='panel'] {
+    background: var(--ds-surface-subtle, var(--ds-card-bg, var(--ds-surface-card)));
+  }
+
+  .rottay-menu--modern[data-part='root'] [data-part='panel'][data-disclosure-panel='true']::before {
+    border-inline-start-color: var(--ds-color-border-subtle);
+  }
+}
+
 /* ---- forced colors: every row keeps a frame; selection and open state survive.
         Doubled data-part ties the (0,4,0) border shorthand, later source wins. ---- */
 @media (forced-colors: active) {
@@ -458,6 +639,13 @@
     border-color: Highlight;
     background: Highlight;
     color: HighlightText;
+  }
+
+  /* The proto-driven current markers (tick/rule) re-key to the system
+     highlight so a tenant-authored indicator survives forced colors. */
+  .rottay-menu--modern[data-part='root'] [data-part='item'][data-selected='true']::before,
+  .rottay-menu--modern[data-part='root'] [data-part='item'][data-selected='true']::after {
+    background: HighlightText;
   }
 
   .rottay-menu--modern[data-part='root'] [data-part='trigger'][data-open='true'],
@@ -479,5 +667,11 @@
 
   .rottay-menu--modern[data-part='root'] [data-part='divider'] {
     background: ButtonText;
+  }
+
+  /* The nested thread keeps its SHAPE (width and solid/dashed style survive
+     forcing) and re-keys to a system seam color. */
+  .rottay-menu--modern[data-part='root'] [data-part='panel'][data-disclosure-panel='true']::before {
+    border-color: CanvasText;
   }
 }

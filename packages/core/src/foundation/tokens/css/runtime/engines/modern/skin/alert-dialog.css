@@ -93,7 +93,9 @@
   position: fixed;
   inset: 0;
   pointer-events: none;
-  background-color: var(--ds-overlay-bg);
+  /* The authored tenant veil wins; the 40% alpha floor keeps a bare tree
+     dimmed (confirm-dialog.css's parity fallback). */
+  background-color: var(--ds-overlay-bg, var(--ds-color-alpha-black-40));
   background-image: linear-gradient(var(--ds-glass-scrim-tint), var(--ds-glass-scrim-tint));
   backdrop-filter: var(--ds-glass-backdrop-filter, var(--ds-modal-overlay-backdrop));
   -webkit-backdrop-filter: var(--ds-glass-backdrop-filter, var(--ds-modal-overlay-backdrop));
@@ -104,7 +106,14 @@
   color: transparent;
 }
 
-/* ---- surface: overlay material (fill + dark lift + elevation) ---- */
+/* ---- surface: the decision chamber's material (fill + dark lift +
+        elevation), shared with the Modal it blocks alongside: the fill reads
+        the chamber chain (--ds-modal-bg first) so an alert never resolves a
+        different hue from the modal it may replace, and the shadow reads the
+        authored --ds-modal-shadow with a rung-4 floor (previously declared
+        with NO fallback — a tree without the tenant artifact dropped the
+        shadow entirely, leaving the blocking panel edgeless against the
+        scrim). The zenith keyline is the family's common light model. ---- */
 .rottay-alert-dialog--modern[data-part='root'] > [data-part='surface'] {
   /* The lift overlay is its own layer directly above the fill so the fallback
      chain stays untouched; it is inert until a dark surface raises
@@ -113,10 +122,12 @@
      `position: relative` is drained from the engine's former inline static
      (Pass-2 P0): it keeps the panel painting above the -1 backdrop layer. */
   position: relative;
-  background-color: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
+  background-color: var(--ds-modal-bg, var(--ds-color-bg-elevated, var(--ds-color-bg-primary)));
   background-image: linear-gradient(var(--ds-elevation-surface-4), var(--ds-elevation-surface-4));
   border-radius: var(--ds-modal-radius, var(--ds-radius-lg));
-  box-shadow: var(--ds-modal-shadow);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(72% * var(--ds-effect-intensity, 1)), transparent),
+    var(--ds-modal-shadow, var(--ds-elevation-4));
   inline-size: var(--ds-alert-dialog-width, 91.6667%);
   max-inline-size: min(
     var(--ds-alert-dialog-max-width, 24rem),
@@ -230,6 +241,30 @@
     animation-duration: 1ms;
     animation-timing-function: linear;
     transform: none;
+  }
+}
+
+/* The runtime motion switch (not just the OS media query) retires the
+   entrance too — popover.css's `data-ds-motion` idiom, which this skin was
+   missing: a tenant-driven reduced-motion posture previously left the
+   entrance choreographed. */
+html[data-ds-motion='reduced']
+  .rottay-alert-dialog--modern[data-part='root'] > [data-part='backdrop'],
+html[data-ds-motion='reduced']
+  .rottay-alert-dialog--modern[data-part='root'] > [data-part='surface'] {
+  animation-duration: 1ms;
+  animation-timing-function: linear;
+  transform: none;
+}
+
+/* Reduced transparency: the glass layer retires entirely — no blur, no frost
+   tint (overlay-modal.css's law, which this skin was missing). The authored
+   scrim fill stays; it is a flat veil, not a see-through panel. */
+@media (prefers-reduced-transparency: reduce) {
+  .rottay-alert-dialog--modern[data-part='root'] > [data-part='backdrop'] {
+    background-image: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
 }
 

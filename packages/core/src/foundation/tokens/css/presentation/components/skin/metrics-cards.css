@@ -41,7 +41,9 @@
   display: flex;
   flex-direction: column;
   block-size: var(--_ds-dashboard-panel-block-size, calc(415px * var(--ds-rhythm-effective-scale, 1)));
-  padding: 16px;
+  /* Panel frame rides the tenant density plane (Button-skin idiom); the
+     density suite pins its own channels inline on this same root. */
+  padding: calc(16px * var(--ds-density-effective-scale, 1));
   position: relative;
   overflow: hidden;
   background: var(--ds-signal-card-bg, var(--ds-premium-card-bg, var(--ds-color-bg-secondary)));
@@ -52,9 +54,10 @@
   border: 1px solid var(--ds-signal-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary)));
 }
 .ds-metrics-cards.ds-metrics-cards [data-part='header'] {
-  /* Header geometry drained from the engine. */
-  padding-block-end: 12px;
-  margin-block-end: 12px;
+  /* Header geometry drained from the engine; the spacing rung scales with
+     the tenant density ramp. */
+  padding-block-end: var(--ds-spacing-3, 12px);
+  margin-block-end: var(--ds-spacing-3, 12px);
   position: relative;
 }
 .ds-metrics-cards.ds-metrics-cards [data-part='header'][data-part='header'] {
@@ -99,6 +102,18 @@
 
 /* per-card shell ------------------------------------------------------------ */
 
+/* Cross-card value alignment (K-7): the eyebrow zone reserves exactly TWO
+   lines in every card — labels render fully up to two lines, and the value
+   row lands at the same optical height across a row of cards whether a
+   card's eyebrow uses one line or two. */
+.ds-metrics-cards.ds-metrics-cards [data-part='metric-label'] {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  min-block-size: calc(2 * 1.35em);
+  overflow: hidden;
+}
+
 .ds-metrics-cards.ds-metrics-cards [data-part='metric-card'] {
   background: var(--ds-metric-card-glass-bg, var(--ds-metric-card-bg, var(--ds-compact-card-bg, var(--ds-premium-card-bg, var(--ds-color-bg-primary)))));
   border-radius: var(--ds-metric-card-radius, var(--ds-compact-card-radius, var(--ds-radius-md, 8px)));
@@ -109,7 +124,13 @@
   border: 1px solid var(--ds-metric-card-border, var(--ds-compact-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary))));
 }
 
-/* grid motif layer (shell ::before; invisible while grid-line/grid-bg unset) */
+/* grid motif layer (shell ::before; invisible while grid-line/grid-bg unset).
+   C-08/C1: the socket now bridges to the tenant's authored surface grid
+   (`--ds-surface-card-grid-bg`) before falling back to the transparent
+   pre-C1 render — a technical vertical's blueprint texture lights the motif
+   it already authors, while a tenant that never authored a surface grid
+   renders byte-identical to before. Content stays above the layer: the body
+   stack below is positioned, and ::before precedes it in tree order. */
 
 .ds-metrics-cards.ds-metrics-cards [data-part='metric-card']::before {
   content: '';
@@ -119,8 +140,11 @@
   pointer-events: none;
   background-image: var(
     --ds-metric-card-grid-bg,
-    linear-gradient(var(--ds-metric-card-grid-line, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, var(--ds-metric-card-grid-line, transparent) 1px, transparent 1px)
+    var(
+      --ds-surface-card-grid-bg,
+      linear-gradient(var(--ds-metric-card-grid-line, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, var(--ds-metric-card-grid-line, transparent) 1px, transparent 1px)
+    )
   );
   background-size: var(--ds-metric-card-grid-size, var(--ds-surface-card-grid-size, 22px))
     var(--ds-metric-card-grid-size, var(--ds-surface-card-grid-size, 22px));
@@ -144,12 +168,15 @@
   gap: var(--ds-metric-card-gap, var(--ds-spacing-2, 0.5rem));
 }
 
-/* footer region (change badge + meter) — zero-geometry outline border ------- */
+/* footer region (change badge + meter) — zero-geometry outline border.
+   C-08/C1: the badge aligns to the inline-start edge of the KPI composition
+   (the engine's body stack is start-aligned); the meter keeps the full
+   inline measure. */
 
 .ds-metrics-cards.ds-metrics-cards [data-part='footer'] {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   align-self: stretch;
   gap: var(--ds-spacing-2, 0.5rem);
   background: var(--ds-metric-card-footer-bg, transparent);
@@ -202,7 +229,7 @@
 }
 
 .ds-metrics-cards.ds-metrics-cards [data-part='change-badge'] {
-  padding: 4px 8px;
+  padding: var(--ds-spacing-1, 4px) var(--ds-spacing-2, 8px);
 }
 
 /* trend icon + change text — 2-tone ---------------------------------------- */
@@ -232,7 +259,7 @@
 .ds-metrics-cards.ds-metrics-cards [data-part='meter-track'] {
   inline-size: 100%;
   block-size: var(--ds-metric-card-meter-height, 6px);
-  margin-block-start: 4px;
+  margin-block-start: var(--ds-spacing-1, 4px);
   overflow: hidden;
   background: var(--ds-metric-card-meter-track, var(--ds-color-bg-tertiary));
   border-radius: 999px;

@@ -41,57 +41,113 @@
  * byte-identical border formulas. They are NOT unified here: each file resolves
  * its own literal today, and a future edit to one must not move the other's
  * pixels. One token set per component.
+ *
+ * C-12 WAVE (record/detail composition):
+ *  - DENSITY: a single private `--_ds-record-density` channel (the canonical
+ *    `--ds-density-global-effective-scale` composite, fallback 1) scales the
+ *    family's deliberate px geometry — paddings and grid gaps — so the field
+ *    grid reads dense under a compact tenant posture and airy under a
+ *    spacious one without a single tenant selector.
+ *  - TYPOGRAPHY AXIS: label case rides the personality channel
+ *    `--ds-typography-label-transform` (fallback `uppercase`, the exact
+ *    pre-wave render): BitHire's authored `sentence` shield and The
+ *    Management's registry `capitalize` reach every record label; the mono
+ *    family + 0.12em tracking stay the family's shared data-label voice
+ *    (tenant font packs diverge underneath). Values ride
+ *    `--ds-type-numeric-font-variant-numeric` (fallback `normal`): technical
+ *    profiles get tabular lining figures, editorial ones oldstyle.
+ *  - GEOMETRY/EDGE: card radii resolve `--ds-radius-*` with the exact
+ *    pre-wave literals as fallbacks; frame widths resolve the expressive
+ *    `--ds-edge-standard-width` (floor 1px); the action-bar rule resolves
+ *    `--ds-divider-width`/`--ds-divider-style` (floor 1px solid) so ruled or
+ *    dashed tenant divider grammar reaches the record chrome.
+ *  - STATES: `data-loading` reserves the label/value footprint with
+ *    Skeleton bars; `data-error` paints the error frame + icon + copy
+ *    (never colour-only); `data-empty` now also expresses as a dashed frame
+ *    (a shape cue forced-colors keeps).
+ *
+ * C1 ELEVATION (record ledger + docked rail):
+ *  - ONE DATA PLANE: the field grid stops reading as a wall of N identical
+ *    mini-cards and becomes ONE ledger — a single frame, a single radius and
+ *    hairline seams between cells (the RecordFacts / facts-card anatomy:
+ *    `gap` = the divider-grammar width over the family's hairline colour,
+ *    cells painting the plane surface). Cells stretch so row seams stay
+ *    level; the inline auto-fit measure channel still drives the 2→1
+ *    reflow, and the seams survive the collapse as row rules at 320/390px.
+ *    A RecordField OUTSIDE a grid keeps its standalone card untouched.
+ *    The seam's width leg rides `--ds-divider-width`; its style leg cannot
+ *    paint through a grid gap, so ledger seams stay solid — ruled/dashed
+ *    tenant postures keep reaching every other seam of the family.
+ *  - CELL STATES RE-EXPRESSED: hover is a quiet wash over the plane, the
+ *    focus-within path an inset keyline, the per-field error an inset
+ *    error keyline + wash (declared last so it persists through hover and
+ *    focus, C-12 law), and the empty cell an inset DASHED outline — the
+ *    same shape cue the standalone card carries, forced-colors safe.
+ *  - DOCKED ACTION RAIL: the action bar becomes a real sticky dock
+ *    (`inset-block-end: 0`). In-flow sticky never overlays content (it
+ *    reserves its own box), and the opaque `--ds-surface-canvas` paint
+ *    (the canonical dock surface, edit-fields toggle precedent) plus the
+ *    divider-grammar seam keep scrolled content from bleeding through —
+ *    the translucent gradient it replaces would have.
  */
 
 /* --- RecordSummaryStrip ---------------------------------------------------- */
 
+/* One private density factor per block root: every root stamps both scope
+   classes + data-structure, so a single declaration covers the family. */
+.ds-structure.ds-record[data-structure='record'] {
+  --_ds-record-density: var(--ds-density-global-effective-scale, 1);
+}
+
 .ds-structure.ds-record[data-part='summary-strip'] {
   inline-size: 100%;
-  padding: 18px;
-  border-radius: 18px;
+  padding: calc(18px * var(--_ds-record-density, 1));
+  border-radius: var(--ds-radius-xl, 18px);
 }
 
 .ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'] {
-  padding: 20px;
+  padding: calc(20px * var(--_ds-record-density, 1));
 }
 
 .ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-grid'] {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 16px;
+  /* min(100%, …) guard: a sub-measure container re-flows to one column
+     instead of overflowing (320px and below). */
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 11.25rem), 1fr));
+  gap: calc(16px * var(--_ds-record-density, 1));
 }
 
 .ds-structure.ds-record[data-part='summary-strip'][data-variant='technical'] [data-part='summary-grid'] {
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 13.75rem), 1fr));
 }
 
 .ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'] [data-part='summary-grid'] {
-  gap: 18px;
+  gap: calc(18px * var(--_ds-record-density, 1));
 }
 
 .ds-structure.ds-record[data-part='summary-strip'][data-variant='default'] {
   background: color-mix(in srgb, var(--ds-color-bg-secondary) 88%, transparent);
-  border: 1px solid var(--ds-color-border-secondary);
+  border: var(--ds-edge-standard-width, 1px) solid var(--ds-color-border-secondary);
 }
 
 .ds-structure.ds-record[data-part='summary-strip'][data-variant='editorial'] {
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-primary) 12%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-secondary) 90%, transparent) 100%);
-  border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, var(--ds-color-bg-primary) 18%);
+  border: var(--ds-edge-standard-width, 1px) solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, var(--ds-color-bg-primary) 18%);
 }
 
 .ds-structure.ds-record[data-part='summary-strip'][data-variant='technical'] {
   background: color-mix(in srgb, var(--ds-color-bg-secondary) 94%, transparent);
-  border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 84%, var(--ds-color-text-muted) 16%);
+  border: var(--ds-edge-standard-width, 1px) solid color-mix(in srgb, var(--ds-color-border-secondary) 84%, var(--ds-color-text-muted) 16%);
 }
 
 .ds-structure.ds-record[data-part='summary-strip'][data-variant='governance'] {
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-primary) 18%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-secondary) 94%, transparent) 100%);
-  border: 1px solid color-mix(in srgb, var(--ds-color-border) 62%, var(--ds-color-bg-primary) 38%);
+  border: var(--ds-edge-standard-width, 1px) solid color-mix(in srgb, var(--ds-color-border) 62%, var(--ds-color-bg-primary) 38%);
 }
 
 .ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'] {
   background: color-mix(in srgb, var(--ds-color-bg-primary) 18%, var(--ds-color-bg-secondary) 82%);
-  border: 1px solid var(--ds-color-border-secondary);
+  border: var(--ds-edge-standard-width, 1px) solid var(--ds-color-border-secondary);
 }
 
 .ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-item'] {
@@ -117,12 +173,36 @@
 .ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-item-label'] {
   font-family: var(--ds-font-family-mono, monospace);
   letter-spacing: 0.12em;
-  text-transform: uppercase;
+  /* Personality channel: BitHire's authored `sentence` shield and The
+     Management's registry `capitalize` reach the label; absent a personality
+     the exact pre-wave uppercase stands. */
+  text-transform: var(--ds-typography-label-transform, uppercase);
 }
 
 .ds-structure.ds-record[data-part='summary-strip'][data-variant] [data-part='summary-item-value'] {
   color: var(--ds-color-text-primary);
   word-break: break-word;
+  /* Numeric posture channel: technical profiles read tabular lining figures,
+     editorial ones oldstyle; the floor keeps the pre-wave `normal`. The
+     metrics variant's explicit tabular-nums below still wins its own rule. */
+  font-variant-numeric: var(--ds-type-numeric-font-variant-numeric, normal);
+}
+
+/* Loading: the skeleton wrappers reserve the exact line boxes the label and
+   value occupy once resolved (xs × 1.35, sm × 1.6), so late content lands
+   without a jump. */
+.ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-item-skeleton-label'],
+.ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-item-skeleton-value'] {
+  display: flex;
+  align-items: center;
+}
+
+.ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-item-skeleton-label'] {
+  block-size: calc(var(--ds-font-size-xs, 0.75rem) * 1.35);
+}
+
+.ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-item-skeleton-value'] {
+  block-size: calc(var(--ds-font-size-sm, 0.875rem) * 1.6);
 }
 
 .ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-item-value'][data-mono='true'] {
@@ -145,29 +225,104 @@
 
 .ds-structure.ds-record[data-part='field-grid'] {
   display: grid;
-  gap: 14px;
+  gap: calc(14px * var(--_ds-record-density, 1));
   inline-size: 100%;
   align-items: start;
+}
+
+/* --- The grid as ONE data ledger (C1) ----------------------------------------
+   Frame + hairline seams replace the per-field card stack: cells stretch to
+   their row so horizontal seams stay level, and `overflow: hidden` clips the
+   corner cells to the shared radius (nested-radius law: the container has no
+   padding, so the cells keep no radius of their own). The seam width rides
+   the tenant divider grammar; the hairline colour is the same family border
+   the mini-cards painted per-field, now spent ONCE per seam. Border colour
+   clears the P-48 floor from the two scope classes + the two DISTINCT
+   contract attributes (data-part, data-structure — always stamped). */
+.ds-structure.ds-record[data-part='field-grid'][data-structure='record'] {
+  align-items: stretch;
+  gap: var(--ds-divider-width, 1px);
+  border: var(--ds-edge-standard-width, 1px) solid var(--ds-color-border-secondary);
+  border-radius: var(--ds-radius-lg, 14px);
+  background: var(--ds-color-border-secondary);
+  overflow: hidden;
+}
+
+/* Ledger cell: the standalone card frame goes quiet inside the grid (this
+   chain reaches (0,6,0) from the two scope class pairs + the two distinct
+   parts — no repeated class or attribute — so it outranks every standalone
+   rule below). The plane surface is the family's card channel, the same
+   paint RecordPanel and FormFactsCard already spend. */
+.ds-structure.ds-record[data-part='field-grid'] > .ds-structure.ds-record[data-part='field'] {
+  border: none;
+  border-radius: 0;
+  background: var(--ds-surface-card, var(--ds-color-bg-elevated));
+}
+
+/* The mono cell keeps its technical tint, mixed onto the plane (opaque). */
+.ds-structure.ds-record[data-part='field-grid'] > .ds-structure.ds-record[data-part='field'][data-mono='true'] {
+  background: color-mix(in srgb, var(--ds-color-bg-secondary) 30%, var(--ds-surface-card, var(--ds-color-bg-elevated)));
+}
+
+/* The empty cell is a deliberate unfilled slot: the RecordFacts empty fill
+   (opaque mix) plus an inset DASHED outline — the shape cue the standalone
+   card carries as a dashed border, re-expressed so it survives the lost
+   frame and forced colors. */
+.ds-structure.ds-record[data-part='field-grid'] > .ds-structure.ds-record[data-part='field'][data-empty='true'] {
+  background: color-mix(in srgb, var(--ds-color-bg-secondary) 52%, var(--ds-surface-card, var(--ds-color-bg-elevated)));
+  outline: var(--ds-edge-standard-width, 1px) dashed var(--ds-color-border);
+  outline-offset: -4px;
+}
+
+/* Cell hover: a quiet wash over the plane (hover-capable only). Declared
+   after the mono/empty fills so it reaches every cell; the dashed empty
+   outline stays, so the slot cue never disappears under the pointer. */
+@media (hover: hover) {
+  .ds-structure.ds-record[data-part='field-grid'] > .ds-structure.ds-record[data-part='field']:hover {
+    background: color-mix(in srgb, var(--ds-color-bg-secondary) 30%, var(--ds-surface-card, var(--ds-color-bg-elevated)));
+  }
+}
+
+/* Keyboard path into the copy button / linked value: an inset keyline that
+   never shifts the ledger's geometry. */
+.ds-structure.ds-record[data-part='field-grid'] > .ds-structure.ds-record[data-part='field']:focus-within {
+  box-shadow: inset 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, var(--ds-color-primary));
+}
+
+/* Cell error: error wash + inset error keyline, declared LAST so the state
+   persists through hover and focus-within instead of snapping to a neutral
+   cell (C-12 law). The icon + copy below carry the meaning; never paint
+   alone. */
+.ds-structure.ds-record[data-part='field-grid'] > .ds-structure.ds-record[data-part='field'][data-error='true'] {
+  background: color-mix(in srgb, var(--ds-color-error) 5%, var(--ds-surface-card, var(--ds-color-bg-elevated)));
+  box-shadow: inset 0 0 0 var(--ds-edge-standard-width, 1px) color-mix(in srgb, var(--ds-color-error) 62%, var(--ds-color-border-secondary));
 }
 
 /* --- RecordField ----------------------------------------------------------- */
 
 .ds-structure.ds-record[data-part='field'] {
   min-inline-size: 0;
-  padding: 12px 14px;
-  border-radius: 14px;
+  padding: calc(12px * var(--_ds-record-density, 1)) calc(14px * var(--_ds-record-density, 1));
+  border-radius: var(--ds-radius-lg, 14px);
 }
 
 .ds-structure.ds-record[data-part='field'][data-mono='false'] {
-  border: 1px solid var(--ds-color-border-secondary);
+  border: var(--ds-edge-standard-width, 1px) solid var(--ds-color-border-secondary);
   background: color-mix(in srgb, var(--ds-color-bg-secondary) 88%, transparent);
 }
 
 /* The mono field is the ID / key affordance: a firmer border and a denser fill
    than the prose field beside it. */
 .ds-structure.ds-record[data-part='field'][data-mono='true'] {
-  border: 1px solid var(--ds-color-border);
+  border: var(--ds-edge-standard-width, 1px) solid var(--ds-color-border);
   background: color-mix(in srgb, var(--ds-color-bg-primary) 18%, var(--ds-color-bg-secondary) 82%);
+}
+
+/* The empty field is a deliberate placeholder, not a hole: the frame goes
+   dashed — a SHAPE cue that survives forced colors — while the "Not set"
+   copy keeps its tertiary ink. */
+.ds-structure.ds-record[data-part='field'][data-empty='true'] {
+  border-style: dashed;
 }
 
 /* Field interaction: the card is a read surface, so the affordance stays a
@@ -194,6 +349,50 @@
   border-color: var(--ds-focus-ring-color, var(--ds-color-primary));
 }
 
+/* Per-field error frame: error ink mixed onto the family's border voice.
+   `data-mono` is always stamped, so the chain ties the hover/focus-within
+   rules at (0,5,0) and wins by sorting AFTER them — the error state
+   persists through hover and focus instead of snapping to a neutral frame. */
+.ds-structure.ds-record[data-part='field'][data-error='true'][data-mono] {
+  border-color: color-mix(in srgb, var(--ds-color-error) 62%, var(--ds-color-border-secondary));
+}
+
+.ds-structure.ds-record[data-part='field'] [data-part='field-error-row'] {
+  min-inline-size: 0;
+}
+
+.ds-structure.ds-record[data-part='field'][data-error='true'] [data-part='field-error-icon'] {
+  flex-shrink: 0;
+  margin-block-start: 1px;
+  color: var(--ds-color-error);
+}
+
+/* The error copy must clear Typography's own skin (every `Text` is coloured
+   at (0,4,0) via `[data-color='default']`): the chain reaches (0,5,0) from
+   the two scope classes + field + data-error + field-error — no repeated
+   attribute (4th-tanda law). */
+.ds-structure.ds-record[data-part='field'][data-error='true'] [data-part='field-error'] {
+  color: var(--ds-color-error);
+  line-height: 1.4;
+}
+
+/* Loading: the skeleton wrappers reserve the exact line boxes the label and
+   value occupy once resolved (xs × 1.35, sm × 1.6 — the value rule below
+   paints line-height 1.6), so the resolving content lands without a jump. */
+.ds-structure.ds-record[data-part='field'] [data-part='field-skeleton-label'],
+.ds-structure.ds-record[data-part='field'] [data-part='field-skeleton-value'] {
+  display: flex;
+  align-items: center;
+}
+
+.ds-structure.ds-record[data-part='field'] [data-part='field-skeleton-label'] {
+  block-size: calc(var(--ds-font-size-xs, 0.75rem) * 1.35);
+}
+
+.ds-structure.ds-record[data-part='field'] [data-part='field-skeleton-value'] {
+  block-size: calc(var(--ds-font-size-sm, 0.875rem) * 1.6);
+}
+
 .ds-structure.ds-record[data-part='field'][data-empty] > * > [data-part='field-label'] {
   color: var(--ds-color-text-muted);
 }
@@ -201,7 +400,10 @@
 .ds-structure.ds-record[data-part='field'] [data-part='field-label'] {
   font-family: var(--ds-font-family-mono, monospace);
   letter-spacing: 0.12em;
-  text-transform: uppercase;
+  /* Personality channel (see the summary-item-label note): tenant label
+     casing reaches the read field; absent a personality the exact pre-wave
+     uppercase stands. */
+  text-transform: var(--ds-typography-label-transform, uppercase);
 }
 
 .ds-structure.ds-record[data-part='field'] [data-part='field-body'] {
@@ -220,6 +422,9 @@
 .ds-structure.ds-record[data-part='field'] [data-part='field-value'] {
   line-height: 1.6;
   word-break: break-word;
+  /* Numeric posture channel: tabular lining under a technical profile,
+     oldstyle under an editorial one; the floor keeps the pre-wave `normal`. */
+  font-variant-numeric: var(--ds-type-numeric-font-variant-numeric, normal);
 }
 
 .ds-structure.ds-record[data-part='field'][data-mono='true'] [data-part='field-value'] {
@@ -288,15 +493,27 @@
 
 /* --- RecordActionBar ------------------------------------------------------- */
 
+/* Sticky dock (C1): the rail docks to the block-end of its scroll context so
+   record actions stay reachable on long pages. In-flow sticky never overlays
+   content — it reserves its own box, so nothing scrolls UNDER the rail; the
+   opaque canonical canvas surface (the edit-fields sticky toggle precedent)
+   keeps what scrolls PAST it from bleeding through, which the translucent
+   gradient it replaces could not promise. The block-start padding keeps the
+   exact pre-dock air; the block-end padding is the dock's lower air. Safe-area
+   belongs to the app shell, not this rail. Ancestors with `overflow: hidden`
+   (a collapsible section shell) simply degrade the dock to static. */
 .ds-structure.ds-record[data-part='action-bar'] {
-  padding-block-start: 14px;
+  position: sticky;
+  inset-block-end: 0;
+  z-index: 1;
+  padding-block: calc(14px * var(--_ds-record-density, 1)) calc(10px * var(--_ds-record-density, 1));
 }
 
 .ds-structure.ds-record[data-part='action-bar'][data-structure='record'] {
-  border-top: 1px solid var(--ds-color-border-secondary);
-  background-image: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-secondary) 34%, transparent) 0%, transparent 100%);
-  background-size: 100% 100%;
-  background-position: 0 0;
+  /* Divider grammar channels: a ruled/dashed tenant divider posture reaches
+     the rail's top rule; floors keep the exact 1px solid pre-wave render. */
+  border-top: var(--ds-divider-width, 1px) var(--ds-divider-style, solid) var(--ds-color-border-secondary);
+  background: var(--ds-surface-canvas, var(--ds-color-bg-primary));
 }
 
 .ds-structure.ds-record[data-part='action-bar'] > [data-part='action-bar-meta'] {
@@ -317,7 +534,7 @@
 .ds-structure.ds-record[data-part='action-bar'] [data-part='action-bar-meta-label'] {
   font-family: var(--ds-font-family-mono, monospace);
   letter-spacing: 0.12em;
-  text-transform: uppercase;
+  text-transform: var(--ds-typography-label-transform, uppercase);
 }
 
 .ds-structure.ds-record[data-part='action-bar'] > [data-part='action-bar-meta'] [data-part='action-bar-meta-text'] {
@@ -332,12 +549,12 @@
 
 .ds-structure.ds-record[data-part='panel'] {
   inline-size: 100%;
-  padding: 18px;
+  padding: calc(18px * var(--_ds-record-density, 1));
 }
 
 .ds-structure.ds-record[data-part='panel'][data-structure='record'] {
-  border-radius: 18px;
-  border: 1px solid var(--ds-color-border-secondary);
+  border-radius: var(--ds-radius-xl, 18px);
+  border: var(--ds-edge-standard-width, 1px) solid var(--ds-color-border-secondary);
   background: var(--ds-surface-card, var(--ds-color-bg-elevated));
 }
 
@@ -351,7 +568,9 @@
 
 /* --- forced colors: system colors only. Frames re-express as ButtonText,
    the empty-value tint flattens to GrayText, and the copy/link affordances
-   keep their icon shapes. -------------------------------------------------- */
+   keep their icon shapes. The empty field keeps its dashed frame (a style,
+   not a colour) and the error field keeps its icon + copy, so neither state
+   ever depended on paint. -------------------------------------------------- */
 @media (forced-colors: active) {
   .ds-structure.ds-record[data-part='summary-strip'][data-variant='default'],
   .ds-structure.ds-record[data-part='summary-strip'][data-variant='editorial'],
@@ -379,6 +598,11 @@
     color: GrayText;
   }
 
+  .ds-structure.ds-record[data-part='field'][data-error='true'] [data-part='field-error'],
+  .ds-structure.ds-record[data-part='field'][data-error='true'] [data-part='field-error-icon'] {
+    color: CanvasText;
+  }
+
   .ds-structure.ds-record[data-part='field'] .ds-record__field-link:focus-visible {
     outline: 2px solid Highlight;
     outline-offset: 2px;
@@ -386,5 +610,31 @@
 
   .ds-structure.ds-record[data-part='field'][data-mono]:focus-within {
     border-color: Highlight;
+  }
+
+  /* Ledger re-expression (C1): the gap-painted seams are forced away with
+     every background, so each cell re-asserts its segment as a non-shifting
+     system-colour outline (the RecordFacts FC recipe); the empty cell keeps
+     its dashed slot cue, and the keyboard path re-keys to Highlight. */
+  .ds-structure.ds-record[data-part='field-grid'][data-structure='record'] {
+    border-color: ButtonText;
+    background: Canvas;
+  }
+
+  .ds-structure.ds-record[data-part='field-grid'] > .ds-structure.ds-record[data-part='field'] {
+    background: Canvas;
+    box-shadow: none;
+    outline: 1px solid ButtonText;
+    outline-offset: -1px;
+  }
+
+  .ds-structure.ds-record[data-part='field-grid'] > .ds-structure.ds-record[data-part='field'][data-empty='true'] {
+    outline-style: dashed;
+    outline-offset: -4px;
+  }
+
+  .ds-structure.ds-record[data-part='field-grid'] > .ds-structure.ds-record[data-part='field']:focus-within {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
   }
 }

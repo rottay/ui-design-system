@@ -1,3 +1,13 @@
+/* R1 Cohort 1 — FIELD GROUP COHERENCE.
+ *
+ * Measured cause: the REST arm already read the control role, but every OTHER
+ * arm dropped the role link and fell back straight to --ds-surface-control,
+ * and the filled variant read --ds-surface-inset directly. So Select agreed
+ * with Input at rest and diverged the moment any state painted, which is where
+ * the residual cool tint entered. Each state arm now resolves through its
+ * STATE-MATCHED role channel with --ds-select-* kept senior as the chrome tier.
+ */
+
 /**
  * Modern Select skin.
  *
@@ -60,6 +70,11 @@
 .ds-select-shell.ds-select-shell--modern[data-part='root'] {
   position: relative;
   inline-size: 100%;
+  /* Mobile keyboard posture: when the OS/browser scrolls the focused trigger
+     into view (virtual keyboard shrinks the visual viewport), one rhythm of
+     breathing room keeps the field clear of the viewport edge and of any
+     sticky chrome instead of landing flush against it. */
+  scroll-margin-block: var(--ds-spacing-6, 1.5rem);
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'],
@@ -68,7 +83,10 @@
   inline-size: 100%;
   min-inline-size: 0;
   align-items: center;
-  gap: var(--ds-select-trigger-gap, var(--ds-spacing-2));
+  /* Affix rhythm joins the field family: the Input gap channel sits between
+     the trigger's own channel and the raw spacing fallback, so a tenant's
+     affix cadence (bithire 7px / editorial 9px) lands here unchanged. */
+  gap: var(--ds-select-trigger-gap, var(--ds-input-gap, var(--ds-spacing-2)));
   /* Density: the tenant density axis scales the control height like every
      other input sibling (Input/Button/textarea idiom); the 44px coarse
      pointer floor below still wins. */
@@ -83,7 +101,9 @@
     var(--ds-select-trigger-padding-x, 12px)
   );
   color: var(--ds-select-color, var(--ds-color-text-primary));
-  font-family: var(--ds-select-font-family, inherit);
+  /* The trigger speaks the field family's type: deterministic base family
+     through the Input channel instead of whatever the parent happens to set. */
+  font-family: var(--ds-select-font-family, var(--ds-input-font-family, inherit));
   font-size: var(
     --ds-select-trigger-responsive-font-size,
     var(--ds-select-trigger-font-size, 14px)
@@ -112,8 +132,14 @@
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-part='trigger'],
 .ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger'][data-part='trigger'] {
-  border: var(--ds-select-border-width) solid
-    var(--ds-select-border-color, var(--ds-color-border));
+  /* Field edge = ONE chain shared with input.css. The EDGE AXIS owns width and
+     style (TMM ruled finally reaches the field group; BitHire stays hairline),
+     the MATERIAL role owns colour, and --ds-select-* stays senior as chrome.
+     --ds-material-control-border is a colour channel and carries no weight, so
+     mixing the two categories in one token would have been a category error. */
+  border: var(--ds-select-border-width, var(--ds-edge-standard-width, 1px))
+    var(--ds-edge-standard-style, solid)
+    var(--ds-select-border-color, var(--ds-material-control-border, var(--ds-color-border)));
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'] {
@@ -129,68 +155,104 @@
   padding-inline-end: var(--ds-select-native-arrow-clearance, 2rem);
 }
 
-/* ---- Public size geometry (the Input scale: 28/32/36/40/44). Responsive
-       sizes write the `--ds-select-trigger-responsive-*` channels in the
-       engine's generated media rules; the trigger's fallback chains above
-       consume them, so both paths share this geometry. ---- */
+/* ---- Public size geometry. FIELD-FAMILY GEOMETRY LAW (C-02): a Select
+       sitting next to an Input in the same form must read as the SAME control
+       family, so every per-size fallback chain passes through the Input
+       geometry channels (`--ds-input-{size}-*`, tenant-authored) before the
+       historical literal. The documented `--ds-select-trigger-*` channels stay
+       first in the chain: a tenant that authors them keeps full control.
+       Render deltas are deliberate alignment, not drift — bithire md stays
+       36px (its input md) while its trigger type joins the input's 13px; an
+       editorial spacious tenant (input md 40px) now gets a 40px trigger
+       instead of a 36px stranger. Responsive sizes write the
+       `--ds-select-trigger-responsive-*` channels in the engine's generated
+       media rules; the trigger's fallback chains above consume them, so both
+       paths share this geometry. ---- */
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'][data-size='xs'] [data-part='trigger'] {
-  --ds-select-trigger-height: var(--ds-select-trigger-xs-height, 28px);
-  --ds-select-trigger-padding-x: var(--ds-select-trigger-xs-padding-x, 8px);
-  --ds-select-trigger-font-size: var(--ds-select-trigger-xs-font-size, 12px);
-  --ds-select-trigger-line-height: var(--ds-select-trigger-xs-line-height, 16px);
+  --ds-select-trigger-height: var(--ds-select-trigger-xs-height, var(--ds-input-xs-height, 28px));
+  --ds-select-trigger-padding-x: var(--ds-select-trigger-xs-padding-x, var(--ds-input-xs-padding-x, 8px));
+  --ds-select-trigger-font-size: var(--ds-select-trigger-xs-font-size, var(--ds-input-xs-font-size, 12px));
+  --ds-select-trigger-line-height: var(--ds-select-trigger-xs-line-height, var(--ds-input-xs-line-height, 16px));
   --ds-select-native-arrow-inset: var(--ds-select-trigger-padding-x);
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'][data-size='sm'] [data-part='trigger'] {
-  --ds-select-trigger-height: var(--ds-select-trigger-sm-height, 32px);
-  --ds-select-trigger-padding-x: var(--ds-select-trigger-sm-padding-x, 10px);
-  --ds-select-trigger-font-size: var(--ds-select-trigger-sm-font-size, 14px);
-  --ds-select-trigger-line-height: var(--ds-select-trigger-sm-line-height, 20px);
+  --ds-select-trigger-height: var(--ds-select-trigger-sm-height, var(--ds-input-sm-height, 32px));
+  --ds-select-trigger-padding-x: var(--ds-select-trigger-sm-padding-x, var(--ds-input-sm-padding-x, 10px));
+  --ds-select-trigger-font-size: var(--ds-select-trigger-sm-font-size, var(--ds-input-sm-font-size, 14px));
+  --ds-select-trigger-line-height: var(--ds-select-trigger-sm-line-height, var(--ds-input-sm-line-height, 20px));
   --ds-select-native-arrow-inset: var(--ds-select-trigger-padding-x);
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'][data-size='md'] [data-part='trigger'] {
-  --ds-select-trigger-height: var(--ds-select-trigger-md-height, 36px);
-  --ds-select-trigger-padding-x: var(--ds-select-trigger-md-padding-x, 12px);
-  --ds-select-trigger-font-size: var(--ds-select-trigger-md-font-size, 14px);
-  --ds-select-trigger-line-height: var(--ds-select-trigger-md-line-height, 20px);
+  --ds-select-trigger-height: var(--ds-select-trigger-md-height, var(--ds-input-md-height, 36px));
+  --ds-select-trigger-padding-x: var(--ds-select-trigger-md-padding-x, var(--ds-input-md-padding-x, 12px));
+  --ds-select-trigger-font-size: var(--ds-select-trigger-md-font-size, var(--ds-input-md-font-size, 14px));
+  --ds-select-trigger-line-height: var(--ds-select-trigger-md-line-height, var(--ds-input-md-line-height, 20px));
   --ds-select-native-arrow-inset: var(--ds-select-trigger-padding-x);
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'][data-size='lg'] [data-part='trigger'] {
-  --ds-select-trigger-height: var(--ds-select-trigger-lg-height, 40px);
-  --ds-select-trigger-padding-x: var(--ds-select-trigger-lg-padding-x, 14px);
-  --ds-select-trigger-font-size: var(--ds-select-trigger-lg-font-size, 16px);
-  --ds-select-trigger-line-height: var(--ds-select-trigger-lg-line-height, 24px);
+  --ds-select-trigger-height: var(--ds-select-trigger-lg-height, var(--ds-input-lg-height, 40px));
+  --ds-select-trigger-padding-x: var(--ds-select-trigger-lg-padding-x, var(--ds-input-lg-padding-x, 14px));
+  --ds-select-trigger-font-size: var(--ds-select-trigger-lg-font-size, var(--ds-input-lg-font-size, 16px));
+  --ds-select-trigger-line-height: var(--ds-select-trigger-lg-line-height, var(--ds-input-lg-line-height, 24px));
   --ds-select-native-arrow-inset: var(--ds-select-trigger-padding-x);
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'][data-size='xl'] [data-part='trigger'] {
-  --ds-select-trigger-height: var(--ds-select-trigger-xl-height, 44px);
-  --ds-select-trigger-padding-x: var(--ds-select-trigger-xl-padding-x, 16px);
-  --ds-select-trigger-font-size: var(--ds-select-trigger-xl-font-size, 16px);
-  --ds-select-trigger-line-height: var(--ds-select-trigger-xl-line-height, 24px);
+  --ds-select-trigger-height: var(--ds-select-trigger-xl-height, var(--ds-input-xl-height, 44px));
+  --ds-select-trigger-padding-x: var(--ds-select-trigger-xl-padding-x, var(--ds-input-xl-padding-x, 16px));
+  --ds-select-trigger-font-size: var(--ds-select-trigger-xl-font-size, var(--ds-input-xl-font-size, 16px));
+  --ds-select-trigger-line-height: var(--ds-select-trigger-xl-line-height, var(--ds-input-xl-line-height, 24px));
   --ds-select-native-arrow-inset: var(--ds-select-trigger-padding-x);
 }
 
 /* ---- Interaction and semantic states (Input grammar: flat + hairline). ---- */
 
-.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger']:not([data-disabled='true']):not([data-open='true']):not([data-status='error']):not([data-status='warning']):hover {
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger']:not([data-disabled='true']):not([data-open='true']):not([data-status='error']):not([data-status='warning']):not([data-status='success']):hover {
   border-color: var(--ds-select-border-color-hover, var(--ds-color-border-hover));
-  background: var(--ds-select-bg-hover, var(--ds-select-bg, var(--ds-surface-control)));
+  background: var(--ds-select-bg-hover, var(--ds-material-control-background-hover, var(--ds-select-bg, var(--ds-surface-control))));
   box-shadow: var(--ds-select-shadow-hover, var(--ds-select-shadow, none));
 }
 
+/* Focus grammar, custom branch: a CLOSED div trigger focused by keyboard
+   earns the same border + ring the native <select> gets (previously only the
+   open state painted focus, so tab-arrival on a closed custom select was
+   invisible). Pointer opens keep reading through data-open, so this adds
+   keyboard parity without changing the click posture. */
 .ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-open='true'],
+.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger']:focus-visible,
 .ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger']:focus-visible {
   border-color: var(--ds-select-border-color-focus, var(--ds-color-primary));
-  background: var(--ds-select-bg-focus, var(--ds-select-bg, var(--ds-surface-control)));
+  background: var(--ds-select-bg-focus, var(--ds-material-control-background-active, var(--ds-select-bg, var(--ds-surface-control))));
   box-shadow: var(--ds-select-shadow-focus, var(--ds-focus-ring));
 }
 
+/* State borders survive focus (Input grammar): an invalid/warning/success
+   trigger keeps its state hue on the frame while the ring arrives — the
+   focus read must never wash out the validation read. */
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-status='error']:focus-visible,
+.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-status='error'][data-open='true'] {
+  border-color: var(--ds-select-error-border, var(--ds-color-error));
+  background: var(--ds-select-error-bg, var(--ds-select-bg, var(--ds-surface-control)));
+}
+
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-status='warning']:focus-visible,
+.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-status='warning'][data-open='true'] {
+  border-color: var(--ds-select-warning-border, var(--ds-color-warning));
+  background: var(--ds-select-warning-bg, var(--ds-select-bg, var(--ds-surface-control)));
+}
+
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-status='success']:focus-visible,
+.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-status='success'][data-open='true'] {
+  border-color: var(--ds-select-success-border, var(--ds-color-success));
+  background: var(--ds-select-success-bg, var(--ds-select-bg, var(--ds-surface-control)));
+}
+
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-variant='filled'] {
-  background: var(--ds-select-filled-bg, var(--ds-surface-inset, var(--ds-surface-canvas)));
+  background: var(--ds-select-filled-bg, var(--ds-material-inset-background, var(--ds-surface-inset, var(--ds-surface-canvas))));
   border-color: var(--ds-select-filled-border, transparent);
 }
 
@@ -427,7 +489,10 @@
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='loading-spinner'][data-part='loading-spinner'] {
-  border: 2px solid
+  /* Icon weight follows the personality: the Input family's loading-stroke
+     channel (unitless SVG weight) is projected onto the ring's border width.
+     The ×1px projection keeps the unset render byte-identical (2 -> 2px). */
+  border: calc(var(--ds-input-loading-stroke, 2) * 1px) solid
     color-mix(in srgb, var(--ds-color-primary) 28%, var(--ds-color-border));
   border-top-color: var(--ds-color-primary);
   border-radius: 50%;
@@ -520,6 +585,11 @@
   display: grid;
   gap: 0.2rem;
   max-block-size: var(--ds-select-max-height, 240px);
+  /* Mobile keyboard posture: the panel also yields to the small-viewport
+     height so an open list never disappears behind the virtual keyboard or
+     dynamic browser chrome. The plain declaration above is the fallback for
+     engines without svh support (the min() line is simply dropped there). */
+  max-block-size: min(var(--ds-select-max-height, 240px), 60svh);
   overflow-x: hidden;
   overflow-y: auto;
   scrollbar-color: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border)) transparent;
@@ -759,7 +829,8 @@
 }
 
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='loading-state'] [data-part='loading-spinner'][data-part='loading-spinner'] {
-  border: 2px solid
+  /* Same loading-stroke projection as the trigger ring (icon weight axis). */
+  border: calc(var(--ds-input-loading-stroke, 2) * 1px) solid
     color-mix(in srgb, var(--ds-color-primary) 28%, var(--ds-color-border));
   border-top-color: var(--ds-color-primary);
   border-radius: 50%;
@@ -798,6 +869,14 @@
   }
 }
 
+/* Reduced transparency: a tenant's opt-in backdrop blur never survives an
+   explicit user request for opaque surfaces. */
+@media (prefers-reduced-transparency: reduce) {
+  .ds-select-shell__dropdown[data-part='dropdown'] {
+    backdrop-filter: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'],
   .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='arrow-icon'],
@@ -824,6 +903,13 @@
   .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-variant] {
     forced-color-adjust: auto;
     border-color: ButtonText;
+  }
+
+  /* Invalid is never color-only: with hues forced away, the error trigger
+     keeps a heavier frame (shape signal) on top of the engine's
+     aria-invalid + message anatomy. */
+  .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-status='error'] {
+    border-width: 2px;
   }
 
   .ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-open='true'],

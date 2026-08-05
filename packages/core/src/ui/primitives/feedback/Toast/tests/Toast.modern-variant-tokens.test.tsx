@@ -80,7 +80,9 @@ describe('Toast modern engine — the skin derives every variant from tokens', (
   });
 
   it('uses one tokenized full-border recipe for every tone', () => {
-    expect(SKIN).toContain('border: 1px solid color-mix(in srgb, var(--ds-toast-accent) 30%, var(--ds-color-border-subtle));');
+    expect(SKIN).toContain(
+      'border: var(--ds-edge-standard-width, 1px) var(--ds-edge-standard-style, solid) color-mix(in srgb, var(--ds-toast-accent) 30%, var(--ds-color-border-subtle));',
+    );
   });
 
   it('never introduces a one-sided decorative border rail', () => {

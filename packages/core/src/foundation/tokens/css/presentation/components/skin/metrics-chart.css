@@ -37,7 +37,8 @@
   display: flex;
   flex-direction: column;
   block-size: var(--_ds-dashboard-panel-block-size, calc(415px * var(--ds-rhythm-effective-scale, 1)));
-  padding: 16px;
+  /* Panel frame rides the tenant density plane (metrics-cards idiom). */
+  padding: calc(16px * var(--ds-density-effective-scale, 1));
   position: relative;
   overflow: hidden;
   background: var(--ds-signal-card-bg, var(--ds-premium-card-bg, var(--ds-color-bg-secondary)));
@@ -48,9 +49,9 @@
   border: 1px solid var(--ds-signal-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary)));
 }
 .ds-metrics-chart.ds-metrics-chart [data-part='header'] {
-  /* Header geometry drained from the engine. */
-  padding-block-end: 12px;
-  margin-block-end: 12px;
+  /* Header geometry drained from the engine; the rung scales with density. */
+  padding-block-end: var(--ds-spacing-3, 12px);
+  margin-block-end: var(--ds-spacing-3, 12px);
   position: relative;
 }
 .ds-metrics-chart.ds-metrics-chart [data-part='header'][data-part='header'] {
@@ -75,8 +76,8 @@
   color: var(--ds-signal-card-title-color, var(--ds-color-text-primary));
 }
 .ds-metrics-chart.ds-metrics-chart [data-part='live-badge'] {
-  /* Badge padding drained from the engine. */
-  padding: 4px 8px;
+  /* Badge padding drained from the engine; the rungs scale with density. */
+  padding: var(--ds-spacing-1, 4px) var(--ds-spacing-2, 8px);
   background: var(--ds-signal-card-badge-bg, var(--ds-color-success-100));
 }
 .ds-metrics-chart.ds-metrics-chart [data-part='live-badge'][data-part='live-badge'] {
@@ -187,7 +188,7 @@
 /* progress row — rhythm drained from the engine ---------------------------- */
 
 .ds-metrics-chart.ds-metrics-chart [data-part='progress-row'] {
-  margin-block-start: 4px;
+  margin-block-start: var(--ds-spacing-1, 4px);
 }
 
 /* progress row — label static, percent 3-tone (success / warning) ----------- */

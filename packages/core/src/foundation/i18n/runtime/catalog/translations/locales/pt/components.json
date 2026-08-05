@@ -804,7 +804,9 @@
     "moreOptions": "Mais opções",
     "export": "Exportar",
     "active": "ativos",
-    "clearAll": "Limpar tudo"
+    "clearAll": "Limpar tudo",
+    "draft": "rascunho",
+    "invalid": "inválido"
   },
   "dataTerminalCard": {
     "live": "AO VIVO",
@@ -1159,7 +1161,9 @@
   },
   "activeFiltersBar": {
     "more_count": "+{count} mais",
-    "show_less": "Mostrar menos"
+    "show_less": "Mostrar menos",
+    "state_draft": "rascunho",
+    "state_invalid": "inválido"
   },
   "brandStudio": {
     "tenantReport": {

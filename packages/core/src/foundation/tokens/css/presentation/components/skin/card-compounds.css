@@ -43,6 +43,13 @@
   gap: var(--ds-card-header-gap);
   min-inline-size: 0;
   min-height: var(--ds-card-header-min-height);
+  /* Protected header zone: the tenant band (`--ds-card-header-bg`, painted
+     below) wears the concentric corner the parent card body publishes for
+     its nested regions, so a painted band reads as ONE bounded region
+     related to the card corner. Unpainted (transparent channel) the radius
+     is invisible; outside a card the private is unset and the 0px fallback
+     preserves the previous square-edged band exactly. */
+  border-radius: var(--_ds-card-nest-radius, 0px);
   border-bottom: none;
   background: var(--ds-card-header-bg);
   background-position: 0% 50%;
@@ -128,7 +135,17 @@
   font-weight: var(--ds-font-weight-semibold);
   letter-spacing: var(--ds-card-header-eyebrow-tracking);
   line-height: 1.2;
-  text-transform: uppercase;
+  /* C1 overline grammar (C-07/C-12): the case follows the tenant's label
+     personality instead of a hardcoded technical uppercase. The overline
+     channel leads (an expressive profile that authors it wins), then the
+     label-transform channel (authored labelStyle: technical sentence vs
+     editorial capitalize), then the historical uppercase. Family stays on the
+     tenant mono pack, which already diverges (technical mono vs editorial
+     mono) — the overline is a voice, not a costume. */
+  text-transform: var(
+    --ds-page-header-eyebrow-text-transform,
+    var(--ds-typography-label-transform, uppercase)
+  );
 }
 .rottay-card-header > .rottay-card-header-content > [data-part='icon'][data-part='icon'] {
   display: inline-grid;
@@ -404,6 +421,13 @@
 }
 
 @media (forced-colors: active) {
+  /* the tenant band is a background image (gradients survive the system
+     color pass): silence it so header copy keeps system contrast */
+  .rottay-card-header[data-part='header'][data-part='header'] {
+    background: none;
+    box-shadow: none;
+  }
+
   .rottay-card-header > .rottay-card-header-content > [data-part='icon'][data-part='icon'],
   .rottay-card-header > [data-part='extra'][data-part='extra'],
   .rottay-card-footer > .rottay-card-footer-actions {

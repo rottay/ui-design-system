@@ -182,6 +182,9 @@
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
+  /* Scroll posture: the nav column is its own scroll region — a wheel/touch
+     fling at either end must not chain into the page behind the chrome. */
+  overscroll-behavior-block: contain;
   padding: var(
     --ds-shell-navigation-body-padding,
     var(
@@ -351,6 +354,93 @@
   box-shadow: var(--ds-shell-footer-shadow, none);
 }
 
+/* ---------------------------------------------------------------------------
+ * Anatomy variants (chrome.anatomy → data-anatomy-* on the DS root). Same
+ * closed vocabulary the modern Layout sider/header already honor
+ * (modern/skin/layout.css); scoped here to the AppShell chrome so the
+ * tenant's sidebar/layout anatomy reaches THIS shell too. `default`/absent
+ * renders the base above untouched.
+ *
+ * Sidebar panel/rail governs the interior rhythm cascaded to a nested nav
+ * through the existing `--ds-sidebar-*` channels only — the shell's TRACK
+ * width stays owned by the shell geometry (`--ds-shell-sidebar-width` /
+ * collapse state), so content avoidance can never desync from the rail.
+ * ------------------------------------------------------------------------- */
+
+/* sidebar panel: roomy, reading-first rhythm (the comfortable default). */
+[data-anatomy-sidebar='panel'] .rottay-app-shell__navigation-sidebar {
+  --ds-sidebar-item-padding-inline: var(--ds-spacing-3);
+  --ds-sidebar-item-gap: var(--ds-spacing-2);
+  --ds-sidebar-shell-padding-inline:
+    var(--ds-spacing-4) var(--ds-spacing-4)
+    calc(var(--ds-spacing-4) + 28px) var(--ds-spacing-4);
+}
+
+/* sidebar rail: narrow, scan-first; tight rhythm and compact padding. */
+[data-anatomy-sidebar='rail'] .rottay-app-shell__navigation-sidebar {
+  --ds-sidebar-item-gap: var(--ds-spacing-1);
+  --ds-sidebar-shell-padding-inline:
+    var(--ds-spacing-2) var(--ds-spacing-2)
+    calc(var(--ds-spacing-2) + 28px) var(--ds-spacing-2);
+}
+
+/* layout flat: the shell header merges with the canvas — no rule, radius,
+   elevation or backdrop tint. */
+[data-anatomy-layout='flat'] .rottay-app-shell__header {
+  border-block-end: 0;
+  border-radius: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* layout floating: the shell header lifts into an inset, rounded, elevated
+   card (mirrors the modern Layout.Header floating anatomy). */
+[data-anatomy-layout='floating'] .rottay-app-shell__header {
+  border-block-end: 0;
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-elevation-2);
+  margin: var(--ds-spacing-2);
+}
+
+/* ---------------------------------------------------------------------------
+ * CONTENT AVOIDANCE vs BottomTabBar (C-11). The bar is fixed chrome that
+ * publishes `--ds-bottom-tab-bar-reserved-block-end` on its own root; custom
+ * properties inherit DOWN, so the shell cannot read the bar's channel — but
+ * when the bar is composed INSIDE the shell (the sanctioned floatingContent
+ * slot), `:has()` lets the shell reserve the bar's geometry declaratively.
+ * The 50px base tracks the bar's content geometry exactly like the bar's own
+ * reservation hook (bottom-tab-bar.css documents the same contract — update
+ * both if that geometry changes). `max()` keeps any LARGER app-authored
+ * bottom inset (e.g. player chrome + tabs) intact, and
+ * `--ds-shell-main-padding-block-end` is the pre-existing public channel the
+ * main area already consumes, so no new hook is created. Browsers without
+ * `:has()` skip the rule: the app's explicit `geometry.bottomInset` contract
+ * keeps working as before (graceful degradation, not a new requirement).
+ * ------------------------------------------------------------------------- */
+.rottay-app-shell:has(.rottay-bottom-tab-bar[data-part='root']) .rottay-app-shell__main {
+  --ds-shell-main-padding-block-end: max(
+    var(--ds-shell-bottom-inset),
+    calc(50px + env(safe-area-inset-bottom, 0px))
+  );
+}
+
+/* ---------------------------------------------------------------------------
+ * COLLAPSED RAIL COMPOSITION (C-11 C1). The shell owns the collapsed TRACK
+ * (contract geometry, default 96px) while a standalone collapsed Menu pins
+ * its own 64px rail floor — composed inside this body that pin left the
+ * icon column hugging the reading edge with up to 16px of trailing slack
+ * (or clipped when a consumer authored a 64px track). The cross-family
+ * proto reassignment makes the shell-composed menu FILL the body so its
+ * flex-centered icon column lands on the track's optical center; the
+ * standalone menu keeps its byte-identical 64px fallback. The track width
+ * itself stays owned by the shell geometry — this channel only tells the
+ * menu to follow it, including through the collapse width transition.
+ * ------------------------------------------------------------------------- */
+.rottay-app-shell__navigation-body[data-collapsed='true'] {
+  --_ds-menu-collapsed-inline-size: 100%;
+}
+
 /* Direction-aware safe-area consumption (RTL). The physical `env()` readings
    are bridged into named channels by the engine's rootStyle; the LOGICAL
    paddings below must consume the physical reading of the edge they actually
@@ -379,15 +469,15 @@
   border-radius: var(--ds-radius-md, 8px);
   background: transparent;
   transition:
-    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+    background-color var(--ds-motion-feedback, var(--ds-motion-fast)) var(--ds-motion-ease-out, ease-out),
+    color var(--ds-motion-feedback, var(--ds-motion-fast)) var(--ds-motion-ease-out, ease-out);
 }
 
 .rottay-app-shell [data-part="navigation-trigger"] {
   border-radius: var(--ds-radius-md, 8px);
   transition:
-    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+    background-color var(--ds-motion-feedback, var(--ds-motion-fast)) var(--ds-motion-ease-out, ease-out),
+    color var(--ds-motion-feedback, var(--ds-motion-fast)) var(--ds-motion-ease-out, ease-out);
 }
 
 /* Hover microinteraction: quiet wash, no accent — the shell chrome stays
@@ -425,6 +515,20 @@
   .rottay-app-shell [data-part="navigation-trigger"],
   .rottay-app-shell__navigation-drawer [data-part="navigation-close"] {
     transition: none;
+  }
+}
+
+/* Reduced transparency: the sticky header's backdrop blur is a tint
+   affordance only — drop it (and the translucent wash it softens) so the
+   header reads as a solid surface (sheet.css precedent). */
+@media (prefers-reduced-transparency: reduce) {
+  .rottay-app-shell__header {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: var(
+      --ds-shell-header-background,
+      var(--ds-layout-header-bg, var(--ds-surface-canvas))
+    );
   }
 }
 

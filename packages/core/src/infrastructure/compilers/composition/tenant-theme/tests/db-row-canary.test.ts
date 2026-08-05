@@ -30,6 +30,7 @@ import { resolve } from 'node:path';
 
 import {
   THEMANAGEMENT_TENANT_THEME_DOCUMENT,
+  THEMANAGEMENT_TENANT_THEME_EXPECTED_ANATOMY,
   THEMANAGEMENT_TENANT_THEME_IDENTITY,
 } from '@/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row';
 import { TENANT_THEME_V1_COVERAGE } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
@@ -37,6 +38,7 @@ import { TENANT_THEME_V1_COVERAGE } from '@/foundation/contracts/composition/ten
 import {
   compileTenantThemeConfig,
   getTenantThemeVerticalEnvelope,
+  tenantThemeAnatomyAttributes,
   validateTenantThemeDocument,
 } from '..';
 
@@ -152,6 +154,12 @@ describe('tenant theme — DB row compiles to a governed artifact', () => {
     // rather than merely looking wrong.
     expect(artifact.css).not.toContain("data-tenant='bithire'");
     expect(artifact.css).not.toContain('data-tenant="bithire"');
+  });
+
+  it('projects all four structural chrome selections from the DB document', () => {
+    expect(tenantThemeAnatomyAttributes(compileRow(readRow()))).toEqual(
+      THEMANAGEMENT_TENANT_THEME_EXPECTED_ANATOMY,
+    );
   });
 });
 

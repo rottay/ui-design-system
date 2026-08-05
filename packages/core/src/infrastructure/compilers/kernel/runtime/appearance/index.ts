@@ -618,13 +618,19 @@ export function appearanceAdvancedToVariables(
 
   // ── Raw token overrides (allowlisted, capped by the schema limits object) ──
   if (advanced.tokenOverrides) {
-    let count = 0;
-    for (const [key, value] of Object.entries(advanced.tokenOverrides)) {
-      if (count >= MAX_TOKEN_OVERRIDES) break;
-      if (key.startsWith('--ds-') && value != null) {
-        vars[key] = String(value);
-        count++;
-      }
+    const entries = Object.entries(advanced.tokenOverrides).filter(
+      ([key, value]) => key.startsWith('--ds-') && value != null,
+    );
+    // Over-budget rejects outright: silently dropping entries would paint a
+    // theme the author never approved.
+    if (entries.length > MAX_TOKEN_OVERRIDES) {
+      throw new Error(
+        `[Appearance] tokenOverrides has ${entries.length} entries; the bound is ` +
+          `${MAX_TOKEN_OVERRIDES} (TENANT_THEME_CONFIG_SCHEMA.limits.maxTokenOverrides).`,
+      );
+    }
+    for (const [key, value] of entries) {
+      vars[key] = String(value);
     }
   }
 

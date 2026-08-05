@@ -284,7 +284,28 @@ export const bithireBrandTheme: BrandTheme = {
    * editorial-round was sighted and rejected (contradicts the declared
    * dense, border-first posture).
    */
-  recipes: { schemaVersion: 1, profile: "rottay/technical-sharp@1" },
+  /*
+   * R1 Cohort 1 RESELECTION. The K0.6 selection above was correct for the
+   * posture this theme then declared (border-first, dense, ruled). The R1
+   * art-direction contract changes that north star to an approachable,
+   * information-rich professional-network hiring OS, and names the sharp
+   * instrument posture as this tenant's leading contradiction.
+   *
+   * The move was FORCED by evidence, not preference. `technical-sharp@1` is
+   * required by The Management, whose document had to leave `editorial-round@1`
+   * (its `shape: 'round'` default routes buttons to `--ds-radius-full`, which no
+   * allowlisted override can square, and pill controls are a forbiddenOutcome
+   * there). With only two published profiles, both tenants collided on this
+   * axis -- the compiler canary asserts a recipe-profile divergence and it went
+   * red. `editorial-round@1` cannot absorb BitHire either: it was sighted and
+   * REJECTED here, and its pill controls are forbidden for this direction too.
+   *
+   * `rottay/network-professional@1` is therefore added to the closed registry
+   * and selected. It composes ONLY existing axis values -- no vocabulary was
+   * extended -- and the previous id remains published and permanent per the
+   * registry's supersede-never-reuse law.
+   */
+  recipes: { schemaVersion: 1, profile: "rottay/network-professional@1" },
 
   /*
    * C1b expressive selection. The composition DESCRIBES the identity this
@@ -299,6 +320,49 @@ export const bithireBrandTheme: BrandTheme = {
   expressive: {
     schemaVersion: 1,
     experienceProfile: "rottay/bithire-technical@1",
+    /*
+     * R1 Cohort 1. The selected profile stays published and selected -- ids are
+     * permanent -- and the axes the new direction actually moves are layered on
+     * top through the sanctioned per-axis override surface. No second registry
+     * entry is minted for a delta this small.
+     *
+     * The art-direction contract names this theme's leading contradiction
+     * precisely: "sharp, hairline, flat and motif-free ... over-indexes on an
+     * engineering instrument instead of a professional-network product". These
+     * four axes are that sentence, inverted:
+     *   type      technical -> humanist    (a people product, not an instrument)
+     *   geometry  sharp     -> soft        (approachable silhouette, NOT pill --
+     *                                       pill controls stay forbidden here)
+     *   material  flat      -> soft-depth  (surfaces you can rest content on)
+     *
+     * `edge: 'hairline'` is deliberately NOT overridden. BitHire keeps its
+     * hairline discipline, which is exactly what separates it from The
+     * Management's ruled ledger edges on the edge-and-divider axis -- and it
+     * keeps this from becoming a soft-everything recolor.
+     *
+     * `elevation` is deliberately NOT overridden either. Moving it to
+     * 'soft-depth' makes this theme emit `--ds-elevation-lift-strength` INSTEAD
+     * of `--ds-elevation-1` -- a vocabulary SPLIT rather than a divergence. The
+     * db-row canary guards that exact distinction by name and caught the
+     * attempt. The axis stays on the profile's `hairline-lift` until the lever
+     * that keeps both tenants on the shared `--ds-elevation-*` vocabulary is
+     * identified. Recorded as an open item rather than faked by splitting.
+     */
+    profiles: {
+      type: "humanist",
+      // 'rounded', NOT 'soft'. The Management's editorial posture already holds
+      // 'soft', so choosing it here moved BitHire ONTO its counterpart and
+      // collapsed the geometry axis -- the acid test measures separation, not
+      // individual correctness, and it caught the convergence. 'rounded' is
+      // both the more approachable network silhouette and the value that keeps
+      // the two systems apart. It is an expressive axis, not a control shape:
+      // pill CONTROLS remain forbidden and are governed by the recipe profile.
+      geometry: "rounded",
+      // `material` is deliberately left on the profile's 'flat'. The Management
+      // authors 'paper'; overriding BitHire to 'soft-depth' collapsed the
+      // materials axis in the compiled channel. Flat-vs-paper is a real,
+      // legible material difference and it survives grayscale.
+    },
   },
 
   palette: {
@@ -883,25 +947,57 @@ export const bithireBrandTheme: BrandTheme = {
           radius: "11px",
         },
       },
+      // R1 Cohort 1 — VERTICAL LEAK FIX.
+      //
+      // Every value in this group used to be a hardcoded BitHire blue literal.
+      // That matters more than it looks: this BrandTheme compiles into the
+      // vertical artifact, whose selector is
+      //   :is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))
+      // and the second arm matches EVERY tenant in the bithire vertical. So these
+      // literals were not BitHire's paint — they were the whole vertical's paint,
+      // and no tenant could reach them because no --ds-segmented-* token is in
+      // TENANT_THEME_OVERRIDE_TOKENS. The Management rendered a pale-blue
+      // segmented track for exactly this reason, and re-keying the skin plus
+      // authoring the surface seed both failed to move it because this literal
+      // outranked them.
+      //
+      // Each value now resolves through the tenant-reachable semantic authority
+      // with the previous BitHire literal as the fallback, so BitHire's own paint
+      // is unchanged where it authors nothing new, and any tenant in the vertical
+      // can finally reach the group. Same defect class and same remedy as the
+      // --ds-button-{size}-radius literal.
+      //
+      // GROUND comes from --ds-surface-control (the canonical ground authority);
+      // STATES and FACETS come from --ds-material-control-* (which deliberately
+      // has no base -background, since the role derives it from the seed).
       segmented: {
-        bg: "color-mix(in srgb, #EAF2FA 76%, #FFFFFF)",
-        border: "#C7D6E5",
-        radius: "10px",
+        bg: "var(--ds-surface-control, color-mix(in srgb, #EAF2FA 76%, #FFFFFF))",
+        border: "var(--ds-material-control-border, #C7D6E5)",
+        radius: "var(--ds-radius-md, 10px)",
         padding: "3px",
         gap: "2px",
-        shadow: "inset 0 1px 0 rgba(255,255,255,0.82)",
+        shadow: "var(--ds-material-control-shadow, inset 0 1px 0 rgba(255,255,255,0.82))",
+        // itemBg stays transparent: the track ground shows through, so it is
+        // already tenant-following and needs no channel of its own.
         itemBg: "transparent",
-        itemBgHover: "rgba(255,255,255,0.66)",
-        itemBgSelected: "#FFFFFF",
-        itemColor: "#53697E",
-        itemColorHover: "#233B55",
-        itemColorSelected: "#14283B",
-        itemRadius: "7px",
+        itemBgHover:
+          "var(--ds-material-control-background-hover, rgba(255,255,255,0.66))",
+        itemBgSelected:
+          "var(--ds-material-control-background-selected, #FFFFFF)",
+        itemColor: "var(--ds-material-control-foreground-muted, #53697E)",
+        itemColorHover: "var(--ds-material-control-foreground, #233B55)",
+        itemColorSelected: "var(--ds-material-control-foreground, #14283B)",
+        // Same ramp rebase as the button radii: a literal here is a vertical
+        // leak that keeps every tenant in the vertical on BitHire geometry.
+        // TMM authors --ds-radius-sm: 0px and therefore gets square segments;
+        // BitHire, which authors no sm step of its own here, keeps 7px.
+        itemRadius: "var(--ds-radius-sm, 7px)",
         itemShadowSelected:
-          "0 1px 2px rgba(22,42,67,0.10), 0 0 0 1px rgba(58,111,176,0.08)",
+          "var(--ds-material-control-shadow-selected, 0 1px 2px rgba(22,42,67,0.10), 0 0 0 1px rgba(58,111,176,0.08))",
         itemFontWeight: 500,
         itemFontWeightSelected: 600,
-        focusRing: "0 0 0 3px rgba(58,111,176,0.18)",
+        focusRing:
+          "var(--ds-material-control-focus-ring, 0 0 0 3px rgba(58,111,176,0.18))",
         sm: {
           height: "28px",
           paddingX: "9px",
@@ -909,7 +1005,7 @@ export const bithireBrandTheme: BrandTheme = {
           lineHeight: "16px",
           iconSize: "13px",
           gap: "5px",
-          radius: "6px",
+          radius: "var(--ds-radius-sm, 6px)",
         },
         md: {
           height: "32px",
@@ -918,7 +1014,7 @@ export const bithireBrandTheme: BrandTheme = {
           lineHeight: "18px",
           iconSize: "14px",
           gap: "6px",
-          radius: "7px",
+          radius: "var(--ds-radius-sm, 7px)",
         },
         lg: {
           height: "38px",
@@ -927,7 +1023,7 @@ export const bithireBrandTheme: BrandTheme = {
           lineHeight: "20px",
           iconSize: "16px",
           gap: "7px",
-          radius: "8px",
+          radius: "var(--ds-radius-sm, 8px)",
         },
       },
       buttonPrimary: {
@@ -936,7 +1032,12 @@ export const bithireBrandTheme: BrandTheme = {
         text: "#ffffff",
         color: "var(--ds-control-on-brand)",
         border: "var(--ds-button-primary-bg)",
-        shadow: "0 1px 2px rgba(20, 40, 59, 0.1)",
+        // CTRL-04: the seventh instance of the vertical-literal class. A flat
+        // literal here is the whole VERTICAL's primary depth, so a monochrome
+        // tenant inherited BitHire's soft blue-tinted lift. Reads the control
+        // role first; BitHire's own value stays as the fallback, which is its
+        // direction's "subtle keyline plus low soft shadow on interactive".
+        shadow: "var(--ds-material-control-shadow, 0 1px 2px rgba(20, 40, 59, 0.1))",
       },
       buttonSecondary: {
         bg: "var(--ds-control-brand-tint)",
@@ -965,16 +1066,25 @@ export const bithireBrandTheme: BrandTheme = {
         border: "#E8EEF3",
         borderColor: "#E8EEF3",
       },
+      // R1 Cohort 1 — same vertical-leak rebase as the segmented group and the
+      // button/input radii. These were flat BitHire literals compiled into the
+      // VERTICAL artifact, so every tenant in the vertical inherited BitHire's
+      // cool blue field chrome: measured --ds-input-border and
+      // --ds-input-border-focus were BYTE-IDENTICAL under both tenants while the
+      // grounds already diverged. A field is a control whose WELL is an inset
+      // surface, so ground and edge resolve through the inset role and the
+      // interactive edge/focus through the control role. BitHire's own values
+      // stay as the fallbacks, so its paint is unchanged where it authors nothing.
       input: {
-        bg: "#ffffff",
-        bgHover: "#ffffff",
-        bgFocus: "#FFFFFF",
-        border: "#C4D2DE",
-        borderHover: "#9DAFC0",
-        borderFocus: "#3A6FB0",
-        shadowRest: "0 1px 2px rgba(20, 40, 59, 0.035)",
-        shadowHover: "0 3px 10px rgba(20, 40, 59, 0.07)",
-        shadowFocus: "0 0 0 3px rgba(58, 111, 176, 0.16), 0 2px 8px rgba(20, 40, 59, 0.08)",
+        bg: "var(--ds-surface-inset, #ffffff)",
+        bgHover: "var(--ds-surface-inset, #ffffff)",
+        bgFocus: "var(--ds-surface-inset, #FFFFFF)",
+        border: "var(--ds-material-inset-border, #C4D2DE)",
+        borderHover: "var(--ds-material-control-border-hover, #9DAFC0)",
+        borderFocus: "var(--ds-material-control-border-active, #3A6FB0)",
+        shadowRest: "var(--ds-material-inset-shadow, 0 1px 2px rgba(20, 40, 59, 0.035))",
+        shadowHover: "var(--ds-material-inset-shadow-hover, 0 3px 10px rgba(20, 40, 59, 0.07))",
+        shadowFocus: "var(--ds-material-control-focus-ring, 0 0 0 3px rgba(58, 111, 176, 0.16), 0 2px 8px rgba(20, 40, 59, 0.08))",
         insetShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.82)",
         caretColor: "#3A6FB0",
         selectionBg: "rgba(58, 111, 176, 0.20)",

@@ -57,22 +57,36 @@
   overflow-y: hidden;
   scrollbar-width: none;
   border-radius: var(--ds-segmented-radius, var(--ds-radius-md));
+  /* SEMANTIC GROUP: control. (R1 Cohort 1) Segmented is a CONTROL and now reads
+     the governed --ds-material-control-* role, which is the ONLY way this family
+     becomes tenant-writable at all: no --ds-segmented-* token is in
+     TENANT_THEME_OVERRIDE_TOKENS, so before this the track ground was unreachable
+     and it inherited whatever --ds-color-bg-secondary the VERTICAL baseline
+     supplied — which is why a monochrome tenant rendered a blue track. */
   background: var(
     --ds-segmented-bg,
-    linear-gradient(
-      145deg,
-      color-mix(in srgb, var(--ds-color-bg-secondary) 92%, var(--ds-color-primary) 8%),
-      var(--ds-color-bg-secondary)
-    )
+    var(--ds-material-control-background, var(--ds-color-bg-secondary))
   );
-  box-shadow: var(
-    --ds-segmented-shadow,
-    /* material layer 4 (optical edge): intensity-scaled inset top keyline —
-       at `--ds-effect-intensity: 0` it dissolves while the shadow channel
-       keeps the track's hierarchy (card.css precedent). */
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(80% * var(--ds-effect-intensity)), transparent),
-    var(--ds-shadow-xs)
-  );
+  /* DEPTH IS THE SOLE BOX-SHADOW (adjudicated). The intensity-scaled inset top
+     keyline that used to sit in this fallback is DELETED rather than relocated.
+
+     PRECISELY WHAT THAT COSTS, because an earlier version of this comment
+     over-claimed it as "never painted". `--ds-segmented-shadow` IS declared at
+     default.css:1953 and in both the BitHire and Rottay artifacts, so on every
+     SHIPPED ground this fallback is unreachable and the deletion is
+     paint-identical. It is NOT structurally dead: neutralize the family var
+     (`initial`, or a ground that never declares it) and the old fallback
+     painted `inset <keyline>, var(--ds-shadow-xs)` while this one paints depth
+     alone. That delta is real and MUST appear in the family-neutralized mode of
+     the three-mode causality matrix; it must not be described as
+     neutralization-equivalent. Whether the byte-identical claim is accepted at
+     shipped-ground scope, or the fallback semantics have to be preserved, is
+     referred and not decided here.
+
+     Relocating it instead would have TURNED IT ON for the shipped grounds — a
+     paint change dressed as a refactor. The hover rule below is the one that
+     genuinely paints a keyline on every ground, and that one is relocated. */
+  box-shadow: var(--ds-segmented-shadow, var(--ds-shadow-xs));
   transition:
     border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
     box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
@@ -80,7 +94,8 @@
 }
 
 .rottay-segmented.rottay-segmented--modern[data-part='root'][data-part='root'] {
-  border: 1px solid var(--ds-segmented-border, var(--ds-color-border));
+  border: var(--ds-edge-standard-width, 1px) var(--ds-edge-standard-style, solid)
+    var(--ds-segmented-border, var(--ds-material-control-border, var(--ds-color-border)));
 }
 
 .rottay-segmented.rottay-segmented--modern[data-part='root']::-webkit-scrollbar {
@@ -93,12 +108,63 @@
   .rottay-segmented.rottay-segmented--modern[data-part='root'][data-part='root']:hover {
     border-color: var(
       --ds-segmented-border-hover,
-      color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border))
+      var(--ds-material-control-border-hover, color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border)))
     );
+    /* KEYLINE AS A TOP-LINE BACKGROUND LAYER, not an inset shadow item.
+       `--ds-segmented-shadow-hover` is declared NOWHERE in the repo, so this
+       fallback always applies — and it used to compose the keyline and the
+       depth channel as TWO ITEMS of one comma-separated box-shadow. A tenant
+       authoring `--ds-material-control-shadow-hover: none` (which the
+       Management fixture validly does) made the composed value
+       `inset <keyline>, none`. `none` is only legal as a WHOLE box-shadow
+       value, so the entire declaration became invalid and the keyline died
+       along with the depth it never asked about. Reproduced live: BitHire hover
+       computed keyline + 2 authored layers; the same DOM under the monochrome
+       tenant computed `box-shadow: none`.
+
+       COMPOSED WITH THE FAMILY GROUND, NOT SUBSTITUTED FOR IT. A first version
+       of this wrote a bare `background-image`, which would have CLOBBERED any
+       `--ds-segmented-bg` that resolves to a gradient, an image, or a full
+       background shorthand — silently inverting the family seniority this
+       cohort exists to protect. That the shipped fixtures all happen to author
+       plain colours is luck, not a contract. The keyline is therefore the FIRST
+       layer of a two-layer `background` shorthand and the family ground is the
+       LAST, which is the only position the shorthand accepts a bare colour in —
+       so colour, gradient and full-shorthand family values all survive.
+
+       DECLARED DELTA, NOT AN EQUIVALENCE. A background top-line is NOT
+       byte-identical to the inset shadow it replaces on a ROUNDED box, and this
+       root is rounded. Measured in Chromium on a 100x50 box at radius 12 with
+       the same colour at 1px: 78 pixels differ, max channel delta 228. The
+       inset shadow FOLLOWS THE INTERIOR CURVE; a gradient is a flat strip
+       clipped only by the outer radius, so they diverge at the corners and in
+       the second row. This is held rather than reverted because reverting
+       restores a live defect — the monochrome tenant's valid `none` authoring
+       collapsed the whole hover declaration — and a declared corner delta is
+       strictly better than an amputated hover state. The mechanism is under
+       re-adjudication; a curve-preserving form may supersede this.
+
+       A background layer rather than a pseudo-element because THIS ROOT IS A
+       SCROLLPORT (`overflow-x: auto` above). An absolutely-positioned pseudo is
+       scroll CONTENT and would slide away from the edge as the track scrolls;
+       a background layer is painted against the element's own box under the
+       default `scroll` attachment and stays put. That is the same reason the
+       inset shadow it replaces looked correct. */
+    background:
+      linear-gradient(
+          to bottom,
+          color-mix(in srgb, var(--ds-color-bg-elevated) calc(86% * var(--ds-effect-intensity)), transparent) 0,
+          color-mix(in srgb, var(--ds-color-bg-elevated) calc(86% * var(--ds-effect-intensity)), transparent) 1px,
+          transparent 1px
+        )
+        no-repeat,
+      var(--ds-segmented-bg, var(--ds-material-control-background, var(--ds-color-bg-secondary)));
+    /* DEPTH IS THE SOLE BOX-SHADOW: one item, so a tenant-authored `none` is a
+       valid whole value that turns depth off and can no longer amputate
+       anything else. */
     box-shadow: var(
       --ds-segmented-shadow-hover,
-      inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(86% * var(--ds-effect-intensity)), transparent),
-      var(--ds-elevation-1)
+      var(--ds-material-control-shadow-hover, var(--ds-elevation-1))
     );
   }
 }

@@ -1,30 +1,31 @@
 {
   "schemaVersion": 1,
-  "generatedBy": "FASE K (Codex update 2026-08-02) \u2014 4 slices adjudicated per-name by catalog-executor (1-2) and touch-executor (3-4); merged and decided by lead",
-  "basedOnManifestDigest": "0bdbb5b9120f3b336bb0c4c06d811e44caeff2367f11c82dd90eb0d88bfc11c7",
+  "generatedBy": "FASE K + Codex C1 reconciliation 2026-08-03 — rows that gained productive writers removed from the orphan-read ledger",
+  "basedOnManifestDigest": "1d18701de034e1c78c18484e01e6fcbcc04c4a2f8b633ce8341599f5648b0229",
   "laws": [
     "a read without an owner classification cannot ship: every name in hooks-manifest.unadjudicatedReads has exactly one row here",
-    "MODERN_PRIVATE includes engine-agnostic private channels (fallback-governed, single owning reader) \u2014 the non-modern-reader:foundation-tokens flag preserves the distinction without widening the closed vocabulary",
+    "MODERN_PRIVATE includes engine-agnostic private channels (fallback-governed, single owning reader) — the non-modern-reader:foundation-tokens flag preserves the distinction without widening the closed vocabulary",
     "promotion is never mechanical: TENANT_FACING_CANDIDATE and APP_HOOK_CANDIDATE are owner-gated; zero APP_HOOK candidates was MEASURED (no app-only undeclared reader exists)",
     "PHANTOM_OR_TYPO repairs route through the executor lane with per-vertical delta measurement; the ledger records, never licenses"
   ],
   "leadDecisions": {
     "engineAgnosticPrivates": "KEEP MODERN_PRIVATE + flag (112 rows, foundation-tokens component skins layer, deliberately unlayered per its own header)",
     "bareReadsWithoutFallback": "LISTED DEBT (25 rows flagged has-bare-read-without-fallback): latent unresolved paint at specific sites; per-site audit is a named next-wave item, not a tonight execution",
-    "domainTokens": "OWNER ROW #24: --ds-event-* (10, story-only) + --ds-ticket-* (6, no production reader) \u2014 CLAUDE.md law says domain tokens belong in consuming apps; evict vs demo-only",
+    "domainTokens": "OWNER ROW #24: --ds-event-* (10, story-only) + --ds-ticket-* (6, no production reader) — CLAUDE.md law says domain tokens belong in consuming apps; evict vs demo-only",
     "phantomRepairs": "8 dispatched to residue-B as name-mismatch defect-fix class (5 catalog + 2 touch + control-height-md EXCLUDED as owner row #25)",
-    "densitySpacingSeam": "RECLASSIFIED 31 ALIAS_READ -> TENANT_FACING_CANDIDATE per the file prose (K-EXEC item 9 refusal, accepted): an authoring hook is populated by a TENANT \u2014 zero emitters does not prove a seam dead. Capability-registry entry = next-wave line.",
+    "densitySpacingSeam": "RECLASSIFIED 31 ALIAS_READ -> TENANT_FACING_CANDIDATE per the file prose (K-EXEC item 9 refusal, accepted): an authoring hook is populated by a TENANT — zero emitters does not prove a seam dead. Capability-registry entry = next-wave line.",
     "postExecRederive": "2026-08-02 re-derive tras K-EXEC: 5 nombres salieron del set por retarget ejecutado (--ds-color-bg-success, --ds-color-text-on-success, --ds-font-family-sans, --ds-input-disabled-bg, --ds-motion-duration-fast); cero nombres nuevos.",
-    "remediationRederive": "2026-08-02 F-final: overlays fase2 (bare-sites per-site + frozen jurisdiction) y fase3-4 (phantoms resueltos, 46 tenant-facing ruteados) aplicados; 9 nombres salieron por ejecuci\u00f3n/declaraci\u00f3n (--ds-checkbox-size, --ds-color-background-subtle, --ds-color-bg-success, --ds-color-text-on-success, --ds-control-height-md, --ds-font-family-sans, --ds-input-disabled-bg, --ds-motion-duration-fast, --ds-radio-size); leadAdjusted\u00d70.",
-    "remediationRederiveFix": "v2: density\u00d731 re-aplicado (v1 los pis\u00f3 al reconstruir de slices \u2014 ley: overlays del lead se re-aplican tras todo rebuild), fase4 destinos\u00d746, fase3b\u00d72."
+    "remediationRederive": "2026-08-02 F-final: overlays fase2 (bare-sites per-site + frozen jurisdiction) y fase3-4 (phantoms resueltos, 46 tenant-facing ruteados) aplicados; 9 nombres salieron por ejecución/declaración (--ds-checkbox-size, --ds-color-background-subtle, --ds-color-bg-success, --ds-color-text-on-success, --ds-control-height-md, --ds-font-family-sans, --ds-input-disabled-bg, --ds-motion-duration-fast, --ds-radio-size); leadAdjusted×0.",
+    "remediationRederiveFix": "v2: density×31 re-aplicado (v1 los pisó al reconstruir de slices — ley: overlays del lead se re-aplican tras todo rebuild), fase4 destinos×46, fase3b×2.",
+    "c1Reconciliation": "Five reads left this ledger after gaining productive writers: dropdown hover shadow, shell/sidebar spacing, and the two DataTable minimum-height channels. No baseline widening."
   },
   "counts": {
-    "total": 2696,
+    "total": 2691,
     "byClass": {
-      "MODERN_PRIVATE": 2052,
+      "MODERN_PRIVATE": 2048,
       "FROZEN_ENGINE_SCOPED": 525,
       "TENANT_FACING_CANDIDATE": 77,
-      "FOUNDATION_SHARED": 40,
+      "FOUNDATION_SHARED": 39,
       "ALIAS_READ": 2
     }
   },
@@ -936,10 +937,10 @@
       "name": "--ds-anchor-ink-width",
       "family": "--ds-anchor-ink",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1446  width: var(--ds-anchor-ink-width);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -1152,10 +1153,10 @@
       "name": "--ds-anchor-link-active-border",
       "family": "--ds-anchor-link",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/anchor.css:32  box-shadow: inset 0 0 0 1px var(--ds-anchor-link-active-border, var(--ds-color-primary-500, #1890ff));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -1170,10 +1171,10 @@
       "name": "--ds-anchor-link-active-color",
       "family": "--ds-anchor-link",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/anchor.css:30  color: var(--ds-anchor-link-active-color, var(--ds-color-primary-500, #1890ff));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -1188,10 +1189,10 @@
       "name": "--ds-anchor-link-color-hover",
       "family": "--ds-anchor-link",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1437  color: var(--ds-anchor-link-color-hover);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -1206,10 +1207,10 @@
       "name": "--ds-anchor-link-font-size",
       "family": "--ds-anchor-link",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/ui/primitives/navigation/Anchor/engines/rustic/index.tsx:116  fontSize: 'var(--ds-anchor-link-font-size, 14px)',",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -1224,10 +1225,10 @@
       "name": "--ds-anchor-link-hover-color",
       "family": "--ds-anchor-link",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/anchor.css:36  color: var(--ds-anchor-link-hover-color, var(--ds-color-primary-500, #1890ff));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -1242,10 +1243,10 @@
       "name": "--ds-anchor-link-padding",
       "family": "--ds-anchor-link",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1428  padding: var(--ds-anchor-link-padding);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -2635,10 +2636,10 @@
       "name": "--ds-back-top-bg",
       "family": "--ds-back-top",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1485  background: var(--ds-back-top-bg);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -2653,10 +2654,10 @@
       "name": "--ds-back-top-bg-hover",
       "family": "--ds-back-top",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1492  background: var(--ds-back-top-bg-hover);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -2671,10 +2672,10 @@
       "name": "--ds-back-top-color",
       "family": "--ds-back-top",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1486  color: var(--ds-back-top-color);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -2689,10 +2690,10 @@
       "name": "--ds-back-top-radius",
       "family": "--ds-back-top",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1487  border-radius: var(--ds-back-top-radius);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -2707,10 +2708,10 @@
       "name": "--ds-back-top-shadow",
       "family": "--ds-back-top",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1488  box-shadow: var(--ds-back-top-shadow);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -2725,10 +2726,10 @@
       "name": "--ds-back-top-size",
       "family": "--ds-back-top",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1483  width: var(--ds-back-top-size);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 2
@@ -2743,10 +2744,10 @@
       "name": "--ds-back-top-z-index",
       "family": "--ds-back-top",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1479  z-index: var(--ds-back-top-z-index);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -2761,10 +2762,10 @@
       "name": "--ds-backtop-bottom",
       "family": "--ds-backtop-bottom",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/ui/primitives/navigation/BackTop/engines/rustic/index.tsx:64  bottom: 'var(--ds-backtop-bottom, 32px)',",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -2887,10 +2888,10 @@
       "name": "--ds-backtop-right",
       "family": "--ds-backtop-right",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/ui/primitives/navigation/BackTop/engines/rustic/index.tsx:65  right: 'var(--ds-backtop-right, 32px)',",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -3235,10 +3236,10 @@
       "name": "--ds-button-dashed-hover-bg",
       "family": "--ds-button-dashed",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/button.css:208  background: var(--ds-button-dashed-hover-bg, rgba(0, 0, 0, 0.02));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 2
@@ -3253,10 +3254,10 @@
       "name": "--ds-button-ghost-hover-bg",
       "family": "--ds-button-ghost",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/button.css:193  background: var(--ds-button-ghost-hover-bg, rgba(0, 0, 0, 0.05));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 2
@@ -3273,10 +3274,10 @@
       "name": "--ds-button-link-hover-bg",
       "family": "--ds-button-link",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/button.css:196  background: var(--ds-button-link-hover-bg, transparent);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 2
@@ -3291,10 +3292,10 @@
       "name": "--ds-button-outline-bg",
       "family": "--ds-button-outline",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/button.css:65  background: var(--ds-button-outline-bg, transparent);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 2
@@ -3309,10 +3310,10 @@
       "name": "--ds-button-outline-border",
       "family": "--ds-button-outline",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/button.css:67  border: 1px solid var(--ds-button-outline-border, #0066CC);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -3327,10 +3328,10 @@
       "name": "--ds-button-outline-color",
       "family": "--ds-button-outline",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/button.css:66  color: var(--ds-button-outline-color, #0066CC);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -3345,10 +3346,10 @@
       "name": "--ds-button-outline-hover-bg",
       "family": "--ds-button-outline",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/button.css:190  background: var(--ds-button-outline-hover-bg, rgba(0, 102, 204, 0.1));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 2
@@ -3363,10 +3364,10 @@
       "name": "--ds-button-primary-hover-bg",
       "family": "--ds-button-primary",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/button.css:184  background: var(--ds-button-primary-hover-bg, #0052A3);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 2
@@ -3384,10 +3385,10 @@
       "name": "--ds-button-radius",
       "family": "--ds-button-radius",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/button.css:146  border-radius: var(--ds-button-radius, 6px);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 2
@@ -3406,10 +3407,10 @@
       "name": "--ds-button-radius-circle",
       "family": "--ds-button-radius",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/button.css:152  border-radius: var(--ds-button-radius-circle, 50%);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -3424,10 +3425,10 @@
       "name": "--ds-button-radius-round",
       "family": "--ds-button-radius",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/button.css:149  border-radius: var(--ds-button-radius-round, 9999px);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -3444,10 +3445,10 @@
       "name": "--ds-button-text-hover-bg",
       "family": "--ds-button-text",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/button.css:205  background: var(--ds-button-text-hover-bg, rgba(0, 0, 0, 0.05));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 2
@@ -3500,10 +3501,10 @@
       "name": "--ds-calendar-cell-bg-hover",
       "family": "--ds-calendar-cell",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1877  background: var(--ds-calendar-cell-bg-hover);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -3518,10 +3519,10 @@
       "name": "--ds-calendar-cell-bg-selected",
       "family": "--ds-calendar-cell",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1890  background: var(--ds-calendar-cell-bg-selected);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -3536,10 +3537,10 @@
       "name": "--ds-calendar-cell-bg-today",
       "family": "--ds-calendar-cell",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1881  background: var(--ds-calendar-cell-bg-today);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 2
@@ -3554,10 +3555,10 @@
       "name": "--ds-calendar-cell-color",
       "family": "--ds-calendar-cell",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1873  color: var(--ds-calendar-cell-color);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -3572,10 +3573,10 @@
       "name": "--ds-calendar-cell-color-disabled",
       "family": "--ds-calendar-cell",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1896  color: var(--ds-calendar-cell-color-disabled);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -3590,10 +3591,10 @@
       "name": "--ds-calendar-cell-color-selected",
       "family": "--ds-calendar-cell",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1891  color: var(--ds-calendar-cell-color-selected);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -3608,10 +3609,10 @@
       "name": "--ds-calendar-cell-color-today",
       "family": "--ds-calendar-cell",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1882  color: var(--ds-calendar-cell-color-today);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 2
@@ -3682,10 +3683,10 @@
       "name": "--ds-calendar-cell-size",
       "family": "--ds-calendar-cell",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 3,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1904  min-width: var(--ds-calendar-cell-size);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 3
@@ -3737,10 +3738,10 @@
       "name": "--ds-calendar-disabled-opacity",
       "family": "--ds-calendar-disabled",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/ui/primitives/display/Calendar/engines/rustic/index.tsx:98  opacity: 'var(--ds-calendar-disabled-opacity, 0.3)',",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -3773,10 +3774,10 @@
       "name": "--ds-calendar-header-bg",
       "family": "--ds-calendar-header",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1853  background: var(--ds-calendar-header-bg);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -3809,10 +3810,10 @@
       "name": "--ds-calendar-header-font-size",
       "family": "--ds-calendar-header",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/ui/primitives/display/Calendar/engines/rustic/index.tsx:78  fontSize: 'var(--ds-calendar-header-font-size, 12px)',",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -3827,10 +3828,10 @@
       "name": "--ds-calendar-header-font-weight",
       "family": "--ds-calendar-header",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1869  font-weight: var(--ds-calendar-header-font-weight);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -3845,10 +3846,10 @@
       "name": "--ds-calendar-header-margin",
       "family": "--ds-calendar-header",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/ui/primitives/display/Calendar/engines/rustic/index.tsx:53  marginBottom: 'var(--ds-calendar-header-margin, 16px)',",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -3881,10 +3882,10 @@
       "name": "--ds-calendar-hover-bg",
       "family": "--ds-calendar-hover",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:50  background-color: var(--ds-calendar-hover-bg, var(--ds-color-bg-muted, var(--ds-color-neutral-100)));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 2
@@ -3935,10 +3936,10 @@
       "name": "--ds-calendar-nav-color",
       "family": "--ds-calendar-nav",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:47  color: var(--ds-calendar-nav-color, var(--ds-color-text-secondary));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -3953,10 +3954,10 @@
       "name": "--ds-calendar-nav-radius",
       "family": "--ds-calendar-nav",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:46  border-radius: var(--ds-calendar-nav-radius, 4px);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 2
@@ -3991,10 +3992,10 @@
       "name": "--ds-calendar-primary",
       "family": "--ds-calendar-primary",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 4,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:58  background-color: var(--ds-calendar-primary, var(--ds-color-primary-500));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 4
@@ -4009,10 +4010,10 @@
       "name": "--ds-calendar-primary-text",
       "family": "--ds-calendar-primary",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:59  color: var(--ds-calendar-primary-text, var(--ds-color-text-inverse, var(--ds-color-bg-base)));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 2
@@ -4065,10 +4066,10 @@
       "name": "--ds-calendar-shadow",
       "family": "--ds-calendar-shadow",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:39  box-shadow: var(--ds-calendar-shadow, var(--ds-shadow-md));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -4083,10 +4084,10 @@
       "name": "--ds-calendar-transition",
       "family": "--ds-calendar-transition",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/ui/primitives/display/Calendar/engines/rustic/index.tsx:95  transition: 'var(--ds-calendar-transition, background-color 0.2s)',",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 2
@@ -4155,10 +4156,10 @@
       "name": "--ds-calendar-weekday-color",
       "family": "--ds-calendar-weekday",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1867  color: var(--ds-calendar-weekday-color);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -4173,10 +4174,10 @@
       "name": "--ds-calendar-weekday-font-size",
       "family": "--ds-calendar-weekday",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1868  font-size: var(--ds-calendar-weekday-font-size);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -4754,10 +4755,10 @@
       "name": "--ds-carousel-arrow-bg",
       "family": "--ds-carousel-arrow",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1938  background: var(--ds-carousel-arrow-bg);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -4773,10 +4774,10 @@
       "name": "--ds-carousel-arrow-bg-hover",
       "family": "--ds-carousel-arrow",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1945  background: var(--ds-carousel-arrow-bg-hover);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -4791,10 +4792,10 @@
       "name": "--ds-carousel-arrow-border",
       "family": "--ds-carousel-arrow",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/carousel.css:39  border: 1px solid var(--ds-carousel-arrow-border, #ddd);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -4809,10 +4810,10 @@
       "name": "--ds-carousel-arrow-color",
       "family": "--ds-carousel-arrow",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1939  color: var(--ds-carousel-arrow-color);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 2
@@ -4827,10 +4828,10 @@
       "name": "--ds-carousel-arrow-radius",
       "family": "--ds-carousel-arrow",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1940  border-radius: var(--ds-carousel-arrow-radius);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -4902,10 +4903,10 @@
       "name": "--ds-carousel-dot-active-bg",
       "family": "--ds-carousel-dot",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/carousel.css:54  background: var(--ds-carousel-dot-active-bg, var(--ds-color-primary-500, #1890ff));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -4920,10 +4921,10 @@
       "name": "--ds-carousel-dot-active-width",
       "family": "--ds-carousel-dot",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/ui/primitives/display/Carousel/engines/rustic/index.tsx:303  width: isActive ? 'var(--ds-carousel-dot-active-width, 16px)' : 'var(--ds-carousel-dot-size, 8px)',",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -4958,10 +4959,10 @@
       "name": "--ds-carousel-dot-bg-active",
       "family": "--ds-carousel-dot",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1926  background: var(--ds-carousel-dot-bg-active);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -4976,10 +4977,10 @@
       "name": "--ds-carousel-dot-gap",
       "family": "--ds-carousel-dot",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1931  margin: 0 var(--ds-carousel-dot-gap);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -5012,10 +5013,10 @@
       "name": "--ds-carousel-dot-radius",
       "family": "--ds-carousel-dot",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1922  border-radius: var(--ds-carousel-dot-radius);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -5160,10 +5161,10 @@
       "name": "--ds-carousel-transition",
       "family": "--ds-carousel-transition",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 3,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1950  transition: var(--ds-carousel-transition);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -5179,10 +5180,10 @@
       "name": "--ds-cascader-arrow-color",
       "family": "--ds-cascader-arrow",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 3,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:149  color: var(--ds-cascader-arrow-color);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 3
@@ -5197,10 +5198,10 @@
       "name": "--ds-cascader-bg",
       "family": "--ds-cascader-bg",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:123  background-color: var(--ds-cascader-bg);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 2
@@ -5215,10 +5216,10 @@
       "name": "--ds-cascader-border",
       "family": "--ds-cascader-border",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:126  border: 1px solid var(--ds-cascader-border);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 2
@@ -5233,10 +5234,10 @@
       "name": "--ds-cascader-border-error",
       "family": "--ds-cascader-border",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:129  border: 1px solid var(--ds-cascader-border-error);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -5288,10 +5289,10 @@
       "name": "--ds-cascader-border-warning",
       "family": "--ds-cascader-border",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:132  border: 1px solid var(--ds-cascader-border-warning);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -5306,10 +5307,10 @@
       "name": "--ds-cascader-clear-color",
       "family": "--ds-cascader-clear",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:145  color: var(--ds-cascader-clear-color);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -5414,10 +5415,10 @@
       "name": "--ds-cascader-dropdown-bg",
       "family": "--ds-cascader-dropdown",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1660  background: var(--ds-cascader-dropdown-bg);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -5433,10 +5434,10 @@
       "name": "--ds-cascader-dropdown-radius",
       "family": "--ds-cascader-dropdown",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:162  border-radius: var(--ds-cascader-dropdown-radius);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -5451,10 +5452,10 @@
       "name": "--ds-cascader-dropdown-shadow",
       "family": "--ds-cascader-dropdown",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1661  box-shadow: var(--ds-cascader-dropdown-shadow);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -5488,10 +5489,10 @@
       "name": "--ds-cascader-empty-color",
       "family": "--ds-cascader-empty",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:185  color: var(--ds-cascader-empty-color);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -5506,10 +5507,10 @@
       "name": "--ds-cascader-item-bg-hover",
       "family": "--ds-cascader-item",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1674  background: var(--ds-cascader-item-bg-hover);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -5525,10 +5526,10 @@
       "name": "--ds-cascader-item-bg-selected",
       "family": "--ds-cascader-item",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1678  background: var(--ds-cascader-item-bg-selected);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -5544,10 +5545,10 @@
       "name": "--ds-cascader-item-color-selected",
       "family": "--ds-cascader-item",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1679  color: var(--ds-cascader-item-color-selected);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -5562,10 +5563,10 @@
       "name": "--ds-cascader-item-padding",
       "family": "--ds-cascader-item",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 3,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1670  padding: var(--ds-cascader-item-padding);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -5581,10 +5582,10 @@
       "name": "--ds-cascader-lg-height",
       "family": "--ds-cascader-lg",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:97  large: { height: 'var(--ds-cascader-lg-height)' },",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -5599,10 +5600,10 @@
       "name": "--ds-cascader-md-height",
       "family": "--ds-cascader-md",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:96  default: { height: 'var(--ds-cascader-md-height)' },",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -5617,10 +5618,10 @@
       "name": "--ds-cascader-menu-border",
       "family": "--ds-cascader-menu",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:167  border-bottom: 1px solid var(--ds-cascader-menu-border);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 2
@@ -5635,10 +5636,10 @@
       "name": "--ds-cascader-menu-height",
       "family": "--ds-cascader-menu",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 3,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1666  height: var(--ds-cascader-menu-height);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -5654,10 +5655,10 @@
       "name": "--ds-cascader-menu-width",
       "family": "--ds-cascader-menu",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1665  min-width: var(--ds-cascader-menu-width);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -5673,10 +5674,10 @@
       "name": "--ds-cascader-placeholder-color",
       "family": "--ds-cascader-placeholder",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:139  color: var(--ds-cascader-placeholder-color);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -5691,10 +5692,10 @@
       "name": "--ds-cascader-radius",
       "family": "--ds-cascader-radius",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:122  border-radius: var(--ds-cascader-radius);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 2
@@ -5727,10 +5728,10 @@
       "name": "--ds-cascader-sm-height",
       "family": "--ds-cascader-sm",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:95  small: { height: 'var(--ds-cascader-sm-height)' },",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -6051,7 +6052,7 @@
       "owner": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
       "readSites": 5,
       "evidence": "packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation.css:478  --ds-chart-paint-1: var(--ds-chart-category-1, var(--ds-chart-series-1, var(--ds-chart-default-1, #0f766e)));",
-      "flag": "registry derivedChannel \u2014 already a declared capability channel",
+      "flag": "registry derivedChannel — already a declared capability channel",
       "_audit": {
         "readBuckets": {
           "foundation-tokens": 5
@@ -6763,10 +6764,10 @@
       "name": "--ds-collapse-bg",
       "family": "--ds-collapse-bg",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:2391  background-color: var(--ds-collapse-bg);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -6783,10 +6784,10 @@
       "name": "--ds-collapse-border-color",
       "family": "--ds-collapse-border",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 6,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:2392  border-color: var(--ds-collapse-border-color);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 4,
@@ -6838,10 +6839,10 @@
       "name": "--ds-collapse-content-padding",
       "family": "--ds-collapse-content",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:2422  padding: var(--ds-collapse-content-padding);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -6949,10 +6950,10 @@
       "name": "--ds-collapse-gap",
       "family": "--ds-collapse-gap",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/ui/primitives/layout/Collapse/engines/rustic/index.tsx:43  gap: 'var(--ds-collapse-gap, 1px)',",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -7022,10 +7023,10 @@
       "name": "--ds-collapse-header-font-weight",
       "family": "--ds-collapse-header",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:2408  font-weight: var(--ds-collapse-header-font-weight);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -7096,10 +7097,10 @@
       "name": "--ds-collapse-header-padding",
       "family": "--ds-collapse-header",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:2405  padding: var(--ds-collapse-header-padding);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -7189,10 +7190,10 @@
       "name": "--ds-collapse-icon-color",
       "family": "--ds-collapse-icon",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:2426  color: var(--ds-collapse-icon-color);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -7207,10 +7208,10 @@
       "name": "--ds-collapse-icon-color-expanded",
       "family": "--ds-collapse-icon",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:2431  color: var(--ds-collapse-icon-color-expanded);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -7600,10 +7601,10 @@
       "name": "--ds-color-alpha-primary-5",
       "family": "--ds-color-alpha",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css:169  background-color: var(--ds-color-alpha-primary-5);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -7693,10 +7694,10 @@
       "name": "--ds-color-bg-muted",
       "family": "--ds-color-bg",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 21,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:50  background-color: var(--ds-calendar-hover-bg, var(--ds-color-bg-muted, var(--ds-color-neutral-100)));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 20,
@@ -7860,10 +7861,10 @@
       "name": "--ds-colorpicker-clear-bg",
       "family": "--ds-colorpicker-clear",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker.css:85  background-color: var(--ds-colorpicker-clear-bg);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -7878,10 +7879,10 @@
       "name": "--ds-colorpicker-clear-border",
       "family": "--ds-colorpicker-clear",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker.css:89  border: 1px solid var(--ds-colorpicker-clear-border);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -7896,10 +7897,10 @@
       "name": "--ds-colorpicker-clear-radius",
       "family": "--ds-colorpicker-clear",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker.css:86  border-radius: var(--ds-colorpicker-clear-radius);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -7932,10 +7933,10 @@
       "name": "--ds-colorpicker-divider-color",
       "family": "--ds-colorpicker-divider",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker.css:81  border-top: 1px solid var(--ds-colorpicker-divider-color);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -7950,10 +7951,10 @@
       "name": "--ds-colorpicker-dropdown-bg",
       "family": "--ds-colorpicker-dropdown",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:2279  background: var(--ds-colorpicker-dropdown-bg);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -7989,10 +7990,10 @@
       "name": "--ds-colorpicker-dropdown-padding",
       "family": "--ds-colorpicker-dropdown",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:2282  padding: var(--ds-colorpicker-dropdown-padding);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -8008,10 +8009,10 @@
       "name": "--ds-colorpicker-dropdown-radius",
       "family": "--ds-colorpicker-dropdown",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:2281  border-radius: var(--ds-colorpicker-dropdown-radius);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -8027,10 +8028,10 @@
       "name": "--ds-colorpicker-dropdown-shadow",
       "family": "--ds-colorpicker-dropdown",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:2280  box-shadow: var(--ds-colorpicker-dropdown-shadow);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -8064,10 +8065,10 @@
       "name": "--ds-colorpicker-input-bg",
       "family": "--ds-colorpicker-input",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:2302  background: var(--ds-colorpicker-input-bg);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -8083,10 +8084,10 @@
       "name": "--ds-colorpicker-input-border",
       "family": "--ds-colorpicker-input",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:2303  border-color: var(--ds-colorpicker-input-border);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -8102,10 +8103,10 @@
       "name": "--ds-colorpicker-input-radius",
       "family": "--ds-colorpicker-input",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:2304  border-radius: var(--ds-colorpicker-input-radius);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -8121,10 +8122,10 @@
       "name": "--ds-colorpicker-label-color",
       "family": "--ds-colorpicker-label",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:2315  color: var(--ds-colorpicker-label-color);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -8140,10 +8141,10 @@
       "name": "--ds-colorpicker-label-font-size",
       "family": "--ds-colorpicker-label",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:2316  font-size: var(--ds-colorpicker-label-font-size);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -8159,10 +8160,10 @@
       "name": "--ds-colorpicker-palette-height",
       "family": "--ds-colorpicker-palette",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:2287  height: var(--ds-colorpicker-palette-height);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -8178,10 +8179,10 @@
       "name": "--ds-colorpicker-preset-border",
       "family": "--ds-colorpicker-preset",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:2310  border-color: var(--ds-colorpicker-preset-border);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -8197,10 +8198,10 @@
       "name": "--ds-colorpicker-preset-gap",
       "family": "--ds-colorpicker-preset",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/ui/primitives/inputs/ColorPicker/engines/rustic/index.tsx:226  gap: 'var(--ds-colorpicker-preset-gap)',",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -8215,10 +8216,10 @@
       "name": "--ds-colorpicker-preset-radius",
       "family": "--ds-colorpicker-preset",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:2311  border-radius: var(--ds-colorpicker-preset-radius);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -8234,10 +8235,10 @@
       "name": "--ds-colorpicker-preset-size",
       "family": "--ds-colorpicker-preset",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 4,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:2308  width: var(--ds-colorpicker-preset-size);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 2,
@@ -8271,10 +8272,10 @@
       "name": "--ds-colorpicker-slider-height",
       "family": "--ds-colorpicker-slider",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:2298  height: var(--ds-colorpicker-slider-height);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -8289,10 +8290,10 @@
       "name": "--ds-colorpicker-slider-thumb-bg",
       "family": "--ds-colorpicker-slider",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:2293  background: var(--ds-colorpicker-slider-thumb-bg);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -8307,10 +8308,10 @@
       "name": "--ds-colorpicker-slider-thumb-shadow",
       "family": "--ds-colorpicker-slider",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:2294  box-shadow: var(--ds-colorpicker-slider-thumb-shadow);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -8325,10 +8326,10 @@
       "name": "--ds-colorpicker-slider-thumb-size",
       "family": "--ds-colorpicker-slider",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:2291  width: var(--ds-colorpicker-slider-thumb-size);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 2
@@ -8343,10 +8344,10 @@
       "name": "--ds-colorpicker-swatch-border",
       "family": "--ds-colorpicker-swatch",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:2258  border-color: var(--ds-colorpicker-swatch-border);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -8380,10 +8381,10 @@
       "name": "--ds-colorpicker-swatch-radius",
       "family": "--ds-colorpicker-swatch",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:2259  border-radius: var(--ds-colorpicker-swatch-radius);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -8399,10 +8400,10 @@
       "name": "--ds-colorpicker-swatch-shadow",
       "family": "--ds-colorpicker-swatch",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:2260  box-shadow: var(--ds-colorpicker-swatch-shadow);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -8478,10 +8479,10 @@
       "name": "--ds-colorpicker-text-font-size",
       "family": "--ds-colorpicker-text",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/ui/primitives/inputs/ColorPicker/engines/rustic/index.tsx:192  fontSize: 'var(--ds-colorpicker-text-font-size)',",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -9667,10 +9668,10 @@
       "name": "--ds-command-palette-focus-line",
       "family": "--ds-command-palette",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css:62  box-shadow: inset 0 -1px 0 0 var(--ds-command-palette-focus-line, var(--ds-color-primary-200));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -9685,10 +9686,10 @@
       "name": "--ds-command-palette-item-active-bg",
       "family": "--ds-command-palette",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css:86  background: var(--ds-command-palette-item-active-bg, var(--ds-color-primary-50));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -9703,10 +9704,10 @@
       "name": "--ds-command-palette-item-active-border",
       "family": "--ds-command-palette",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css:89  box-shadow: inset 0 0 0 1px var(--ds-command-palette-item-active-border, var(--ds-color-primary-500));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -9721,10 +9722,10 @@
       "name": "--ds-command-palette-item-hover-border",
       "family": "--ds-command-palette",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css:97  box-shadow: inset 0 0 0 1px var(--ds-command-palette-item-hover-border, var(--ds-color-primary-300));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -9739,10 +9740,10 @@
       "name": "--ds-command-palette-shortcut-bg",
       "family": "--ds-command-palette",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css:108  background: var(--ds-command-palette-shortcut-bg, var(--ds-color-surface-muted, var(--ds-color-neutral-50)));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -9757,10 +9758,10 @@
       "name": "--ds-command-palette-shortcut-shadow",
       "family": "--ds-command-palette",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css:110  box-shadow: var(--ds-command-palette-shortcut-shadow, var(--ds-shadow-sm));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -11318,10 +11319,10 @@
       "name": "--ds-datepicker-cell-color",
       "family": "--ds-datepicker-cell",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/date-picker.css:202  color: var(--ds-datepicker-cell-color, var(--ds-color-text-primary));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -11372,10 +11373,10 @@
       "name": "--ds-datepicker-cell-hover-bg",
       "family": "--ds-datepicker-cell",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/date-picker.css:228  background-color: var(--ds-datepicker-cell-hover-bg, var(--ds-color-primary-50));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -11408,10 +11409,10 @@
       "name": "--ds-datepicker-cell-radius",
       "family": "--ds-datepicker-cell",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/date-picker.css:199  border-radius: var(--ds-datepicker-cell-radius, 4px);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -11444,10 +11445,10 @@
       "name": "--ds-datepicker-day-header-color",
       "family": "--ds-datepicker-day",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/date-picker.css:194  color: var(--ds-datepicker-day-header-color, var(--ds-color-text-tertiary));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -11462,10 +11463,10 @@
       "name": "--ds-datepicker-focus-ring",
       "family": "--ds-datepicker-focus",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/date-picker.css:222  border: 2px solid var(--ds-datepicker-focus-ring, var(--ds-color-primary-500));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -11480,10 +11481,10 @@
       "name": "--ds-datepicker-header-color",
       "family": "--ds-datepicker-header",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/date-picker.css:190  color: var(--ds-datepicker-header-color, var(--ds-color-text-primary));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -11498,10 +11499,10 @@
       "name": "--ds-datepicker-nav-color",
       "family": "--ds-datepicker-nav",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/date-picker.css:186  color: var(--ds-datepicker-nav-color, var(--ds-color-text-secondary));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -11516,10 +11517,10 @@
       "name": "--ds-datepicker-outside-color",
       "family": "--ds-datepicker-outside",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/date-picker.css:207  color: var(--ds-datepicker-outside-color, var(--ds-color-text-tertiary));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -11534,10 +11535,10 @@
       "name": "--ds-datepicker-panel-bg",
       "family": "--ds-datepicker-panel",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/date-picker.css:174  background-color: var(--ds-datepicker-panel-bg, var(--ds-color-bg-elevated));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -11552,10 +11553,10 @@
       "name": "--ds-datepicker-panel-border",
       "family": "--ds-datepicker-panel",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 3,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/date-picker.css:179  border: 1px solid var(--ds-datepicker-panel-border, var(--ds-color-border));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 3
@@ -11570,10 +11571,10 @@
       "name": "--ds-datepicker-panel-radius",
       "family": "--ds-datepicker-panel",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/date-picker.css:175  border-radius: var(--ds-datepicker-panel-radius, 8px);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -11646,10 +11647,10 @@
       "name": "--ds-datepicker-range-bg",
       "family": "--ds-datepicker-range",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/date-picker.css:210  background-color: var(--ds-datepicker-range-bg, var(--ds-color-primary-100));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -11664,10 +11665,10 @@
       "name": "--ds-datepicker-selected-bg",
       "family": "--ds-datepicker-selected",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/date-picker.css:213  background-color: var(--ds-datepicker-selected-bg, var(--ds-color-primary-500));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -11682,10 +11683,10 @@
       "name": "--ds-datepicker-selected-color",
       "family": "--ds-datepicker-selected",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/date-picker.css:214  color: var(--ds-datepicker-selected-color, var(--ds-color-text-inverse, var(--ds-color-bg-base)));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -11700,10 +11701,10 @@
       "name": "--ds-datepicker-selected-shadow",
       "family": "--ds-datepicker-selected",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/date-picker.css:215  box-shadow: var(--ds-datepicker-selected-shadow, 0 0 0 2px var(--ds-color-primary-200));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -11718,10 +11719,10 @@
       "name": "--ds-datepicker-today-border",
       "family": "--ds-datepicker-today",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/date-picker.css:218  border: 1px solid var(--ds-datepicker-today-border, var(--ds-color-primary-500));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -11736,10 +11737,10 @@
       "name": "--ds-datepicker-today-color",
       "family": "--ds-datepicker-today",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/date-picker.css:258  color: var(--ds-datepicker-today-color, var(--ds-color-primary-500));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -11754,10 +11755,10 @@
       "name": "--ds-datepicker-today-hover-bg",
       "family": "--ds-datepicker-today",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/date-picker.css:262  background-color: var(--ds-datepicker-today-hover-bg, var(--ds-color-primary-50));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -11772,10 +11773,10 @@
       "name": "--ds-datepicker-today-hover-shadow",
       "family": "--ds-datepicker-today",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/date-picker.css:263  box-shadow: var(--ds-datepicker-today-hover-shadow, var(--ds-shadow-sm));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -12044,7 +12045,7 @@
       "class": "TENANT_FACING_CANDIDATE",
       "owner": "packages/core/src/foundation/tokens/css/foundation/base/density.css",
       "readSites": 1,
-      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' \u2014 public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
+      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' — public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
       "flag": "documented-authoring-hook",
       "_audit": {
         "readBuckets": {
@@ -12062,7 +12063,7 @@
       "class": "TENANT_FACING_CANDIDATE",
       "owner": "packages/core/src/foundation/tokens/css/foundation/base/density.css",
       "readSites": 1,
-      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' \u2014 public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
+      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' — public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
       "flag": "documented-authoring-hook",
       "_audit": {
         "readBuckets": {
@@ -12080,7 +12081,7 @@
       "class": "TENANT_FACING_CANDIDATE",
       "owner": "packages/core/src/foundation/tokens/css/foundation/base/density.css",
       "readSites": 1,
-      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' \u2014 public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
+      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' — public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
       "flag": "documented-authoring-hook",
       "_audit": {
         "readBuckets": {
@@ -12098,7 +12099,7 @@
       "class": "TENANT_FACING_CANDIDATE",
       "owner": "packages/core/src/foundation/tokens/css/foundation/base/density.css",
       "readSites": 1,
-      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' \u2014 public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
+      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' — public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
       "flag": "documented-authoring-hook",
       "_audit": {
         "readBuckets": {
@@ -12116,7 +12117,7 @@
       "class": "TENANT_FACING_CANDIDATE",
       "owner": "packages/core/src/foundation/tokens/css/foundation/base/density.css",
       "readSites": 1,
-      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' \u2014 public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
+      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' — public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
       "flag": "documented-authoring-hook",
       "_audit": {
         "readBuckets": {
@@ -12134,7 +12135,7 @@
       "class": "TENANT_FACING_CANDIDATE",
       "owner": "packages/core/src/foundation/tokens/css/foundation/base/density.css",
       "readSites": 1,
-      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' \u2014 public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
+      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' — public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
       "flag": "documented-authoring-hook",
       "_audit": {
         "readBuckets": {
@@ -12152,7 +12153,7 @@
       "class": "TENANT_FACING_CANDIDATE",
       "owner": "packages/core/src/foundation/tokens/css/foundation/base/density.css",
       "readSites": 1,
-      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' \u2014 public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
+      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' — public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
       "flag": "documented-authoring-hook",
       "_audit": {
         "readBuckets": {
@@ -12170,7 +12171,7 @@
       "class": "TENANT_FACING_CANDIDATE",
       "owner": "packages/core/src/foundation/tokens/css/foundation/base/density.css",
       "readSites": 1,
-      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' \u2014 public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
+      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' — public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
       "flag": "documented-authoring-hook",
       "_audit": {
         "readBuckets": {
@@ -12188,7 +12189,7 @@
       "class": "TENANT_FACING_CANDIDATE",
       "owner": "packages/core/src/foundation/tokens/css/foundation/base/density.css",
       "readSites": 1,
-      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' \u2014 public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
+      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' — public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
       "flag": "documented-authoring-hook",
       "_audit": {
         "readBuckets": {
@@ -12206,7 +12207,7 @@
       "class": "TENANT_FACING_CANDIDATE",
       "owner": "packages/core/src/foundation/tokens/css/foundation/base/density.css",
       "readSites": 1,
-      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' \u2014 public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
+      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' — public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
       "flag": "documented-authoring-hook",
       "_audit": {
         "readBuckets": {
@@ -12224,7 +12225,7 @@
       "class": "TENANT_FACING_CANDIDATE",
       "owner": "packages/core/src/foundation/tokens/css/foundation/base/density.css",
       "readSites": 1,
-      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' \u2014 public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
+      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' — public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
       "flag": "documented-authoring-hook",
       "_audit": {
         "readBuckets": {
@@ -12242,7 +12243,7 @@
       "class": "TENANT_FACING_CANDIDATE",
       "owner": "packages/core/src/foundation/tokens/css/foundation/base/density.css",
       "readSites": 1,
-      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' \u2014 public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
+      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' — public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
       "flag": "documented-authoring-hook",
       "_audit": {
         "readBuckets": {
@@ -12260,7 +12261,7 @@
       "class": "TENANT_FACING_CANDIDATE",
       "owner": "packages/core/src/foundation/tokens/css/foundation/base/density.css",
       "readSites": 1,
-      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' \u2014 public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
+      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' — public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
       "flag": "documented-authoring-hook",
       "_audit": {
         "readBuckets": {
@@ -12278,7 +12279,7 @@
       "class": "TENANT_FACING_CANDIDATE",
       "owner": "packages/core/src/foundation/tokens/css/foundation/base/density.css",
       "readSites": 1,
-      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' \u2014 public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
+      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' — public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
       "flag": "documented-authoring-hook",
       "_audit": {
         "readBuckets": {
@@ -12296,7 +12297,7 @@
       "class": "TENANT_FACING_CANDIDATE",
       "owner": "packages/core/src/foundation/tokens/css/foundation/base/density.css",
       "readSites": 1,
-      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' \u2014 public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
+      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' — public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
       "flag": "documented-authoring-hook",
       "_audit": {
         "readBuckets": {
@@ -12314,7 +12315,7 @@
       "class": "TENANT_FACING_CANDIDATE",
       "owner": "packages/core/src/foundation/tokens/css/foundation/base/density.css",
       "readSites": 1,
-      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' \u2014 public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
+      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' — public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
       "flag": "documented-authoring-hook",
       "_audit": {
         "readBuckets": {
@@ -12332,7 +12333,7 @@
       "class": "TENANT_FACING_CANDIDATE",
       "owner": "packages/core/src/foundation/tokens/css/foundation/base/density.css",
       "readSites": 1,
-      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' \u2014 public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
+      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' — public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
       "flag": "documented-authoring-hook",
       "_audit": {
         "readBuckets": {
@@ -12350,7 +12351,7 @@
       "class": "TENANT_FACING_CANDIDATE",
       "owner": "packages/core/src/foundation/tokens/css/foundation/base/density.css",
       "readSites": 1,
-      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' \u2014 public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
+      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' — public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
       "flag": "documented-authoring-hook",
       "_audit": {
         "readBuckets": {
@@ -12368,7 +12369,7 @@
       "class": "TENANT_FACING_CANDIDATE",
       "owner": "packages/core/src/foundation/tokens/css/foundation/base/density.css",
       "readSites": 1,
-      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' \u2014 public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
+      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' — public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
       "flag": "documented-authoring-hook",
       "_audit": {
         "readBuckets": {
@@ -12386,7 +12387,7 @@
       "class": "TENANT_FACING_CANDIDATE",
       "owner": "packages/core/src/foundation/tokens/css/foundation/base/density.css",
       "readSites": 1,
-      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' \u2014 public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
+      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' — public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
       "flag": "documented-authoring-hook",
       "_audit": {
         "readBuckets": {
@@ -12404,7 +12405,7 @@
       "class": "TENANT_FACING_CANDIDATE",
       "owner": "packages/core/src/foundation/tokens/css/foundation/base/density.css",
       "readSites": 1,
-      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' \u2014 public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
+      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' — public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
       "flag": "documented-authoring-hook",
       "_audit": {
         "readBuckets": {
@@ -12422,7 +12423,7 @@
       "class": "TENANT_FACING_CANDIDATE",
       "owner": "packages/core/src/foundation/tokens/css/foundation/base/density.css",
       "readSites": 1,
-      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' \u2014 public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
+      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' — public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
       "flag": "documented-authoring-hook",
       "_audit": {
         "readBuckets": {
@@ -12440,7 +12441,7 @@
       "class": "TENANT_FACING_CANDIDATE",
       "owner": "packages/core/src/foundation/tokens/css/foundation/base/density.css",
       "readSites": 1,
-      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' \u2014 public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
+      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' — public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
       "flag": "documented-authoring-hook",
       "_audit": {
         "readBuckets": {
@@ -12458,7 +12459,7 @@
       "class": "TENANT_FACING_CANDIDATE",
       "owner": "packages/core/src/foundation/tokens/css/foundation/base/density.css",
       "readSites": 1,
-      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' \u2014 public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
+      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' — public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
       "flag": "documented-authoring-hook",
       "_audit": {
         "readBuckets": {
@@ -12476,7 +12477,7 @@
       "class": "TENANT_FACING_CANDIDATE",
       "owner": "packages/core/src/foundation/tokens/css/foundation/base/density.css",
       "readSites": 1,
-      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' \u2014 public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
+      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' — public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
       "flag": "documented-authoring-hook",
       "_audit": {
         "readBuckets": {
@@ -12494,7 +12495,7 @@
       "class": "TENANT_FACING_CANDIDATE",
       "owner": "packages/core/src/foundation/tokens/css/foundation/base/density.css",
       "readSites": 1,
-      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' \u2014 public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
+      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' — public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
       "flag": "documented-authoring-hook",
       "_audit": {
         "readBuckets": {
@@ -12512,7 +12513,7 @@
       "class": "TENANT_FACING_CANDIDATE",
       "owner": "packages/core/src/foundation/tokens/css/foundation/base/density.css",
       "readSites": 1,
-      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' \u2014 public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
+      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' — public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
       "flag": "documented-authoring-hook",
       "_audit": {
         "readBuckets": {
@@ -12530,7 +12531,7 @@
       "class": "TENANT_FACING_CANDIDATE",
       "owner": "packages/core/src/foundation/tokens/css/foundation/base/density.css",
       "readSites": 1,
-      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' \u2014 public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
+      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' — public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
       "flag": "documented-authoring-hook",
       "_audit": {
         "readBuckets": {
@@ -12548,7 +12549,7 @@
       "class": "TENANT_FACING_CANDIDATE",
       "owner": "packages/core/src/foundation/tokens/css/foundation/base/density.css",
       "readSites": 1,
-      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' \u2014 public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
+      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' — public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
       "flag": "documented-authoring-hook",
       "_audit": {
         "readBuckets": {
@@ -12566,7 +12567,7 @@
       "class": "TENANT_FACING_CANDIDATE",
       "owner": "packages/core/src/foundation/tokens/css/foundation/base/density.css",
       "readSites": 1,
-      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' \u2014 public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
+      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' — public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
       "flag": "documented-authoring-hook",
       "_audit": {
         "readBuckets": {
@@ -12584,7 +12585,7 @@
       "class": "TENANT_FACING_CANDIDATE",
       "owner": "packages/core/src/foundation/tokens/css/foundation/base/density.css",
       "readSites": 1,
-      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' \u2014 public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
+      "evidence": "density.css:55-57 prose: 'Density-aware white-label overrides SHOULD AUTHOR these hooks' — public authoring seam; undeclared IS the intentional state (K-EXEC item 9)",
       "flag": "documented-authoring-hook",
       "_audit": {
         "readBuckets": {
@@ -12600,10 +12601,10 @@
       "name": "--ds-descriptions-border-color",
       "family": "--ds-descriptions-border",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/descriptions.css:41  border: 1px solid var(--ds-descriptions-border-color, #e8e8e8);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -12762,10 +12763,10 @@
       "name": "--ds-descriptions-font-size-default",
       "family": "--ds-descriptions-font",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/ui/primitives/display/Descriptions/engines/rustic/index.tsx:35  default: 'var(--ds-descriptions-font-size-default, 14px)',",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 2
@@ -12780,10 +12781,10 @@
       "name": "--ds-descriptions-font-size-small",
       "family": "--ds-descriptions-font",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/ui/primitives/display/Descriptions/engines/rustic/index.tsx:36  small: 'var(--ds-descriptions-font-size-small, 12px)',",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -12978,10 +12979,10 @@
       "name": "--ds-descriptions-item-border-color",
       "family": "--ds-descriptions-item",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/descriptions.css:53  border-bottom: 1px solid var(--ds-descriptions-item-border-color, #f0f0f0);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -12996,10 +12997,10 @@
       "name": "--ds-descriptions-label-bg",
       "family": "--ds-descriptions-label",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1582  background: var(--ds-descriptions-label-bg);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -13142,10 +13143,10 @@
       "name": "--ds-descriptions-padding",
       "family": "--ds-descriptions-padding",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1598  padding: var(--ds-descriptions-padding);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -13359,10 +13360,10 @@
       "name": "--ds-descriptions-title-color",
       "family": "--ds-descriptions-title",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/descriptions.css:36  color: var(--ds-descriptions-title-color, var(--ds-color-text-primary, #333));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -14191,10 +14192,10 @@
       "name": "--ds-drawer-body-padding",
       "family": "--ds-drawer-body",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:905  padding: var(--ds-drawer-body-padding);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -14210,10 +14211,10 @@
       "name": "--ds-drawer-border-color",
       "family": "--ds-drawer-border",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/drawer.css:55  border-bottom: 1px solid var(--ds-drawer-border-color, var(--ds-color-border-subtle));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 2
@@ -14228,10 +14229,10 @@
       "name": "--ds-drawer-close-bg-hover",
       "family": "--ds-drawer-close",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:921  background: var(--ds-drawer-close-bg-hover);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -14266,10 +14267,10 @@
       "name": "--ds-drawer-close-color-hover",
       "family": "--ds-drawer-close",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:920  color: var(--ds-drawer-close-color-hover);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -14284,10 +14285,10 @@
       "name": "--ds-drawer-close-size",
       "family": "--ds-drawer-close",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:915  font-size: var(--ds-drawer-close-size);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -14340,10 +14341,10 @@
       "name": "--ds-drawer-footer-padding",
       "family": "--ds-drawer-footer",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:909  padding: var(--ds-drawer-footer-padding);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -14359,10 +14360,10 @@
       "name": "--ds-drawer-header-padding",
       "family": "--ds-drawer-header",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:894  padding: var(--ds-drawer-header-padding);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -14378,10 +14379,10 @@
       "name": "--ds-drawer-overlay-bg",
       "family": "--ds-drawer-overlay",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:925  background: var(--ds-drawer-overlay-bg);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -14396,10 +14397,10 @@
       "name": "--ds-drawer-title-color",
       "family": "--ds-drawer-title",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:901  color: var(--ds-drawer-title-color);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -14454,10 +14455,10 @@
       "name": "--ds-drawer-transition",
       "family": "--ds-drawer-transition",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/ui/primitives/feedback/Drawer/engines/rustic/index.tsx:304  transition: 'var(--ds-drawer-transition, transform 0.3s ease-in-out)',",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -14546,10 +14547,10 @@
       "name": "--ds-dropdown-divider-color",
       "family": "--ds-dropdown-divider",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/context-menu.css:54  background-color: var(--ds-dropdown-divider-color, var(--ds-color-neutral-200, #e5e7eb));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 2
@@ -14781,10 +14782,10 @@
       "name": "--ds-dropdown-item-hover-bg",
       "family": "--ds-dropdown-item",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/context-menu.css:74  background-color: var(--ds-dropdown-item-hover-bg, var(--ds-color-neutral-100, #f3f4f6));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 2
@@ -14827,24 +14828,6 @@
         },
         "declBuckets": {},
         "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-dropdown-item-shadow-hover",
-      "family": "--ds-dropdown-item",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/dropdown.css",
-      "readSites": 2,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/dropdown.css:262  var(--ds-dropdown-item-shadow-hover, var(--ds-shadow-xs));",
-      "flag": "undeclared by design: 2 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 2
-        },
-        "declBuckets": {},
-        "withFallback": 2,
         "bare": 0,
         "testStoryReads": 0
       }
@@ -14908,10 +14891,10 @@
       "name": "--ds-dropdown-shortcut-color",
       "family": "--ds-dropdown-shortcut",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/context-menu.css:60  color: var(--ds-dropdown-shortcut-color, var(--ds-color-text-secondary, #6b7280));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -14926,10 +14909,10 @@
       "name": "--ds-dropdown-z-index",
       "family": "--ds-dropdown-z",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/ui/primitives/overlay/Dropdown/engines/rustic/index.tsx:275  zIndex: 'var(--ds-dropdown-z-index, 1050)' as unknown as number,",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -15919,7 +15902,7 @@
       "owner": "packages/core/src/foundation/tokens/css/facade/artifacts/evnto/_source/extension.css",
       "readSites": 0,
       "evidence": "packages/core/src/ui/surfaces/foundation/common/SurfaceEvntoPilot.stories.tsx:127  cancelled: { bg: 'var(--ds-event-cancelled, #fef2f2)', color: 'var(--ds-event-cancelled-text, #dc2626)', label: 'Cancelled' },",
-      "flag": "brand-authored today: the only declarations live in facade/artifacts/*/_source/extension.css (2 vertical source(s)), so a vertical already sets this and no foundation file owns it; NOT ON THE PRODUCTIVE PATH \u2014 only test/story readers",
+      "flag": "brand-authored today: the only declarations live in facade/artifacts/*/_source/extension.css (2 vertical source(s)), so a vertical already sets this and no foundation file owns it; NOT ON THE PRODUCTIVE PATH — only test/story readers",
       "_audit": {
         "readBuckets": {},
         "declBuckets": {
@@ -15938,7 +15921,7 @@
       "owner": "packages/core/src/foundation/tokens/css/facade/artifacts/evnto/_source/extension.css",
       "readSites": 0,
       "evidence": "packages/core/src/ui/surfaces/foundation/common/SurfaceEvntoPilot.stories.tsx:127  cancelled: { bg: 'var(--ds-event-cancelled, #fef2f2)', color: 'var(--ds-event-cancelled-text, #dc2626)', label: 'Cancelled' },",
-      "flag": "brand-authored today: the only declarations live in facade/artifacts/*/_source/extension.css (2 vertical source(s)), so a vertical already sets this and no foundation file owns it; NOT ON THE PRODUCTIVE PATH \u2014 only test/story readers",
+      "flag": "brand-authored today: the only declarations live in facade/artifacts/*/_source/extension.css (2 vertical source(s)), so a vertical already sets this and no foundation file owns it; NOT ON THE PRODUCTIVE PATH — only test/story readers",
       "_audit": {
         "readBuckets": {},
         "declBuckets": {
@@ -15957,7 +15940,7 @@
       "owner": "packages/core/src/foundation/tokens/css/facade/artifacts/evnto/_source/extension.css",
       "readSites": 0,
       "evidence": "packages/core/src/ui/surfaces/foundation/common/SurfaceEvntoPilot.stories.tsx:123  draft: { bg: 'var(--ds-event-draft, rgba(0,0,0,0.04))', color: 'var(--ds-event-draft-text, #737373)', label: 'Draft' },",
-      "flag": "brand-authored today: the only declarations live in facade/artifacts/*/_source/extension.css (2 vertical source(s)), so a vertical already sets this and no foundation file owns it; NOT ON THE PRODUCTIVE PATH \u2014 only test/story readers",
+      "flag": "brand-authored today: the only declarations live in facade/artifacts/*/_source/extension.css (2 vertical source(s)), so a vertical already sets this and no foundation file owns it; NOT ON THE PRODUCTIVE PATH — only test/story readers",
       "_audit": {
         "readBuckets": {},
         "declBuckets": {
@@ -15976,7 +15959,7 @@
       "owner": "packages/core/src/foundation/tokens/css/facade/artifacts/evnto/_source/extension.css",
       "readSites": 0,
       "evidence": "packages/core/src/ui/surfaces/foundation/common/SurfaceEvntoPilot.stories.tsx:123  draft: { bg: 'var(--ds-event-draft, rgba(0,0,0,0.04))', color: 'var(--ds-event-draft-text, #737373)', label: 'Draft' },",
-      "flag": "brand-authored today: the only declarations live in facade/artifacts/*/_source/extension.css (2 vertical source(s)), so a vertical already sets this and no foundation file owns it; NOT ON THE PRODUCTIVE PATH \u2014 only test/story readers",
+      "flag": "brand-authored today: the only declarations live in facade/artifacts/*/_source/extension.css (2 vertical source(s)), so a vertical already sets this and no foundation file owns it; NOT ON THE PRODUCTIVE PATH — only test/story readers",
       "_audit": {
         "readBuckets": {},
         "declBuckets": {
@@ -15995,7 +15978,7 @@
       "owner": "packages/core/src/foundation/tokens/css/facade/artifacts/evnto/_source/extension.css",
       "readSites": 0,
       "evidence": "packages/core/src/ui/surfaces/foundation/common/SurfaceEvntoPilot.stories.tsx:126  ended: { bg: 'var(--ds-event-ended, rgba(0,0,0,0.04))', color: 'var(--ds-event-ended-text, #a3a3a3)', label: 'Ended' },",
-      "flag": "brand-authored today: the only declarations live in facade/artifacts/*/_source/extension.css (2 vertical source(s)), so a vertical already sets this and no foundation file owns it; NOT ON THE PRODUCTIVE PATH \u2014 only test/story readers",
+      "flag": "brand-authored today: the only declarations live in facade/artifacts/*/_source/extension.css (2 vertical source(s)), so a vertical already sets this and no foundation file owns it; NOT ON THE PRODUCTIVE PATH — only test/story readers",
       "_audit": {
         "readBuckets": {},
         "declBuckets": {
@@ -16014,7 +15997,7 @@
       "owner": "packages/core/src/foundation/tokens/css/facade/artifacts/evnto/_source/extension.css",
       "readSites": 0,
       "evidence": "packages/core/src/ui/surfaces/foundation/common/SurfaceEvntoPilot.stories.tsx:126  ended: { bg: 'var(--ds-event-ended, rgba(0,0,0,0.04))', color: 'var(--ds-event-ended-text, #a3a3a3)', label: 'Ended' },",
-      "flag": "brand-authored today: the only declarations live in facade/artifacts/*/_source/extension.css (2 vertical source(s)), so a vertical already sets this and no foundation file owns it; NOT ON THE PRODUCTIVE PATH \u2014 only test/story readers",
+      "flag": "brand-authored today: the only declarations live in facade/artifacts/*/_source/extension.css (2 vertical source(s)), so a vertical already sets this and no foundation file owns it; NOT ON THE PRODUCTIVE PATH — only test/story readers",
       "_audit": {
         "readBuckets": {},
         "declBuckets": {
@@ -16033,7 +16016,7 @@
       "owner": "packages/core/src/foundation/tokens/css/facade/artifacts/evnto/_source/extension.css",
       "readSites": 0,
       "evidence": "packages/core/src/ui/surfaces/foundation/common/SurfaceEvntoPilot.stories.tsx:125  live: { bg: 'var(--ds-event-live, #eff6ff)', color: 'var(--ds-event-live-text, #2563eb)', label: 'Live' },",
-      "flag": "brand-authored today: the only declarations live in facade/artifacts/*/_source/extension.css (2 vertical source(s)), so a vertical already sets this and no foundation file owns it; NOT ON THE PRODUCTIVE PATH \u2014 only test/story readers",
+      "flag": "brand-authored today: the only declarations live in facade/artifacts/*/_source/extension.css (2 vertical source(s)), so a vertical already sets this and no foundation file owns it; NOT ON THE PRODUCTIVE PATH — only test/story readers",
       "_audit": {
         "readBuckets": {},
         "declBuckets": {
@@ -16052,7 +16035,7 @@
       "owner": "packages/core/src/foundation/tokens/css/facade/artifacts/evnto/_source/extension.css",
       "readSites": 0,
       "evidence": "packages/core/src/ui/surfaces/foundation/common/SurfaceEvntoPilot.stories.tsx:125  live: { bg: 'var(--ds-event-live, #eff6ff)', color: 'var(--ds-event-live-text, #2563eb)', label: 'Live' },",
-      "flag": "brand-authored today: the only declarations live in facade/artifacts/*/_source/extension.css (2 vertical source(s)), so a vertical already sets this and no foundation file owns it; NOT ON THE PRODUCTIVE PATH \u2014 only test/story readers",
+      "flag": "brand-authored today: the only declarations live in facade/artifacts/*/_source/extension.css (2 vertical source(s)), so a vertical already sets this and no foundation file owns it; NOT ON THE PRODUCTIVE PATH — only test/story readers",
       "_audit": {
         "readBuckets": {},
         "declBuckets": {
@@ -16071,7 +16054,7 @@
       "owner": "packages/core/src/foundation/tokens/css/facade/artifacts/evnto/_source/extension.css",
       "readSites": 0,
       "evidence": "packages/core/src/ui/surfaces/foundation/common/SurfaceEvntoPilot.stories.tsx:124  published: { bg: 'var(--ds-event-published, #f0fdf4)', color: 'var(--ds-event-published-text, #16a34a)', label: 'Published' },",
-      "flag": "brand-authored today: the only declarations live in facade/artifacts/*/_source/extension.css (2 vertical source(s)), so a vertical already sets this and no foundation file owns it; NOT ON THE PRODUCTIVE PATH \u2014 only test/story readers",
+      "flag": "brand-authored today: the only declarations live in facade/artifacts/*/_source/extension.css (2 vertical source(s)), so a vertical already sets this and no foundation file owns it; NOT ON THE PRODUCTIVE PATH — only test/story readers",
       "_audit": {
         "readBuckets": {},
         "declBuckets": {
@@ -16090,7 +16073,7 @@
       "owner": "packages/core/src/foundation/tokens/css/facade/artifacts/evnto/_source/extension.css",
       "readSites": 0,
       "evidence": "packages/core/src/ui/surfaces/foundation/common/SurfaceEvntoPilot.stories.tsx:124  published: { bg: 'var(--ds-event-published, #f0fdf4)', color: 'var(--ds-event-published-text, #16a34a)', label: 'Published' },",
-      "flag": "brand-authored today: the only declarations live in facade/artifacts/*/_source/extension.css (2 vertical source(s)), so a vertical already sets this and no foundation file owns it; NOT ON THE PRODUCTIVE PATH \u2014 only test/story readers",
+      "flag": "brand-authored today: the only declarations live in facade/artifacts/*/_source/extension.css (2 vertical source(s)), so a vertical already sets this and no foundation file owns it; NOT ON THE PRODUCTIVE PATH — only test/story readers",
       "_audit": {
         "readBuckets": {},
         "declBuckets": {
@@ -16899,10 +16882,10 @@
       "name": "--ds-float-button-bg",
       "family": "--ds-float-button",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1459  background: var(--ds-float-button-bg);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -16917,10 +16900,10 @@
       "name": "--ds-float-button-bg-hover",
       "family": "--ds-float-button",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1466  background: var(--ds-float-button-bg-hover);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -16935,10 +16918,10 @@
       "name": "--ds-float-button-color",
       "family": "--ds-float-button",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1460  color: var(--ds-float-button-color);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -16953,10 +16936,10 @@
       "name": "--ds-float-button-primary-bg",
       "family": "--ds-float-button",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1470  background: var(--ds-float-button-primary-bg);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -16971,10 +16954,10 @@
       "name": "--ds-float-button-primary-color",
       "family": "--ds-float-button",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1471  color: var(--ds-float-button-primary-color);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -16989,10 +16972,10 @@
       "name": "--ds-float-button-radius",
       "family": "--ds-float-button",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1462  border-radius: var(--ds-float-button-radius);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -17007,10 +16990,10 @@
       "name": "--ds-float-button-shadow",
       "family": "--ds-float-button",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1461  box-shadow: var(--ds-float-button-shadow);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -17025,10 +17008,10 @@
       "name": "--ds-float-button-size",
       "family": "--ds-float-button",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1454  width: var(--ds-float-button-size);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 2
@@ -17151,10 +17134,10 @@
       "name": "--ds-floatbutton-bottom",
       "family": "--ds-floatbutton-bottom",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:77  bottom: 'var(--ds-floatbutton-bottom, 24px)',",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -17223,10 +17206,10 @@
       "name": "--ds-floatbutton-gap",
       "family": "--ds-floatbutton-gap",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:87  gap: 'var(--ds-floatbutton-gap, 8px)',",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 2
@@ -17331,10 +17314,10 @@
       "name": "--ds-floatbutton-right",
       "family": "--ds-floatbutton-right",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:78  right: 'var(--ds-floatbutton-right, 24px)',",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -17386,10 +17369,10 @@
       "name": "--ds-floatbutton-square-radius",
       "family": "--ds-floatbutton-square",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:43  border-radius: var(--ds-floatbutton-square-radius, 8px);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -17404,10 +17387,10 @@
       "name": "--ds-floatbutton-z-index",
       "family": "--ds-floatbutton-z",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:79  zIndex: 'var(--ds-floatbutton-z-index, 1000)' as unknown as number,",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -18055,10 +18038,10 @@
       "name": "--ds-form-helper-color",
       "family": "--ds-form-helper",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1058  color: var(--ds-form-helper-color);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -18073,10 +18056,10 @@
       "name": "--ds-form-info-color",
       "family": "--ds-form-info",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/form.css:38  color: var(--ds-form-info-color, #3b82f6);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -18091,10 +18074,10 @@
       "name": "--ds-form-item-margin-bottom",
       "family": "--ds-form-item",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1042  margin-bottom: var(--ds-form-item-margin-bottom);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -18577,10 +18560,10 @@
       "name": "--ds-image-border-color",
       "family": "--ds-image-border",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/image.css:44  border: 1px solid var(--ds-image-border-color, rgba(0, 0, 0, 0.1));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -18595,10 +18578,10 @@
       "name": "--ds-image-fallback-bg",
       "family": "--ds-image-fallback",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/image.css:67  background-color: var(--ds-image-fallback-bg, #f5f5f5);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -18613,10 +18596,10 @@
       "name": "--ds-image-fallback-color",
       "family": "--ds-image-fallback",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/image.css:68  color: var(--ds-image-fallback-color, #737373);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -18667,10 +18650,10 @@
       "name": "--ds-image-loading-bg",
       "family": "--ds-image-loading",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/image.css:62  background-color: var(--ds-image-loading-bg, #e5e5e5);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -18685,10 +18668,10 @@
       "name": "--ds-image-mask-bg",
       "family": "--ds-image-mask",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1971  background: var(--ds-image-mask-bg);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -18703,10 +18686,10 @@
       "name": "--ds-image-mask-color",
       "family": "--ds-image-mask",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1972  color: var(--ds-image-mask-color);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -18721,10 +18704,10 @@
       "name": "--ds-image-placeholder-bg",
       "family": "--ds-image-placeholder",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1966  background: var(--ds-image-placeholder-bg);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -18740,10 +18723,10 @@
       "name": "--ds-image-placeholder-color",
       "family": "--ds-image-placeholder",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1967  color: var(--ds-image-placeholder-color);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -18758,10 +18741,10 @@
       "name": "--ds-image-preview-bg",
       "family": "--ds-image-preview",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1977  background: var(--ds-image-preview-bg);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -18776,10 +18759,10 @@
       "name": "--ds-image-preview-close-size",
       "family": "--ds-image-preview",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:2000  font-size: var(--ds-image-preview-close-size);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -18794,10 +18777,10 @@
       "name": "--ds-image-preview-icon-size",
       "family": "--ds-image-preview",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1994  width: var(--ds-image-preview-icon-size);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 2
@@ -18812,10 +18795,10 @@
       "name": "--ds-image-preview-toolbar-bg",
       "family": "--ds-image-preview",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1981  background: var(--ds-image-preview-toolbar-bg);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 2
@@ -18830,10 +18813,10 @@
       "name": "--ds-image-preview-toolbar-color",
       "family": "--ds-image-preview",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 4,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1982  color: var(--ds-image-preview-toolbar-color);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 4
@@ -18848,10 +18831,10 @@
       "name": "--ds-image-preview-toolbar-radius",
       "family": "--ds-image-preview",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1983  border-radius: var(--ds-image-preview-toolbar-radius);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -18921,10 +18904,10 @@
       "name": "--ds-image-shadow",
       "family": "--ds-image-shadow",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/image.css:47  box-shadow: var(--ds-image-shadow, 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -18939,10 +18922,10 @@
       "name": "--ds-image-transition",
       "family": "--ds-image-transition",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/ui/primitives/display/Image/engines/rustic/index.tsx:111  transition: 'var(--ds-image-transition, all 0.2s ease-in-out)',",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -18957,10 +18940,10 @@
       "name": "--ds-image-zoom-close-bg",
       "family": "--ds-image-zoom",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/image.css:88  background-color: var(--ds-image-zoom-close-bg, rgba(255, 255, 255, 0.1));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -18975,10 +18958,10 @@
       "name": "--ds-image-zoom-close-color",
       "family": "--ds-image-zoom",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/image.css:91  color: var(--ds-image-zoom-close-color, white);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -18993,10 +18976,10 @@
       "name": "--ds-image-zoom-indicator-bg",
       "family": "--ds-image-zoom",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/image.css:78  background-color: var(--ds-image-zoom-indicator-bg, rgba(0, 0, 0, 0.5));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -19011,10 +18994,10 @@
       "name": "--ds-image-zoom-indicator-color",
       "family": "--ds-image-zoom",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/image.css:80  color: var(--ds-image-zoom-indicator-color, white);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -19047,10 +19030,10 @@
       "name": "--ds-image-zoom-overlay-bg",
       "family": "--ds-image-zoom",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/image.css:85  background-color: var(--ds-image-zoom-overlay-bg, rgba(0, 0, 0, 0.9));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -19645,10 +19628,10 @@
       "name": "--ds-invoice-label-color",
       "family": "--ds-invoice-label",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/ui/patterns/forms/invoice-template/engines/classic/index.tsx:145  color: 'var(--ds-invoice-label-color, var(--ds-color-text-tertiary))',",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 2
@@ -19663,10 +19646,10 @@
       "name": "--ds-invoice-notes-color",
       "family": "--ds-invoice-notes",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/ui/patterns/forms/invoice-template/engines/classic/index.tsx:227  <div style={{ fontSize: 13, color: 'var(--ds-invoice-notes-color, var(--ds-color-text-secondary))', whiteSpace: 'pre-wrap' }}>",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -19681,10 +19664,10 @@
       "name": "--ds-invoice-panel-bg",
       "family": "--ds-invoice-panel",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/ui/patterns/forms/invoice-template/engines/classic/index.tsx:136  background: 'var(--ds-invoice-panel-bg, var(--ds-color-bg-secondary))',",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 2
@@ -19771,10 +19754,10 @@
       "name": "--ds-invoice-watermark-color",
       "family": "--ds-invoice-watermark",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/ui/patterns/forms/invoice-template/engines/classic/index.tsx:113  color: 'var(--ds-invoice-watermark-color, var(--ds-color-text-tertiary))',",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -20275,10 +20258,10 @@
       "name": "--ds-layout-content-bg",
       "family": "--ds-layout-content",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:2171  background: var(--ds-layout-content-bg);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -20332,10 +20315,10 @@
       "name": "--ds-layout-footer-bg",
       "family": "--ds-layout-footer",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:2176  background: var(--ds-layout-footer-bg);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -20351,10 +20334,10 @@
       "name": "--ds-layout-footer-color",
       "family": "--ds-layout-footer",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:2177  color: var(--ds-layout-footer-color);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -20369,10 +20352,10 @@
       "name": "--ds-layout-footer-padding",
       "family": "--ds-layout-footer",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:2175  padding: var(--ds-layout-footer-padding);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -20424,10 +20407,10 @@
       "name": "--ds-layout-header-color",
       "family": "--ds-layout-header",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:2135  color: var(--ds-layout-header-color);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -20443,10 +20426,10 @@
       "name": "--ds-layout-header-padding",
       "family": "--ds-layout-header",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:2137  padding: var(--ds-layout-header-padding);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -20574,10 +20557,10 @@
       "name": "--ds-layout-sider-light-border",
       "family": "--ds-layout-sider",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:2166  border-right: 1px solid var(--ds-layout-sider-light-border);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -20593,10 +20576,10 @@
       "name": "--ds-layout-sider-light-color",
       "family": "--ds-layout-sider",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:2165  color: var(--ds-layout-sider-light-color);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -20742,10 +20725,10 @@
       "name": "--ds-link-color-active",
       "family": "--ds-link-color",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1789  color: var(--ds-link-color-active);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -20761,10 +20744,10 @@
       "name": "--ds-link-color-hover",
       "family": "--ds-link-color",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1783  color: var(--ds-link-color-hover);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -20780,10 +20763,10 @@
       "name": "--ds-link-danger-color",
       "family": "--ds-link-danger",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/link.css:40  color: var(--ds-link-danger-color, var(--ds-color-error-500, #ff4d4f));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -20798,10 +20781,10 @@
       "name": "--ds-link-decoration",
       "family": "--ds-link-decoration",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1777  text-decoration: var(--ds-link-decoration);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -20817,10 +20800,10 @@
       "name": "--ds-link-decoration-hover",
       "family": "--ds-link-decoration",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1784  text-decoration: var(--ds-link-decoration-hover);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -21035,10 +21018,10 @@
       "name": "--ds-link-primary-color",
       "family": "--ds-link-primary",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/link.css:28  color: var(--ds-link-primary-color, var(--ds-color-primary-500, #1677ff));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -21071,10 +21054,10 @@
       "name": "--ds-link-secondary-color",
       "family": "--ds-link-secondary",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/link.css:31  color: var(--ds-link-secondary-color, var(--ds-color-neutral-600, #595959));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -21089,10 +21072,10 @@
       "name": "--ds-link-success-color",
       "family": "--ds-link-success",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/link.css:34  color: var(--ds-link-success-color, var(--ds-color-success-500, #52c41a));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -21197,10 +21180,10 @@
       "name": "--ds-link-warning-color",
       "family": "--ds-link-warning",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/link.css:37  color: var(--ds-link-warning-color, var(--ds-color-warning-500, #faad14));",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -21215,10 +21198,10 @@
       "name": "--ds-list-border",
       "family": "--ds-list-border",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1725  border-color: var(--ds-list-border);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -21323,10 +21306,10 @@
       "name": "--ds-list-empty-color",
       "family": "--ds-list-empty",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1757  color: var(--ds-list-empty-color);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -21341,10 +21324,10 @@
       "name": "--ds-list-footer-bg",
       "family": "--ds-list-footer",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1744  background: var(--ds-list-footer-bg);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -21359,10 +21342,10 @@
       "name": "--ds-list-header-bg",
       "family": "--ds-list-header",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1739  background: var(--ds-list-header-bg);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -21377,10 +21360,10 @@
       "name": "--ds-list-item-color",
       "family": "--ds-list-item",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1730  color: var(--ds-list-item-color);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -21395,10 +21378,10 @@
       "name": "--ds-list-item-divider",
       "family": "--ds-list-item",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1731  border-color: var(--ds-list-item-divider);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -21413,10 +21396,10 @@
       "name": "--ds-list-md-padding-x",
       "family": "--ds-list-md",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1729  padding: var(--ds-list-md-padding-y) var(--ds-list-md-padding-x);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -21431,10 +21414,10 @@
       "name": "--ds-list-md-padding-y",
       "family": "--ds-list-md",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1729  padding: var(--ds-list-md-padding-y) var(--ds-list-md-padding-x);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -21467,10 +21450,10 @@
       "name": "--ds-list-radius",
       "family": "--ds-list-radius",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1721  border-radius: var(--ds-list-radius);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -22520,7 +22503,7 @@
       "owner": "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css:19  --ds-workspace-shell-overlay: var(--ds-material-canvas-texture, transparent);",
-      "flag": "registry derivedChannel \u2014 already a declared capability channel",
+      "flag": "registry derivedChannel — already a declared capability channel",
       "_audit": {
         "readBuckets": {
           "foundation-tokens": 2
@@ -22543,7 +22526,7 @@
       "owner": "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts",
       "readSites": 3,
       "evidence": "packages/core/src/foundation/tokens/css/presentation/components/card.css:400  var( --ds-material-card-highlight, inset 0 1px 0 color-mix(in srgb, var(--ds-card-bg) 72%, transparent) ",
-      "flag": "registry derivedChannel \u2014 already a declared capability channel",
+      "flag": "registry derivedChannel — already a declared capability channel",
       "_audit": {
         "readBuckets": {
           "foundation-tokens": 3
@@ -24099,10 +24082,10 @@
       "name": "--ds-mentions-bg",
       "family": "--ds-mentions-bg",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/mentions.css:30  background-color: var(--ds-mentions-bg);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -24117,10 +24100,10 @@
       "name": "--ds-mentions-border",
       "family": "--ds-mentions-border",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/mentions.css:28  border: 1px solid var(--ds-mentions-border);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -24153,10 +24136,10 @@
       "name": "--ds-mentions-border-error",
       "family": "--ds-mentions-border",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/mentions.css:37  border-color: var(--ds-mentions-border-error);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -24208,10 +24191,10 @@
       "name": "--ds-mentions-border-warning",
       "family": "--ds-mentions-border",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/mentions.css:40  border-color: var(--ds-mentions-border-warning);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -24244,10 +24227,10 @@
       "name": "--ds-mentions-dropdown-bg",
       "family": "--ds-mentions-dropdown",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1698  background: var(--ds-mentions-dropdown-bg);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -24263,10 +24246,10 @@
       "name": "--ds-mentions-dropdown-max-height",
       "family": "--ds-mentions-dropdown",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/ui/primitives/inputs/Mentions/engines/rustic/index.tsx:261  maxHeight: 'var(--ds-mentions-dropdown-max-height)',",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -24281,10 +24264,10 @@
       "name": "--ds-mentions-dropdown-radius",
       "family": "--ds-mentions-dropdown",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1700  border-radius: var(--ds-mentions-dropdown-radius);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -24300,10 +24283,10 @@
       "name": "--ds-mentions-dropdown-shadow",
       "family": "--ds-mentions-dropdown",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1699  box-shadow: var(--ds-mentions-dropdown-shadow);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1,
@@ -24337,10 +24320,10 @@
       "name": "--ds-mentions-empty-color",
       "family": "--ds-mentions-empty",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/mentions.css:57  color: var(--ds-mentions-empty-color);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -24355,10 +24338,10 @@
       "name": "--ds-mentions-font-size",
       "family": "--ds-mentions-font",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/ui/primitives/inputs/Mentions/engines/rustic/index.tsx:247  fontSize: 'var(--ds-mentions-font-size)',",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -24429,10 +24412,10 @@
       "name": "--ds-mentions-option-bg-selected",
       "family": "--ds-mentions-option",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1712  background: var(--ds-mentions-option-bg-selected);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "classic": 1
@@ -24539,10 +24522,10 @@
       "name": "--ds-mentions-padding",
       "family": "--ds-mentions-padding",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/ui/primitives/inputs/Mentions/engines/rustic/index.tsx:246  padding: 'var(--ds-mentions-padding)',",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -24575,10 +24558,10 @@
       "name": "--ds-mentions-radius",
       "family": "--ds-mentions-radius",
       "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "\u2014",
+      "owner": "—",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/mentions.css:29  border-radius: var(--ds-mentions-radius);",
-      "flag": "frozen engine reader only \u2014 do not edit",
+      "flag": "frozen engine reader only — do not edit",
       "_audit": {
         "readBuckets": {
           "rustic": 1
@@ -29392,17 +29375,6 @@
       "flag": "non-modern-reader:foundation-tokens"
     },
     {
-      "name": "--ds-shell-main-padding-block-end",
-      "family": "shell",
-      "class": "MODERN_PRIVATE",
-      "owner": "foundation/tokens/css/presentation/components/skin/app-shell.css",
-      "readSites": [
-        "foundation/tokens/css/presentation/components/skin/app-shell.css"
-      ],
-      "evidence": "undeclared internal channel; 1 read(s) in foundation-tokens, 1 with a governing fallback",
-      "flag": "non-modern-reader:foundation-tokens"
-    },
-    {
       "name": "--ds-shell-main-padding-block-start",
       "family": "shell",
       "class": "MODERN_PRIVATE",
@@ -29815,18 +29787,6 @@
         "foundation/tokens/css/runtime/engines/rustic/skin/layout.css"
       ],
       "evidence": "declared in an existing foundation owner (foundation-tokens); 3 read(s) across foundation-tokens+modern+rustic"
-    },
-    {
-      "name": "--ds-sidebar-shell-padding-inline",
-      "family": "sidebar",
-      "class": "FOUNDATION_SHARED",
-      "owner": "foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
-      "readSites": [
-        "foundation/tokens/css/presentation/components/skin/app-shell.css",
-        "foundation/tokens/css/runtime/engines/classic/theme.css",
-        "foundation/tokens/css/runtime/engines/modern/skin/layout.css"
-      ],
-      "evidence": "declared in an existing foundation owner (foundation-tokens); 5 read(s) across foundation-tokens+classic+modern+rustic"
     },
     {
       "name": "--ds-size-touch-target",
@@ -32361,7 +32321,7 @@
         "foundation/tokens/css/presentation/components/skin/input-compounds.css",
         "foundation/tokens/css/runtime/engines/modern/skin/input.css"
       ],
-      "evidence": "(c) safe fallback: terminal var(--ds-surface-disabled, var(--ds-surface-subtle, var(--ds-surface-canvas))); copied from the governed sibling site select.css:223 \u2014 authored, not invented. ZERO-DELTA: the guarding outer channel resolves in all three verticals (--ds-input-bg-disabled / --ds-textarea-bg-disabled = bithire #F8F8F8 / #fafafa, platform #18181B / #fafafa, evnto #FAFAFA / #fafafa), so the inner fallback was never evaluated and is not evaluated now; it only removes the latent IACVT.",
+      "evidence": "(c) safe fallback: terminal var(--ds-surface-disabled, var(--ds-surface-subtle, var(--ds-surface-canvas))); copied from the governed sibling site select.css:223 — authored, not invented. ZERO-DELTA: the guarding outer channel resolves in all three verticals (--ds-input-bg-disabled / --ds-textarea-bg-disabled = bithire #F8F8F8 / #fafafa, platform #18181B / #fafafa, evnto #FAFAFA / #fafafa), so the inner fallback was never evaluated and is not evaluated now; it only removes the latent IACVT.",
       "action": "(c) safe fallback",
       "liveBareSitesBefore": 6,
       "liveBareSitesAfter": 0,
@@ -32624,16 +32584,6 @@
         "foundation/tokens/css/runtime/engines/modern/skin/data-table.css"
       ],
       "evidence": "undeclared internal channel; 2 read(s) in foundation-tokens+modern, 2 with a governing fallback"
-    },
-    {
-      "name": "--ds-table-bulk-bar-min-height",
-      "family": "table",
-      "class": "MODERN_PRIVATE",
-      "owner": "foundation/tokens/css/runtime/engines/modern/skin/data-table.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/modern/skin/data-table.css"
-      ],
-      "evidence": "undeclared internal channel; 1 read(s) in modern, 1 with a governing fallback"
     },
     {
       "name": "--ds-table-bulk-bar-padding",
@@ -33291,16 +33241,6 @@
       "owner": "foundation/tokens/css/runtime/engines/modern/skin/table.css",
       "readSites": [
         "foundation/tokens/css/runtime/engines/modern/skin/table.css"
-      ],
-      "evidence": "undeclared internal channel; 1 read(s) in modern, 1 with a governing fallback"
-    },
-    {
-      "name": "--ds-table-pagination-min-height",
-      "family": "table",
-      "class": "MODERN_PRIVATE",
-      "owner": "foundation/tokens/css/runtime/engines/modern/skin/data-table.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/modern/skin/data-table.css"
       ],
       "evidence": "undeclared internal channel; 1 read(s) in modern, 1 with a governing fallback"
     },
@@ -34342,7 +34282,7 @@
       "readSites": [
         "foundation/tokens/css/runtime/engines/modern/skin/textarea.css"
       ],
-      "evidence": "(c) safe fallback: terminal var(--ds-textarea-caret-color, var(--ds-input-border-focus, var(--ds-color-primary))); copied from the governed sibling site textarea.css:50 \u2014 authored, not invented. ZERO-DELTA: the guarding outer channel resolves in all three verticals (--ds-input-autofill-caret = bithire #3A6FB0, platform rgba(255,255,255,0\u2026), evnto #171717), so the inner fallback was never evaluated and is not evaluated now; it only removes the latent IACVT.",
+      "evidence": "(c) safe fallback: terminal var(--ds-textarea-caret-color, var(--ds-input-border-focus, var(--ds-color-primary))); copied from the governed sibling site textarea.css:50 — authored, not invented. ZERO-DELTA: the guarding outer channel resolves in all three verticals (--ds-input-autofill-caret = bithire #3A6FB0, platform rgba(255,255,255,0…), evnto #171717), so the inner fallback was never evaluated and is not evaluated now; it only removes the latent IACVT.",
       "action": "(c) safe fallback",
       "liveBareSitesBefore": 1,
       "liveBareSitesAfter": 0,

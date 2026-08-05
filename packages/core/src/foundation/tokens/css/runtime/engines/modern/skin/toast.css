@@ -26,6 +26,18 @@
  * or absent variant fell through to VARIANT_COLORS.default's bg/color) -- which
  * is NOT the same paint as `[data-tone='default']`, whose arm reads the card
  * surface tokens instead. Both are kept.
+ *
+ * STATE LANGUAGE (lifecycle-feedback canon): the toast is the TRANSIENT member
+ * of the single urgency grammar shared with Alert and Notification -- one
+ * accent channel per tone drives the glyph well, the edge-grammar frame, the
+ * accent wash and the title's severity WEIGHT ramp (warning/error bold). The
+ * floating surface composes the tenant card-material texture facet (fallback
+ * `none`: flat stays flat, paper reads on the toast). Enter/exit are owned
+ * here as governed keyframes (the engine stamps `data-state`, never inline
+ * animation): duration/easing ride the personality-projected
+ * `--ds-toast-enter-*`/`--ds-toast-exit-*` channels, and the scale depth
+ * multiplies `--ds-motion-intensity` (fallback 1 = the historical render), so
+ * the motion dial retunes the toast's arrival on the same DOM.
  */
 
 .rottay-toast--modern.rottay-toast--modern[data-part='root'][data-part='root'] {
@@ -37,16 +49,62 @@
   max-inline-size: 100%;
   overflow: hidden;
   color: var(--ds-color-text-primary);
+  /* Material facet: the card-material texture rides above the accent wash
+     (SemanticSurface idiom: texture layer, then color layers). `none` on flat
+     postures keeps the historical paint byte-identical. */
   background:
+    var(--ds-material-card-texture, none),
     linear-gradient(
       135deg,
       color-mix(in srgb, var(--ds-toast-accent) 10%, var(--ds-color-bg-primary)) 0%,
       color-mix(in srgb, var(--ds-color-bg-primary) 98%, var(--ds-toast-accent) 2%) 54%,
       var(--ds-color-bg-primary) 100%
     );
-  border: 1px solid color-mix(in srgb, var(--ds-toast-accent) 30%, var(--ds-color-border-subtle));
+  border: var(--ds-edge-standard-width, 1px) var(--ds-edge-standard-style, solid) color-mix(in srgb, var(--ds-toast-accent) 30%, var(--ds-color-border-subtle));
   border-radius: var(--ds-radius-lg);
   box-shadow: var(--ds-elevation-3);
+}
+
+/* Governed enter/exit (skin-owned; the engine stamps data-state, no inline
+   animation). Duration/easing resolve the personality-projected channels with
+   the motion-canon rungs as fallback; the scale depth multiplies the tenant
+   motion-intensity dial (fallback 1 = the legacy toast-fade render). A toast
+   has no placement knowledge inside the in-flow Container, so its arrival is
+   scale+fade -- the edge-travel grammar belongs to Notification, which knows
+   its stack edge. */
+.rottay-toast--modern.rottay-toast--modern[data-part='root'][data-state='open'] {
+  animation: ds-toast-enter-modern
+    var(--ds-toast-enter-duration, var(--ds-motion-slow))
+    var(--ds-toast-enter-easing, var(--ds-motion-ease-out)) both;
+}
+
+.rottay-toast--modern.rottay-toast--modern[data-part='root'][data-state='leaving'] {
+  pointer-events: none;
+  animation: ds-toast-exit-modern
+    var(--ds-toast-exit-duration, var(--ds-motion-normal))
+    var(--ds-toast-exit-easing, var(--ds-motion-ease-exit)) both;
+}
+
+@keyframes ds-toast-enter-modern {
+  from {
+    opacity: 0;
+    transform: scale(calc(1 - 0.05 * var(--ds-motion-intensity, 1)));
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes ds-toast-exit-modern {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(calc(1 - 0.05 * var(--ds-motion-intensity, 1)));
+  }
 }
 
 .rottay-toast--modern[data-part='root'][data-radius='none'] { border-radius: 0; }
@@ -57,10 +115,28 @@
 
 .rottay-toast--modern[data-part='root'][data-tone='default'] { --ds-toast-accent: var(--ds-color-primary); }
 .rottay-toast--modern[data-part='root'][data-tone='primary'] { --ds-toast-accent: var(--ds-color-primary); }
-.rottay-toast--modern[data-part='root'][data-tone='success'] { --ds-toast-accent: var(--ds-color-success); }
-.rottay-toast--modern[data-part='root'][data-tone='error'] { --ds-toast-accent: var(--ds-color-error); }
-.rottay-toast--modern[data-part='root'][data-tone='warning'] { --ds-toast-accent: var(--ds-color-warning); }
-.rottay-toast--modern[data-part='root'][data-tone='info'] { --ds-toast-accent: var(--ds-color-info); }
+/* Severity ink relay on the semantic tones (the Callout AUT-1 authority,
+   family adoption): the glyph reads the AA-measured `--ds-color-{tone}-ink`;
+   info's ink is the raw hue by construction, warning/error/success deepen
+   toward the tenant neutral (the raw hues read ~2.2:1 on the tinted well,
+   under the 3:1 glyph floor). default/primary/secondary keep the raw accent --
+   no ink authority exists for brand hues. Fallbacks are the raw accent. */
+.rottay-toast--modern[data-part='root'][data-tone='success'] {
+  --ds-toast-accent: var(--ds-color-success);
+  --_ds-toast-accent-ink: var(--ds-color-success-ink, var(--ds-toast-accent));
+}
+.rottay-toast--modern[data-part='root'][data-tone='error'] {
+  --ds-toast-accent: var(--ds-color-error);
+  --_ds-toast-accent-ink: var(--ds-color-error-ink, var(--ds-toast-accent));
+}
+.rottay-toast--modern[data-part='root'][data-tone='warning'] {
+  --ds-toast-accent: var(--ds-color-warning);
+  --_ds-toast-accent-ink: var(--ds-color-warning-ink, var(--ds-toast-accent));
+}
+.rottay-toast--modern[data-part='root'][data-tone='info'] {
+  --ds-toast-accent: var(--ds-color-info);
+  --_ds-toast-accent-ink: var(--ds-color-info-ink, var(--ds-toast-accent));
+}
 .rottay-toast--modern[data-part='root'][data-tone='secondary'] { --ds-toast-accent: var(--ds-color-secondary); }
 
 .rottay-toast--modern.rottay-toast--modern[data-part='root'][data-part='root'][data-tone='gradient'] {
@@ -86,9 +162,11 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--ds-toast-accent);
+  /* The glyph carries the severity INK, never the raw hue (Alert/Callout
+     parity); brand tones fall back to the raw accent. */
+  color: var(--_ds-toast-accent-ink, var(--ds-toast-accent));
   background: color-mix(in srgb, var(--ds-toast-accent) 11%, var(--ds-color-bg-primary));
-  border: 1px solid color-mix(in srgb, var(--ds-toast-accent) 26%, var(--ds-color-border-subtle));
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-toast-accent) 26%, var(--ds-color-border-subtle));
   border-radius: var(--ds-radius-md);
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) calc(56% * var(--ds-effect-intensity)), transparent);
 }
@@ -110,10 +188,20 @@
   font-size: var(--ds-font-size-sm);
   font-weight: var(--ds-font-weight-semibold);
   line-height: var(--ds-line-height-snug);
-  letter-spacing: var(--ds-letter-spacing-tight);
+  /* Heading tracking channel (fallback: the legacy tight tracking, so the
+     untyped default renders unchanged): a technical posture tightens, an
+     editorial one rests at 0 -- personality in type, not in paint. */
+  letter-spacing: var(--ds-letter-spacing-heading, var(--ds-letter-spacing-tight));
   /* Long-copy resilience: unbroken strings wrap inside the body's
      minmax(0, 1fr) track instead of protruding past the actions column. */
   overflow-wrap: break-word;
+}
+
+/* Severity weight ramp (state language, Alert/Notification parity): urgent
+   tones read heavier in TYPE -- urgency is never hue-only. */
+.rottay-toast--modern[data-part='root'][data-tone='warning'] [data-part='title'],
+.rottay-toast--modern[data-part='root'][data-tone='error'] [data-part='title'] {
+  font-weight: var(--ds-font-weight-bold);
 }
 .rottay-toast--modern[data-part='root'] [data-part='description'],
 .rottay-toast--modern[data-part='root'] [data-part='custom-content'] {
@@ -221,6 +309,13 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  /* Enter/exit land instantly in the final state (the global token zeroing
+     already collapses the duration; this guard keeps the keyframes from
+     painting their `from` frame at all). */
+  .rottay-toast--modern.rottay-toast--modern[data-part='root'][data-state='open'],
+  .rottay-toast--modern.rottay-toast--modern[data-part='root'][data-state='leaving'] {
+    animation: none;
+  }
   .rottay-toast--modern[data-part='root'] [data-part='action'],
   .rottay-toast--modern[data-part='root'] [data-part='close-button'],
   .rottay-toast--modern[data-part='root'] > [data-part='progress-bar'] {

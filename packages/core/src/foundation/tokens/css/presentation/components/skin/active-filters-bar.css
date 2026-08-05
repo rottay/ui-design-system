@@ -138,6 +138,51 @@
   overflow: hidden;
   text-overflow: ellipsis;
   margin-inline-start: var(--ds-spacing-1, 0.25rem);
+  /* Values scan as data: tabular figures keep same-width numerals when a
+     chip carries counts, dates or ids (the status-filter-pills idiom). */
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- filter lifecycle (applied / draft / invalid). The chip CHROME stays
+        the Tag primitive's paint (composition law); the state is expressed
+        on the pattern-owned interior — the icon slot's ink and the value's
+        underline grammar — so it reads as form, never as hue alone, and it
+        survives forced colors (text-decoration remaps to CanvasText):
+        - draft: dashed underline + quieter weight — chosen, not committed;
+        - invalid: wavy error underline — the universal "needs repair" mark. ---- */
+.ds-structure.ds-active-filters-bar[data-part="root"]
+  [data-part="chip"][data-state="draft"]
+  [data-part="chip-value"] {
+  /* C1: draft must read at two meters — REGULAR weight + quieted ink under
+     the dashed underline, so the provisional chip is visibly ghosted next
+     to the solid applied chip (same grammar as the ListToolbar strip). */
+  color: var(--ds-color-text-secondary);
+  font-weight: 400;
+  text-decoration: underline dashed;
+  text-decoration-color: var(--ds-color-text-muted);
+  text-underline-offset: 0.2em;
+}
+.ds-structure.ds-active-filters-bar[data-part="root"]
+  [data-part="chip"][data-state="invalid"]
+  [data-part="chip-value"] {
+  color: var(--ds-color-error);
+  text-decoration: underline wavy var(--ds-color-error);
+  text-underline-offset: 0.2em;
+}
+.ds-structure.ds-active-filters-bar[data-part="root"]
+  [data-part="chip"][data-state="invalid"]
+  [data-part="chip-label"] {
+  color: var(--ds-color-error);
+}
+.ds-structure.ds-active-filters-bar[data-part="root"]
+  [data-part="chip"][data-state="draft"]
+  [data-part="icon"] {
+  color: var(--ds-color-text-muted);
+}
+.ds-structure.ds-active-filters-bar[data-part="root"]
+  [data-part="chip"][data-state="invalid"]
+  [data-part="icon"] {
+  color: var(--ds-color-error);
 }
 
 /* ---- entrance: one coordinated fade-rise, silenced under reduced-motion ---- */
@@ -162,7 +207,9 @@
    and the count pill re-assert in system colors. The composed Tag chips and
    the clear-all / add-filter Buttons keep their own forced-colors contracts;
    the chip label/value text auto-maps (the label's uppercase tracking keeps
-   it distinguishable from the value without colour). */
+   it distinguishable from the value without colour). The lifecycle grammar
+   survives by FORM: the dashed/wavy value underlines remap to CanvasText and
+   the state glyphs render as system ink. */
 @media (forced-colors: active) {
   .ds-structure.ds-active-filters-bar[data-part="root"][data-embedded="false"] {
     border-bottom-color: ButtonText;
@@ -171,6 +218,30 @@
   .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="pill"] {
     border-color: ButtonText;
     background: Canvas;
+    color: CanvasText;
+  }
+  .ds-structure.ds-active-filters-bar[data-part="root"]
+    [data-part="chip"][data-state="draft"]
+    [data-part="chip-value"] {
+    color: CanvasText;
+    text-decoration: underline dashed;
+    text-decoration-color: CanvasText;
+  }
+  .ds-structure.ds-active-filters-bar[data-part="root"]
+    [data-part="chip"][data-state="invalid"]
+    [data-part="chip-value"] {
+    color: CanvasText;
+    text-decoration: underline wavy;
+    text-decoration-color: CanvasText;
+  }
+  .ds-structure.ds-active-filters-bar[data-part="root"]
+    [data-part="chip"][data-state="invalid"]
+    [data-part="chip-label"] {
+    color: CanvasText;
+  }
+  .ds-structure.ds-active-filters-bar[data-part="root"]
+    [data-part="chip"][data-state]
+    [data-part="icon"] {
     color: CanvasText;
   }
 }

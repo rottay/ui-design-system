@@ -193,12 +193,16 @@
   transition: grid-template-rows var(--ds-motion-normal) var(--ds-motion-ease-out);
 }
 .rottay-menu-submenu__content {
+  position: relative;
   min-height: 0;
   overflow: hidden;
   margin: 0;
   padding-block: 0;
   padding-inline: var(--ds-menu-submenu-indent, 24px) 0;
   list-style: none;
+  /* Nested thread design default (C1): ON for the compound disclosure panel,
+     gated by the same proto the engine skin consumes. */
+  --_ds-menu-nested-thread-size: var(--ds-divider-width, 1px);
   /* Collapsed content must leave the tab order while `aria-hidden='true'` is
      set (the grid-only collapse leaked focusable rows — axe
      aria-hidden-focus). `visibility` interpolates discretely: it stays
@@ -212,6 +216,22 @@
   visibility: hidden;
 }
 
+/* Nested thread (C1): the same disclosure-thread grammar the engine skin
+   paints — a logical seam centered on this panel's own indent gutter, its
+   STYLE riding `--ds-divider-style` (solid technical / dashed editorial via
+   the personality bridge) and its ink the shared proto. Logical
+   border-inline-start mirrors it to the reading side under RTL. */
+.rottay-menu-submenu__content::before {
+  content: '';
+  position: absolute;
+  inset-block: 2px 4px;
+  inset-inline-start: calc(var(--ds-menu-submenu-indent, 24px) / 2);
+  border-inline-start: var(--_ds-menu-nested-thread-size, 0px)
+    var(--ds-divider-style, solid)
+    var(--_ds-menu-nested-thread-ink, color-mix(in srgb, var(--ds-color-text-primary) 14%, transparent));
+  pointer-events: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .rottay-menu-submenu__panel,
   .rottay-menu-submenu__content,
@@ -219,6 +239,15 @@
   .rottay-menu-item[data-part='item'],
   .rottay-menu-submenu [data-part='trigger'] {
     transition: none;
+  }
+}
+
+/* Reduced transparency: the nested thread's translucent hairline collapses
+   to the solid subtle border (sheet.css precedent; equal-specificity
+   longhand, later in source). */
+@media (prefers-reduced-transparency: reduce) {
+  .rottay-menu-submenu__content::before {
+    border-inline-start-color: var(--ds-color-border-subtle);
   }
 }
 
@@ -236,7 +265,11 @@
   font-size: var(--ds-menu-group-title-font-size, 12px);
   font-weight: var(--ds-menu-group-title-font-weight, 600);
   letter-spacing: var(--ds-letter-spacing-wider);
-  text-transform: uppercase;
+  /* Overline grammar chain (C-11 C1; the C-03/C-12 idiom): tenant menu
+     channel → header eyebrow channel → personality label case → uppercase
+     floor. The compound eyebrow speaks with the same voice as the engine
+     skin's group label instead of a hardcoded technical uppercase. */
+  text-transform: var(--ds-menu-group-text-transform, var(--ds-page-header-eyebrow-text-transform, var(--ds-typography-label-transform, uppercase)));
   user-select: none;
 }
 
@@ -279,5 +312,11 @@
      keeps the disclosure state visible without growing geometry. */
   .rottay-menu-submenu [data-part='trigger'][data-open='true'] {
     outline: 1px solid ButtonText;
+  }
+
+  /* The nested thread keeps its SHAPE (width/style survive forcing) and
+     re-keys to a system seam color. */
+  .rottay-menu-submenu__content::before {
+    border-color: CanvasText;
   }
 }

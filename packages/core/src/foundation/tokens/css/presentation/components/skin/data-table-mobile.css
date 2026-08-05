@@ -412,6 +412,110 @@
   );
 }
 
+/* ---- state icon tile: the empty/error panels carry the same governed tile
+        the desktop card states own, so the state grammar is identical across
+        postures (icon + title + recovery copy, never bare text) ---- */
+.ds-pattern-data-table.ds-data-table--mobile[data-part="mobile-state-panel"]
+  [data-part="state-icon-tile"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem));
+  background: color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
+  color: var(--ds-color-primary);
+}
+.ds-pattern-data-table.ds-data-table--mobile[data-part="mobile-state-panel"]
+  [data-part="state-icon-tile"][data-part="state-icon-tile"] {
+  border: 1px solid var(--ds-table-border, var(--ds-color-border-subtle));
+}
+.ds-pattern-data-table.ds-data-table--mobile[data-part="mobile-state-panel"][data-state="error"]
+  [data-part="state-icon-tile"] {
+  background: color-mix(in srgb, var(--ds-color-error) 8%, transparent);
+  color: var(--ds-color-error);
+}
+
+/* ---- mobile loading skeleton: two anonymous card anatomies replace the old
+        bare "Loading…" line. They mirror the loaded list's exact footprint —
+        identity bar, summary field rows, trailing action bar — and scale with
+        the same per-density channels the real cards resolve, so the handoff
+        to content does not jump at any density. The bars ride the shared
+        --ds-table-skeleton-fill channel and the family's scan keyframes. ---- */
+.ds-pattern-data-table.ds-data-table--mobile[data-part="mobile-state-panel"][data-state="loading"] {
+  display: grid;
+  gap: var(--ds-spacing-3, 0.75rem);
+  place-items: stretch;
+  text-align: start;
+}
+
+.ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-skeleton-card"] {
+  display: grid;
+  gap: var(--ds-spacing-2, 0.5rem);
+  padding: var(--ds-density-card-padding, 1rem);
+  border-radius: var(
+    --ds-collection-card-radius,
+    var(--ds-premium-card-radius, var(--ds-radius-lg))
+  );
+  background: var(
+    --ds-collection-card-bg,
+    var(--ds-card-bg, var(--ds-surface-card))
+  );
+}
+.ds-pattern-data-table.ds-data-table--mobile
+  [data-part="mobile-skeleton-card"][data-part="mobile-skeleton-card"] {
+  border: 1px solid
+    var(
+      --ds-collection-card-border,
+      var(--ds-card-border, var(--ds-color-border-subtle))
+    );
+}
+
+.ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-skeleton-title"],
+.ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-skeleton-field"],
+.ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-skeleton-actions"] {
+  height: calc(12px * var(--ds-density-local-factor, 1));
+  border-radius: var(--ds-radius-sm, 6px);
+  background: var(
+    --ds-table-skeleton-fill,
+    linear-gradient(
+      105deg,
+      color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent) 24%,
+      color-mix(in srgb, var(--ds-color-bg-elevated) 74%, transparent) 44%,
+      color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent) 64%
+    )
+  );
+  background-size: 220% 100%;
+  animation: ds-data-table-skeleton-scan var(--ds-motion-attention)
+    var(--ds-motion-ease-standard, ease-in-out) infinite;
+}
+
+.ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-skeleton-title"] {
+  width: 52%;
+  height: calc(16px * var(--ds-density-local-factor, 1));
+}
+
+.ds-pattern-data-table.ds-data-table--mobile
+  [data-part="mobile-skeleton-field"][data-short="true"] {
+  width: 64%;
+}
+
+.ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-skeleton-actions"] {
+  width: 44%;
+  height: calc(24px * var(--ds-density-local-factor, 1));
+  margin-block-start: 2px;
+}
+
+.ds-pattern-data-table.ds-data-table--mobile
+  [data-part="mobile-skeleton-card"][data-skeleton-index="1"]
+  :is(
+    [data-part="mobile-skeleton-title"],
+    [data-part="mobile-skeleton-field"],
+    [data-part="mobile-skeleton-actions"]
+  ) {
+  animation-delay: var(--ds-motion-fast);
+}
+
 @container ds-mobile-table (max-width: 28rem) {
   .ds-pattern-data-table.ds-data-table--mobile
     [data-part="mobile-card-summary-label"] {
@@ -429,6 +533,22 @@
   .ds-pattern-data-table.ds-data-table--mobile
     .ds-data-table__mobile-card:focus-within {
     transform: none;
+  }
+
+  .ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-skeleton-title"],
+  .ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-skeleton-field"],
+  .ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-skeleton-actions"] {
+    animation: none;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  /* The selection well meets the physical touch floor; its painted size is
+     already near it, so the geometry change is imperceptible on touch. */
+  .ds-pattern-data-table.ds-data-table--mobile
+    [data-part="mobile-card-selection"] {
+    min-width: var(--ds-touch-target-min, 44px);
+    min-height: var(--ds-touch-target-min, 44px);
   }
 }
 
@@ -452,5 +572,20 @@
     border-color: Highlight;
     outline: 2px solid Highlight;
     outline-offset: 2px;
+  }
+
+  /* Skeleton gradients are forced away; the bars keep a system-color fill so
+     the loading anatomy still reads (the stats-grid/table.css idiom). */
+  .ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-skeleton-title"],
+  .ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-skeleton-field"],
+  .ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-skeleton-actions"] {
+    background: GrayText;
+    animation: none;
+  }
+
+  .ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-skeleton-card"] {
+    forced-color-adjust: none;
+    border-color: CanvasText;
+    background: Canvas;
   }
 }

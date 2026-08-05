@@ -1742,7 +1742,14 @@
   /* ─────────────────────────────────────────────────────────────────────────────
      SPINNER
      ───────────────────────────────────────────────────────────────────────────── */
-  --ds-spinner-color: #171717;
+  /* R1 Cohort 1 — EIGHTH instance of the vertical/base-literal class. A hard
+     literal here severed the tenant chain completely: the skin already read
+     var(--ds-spinner-color, var(--ds-color-primary)), but the fallback was dead
+     because this declaration always resolves, so the working indicator was
+     near-black under EVERY tenant including one whose accent is blue.
+     "Working" must carry the accent, so the accent is the default and the old
+     literal stays as the fallback. */
+  --ds-spinner-color: var(--ds-color-primary, #171717);
   --ds-spinner-track: #e5e5e5;
 
   /* ─────────────────────────────────────────────────────────────────────────────
@@ -1760,6 +1767,23 @@
      DROPDOWN
      ───────────────────────────────────────────────────────────────────────────── */
   --ds-dropdown-bg: #ffffff;
+  /* NOT DELEGATED. This default briefly read
+     `var(--ds-material-overlay-shadow, var(--ds-shadow-lg))` under adjudicated
+     option (C) and has been restored to the plain literal by forward edit,
+     because (C)'s precondition is not met: delegating hands the role's
+     none-capability to EVERY reader of this var at once, and the overlay
+     cohort's isolation is not settled. An un-delegated default is not
+     none-reachable, so nothing downstream can be handed an invalid value.
+
+     PERMANENT RULE, adjudicated, and it outlives this cohort:
+       Under option (C), do NOT delegate a default until the computed splice
+       list for EVERY consumer of that var is EMPTY.
+     Not "every consumer in scope" -- every consumer, computed transitively (a
+     consumer may reach the role through intermediate custom properties) and
+     across every state selector, not one representative rule per surface; both
+     blind spots have already hidden a live defect in this family. The list must
+     come from an instrument that is capable of failing -- a gate that cannot go
+     red cannot certify the precondition. */
   --ds-dropdown-shadow: var(--ds-shadow-lg);
   --ds-dropdown-radius: var(--ds-radius-lg);
   --ds-dropdown-padding: 0.375rem;
@@ -1908,7 +1932,15 @@
   /* ─────────────────────────────────────────────────────────────────────────────
      SEGMENTED CONTROL
      ───────────────────────────────────────────────────────────────────────────── */
-  --ds-segmented-bg: #f5f5f5;
+  /* R1 Cohort 1: the segmented track is a CONTROL ground, so its default derives
+     from the control surface seed instead of a hard literal. The literal was the
+     sole remaining cause of a monochrome tenant rendering a pale-blue track: no
+     --ds-segmented-* token is tenant-writable, and a bare `background:
+     var(--ds-segmented-bg)` meant the skin's role chain could never fire. Same
+     defect class as the --ds-button-{size}-radius literal, same remedy — re-base
+     the DEFAULT onto the tenant-reachable seed and keep the old value as the
+     fallback so nothing moves where no tenant authors it. */
+  --ds-segmented-bg: var(--ds-surface-control, #f5f5f5);
   --ds-segmented-item-bg: transparent;
   --ds-segmented-item-bg-selected: #ffffff;
   --ds-segmented-item-color: #525252;
