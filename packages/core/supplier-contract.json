@@ -29,7 +29,8 @@
     "./styles/modern",
     "./styles/platform",
     "./styles/rottay",
-    "./supplier-contract"
+    "./supplier-contract",
+    "./tenant-theme-canary-fixtures"
   ],
   "entrypoints": {
     ".": {
