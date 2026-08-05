@@ -212,12 +212,6 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
   // Drawer skin. Only geometry is assembled here.
   const getPositionStyles = (): React.CSSProperties => {
     const base: React.CSSProperties = {
-      position: 'fixed',
-      // Tokenized overlay stack (spec section 9): the panel sits one tier
-      // above the backdrop via the drawer/overlay pair, not a `zBase + 1`
-      // magic-number offset. The layer manager supplies the canonical drawer
-      // band (equal to --ds-z-drawer for a lone drawer) plus a stack offset.
-      zIndex: overlayLayer.zIndex,
       display: 'flex',
       flexDirection: 'column',
       ...overlayMotion.variables,
@@ -228,6 +222,32 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
           : `${animationName} var(--ds-recipe-exit, ${MOTION_DURATION}) var(--ds-recipe-curve, ${MOTION_EASING}) both`,
       overflow: 'hidden',
       ...style,
+      // FAB-17: THE ENGINE'S POSITIONING BLOCK MERGES LAST. A drawer's fixed
+      // positioning is ANATOMY, not customization surface -- a drawer that is
+      // not fixed is not a drawer. `style` is a public, unrestricted
+      // CSSProperties hatch, and the switch below COMPUTES a viewport-edge
+      // rect against this position: top/left/right/bottom plus a 100vh/100vw
+      // span, which only pin to the viewport on a fixed element. A caller
+      // passing `position: static` strands that rect and the panel renders in
+      // flow. That is true of the component as it stands today, and it is the
+      // load-bearing reason for this ordering.
+      // A relocated keyline pseudo would ALSO be re-anchored by such an
+      // override, but that is a secondary consequence and deliberately NOT the
+      // justification: FAB-12 ruled byte-identical keyline relocation off a
+      // bordered, radiused box unachievable, so the decoration slot may not
+      // survive adjudication. This ordering must not depend on it, and does
+      // not. Popover already merged its positionStyle last -- this aligns the
+      // outliers with their own family's protected members.
+      //
+      // The placement COORDINATES were already safe: the switch below spreads
+      // `...base` and then adds top/left/width/height, so they always outrank
+      // caller style. Only `position` and the owned `zIndex` were exposed.
+      position: 'fixed',
+      // Tokenized overlay stack (spec section 9): the panel sits one tier
+      // above the backdrop via the drawer/overlay pair, not a `zBase + 1`
+      // magic-number offset. The layer manager supplies the canonical drawer
+      // band (equal to --ds-z-drawer for a lone drawer) plus a stack offset.
+      zIndex: overlayLayer.zIndex,
     };
 
     switch (placement) {

@@ -456,8 +456,6 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
           onClick={(e) => e.stopPropagation()}
           className={className}
           style={{
-            position: isAdaptiveFullscreen ? 'fixed' : 'relative',
-            ...(isAdaptiveFullscreen ? { top: 0, left: 0 } : {}),
             display: 'flex',
             flexDirection: 'column',
             // The radius folds a size enum (RADIUS_MAP) and the fullscreen
@@ -479,6 +477,26 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
                 : `${isAdaptiveFullscreen ? 'ds-overlay-modal-sheet-exit-modern' : 'ds-overlay-modal-exit-modern'} var(--ds-recipe-exit, ${MOTION_DURATION}) var(--ds-recipe-curve, ${MOTION_EASING}) both`,
             overflow: 'hidden',
             ...style,
+            // FAB-17: THE ENGINE'S POSITIONING BLOCK MERGES LAST. An overlay's
+            // position is ANATOMY, not customization surface -- a Modal that is
+            // not fixed/relative is not a Modal. `style` is a public,
+            // unrestricted CSSProperties hatch, and this engine COMPUTES
+            // geometry against the position it sets: the adaptive-fullscreen
+            // posture pins top/left to 0, which only means anything on a fixed
+            // element. A caller passing `position: static` strands that offset
+            // and the chamber renders at flow position. That is true of the
+            // component as it stands today, and it is the load-bearing reason
+            // for this ordering.
+            // A relocated keyline pseudo would ALSO be re-anchored by such an
+            // override, but that is a secondary consequence and deliberately
+            // NOT the justification: FAB-12 ruled byte-identical keyline
+            // relocation off a bordered, radiused box unachievable, so the
+            // decoration slot may not survive adjudication. This ordering must
+            // not depend on it, and does not.
+            // Popover already merged its positionStyle last -- this aligns the
+            // outliers with their own family's protected members.
+            position: isAdaptiveFullscreen ? 'fixed' : 'relative',
+            ...(isAdaptiveFullscreen ? { top: 0, left: 0 } : {}),
           }}
         >
           {/* ---- Header ----. Layout AND paint live in the modern skin

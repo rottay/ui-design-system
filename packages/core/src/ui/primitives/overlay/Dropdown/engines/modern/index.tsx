@@ -554,11 +554,11 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>((props, 
       data-has-submenu={itemsHaveSubmenu(menu?.items) ? 'true' : undefined}
       className={['rottay-dropdown__surface', overlayClassName].filter(Boolean).join(' ')}
       style={{
-        position: 'absolute',
-        zIndex: 'var(--ds-z-dropdown)',
-        ...(portalHost
-          ? (popupPosition ?? { visibility: 'hidden' })
-          : inTreePlacementStyle(placement)),
+        // Pre-measurement guard, deliberately BEFORE `...overlayStyle` so it
+        // remains caller-overridable: until the portal position is measured the
+        // surface must not flash at the origin. FAB-17's positioning block does
+        // not include `visibility`, so this is not part of the merge-last set.
+        ...(portalHost && !popupPosition ? { visibility: 'hidden' as const } : {}),
         // Measured geometry bridge (private proto per the naming law): the
         // trigger's center offset from the surface's inline-start edge.
         ...(arrowAnchorOffset
@@ -577,6 +577,33 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>((props, 
               : 'ds-dropdown-popover-exit-modern'
         } ${MOTION_DURATION} ${MOTION_EASING} both`,
         ...overlayStyle,
+        // FAB-17: THE ENGINE'S POSITIONING BLOCK MERGES LAST. An overlay's
+        // position is ANATOMY, not customization surface -- a dropdown surface
+        // that is not absolutely positioned is not anchored to its trigger.
+        // `style` is a public, unrestricted CSSProperties hatch, and this
+        // engine MEASURES `popupPosition` at runtime and applies it as
+        // coordinates against the position it sets. A caller passing
+        // `position: static` strands the measured geometry and the menu renders
+        // in flow, detached from the trigger it is supposed to track. That is
+        // true of the component as it stands today, and it is the load-bearing
+        // reason for this ordering.
+        // A relocated keyline pseudo would ALSO be re-anchored by such an
+        // override, but that is a secondary consequence and deliberately NOT
+        // the justification: FAB-12 ruled byte-identical keyline relocation off
+        // a bordered, radiused box unachievable, so the decoration slot may not
+        // survive adjudication. This ordering must not depend on it, and does
+        // not. Popover already merged its positionStyle last -- this aligns the
+        // outliers with their own family's protected members.
+        position: 'absolute',
+        zIndex: 'var(--ds-z-dropdown)',
+        // MINIMIZED TO THE RULING. FAB-17 names the positioning block as
+        // "position, the placement coordinates it computes, and the z-index it
+        // owns" -- `visibility` is NOT in it. The pre-measurement guard is
+        // therefore hoisted ABOVE `...overlayStyle` (see the head of this
+        // object) so a caller can still control visibility, while only the
+        // coordinates stay last. Narrowing caller semantics further than the
+        // ruling adjudicated would be the implementer resolving scope again.
+        ...(portalHost ? (popupPosition ?? {}) : inTreePlacementStyle(placement)),
       }}
       onClick={(event) => event.stopPropagation()}
       onKeyDown={(event) => {
