@@ -215,6 +215,48 @@ function resolveKey<T extends object>(
   return String(readCollectionRecordValue(item, rowKey));
 }
 
+type CollectionWorkspaceTableRowProps = React.HTMLAttributes<HTMLTableRowElement> & {
+  'data-part'?: string;
+  'data-focused'?: string;
+};
+
+/**
+ * Decorates the table row in place. A table body may only contain table rows;
+ * wrapping a row with a Box/div produces invalid HTML and breaks hydration.
+ */
+function markCollectionWorkspaceFocusedRow(node: ReactNode): ReactNode {
+  return React.Children.map(node, (child) => {
+    if (!React.isValidElement(child)) return child;
+
+    const childProps = child.props as CollectionWorkspaceTableRowProps & {
+      children?: ReactNode;
+    };
+
+    if (child.type === React.Fragment) {
+      return React.cloneElement(
+        child,
+        undefined,
+        markCollectionWorkspaceFocusedRow(childProps.children),
+      );
+    }
+
+    if (child.type !== 'tr' || childProps['data-part'] !== 'body-row') {
+      return child;
+    }
+
+    return React.cloneElement(
+      child as React.ReactElement<CollectionWorkspaceTableRowProps>,
+      {
+        className: [
+          childProps.className,
+          'ds-collection-workspace__focused-row',
+        ].filter(Boolean).join(' '),
+        'data-focused': 'true',
+      },
+    );
+  });
+}
+
 function readCollectionRecordValue(value: unknown, key: PropertyKey): unknown {
   if (typeof value !== 'object' || value === null) return undefined;
   return Reflect.get(value, key);
@@ -1690,15 +1732,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
       if (!focusEnabled) return defaultRender;
       const key = resolveKey(row, rowKey);
       if (key !== focusedKey) return defaultRender;
-      return (
-        <Box
-          className="ds-collection-workspace__focused-row"
-          data-part="focused-row"
-          data-focused="true"
-        >
-          {defaultRender}
-        </Box>
-      );
+      return markCollectionWorkspaceFocusedRow(defaultRender);
     },
     [focusEnabled, focusedKey, rowKey],
   );

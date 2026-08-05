@@ -47,6 +47,8 @@ export interface SvgBarRendererProps {
   readonly bandPadding?: number;
   readonly groupPadding?: number;
   readonly maxTicks?: number;
+  /** Category-axis-only tick cap (responsive label thinning); see geometry. */
+  readonly maxCategoryTicks?: number;
   readonly barRadius?: number;
   readonly showValues?: boolean;
   /** Optional axis captions rendered outside the plot rect. */
@@ -79,6 +81,7 @@ export function SvgBarRenderer({
   bandPadding,
   groupPadding,
   maxTicks,
+  maxCategoryTicks,
   barRadius,
   showValues = false,
   xLabel,
@@ -104,6 +107,7 @@ export function SvgBarRenderer({
         bandPadding,
         groupPadding,
         maxTicks,
+        maxCategoryTicks,
       })
       : buildSvgBarGeometry({
         data: data ?? [],
@@ -113,8 +117,9 @@ export function SvgBarRenderer({
         insets,
         bandPadding,
         maxTicks,
+        maxCategoryTicks,
       })),
-    [bandPadding, data, geometryWidth, groupPadding, height, insets, isSeries, layout, maxTicks, orientation, series],
+    [bandPadding, data, geometryWidth, groupPadding, height, insets, isSeries, layout, maxTicks, maxCategoryTicks, orientation, series],
   );
   const bars = geometry.bars as readonly BarMark[];
   const interactionItems = useMemo(
@@ -225,6 +230,20 @@ export function SvgBarRenderer({
         y: activeBar.y,
       } : undefined}
     >
+      {/* Tenant plot plane: the paint lives in the foundation skin on the
+          pre-existing `--ds-chart-plot-bg` channel (transparent fallback keeps
+          legacy standalone renders on the page canvas). Placed beneath the
+          grid so the point/insight separation strokes that already read the
+          same channel sit on the plane they assume. */}
+      <rect
+        data-part="plot-surface"
+        aria-hidden="true"
+        x={geometry.plot.x}
+        y={geometry.plot.y}
+        width={geometry.plot.width}
+        height={geometry.plot.height}
+      />
+
       <g data-part="grid" aria-hidden="true">
         {geometry.valueTicks.map((tick) => (
           <line
@@ -294,10 +313,18 @@ export function SvgBarRenderer({
           const markLabel = actionable && interaction && interaction.mode !== 'static'
             ? `${accessibleLabel}. ${interaction.actionLabel}`
             : accessibleLabel;
+          // Two footprints on purpose: the halo hugs the painted bar (24px
+          // floor) while the invisible pointer target honors the 44px coarse
+          // pointer floor without inflating any paint. Overlapping targets in
+          // dense groups resolve to the nearest datum in the controller.
           const hitWidth = Math.max(24, bar.width);
           const hitHeight = Math.max(24, bar.height);
           const hitX = bar.x - (hitWidth - bar.width) / 2;
           const hitY = bar.y - (hitHeight - bar.height) / 2;
+          const targetWidth = Math.max(44, bar.width);
+          const targetHeight = Math.max(44, bar.height);
+          const targetX = bar.x - (targetWidth - bar.width) / 2;
+          const targetY = bar.y - (targetHeight - bar.height) / 2;
           const cornerRadius = bar.isTopOfStack === false ? 0 : radius;
 
           return (
@@ -325,10 +352,10 @@ export function SvgBarRenderer({
                 <>
                   <rect
                     data-part="interaction-target"
-                    x={hitX}
-                    y={hitY}
-                    width={hitWidth}
-                    height={hitHeight}
+                    x={targetX}
+                    y={targetY}
+                    width={targetWidth}
+                    height={targetHeight}
                     pointerEvents="all"
                     aria-hidden="true"
                   />

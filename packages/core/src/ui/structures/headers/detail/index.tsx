@@ -200,7 +200,10 @@ export function DetailHeader({
                     <Button
                       variant={resolveSharedHeaderActionVariant(action)}
                       size="sm"
-                      icon={ActionIcon ? <ActionIcon style={{ width: 14, height: 14 }} /> : undefined}
+                      /* Icon geometry rides the Button's governed icon channel
+                         (`--ds-button-sm-icon-size`), not an inline override —
+                         the same contract the record action rail uses. */
+                      icon={ActionIcon ? <ActionIcon /> : undefined}
                       onClick={action.onClick}
                       href={action.href}
                       loading={action.loading}
@@ -257,7 +260,14 @@ export function DetailHeader({
                     align="center"
                     gap={8}
                   >
-                    {item.icon ? <item.icon style={{ width: 14, height: 14 }} /> : null}
+                    {item.icon ? (
+                      /* Icon frame drained from the retired inline 14px: the
+                         skin owns the well and the glyph inherits
+                         currentColor from the chip's muted ink. */
+                      <Box data-part="metadata-chip-icon" aria-hidden>
+                        <item.icon />
+                      </Box>
+                    ) : null}
                     <Text data-part="metadata-chip-label" size="xs" weight="bold" color="subtle">
                       {item.label}
                     </Text>

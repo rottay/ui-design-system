@@ -207,8 +207,10 @@ describe('AreaChart and LineChart correctness floor', () => {
       { productProfile: 'events.organizer' },
     );
 
-    const signed = screen.getByRole('img', { name: 'Signed linear line' });
-    const constant = screen.getByRole('img', { name: 'Constant time line' });
+    // Interactive line charts expose a labelled group whose descendant marks
+    // own the point-level image semantics.
+    const signed = screen.getByRole('group', { name: 'Signed linear line' });
+    const constant = screen.getByRole('group', { name: 'Constant time line' });
 
     await waitFor(() => {
       expect(signed.querySelectorAll('circle[data-part="point"]')).toHaveLength(3);
@@ -294,7 +296,7 @@ describe('AreaChart and LineChart correctness floor', () => {
       />,
     );
 
-    const chart = screen.getByRole('img', { name: 'Equivalent time values' });
+    const chart = screen.getByRole('group', { name: 'Equivalent time values' });
     // Renderer DOM: equivalent Date and ISO timestamps resolve to the same
     // pure-geometry x position, so both series' single points share `cx`.
     const points = await waitFor(() => {

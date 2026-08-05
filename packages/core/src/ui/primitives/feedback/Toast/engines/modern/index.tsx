@@ -8,8 +8,9 @@
  * - No DaisyUI classes: the structural `alert` class was drained (WO-SKIN-03);
  *   the unlayered skin `toast.css` is the single paint owner, keyed on the
  *   `data-tone`/`data-radius`/`data-shadow` attributes stamped here
- * - Enter/exit motion is inline via `getToastAnimationStyle` (token-driven,
- *   reduced-motion safe); all static surface paint lives in the skin
+ * - Enter/exit motion is skin-owned: the engine stamps `data-state` and the
+ *   skin plays governed keyframes on the personality/dial motion channels;
+ *   all static surface paint lives in the skin
  * - Full feature parity with other engines
  *
  * @example Basic Usage
@@ -46,7 +47,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import type { ToastProps, ToastVariant } from '../../contracts';
 import { TOAST_DEFAULTS } from '../../contracts';
-import { getToastAnimationStyle } from '../../runtime/animation';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { StatusInfoIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-info';
 import { StatusSuccessIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-success';
@@ -199,15 +199,17 @@ export default function ModernToast(props: ToastProps): React.ReactElement | nul
    * Only the exit keyframes finalize the dismissal: an early close can land
    * while the ENTER animation is still playing, and its `animationend` must
    * not hide the toast prematurely (the bubbled progress-bar animationend is
-   * filtered by the target check as well).
+   * filtered by the target check as well). The skin owns both keyframe sets
+   * (`ds-toast-enter-modern` / `ds-toast-exit-modern`), so the filter keys on
+   * that governed namespace.
    */
   const handleAnimationEnd = useCallback(
     (event: React.AnimationEvent<HTMLDivElement>) => {
       if (
         isExiting &&
         event.target === rootRef.current &&
-        event.animationName.startsWith('toast-') &&
-        event.animationName.includes('out')
+        event.animationName.startsWith('ds-toast-') &&
+        event.animationName.includes('exit')
       ) {
         finalizeClose();
       }
@@ -291,11 +293,15 @@ export default function ModernToast(props: ToastProps): React.ReactElement | nul
   // pins its absence), so neither DaisyUI's `.alert` base paint nor
   // personality.css's `.alert` transition reaches this tree -- the unlayered
   // skin is the single paint owner.
-  // Enter/exit motion comes entirely from the inline `animation` set below via
-  // getToastAnimationStyle, which reads --ds-toast-enter/exit-duration/easing
-  // and is neutralized by the global prefers-reduced-motion guard. No
-  // Tailwind animate-* utility class is applied here: this design system does
-  // not define one, and it would carry a literal duration outside that guard.
+  // Enter/exit motion is also skin-owned (Notification family idiom): the
+  // engine stamps `data-state='open'|'leaving'` and the skin plays its
+  // governed `ds-toast-enter/exit-modern` keyframes, consuming the
+  // personality-projected `--ds-toast-enter/exit-duration/easing` channels and
+  // the `--ds-motion-intensity` dial. No inline `animation` is stamped: the
+  // shared JS keyframe literals (`getToastAnimationStyle`, still used by the
+  // rustic engine and the compound Container) cannot respond to the tenant
+  // motion dial, and the governed exit window is read from the computed style
+  // either way.
 
   // ========================================================================
   // Event Handlers for Hover
@@ -347,6 +353,7 @@ export default function ModernToast(props: ToastProps): React.ReactElement | nul
       data-tone={variant}
       data-radius={props.radius ?? 'md'}
       data-shadow={props.shadow === false ? 'false' : 'true'}
+      data-state={isExiting ? 'leaving' : 'open'}
       data-has-title={title ? 'true' : 'false'}
       data-has-description={description ? 'true' : 'false'}
       data-has-action={action ? 'true' : 'false'}
@@ -355,9 +362,9 @@ export default function ModernToast(props: ToastProps): React.ReactElement | nul
       style={{
         // Instance hatch: the skin's progress animation consumes the toast's
         // lifetime from this channel (`--ds-message-duration` parity). Surface
-        // paint and position/overflow stay skin-owned (toast.css root rule).
+        // paint, enter/exit motion and position/overflow stay skin-owned
+        // (toast.css root + data-state rules).
         '--ds-toast-duration': `${duration}ms`,
-        ...getToastAnimationStyle('top-right', isExiting ? 'out' : 'in', 'fade'),
         ...style,
       } as React.CSSProperties}
       onMouseEnter={handleMouseEnter}

@@ -35,7 +35,9 @@ import React, {
 } from "react";
 import {
   AlertTriangleIcon,
+  ArrowDownIcon,
   ArrowUpDownIcon,
+  ArrowUpIcon,
   ArrowLeftIcon,
   ArrowRightIcon,
   CheckIcon as Check,
@@ -57,6 +59,29 @@ import { useVirtualScroll } from "../../../../runtime/virtualization/virtual-scr
 import { useGroupedData } from "../../runtime/grouping";
 import type { EditableConfig } from "../../../../../../foundation/contracts/runtime/components/patterns/core";
 import { InlineCellEditor } from "./cell-editor";
+
+/** A tbody may contain only rows (or fragments whose children are rows). */
+function isValidTableBodyRowOutput(node: React.ReactNode): boolean {
+  let valid = true;
+
+  React.Children.forEach(node, (child) => {
+    if (!valid || child == null || typeof child === "boolean") return;
+    if (!React.isValidElement(child)) {
+      valid = false;
+      return;
+    }
+    if (child.type === "tr") return;
+    if (child.type === React.Fragment) {
+      valid = isValidTableBodyRowOutput(
+        (child.props as { children?: React.ReactNode }).children,
+      );
+      return;
+    }
+    valid = false;
+  });
+
+  return valid;
+}
 
 /**
  * Concrete width applied to a pinned column that declares no explicit width.
@@ -191,6 +216,9 @@ export default function ModernDataTable<T extends object>(
     aggregations,
     defaultGroupExpanded = true,
     renderGroupHeader,
+    // Custom row wrapper (contracted channel; previously unwired in this
+    // engine — W7-style activation, same as onPinChange/onVisibleColumnsChange)
+    renderRow,
   } = props;
 
   const density = densityProp ?? (compact ? "compact" : "comfortable");
@@ -1470,10 +1498,17 @@ export default function ModernDataTable<T extends object>(
                               data-sort-state={sortState}
                               aria-hidden="true"
                             >
+                              {/* Three distinct glyphs, one per state (quiet
+                                  up-down pair / arrow up / arrow down), so
+                                  the sort order never rides on color or on a
+                                  rotated shape alone. Direction-neutral:
+                                  nothing mirrors under RTL. */}
                               {sortState === "none" ? (
                                 <ArrowUpDownIcon size={12} strokeWidth={1.8} />
+                              ) : sortState === "asc" ? (
+                                <ArrowUpIcon size={12} strokeWidth={2.1} />
                               ) : (
-                                <ChevronDownIcon size={12} strokeWidth={2.1} />
+                                <ArrowDownIcon size={12} strokeWidth={2.1} />
                               )}
                             </span>
                           )}
@@ -1690,8 +1725,8 @@ export default function ModernDataTable<T extends object>(
                           const isLastRowOverall =
                             isLastSection && isLastRowInSection;
 
-                          sectionRows.push(
-                            <React.Fragment key={key}>
+                          const groupedRowNodes = (
+                            <>
                               <tr
                                 data-row-index={index}
                                 data-row-key={key}
@@ -2009,6 +2044,16 @@ export default function ModernDataTable<T extends object>(
                                   </td>
                                 </tr>
                               )}
+                            </>
+                          );
+                          const renderedGroupedRowNodes = renderRow
+                            ? renderRow(row, groupedRowNodes, index)
+                            : groupedRowNodes;
+                          sectionRows.push(
+                            <React.Fragment key={key}>
+                              {isValidTableBodyRowOutput(renderedGroupedRowNodes)
+                                ? renderedGroupedRowNodes
+                                : groupedRowNodes}
                             </React.Fragment>
                           );
                         });
@@ -2112,8 +2157,8 @@ export default function ModernDataTable<T extends object>(
                       const isRowSaving = savingCell?.rowKey === key;
                       const isLastRow = index === data.length - 1;
 
-                      return (
-                        <React.Fragment key={key}>
+                      const flatRowNodes = (
+                        <>
                           <tr
                             data-row-index={index}
                             data-row-key={key}
@@ -2424,6 +2469,16 @@ export default function ModernDataTable<T extends object>(
                               </td>
                             </tr>
                           )}
+                        </>
+                      );
+                      const renderedFlatRowNodes = renderRow
+                        ? renderRow(row, flatRowNodes, index)
+                        : flatRowNodes;
+                      return (
+                        <React.Fragment key={key}>
+                          {isValidTableBodyRowOutput(renderedFlatRowNodes)
+                            ? renderedFlatRowNodes
+                            : flatRowNodes}
                         </React.Fragment>
                       );
                     })}

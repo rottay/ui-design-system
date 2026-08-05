@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { StrictMode, useEffect } from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -248,5 +248,131 @@ describe('roving-focus kernel: controlled active', () => {
   it('resolves a disabled controlled id to the first enabled one', () => {
     render(<Collection ids={ids} activeId="b" disabledIds={['b']} />);
     expect(tabStops()[0]).toHaveTextContent('a');
+  });
+});
+
+describe('roving-focus kernel: reading direction resolves live', () => {
+  it('re-resolves on every interaction, so a live dir flip on the SAME mounted tree mirrors both ways', () => {
+    // This is exactly the case a cached-direction implementation cannot
+    // handle: capture direction once on the FIRST navigation and nothing
+    // ever invalidates it, so a live locale flip leaves the horizontal
+    // arrows mirrored the wrong way with no error and no re-render to fix
+    // it. Nothing here unmounts -- `rerender` updates the SAME `<div dir>`
+    // element, which is the failure a two-separate-mounts test cannot see.
+    const tree = (dir: 'ltr' | 'rtl') => (
+      <div dir={dir}>
+        <Collection ids={ids} orientation="horizontal" />
+      </div>
+    );
+
+    const { rerender } = render(tree('ltr'));
+
+    // Navigate once while LTR -- the exact trigger a first-navigation cache
+    // would key its capture on.
+    fireEvent.keyDown(screen.getByTestId('a'), { key: 'ArrowRight' });
+    expect(screen.getByTestId('b')).toHaveFocus();
+
+    rerender(tree('rtl'));
+    fireEvent.keyDown(screen.getByTestId('b'), { key: 'ArrowRight' });
+    // RTL mirrors ArrowRight to "previous".
+    expect(screen.getByTestId('a')).toHaveFocus();
+
+    rerender(tree('ltr'));
+    fireEvent.keyDown(screen.getByTestId('a'), { key: 'ArrowRight' });
+    expect(screen.getByTestId('b')).toHaveFocus();
+  });
+});
+
+describe('roving-focus kernel: reveal ownership contract', () => {
+  /**
+   * SCOPE LIMIT. This suite's configured environment is happy-dom (see
+   * vitest.config.ts), which has no layout engine and does not actually
+   * scroll anything on focus -- so nothing in this describe block can show
+   * that `preventScroll` really suppresses a scroll. What IS provable, and
+   * all that these tests claim, is the CONTRACT: which argument the kernel
+   * passes to the real DOM `focus()` call. Whether the browser honours that
+   * argument the way the spec promises is outside what this environment can
+   * see.
+   */
+
+  it('passes preventScroll: true to focus() when the consumer opts in', () => {
+    render(<Collection ids={ids} preventScroll />);
+    const target = screen.getByTestId('b');
+    const focusSpy = vi.spyOn(target, 'focus');
+
+    fireEvent.keyDown(screen.getByTestId('a'), { key: 'ArrowDown' });
+
+    expect(focusSpy).toHaveBeenCalledWith({ preventScroll: true });
+    expect(target).toHaveFocus();
+  });
+
+  it('passes preventScroll: false by default, so existing consumers keep native focus-scroll', () => {
+    render(<Collection ids={ids} />);
+    const target = screen.getByTestId('b');
+    const focusSpy = vi.spyOn(target, 'focus');
+
+    fireEvent.keyDown(screen.getByTestId('a'), { key: 'ArrowDown' });
+
+    expect(focusSpy).toHaveBeenCalledWith({ preventScroll: false });
+  });
+
+  it('warns exactly once under StrictMode when ownsReveal is set without preventScroll', () => {
+    let effectRuns = 0;
+    function EffectProbe() {
+      useEffect(() => {
+        effectRuns += 1;
+      }, []);
+      return null;
+    }
+
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    try {
+      render(
+        <StrictMode>
+          <EffectProbe />
+          <Collection ids={ids} ownsReveal />
+        </StrictMode>
+      );
+
+      // Confirms THIS environment actually double-invokes effect setup under
+      // StrictMode before trusting "exactly one warning" as evidence of a
+      // latch: without this check, the assertion below would be trivially
+      // true for the wrong reason (a single invocation), and it would not
+      // distinguish a latched implementation from one with no latch at all.
+      expect(effectRuns).toBe(2);
+      expect(warnSpy).toHaveBeenCalledTimes(1);
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
+  it('does not warn for a valid ownsReveal + preventScroll pair, or when neither is set', () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    try {
+      const { unmount } = render(<Collection ids={ids} ownsReveal preventScroll />);
+      expect(warnSpy).not.toHaveBeenCalled();
+      unmount();
+
+      render(<Collection ids={ids} />);
+      expect(warnSpy).not.toHaveBeenCalled();
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
+  it('resets the warning latch, so a mismatch that is fixed and then reintroduced is reported again', () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    try {
+      const { rerender } = render(<Collection ids={ids} ownsReveal />);
+      expect(warnSpy).toHaveBeenCalledTimes(1);
+
+      rerender(<Collection ids={ids} ownsReveal preventScroll />);
+      expect(warnSpy).toHaveBeenCalledTimes(1); // still just the first warning
+
+      rerender(<Collection ids={ids} ownsReveal />);
+      expect(warnSpy).toHaveBeenCalledTimes(2);
+    } finally {
+      warnSpy.mockRestore();
+    }
   });
 });

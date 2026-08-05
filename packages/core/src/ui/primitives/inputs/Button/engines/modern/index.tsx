@@ -8,7 +8,9 @@
  * `foundation/tokens/css/runtime/engines/modern/skin/button.css`, keyed on the `data-*` contract
  * this component stamps: `data-variant`, `data-size`, `data-shape`,
  * `data-disabled`, `data-loading`, `data-pending`, `data-icon-only`,
- * `data-size-responsive`, the `data-part` / `data-state` anatomy attributes
+ * `data-size-responsive`, `data-tone` (the quiet-destructive grammar, only
+ * when `danger` composes with an explicit quiet variant), the
+ * `data-part` / `data-state` anatomy attributes
  * from `behavior/anatomy.ts`, and the `data-recipe` / `data-recipe-state`
  * motion vocabulary plus `--ds-recipe-*` variables from the feedback.press
  * recipe. No DaisyUI btn-* classes are used. Besides those variables, a
@@ -27,6 +29,8 @@
  *   `--ds-button-secondary-*` channels, same interaction model as primary
  * - Ghost: No border, minimal hover bg
  * - Danger: Red-tinted, same interaction model as primary
+ * - Quiet destructive (`danger` + an explicit quiet variant): error ink and a
+ *   tempered wash at low volume, reserved for secondary destructive actions
  * - Link: Underline on hover, no background
  *
  * @see {@link Button} for the main component
@@ -66,6 +70,24 @@ import {
  * paint, all three together. The authored domain is the recipe definition's.
  */
 const KNOWN_VARIANTS: ReadonlySet<string> = new Set(BUTTON_VARIANT_VALUES);
+type ModernButtonVariant = (typeof BUTTON_VARIANT_VALUES)[number];
+
+const isKnownVariant = (value: string): value is ModernButtonVariant =>
+  KNOWN_VARIANTS.has(value);
+
+/**
+ * Variants whose paint is quiet (ink/wash/border, no solid fill). `danger`
+ * composed with one of these keeps the variant and stamps `data-tone` —
+ * see the resolution below.
+ */
+const QUIET_TONE_VARIANTS: ReadonlySet<string> = new Set([
+  'ghost',
+  'text',
+  'link',
+  'default',
+  'outline',
+  'dashed',
+]);
 
 /**
  * DS-S001 recipe: the same semantic classes the skin has always selected on,
@@ -289,18 +311,31 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
 
   const size = scalarOrUndefined(resolvedSizeProp) ?? BUTTON_DEFAULTS.size;
 
-  // Explicit `danger` prop takes priority over `variant`.
   // Unknown variants fall back to the public primary contract for className,
-  // data attributes, and inline styles consistently.
+  // data attributes, and inline styles consistently. Explicit `danger` takes
+  // priority over `variant` — with one refined exception: `danger` on an
+  // explicitly requested QUIET variant prop (ghost, text, link, default,
+  // outline, dashed) keeps the quiet variant and stamps `data-tone='danger'`
+  // instead, so the skin paints the destructive grammar at low volume (red
+  // ink plus a tempered wash) rather than the solid error fill. `danger`
+  // with no explicit variant PROP — a profile default is not an explicit
+  // request — or on a solid variant still resolves to the solid `danger`
+  // recipe, unchanged.
   const requestedVariant = variant || 'primary';
   const normalizedVariant = requestedVariant === 'error'
     ? 'danger'
     : requestedVariant === 'gradient'
       ? 'primary'
       : requestedVariant;
-  const effectiveVariant = danger
-    ? 'danger'
-    : KNOWN_VARIANTS.has(normalizedVariant)
+  const quietDangerTone =
+    danger && variantProp !== undefined && QUIET_TONE_VARIANTS.has(normalizedVariant)
+      ? 'danger'
+      : undefined;
+  const effectiveVariant: ModernButtonVariant = danger
+    ? quietDangerTone
+      ? (normalizedVariant as ModernButtonVariant)
+      : 'danger'
+    : isKnownVariant(normalizedVariant)
       ? normalizedVariant
       : 'primary';
   const usesGradient = gradient || requestedVariant === 'gradient';
@@ -375,9 +410,23 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
   const accessibleBusyLabel = resolvedBusyLabel == null ? children : null;
   const content = widthStable ? (
     <span data-part="content-frame">
+      {/* The reserve sizes the frame, so it must reserve the WIDEST of the two
+          states, not just the resting one. Reserving only the resting content
+          undersized the frame whenever the busy label was longer, and the busy
+          content then ellipsized against `overflow: clip` — "Submitting"
+          rendering as "Su..." at 1440px with abundant free space. Swapping the
+          label on busy is correct; truncating a state label never is. Both rows
+          are stacked in the same grid cell so the frame takes the max width and
+          the taller of the two heights. */}
       <span data-part="content" data-layer="reserve" aria-hidden="true">
         {restingContentNode}
       </span>
+      {resolvedBusyLabel != null && (
+        <span data-part="content" data-layer="reserve" data-reserve="busy" aria-hidden="true">
+          <LoadingSpinner size={size} />
+          <span data-part="label">{resolvedBusyLabel}</span>
+        </span>
+      )}
       <span data-part="busy-content" aria-live="polite">
         <LoadingSpinner size={size} />
         {resolvedBusyLabel != null && <span data-part="label">{resolvedBusyLabel}</span>}
@@ -443,6 +492,10 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
     'data-size': size,
     'data-shape': shape,
     'data-radius': radius,
+    // Quiet destructive grammar: present only when `danger` composed with an
+    // explicit quiet variant (see the resolution above); the skin owns the
+    // low-volume destructive paint for this tone.
+    'data-tone': quietDangerTone,
     // The behavioral `loading` prop is authoritative when active. A composing
     // family may still request an explicit false stamp for a stable state
     // contract (for example overlay actions); P-79 requires that semantic

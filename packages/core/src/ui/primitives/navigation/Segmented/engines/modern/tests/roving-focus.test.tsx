@@ -71,3 +71,83 @@ describe('Modern Segmented roving focus', () => {
     expect(stops[0]).toBe(radio('A'));
   });
 });
+
+
+/**
+ * LOCALE FLIP ON A LIVE TREE.
+ *
+ * Both halves of a direction change are covered here, because they are separate
+ * mechanisms and each one was broken independently.
+ *
+ * The KEYBOARD half lived in the shared roving-focus kernel, which captured
+ * reading direction into a ref on the first navigation and never recomputed it.
+ * Navigate once in LTR, flip an ancestor to `dir="rtl"` on the SAME mounted
+ * tree, and the horizontal arrows kept the stale mapping — nothing remounts, so
+ * nothing re-captured. Its pure resolver was always correct; only the caching
+ * was not. The law now resolves direction at the start of every interaction.
+ *
+ * The REVEAL half is asserted in `reveal.test.tsx`. Together they matter more
+ * than separately: with only the reveal fixed, the option scrolled into view at
+ * the correct mirrored position while the arrow that reached it still pointed
+ * the wrong way.
+ *
+ * These assertions were briefly carried as an `.fails` test plus a pin on the
+ * WRONG behaviour, as scaffolding while the shared fix was adjudicated. Both
+ * were deleted in the same change that corrected the kernel: a certified round
+ * may not ship either, and a pin on wrong behaviour that outlives its defect
+ * becomes a test defending the bug.
+ */
+describe('Modern Segmented keyboard direction after a live locale flip', () => {
+  const tree = (dir: 'ltr' | 'rtl', onChange: (value: string | number) => void) => (
+    <div dir={dir}>
+      <ModernSegmented
+        ariaLabel="Stage"
+        options={['A', 'B', 'C']}
+        defaultValue="B"
+        onChange={onChange}
+      />
+    </div>
+  );
+
+  it('mirrors the horizontal arrows after an ancestor flips to RTL', () => {
+    const onChange = vi.fn();
+    const { rerender } = render(tree('ltr', onChange));
+
+    // This first navigation is what the old law CAPTURED direction on.
+    fireEvent.keyDown(radio('B'), { key: 'ArrowRight' });
+    expect(onChange).toHaveBeenLastCalledWith('C');
+
+    rerender(tree('rtl', onChange));
+
+    // Under RTL the horizontal pair mirrors, so ArrowRight is PREVIOUS. With a
+    // cached LTR direction this advanced and wrapped to 'A' instead.
+    fireEvent.keyDown(radio('C'), { key: 'ArrowRight' });
+    expect(onChange).toHaveBeenLastCalledWith('B');
+  });
+
+  it('mirrors back when the ancestor returns to LTR', () => {
+    // A one-way fix would pass the test above and still strand anyone switching
+    // back, so the return trip is asserted rather than assumed symmetric.
+    const onChange = vi.fn();
+    const { rerender } = render(tree('rtl', onChange));
+
+    fireEvent.keyDown(radio('B'), { key: 'ArrowRight' });
+    expect(onChange).toHaveBeenLastCalledWith('A');
+
+    rerender(tree('ltr', onChange));
+
+    fireEvent.keyDown(radio('A'), { key: 'ArrowRight' });
+    expect(onChange).toHaveBeenLastCalledWith('B');
+  });
+
+  it('resolves direction correctly when the tree mounts already RTL', () => {
+    // The capture was only ever wrong when it was STALE. Mounting in RTL and
+    // never flipping always resolved correctly, which is why every pre-existing
+    // RTL test passed and none of them reached the defect.
+    const onChange = vi.fn();
+    render(tree('rtl', onChange));
+
+    fireEvent.keyDown(radio('B'), { key: 'ArrowRight' });
+    expect(onChange).toHaveBeenLastCalledWith('A');
+  });
+});

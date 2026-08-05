@@ -95,6 +95,14 @@ const TYPE_ICONS: Record<AlertType, React.ReactNode> = {
   error: <StatusErrorIcon decorative size={20} />,
 };
 
+/**
+ * Focusable candidates for the keyboard-dismiss focus return (deterministic
+ * document-order query; disabled and tabindex="-1" nodes excluded).
+ * @internal
+ */
+const FOCUSABLE_SELECTOR =
+  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
 // ============================================================================
 // Component
 // ============================================================================
@@ -121,6 +129,8 @@ const TYPE_ICONS: Record<AlertType, React.ReactNode> = {
  * **Accessibility:**
  * - `role="alert"` announces the message assertively on mount
  * - Close button is focusable with a governed focus ring
+ * - Keyboard-originated dismiss returns focus to the next focusable element
+ *   in document order (never strands focus on the unmounted node)
  * - Icon provides visual context (decorative, screen-reader hidden)
  *
  * @param props - {@link AlertProps}
@@ -151,6 +161,7 @@ export default function ModernAlert(props: AlertProps): React.ReactElement | nul
    * Managed internally when closable is true.
    */
   const [visible, setVisible] = useState(true);
+  const rootRef = React.useRef<HTMLDivElement | null>(null);
 
   // ---------------------------------------------------------------------------
   // Props Destructuring
@@ -220,8 +231,33 @@ export default function ModernAlert(props: AlertProps): React.ReactElement | nul
   /**
    * Handle close button click.
    * Sets visibility to false and triggers onClose callback.
+   *
+   * FOCUS RETURN: a keyboard-originated dismiss (detail === 0 -- the click
+   * came from Enter/Space, not a pointer) must not strand focus on a node
+   * that is about to unmount. The landing spot is deterministic: the first
+   * focusable element AFTER the alert in document order (scope: the alert's
+   * parent subtree, then the document), else the last one before it. Pointer
+   * dismissals keep the browser default (no focus management).
    */
-  const handleClose = () => {
+  const handleClose = (event: React.MouseEvent<HTMLButtonElement>) => {
+    if (event.detail === 0) {
+      const root = rootRef.current;
+      if (root) {
+        // Scope: the alert's parent subtree first, the document as fallback
+        // (an alert alone in its section still lands somewhere predictable).
+        const collect = (scope: ParentNode): HTMLElement[] =>
+          Array.from(scope.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter(
+            (el) => el !== root && !root.contains(el)
+          );
+        const inParent = collect(root.parentElement ?? document);
+        const focusable = inParent.length > 0 ? inParent : collect(document);
+        const after = focusable.filter(
+          (el) => root.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING
+        );
+        const target = after[0] ?? focusable[focusable.length - 1];
+        target?.focus({ preventScroll: true });
+      }
+    }
     setVisible(false);
     onClose?.();
   };
@@ -243,6 +279,7 @@ export default function ModernAlert(props: AlertProps): React.ReactElement | nul
       <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
     )}
     <div
+      ref={rootRef}
       data-part="root"
       data-tone={alertType}
       data-compact={compactIsResponsive ? 'responsive' : isCompact}

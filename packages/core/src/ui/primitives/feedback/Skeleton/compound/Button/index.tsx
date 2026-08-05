@@ -17,16 +17,16 @@
  * **Size Mapping:**
  * | Size | Width | Height |
  * |------|-------|--------|
- * | sm | 64px | 24px |
- * | md | 80px | 32px (default) |
- * | lg | 96px | 40px |
+ * | sm | 64px | `--ds-button-sm-height` × density |
+ * | md | 80px | `--ds-button-md-height` × density (default) |
+ * | lg | 96px | `--ds-button-lg-height` × density |
  *
  * **Shape Options:**
  * | Shape | Border Radius |
  * |-------|---------------|
- * | default | 4px |
+ * | default | `--ds-button-{size}-radius` |
  * | circle | 50% (square button) |
- * | round | height / 2 (pill shape) |
+ * | round | `--ds-radius-full` (pill shape) |
  *
  * @example Basic Usage
  * ```tsx
@@ -127,18 +127,19 @@ export interface SkeletonButtonProps {
 
 /**
  * Size preset mappings for button skeleton.
- * Maps semantic size names to dimension values.
+ * Maps semantic size names to the width presets and the button token channel
+ * each placeholder mirrors.
  *
  * @internal
  */
 const SIZE_MAP = {
-  /** Small button - 64x24px */
-  sm: { width: 64, height: 24 },
-  /** Medium button - 80x32px (default) */
-  md: { width: 80, height: 32 },
-  /** Large button - 96x40px */
-  lg: { width: 96, height: 40 },
-};
+  /** Small button - 64px wide at the sm control height */
+  sm: { width: 64, height: 24, channel: 'sm' },
+  /** Medium button - 80px wide at the md control height (default) */
+  md: { width: 80, height: 32, channel: 'md' },
+  /** Large button - 96px wide at the lg control height */
+  lg: { width: 96, height: 40, channel: 'lg' },
+} as const;
 
 // ============================================================================
 // Component
@@ -154,7 +155,8 @@ const SIZE_MAP = {
  * @remarks
  * - Uses CSS gradient animation for shimmer effect
  * - Circle shape uses height for both dimensions (square)
- * - Round shape uses half-height for border-radius (pill)
+ * - Heights and radii ride the tenant's button channels, so the placeholder
+ *   reserves the mounted button's real footprint at any density
  * - Forwards ref for DOM manipulation
  * - Applies `rottay-skeleton-button` class for styling hooks
  *
@@ -182,15 +184,21 @@ export const SkeletonButton = forwardRef<HTMLDivElement, SkeletonButtonProps>(
     // Get dimensions from size preset
     const dimensions = SIZE_MAP[size];
 
-    // Calculate border-radius based on shape. The round case is emitted as an
-    // explicit px string (not a bare number) because it rides the
-    // --ds-skeleton-button-radius custom-property hatch, which — unlike a React
-    // style value — is not auto-suffixed with px.
+    // Height and radius track the real button's tenant channels; width keeps
+    // the contract preset, density-scaled. Fallbacks are the historical
+    // literals, so render is unchanged where the token bundle is absent.
+    const height = `calc(var(--ds-button-${dimensions.channel}-height, ${dimensions.height}px) * var(--ds-density-effective-scale, 1))`;
+    const width = `calc(${dimensions.width}px * var(--ds-density-effective-scale, 1))`;
+
+    // Calculate border-radius based on shape. The round case rides the
+    // tenant's full-radius channel (a pill at any height); the default case
+    // follows the size-matched button radius so placeholder and control
+    // share the tenant's corner grammar.
     const borderRadius = shape === 'circle'
       ? '50%'
       : shape === 'round'
-        ? `${dimensions.height / 2}px`
-        : '4px';
+        ? 'var(--ds-radius-full, 9999px)'
+        : `var(--ds-button-${dimensions.channel}-radius, 4px)`;
 
     // -------------------------------------------------------------------------
     // Style Generation
@@ -204,9 +212,9 @@ export const SkeletonButton = forwardRef<HTMLDivElement, SkeletonButtonProps>(
     // skeleton-compounds skin; the shape-conditional corner radius rides the
     // --ds-skeleton-button-radius hatch; only the animation reference stays inline.
     const buttonStyle = {
-      // Circle shape uses height for both dimensions
-      width: shape === 'circle' ? dimensions.height : dimensions.width,
-      height: dimensions.height,
+      // Circle shape uses the (channel-resolved) height for both dimensions
+      width: shape === 'circle' ? height : width,
+      height,
       '--ds-skeleton-button-radius': borderRadius,
       animation: 'ds-skeleton-shimmer var(--ds-skeleton-animation-duration) infinite',
       ...style,

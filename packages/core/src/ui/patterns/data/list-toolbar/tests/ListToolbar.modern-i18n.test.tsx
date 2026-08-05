@@ -1,7 +1,7 @@
 /**
  * @fileoverview ListToolbar modern engine — i18n channel tests (W9).
  *
- * Pins the landing of the 20 `components.listToolbar.*` catalog keys:
+ * Pins the complete `components.listToolbar.*` catalog contract:
  * catalog parity across the full locales (en/es/ar), resolution through the
  * I18nProvider, prop-over-catalog precedence (`messages` / `searchPlaceholder`
  * win), the documented partial-locale fallback for fr (→ fallback locale),
@@ -11,7 +11,7 @@
 
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { act, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 
 import ModernListToolbar from '../engines/modern';
 import { I18nProvider } from '@/infrastructure/runtime/i18n';
@@ -19,7 +19,7 @@ import { TRANSLATION_CATALOG } from '@/foundation/i18n/runtime/catalog';
 import { resolveTranslation } from '@/foundation/i18n/runtime/resolution';
 import { mockMatchMedia } from '../../../../../tooling/testing/helpers/browser/match-media';
 
-/** The 20 catalog keys landed in `components.listToolbar.*` (W9 census). */
+/** The catalog keys consumed by the current ListToolbar contract. */
 const LIST_TOOLBAR_CATALOG_KEYS = [
   'searchPlaceholder',
   'compact',
@@ -41,6 +41,8 @@ const LIST_TOOLBAR_CATALOG_KEYS = [
   'export',
   'active',
   'clearAll',
+  'draft',
+  'invalid',
 ] as const;
 
 /** Historical English copy — the en catalog must match it exactly. */
@@ -65,6 +67,8 @@ const EN_FLOOR: Record<(typeof LIST_TOOLBAR_CATALOG_KEYS)[number], string> = {
   export: 'Export',
   active: 'active',
   clearAll: 'Clear all',
+  draft: 'draft',
+  invalid: 'invalid',
 };
 
 const PILLS = [
@@ -113,7 +117,7 @@ describe('ListToolbar modern i18n (W9)', () => {
   });
 
   describe('catalog landing', () => {
-    it('lands the 20 listToolbar keys in every full locale (en/es/ar)', () => {
+    it('lands every listToolbar key in every full locale (en/es/ar)', () => {
       for (const locale of ['en', 'es', 'ar'] as const) {
         const entry = (
           TRANSLATION_CATALOG[locale].components as Record<string, Record<string, string>>
@@ -156,10 +160,15 @@ describe('ListToolbar modern i18n (W9)', () => {
       expect(await screen.findByPlaceholderText('Buscar...')).toBeInTheDocument();
       expect(await screen.findByRole('button', { name: 'Exportar' })).toBeInTheDocument();
       expect(await screen.findByRole('button', { name: 'Limpiar todo' })).toBeInTheDocument();
-      // Empty densitySuffix honored: the option announces just the adjective,
-      // inside a group already named "Densidad de filas".
+      // Density is a secondary command in the settings panel. The tab names
+      // the context, so the option itself announces only the localized
+      // adjective (the empty Spanish densitySuffix is still honored).
+      fireEvent.click(
+        await screen.findByRole('button', { name: 'Configuración de columnas' }),
+      );
+      fireEvent.click(await screen.findByRole('tab', { name: 'Densidad' }));
       expect(
-        await screen.findByRole('radio', { name: /^Compacta$/ }),
+        await screen.findByRole('button', { name: /^Compacta$/ }),
       ).toBeInTheDocument();
       expect(screen.getByRole('radio', { name: 'Vista de lista' })).toBeInTheDocument();
       expect(screen.getByRole('radio', { name: 'Vista de tarjetas' })).toBeInTheDocument();
@@ -205,8 +214,10 @@ describe('ListToolbar modern i18n (W9)', () => {
       expect(await screen.findByPlaceholderText('Search...')).toBeInTheDocument();
       expect(await screen.findByRole('button', { name: 'Export' })).toBeInTheDocument();
       expect(await screen.findByRole('button', { name: 'Clear all' })).toBeInTheDocument();
+      fireEvent.click(await screen.findByRole('button', { name: 'Column settings' }));
+      fireEvent.click(await screen.findByRole('tab', { name: 'Density' }));
       expect(
-        await screen.findByRole('radio', { name: 'Compact density' }),
+        await screen.findByRole('button', { name: 'Compact' }),
       ).toBeInTheDocument();
     });
   });

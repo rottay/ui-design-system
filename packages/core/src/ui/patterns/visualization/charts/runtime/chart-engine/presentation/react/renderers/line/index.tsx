@@ -214,6 +214,17 @@ export function SvgLineRenderer({
       tooltipKey={interactionState.activeKey ?? undefined}
       tooltipAnchor={activePoint ? { x: activePoint.x, y: activePoint.y } : undefined}
     >
+      {/* Tenant plot plane, painted by the foundation skin on the shared
+          `--ds-chart-plot-bg` channel (see the bar renderer note). */}
+      <rect
+        data-part="plot-surface"
+        aria-hidden="true"
+        x={geometry.plot.x}
+        y={geometry.plot.y}
+        width={geometry.plot.width}
+        height={geometry.plot.height}
+      />
+
       <g data-part="grid" aria-hidden="true">
         {geometry.yTicks.map((tick) => (
           <line
@@ -328,11 +339,14 @@ export function SvgLineRenderer({
                     aria-label={markLabel}
                     aria-describedby={datumProps['data-active'] && tooltip !== undefined && tooltip !== null && tooltip !== false ? tooltipId : undefined}
                   >
+                    {/* Invisible 44px coarse-pointer target; the controller
+                        resolves overlapping targets to the nearest point, and
+                        neither the dot nor the halo paint grows. */}
                     <circle
                       data-part="interaction-target"
                       cx={point.xPosition}
                       cy={point.yPosition}
-                      r={12}
+                      r={22}
                       pointerEvents="all"
                       aria-hidden="true"
                     />

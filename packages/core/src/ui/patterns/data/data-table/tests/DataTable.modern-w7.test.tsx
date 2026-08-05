@@ -149,6 +149,21 @@ describe('W7/D3 — pinned columns resolve concrete widths (no gap/overlap)', ()
 });
 
 describe('W7 — dead shared props now emit from the modern engine', () => {
+  it('rejects a non-row renderRow wrapper instead of emitting invalid tbody markup', () => {
+    const { container } = render(
+      <ModernDataTable<Row>
+        data={ROWS}
+        rowKey="id"
+        columns={BASE_COLUMNS}
+        renderRow={(_row, defaultRender) => <div>{defaultRender}</div>}
+      />
+    );
+
+    expect(container.querySelector('tbody > div')).not.toBeInTheDocument();
+    expect(container.querySelectorAll('tbody > tr[data-part="body-row"]'))
+      .toHaveLength(ROWS.length);
+  });
+
   it('emits onRowDoubleClick with the row and index', () => {
     const onRowDoubleClick = vi.fn();
     render(

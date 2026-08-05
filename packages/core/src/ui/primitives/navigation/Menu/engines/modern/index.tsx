@@ -350,7 +350,16 @@ function SubmenuRow({
         </span>
       </div>
       {isOpen && (
-        <ul role="group" data-part="panel">
+        // `data-disclosure-panel` + the level channel let the skin hang the
+        // nested thread from this trigger's indent gutter (configuration,
+        // never paint — the getLevelStyleVars idiom). Group panels stay
+        // unstamped: a section is not a tree.
+        <ul
+          role="group"
+          data-part="panel"
+          data-disclosure-panel="true"
+          style={getLevelStyleVars(level, inlineIndent)}
+        >
           {renderModernMenuItems(item.children || [], context, level + 1, item.key)}
         </ul>
       )}

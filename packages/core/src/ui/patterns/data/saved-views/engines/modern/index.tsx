@@ -284,6 +284,7 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
             data-active={isActive}
             data-dragging={isDragging}
             data-drop-target={isDropTarget}
+            data-dirty={view.isDirty || undefined}
             draggable={!!onViewReorder}
             onDragStart={(e) => handleDragStart(e, view.id)}
             onDragOver={(e) => handleDragOver(e, view.id)}
@@ -335,13 +336,18 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
               </Button>
             )}
 
-            {/* Unsaved changes indicator */}
-            {view.config && (view as any).isDirty && (
+            {/* Unsaved changes indicator: a ringed dot (shape, not hue) with
+                an accessible name — `title` alone never reaches most screen
+                readers, so the state is announced through role+label and the
+                tooltip stays as the sighted-mouse affordance. */}
+            {view.config && view.isDirty && (
               <span
                 data-part="unsaved-dot"
                 className="ds-saved-views__unsaved-dot"
                 data-dirty={true}
                 data-active={isActive}
+                role="img"
+                aria-label={unsavedChangesTitle}
                 title={unsavedChangesTitle}
               />
             )}

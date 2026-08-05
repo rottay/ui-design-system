@@ -12,15 +12,17 @@
  * background pattern generators so the section header reads like a
  * briefing card rather than a plain form group.
  *
- * Sections support: required/optional badges, summary chip slot, extra
- * action slot, controlled or uncontrolled accordion behavior,
+ * Sections support: required/optional badges, per-section error chips
+ * (semantic status icon + copy, never colour-only), summary chip slot,
+ * extra action slot, controlled or uncontrolled accordion behavior,
  * per-section appearance/tone overrides.
  *
  * Companion exports:
  *   - `FormFactsCard` — a sibling card component that renders
  *     a vertical list of label/value facts with optional eyebrow +
- *     helper text. Uses the same DS tokens so it composes visually
- *     with the section container.
+ *     helper text and a `loading` skeleton state that reserves the
+ *     final row footprint. Uses the same DS tokens so it composes
+ *     visually with the section container.
  *
  * The family stays domain-agnostic. Section titles, descriptions,
  * summaries, and chip text are all consumer-supplied; the component
@@ -39,9 +41,10 @@
 import { type CSSProperties, type ReactNode, useEffect, useId, useMemo, useState } from 'react';
 
 import { NavigationDownIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-down';
+import { StatusErrorIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-error';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
-import { Box, Flex, Stack, Text } from '../../../primitives';
+import { Box, Flex, Skeleton, Stack, Text } from '../../../primitives';
 
 export type FormSectionsAppearance = 'card' | 'soft' | 'divided';
 export type FormSectionTone = 'default' | 'editorial' | 'technical' | 'governance';
@@ -53,6 +56,10 @@ export interface FormSectionsEntry {
   summary?: ReactNode;
   required?: boolean;
   optional?: boolean;
+  /** Per-section error copy (consumer-supplied). Rendered as a header chip
+      with the semantic `status.error` icon — the section-level state never
+      reads through colour alone. */
+  error?: ReactNode;
   defaultOpen?: boolean;
   extra?: ReactNode;
   appearance?: FormSectionsAppearance;
@@ -84,6 +91,9 @@ export interface FormFactsCardProps {
   description?: string;
   eyebrow?: string;
   items: FormFactItem[];
+  /** Reserves the final label/value footprint with skeleton bars (one pair
+      per fact row) while the facts resolve. */
+  loading?: boolean;
   style?: CSSProperties;
 }
 
@@ -214,6 +224,20 @@ export function FormSections({
                   </Text>
                   {section.required ? <SectionChip label={requiredLabel} tone="required" /> : null}
                   {section.optional ? <SectionChip label={optionalLabel} tone="optional" /> : null}
+                  {section.error ? (
+                    <Flex data-part="section-error" align="center" gap={5}>
+                      {/* Decorative: the adjacent copy carries the error
+                          meaning; the icon is the non-colour shape cue. */}
+                      <StatusErrorIcon decorative size={12} data-part="section-error-icon" />
+                      {typeof section.error === 'string' || typeof section.error === 'number' ? (
+                        <Text data-part="section-error-copy" size="xs" weight="bold">
+                          {section.error}
+                        </Text>
+                      ) : (
+                        section.error
+                      )}
+                    </Flex>
+                  ) : null}
                 </Flex>
 
                 {section.description ? (
@@ -263,6 +287,7 @@ export function FormSections({
             data-tone={resolvedTone}
             data-appearance={resolvedAppearance}
             data-open={isOpen}
+            data-error={section.error ? 'true' : undefined}
           >
             {collapsible ? (
               <button
@@ -311,6 +336,7 @@ export function FormFactsCard({
   description,
   eyebrow,
   items,
+  loading = false,
   style,
 }: FormFactsCardProps) {
   const visibleItems = useMemo(
@@ -322,6 +348,8 @@ export function FormFactsCard({
     <Box
       className="ds-structure ds-form-sections"
       data-part="facts-card"
+      data-loading={loading ? 'true' : undefined}
+      aria-busy={loading ? true : undefined}
       style={style}
     >
       <Box data-part="facts-card-body">
@@ -365,30 +393,46 @@ export function FormFactsCard({
               justify="between"
               gap={16}
             >
-              <Stack spacing="xs" data-part="facts-card-item-copy">
-                <Text
-                  data-part="facts-card-item-label"
-                  size="xs"
-                  weight="bold"
-                >
-                  {item.label}
-                </Text>
-                {item.helper ? (
-                  <Text data-part="facts-card-item-helper" size="xs">
-                    {item.helper}
+              {loading ? (
+                <>
+                  {/* Loading keeps the ledger hierarchy: a narrow label bar
+                      on the copy side and a shorter value bar on the measure
+                      side, same row footprint as the resolved fact. */}
+                  <Box data-part="facts-card-item-skeleton-label">
+                    <Skeleton variant="rounded" width="9em" height="0.7rem" />
+                  </Box>
+                  <Box data-part="facts-card-item-skeleton-value">
+                    <Skeleton variant="rounded" width="5em" height="0.9rem" />
+                  </Box>
+                </>
+              ) : (
+                <>
+                  <Stack spacing="xs" data-part="facts-card-item-copy">
+                    <Text
+                      data-part="facts-card-item-label"
+                      size="xs"
+                      weight="bold"
+                    >
+                      {item.label}
+                    </Text>
+                    {item.helper ? (
+                      <Text data-part="facts-card-item-helper" size="xs">
+                        {item.helper}
+                      </Text>
+                    ) : null}
+                  </Stack>
+                  {/* Measure, end alignment, break strategy and the mono
+                      treatment are skin-owned; `data-mono` stamps the state. */}
+                  <Text
+                    data-part="facts-card-item-value"
+                    size="sm"
+                    weight="medium"
+                    data-mono={item.mono ? 'true' : undefined}
+                  >
+                    {item.value}
                   </Text>
-                ) : null}
-              </Stack>
-              {/* Measure, end alignment, break strategy and the mono
-                  treatment are skin-owned; `data-mono` stamps the state. */}
-              <Text
-                data-part="facts-card-item-value"
-                size="sm"
-                weight="medium"
-                data-mono={item.mono ? 'true' : undefined}
-              >
-                {item.value}
-              </Text>
+                </>
+              )}
             </Flex>
           ))}
         </Stack>

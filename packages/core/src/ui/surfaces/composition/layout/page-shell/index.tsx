@@ -71,12 +71,14 @@ export function PageShellSurface({
       title={chrome.title}
       hideHeader={chrome.hideHeader}
       subtitle={chrome.subtitle}
+      metadata={chrome.metadata}
       headerContent={chrome.headerContent}
       breadcrumbs={chrome.breadcrumbs}
       actions={actions}
       back={chrome.back}
       badge={chrome.badge}
       maxWidth={chrome.maxWidth}
+      sticky={chrome.sticky}
       loading={loading}
     >
       {/* Coarse view-transition seam: the page body is a single named group so

@@ -8,12 +8,14 @@
 import type { ReactNode } from 'react';
 import type { PatternBaseProps } from '../../../../../foundation/contracts/runtime/components/patterns/core';
 import type {
+  ActiveFilterState,
   DensityKey,
   FilterPillConfig,
   ViewMode,
 } from '@/foundation/contracts/runtime/components/patterns/data';
 
 export type {
+  ActiveFilterState,
   DensityKey,
   FilterPillConfig,
   ViewMode,
@@ -53,6 +55,18 @@ export interface ListToolbarMessages {
   compactDescription?: string;
   comfortableDescription?: string;
   spaciousDescription?: string;
+  /**
+   * Accessible state name announced inside a draft filter chip (chosen but
+   * not yet applied). Optional; resolves through the catalog when present,
+   * with an English floor.
+   */
+  draft?: string;
+  /**
+   * Accessible state name announced inside an invalid filter chip (the value
+   * no longer resolves against the filter's options). Same resolution law as
+   * `draft`.
+   */
+  invalid?: string;
 }
 
 /** Props for the ListToolbar pattern component. */
@@ -92,6 +106,20 @@ export interface ListToolbarProps extends PatternBaseProps {
   onClearFilters?: () => void;
   /** Number of currently active filters */
   activeFilterCount?: number;
+  /**
+   * Per-filter lifecycle state, keyed by filter key (see `ActiveFilterState`).
+   * Optional; a filter without an entry renders as `applied`. Independently of
+   * this map, the modern engine marks a chip `invalid` when its active value
+   * no longer exists among the pill's options (orphaned value).
+   */
+  filterStates?: Record<string, ActiveFilterState>;
+  /**
+   * The collection below the toolbar is refreshing. The bar keeps its full
+   * footprint (no layout shift), marks the root `aria-busy` and renders the
+   * governed busy hairline; controls stay operable so a slow refresh never
+   * strands the search the user is typing into.
+   */
+  loading?: boolean;
 
   // View controls
   /** Current view mode */

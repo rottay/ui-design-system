@@ -422,6 +422,32 @@ describe('CollectionWorkspaceSurface', () => {
     expect(root).toHaveAttribute('data-selection-enabled', 'false');
   });
 
+  it('marks the focused table row without inserting a div inside tbody', async () => {
+    const { container } = renderSurface(
+      <CollectionWorkspaceSurface
+        {...buildProps({
+          behavior: {
+            focus: {
+              enabled: true,
+              focusedKey: '1',
+              onFocusChange: vi.fn(),
+            },
+          },
+        })}
+      />,
+      { engine: 'modern' },
+    );
+
+    expect(await screen.findByText('Alice')).toBeInTheDocument();
+    expect(container.querySelector('tbody > div')).not.toBeInTheDocument();
+
+    const focusedRow = container.querySelector('tbody > tr[data-row-key="1"]');
+    expect(focusedRow).toHaveClass('ds-collection-workspace__focused-row');
+    expect(focusedRow).toHaveAttribute('data-focused', 'true');
+    expect(focusedRow).toHaveAttribute('data-part', 'body-row');
+    expect(focusedRow).toHaveAttribute('data-row-key', '1');
+  });
+
   it('stamps the same neutral component scope and known states in premium mode', async () => {
     const { container } = renderSurface(
       <CollectionWorkspaceSurface

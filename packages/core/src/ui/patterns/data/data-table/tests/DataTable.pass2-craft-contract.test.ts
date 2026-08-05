@@ -74,7 +74,7 @@ describe("DataTable pass 2 craft contract", () => {
 
   it("uses all-around selection and drop feedback instead of an accent rail", () => {
     const selectedRule = modernSkin.match(
-      /\[data-part="body-row"\]\[data-selected="true"\]\s*\{([^}]*)\}/
+      /\[data-part="body-row"\]\[data-selected="true"\]\s*>\s*td\s*\{([^}]*)\}/
     )?.[1];
     const dropRule = modernSkin.match(
       /\[data-part="drop-indicator"\]\[data-part="drop-indicator"\]\s*\{([\s\S]*?)\}/g

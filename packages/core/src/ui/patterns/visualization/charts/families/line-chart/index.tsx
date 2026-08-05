@@ -7,9 +7,11 @@
  * preserves the established family props, scaffold, accessible summary, legend,
  * and the caller-declared lifecycle states.
  *
- * Live crosshair/tooltip wiring for the migrated renderers lands with the
- * shared interaction controller (Stage C); this migration keeps the idle
- * tooltip element so the tooltip-personality/skin contract is preserved.
+ * The renderer's shared interaction controller provides hover/focus/keyboard
+ * point exploration and the positioned tooltip; the family declares the
+ * interaction only while the tooltip personality is active. The idle legacy
+ * tooltip overlay stays mounted so the tooltip-personality/skin contract is
+ * preserved for the legacy anatomy.
  *
  * @example
  * <LineChart
@@ -22,7 +24,7 @@
  * />
  */
 
-import { memo, useMemo, useRef } from 'react';
+import { memo, useMemo, useRef, type ReactNode } from 'react';
 import { arrayValueAt } from '@/foundation/kernel/collections';
 
 import type {
@@ -38,14 +40,16 @@ import type {
 } from '../../contracts';
 import { useChartDimensions, useChartPersonality, useChartCompact, useChartTooltip } from '../../runtime';
 import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
-import { ChartTooltip } from '../../presentation/tooltip';
+import { ChartTooltip, TooltipValue } from '../../presentation/tooltip';
+import type { ChartInteraction } from '../../runtime/chart-engine/foundation/interaction';
+import type { ChartInsightSpec } from '../../runtime/chart-engine/foundation/spec';
 import type {
   SvgLineCurve,
   SvgLineSeries,
   SvgLineXType,
   SvgLineXValue,
 } from '../../runtime/chart-engine/foundation/renderers/geometry';
-import { SvgLineRenderer } from '../../runtime/chart-engine/presentation/react/renderers/line';
+import { SvgLineRenderer, type SvgLineInteractionDatum } from '../../runtime/chart-engine/presentation/react/renderers/line';
 
 type LinePoint = Series['data'][number];
 const FALLBACK_LINE_COLOR = 'var(--ds-color-primary)';
@@ -96,6 +100,12 @@ interface LineChartOwnProps
   xAxisLabel?: string;
   yAxisLabel?: string;
   xType?: SvgLineXType;
+  /**
+   * Static, app-authored annotation specs (threshold rules, bands, events,
+   * direct labels). Rendered by the shared InsightLayer with `role="note"`
+   * semantics; never interactive.
+   */
+  insights?: readonly ChartInsightSpec[];
 }
 
 /** Props for the {@link LineChart} component. */
@@ -140,6 +150,7 @@ export const LineChart = memo(function LineChart({
   compactMode,
   autoCompact,
   compactBreakpoint,
+  insights,
 }: LineChartProps) {
   const scaffoldRef = useRef<HTMLDivElement>(null);
   const legacySvgRef = useRef<SVGSVGElement>(null);
@@ -147,9 +158,9 @@ export const LineChart = memo(function LineChart({
   const chartPersonality = useChartPersonality({ animate, curved, showDots, tooltip, colorScheme });
   const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
   const compactState = useChartCompact({ compact, compactMode, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
-  // The idle tooltip element preserves the tooltip-personality/skin contract.
-  // Live crosshair wiring for the migrated renderers lands with the shared
-  // interaction controller (Stage C), not this migration.
+  // The idle tooltip element preserves the tooltip-personality/skin contract
+  // for the legacy overlay anatomy; live hover/focus/keyboard exploration now
+  // flows through the shared interaction controller below.
   const { tooltipProps } = useChartTooltip();
 
   const finiteSeries = useMemo(() => series.map((currentSeries) => ({
@@ -185,7 +196,7 @@ export const LineChart = memo(function LineChart({
   };
 
   const legendNode = legend ? (
-    <div data-part="legend">
+    <div data-part="legend" data-legend-encoding="series">
       {finiteSeries.map((s, i) => (
         <div key={`${s.name}-${i}`} data-part="legend-item">
           <span data-part="legend-swatch" data-series-index={i % 5} style={{ backgroundColor: s.color ?? lineColor(palette, i) }} />
@@ -194,6 +205,30 @@ export const LineChart = memo(function LineChart({
       ))}
     </div>
   ) : null;
+
+  // Explore interaction: hover/focus/keyboard point exploration with a
+  // positioned tooltip, mirroring the BarChart family contract. Declared only
+  // while the tooltip personality is active.
+  const interaction: ChartInteraction<SvgLineInteractionDatum> | undefined = chartPersonality.tooltip
+    ? {
+      mode: 'explore',
+      renderTooltip: (active): ReactNode => {
+        const compactTooltip = compactState.compactTooltip;
+        const label = compactTooltip
+          ? ''
+          : `${active.datum.series.label} — ${active.datum.point.xLabel ?? String(active.datum.point.x)}`;
+        return (
+          <TooltipValue
+            label={label}
+            value={active.datum.point.valueLabel ?? active.datum.point.value}
+            {...(active.datum.series.color === undefined
+              ? {}
+              : { swatchColor: active.datum.series.color })}
+          />
+        );
+      },
+    }
+    : undefined;
 
   const resolvedState = resolveChartScaffoldState({
     state,
@@ -261,8 +296,13 @@ export const LineChart = memo(function LineChart({
           curve={resolvedCurve}
           showArea={showArea}
           showDots={chartPersonality.showDots}
+          {...(Number.isFinite(compactState.maxTicks)
+            ? { maxTicks: compactState.maxTicks }
+            : {})}
           {...(xAxisLabel === undefined ? {} : { xLabel: xAxisLabel })}
           {...(yAxisLabel === undefined ? {} : { yLabel: yAxisLabel })}
+          {...(insights === undefined ? {} : { insights })}
+          {...(interaction === undefined ? {} : { interaction })}
         />
       )}
     />

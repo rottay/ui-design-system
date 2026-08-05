@@ -92,4 +92,10 @@ export interface WidgetBoardProps extends PatternBaseProps {
   /** Optional app-owned role default. */
   onReset?: () => WidgetBoardItem[] | void;
   emptyState?: ReactNode;
+  /**
+   * Consumer-composed board-level error (mirror of `emptyState`): when set,
+   * it replaces the grid so a failed load never strands the user on a blank
+   * or stale board. Per-widget errors stay inside `item.content`.
+   */
+  error?: ReactNode;
 }

@@ -66,6 +66,20 @@ function getMode<T>(
   return column.responsive?.[deviceKey] ?? "visible";
 }
 
+/**
+ * Phone projection ordering: a column declared `priority: 'low'` is supporting
+ * context (it already yields first to the container-width axis on the desktop
+ * table), so it must never displace primary content from one of the few
+ * summary slots a 390px card has. The sort is stable — declaration order
+ * stands within one priority tier, which keeps the card reading in the same
+ * field order the consumer designed.
+ */
+function orderSummaryCandidates<T>(cols: ColumnDef<T>[]): ColumnDef<T>[] {
+  return [...cols].sort(
+    (a, b) => Number(a.priority === "low") - Number(b.priority === "low")
+  );
+}
+
 export function DataTableMobileCards<T extends object>({
   data,
   columns,
@@ -102,20 +116,27 @@ export function DataTableMobileCards<T extends object>({
 
     // If there are primary columns, use the first as card title.
     // Otherwise fall back to the first visible column (legacy behavior).
+    // Both branches cap the summary at 3 fields: a phone card is an
+    // identity + key-facts projection, not a column dump — fields beyond
+    // the cap are reachable via the row's own open action.
     titleColumn = primaryCols[0] ?? visibleColumns[0];
     summaryColumns =
       summaryCols.length > 0
-        ? summaryCols
-        : visibleColumns
-            .filter(
+        ? orderSummaryCandidates(summaryCols).slice(0, 3)
+        : orderSummaryCandidates(
+            visibleColumns.filter(
               (col) =>
                 col !== titleColumn && getMode(col, deviceKey) === "visible"
             )
-            .slice(0, 3);
+          ).slice(0, 3);
   } else {
-    // Legacy positional heuristic: first column is title, next 3 are summary.
+    // Legacy positional heuristic: first column is title, next 3 are summary
+    // (priority-ordered: low-priority context yields its slot first).
     titleColumn = visibleColumns[0];
-    summaryColumns = visibleColumns.slice(1, 4);
+    summaryColumns = orderSummaryCandidates(visibleColumns.slice(1)).slice(
+      0,
+      3
+    );
   }
 
   return (

@@ -46,6 +46,7 @@ import {
 import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
+import { StatusErrorIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-error';
 import { StatusLoadingIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-loading';
 
 function scalarOrUndefined<T>(value: ResponsiveValue<T> | undefined): T | undefined {
@@ -156,10 +157,14 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     // already excluded via `:not([data-size-responsive])`, so the generated
     // `[data-responsive-id]` declarations only compete with the semantic
     // variants (flushed/unstyled padding resets), which must keep winning.
+    // Height travels through the PRIVATE `--_ds-input-responsive-height`
+    // relay (the skin's base rule consumes it as a min-block-size floor, and
+    // the coarse block recomputes max(floor, touch target) against the same
+    // channel), so the control grows with scaled type instead of clipping.
     // Gap and radius ride custom-property channels the skin's base rule
     // consumes, so they resolve without specificity games.
     responsiveEntries.push({
-      cssProperty: 'block-size',
+      cssProperty: '--_ds-input-responsive-height',
       value: sizeProp,
       resolve: (v: InputSize) =>
         `calc(${resolvedSize(v).height} * var(--ds-density-effective-scale, 1))`,
@@ -413,7 +418,11 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
       )}
       {hasError && errorMessage && (
         <span id={errorMessageId} data-part="error-message" role="alert">
-          {errorMessage}
+          {/* Same validation anatomy as FormField/Form.Item: the governed
+              status.error glyph carries the state as SHAPE (never hue
+              alone), aligned to the first text line by the skin. */}
+          <StatusErrorIcon decorative size={14} data-part="error-icon" />
+          <span data-part="error-text">{errorMessage}</span>
         </span>
       )}
     </>

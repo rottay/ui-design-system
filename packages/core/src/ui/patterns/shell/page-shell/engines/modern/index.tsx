@@ -9,11 +9,15 @@
  *
  * Features:
  * - Breadcrumb trail with "/" separators, muted color, hover state
- * - Title area with strong heading (700 weight, negative tracking)
- * - Subtitle in secondary color
+ * - Title area with strong heading bound to the authored page-title
+ *   typography role (`--ds-type-page-title-*`, exact fallbacks)
+ * - Subtitle in secondary color; optional metadata register line (caption
+ *   role, muted ink, tabular numerals)
  * - Actions slot right-aligned with proper spacing
  * - Optional tab navigation with active indicator
  * - Back navigation button (ghost, token-driven)
+ * - Optional sticky header posture with safe-area offset and governed stuck
+ *   elevation (data-sticky / data-stuck)
  * - Transparent background (content cards provide their own)
  * - Optional bottom border separator
  *
@@ -204,6 +208,7 @@ export default function ModernPageShell(props: PageShellProps) {
     icon,
     hideHeader = false,
     subtitle,
+    metadata,
     headerContent,
     breadcrumbs,
     actions,
@@ -215,9 +220,62 @@ export default function ModernPageShell(props: PageShellProps) {
     badge,
     maxWidth,
     loading,
+    sticky = false,
     className,
     style,
   } = props;
+
+  /* ---- Sticky posture (cockpit-header idiom): the header opts into
+          position:sticky through the prop; a passive window-scroll listener
+          stamps data-stuck once the scrollport has moved, so the governed
+          stuck elevation only appears when content can actually pass beneath
+          the panel. Known boundary (same as cockpit-header): the viewport is
+          the assumed scroll root — a shell inside a nested scroller keeps
+          data-stuck='false' until the window itself scrolls.
+
+          C1 progressive separation: the same listener also reports a
+          continuous 0→1 progress across the first 48px past the stuck
+          threshold, written straight to the header node (no per-frame
+          re-render) on the private runtime-instance channel
+          `--_ds-page-shell-stuck-progress`. The skin reads it with the
+          exact current render as fallback, so an engine that never writes
+          it keeps the binary stuck treatment. The value follows the user's
+          own scroll position — scroll-linked STATE, not autonomous motion —
+          so reduced-motion needs no extra guard. ---- */
+  const [isStuck, setIsStuck] = React.useState(false);
+  const stuckProgressRef = React.useRef(0);
+  const headerNodeRef = React.useRef<HTMLDivElement | null>(null);
+
+  const headerRef = React.useCallback((node: HTMLDivElement | null) => {
+    headerNodeRef.current = node;
+    /* Node swap (loading → loaded): restore the last known progress so the
+       ramp never resets mid-scroll. */
+    if (node) {
+      node.style.setProperty(
+        '--_ds-page-shell-stuck-progress',
+        String(stuckProgressRef.current),
+      );
+    }
+  }, []);
+
+  React.useEffect(() => {
+    if (!sticky) return;
+
+    const handleScroll = () => {
+      setIsStuck(window.scrollY > 4);
+      /* 48px governed ramp past the 4px stuck threshold. */
+      const progress = Math.min(1, Math.max(0, (window.scrollY - 4) / 44));
+      stuckProgressRef.current = progress;
+      headerNodeRef.current?.style.setProperty(
+        '--_ds-page-shell-stuck-progress',
+        String(progress),
+      );
+    };
+    handleScroll();
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [sticky]);
 
   /* ---- Guarded i18n channel (K4 idiom): chrome labels resolve through the
           catalogs when an I18nProvider is mounted; without one the documented
@@ -238,7 +296,10 @@ export default function ModernPageShell(props: PageShellProps) {
   /* ---- Loading skeleton: geometry lives in the skin keyed on data-block
           (cockpit-header idiom); the pulse cadence rides the skin's motion
           channel. The two action blocks keep their divergent radius on the
-          sanctioned inline custom-property channel. ---- */
+          sanctioned inline custom-property channel. The skeleton mirrors the
+          anatomy the caller actually requested (breadcrumb / eyebrow / title
+          / subtitle / actions / tabs), so the late content lands on the
+          footprint the skeleton reserved instead of jumping. ---- */
   if (loading) {
     return (
       <div
@@ -253,28 +314,47 @@ export default function ModernPageShell(props: PageShellProps) {
       >
         <div className="ds-pattern-page-shell__loading-skeleton" data-part="skeleton-group">
           {/* Breadcrumb skeleton */}
-          <div data-part="skeleton" data-block="breadcrumb" />
+          {breadcrumbs && breadcrumbs.length > 0 && (
+            <div data-part="skeleton" data-block="breadcrumb" />
+          )}
+          {/* Eyebrow skeleton */}
+          {eyebrow ? <div data-part="skeleton" data-block="eyebrow" /> : null}
           {/* Title skeleton */}
           <div data-part="skeleton-title-row">
             <div data-part="skeleton-title-copy">
               {/* In-flow skeleton: 280px exceeds the content box a 360px
                   viewport offers, so it is bounded rather than pinned. */}
               <div data-part="skeleton" data-block="title" />
-              <div data-part="skeleton" data-block="subtitle" />
+              {subtitle ? <div data-part="skeleton" data-block="subtitle" /> : null}
+              {/* C1: the metadata register line joins the mirrored anatomy —
+                  its block reserves the caption footprint so a late register
+                  never pushes the actions/tabs down on hydrate. */}
+              {metadata ? <div data-part="skeleton" data-block="metadata" /> : null}
             </div>
-            <div data-part="skeleton-action-row">
-              <div
-                data-part="skeleton"
-                data-block="action-sm"
-                style={{ '--ds-page-shell-skeleton-radius': 'var(--ds-radius-md)' } as React.CSSProperties}
-              />
-              <div
-                data-part="skeleton"
-                data-block="action-md"
-                style={{ '--ds-page-shell-skeleton-radius': 'var(--ds-radius-md)' } as React.CSSProperties}
-              />
-            </div>
+            {actions ? (
+              <div data-part="skeleton-action-row">
+                <div
+                  data-part="skeleton"
+                  data-block="action-sm"
+                  style={{ '--ds-page-shell-skeleton-radius': 'var(--ds-radius-md)' } as React.CSSProperties}
+                />
+                <div
+                  data-part="skeleton"
+                  data-block="action-md"
+                  style={{ '--ds-page-shell-skeleton-radius': 'var(--ds-radius-md)' } as React.CSSProperties}
+                />
+              </div>
+            ) : null}
           </div>
+          {/* Tab strip skeleton: one block per declared tab (capped at four)
+              reserves the strip's final width and row height. */}
+          {tabs && tabs.length > 0 && (
+            <div data-part="skeleton-tabs-row">
+              {tabs.slice(0, 4).map((tab) => (
+                <div key={`skeleton-tab-${tab.key}`} data-part="skeleton" data-block="tab" />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     );
@@ -332,10 +412,13 @@ export default function ModernPageShell(props: PageShellProps) {
       {/* ---- Page header area ---- */}
       {!hideHeader && (
         <div
+          ref={headerRef}
           data-part="header"
           data-has-actions={actions ? 'true' : 'false'}
           data-has-tabs={tabs && tabs.length > 0 ? 'true' : 'false'}
           data-has-rich-content={headerContent ? 'true' : 'false'}
+          data-sticky={sticky ? 'true' : 'false'}
+          data-stuck={sticky && isStuck ? 'true' : 'false'}
         >
         {/* ---- Breadcrumb trail (pattern-owned framed-pill grammar — see the
                 skin header; the Breadcrumb primitive was evaluated and the
@@ -411,6 +494,13 @@ export default function ModernPageShell(props: PageShellProps) {
                 >
                   {subtitle}
                 </p>
+              )}
+              {metadata && (
+                /* Register line: counts, timestamps, owners. Deliberately
+                   subordinate — caption role and muted ink live in the skin. */
+                <div data-part="metadata">
+                  {metadata}
+                </div>
               )}
             </div>
           </div>

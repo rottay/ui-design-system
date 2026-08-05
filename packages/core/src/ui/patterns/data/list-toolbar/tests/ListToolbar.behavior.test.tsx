@@ -117,7 +117,7 @@ describe('PatternListToolbar behavior', () => {
     expect(onViewModeChange).toHaveBeenCalledWith('cards');
   });
 
-  it('switches the modern density through the segmented control', async () => {
+  it('switches the modern density through the settings panel', async () => {
     mockMatchMedia(1280);
     const onDensityChange = vi.fn();
     renderWithEngine(
@@ -125,7 +125,9 @@ describe('PatternListToolbar behavior', () => {
       'modern',
     );
 
-    fireEvent.click(await screen.findByRole('radio', { name: 'Compact density' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'Column settings' }));
+    fireEvent.click(await screen.findByRole('tab', { name: 'Density' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'Compact' }));
     expect(onDensityChange).toHaveBeenCalledWith('compact');
   });
 

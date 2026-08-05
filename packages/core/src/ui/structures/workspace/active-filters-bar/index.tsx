@@ -15,6 +15,13 @@
  * (`action-close` / `action-add`). The count eyebrow is a parametric
  * `{count} active` message with tabular figures (skin-owned).
  *
+ * FILTER LIFECYCLE (C-05): `ActiveFilter.state` renders the applied / draft /
+ * invalid grammar — the governed `status-draft` / `status-error` glyph in
+ * the Tag's icon slot (shape), the skin's underline treatment on the value
+ * (form), and a visually hidden localized state word (text), so the state
+ * never depends on hue and survives forced colors. Absent means applied,
+ * which keeps every existing caller byte-identical.
+ *
  * Returns null when no filters are active, so consumers can mount it
  * unconditionally without dealing with empty-state logic; the rail's
  * entrance transition is skin-owned (coordinated, silenced under
@@ -37,6 +44,8 @@ import { useOptionalTranslation } from "@/infrastructure/runtime/i18n";
 import { Box, Button, Flex, Tag } from "../../../primitives";
 import { ActionAddIcon } from "@/graphics/icons/presentation/semantic/generated/roles/action-add";
 import { ActionCloseIcon } from "@/graphics/icons/presentation/semantic/generated/roles/action-close";
+import { StatusDraftIcon } from "@/graphics/icons/presentation/semantic/generated/roles/status-draft";
+import { StatusErrorIcon } from "@/graphics/icons/presentation/semantic/generated/roles/status-error";
 import type { ActiveFilter } from "@/foundation/contracts/runtime/components/patterns/data";
 
 export type { ActiveFilter } from "@/foundation/contracts/runtime/components/patterns/data";
@@ -108,7 +117,21 @@ export function ActiveFiltersBar({
                 count: activeFilters.length,
               })}
             </Box>
-            {visibleFilters.map((filter) => (
+            {visibleFilters.map((filter) => {
+              /* Lifecycle state (ActiveFilter.state, absent = applied). The
+                 state reaches the chip three ways at once: the governed
+                 status glyph in the Tag's icon slot (shape), a skin-owned
+                 underline grammar on the value (form), and a visually hidden
+                 localized word (text) — never hue alone. The chip chrome
+                 itself stays the Tag primitive's paint. */
+              const state = filter.state ?? "applied";
+              const stateLabel =
+                state === "draft"
+                  ? tOr("activeFiltersBar.state_draft", "draft")
+                  : state === "invalid"
+                    ? tOr("activeFiltersBar.state_invalid", "invalid")
+                    : null;
+              return (
               /* Composed Tag (closable): chrome, focus ring and the close
                  button's semantics belong to the primitive; the pattern
                  keeps only the label/value typography inside. */
@@ -117,6 +140,7 @@ export function ActiveFiltersBar({
                 tone="primary"
                 closable
                 data-part="chip"
+                data-state={state !== "applied" ? state : undefined}
                 onClose={() => onRemoveFilter(filter.key)}
                 closeLabel={tOr(
                   "activeFiltersBar.remove_filter_named",
@@ -125,6 +149,13 @@ export function ActiveFiltersBar({
                     field: filter.label,
                   }
                 )}
+                icon={
+                  state === "draft" ? (
+                    <StatusDraftIcon decorative size={11} />
+                  ) : state === "invalid" ? (
+                    <StatusErrorIcon decorative size={11} />
+                  ) : undefined
+                }
               >
                 <Box as="span" data-part="chip-label">
                   {filter.label}
@@ -142,8 +173,14 @@ export function ActiveFiltersBar({
                 >
                   {filter.displayValue ?? filter.value}
                 </Box>
+                {stateLabel && (
+                  <Box as="span" className="ds-sr-only">
+                    {stateLabel}
+                  </Box>
+                )}
               </Tag>
-            ))}
+              );
+            })}
             {hiddenCount > 0 && (
               /* Governed "more": a clickable Tag (role=button via the
                  primitive's clickable contract) that expands the rail in

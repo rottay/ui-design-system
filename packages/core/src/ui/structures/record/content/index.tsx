@@ -28,14 +28,21 @@
  * floor without ever repeating a class or an attribute.
  *
  * INLINE BOUNDARY: the only inline styles left are runtime-computed
- * values (the field-grid `gridTemplateColumns` prop, the field's
- * `grid-column: span N`, consumer `style` passthrough) and the copy
- * timer state. All static geometry lives in
+ * values (the field-grid `gridTemplateColumns` prop — whose DEFAULT embeds
+ * the private `--_ds-record-field-measure` channel with the exact
+ * 16rem fallback — the field's `grid-column: span N`, consumer `style`
+ * passthrough) and the copy timer state. All static geometry lives in
  * `presentation/components/skin/record.css` — including the linked-value
  * cluster's fit-content measure and the link arrow's 13px frame (drained
  * from inline icon sizing). Action-bar icons take the Button's governed
  * icon channel (`--ds-button-sm-icon-size`) instead of an inline 14px
  * override, so tenant icon sizing reaches the rail.
+ *
+ * STATES (C-12): `RecordField` and `RecordSummaryStrip` accept `loading`
+ * (Skeleton bars that reserve the final label/value footprint) and
+ * `RecordField` accepts `error` (semantic status icon + copy, never
+ * colour-only). Empty values keep the deliberate `data-empty` placeholder,
+ * which the skin expresses as a dashed frame — a shape cue, not a tint.
  *
  * Exports:
  *   - `RecordSummaryStrip` — horizontal/grid summary card with 5
@@ -45,7 +52,8 @@
  *     with a configurable `gridTemplateColumns` value
  *   - `RecordField` — a single read-only field card with label,
  *     value, optional helper, optional copy-to-clipboard, optional
- *     href, and a monospace mode for IDs / keys
+ *     href, a monospace mode for IDs / keys, a `loading` skeleton
+ *     state, and a per-field `error` state (icon + copy)
  *   - `RecordActionBar` — a sticky-feel action rail with optional
  *     meta slot on the left and either a free-form `actions` ReactNode
  *     slot or a structured `actionItems[]` array using the
@@ -84,9 +92,10 @@ import { useCallback, useEffect, useRef, useState, type CSSProperties, type Reac
 import {
   ArrowUpRightIcon as ArrowUpRight,
 } from '../../../../graphics/icons';
+import { StatusErrorIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-error';
 import { CopyToCheck } from '../../../../graphics/motion';
 
-import { Box, Button, Flex, Stack, Text, Tooltip } from '../../../primitives';
+import { Box, Button, Flex, Skeleton, Stack, Text, Tooltip } from '../../../primitives';
 import { useNavigationLink } from '../../../../infrastructure/runtime/adapters/presentation/react/navigation';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import {
@@ -118,10 +127,14 @@ export interface RecordActionItem extends SharedHeaderActionDescriptor {
 export function RecordSummaryStrip({
   items,
   variant = 'default',
+  loading = false,
   style,
 }: {
   items: RecordSummaryItem[];
   variant?: 'default' | 'editorial' | 'technical' | 'governance' | 'metrics';
+  /** Reserves the final label/value footprint with skeleton bars (one pair
+      per item) while the summary data resolves. */
+  loading?: boolean;
   style?: CSSProperties;
 }) {
   const visibleItems = items.filter((item) => item.value !== undefined && item.value !== null && item.value !== '');
@@ -136,6 +149,8 @@ export function RecordSummaryStrip({
       data-part="summary-strip"
       data-structure="record"
       data-variant={variant}
+      data-loading={loading ? 'true' : undefined}
+      aria-busy={loading ? true : undefined}
       style={style}
     >
       {/* Grid rhythm + per-variant columns/padding/gap are skin-owned off
@@ -143,26 +158,43 @@ export function RecordSummaryStrip({
       <Box data-part="summary-grid">
         {visibleItems.map((item) => (
           <Stack key={item.label} data-part="summary-item" spacing={4}>
-            <Text
-              data-part="summary-item-label"
-              size="xs"
-              weight="bold"
-            >
-              {item.label}
-            </Text>
-            <Text
-              data-part="summary-item-value"
-              data-mono={item.mono ? 'true' : undefined}
-              size={variant === 'metrics' ? 'md' : 'sm'}
-              weight="medium"
-            >
-              {item.value}
-            </Text>
-            {item.helper ? (
-              <Text data-part="summary-item-helper" size="xs">
-                {item.helper}
-              </Text>
-            ) : null}
+            {loading ? (
+              <>
+                {/* The skeleton pair reserves the final hierarchy: a short
+                    label bar over a wider value bar, so late content lands on
+                    an identical footprint (no jump). Bar geometry is the
+                    Skeleton contract; wrapper rhythm is skin-owned. */}
+                <Box data-part="summary-item-skeleton-label">
+                  <Skeleton variant="rounded" width="8em" height="0.7rem" />
+                </Box>
+                <Box data-part="summary-item-skeleton-value">
+                  <Skeleton variant="rounded" width="64%" height="0.9rem" />
+                </Box>
+              </>
+            ) : (
+              <>
+                <Text
+                  data-part="summary-item-label"
+                  size="xs"
+                  weight="bold"
+                >
+                  {item.label}
+                </Text>
+                <Text
+                  data-part="summary-item-value"
+                  data-mono={item.mono ? 'true' : undefined}
+                  size={variant === 'metrics' ? 'md' : 'sm'}
+                  weight="medium"
+                >
+                  {item.value}
+                </Text>
+                {item.helper ? (
+                  <Text data-part="summary-item-helper" size="xs">
+                    {item.helper}
+                  </Text>
+                ) : null}
+              </>
+            )}
           </Stack>
         ))}
       </Box>
@@ -172,10 +204,14 @@ export function RecordSummaryStrip({
 
 export function RecordFieldGrid({
   children,
-  /* The default is intrinsic: tracks auto-fit a 16rem minimum measure, so a
+  /* The default is intrinsic: tracks auto-fit a minimum measure, so a
      narrow container re-flows 2→1 columns and long labels/values never force
-     an overflow. A caller's explicit `columns` always wins (runtime prop). */
-  columns = 'repeat(auto-fit, minmax(min(100%, 16rem), 1fr))',
+     an overflow. The measure rides the private
+     `--_ds-record-field-measure` channel (fallback 16rem, the exact
+     value painted before) so a tenant density/geometry posture can retune
+     the 2→1 reflow point from one place. A caller's explicit `columns`
+     always wins (runtime prop). */
+  columns = 'repeat(auto-fit, minmax(min(100%, var(--_ds-record-field-measure, 16rem)), 1fr))',
   style,
 }: {
   children: ReactNode;
@@ -244,6 +280,8 @@ export function RecordField({
   helper,
   href,
   copyValue,
+  loading = false,
+  error,
 }: {
   label: string;
   value: ReactNode;
@@ -253,6 +291,14 @@ export function RecordField({
   helper?: ReactNode;
   href?: string;
   copyValue?: string;
+  /** Reserves the final label/value footprint with skeleton bars while the
+      field's data resolves; the copy/link affordances stay unmounted so no
+      control acts on placeholder content. */
+  loading?: boolean;
+  /** Per-field error copy (consumer-supplied). Rendered with the semantic
+      `status.error` icon and the error ink — the state never reads through
+      colour alone. */
+  error?: ReactNode;
 }) {
   const NavLink = useNavigationLink();
   const { tOr } = useRecordTranslation();
@@ -332,42 +378,72 @@ export function RecordField({
       data-structure="record"
       data-empty={resolved.empty}
       data-mono={mono}
+      data-loading={loading ? 'true' : undefined}
+      data-error={error ? 'true' : undefined}
+      aria-busy={loading ? true : undefined}
       /* grid-column stays inline: runtime `span` prop. */
       style={{
         gridColumn: `span ${span}`,
       }}
     >
       <Stack spacing={6}>
-        <Text
-          data-part="field-label"
-          size="xs"
-          weight="bold"
-        >
-          {label}
-        </Text>
+        {loading ? (
+          <>
+            {/* Loading keeps the read hierarchy: a short label bar above a
+                wider value bar, so the resolving content lands on the same
+                footprint. */}
+            <Box data-part="field-skeleton-label">
+              <Skeleton variant="rounded" width="9em" height="0.7rem" />
+            </Box>
+            <Box data-part="field-skeleton-value">
+              <Skeleton variant="rounded" width="72%" height="0.9rem" />
+            </Box>
+          </>
+        ) : (
+          <>
+            <Text
+              data-part="field-label"
+              size="xs"
+              weight="bold"
+            >
+              {label}
+            </Text>
 
-        <Flex align="start" justify="between" gap={12}>
-          <Box data-part="field-body">{maybeLinkedValue}</Box>
-          {copyValue ? (
-            <Tooltip content={copied ? tOr('record.copiedField', 'Copied {label}', { label: label.toLowerCase() }) : tOr('record.copyField', 'Copy {label}', { label: label.toLowerCase() })}>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleCopy}
-                data-part="field-copy"
-                aria-label={copied ? tOr('record.copiedField', 'Copied {label}', { label: label.toLowerCase() }) : tOr('record.copyField', 'Copy {label}', { label: label.toLowerCase() })}
-              >
-                <CopyToCheck copied={copied} size={13} />
-              </Button>
-            </Tooltip>
-          ) : null}
-        </Flex>
+            <Flex align="start" justify="between" gap={12}>
+              <Box data-part="field-body">{maybeLinkedValue}</Box>
+              {copyValue ? (
+                <Tooltip content={copied ? tOr('record.copiedField', 'Copied {label}', { label: label.toLowerCase() }) : tOr('record.copyField', 'Copy {label}', { label: label.toLowerCase() })}>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleCopy}
+                    data-part="field-copy"
+                    aria-label={copied ? tOr('record.copiedField', 'Copied {label}', { label: label.toLowerCase() }) : tOr('record.copyField', 'Copy {label}', { label: label.toLowerCase() })}
+                  >
+                    <CopyToCheck copied={copied} size={13} />
+                  </Button>
+                </Tooltip>
+              ) : null}
+            </Flex>
 
-        {helper ? (
-          <Text data-part="field-helper" size="xs">
-            {helper}
-          </Text>
-        ) : null}
+            {helper ? (
+              <Text data-part="field-helper" size="xs">
+                {helper}
+              </Text>
+            ) : null}
+
+            {error ? (
+              <Flex data-part="field-error-row" align="start" gap={6}>
+                {/* Decorative: the adjacent copy carries the error meaning;
+                    the icon is the non-colour shape cue. */}
+                <StatusErrorIcon decorative size={13} data-part="field-error-icon" />
+                <Text data-part="field-error" size="xs">
+                  {error}
+                </Text>
+              </Flex>
+            ) : null}
+          </>
+        )}
       </Stack>
     </Box>
   );

@@ -152,6 +152,16 @@ export interface ButtonProps extends BaseComponentProps, EngineAwareProps, Loada
 
   /**
    * Whether the button has danger/destructive state.
+   *
+   * @remarks
+   * `danger` with no explicit `variant` (or on a solid variant) resolves to
+   * the solid `danger` recipe — the primary destructive commitment. `danger`
+   * combined with an explicitly requested QUIET variant (`ghost`, `text`,
+   * `link`, `default`, `outline`, `dashed`) keeps that variant and stamps
+   * `data-tone="danger"` instead: the modern skin paints the low-volume
+   * destructive grammar (error ink + tempered wash) from the governed error
+   * channels. The DOM tree is identical either way; only the state
+   * attributes differ.
    */
   danger?: boolean;
 

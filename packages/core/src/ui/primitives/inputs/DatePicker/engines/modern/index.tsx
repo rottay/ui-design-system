@@ -65,10 +65,17 @@ import { toCanonicalSize } from '../../../../../../foundation/contracts/kernel/c
 // `sm | md | lg` step -- `toCanonicalSize` resolves any accepted spelling.
 // Bare channels (fallback parity): every `--ds-input-*` axis is a declared
 // channel, so `var(--ds-x)` resolves to the channel default on its own.
+// C-02 height-as-floor: the BLOCK AXIS no longer lives here -- the skin owns
+// it per data-size through the `--_ds-datepicker-trigger-height` relay
+// (min-block-size x the density plane, recomputed max(relay, 44px) on coarse
+// pointers), so the trigger grows with type scale and the touch floor can
+// actually win (an inline min-block-size would beat the skin's coarse rule).
+// Inline keeps only font-size + the padding pair the spread-order note below
+// depends on; padding now reads the per-size channel pair (Input grammar).
 const sizeStyleMap: Record<'sm' | 'md' | 'lg', React.CSSProperties> = {
-  sm: { height: 'var(--ds-input-sm-height)', fontSize: 'var(--ds-input-sm-font-size)', padding: '4px var(--ds-input-sm-padding-x)' },
-  md: { height: 'var(--ds-input-md-height)', fontSize: 'var(--ds-input-md-font-size)', padding: '6px var(--ds-input-md-padding-x)' },
-  lg: { height: 'var(--ds-input-lg-height)', fontSize: 'var(--ds-input-lg-font-size)', padding: '8px var(--ds-input-lg-padding-x)' },
+  sm: { fontSize: 'var(--ds-input-sm-font-size)', padding: 'var(--ds-input-sm-padding-y) var(--ds-input-sm-padding-x)' },
+  md: { fontSize: 'var(--ds-input-md-font-size)', padding: 'var(--ds-input-md-padding-y) var(--ds-input-md-padding-x)' },
+  lg: { fontSize: 'var(--ds-input-lg-font-size)', padding: 'var(--ds-input-lg-padding-y) var(--ds-input-lg-padding-x)' },
 };
 
 // All functional glyphs resolve through the semantic icon corpus. The double

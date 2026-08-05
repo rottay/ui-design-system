@@ -14,6 +14,7 @@ import {
   METRIC_CARD_NUMBER_FONT_VARIANT,
   METRIC_CARD_NUMBER_MIN_WIDTH,
   METRIC_MONO_FONT,
+  METRIC_VALUE_FONT,
 } from '../../../foundation/tokens';
 
 /** Hook-local `tOr`: catalogue value with an English floor, never a raw key. */
@@ -105,10 +106,13 @@ function MetricRow({ metric, index }: { metric: MetricsProps['metrics'][0]; inde
             style={{
               fontSize: 28,
               fontWeight: 800,
-              fontFamily: METRIC_MONO_FONT,
+              // Numeric role voice (C-08/C1): the tenant's authored figure
+              // face, mono chain as the exact pre-C1 fallback. `end` keeps
+              // the figure on the inline-end edge under RTL too.
+              fontFamily: METRIC_VALUE_FONT,
               letterSpacing: 0,
               minWidth: METRIC_CARD_NUMBER_MIN_WIDTH,
-              textAlign: 'right',
+              textAlign: 'end',
               fontVariantNumeric: METRIC_CARD_NUMBER_FONT_VARIANT,
             }}
           >

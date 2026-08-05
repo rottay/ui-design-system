@@ -48,6 +48,7 @@ import { useChartDimensions, useChartPersonality, useChartCompact } from '../../
 import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
 import { TooltipValue } from '../../presentation/tooltip';
 import type { ChartInteraction } from '../../runtime/chart-engine/foundation/interaction';
+import type { ChartInsightSpec } from '../../runtime/chart-engine/foundation/spec';
 import type {
   SvgBarDatum,
   SvgBarSeriesInput,
@@ -55,6 +56,16 @@ import type {
 import { SvgBarRenderer } from '../../runtime/chart-engine/presentation/react/renderers/bar';
 
 const FALLBACK_BAR_COLOR = 'var(--ds-color-primary)';
+
+/**
+ * Governed responsive-label floors for the category axis. Vertical charts thin
+ * category ticks to one per ~56px of measured plot width (a compact tabular
+ * label at `--ds-font-size-xs` reads cleanly at that spacing); horizontal
+ * charts cap by band height so end-anchored labels never collide. Sampled
+ * ticks keep first/last and even spacing, so reduction never clips a label.
+ */
+const CATEGORY_TICK_MIN_INLINE_SPACING = 56;
+const CATEGORY_TICK_MIN_BLOCK_SPACING = 18;
 
 function resolvePaletteColor(palette: readonly string[], index: number): string {
   const paletteIndex = palette.length > 0 ? index % palette.length : 0;
@@ -83,11 +94,23 @@ interface BarChartOwnProps
   stacked?: boolean;
   /** Multi-series data. When provided, `data` is ignored. */
   series?: Series[];
+  /**
+   * Corner radius of each bar in px. When omitted, the renderer resolves the
+   * radius from the vertical grammar's mark posture (human-rounded /
+   * technical-sharp / tactile-temporal / balanced) so the mark belongs to the
+   * tenant's edge grammar instead of a library default.
+   */
   barRadius?: number;
   barGap?: number;
   showValues?: boolean;
   xAxisLabel?: string;
   yAxisLabel?: string;
+  /**
+   * Static, app-authored annotation specs (threshold rules, bands, events,
+   * direct labels). Rendered by the shared InsightLayer with `role="note"`
+   * semantics; never interactive.
+   */
+  insights?: readonly ChartInsightSpec[];
 }
 
 /** Props for the {@link BarChart} component. */
@@ -106,7 +129,7 @@ export const BarChart = memo(function BarChart({
   orientation = 'vertical',
   stacked = false,
   series,
-  barRadius = 4,
+  barRadius,
   barGap = 0.2,
   showValues = false,
   xAxisLabel,
@@ -135,6 +158,7 @@ export const BarChart = memo(function BarChart({
   compactMode,
   autoCompact,
   compactBreakpoint,
+  insights,
 }: BarChartProps) {
   const scaffoldRef = useRef<HTMLDivElement>(null);
   const legacySvgRef = useRef<SVGSVGElement>(null);
@@ -142,8 +166,20 @@ export const BarChart = memo(function BarChart({
   const chartPersonality = useChartPersonality({ animate, tooltip, colorScheme });
   const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
   const compactState = useChartCompact({ compact, compactMode, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
-  const resolvedBarRadius = Number.isFinite(barRadius) ? Math.max(0, barRadius) : 4;
   const resolvedBarGap = Number.isFinite(barGap) ? Math.min(0.95, Math.max(0, barGap)) : 0.2;
+  // Only an app-authored radius is threaded; otherwise the renderer resolves
+  // the corner radius from the vertical grammar's mark posture.
+  const authoredBarRadius = barRadius === undefined || !Number.isFinite(barRadius)
+    ? undefined
+    : Math.max(0, barRadius);
+  // Governed category-label thinning, always on: the category axis derives a
+  // tick cap from the measured container so crowded labels are sampled (never
+  // clipped or overlapped) at 320/390px and on dense desktop dashboards alike.
+  // Compact mode's explicit maxTicks still wins through the geometry's
+  // smaller-cap merge.
+  const categoryTickCap = orientation === 'horizontal'
+    ? Math.max(2, Math.floor(height / CATEGORY_TICK_MIN_BLOCK_SPACING))
+    : Math.max(2, Math.floor(dimensions.width / CATEGORY_TICK_MIN_INLINE_SPACING));
 
   const isMultiSeries = series != null && series.length > 0;
   const singleData = useMemo(
@@ -230,7 +266,7 @@ export const BarChart = memo(function BarChart({
 
   const legendNode = legend ? (
     isMultiSeries ? (
-      <div data-part="legend">
+      <div data-part="legend" data-legend-encoding="series">
         {renderSeries.map((s, i) => (
           <div key={`${s.name}-${i}`} data-part="legend-item">
             <span data-part="legend-swatch" data-series-index={i % 10} style={{ backgroundColor: arrayValueAt(seriesColors, i) }} />
@@ -239,7 +275,7 @@ export const BarChart = memo(function BarChart({
         ))}
       </div>
     ) : (
-      <div data-part="legend">
+      <div data-part="legend" data-legend-encoding="categories">
         {singleData.map((d, i) => (
           <div key={`${d.label}-${i}`} data-part="legend-item">
             <span data-part="legend-swatch" data-series-index={i % 10} style={{ backgroundColor: d.color ?? resolvePaletteColor(palette, i) }} />
@@ -343,13 +379,15 @@ export const BarChart = memo(function BarChart({
           responsive={responsive}
           orientation={orientation}
           bandPadding={resolvedBarGap}
-          barRadius={resolvedBarRadius}
+          {...(authoredBarRadius === undefined ? {} : { barRadius: authoredBarRadius })}
           showValues={showValues}
           {...(Number.isFinite(compactState.maxTicks)
             ? { maxTicks: compactState.maxTicks }
             : {})}
+          maxCategoryTicks={categoryTickCap}
           {...(xAxisLabel === undefined ? {} : { xLabel: xAxisLabel })}
           {...(yAxisLabel === undefined ? {} : { yLabel: yAxisLabel })}
+          {...(insights === undefined ? {} : { insights })}
           {...(interaction === undefined ? {} : { interaction })}
         />
       )}

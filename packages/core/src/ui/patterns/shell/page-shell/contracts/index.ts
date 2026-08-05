@@ -48,6 +48,12 @@ export interface PageShellProps extends PatternBaseProps {
   hideHeader?: boolean;
   /** Optional subtitle or description rendered below the title */
   subtitle?: ReactNode;
+  /**
+   * Optional register-line metadata (counts, timestamps, owners, sync state)
+   * rendered below the subtitle. Kept visually subordinate to the subtitle:
+   * caption role, muted ink, tabular numerals, hairline-separated.
+   */
+  metadata?: ReactNode;
   /** Optional rich content rendered below the title block inside the header. */
   headerContent?: ReactNode;
   /** Breadcrumb trail items; last item is treated as current (no link) */
@@ -72,6 +78,14 @@ export interface PageShellProps extends PatternBaseProps {
   };
   /** Badge element rendered next to the title (e.g. status indicator) */
   badge?: ReactNode;
+  /**
+   * When true, the page header sticks to the top of the scrollport. While
+   * stuck, the panel trades its resting elevation for a governed hairline +
+   * deeper shadow so the hierarchy survives content scrolling beneath it.
+   * The sticky offset reads the `--ds-safe-area-top` channel (env fallback),
+   * so notched devices never tuck the header under the sensor area.
+   */
+  sticky?: boolean;
   /** Maximum width constraint for the page content area */
   maxWidth?: number | string;
 }

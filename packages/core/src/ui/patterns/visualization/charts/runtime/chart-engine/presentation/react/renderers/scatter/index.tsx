@@ -191,6 +191,17 @@ export function SvgScatterRenderer({
         y: activePoint.yPosition - activePoint.radius,
       } : undefined}
     >
+      {/* Tenant plot plane, painted by the foundation skin on the shared
+          `--ds-chart-plot-bg` channel (see the bar renderer note). */}
+      <rect
+        data-part="plot-surface"
+        aria-hidden="true"
+        x={geometry.plot.x}
+        y={geometry.plot.y}
+        width={geometry.plot.width}
+        height={geometry.plot.height}
+      />
+
       {grid ? (
         <>
           <g data-part="grid" data-axis="x" aria-hidden="true">

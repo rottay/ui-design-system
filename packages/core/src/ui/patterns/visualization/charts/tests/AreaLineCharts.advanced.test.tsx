@@ -110,7 +110,7 @@ describe('Area and line chart advanced coverage', () => {
       }
     );
 
-    await screen.findByRole('img', { name: 'Revenue' });
+    await screen.findByRole('group', { name: 'Revenue' });
     // The renderer owns the plot SVG, so the scaffold exposes the accessible
     // summary through its default-active item (first row) rather than the
     // legacy fallback-SVG roving handler; the full item list stays in the DOM.
@@ -149,10 +149,9 @@ describe('Area and line chart advanced coverage', () => {
       }
     );
 
-    // The renderer surface contributes an accessible <title>, so the chart
-    // name now appears both as the heading and the SVG title; disambiguate via
-    // the image role rather than a bare text match.
-    expect(await screen.findByRole('img', { name: 'Linear Revenue' })).toBeInTheDocument();
+    // Interactive line charts expose a labelled group; their descendant marks
+    // own the point-level image semantics.
+    expect(await screen.findByRole('group', { name: 'Linear Revenue' })).toBeInTheDocument();
     expect(screen.getByText('Revenue', { selector: 'span' })).toBeInTheDocument();
     await waitFor(() => {
       expect(secondRender.container.querySelector('svg')).toBeTruthy();

@@ -10,7 +10,7 @@
  * Layout (desktop):
  *   Left:    Search input (with active filter count badge)
  *   Center:  Saved views bar (if present, stretches)
- *   Right:   Density toggle | View mode | Export | Column settings | Primary CTA
+ *   Right:   View mode | Export | Settings (density lives inside) | Primary CTA
  *
  * Layout (mobile):
  *   Row 1: Title + count | overflow menu + primary CTA
@@ -56,11 +56,14 @@ import {
   MoreHorizontalIcon as MoreHorizontal,
   CheckIcon as Check,
 } from '../../../../../../graphics/icons';
+import { StatusDraftIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-draft';
+import { StatusErrorIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-error';
 
 import type {
   ListToolbarProps,
   ListToolbarMessages,
   FilterPillConfig,
+  ActiveFilterState,
   DensityKey,
 } from '../../contracts';
 import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
@@ -92,6 +95,8 @@ const DEFAULT_MESSAGES: ListToolbarMessages = {
   export: 'Export',
   active: 'active',
   clearAll: 'Clear all',
+  draft: 'draft',
+  invalid: 'invalid',
 };
 
 /**
@@ -120,6 +125,8 @@ const CATALOG_MESSAGE_KEYS = [
   'export',
   'active',
   'clearAll',
+  'draft',
+  'invalid',
 ] as const satisfies readonly (keyof ListToolbarMessages)[];
 
 /**
@@ -254,14 +261,18 @@ function ToolbarDivider() {
 
 function FilterButton({
   pill,
+  state,
   onFilterChange,
 }: {
   pill: FilterPillConfig;
+  /** Lifecycle state of this filter's current value; absent means applied. */
+  state?: ActiveFilterState;
   onFilterChange?: (key: string, value: unknown) => void;
 }) {
   const [open, setOpen] = useState(false);
   const isActive = pill.value && pill.value !== '' && pill.value !== 'all';
   const activeLabel = pill.options.find((o) => o.value === pill.value)?.label;
+  const chipState: ActiveFilterState = state ?? 'applied';
 
   return (
     <Popover
@@ -301,6 +312,7 @@ function FilterButton({
         className='ds-list-toolbar__filter-trigger'
         data-active={!!isActive}
         data-open={open}
+        data-state={isActive && chipState !== 'applied' ? chipState : undefined}
         aria-expanded={open}
         aria-haspopup='listbox'
         aria-label={activeLabel ? `${pill.label}: ${activeLabel}` : pill.label}
@@ -687,10 +699,17 @@ function MobileOverflowItem({
  * Desktop layout:
  *   Left:   [Icon] Title (count) | Search input (+ filter count badge)
  *   Center: Filter pills (stretch)
- *   Right:  Density toggle | View mode | Export | Settings | Primary CTA
+ *   Right:  View mode | Export | Settings (density inside) | Primary CTA
  *
  * Conditional second row:
  *   Active filter chips strip with dismiss buttons.
+ *
+ * Filter lifecycle (C-05): every chip and its rail trigger carry an
+ * applied / draft / invalid state (`filterStates` prop; an orphaned value
+ * self-reports as invalid) expressed as border style + governed status glyph
+ * + visually hidden localized word — never hue alone. `loading` pins a busy
+ * hairline to the shell's bottom edge with zero layout shift and marks the
+ * root `aria-busy`; controls stay operable while the collection refreshes.
  *
  * On mobile, secondary controls collapse into a 'More' dropdown.
  */
@@ -708,6 +727,8 @@ export default function ModernListToolbar({
   onFilterChange,
   onClearFilters,
   activeFilterCount = 0,
+  filterStates,
+  loading = false,
   viewMode,
   onViewModeChange,
   density,
@@ -742,7 +763,7 @@ export default function ModernListToolbar({
     () => {
       const catalogDefaults = {} as ListToolbarMessages;
       for (const key of CATALOG_MESSAGE_KEYS) {
-        catalogDefaults[key] = tOr(`listToolbar.${key}`, DEFAULT_MESSAGES[key]);
+        catalogDefaults[key] = tOr(`listToolbar.${key}`, DEFAULT_MESSAGES[key]!);
       }
       return { ...catalogDefaults, ...messageOverrides };
     },
@@ -762,22 +783,42 @@ export default function ModernListToolbar({
   /** Build the list of active filter chips for display. */
   const activeFilterChips = useMemo(() => {
     if (!activeFilters || !filterPills) return [];
-    const chips: { key: string; label: string; value: string }[] = [];
+    const chips: {
+      key: string;
+      label: string;
+      value: string;
+      state: ActiveFilterState;
+    }[] = [];
     for (const pill of filterPills) {
       const active = activeFilters[pill.key];
       if (active && active !== '' && active !== 'all') {
         const option = pill.options.find((o) => o.value === String(active));
+        /* An active value that no longer resolves against the pill's options
+           is invalid on its face (stale saved view, retired option) — the
+           consumer's explicit map wins when it says otherwise. */
+        const state: ActiveFilterState =
+          filterStates?.[pill.key] ?? (option ? 'applied' : 'invalid');
         chips.push({
           key: pill.key,
           label: pill.label,
           value: option?.label ?? String(active),
+          state,
         });
       }
     }
     return chips;
-  }, [activeFilters, filterPills]);
+  }, [activeFilters, filterPills, filterStates]);
 
   const hasActiveFilters = activeFilterChips.length > 0;
+  /** Chip states keyed by filter key, shared with the pill triggers so the
+     rail and the strip can never disagree about a filter's lifecycle. */
+  const chipStateByKey = useMemo(
+    () =>
+      Object.fromEntries(
+        activeFilterChips.map((chip) => [chip.key, chip.state])
+      ) as Record<string, ActiveFilterState>,
+    [activeFilterChips]
+  );
   // `showTitleSection` alone gates the cluster. The historical
   // `Boolean(title || totalCount >= 0)` term was tautological (any count
   // passes `>= 0`) and is preserved here as documentation of that falsified
@@ -794,6 +835,8 @@ export default function ModernListToolbar({
       data-has-active-filters={hasActiveFilters}
       data-has-title={showTitleCluster}
       data-has-primary-action={!!primaryAction}
+      data-loading={loading || undefined}
+      aria-busy={loading || undefined}
       className={`ds-pattern-list-toolbar ds-engine-modern ${className ?? ''}`}
       style={{
         ...style,
@@ -918,6 +961,7 @@ export default function ModernListToolbar({
                   <FilterButton
                     key={pill.key}
                     pill={pill}
+                    state={chipStateByKey[pill.key]}
                     onFilterChange={onFilterChange}
                   />
                 ))}
@@ -1003,6 +1047,7 @@ export default function ModernListToolbar({
                   <FilterButton
                     key={pill.key}
                     pill={pill}
+                    state={chipStateByKey[pill.key]}
                     onFilterChange={onFilterChange}
                   />
                 ))}
@@ -1034,12 +1079,12 @@ export default function ModernListToolbar({
             className='ds-list-toolbar__controls'
             align='center'
           >
-            {/* Density toggle */}
-            <DensitySwitch
-              density={density}
-              onDensityChange={onDensityChange}
-              messages={messages}
-            />
+            {/* C1 priority grammar: one quiet instrument cluster, never a
+               row of twin controls. Density is deliberately NOT repeated
+               here — it already lives inside the settings panel (density
+               tab) and in the mobile overflow menu, so rendering it beside
+               the view switch only produced two identical segmented
+               controls competing with the primary action. */}
 
             {/* View mode toggle */}
             <ViewSwitch
@@ -1130,9 +1175,17 @@ export default function ModernListToolbar({
               key={chip.key}
               data-part='filter-chip'
               className='ds-list-toolbar__filter-chip'
+              data-state={chip.state !== 'applied' ? chip.state : undefined}
               closable
               onClose={() => onFilterChange?.(chip.key, '')}
               size='sm'
+              icon={
+                chip.state === 'draft' ? (
+                  <StatusDraftIcon decorative size={11} />
+                ) : chip.state === 'invalid' ? (
+                  <StatusErrorIcon decorative size={11} />
+                ) : undefined
+              }
             >
               <Text
                 data-part='filter-chip-label'
@@ -1148,6 +1201,13 @@ export default function ModernListToolbar({
               >
                 {chip.value}
               </Text>
+              {/* The state glyph is decorative; the state itself must reach
+                 assistive tech as words, in the chip's reading order. */}
+              {chip.state !== 'applied' && (
+                <Box as='span' className='ds-sr-only'>
+                  {chip.state === 'draft' ? messages.draft : messages.invalid}
+                </Box>
+              )}
             </Tag>
           ))}
 

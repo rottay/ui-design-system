@@ -21,11 +21,14 @@
  * `vertical` the kernel owns Up/Down and leaves Left/Right to the submenu
  * disclosure, and under `horizontal` the axes swap.
  *
- * READING-DIRECTION LAW. Direction is captured ONCE per collection instance,
- * on first navigation, and cached -- the ContextMenu precedent, which captures
- * at open time rather than per keystroke. A family carrying its own direction
- * axis (Rate's `direction` prop) passes an explicit boolean and never reaches
- * the probe.
+ * READING-DIRECTION LAW. Direction is resolved at the START OF EVERY
+ * INTERACTION, never cached. The previous law captured once per instance on
+ * first navigation, following the ContextMenu precedent of capturing at open
+ * time; that is wrong for a collection that outlives a locale change. Flip an
+ * ancestor's `dir` on a live tree and a cached direction leaves the horizontal
+ * arrows mirrored the wrong way with nothing to invalidate it. A family
+ * carrying its own direction axis (Rate's `direction` prop) passes an explicit
+ * boolean and never reaches the probe.
  *
  * SCOPE. This owner navigates a collection whose steps ARE its elements. A
  * family whose step is a VALUE rather than an element (Rate: `allowHalf`
@@ -188,8 +191,9 @@ export interface RovingFocusOptions {
   wrap?: boolean;
 
   /**
-   * Reading direction. `'auto'` probes the DOM context once per instance; an
-   * explicit boolean belongs to families that own a direction axis.
+   * Reading direction. `'auto'` probes the DOM context on every interaction, so
+   * a live locale flip is honoured; an explicit boolean belongs to families
+   * that own a direction axis.
    */
   rtl?: boolean | 'auto';
 
@@ -207,6 +211,28 @@ export interface RovingFocusOptions {
 
   /** Fired when navigation moves the tab stop. Focus has already moved. */
   onActiveChange?: (id: string) => void;
+
+  /**
+   * Declares that this consumer owns a REVEAL — it scrolls the active item into
+   * view itself. Opt-in, because most collections do not.
+   *
+   * A consumer that owns a reveal MUST also pass `preventScroll`, so the reveal
+   * is the SINGLE authority over scroll position. Otherwise the kernel's own
+   * `focus()` scrolls first, through the browser's ancestor-walking path, and
+   * the reveal then corrects a position the user has already seen move — two
+   * authorities fighting over one offset, with the native one able to scroll
+   * ancestors the reveal deliberately never touches.
+   */
+  ownsReveal?: boolean;
+
+  /**
+   * Passes `preventScroll` to every `focus()` the kernel performs.
+   *
+   * Opt-in rather than default: changing it for every existing consumer at once
+   * would silently remove the native focus-scroll that collections without a
+   * reveal legitimately rely on to bring the focused item into view.
+   */
+  preventScroll?: boolean;
 }
 
 export interface RovingFocusItemProps {
@@ -223,10 +249,10 @@ export interface RovingFocus {
   getItemProps: (id: string) => RovingFocusItemProps;
 
   /**
-   * The collection's captured reading direction. A family composing CROSS-axis
-   * semantics on top of the collection (Menu's submenu disclosure) must ask
-   * here, so one capture answers for the whole instance instead of the family
-   * opening a second direction model.
+   * The collection's reading direction, resolved fresh on each call. A family
+   * composing CROSS-axis semantics on top of the collection (Menu's submenu
+   * disclosure) must ask here, so one resolver answers for the whole instance
+   * instead of the family opening a second direction model.
    */
   resolveIsRtl: (element: HTMLElement) => boolean;
 }
@@ -251,16 +277,47 @@ export function useRovingFocus(options: RovingFocusOptions): RovingFocus {
     initialActiveId,
     activeId,
     onActiveChange,
+    ownsReveal = false,
+    preventScroll = false,
   } = options;
+
+  /**
+   * Latch for the opt-in contract warning, so one mistake prints one line.
+   *
+   * An effect alone is not enough for that promise. Moving the check out of
+   * render was necessary — render must be pure, and warning there is its own
+   * defect — but StrictMode deliberately runs effect SETUP TWICE in development,
+   * so an unguarded effect prints the warning twice for a single mismatch. A
+   * warning that always double-prints trains readers to discount it, which is
+   * worse than not warning at all.
+   *
+   * The latch resets when the pair becomes valid again, so a consumer that
+   * fixes the mismatch and later reintroduces it is told a second time.
+   */
+  const hasWarnedRevealContract = useRef(false);
+
+  // Not thrown: a mismatched pair degrades to a visible scroll fight, not a
+  // crash, and failing hard would take down a consumer over a quality defect.
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'production') return;
+    if (!ownsReveal || preventScroll) {
+      hasWarnedRevealContract.current = false;
+      return;
+    }
+    if (hasWarnedRevealContract.current) return;
+    hasWarnedRevealContract.current = true;
+    console.warn(
+      '[roving-focus] a consumer declared ownsReveal but did not pass preventScroll. ' +
+        'The kernel focus() will scroll before the reveal runs, so the reveal is not the ' +
+        'single scroll authority and native focus-scroll may move ancestors it does not own.'
+    );
+  }, [ownsReveal, preventScroll]);
 
   const isControlled = activeId !== undefined;
   const [internalActiveId, setInternalActiveId] = useState<string | undefined>(initialActiveId);
 
   /** Registered elements, the only channel through which the kernel calls focus(). */
   const itemNodes = useRef(new Map<string, HTMLElement>());
-
-  /** Reading direction, captured once per instance (READING-DIRECTION LAW). */
-  const readingDirectionIsRtl = useRef<boolean | null>(null);
 
   /** Anchors for the focus-stability rule (identity, not position). */
   const lastActiveId = useRef<string | undefined>(undefined);
@@ -284,28 +341,39 @@ export function useRovingFocus(options: RovingFocusOptions): RovingFocus {
     lastIds.current = ids;
   });
 
+  /**
+   * READING-DIRECTION LAW, corrected: resolve at the START OF EVERY INTERACTION.
+   *
+   * The previous law captured direction once per instance into a ref and never
+   * recomputed it. That is wrong under locale switching, and the failure is
+   * silent: navigate once in LTR, flip an ancestor to `dir="rtl"` on the SAME
+   * mounted tree, and the horizontal arrows keep the stale mapping. Nothing
+   * remounts, so nothing re-captures. Consumers that also reveal the active item
+   * make it worse — the option scrolls into view at the correct mirrored
+   * position while the arrow that reaches it still points the wrong way.
+   *
+   * The resolver itself was always correct; only the caching was not. Resolving
+   * per interaction costs one `closest()` plus one computed-style read per
+   * keydown, which is not measurable against the layout work a keypress already
+   * triggers, and correctness under locale switching is not optional.
+   */
   const resolveIsRtl = useCallback(
-    (element: HTMLElement): boolean => {
-      if (rtl !== 'auto') return rtl;
-      if (readingDirectionIsRtl.current === null) {
-        readingDirectionIsRtl.current = resolveReadingDirectionIsRtl(element);
-      }
-      return readingDirectionIsRtl.current;
-    },
+    (element: HTMLElement): boolean =>
+      rtl !== 'auto' ? rtl : resolveReadingDirectionIsRtl(element),
     [rtl]
   );
 
   const setActive = useCallback(
     (id: string, setOptions?: { focus?: boolean }) => {
       if (setOptions?.focus) {
-        itemNodes.current.get(id)?.focus();
+        itemNodes.current.get(id)?.focus({ preventScroll });
       }
       if (!isControlled) {
         setInternalActiveId(id);
       }
       onActiveChange?.(id);
     },
-    [isControlled, onActiveChange]
+    [isControlled, onActiveChange, preventScroll]
   );
 
   const getItemProps = (id: string): RovingFocusItemProps => ({

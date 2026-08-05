@@ -55,6 +55,7 @@ import {
 } from 'react';
 
 import { Box, Button, Flex, Stack, Text, Tooltip } from '../../../primitives';
+import { StatusErrorIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-error';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 /* -------------------------------------------------------------------------- */
@@ -542,13 +543,19 @@ export function InlineEditField({
         {children}
       </InlineEditControl>
       {hasError && errorMessage ? (
-        <Text
-          data-part="field-error"
-          id={resolvedErrorId}
-          size="xs"
-        >
-          {errorMessage}
-        </Text>
+        <Flex data-part="field-error-row" align="start" gap={6}>
+          {/* Decorative: the adjacent message carries the error meaning (and
+              reaches AT through aria-describedby); the icon is the
+              non-colour shape cue of the field error grammar. */}
+          <StatusErrorIcon decorative size={13} data-part="field-error-icon" />
+          <Text
+            data-part="field-error"
+            id={resolvedErrorId}
+            size="xs"
+          >
+            {errorMessage}
+          </Text>
+        </Flex>
       ) : null}
     </Box>
   );

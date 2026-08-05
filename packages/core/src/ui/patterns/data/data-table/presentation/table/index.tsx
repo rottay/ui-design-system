@@ -13,9 +13,12 @@ import { stampDataPart } from "../../../../../../infrastructure/runtime/dom/foun
 import { useBreakpoints } from "@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state";
 import { useMediaQuery } from "@/infrastructure/runtime/responsive/runtime/media-query";
 import { Box, Button, Flex, Stack, Text } from "../../../../../primitives";
+import { VisuallyHidden } from "@/ui/primitives/foundation/VisuallyHidden";
 import {
+  AlertTriangleIcon,
   ArrowLeftIcon,
   ArrowRightIcon,
+  Table2Icon,
 } from "../../../../../../graphics/icons";
 import { PatternFilterPanel } from "../../../../facade";
 import type {
@@ -378,7 +381,10 @@ export function PatternDataTable<T extends object>(
               role="alert"
             >
               {errorState ?? (
-                <Stack spacing="xs" align="center">
+                <Stack spacing="sm" align="center">
+                  <Box data-part="state-icon-tile" aria-hidden="true">
+                    <AlertTriangleIcon size={22} strokeWidth={1.5} />
+                  </Box>
                   <Text weight="semibold">
                     {messages?.errorTitle ?? "Unable to load data"}
                   </Text>
@@ -397,7 +403,30 @@ export function PatternDataTable<T extends object>(
               role="status"
               aria-label={messages?.loadingLabel ?? "Loading"}
             >
-              <Text color="subtle">{messages?.loadingLabel ?? "Loading…"}</Text>
+              {/* Card-projection skeleton: two anonymous card anatomies mirror
+                  the loaded list's exact footprint (identity bar + summary
+                  fields + action bar), so the handoff to real cards does not
+                  jump. The accessible name stays on the host; the visible
+                  label is redundant noise next to the anatomy. */}
+              <VisuallyHidden>
+                {messages?.loadingLabel ?? "Loading…"}
+              </VisuallyHidden>
+              {[0, 1].map((cardIndex) => (
+                <Box
+                  key={cardIndex}
+                  data-part="mobile-skeleton-card"
+                  data-skeleton-index={cardIndex}
+                  aria-hidden="true"
+                >
+                  <Box data-part="mobile-skeleton-title" />
+                  <Box data-part="mobile-skeleton-field" />
+                  <Box
+                    data-part="mobile-skeleton-field"
+                    data-short="true"
+                  />
+                  <Box data-part="mobile-skeleton-actions" />
+                </Box>
+              ))}
             </Box>
           ) : data.length === 0 ? (
             <Box
@@ -407,7 +436,10 @@ export function PatternDataTable<T extends object>(
               role="status"
             >
               {emptyState ?? (
-                <Stack spacing="xs" align="center">
+                <Stack spacing="sm" align="center">
+                  <Box data-part="state-icon-tile" aria-hidden="true">
+                    <Table2Icon size={22} strokeWidth={1.5} />
+                  </Box>
                   <Text weight="semibold">
                     {messages?.emptyTitle ?? "No data"}
                   </Text>

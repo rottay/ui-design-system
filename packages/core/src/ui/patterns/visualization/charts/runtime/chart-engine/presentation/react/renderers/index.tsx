@@ -110,6 +110,7 @@ export function ChartRendererSurface({
       data-chart-grid={grammar.grid}
       data-chart-axes={grammar.axes}
       data-chart-marks={grammar.marks}
+      data-chart-annotations={grammar.annotations}
       data-chart-motion={grammar.motion}
       data-chart-color-scheme={colorScheme}
       data-chart-line-style={chartPersonality.lineStyle}

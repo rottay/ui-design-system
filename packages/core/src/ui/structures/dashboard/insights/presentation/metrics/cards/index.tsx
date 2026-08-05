@@ -15,7 +15,9 @@ import {
   METRIC_CARD_MIN_HEIGHT,
   METRIC_CARD_NUMBER_FONT_VARIANT,
   METRIC_CARD_NUMBER_MIN_WIDTH,
+  METRIC_LABEL_TEXT_TRANSFORM,
   METRIC_MONO_FONT,
+  METRIC_VALUE_FONT,
   parseMetricValue,
 } from '../../../foundation/tokens';
 
@@ -57,7 +59,7 @@ function MetricCard({
         overflow: 'hidden',
       }}
     >
-      <Stack spacing="sm" align="center" data-part="body">
+      <Stack spacing="sm" align="start" data-part="body">
         <Box
           className="metric-icon-container"
           data-part="metric-icon-box"
@@ -68,18 +70,41 @@ function MetricCard({
           <metric.icon className="metric-icon" data-part="metric-icon" style={{ width: 14, height: 14 }} />
         </Box>
 
+        {/* KPI grammar (C-08/C1): eyebrow BEFORE the figure — reading order =
+            visual order, and the value carries the card's hierarchy. The stack
+            aligns to inline-start (StatsGrid's premium KPI anatomy), so the
+            composition mirrors under RTL for free. */}
+        <Text
+          className="metric-label"
+          data-part="metric-label"
+          size="xs"
+          style={{
+            textTransform: METRIC_LABEL_TEXT_TRANSFORM,
+            letterSpacing: '0.1em',
+            fontFamily: METRIC_MONO_FONT,
+            fontSize: 10,
+          }}
+        >
+          {metric.label}
+        </Text>
+
         <Box style={{ position: 'relative' }}>
           <Text
             className="metric-value-v3"
             data-part="metric-value"
             style={{
-              fontSize: 24,
+              // Private proto (C-08): editorial vs operational figure sizing.
+              // C-08/C1 retune: the default rises 24px → 28px so the figure
+              // dominates the card (matching the rows/minimal family measure);
+              // an unset channel still multiplies the global `--ds-type-scale`
+              // on top through the font metrics.
+              fontSize: 'var(--_ds-metric-value-size, 28px)',
               fontWeight: 800,
-              fontFamily: METRIC_MONO_FONT,
+              fontFamily: METRIC_VALUE_FONT,
               lineHeight: 1,
               letterSpacing: 0,
               minWidth: METRIC_CARD_NUMBER_MIN_WIDTH,
-              textAlign: 'center',
+              textAlign: 'start',
               fontVariantNumeric: METRIC_CARD_NUMBER_FONT_VARIANT,
               position: 'relative',
             }}
@@ -88,20 +113,6 @@ function MetricCard({
             {suffix}
           </Text>
         </Box>
-
-        <Text
-          className="metric-label"
-          data-part="metric-label"
-          size="xs"
-          style={{
-            textTransform: 'uppercase',
-            letterSpacing: '0.1em',
-            fontFamily: METRIC_MONO_FONT,
-            fontSize: 10,
-          }}
-        >
-          {metric.label}
-        </Text>
 
         <Box data-part="footer">
           <Flex align="center" gap={8}>
@@ -184,8 +195,15 @@ export function MetricsCards({ metrics, density = 'comfortable' }: MetricsProps)
       <Box data-part="scroll-area" className="metrics-scroll">
         {/* Intrinsic tracks: cards reflow 3→2→1 by available inline size
             instead of pinning a desktop-born 3-up that overflows narrow
-            embeddings; each card keeps a legible 10rem floor. */}
-        <Grid data-part="cards-grid" columns="repeat(auto-fit, minmax(min(100%, 10rem), 1fr))" gap={10}>
+            embeddings. The track floor rides a private proto (fallback 10rem
+            = the pre-proto render) so a dense operational tenant fits more
+            cards per row while an editorial one breathes; the semantic gap
+            follows the tenant density/rhythm ramp instead of a literal px. */}
+        <Grid
+          data-part="cards-grid"
+          columns="repeat(auto-fit, minmax(min(100%, var(--_ds-metric-card-track-min, 10rem)), 1fr))"
+          gap="sm"
+        >
           {metrics.map((metric: KeyMetric, i: number) => (
             <MetricCard key={metric.label} metric={metric} index={i} cardPadding={cardPadding} />
           ))}

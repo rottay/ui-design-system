@@ -140,16 +140,12 @@ export function ChartTooltip({
 // Pre-built tooltip content components
 // ---------------------------------------------------------------------------
 
-/** Styles for the color swatch shown next to tooltip values. */
-const SWATCH_STYLE: CSSProperties = {
-  width: 8,
-  height: 8,
-  display: 'inline-block',
-  flexShrink: 0,
-};
-
 /**
  * Simple single-value tooltip row with an optional color swatch.
+ *
+ * Row anatomy (gaps, swatch size/shape, value weight and spacing) lives in the
+ * chart foundation skin so the minimal/detailed/glass anatomy dials can retune
+ * it; only the caller-authored swatch paint stays inline.
  *
  * @example
  * ```tsx
@@ -159,20 +155,24 @@ const SWATCH_STYLE: CSSProperties = {
 export function TooltipValue({
   label,
   value,
+  swatchColor,
   color,
 }: {
   /** Descriptive label (e.g. category name, series name) */
   label: string;
   /** Formatted display value */
   value: string | number;
-  /** Optional color swatch shown before the label */
+  /** Optional semantic series color for the swatch. TooltipValue owns paint. */
+  swatchColor?: string;
+  /** @deprecated Use `swatchColor`; retained for source compatibility. */
   color?: string;
 }) {
+  const resolvedSwatchColor = swatchColor ?? color;
   return (
-    <div className="ds-chart-tooltip-value" data-part="tooltip-value" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-      {color ? <span data-part="swatch" style={{ ...SWATCH_STYLE, backgroundColor: color }} /> : null}
+    <div className="ds-chart-tooltip-value" data-part="tooltip-value">
+      {resolvedSwatchColor ? <span data-part="swatch" style={{ backgroundColor: resolvedSwatchColor }} /> : null}
       <span data-part="label">{label}</span>
-      <span data-part="value" className="ds-nums-tabular" style={{ marginLeft: 'auto', fontWeight: 600, paddingLeft: 12 }}>{value}</span>
+      <span data-part="value" className="ds-nums-tabular">{value}</span>
     </div>
   );
 }
@@ -201,15 +201,9 @@ export function TooltipSeries({
   items: Array<{ name: string; value: string | number; color: string }>;
 }) {
   return (
-    <div className="ds-chart-tooltip-series" data-part="tooltip-series" style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+    <div className="ds-chart-tooltip-series" data-part="tooltip-series">
       {title ? (
-        <div
-          data-part="title"
-          style={{
-            fontWeight: 600,
-            marginBottom: 2,
-          }}
-        >
+        <div data-part="title">
           {title}
         </div>
       ) : null}
@@ -219,11 +213,10 @@ export function TooltipSeries({
           // renders every row with an empty name, swatch-only.
           key={`${item.name}-${index}`}
           data-part="series-row"
-          style={{ display: 'flex', alignItems: 'center', gap: 6 }}
         >
-          <span data-part="swatch" style={{ ...SWATCH_STYLE, backgroundColor: item.color }} />
+          <span data-part="swatch" style={{ backgroundColor: item.color }} />
           <span data-part="label">{item.name}</span>
-          <span data-part="value" className="ds-nums-tabular" style={{ marginLeft: 'auto', fontWeight: 600, paddingLeft: 12 }}>{item.value}</span>
+          <span data-part="value" className="ds-nums-tabular">{item.value}</span>
         </div>
       ))}
     </div>

@@ -349,10 +349,10 @@ export function ChartScaffold({
         }}
       >
         {title ? (
-          <div data-part="heading" style={{ marginBottom: 4 }}>
-            <div id={titleId} data-part="title" style={{ fontSize: 16, fontWeight: 600 }}>{title}</div>
+          <div data-part="heading">
+            <div id={titleId} data-part="title">{title}</div>
             {subtitle ? (
-              <div data-part="subtitle" style={{ fontSize: 13 }}>{subtitle}</div>
+              <div data-part="subtitle">{subtitle}</div>
             ) : null}
           </div>
         ) : (
@@ -366,23 +366,12 @@ export function ChartScaffold({
           role={isError ? 'alert' : 'status'}
           aria-live={isError ? 'assertive' : 'polite'}
           aria-atomic="true"
-          style={{
-            flex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 8,
-            padding: 24,
-            textAlign: 'center',
-            boxSizing: 'border-box',
-          }}
         >
-          <div data-part="state-label" style={{ fontWeight: 600 }}>
+          <div data-part="state-label">
             {isError ? errorLabel : emptyLabel}
           </div>
           {(isError ? errorDescription : emptyDescription) ? (
-            <div data-part="state-description" style={{ fontSize: 13 }}>
+            <div data-part="state-description">
               {isError ? errorDescription : emptyDescription}
             </div>
           ) : null}
@@ -412,10 +401,10 @@ export function ChartScaffold({
       style={{ position: 'relative', width: width ?? '100%', ...(minHeight ? { minHeight } : {}), ...style }}
     >
       {title ? (
-        <div data-part="heading" style={{ marginBottom: 4 }}>
-          <div id={titleId} data-part="title" style={{ fontSize: 16, fontWeight: 600 }}>{title}</div>
+        <div data-part="heading">
+          <div id={titleId} data-part="title">{title}</div>
           {subtitle ? (
-            <div data-part="subtitle" style={{ fontSize: 13 }}>{subtitle}</div>
+            <div data-part="subtitle">{subtitle}</div>
           ) : null}
         </div>
       ) : (
