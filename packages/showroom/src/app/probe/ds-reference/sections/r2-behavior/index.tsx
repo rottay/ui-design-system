@@ -14,13 +14,17 @@ import {
   FormField,
   Input,
   Layout,
+  NavLink,
   OTPInput,
   InputNumber,
   Mentions,
+  Popover,
   PasswordInput,
   Radio,
   Rate,
+  Result,
   ScrollArea,
+  Segmented,
   Splitter,
   Stepper,
   Switch,
@@ -58,7 +62,11 @@ export type R2BehaviorCase =
   | 'formfield'
   | 'layout'
   | 'rate'
-  | 'affix';
+  | 'affix'
+  | 'result'
+  | 'link'
+  | 'segmented'
+  | 'popover';
 
 const CRUMB_ITEMS = [
   { key: 'home', label: 'Home', href: '/' },
@@ -296,6 +304,51 @@ function AffixLateTargetHarness() {
   );
 }
 
+function SegmentedReselectHarness() {
+  const [fired, setFired] = React.useState(0);
+  const [value, setValue] = React.useState<string | number>('week');
+  return (
+    <div>
+      <Segmented
+        options={[
+          { label: 'Day', value: 'day' },
+          { label: 'Week', value: 'week' },
+          { label: 'Month', value: 'month' },
+        ]}
+        value={value}
+        onChange={(next) => {
+          setFired((n) => n + 1);
+          setValue(next);
+        }}
+      />
+      <div data-testid="lab-segmented-state">
+        Value: {String(value)} / onChange fired: {fired}
+      </div>
+    </div>
+  );
+}
+
+/** The parent refuses every close, so the surface stays open across dismissals. */
+function PopoverRefusedCloseHarness() {
+  const [closeRequests, setCloseRequests] = React.useState(0);
+  return (
+    <div>
+      <Popover
+        open
+        trigger="click"
+        title="Filters"
+        content={<div style={{ padding: 4 }}>Saved views</div>}
+        onOpenChange={(next) => {
+          if (!next) setCloseRequests((n) => n + 1);
+        }}
+      >
+        <button type="button" data-testid="lab-popover-trigger">Open filters</button>
+      </Popover>
+      <div data-testid="lab-popover-state">Close requests: {closeRequests}</div>
+    </div>
+  );
+}
+
 export function R2BehaviorScene({ only }: { only: R2BehaviorCase }) {
   return (
     <SceneFrame title={`R2 BEHAVIOR - ${only.toUpperCase()}`}>
@@ -521,6 +574,50 @@ export function R2BehaviorScene({ only }: { only: R2BehaviorCase }) {
         <SpecimenRow axis="AFFIX - binds the scroll container it resolves late">
           <div data-testid="lab-affix" style={{ inlineSize: 'min(360px, 100%)' }}>
             <AffixLateTargetHarness />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'result' && (
+        <SpecimenRow axis="RESULT - the status region is named by its own title">
+          <div data-testid="lab-result" style={{ inlineSize: 'min(420px, 100%)' }}>
+            <Result
+              status="success"
+              title="Payout scheduled"
+              subTitle="Funds arrive within two business days."
+            />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'link' && (
+        <SpecimenRow axis="LINK - a new tab is announced only when one opens">
+          <div data-testid="lab-link" style={{ display: 'grid', gap: 8, inlineSize: 'min(420px, 100%)' }}>
+            <span data-testid="lab-link-native">
+              <NavLink href="https://example.com/a" target="_blank">Native new tab</NavLink>
+            </span>
+            <span data-testid="lab-link-self">
+              <NavLink href="https://example.com/b" external target="_self">Same tab</NavLink>
+            </span>
+            <span data-testid="lab-link-merged">
+              <NavLink href="https://example.com/c" external rel="nofollow">Merged rel</NavLink>
+            </span>
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'segmented' && (
+        <SpecimenRow axis="SEGMENTED - re-selecting the current option is not a change">
+          <div data-testid="lab-segmented" style={{ inlineSize: 'min(420px, 100%)' }}>
+            <SegmentedReselectHarness />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'popover' && (
+        <SpecimenRow axis="POPOVER - a refused close still reports the next dismissal">
+          <div data-testid="lab-popover" style={{ inlineSize: 'min(420px, 100%)' }}>
+            <PopoverRefusedCloseHarness />
           </div>
         </SpecimenRow>
       )}

@@ -35,6 +35,19 @@ import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import type { LinkProps } from '../../contracts';
 import { LINK_DEFAULTS } from '../../contracts';
 
+const OUTBOUND_REL_TOKENS = ['noopener', 'noreferrer'] as const;
+
+/** Union of the caller's `rel` token set with the outbound hardening tokens. */
+function hardenOutboundRel(rel: string | undefined): string {
+  const tokens = (rel ?? '').split(/\s+/).filter(Boolean);
+  const present = new Set(tokens.map((token) => token.toLowerCase()));
+
+  return [
+    ...tokens,
+    ...OUTBOUND_REL_TOKENS.filter((token) => !present.has(token)),
+  ].join(' ');
+}
+
 /**
  * Modern engine Link component painted by the modern skin.
  *
@@ -66,6 +79,8 @@ export default function ModernLink(props: LinkProps): React.ReactElement {
     className = '',
     style,
     onClick,
+    target,
+    rel,
     ...rest
   } = props;
 
@@ -81,10 +96,11 @@ export default function ModernLink(props: LinkProps): React.ReactElement {
     onClick?.(e);
   };
 
-  /** Security attributes for external links */
-  const externalProps = external
-    ? { target: '_blank', rel: 'noopener noreferrer' }
-    : {};
+  // Target keywords are ASCII case-insensitive, so `_BLANK` opens the same
+  // window.opener hole; `rel` is a token set, so tokens merge rather than replace.
+  const resolvedTarget = target ?? (external ? '_blank' : undefined);
+  const opensNewContext = resolvedTarget?.toLowerCase() === '_blank';
+  const resolvedRel = opensNewContext ? hardenOutboundRel(rel) : rel;
 
   /**
    * External announcements: the icon is a visual affordance, so screen-reader
@@ -112,7 +128,8 @@ export default function ModernLink(props: LinkProps): React.ReactElement {
       data-disabled={disabled || undefined}
       data-external={external || undefined}
       style={style}
-      {...externalProps}
+      target={resolvedTarget}
+      rel={resolvedRel}
       {...rest}
     >
       {children}
@@ -121,7 +138,7 @@ export default function ModernLink(props: LinkProps): React.ReactElement {
           <ActionOpenExternalIcon size={12} decorative />
         </span>
       )}
-      {external && <VisuallyHidden>{newTabText}</VisuallyHidden>}
+      {opensNewContext && <VisuallyHidden>{newTabText}</VisuallyHidden>}
     </a>
   );
 }

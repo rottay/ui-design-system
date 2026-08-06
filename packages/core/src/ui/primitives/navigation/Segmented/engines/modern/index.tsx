@@ -161,6 +161,9 @@ export const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(
      */
     const handleClick = (optValue: string | number) => {
       if (disabled) return;
+      // Re-activating the checked option is not a change: a radiogroup has no
+      // "off" state to toggle back to, so the only honest report is silence.
+      if (optValue === currentValue) return;
       if (value === undefined) setInternalValue(optValue);
       onChange?.(optValue);
     };

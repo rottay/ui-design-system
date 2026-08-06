@@ -485,8 +485,11 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
       if (leaveTimeoutRef.current) clearTimeout(leaveTimeoutRef.current);
       enterTimeoutRef.current = null;
       leaveTimeoutRef.current = null;
+      // A refused close drifts the intent ref from a still-open surface;
+      // dismissing something still visible is always a fresh request.
+      if (isOpen) requestedOpenRef.current = true;
       requestOpen(false);
-    }, [requestOpen]);
+    }, [isOpen, requestOpen]);
 
     const handleEscape = useCallback(() => {
       closeAll();

@@ -136,6 +136,10 @@ export const Result = React.forwardRef<HTMLDivElement, ResultProps>(
       style,
     } = props;
 
+    // `status` is not a name-from-content role: without an explicit
+    // association the region resolves to an unnamed live region.
+    const titleId = `${React.useId()}-title`;
+
     // -------------------------------------------------------------------------
     // Render
     // -------------------------------------------------------------------------
@@ -153,6 +157,7 @@ export const Result = React.forwardRef<HTMLDivElement, ResultProps>(
            built-in glyph stays decorative -- the tone is conveyed by the
            title/description text, never by hue alone. */
         role="status"
+        aria-labelledby={title ? titleId : undefined}
       >
         {/* Custom icon takes precedence over the built-in status glyph,
             allowing consumers to completely replace the visual indicator;
@@ -163,7 +168,7 @@ export const Result = React.forwardRef<HTMLDivElement, ResultProps>(
 
         {/* Title Section */}
         {title && (
-          <h2 data-part="title">
+          <h2 data-part="title" id={titleId}>
             {title}
           </h2>
         )}
