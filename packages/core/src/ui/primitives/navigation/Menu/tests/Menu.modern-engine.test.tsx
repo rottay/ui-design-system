@@ -247,7 +247,9 @@ describe('Modern Menu public anatomy', () => {
 
     const topRule = MENU_SKIN.match(/\[data-level='top'\][^{]*\{[^}]*\}/);
     expect(topRule?.[0]).toContain('min-block-size: 0');
-    expect(topRule?.[0]).toContain("block-size: var(--ds-sidebar-item-height, 62px)");
+    expect(topRule?.[0]).toContain(
+      'block-size: calc(var(--ds-sidebar-item-height, 62px) * var(--ds-density-effective-scale, 1))'
+    );
     expect(topRule?.[0]).not.toContain('--ds-menu-item-height');
 
     const childRule = MENU_SKIN.match(/\[data-level='child'\][^{]*\{[^}]*\}/);

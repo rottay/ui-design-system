@@ -320,7 +320,15 @@
 .rottay-menu--modern[data-part='root'] [data-part='trigger']:not([data-disabled]):active {
   transform: translateY(0);
   box-shadow: none;
-  background: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-card-bg, var(--ds-surface-card)));
+  /* The press is the touch twin of hover, so it reads the same governed
+     item channel; only lift and shadow differ between the two states. */
+  background: var(
+    --ds-menu-item-bg-hover,
+    var(
+      --ds-sidebar-item-bg-hover,
+      color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-card-bg, var(--ds-surface-card)))
+    )
+  );
 }
 
 .rottay-menu--modern[data-part='root'] [data-part='item'][data-selected='true'] {
@@ -371,7 +379,13 @@
 .rottay-menu--modern[data-part='root'] [data-part='trigger'][data-open='true'],
 .rottay-menu--modern[data-part='root'] [data-part='trigger'][data-selected-descendant='true'] {
   color: var(--ds-menu-item-color-active, var(--ds-color-text-primary));
-  background: color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-card-bg, var(--ds-surface-card)));
+  background: var(
+    --ds-menu-item-bg-hover,
+    var(
+      --ds-sidebar-item-bg-hover,
+      color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-card-bg, var(--ds-surface-card)))
+    )
+  );
   border-color: color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle));
 }
 

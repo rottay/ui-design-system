@@ -123,7 +123,9 @@
      bithire's white surface is byte-identical). */
   background: var(--ds-tour-surface-bg, var(--ds-material-card-background, var(--ds-surface-card)));
   border-radius: var(--ds-radius-lg);
-  box-shadow: var(--ds-elevation-3);
+  /* WHOLE-VALUE position only: a none-capable role inside a comma list would
+     let an authored `none` void the entire declaration (FAB-05). */
+  box-shadow: var(--ds-material-overlay-shadow, var(--ds-elevation-3));
   /* Long-copy resilience (popover.css idiom): long ES/AR step copy and 200%
      zoom wrap cleanly instead of overflowing the measured placement box. */
   text-align: start;
@@ -257,13 +259,13 @@
      failure); overlay-foreground is authored (#FFF9F0 on TMM teal = 5.2:1;
      bithire's #FFFFFF equals its on-primary -- byte-identical paint). */
   background: var(--ds-tour-action-next-bg, var(--ds-color-neutral, var(--ds-color-primary)));
-  color: var(--ds-tour-action-next-ink, var(--ds-material-overlay-foreground, var(--ds-color-text-on-primary)));
+  color: var(--ds-tour-action-next-ink, var(--ds-color-primary-foreground, var(--ds-color-text-inverse, var(--ds-color-text-on-primary))));
 }
 .rottay-tour--modern[data-part='root']
   [data-part='surface'][data-type='primary']
   [data-part='action'][data-action='next'] {
   background: var(--ds-tour-action-next-bg, var(--ds-color-primary));
-  color: var(--ds-tour-action-next-ink, var(--ds-material-overlay-foreground, var(--ds-color-text-on-primary)));
+  color: var(--ds-tour-action-next-ink, var(--ds-color-primary-foreground, var(--ds-color-text-inverse, var(--ds-color-text-on-primary))));
 }
 
 .rottay-tour--modern[data-part='root'] [data-part='action']:not(:disabled):focus-visible,

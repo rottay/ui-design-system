@@ -145,7 +145,10 @@
     var(--ds-motion-ease-out) both;
 }
 .rottay-alert-dialog--modern[data-part='root'] > [data-part='surface'][role='alertdialog'] {
-  border: 1px solid var(--ds-color-border-subtle);
+  /* Same overlay material register as ContextMenu/Popconfirm: the role channel
+     directly, with the shipped subtle edge as terminal fallback. No new public
+     family token is minted for this edge. */
+  border: 1px solid var(--ds-material-overlay-border, var(--ds-color-border-subtle));
 }
 
 /* Density postures: deliberate padding steps, not a uniform scale. The

@@ -152,7 +152,10 @@
     var(--ds-motion-ease-out) both;
 }
 .rottay-confirm-dialog--modern[data-part='backdrop'] > [data-part='surface'][role='alertdialog'] {
-  border: 1px solid var(--ds-color-border-subtle);
+  /* Same overlay material register as ContextMenu/Popconfirm: the role channel
+     directly, with the shipped subtle edge as terminal fallback. No new public
+     family token is minted for this edge. */
+  border: 1px solid var(--ds-material-overlay-border, var(--ds-color-border-subtle));
 }
 
 /* Density postures (the attribute lives on the PortalScope wrapper, so the

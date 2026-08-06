@@ -53116,7 +53116,10 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
     var(--ds-motion-ease-out) both;
 }
 .rottay-alert-dialog--modern[data-part='root'] > [data-part='surface'][role='alertdialog'] {
-  border: 1px solid var(--ds-color-border-subtle);
+  /* Same overlay material register as ContextMenu/Popconfirm: the role channel
+     directly, with the shipped subtle edge as terminal fallback. No new public
+     family token is minted for this edge. */
+  border: 1px solid var(--ds-material-overlay-border, var(--ds-color-border-subtle));
 }
 
 /* Density postures: deliberate padding steps, not a uniform scale. The
@@ -54288,7 +54291,10 @@ html[data-ds-motion='reduced']
     var(--ds-motion-ease-out) both;
 }
 .rottay-confirm-dialog--modern[data-part='backdrop'] > [data-part='surface'][role='alertdialog'] {
-  border: 1px solid var(--ds-color-border-subtle);
+  /* Same overlay material register as ContextMenu/Popconfirm: the role channel
+     directly, with the shipped subtle edge as terminal fallback. No new public
+     family token is minted for this edge. */
+  border: 1px solid var(--ds-material-overlay-border, var(--ds-color-border-subtle));
 }
 
 /* Density postures (the attribute lives on the PortalScope wrapper, so the
@@ -56983,7 +56989,15 @@ html[data-ds-motion='reduced']
 .rottay-menu--modern[data-part='root'] [data-part='trigger']:not([data-disabled]):active {
   transform: translateY(0);
   box-shadow: none;
-  background: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-card-bg, var(--ds-surface-card)));
+  /* The press is the touch twin of hover, so it reads the same governed
+     item channel; only lift and shadow differ between the two states. */
+  background: var(
+    --ds-menu-item-bg-hover,
+    var(
+      --ds-sidebar-item-bg-hover,
+      color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-card-bg, var(--ds-surface-card)))
+    )
+  );
 }
 
 .rottay-menu--modern[data-part='root'] [data-part='item'][data-selected='true'] {
@@ -57034,7 +57048,13 @@ html[data-ds-motion='reduced']
 .rottay-menu--modern[data-part='root'] [data-part='trigger'][data-open='true'],
 .rottay-menu--modern[data-part='root'] [data-part='trigger'][data-selected-descendant='true'] {
   color: var(--ds-menu-item-color-active, var(--ds-color-text-primary));
-  background: color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-card-bg, var(--ds-surface-card)));
+  background: var(
+    --ds-menu-item-bg-hover,
+    var(
+      --ds-sidebar-item-bg-hover,
+      color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-card-bg, var(--ds-surface-card)))
+    )
+  );
   border-color: color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle));
 }
 
@@ -60870,7 +60890,9 @@ html[data-ds-motion="reduced"]
 }
 
 .rottay-sheet--modern[data-part='root'] > [data-part='surface'][data-part='surface'] {
-  border: 1px solid var(--ds-color-border-subtle);
+  /* A sheet is a genuinely floating layer, so its edge joins the overlay
+     material register; the role channel is read directly, no new family token. */
+  border: 1px solid var(--ds-material-overlay-border, var(--ds-color-border-subtle));
 }
 /* the sliding edge sits flush against the viewport and drops its border */
 .rottay-sheet--modern[data-part='root'] > [data-part='surface'][data-part='surface'][data-placement='bottom'] {
@@ -63776,7 +63798,9 @@ html[data-ds-motion='reduced'] .rottay-tabs--modern[data-part='root'] [data-part
      bithire's white surface is byte-identical). */
   background: var(--ds-tour-surface-bg, var(--ds-material-card-background, var(--ds-surface-card)));
   border-radius: var(--ds-radius-lg);
-  box-shadow: var(--ds-elevation-3);
+  /* WHOLE-VALUE position only: a none-capable role inside a comma list would
+     let an authored `none` void the entire declaration (FAB-05). */
+  box-shadow: var(--ds-material-overlay-shadow, var(--ds-elevation-3));
   /* Long-copy resilience (popover.css idiom): long ES/AR step copy and 200%
      zoom wrap cleanly instead of overflowing the measured placement box. */
   text-align: start;
@@ -63910,13 +63934,13 @@ html[data-ds-motion='reduced'] .rottay-tabs--modern[data-part='root'] [data-part
      failure); overlay-foreground is authored (#FFF9F0 on TMM teal = 5.2:1;
      bithire's #FFFFFF equals its on-primary -- byte-identical paint). */
   background: var(--ds-tour-action-next-bg, var(--ds-color-neutral, var(--ds-color-primary)));
-  color: var(--ds-tour-action-next-ink, var(--ds-material-overlay-foreground, var(--ds-color-text-on-primary)));
+  color: var(--ds-tour-action-next-ink, var(--ds-color-primary-foreground, var(--ds-color-text-inverse, var(--ds-color-text-on-primary))));
 }
 .rottay-tour--modern[data-part='root']
   [data-part='surface'][data-type='primary']
   [data-part='action'][data-action='next'] {
   background: var(--ds-tour-action-next-bg, var(--ds-color-primary));
-  color: var(--ds-tour-action-next-ink, var(--ds-material-overlay-foreground, var(--ds-color-text-on-primary)));
+  color: var(--ds-tour-action-next-ink, var(--ds-color-primary-foreground, var(--ds-color-text-inverse, var(--ds-color-text-on-primary))));
 }
 
 .rottay-tour--modern[data-part='root'] [data-part='action']:not(:disabled):focus-visible,

@@ -200,7 +200,7 @@ describe('Tour modern engine — the skin owns the drained chrome', () => {
       'background: var(--ds-tour-action-next-bg, var(--ds-color-neutral, var(--ds-color-primary)));',
     );
     expect(SKIN).toContain(
-      'color: var(--ds-tour-action-next-ink, var(--ds-material-overlay-foreground, var(--ds-color-text-on-primary)));',
+      'color: var(--ds-tour-action-next-ink, var(--ds-color-primary-foreground, var(--ds-color-text-inverse, var(--ds-color-text-on-primary))));',
     );
     // --ds-color-neutral is declared nowhere; it must not appear bare.
     expect(SKIN).not.toContain('background: var(--ds-color-neutral);');
