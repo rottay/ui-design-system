@@ -120,7 +120,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .rottay-spinner.rottay-spinner--modern [data-part='indicator'][role='status'] {
-    animation: none;
+    animation-play-state: paused;
+    border-inline-end-color: var(--ds-spinner-color, var(--ds-color-primary));
   }
 }
 

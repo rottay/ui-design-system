@@ -87,16 +87,15 @@
      the luminance step. Level 3 matches the --ds-elevation-3 shadow this
      surface declares. The bounded primary tint rides on top (dropdown.css
      idiom) so anchored overlays share one material grammar. */
-  background-color: var(--ds-surface-card);
-  background-image:
-    linear-gradient(
-      145deg,
-      color-mix(in srgb, var(--ds-color-primary) 5%, transparent),
-      transparent 44%
-    ),
-    linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3));
+  background:
+    var(--ds-material-overlay-texture, none),
+    linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
+    var(--ds-material-overlay-background, var(--ds-surface-card));
   border-radius: var(--ds-radius-lg);
-  box-shadow: var(--ds-elevation-3);
+  box-shadow: var(
+    --ds-popconfirm-shadow,
+    var(--ds-material-overlay-shadow, var(--ds-elevation-3))
+  );
   padding: var(--ds-popconfirm-padding, var(--ds-spacing-4));
   min-inline-size: min(
     var(--ds-popconfirm-min-width, 12.5rem),
@@ -112,7 +111,8 @@
     var(--ds-motion-ease-out) both;
 }
 .rottay-popconfirm--modern[data-part='trigger'] [data-part='surface'][data-open] {
-  border: 1px solid var(--ds-color-border-subtle);
+  border: 1px solid
+    var(--ds-popconfirm-border-color, var(--ds-material-overlay-border, var(--ds-color-border-subtle)));
 }
 
 /* ---- top-layer branch: the panel carries the `popover` attribute there, and UA

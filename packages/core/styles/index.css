@@ -37000,7 +37000,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   block-size: var(--ds-slider-thumb-size, 16px);
   border-radius: var(--ds-radius-full);
   background: var(--ds-color-primary);
-  box-shadow: var(--ds-slider-thumb-shadow, var(--ds-shadow-sm));
+  box-shadow: var(--ds-slider-thumb-shadow, var(--ds-material-control-shadow, var(--ds-elevation-1)));
   pointer-events: none;
   transition:
     background var(--ds-motion-fast) var(--ds-motion-ease-out),
@@ -37159,7 +37159,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   inline-size: var(--ds-slider-thumb-size, 16px);
   border-radius: 50%;
   background: var(--ds-slider-thumb-bg, var(--ds-color-primary));
-  box-shadow: var(--ds-slider-thumb-shadow, var(--ds-shadow-sm));
+  box-shadow: var(--ds-slider-thumb-shadow, var(--ds-material-control-shadow, var(--ds-elevation-1)));
   transition:
     background var(--ds-motion-fast) var(--ds-motion-ease-out),
     box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
@@ -37187,7 +37187,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   inline-size: var(--ds-slider-thumb-size, 16px);
   border-radius: 50%;
   background: var(--ds-slider-thumb-bg, var(--ds-color-primary));
-  box-shadow: var(--ds-slider-thumb-shadow, var(--ds-shadow-sm));
+  box-shadow: var(--ds-slider-thumb-shadow, var(--ds-material-control-shadow, var(--ds-elevation-1)));
   transition:
     background var(--ds-motion-fast) var(--ds-motion-ease-out),
     box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
@@ -48808,7 +48808,8 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 @media (prefers-reduced-motion: reduce) {
   .rottay-spinner.rottay-spinner--modern [data-part='indicator'][role='status'] {
-    animation: none;
+    animation-play-state: paused;
+    border-inline-end-color: var(--ds-spinner-color, var(--ds-color-primary));
   }
 }
 
@@ -50841,7 +50842,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 .rottay-toast--modern[data-part='root'][data-radius='sm'] { border-radius: var(--ds-radius-sm); }
 .rottay-toast--modern[data-part='root'][data-radius='md'] { border-radius: var(--ds-radius-md); }
 .rottay-toast--modern[data-part='root'][data-radius='lg'] { border-radius: var(--ds-radius-lg); }
-.rottay-toast--modern[data-part='root'][data-shadow='false'] { box-shadow: none; }
+.rottay-toast--modern.rottay-toast--modern[data-part='root'][data-shadow='false'] { box-shadow: none; }
 
 .rottay-toast--modern[data-part='root'][data-tone='default'] { --ds-toast-accent: var(--ds-color-primary); }
 .rottay-toast--modern[data-part='root'][data-tone='primary'] { --ds-toast-accent: var(--ds-color-primary); }
@@ -56261,14 +56262,13 @@ html[data-ds-motion='reduced']
      --ds-elevation-lift-strength. Level 3 matches the --ds-elevation-3 shadow
      this surface declares. */
   background:
-    linear-gradient(
-      145deg,
-      color-mix(in srgb, var(--ds-color-primary) 5%, transparent),
-      transparent 44%
-    ),
+    var(--ds-material-overlay-texture, none),
     linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
-    var(--ds-surface-card);
-  box-shadow: var(--ds-hover-card-shadow, var(--ds-elevation-3));
+    var(--ds-material-overlay-background, var(--ds-surface-card));
+  box-shadow: var(
+    --ds-hover-card-shadow,
+    var(--ds-material-overlay-shadow, var(--ds-elevation-3))
+  );
 }
 /* Presence-driven choreography: the engine stamps data-open from dataState,
    so enter/exit swap at the exact frame the close is requested (the exit
@@ -56283,7 +56283,7 @@ html[data-ds-motion='reduced']
 }
 .rottay-hover-card--modern[data-part='trigger'] [data-part='surface'][data-part='surface'] {
   border: var(--ds-hover-card-border-width, 1px) solid
-    var(--ds-hover-card-border-color, color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%));
+    var(--ds-hover-card-border-color, var(--ds-material-overlay-border, color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%)));
 }
 
 /* ---- direction-aware entrance: each placement travels from its own edge,
@@ -58824,16 +58824,15 @@ html[data-ds-motion='reduced']
      the luminance step. Level 3 matches the --ds-elevation-3 shadow this
      surface declares. The bounded primary tint rides on top (dropdown.css
      idiom) so anchored overlays share one material grammar. */
-  background-color: var(--ds-surface-card);
-  background-image:
-    linear-gradient(
-      145deg,
-      color-mix(in srgb, var(--ds-color-primary) 5%, transparent),
-      transparent 44%
-    ),
-    linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3));
+  background:
+    var(--ds-material-overlay-texture, none),
+    linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
+    var(--ds-material-overlay-background, var(--ds-surface-card));
   border-radius: var(--ds-radius-lg);
-  box-shadow: var(--ds-elevation-3);
+  box-shadow: var(
+    --ds-popconfirm-shadow,
+    var(--ds-material-overlay-shadow, var(--ds-elevation-3))
+  );
   padding: var(--ds-popconfirm-padding, var(--ds-spacing-4));
   min-inline-size: min(
     var(--ds-popconfirm-min-width, 12.5rem),
@@ -58849,7 +58848,8 @@ html[data-ds-motion='reduced']
     var(--ds-motion-ease-out) both;
 }
 .rottay-popconfirm--modern[data-part='trigger'] [data-part='surface'][data-open] {
-  border: 1px solid var(--ds-color-border-subtle);
+  border: 1px solid
+    var(--ds-popconfirm-border-color, var(--ds-material-overlay-border, var(--ds-color-border-subtle)));
 }
 
 /* ---- top-layer branch: the panel carries the `popover` attribute there, and UA

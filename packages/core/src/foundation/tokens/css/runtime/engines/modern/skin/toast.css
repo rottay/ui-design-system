@@ -121,7 +121,7 @@
 .rottay-toast--modern[data-part='root'][data-radius='sm'] { border-radius: var(--ds-radius-sm); }
 .rottay-toast--modern[data-part='root'][data-radius='md'] { border-radius: var(--ds-radius-md); }
 .rottay-toast--modern[data-part='root'][data-radius='lg'] { border-radius: var(--ds-radius-lg); }
-.rottay-toast--modern[data-part='root'][data-shadow='false'] { box-shadow: none; }
+.rottay-toast--modern.rottay-toast--modern[data-part='root'][data-shadow='false'] { box-shadow: none; }
 
 .rottay-toast--modern[data-part='root'][data-tone='default'] { --ds-toast-accent: var(--ds-color-primary); }
 .rottay-toast--modern[data-part='root'][data-tone='primary'] { --ds-toast-accent: var(--ds-color-primary); }

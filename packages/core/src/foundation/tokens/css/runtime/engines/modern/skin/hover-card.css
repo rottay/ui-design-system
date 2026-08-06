@@ -113,14 +113,13 @@
      --ds-elevation-lift-strength. Level 3 matches the --ds-elevation-3 shadow
      this surface declares. */
   background:
-    linear-gradient(
-      145deg,
-      color-mix(in srgb, var(--ds-color-primary) 5%, transparent),
-      transparent 44%
-    ),
+    var(--ds-material-overlay-texture, none),
     linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
-    var(--ds-surface-card);
-  box-shadow: var(--ds-hover-card-shadow, var(--ds-elevation-3));
+    var(--ds-material-overlay-background, var(--ds-surface-card));
+  box-shadow: var(
+    --ds-hover-card-shadow,
+    var(--ds-material-overlay-shadow, var(--ds-elevation-3))
+  );
 }
 /* Presence-driven choreography: the engine stamps data-open from dataState,
    so enter/exit swap at the exact frame the close is requested (the exit
@@ -135,7 +134,7 @@
 }
 .rottay-hover-card--modern[data-part='trigger'] [data-part='surface'][data-part='surface'] {
   border: var(--ds-hover-card-border-width, 1px) solid
-    var(--ds-hover-card-border-color, color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%));
+    var(--ds-hover-card-border-color, var(--ds-material-overlay-border, color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%)));
 }
 
 /* ---- direction-aware entrance: each placement travels from its own edge,
