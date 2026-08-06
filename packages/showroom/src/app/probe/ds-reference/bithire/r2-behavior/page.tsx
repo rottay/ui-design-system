@@ -15,6 +15,10 @@ const CASES: R2BehaviorCase[] = [
   'inputnumber',
   'passwordinput',
   'mentions',
+  'otpinput',
+  'collapse',
+  'backtop',
+  'floatbutton',
 ];
 
 export default async function R2BehaviorPage({

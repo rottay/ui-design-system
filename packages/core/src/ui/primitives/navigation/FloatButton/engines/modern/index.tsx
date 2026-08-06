@@ -438,9 +438,14 @@ export const BackTop = React.forwardRef<HTMLButtonElement, FloatButtonBackTopPro
 
     const [visible, setVisible] = useState(false);
 
+    // Bound scroll source. A memoized `target` reading a ref that is still
+    // empty on the first commit must not pin the listener to `window`.
+    const [scrollSource, setScrollSource] = useState<Window | HTMLElement | null>(null);
+
     // Monitor scroll position and update visibility
     useEffect(() => {
-      const container = target?.() ?? window;
+      if (scrollSource === null) return;
+      const container = scrollSource;
 
       const handleScroll = () => {
         const scrollTop = container === window
@@ -455,7 +460,14 @@ export const BackTop = React.forwardRef<HTMLButtonElement, FloatButtonBackTopPro
       return () => {
         container.removeEventListener('scroll', handleScroll);
       };
-    }, [target, visibilityHeight]);
+    }, [scrollSource, visibilityHeight]);
+
+    // Re-resolve after every commit: a container attaching its ref in a later
+    // commit must still become the bound source. Equal resolutions bail out.
+    useEffect(() => {
+      const next = target?.() ?? window;
+      setScrollSource((current) => (current === next ? current : next));
+    });
 
     // Scroll to top handler. The motion authority gates the animation (B9
     // pass 2 — parity with the standalone BackTop engine): under reduced

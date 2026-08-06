@@ -20,7 +20,7 @@
  * @package @rottay/design-system
  */
 
-import React, { useState, useCallback, useRef, useId, useEffect } from 'react';
+import React, { useState, useCallback, useRef, useId, useMemo } from 'react';
 import { arrayValueAt, setArrayValueAt } from '@/foundation/kernel/collections';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import type { OTPInputProps } from '../../contracts';
@@ -79,12 +79,14 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
     () => (controlledValue || '').split('').concat(Array(length).fill('')).slice(0, length)
   );
 
-  // Sync internal state when parent changes the controlled value
-  useEffect(() => {
-    if (controlledValue !== undefined) {
-      setInternalValues(controlledValue.split('').concat(Array(length).fill('')).slice(0, length));
-    }
-  }, [controlledValue, length]);
+  // Controlled parent owns the truth: a change it refuses never survives locally.
+  const values = useMemo(
+    () =>
+      controlledValue === undefined
+        ? internalValues
+        : controlledValue.split('').concat(Array(length).fill('')).slice(0, length),
+    [controlledValue, internalValues, length]
+  );
 
   /** Validate a single character against the configured input type (numeric or alphanumeric). */
   const isValidChar = useCallback((char: string) => {
@@ -108,13 +110,13 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
   /** Write a valid character to the current slot and auto-advance focus to the next. */
   const handleChange = useCallback((index: number, char: string) => {
     if (!isValidChar(char)) return;
-    const newValues = [...internalValues];
+    const newValues = [...values];
     newValues[index] = char;
     updateValue(newValues);
     if (index < length - 1) {
       focusInputAt(inputRefs.current, index + 1);
     }
-  }, [internalValues, isValidChar, length, updateValue]);
+  }, [values, isValidChar, length, updateValue]);
 
   /**
    * Keyboard navigation: Backspace clears the current slot (or retreats to
@@ -126,8 +128,8 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
   const handleKeyDown = useCallback((index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Backspace') {
       e.preventDefault();
-      const newValues = [...internalValues];
-      if (arrayValueAt(internalValues, index)) {
+      const newValues = [...values];
+      if (arrayValueAt(values, index)) {
         newValues[index] = '';
         updateValue(newValues);
       } else if (index > 0) {
@@ -136,9 +138,9 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
         focusInputAt(inputRefs.current, index - 1);
       }
     } else if (e.key === 'Delete') {
-      if (arrayValueAt(internalValues, index)) {
+      if (arrayValueAt(values, index)) {
         e.preventDefault();
-        const newValues = [...internalValues];
+        const newValues = [...values];
         newValues[index] = '';
         updateValue(newValues);
       }
@@ -153,7 +155,7 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
       e.preventDefault();
       focusInputAt(inputRefs.current, length - 1);
     }
-  }, [internalValues, length, updateValue]);
+  }, [values, length, updateValue]);
 
   /**
    * Paste handler: distributes clipboard text across slots (filtered by type),
@@ -164,14 +166,14 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
     const pasted = e.clipboardData.getData('text').trim();
     const chars = pasted.split('').filter(isValidChar).slice(0, length);
     if (chars.length === 0) return;
-    const newValues = [...internalValues];
+    const newValues = [...values];
     chars.forEach((char, i) => {
       if (i < length) newValues[i] = char;
     });
     updateValue(newValues);
     const focusIndex = Math.min(chars.length, length - 1);
     focusInputAt(inputRefs.current, focusIndex);
-  }, [internalValues, isValidChar, length, updateValue]);
+  }, [values, isValidChar, length, updateValue]);
 
   return (
     <div className={className} style={style} data-part="field">
@@ -187,8 +189,8 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
             maxLength={1}
             data-part="slot"
             data-error={error ? 'true' : 'false'}
-            data-filled={arrayValueAt(internalValues, index) ? 'true' : 'false'}
-            value={arrayValueAt(internalValues, index) || ''}
+            data-filled={arrayValueAt(values, index) ? 'true' : 'false'}
+            value={arrayValueAt(values, index) || ''}
             disabled={disabled}
             autoFocus={autoFocus && index === 0}
             onFocus={(e) => { e.target.select(); }}

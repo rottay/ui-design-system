@@ -1,8 +1,14 @@
 'use client';
 
+import React from 'react';
+
 import {
+  BackTop,
   Checkbox,
+  Collapse,
   DatePicker,
+  FloatButton,
+  OTPInput,
   InputNumber,
   Mentions,
   PasswordInput,
@@ -31,7 +37,11 @@ export type R2BehaviorCase =
   | 'toggle'
   | 'inputnumber'
   | 'passwordinput'
-  | 'mentions';
+  | 'mentions'
+  | 'otpinput'
+  | 'collapse'
+  | 'backtop'
+  | 'floatbutton';
 
 const TAB_ITEMS = [
   { key: 'roster', label: 'Roster', children: 'Reviewer roster' },
@@ -50,6 +60,44 @@ const UPLOAD_FILES = [
     url: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjM0E2RkIwIi8+PC9zdmc+',
   },
 ];
+
+function RefusedOtpHarness() {
+  const [attempted, setAttempted] = React.useState<string | null>(null);
+  return (
+    <div>
+      <OTPInput length={4} value="12" onChange={(next) => setAttempted(next)} />
+      <div data-testid="lab-otpinput-attempt">
+        {attempted === null ? 'Attempted: none' : `Attempted: ${attempted}`}
+      </div>
+    </div>
+  );
+}
+
+/** The container mounts a commit after the trigger, with a memoized accessor. */
+function LateTargetHarness({ kind }: { kind: 'backtop' | 'floatbutton' }) {
+  const scrollRef = React.useRef<HTMLDivElement>(null);
+  const [ready, setReady] = React.useState(false);
+  const target = React.useCallback(() => scrollRef.current ?? window, []);
+  React.useEffect(() => { setReady(true); }, []);
+  return (
+    <div style={{ position: 'relative' }}>
+      {ready && (
+        <div
+          ref={scrollRef}
+          data-testid={`lab-${kind}-scroller`}
+          style={{ inlineSize: 300, blockSize: 200, overflow: 'auto', position: 'relative' }}
+        >
+          <div style={{ blockSize: 1200 }}>Scroll region</div>
+        </div>
+      )}
+      {kind === 'backtop' ? (
+        <BackTop target={target} visibilityHeight={120} />
+      ) : (
+        <FloatButton.BackTop type="primary" target={target} visibilityHeight={120} />
+      )}
+    </div>
+  );
+}
 
 export function R2BehaviorScene({ only }: { only: R2BehaviorCase }) {
   return (
@@ -177,6 +225,41 @@ export function R2BehaviorScene({ only }: { only: R2BehaviorCase }) {
               ]}
               placeholder="Mention a reviewer"
             />
+          </div>
+        </SpecimenRow>
+      )}
+      {only === 'otpinput' && (
+        <SpecimenRow axis="OTPINPUT - a refused controlled change never sticks">
+          <div data-testid="lab-otpinput" style={{ inlineSize: 320 }}>
+            <RefusedOtpHarness />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'collapse' && (
+        <SpecimenRow axis="COLLAPSE - accordion opens exactly one panel">
+          <div data-testid="lab-collapse" style={{ inlineSize: 380 }}>
+            <Collapse accordion defaultActiveKey={['one', 'two']}>
+              <Collapse.Panel panelKey="one" header="Roster">Reviewer roster</Collapse.Panel>
+              <Collapse.Panel panelKey="two" header="Reviews">Open reviews</Collapse.Panel>
+              <Collapse.Panel panelKey="three" header="Archive">Archived items</Collapse.Panel>
+            </Collapse>
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'backtop' && (
+        <SpecimenRow axis="BACKTOP - binds the container that mounts later">
+          <div data-testid="lab-backtop">
+            <LateTargetHarness kind="backtop" />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'floatbutton' && (
+        <SpecimenRow axis="FLOATBUTTON.BACKTOP - same late-target binding">
+          <div data-testid="lab-floatbutton">
+            <LateTargetHarness kind="floatbutton" />
           </div>
         </SpecimenRow>
       )}

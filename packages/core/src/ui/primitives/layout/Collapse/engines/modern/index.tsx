@@ -333,7 +333,10 @@ export const Collapse = React.forwardRef<HTMLDivElement, CollapseProps>(
     );
 
     // Controlled mode: use prop value; uncontrolled: use internal state
-    const activeKeys = activeKey !== undefined ? normalizeKeys(activeKey) : internalActiveKeys;
+    const resolvedKeys = activeKey !== undefined ? normalizeKeys(activeKey) : internalActiveKeys;
+    // Accordion exclusivity is a property of the OPEN SET, not only of the
+    // toggle path: a multi-key default/controlled value still opens one panel.
+    const activeKeys = accordion ? resolvedKeys.slice(0, 1) : resolvedKeys;
 
     const toggleKey = (key: string) => {
       let newKeys: string[];

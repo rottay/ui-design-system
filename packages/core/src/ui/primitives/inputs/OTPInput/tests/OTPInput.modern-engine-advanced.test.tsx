@@ -101,4 +101,42 @@ describe('OTPInput modern advanced coverage', () => {
     render(<ModernOTPInput length={4} autoFocus onChange={() => {}} />);
     expect(document.activeElement).toBe(screen.getByLabelText('Digit 1 of 4'));
   });
+
+  const codeOnScreen = (length: number): string =>
+    Array.from({ length }, (_, i) =>
+      (screen.getByLabelText(`Digit ${i + 1} of ${length}`) as HTMLInputElement).value
+    ).join('');
+
+  it('does not display a character the controlled parent refused to accept', () => {
+    const handleChange = vi.fn();
+    render(<ModernOTPInput length={4} value="12" onChange={handleChange} />);
+
+    const slot3 = screen.getByLabelText('Digit 3 of 4') as HTMLInputElement;
+    fireEvent.change(slot3, { target: { value: '9' } });
+
+    expect(handleChange).toHaveBeenCalledWith('129');
+    expect(slot3.value).toBe('');
+    expect(codeOnScreen(4)).toBe('12');
+  });
+
+  it('does not retain a backspace the controlled parent refused to accept', () => {
+    const handleChange = vi.fn();
+    render(<ModernOTPInput length={4} value="12" onChange={handleChange} />);
+
+    const slot2 = screen.getByLabelText('Digit 2 of 4') as HTMLInputElement;
+    fireEvent.keyDown(slot2, { key: 'Backspace' });
+
+    expect(handleChange).toHaveBeenCalledWith('1');
+    expect(slot2.value).toBe('2');
+    expect(codeOnScreen(4)).toBe('12');
+  });
+
+  it('renders the parent-committed value when the controlled parent accepts', () => {
+    const { rerender } = render(<ModernOTPInput length={4} value="12" onChange={() => {}} />);
+
+    fireEvent.change(screen.getByLabelText('Digit 3 of 4'), { target: { value: '9' } });
+    rerender(<ModernOTPInput length={4} value="129" onChange={() => {}} />);
+
+    expect(codeOnScreen(4)).toBe('129');
+  });
 });

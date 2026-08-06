@@ -124,6 +124,10 @@ export const BackTop = React.forwardRef<HTMLButtonElement, BackTopProps>(
      */
     const getTarget = useCallback(() => target?.() ?? window, [target]);
 
+    /** Bound scroll source. A memoized `target` reading a ref that is still
+     *  empty on the first commit must not pin the listener to `window`. */
+    const [scrollSource, setScrollSource] = useState<Window | HTMLElement | null>(null);
+
     /**
      * Handles scroll events to update button visibility.
      * Compares current scroll position against visibilityHeight threshold.
@@ -145,11 +149,19 @@ export const BackTop = React.forwardRef<HTMLButtonElement, BackTopProps>(
      * Uses passive listener for better scroll performance.
      */
     useEffect(() => {
-      const t = getTarget();
+      if (scrollSource === null) return;
+      const t = scrollSource;
       t.addEventListener('scroll', handleScroll, { passive: true });
       handleScroll();
       return () => t.removeEventListener('scroll', handleScroll);
-    }, [getTarget, handleScroll]);
+    }, [scrollSource, handleScroll]);
+
+    // Re-resolve after every commit: a container attaching its ref in a later
+    // commit must still become the bound source. Equal resolutions bail out.
+    useEffect(() => {
+      const next = getTarget();
+      setScrollSource((current) => (current === next ? current : next));
+    });
 
     // ========================================================================
     // Event Handlers
