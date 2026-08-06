@@ -70,6 +70,7 @@ export const Container = React.forwardRef<HTMLDivElement, ContainerProps>(
       center = CONTAINER_DEFAULTS.center,
       padding = CONTAINER_DEFAULTS.padding,
       fluid = CONTAINER_DEFAULTS.fluid,
+      engine: _engine,
       children,
       className,
       style,

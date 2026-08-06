@@ -62,7 +62,12 @@ export const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
       ...rest
     } = props;
 
-    const presentationAttributes = resolveFlexAttributes(props);
+    // The resolver always returns all ten keys, so spreading it raw would let
+    // an absent one erase a consumer `data-*` that BaseComponentProps allows.
+    const presentationAttributes: Record<string, string> = {};
+    for (const [key, value] of Object.entries(resolveFlexAttributes(props))) {
+      if (value !== undefined) presentationAttributes[key] = value;
+    }
     const parameterStyle = resolveFlexParameterStyle(props);
     const resolvedStyle =
       parameterStyle || consumerStyle

@@ -11,9 +11,12 @@ import {
   Button,
   Checkbox,
   Collapse,
+  Container,
   DatePicker,
   Divider,
   Drawer,
+  Empty,
+  Flex,
   Dropdown,
   FloatButton,
   Form,
@@ -89,7 +92,10 @@ export type R2BehaviorCase =
   | 'button'
   | 'divider'
   | 'space'
-  | 'stack';
+  | 'stack'
+  | 'empty'
+  | 'container'
+  | 'flex';
 
 const CRUMB_ITEMS = [
   { key: 'home', label: 'Home', href: '/' },
@@ -823,6 +829,41 @@ export function R2BehaviorScene({ only }: { only: R2BehaviorCase }) {
               <div style={{ padding: 12, background: 'var(--ds-color-surface-raised, #eee)' }}>Two</div>
               <div style={{ padding: 12, background: 'var(--ds-color-surface-raised, #eee)' }}>Three</div>
             </Grid>
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'empty' && (
+        <SpecimenRow axis="EMPTY - the preset illustration carries the part the skin sizes">
+          <div data-testid="lab-empty" style={{ display: 'grid', gap: 24, inlineSize: 'min(460px, 100%)' }}>
+            <div data-testid="lab-empty-default">
+              <Empty image="default" description="No records yet" />
+            </div>
+            <div data-testid="lab-empty-simple">
+              <Empty image="simple" description="Nothing archived" />
+            </div>
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'container' && (
+        <SpecimenRow axis="CONTAINER - the engine prop never reaches the DOM">
+          <div data-testid="lab-container" style={{ inlineSize: '100%' }}>
+            <Container engine="modern" maxWidth="md" padding="md" data-testid="lab-container-root">
+              <div style={{ padding: 12 }}>Container body</div>
+            </Container>
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'flex' && (
+        <SpecimenRow axis="FLEX - a consumer data attribute survives the presentation resolver">
+          <div data-testid="lab-flex" style={{ inlineSize: 'min(460px, 100%)' }}>
+            <Flex gap="md" data-testid="lab-flex-root" data-align="consumer-owned">
+              <span>one</span>
+              <span>two</span>
+              <span>three</span>
+            </Flex>
           </div>
         </SpecimenRow>
       )}

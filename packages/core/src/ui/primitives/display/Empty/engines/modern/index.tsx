@@ -12,11 +12,14 @@ import { EMPTY_DEFAULTS } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { CommunicationInboxIcon } from '@/graphics/icons/presentation/semantic/generated/roles/communication-inbox';
 
+// data-part="icon" is what the skin sizes the preset illustration from; a
+// caller-supplied ReactNode image is deliberately left unstamped (owns its size).
 const DefaultImage: React.FC = () => (
   <CommunicationInboxIcon
     decorative
     size={36}
     className="rottay-empty__illustration"
+    data-part="icon"
   />
 );
 
@@ -25,6 +28,7 @@ const SimpleImage: React.FC = () => (
     decorative
     size={28}
     className="rottay-empty__illustration"
+    data-part="icon"
   />
 );
 
