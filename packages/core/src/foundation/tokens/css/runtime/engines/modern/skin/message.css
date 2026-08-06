@@ -94,7 +94,13 @@
   overflow: hidden;
   pointer-events: auto;
   color: var(--ds-color-text-primary);
+  /* Material facet (Toast/Notification parity): a message card is a floating
+     OVERLAY-tier layer, so its texture rides the OVERLAY material channel.
+     Message was the one announcement family with no material facet at all.
+     The channel is unset in default.css, so this resolves to `none` and the
+     default paint is byte-identical. */
   background:
+    var(--ds-material-overlay-texture, none),
     linear-gradient(
       135deg,
       color-mix(in srgb, var(--ds-message-accent) 9%, var(--ds-color-bg-primary)) 0%,
@@ -105,7 +111,11 @@
      feedback surface. Fallbacks are the historical 1px solid byte-for-byte. */
   border: var(--ds-edge-standard-width, 1px) var(--ds-edge-standard-style, solid) color-mix(in srgb, var(--ds-message-accent) 30%, var(--ds-color-border-subtle));
   border-radius: var(--ds-radius-lg);
-  box-shadow: var(--ds-elevation-3);
+  /* WHOLE-VALUE ISOLATION (the drawer/dropdown law): the depth chain is this
+     surface's SOLE box-shadow, so the none-capable role channel can only
+     switch depth off, never void the declaration. --ds-elevation-3 is the
+     layer's tier and stays the fallback. */
+  box-shadow: var(--ds-material-overlay-shadow, var(--ds-elevation-3));
   /* Governed entry (state language): duration/easing resolve the
      personality-projected channels first; the motion-canon rungs are the
      exact historical cadence when no personality authors them. */

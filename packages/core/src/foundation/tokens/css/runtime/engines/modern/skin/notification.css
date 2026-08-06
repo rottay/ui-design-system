@@ -106,11 +106,15 @@
   overflow: hidden;
   pointer-events: auto;
   color: var(--ds-color-text-primary);
-  /* Material facet above the accent wash (SemanticSurface idiom): `none` on
-     flat postures keeps the historical paint byte-identical; a paper/texture
-     posture reads on the floating card. */
+  /* Material facet above the accent wash (SemanticSurface idiom). A
+     notification is a floating OVERLAY-tier layer, so the texture rides the
+     OVERLAY material channel that drawer, popover, dropdown and tooltip
+     already read — not --ds-material-card-texture, which stranded the
+     transient layer on the card facet whenever a tenant moved the overlay
+     tier. Both channels are unset in default.css, so the default paint is
+     `none` either way. */
   background:
-    var(--ds-material-card-texture, none),
+    var(--ds-material-overlay-texture, none),
     linear-gradient(
       135deg,
       color-mix(in srgb, var(--ds-notification-accent) 10%, var(--ds-color-bg-primary)) 0%,
@@ -119,7 +123,11 @@
     );
   border: var(--ds-edge-standard-width, 1px) var(--ds-edge-standard-style, solid) color-mix(in srgb, var(--ds-notification-accent) 30%, var(--ds-color-border-subtle));
   border-radius: var(--ds-radius-lg);
-  box-shadow: var(--ds-elevation-3);
+  /* WHOLE-VALUE ISOLATION (the drawer/dropdown law): the depth chain is this
+     surface's SOLE box-shadow, so the none-capable role channel can only
+     switch depth off, never void the declaration. --ds-elevation-3 is the
+     layer's tier and stays the fallback. */
+  box-shadow: var(--ds-material-overlay-shadow, var(--ds-elevation-3));
   animation: ds-notification-enter-top-modern
     var(--ds-notification-enter-duration, var(--ds-motion-normal))
     var(--ds-notification-enter-easing, var(--ds-motion-ease-out)) both;

@@ -50690,11 +50690,16 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   max-inline-size: 100%;
   overflow: hidden;
   color: var(--ds-color-text-primary);
-  /* Material facet: the card-material texture rides above the accent wash
-     (SemanticSurface idiom: texture layer, then color layers). `none` on flat
-     postures keeps the historical paint byte-identical. */
+  /* Material facet: a toast is a floating OVERLAY-tier layer, not a card, so
+     the texture rides the OVERLAY material channel — the same one drawer,
+     popover, dropdown and tooltip read. It used to read
+     --ds-material-card-texture, which split the transient layer off the tier
+     it actually belongs to: a tenant giving the overlay tier its own material
+     moved every other floating surface and left the toast on the card facet.
+     Both channels are unset in default.css, so the resolved paint is `none`
+     either way and this is byte-identical under the default theme. */
   background:
-    var(--ds-material-card-texture, none),
+    var(--ds-material-overlay-texture, none),
     linear-gradient(
       135deg,
       color-mix(in srgb, var(--ds-toast-accent) 10%, var(--ds-color-bg-primary)) 0%,
@@ -50703,7 +50708,12 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
     );
   border: var(--ds-edge-standard-width, 1px) var(--ds-edge-standard-style, solid) color-mix(in srgb, var(--ds-toast-accent) 30%, var(--ds-color-border-subtle));
   border-radius: var(--ds-radius-lg);
-  box-shadow: var(--ds-elevation-3);
+  /* WHOLE-VALUE ISOLATION (the drawer/dropdown law). The depth chain is the
+     SOLE box-shadow of this surface, so the publicly none-capable role channel
+     sits in a whole-value position: an authored `none` switches the depth off
+     instead of voiding an entire multi-value declaration. --ds-elevation-3 is
+     the layer's tier and stays the fallback; nothing here is hand-tuned. */
+  box-shadow: var(--ds-material-overlay-shadow, var(--ds-elevation-3));
 }
 
 /* Governed enter/exit (skin-owned; the engine stamps data-state, no inline
@@ -51499,7 +51509,13 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   overflow: hidden;
   pointer-events: auto;
   color: var(--ds-color-text-primary);
+  /* Material facet (Toast/Notification parity): a message card is a floating
+     OVERLAY-tier layer, so its texture rides the OVERLAY material channel.
+     Message was the one announcement family with no material facet at all.
+     The channel is unset in default.css, so this resolves to `none` and the
+     default paint is byte-identical. */
   background:
+    var(--ds-material-overlay-texture, none),
     linear-gradient(
       135deg,
       color-mix(in srgb, var(--ds-message-accent) 9%, var(--ds-color-bg-primary)) 0%,
@@ -51510,7 +51526,11 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
      feedback surface. Fallbacks are the historical 1px solid byte-for-byte. */
   border: var(--ds-edge-standard-width, 1px) var(--ds-edge-standard-style, solid) color-mix(in srgb, var(--ds-message-accent) 30%, var(--ds-color-border-subtle));
   border-radius: var(--ds-radius-lg);
-  box-shadow: var(--ds-elevation-3);
+  /* WHOLE-VALUE ISOLATION (the drawer/dropdown law): the depth chain is this
+     surface's SOLE box-shadow, so the none-capable role channel can only
+     switch depth off, never void the declaration. --ds-elevation-3 is the
+     layer's tier and stays the fallback. */
+  box-shadow: var(--ds-material-overlay-shadow, var(--ds-elevation-3));
   /* Governed entry (state language): duration/easing resolve the
      personality-projected channels first; the motion-canon rungs are the
      exact historical cadence when no personality authors them. */
@@ -52022,11 +52042,15 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   overflow: hidden;
   pointer-events: auto;
   color: var(--ds-color-text-primary);
-  /* Material facet above the accent wash (SemanticSurface idiom): `none` on
-     flat postures keeps the historical paint byte-identical; a paper/texture
-     posture reads on the floating card. */
+  /* Material facet above the accent wash (SemanticSurface idiom). A
+     notification is a floating OVERLAY-tier layer, so the texture rides the
+     OVERLAY material channel that drawer, popover, dropdown and tooltip
+     already read — not --ds-material-card-texture, which stranded the
+     transient layer on the card facet whenever a tenant moved the overlay
+     tier. Both channels are unset in default.css, so the default paint is
+     `none` either way. */
   background:
-    var(--ds-material-card-texture, none),
+    var(--ds-material-overlay-texture, none),
     linear-gradient(
       135deg,
       color-mix(in srgb, var(--ds-notification-accent) 10%, var(--ds-color-bg-primary)) 0%,
@@ -52035,7 +52059,11 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
     );
   border: var(--ds-edge-standard-width, 1px) var(--ds-edge-standard-style, solid) color-mix(in srgb, var(--ds-notification-accent) 30%, var(--ds-color-border-subtle));
   border-radius: var(--ds-radius-lg);
-  box-shadow: var(--ds-elevation-3);
+  /* WHOLE-VALUE ISOLATION (the drawer/dropdown law): the depth chain is this
+     surface's SOLE box-shadow, so the none-capable role channel can only
+     switch depth off, never void the declaration. --ds-elevation-3 is the
+     layer's tier and stays the fallback. */
+  box-shadow: var(--ds-material-overlay-shadow, var(--ds-elevation-3));
   animation: ds-notification-enter-top-modern
     var(--ds-notification-enter-duration, var(--ds-motion-normal))
     var(--ds-notification-enter-easing, var(--ds-motion-ease-out)) both;
@@ -54545,15 +54573,20 @@ html[data-ds-motion='reduced']
      (popover.css idiom): inert until a dark surface raises
      --ds-elevation-lift-strength. Level 3 matches the --ds-elevation-3 shadow
      this surface declares. */
+  /* The ungoverned 5%-primary sweep left with dropdown.css's: a cursor-anchored
+     surface spends its ONE emphasis on the lift, and an accent layer no tenant
+     can switch off is a role violation rather than a role instance. */
   background:
-    linear-gradient(
-      145deg,
-      color-mix(in srgb, var(--ds-color-primary) 5%, transparent),
-      transparent 44%
-    ),
+    var(--ds-material-overlay-texture, none),
     linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
-    var(--ds-surface-card);
-  box-shadow: var(--ds-context-menu-shadow, var(--ds-elevation-3));
+    var(--ds-material-overlay-background, var(--ds-surface-card));
+  /* WHOLE-VALUE ISOLATION (dropdown.css idiom): depth is this surface's SOLE
+     box-shadow, so the none-capable role channel can only switch depth off --
+     in a comma list an authored `none` would void the entire declaration. */
+  box-shadow: var(
+    --ds-context-menu-shadow,
+    var(--ds-material-overlay-shadow, var(--ds-elevation-3))
+  );
 }
 .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'][data-open] {
   /* The panel's colored border clears the tenant `*` floor at (0,3,1) via the
@@ -54562,7 +54595,7 @@ html[data-ds-motion='reduced']
      future render ever drops the data-open stamp, restore it rather than
      re-doubling the part). */
   border: 1px solid
-    var(--ds-context-menu-border-color, color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%));
+    var(--ds-context-menu-border-color, var(--ds-material-overlay-border, color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%)));
 }
 
 /* ---- top-layer branch: the panel carries the `popover` attribute there, and UA

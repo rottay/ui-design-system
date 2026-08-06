@@ -170,13 +170,15 @@ describe('ContextMenu modern engine — the skin owns the drained paint', () => 
   });
 
   it('shares the lane overlay material register with Dropdown (Pass-2 coherence)', () => {
-    expect(SKIN).toContain('color-mix(in srgb, var(--ds-color-primary) 5%, transparent)');
+    // The register is now the GOVERNED one Dropdown moved to: texture channel
+    // in the image position, overlay-background closing the layer list. The
+    // ungoverned 5%-primary sweep is asserted gone in the material suite below.
     expect(SKIN).toContain(
       'linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3))',
     );
     expect(SKIN).toContain('var(--ds-surface-card)');
-    expect(SKIN).toContain('var(--ds-context-menu-border-color, color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%))');
-    expect(SKIN).toContain('var(--ds-context-menu-shadow, var(--ds-elevation-3))');
+    expect(SKIN).toContain('var(--ds-context-menu-border-color, var(--ds-material-overlay-border, color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%)))');
+    expect(SKIN).toContain('var(--ds-material-overlay-shadow, var(--ds-elevation-3))');
     expect(SKIN).toContain('var(--ds-context-menu-radius, var(--ds-radius-xl))');
     expect(SKIN).not.toContain('background: var(--ds-surface-card);');
     expect(SKIN).not.toContain('box-shadow: var(--ds-elevation-2);');
@@ -230,5 +232,42 @@ describe('ContextMenu modern engine — the skin owns the drained paint', () => 
       /min-block-size:\s*max\(\s*var\(\s*--ds-touch-target-min\s*,\s*44px\s*\)\s*,\s*var\(\s*--ds-context-menu-touch-target-min\s*,\s*2rem\s*\)\s*\)/
     );
     expect(SKIN).toContain('@media (prefers-reduced-motion: reduce)');
+  });
+});
+
+describe('ContextMenu modern engine — overlay material commitment', () => {
+  it('routes ground, texture and border through the overlay material role', () => {
+    // A transient surface owns an OPAQUE material, and it must be the SAME
+    // role Dropdown reads (same widget class) so a tenant's overlay material
+    // reaches every anchored panel instead of only some of them.
+    expect(SKIN).toContain('var(--ds-material-overlay-texture, none)');
+    expect(SKIN).toContain('var(--ds-material-overlay-background, var(--ds-surface-card))');
+    // Family chrome stays senior, the role channel is the next rung, the old
+    // mix survives as the terminal fallback (dropdown.css ordering).
+    expect(SKIN).toMatch(
+      /--ds-context-menu-border-color,\s*var\(\s*--ds-material-overlay-border,\s*color-mix\(in srgb, var\(--ds-color-border\) 86%, var\(--ds-color-primary\) 14%\)\s*\)/
+    );
+  });
+
+  it('keeps the none-capable shadow role in a WHOLE-VALUE position', () => {
+    // FAB-05: `none` is legal only as an entire box-shadow value. If this role
+    // channel ever rides a comma list, a tenant authoring `none` voids the
+    // whole declaration and silently amputates the panel's depth.
+    expect(SKIN).toMatch(
+      /box-shadow:\s*var\(\s*--ds-context-menu-shadow,\s*var\(\s*--ds-material-overlay-shadow,\s*var\(--ds-elevation-3\)\s*\)\s*\);/
+    );
+    const panelShadow = SKIN.match(/box-shadow:\s*var\(\s*--ds-context-menu-shadow[\s\S]*?;/)?.[0] ?? '';
+    expect(panelShadow).not.toContain(',\n    0');
+    expect(panelShadow).not.toContain('inset');
+  });
+
+  it('drops the ungoverned primary sweep from the cursor-anchored panel', () => {
+    // One emphasis moment, spent on the lift. An accent gradient no tenant can
+    // switch off is a role violation; dropdown.css retired the identical layer.
+    expect(SKIN).not.toContain('color-mix(in srgb, var(--ds-color-primary) 5%, transparent)');
+    // The dark-lift layer that carries the elevation step must remain.
+    expect(SKIN).toContain(
+      'linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3))'
+    );
   });
 });

@@ -108,15 +108,20 @@
      (popover.css idiom): inert until a dark surface raises
      --ds-elevation-lift-strength. Level 3 matches the --ds-elevation-3 shadow
      this surface declares. */
+  /* The ungoverned 5%-primary sweep left with dropdown.css's: a cursor-anchored
+     surface spends its ONE emphasis on the lift, and an accent layer no tenant
+     can switch off is a role violation rather than a role instance. */
   background:
-    linear-gradient(
-      145deg,
-      color-mix(in srgb, var(--ds-color-primary) 5%, transparent),
-      transparent 44%
-    ),
+    var(--ds-material-overlay-texture, none),
     linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
-    var(--ds-surface-card);
-  box-shadow: var(--ds-context-menu-shadow, var(--ds-elevation-3));
+    var(--ds-material-overlay-background, var(--ds-surface-card));
+  /* WHOLE-VALUE ISOLATION (dropdown.css idiom): depth is this surface's SOLE
+     box-shadow, so the none-capable role channel can only switch depth off --
+     in a comma list an authored `none` would void the entire declaration. */
+  box-shadow: var(
+    --ds-context-menu-shadow,
+    var(--ds-material-overlay-shadow, var(--ds-elevation-3))
+  );
 }
 .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'][data-open] {
   /* The panel's colored border clears the tenant `*` floor at (0,3,1) via the
@@ -125,7 +130,7 @@
      future render ever drops the data-open stamp, restore it rather than
      re-doubling the part). */
   border: 1px solid
-    var(--ds-context-menu-border-color, color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%));
+    var(--ds-context-menu-border-color, var(--ds-material-overlay-border, color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%)));
 }
 
 /* ---- top-layer branch: the panel carries the `popover` attribute there, and UA

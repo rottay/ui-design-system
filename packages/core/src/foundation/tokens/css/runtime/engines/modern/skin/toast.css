@@ -49,11 +49,16 @@
   max-inline-size: 100%;
   overflow: hidden;
   color: var(--ds-color-text-primary);
-  /* Material facet: the card-material texture rides above the accent wash
-     (SemanticSurface idiom: texture layer, then color layers). `none` on flat
-     postures keeps the historical paint byte-identical. */
+  /* Material facet: a toast is a floating OVERLAY-tier layer, not a card, so
+     the texture rides the OVERLAY material channel — the same one drawer,
+     popover, dropdown and tooltip read. It used to read
+     --ds-material-card-texture, which split the transient layer off the tier
+     it actually belongs to: a tenant giving the overlay tier its own material
+     moved every other floating surface and left the toast on the card facet.
+     Both channels are unset in default.css, so the resolved paint is `none`
+     either way and this is byte-identical under the default theme. */
   background:
-    var(--ds-material-card-texture, none),
+    var(--ds-material-overlay-texture, none),
     linear-gradient(
       135deg,
       color-mix(in srgb, var(--ds-toast-accent) 10%, var(--ds-color-bg-primary)) 0%,
@@ -62,7 +67,12 @@
     );
   border: var(--ds-edge-standard-width, 1px) var(--ds-edge-standard-style, solid) color-mix(in srgb, var(--ds-toast-accent) 30%, var(--ds-color-border-subtle));
   border-radius: var(--ds-radius-lg);
-  box-shadow: var(--ds-elevation-3);
+  /* WHOLE-VALUE ISOLATION (the drawer/dropdown law). The depth chain is the
+     SOLE box-shadow of this surface, so the publicly none-capable role channel
+     sits in a whole-value position: an authored `none` switches the depth off
+     instead of voiding an entire multi-value declaration. --ds-elevation-3 is
+     the layer's tier and stays the fallback; nothing here is hand-tuned. */
+  box-shadow: var(--ds-material-overlay-shadow, var(--ds-elevation-3));
 }
 
 /* Governed enter/exit (skin-owned; the engine stamps data-state, no inline
