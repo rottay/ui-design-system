@@ -247,6 +247,31 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
       ?.scrollIntoView?.({ block: 'nearest', inline: 'nearest' });
   }, [current]);
 
+  // A boundary page disables the edge button that was just activated, and a
+  // disabled element cannot hold focus — rescue it instead of dropping to body.
+  const edgeIntentRef = React.useRef<'prev' | 'next' | null>(null);
+  const prevButtonRef = React.useRef<HTMLButtonElement | null>(null);
+  const nextButtonRef = React.useRef<HTMLButtonElement | null>(null);
+  const recordEdgeIntent = (edge: 'prev' | 'next', node: HTMLButtonElement) => {
+    edgeIntentRef.current =
+      typeof document !== 'undefined' && document.activeElement === node ? edge : null;
+  };
+  React.useEffect(() => {
+    const intent = edgeIntentRef.current;
+    edgeIntentRef.current = null;
+    if (intent === null || typeof document === 'undefined') return;
+    const pressed = intent === 'prev' ? prevButtonRef.current : nextButtonRef.current;
+    if (pressed === null || !pressed.disabled) return;
+    // Browsers blur a newly disabled element to <body>; jsdom leaves it put.
+    const stranded = document.activeElement;
+    if (stranded !== null && stranded !== document.body && stranded !== pressed) return;
+    const rescue =
+      controlsRef.current?.querySelector<HTMLElement>(
+        '[data-part="pagination-page-button"][data-current="true"]'
+      ) ?? (intent === 'prev' ? nextButtonRef.current : prevButtonRef.current);
+    rescue?.focus?.();
+  }, [current]);
+
   // ============================================================================
   // Event Handlers
   // ============================================================================
@@ -334,7 +359,11 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
             i18n; the semantic chevron auto-mirrors in RTL. */}
         <button
           type="button"
-          onClick={() => handlePageChange(current - 1)}
+          ref={prevButtonRef}
+          onClick={(event) => {
+            recordEdgeIntent('prev', event.currentTarget);
+            handlePageChange(current - 1);
+          }}
           disabled={disabled || current <= 1}
           data-part="pagination-nav-button"
           data-direction="prev"
@@ -375,7 +404,11 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
         {/* Next button */}
         <button
           type="button"
-          onClick={() => handlePageChange(current + 1)}
+          ref={nextButtonRef}
+          onClick={(event) => {
+            recordEdgeIntent('next', event.currentTarget);
+            handlePageChange(current + 1);
+          }}
           disabled={disabled || current >= totalPages}
           data-part="pagination-nav-button"
           data-direction="next"

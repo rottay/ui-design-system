@@ -256,7 +256,13 @@ export default function ModernProgress(props: ProgressProps): React.ReactElement
           child <progress> would never reach that resolution. */}
       <progress
         data-part="fill"
-        aria-label={ariaLabel}
+        /* A native <progress> has no implicit name; mirror the circle branch's fallback. */
+        aria-label={ariaLabel ?? (
+          indeterminate
+            ? i18n?.tOr('progress.indeterminate', 'In progress') ?? 'In progress'
+            : i18n?.tOr('progress.percent_complete', `${clampedPercent}% complete`, { percent: clampedPercent }) ??
+              `${clampedPercent}% complete`
+        )}
         {...(indeterminate ? {} : { value: clampedPercent })}
         max="100"
       />

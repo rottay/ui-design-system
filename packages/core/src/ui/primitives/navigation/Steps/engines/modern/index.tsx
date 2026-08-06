@@ -207,7 +207,11 @@ export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(
               data-status={step.effectiveStatus}
               data-disabled={step.disabled || undefined}
               data-clickable={isClickable || undefined}
-              aria-current={step.effectiveStatus === 'process' ? 'step' : undefined}
+              // An ancestor <li> does not convey state to a focused button, so
+              // a clickable step carries aria-current on the trigger instead.
+              aria-current={
+                !isClickable && step.effectiveStatus === 'process' ? 'step' : undefined
+              }
             >
               {step.icon && !progressDot && <span data-part="icon">{step.icon}</span>}
               {typeof progressDot === 'function' && (
@@ -224,6 +228,7 @@ export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(
                 <button
                   type="button"
                   data-part="trigger"
+                  aria-current={step.effectiveStatus === 'process' ? 'step' : undefined}
                   onClick={() => handleStepClick(index, step.disabled)}
                 >
                   {text}

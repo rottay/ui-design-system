@@ -262,6 +262,9 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
           break;
         }
         case 'Escape':
+          // An open popup consumes its own dismissal; Escape must not also close an ancestor overlay.
+          e.preventDefault();
+          e.stopPropagation();
           setIsOpen(false);
           break;
         case 'Home':

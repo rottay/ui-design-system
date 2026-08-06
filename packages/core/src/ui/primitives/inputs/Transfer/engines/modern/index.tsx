@@ -115,12 +115,14 @@ const TransferList: React.FC<TransferListProps> = ({
   const allSelected = selectableItems.length > 0 && selectableItems.every((item) => selectedKeys.has(item.key));
   const someSelected = selectableItems.some((item) => selectedKeys.has(item.key));
 
+  // Select-all toggles only the visible (filtered) scope; selections made outside it survive.
   const handleSelectAll = () => {
-    if (allSelected) {
-      onSelectChange(new Set());
-    } else {
-      onSelectChange(new Set(selectableItems.map((item) => item.key)));
+    const nextSelected = new Set(selectedKeys);
+    for (const item of selectableItems) {
+      if (allSelected) nextSelected.delete(item.key);
+      else nextSelected.add(item.key);
     }
+    onSelectChange(nextSelected);
   };
 
   const handleSelect = (key: string) => {

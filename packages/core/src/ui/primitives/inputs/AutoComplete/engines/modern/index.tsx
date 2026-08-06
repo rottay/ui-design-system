@@ -280,6 +280,9 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
           // Close and RETURN FOCUS to the input (Dropdown/DatePicker
           // precedent): if the pointer/user landed DOM focus on an option,
           // the dropdown unmount would drop focus to <body>.
+          // An open popup consumes its own dismissal; Escape must not also close an ancestor overlay.
+          e.preventDefault();
+          e.stopPropagation();
           handleOpenChange(false);
           inputRef.current?.focus();
           break;

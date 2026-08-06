@@ -41243,9 +41243,14 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  */
 
 .rottay-transfer.rottay-transfer--modern[data-part='root'] {
-  display: flex;
+  /* Two shrinkable panel tracks around an intrinsic control column: a flex row
+     let the panels keep their 200px base and overflow a 390px viewport. */
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
   gap: var(--ds-transfer-gap, 8px);
+  inline-size: fit-content;
+  max-inline-size: 100%;
 }
 
 .rottay-transfer.rottay-transfer--modern [data-part='panel'] {
@@ -41254,6 +41259,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   inline-size: var(--ds-transfer-list-width, 200px);
   /* The width is a ceiling, not a floor: panels must shrink under a narrow
      root (390px mobile) instead of overflowing it (K4-D Pass 2). */
+  max-inline-size: 100%;
   min-inline-size: 0;
   border-radius: var(--ds-radius-lg);
   overflow: hidden;

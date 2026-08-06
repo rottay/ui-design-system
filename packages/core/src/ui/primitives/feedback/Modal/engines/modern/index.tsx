@@ -382,7 +382,8 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
         className="rottay-modal-root--modern rottay-modal rottay-modal--modern rottay-overlay-modal-shell--modern"
         aria-modal="true"
         aria-label={ariaLabel}
-        aria-labelledby={!ariaLabel && title && !header ? titleId : undefined}
+        /* A custom `header` replaces the built-in title, so the heading group carries the name. */
+        aria-labelledby={!ariaLabel && (header || title) ? titleId : undefined}
         aria-describedby={ariaDescribedBy || (description ? descriptionId : undefined)}
         {...overlayMotion.attributes}
         style={{
@@ -503,7 +504,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
               (overlay-modal.css); the engine stamps parts only. */}
           {(title || description || header || closable) && (
             <div data-part="header">
-              <div data-part="heading-group">
+              <div data-part="heading-group" id={header ? titleId : undefined}>
                 {header || (
                   <>
                     {title && (
