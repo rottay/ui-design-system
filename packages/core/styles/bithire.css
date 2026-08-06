@@ -61328,6 +61328,8 @@ html[data-ds-motion="reduced"]
 
 /* ---- item: the grid the circle (row 1) and the text column (row 2) live in. ---- */
 .rottay-stepper--modern[data-part='root'] [data-part='item'] {
+  /* On the item, not ::after: each pseudo opens its own counter scope. */
+  counter-increment: ds-stepper;
   position: relative;
   display: grid;
   flex: 1 1 0;
@@ -61374,7 +61376,6 @@ html[data-ds-motion="reduced"]
 
 .rottay-stepper--modern[data-part='root'] [data-part='item']::after {
   content: counter(ds-stepper);
-  counter-increment: ds-stepper;
   grid-column: 1;
   grid-row: 1;
   display: flex;

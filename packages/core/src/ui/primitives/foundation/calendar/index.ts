@@ -90,7 +90,9 @@ export function parseDateValue(value: Date | string | null | undefined): Date | 
 
 /** Format a date as YYYY-MM-DD. */
 export function formatDateStr(date: Date): string {
-  return `${date.getFullYear()}-${pad2(date.getMonth() + 1)}-${pad2(date.getDate())}`;
+  const year = date.getFullYear();
+  const yyyy = year >= 0 ? String(year).padStart(4, '0') : String(year);
+  return `${yyyy}-${pad2(date.getMonth() + 1)}-${pad2(date.getDate())}`;
 }
 
 /** Format a date's time portion as HH:mm. */

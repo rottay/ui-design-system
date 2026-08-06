@@ -39,6 +39,7 @@ import {
   isResponsiveValue,
   type ResponsivePropEntry,
 } from '@/infrastructure/runtime/responsive/runtime/style-properties';
+import { revealTabWithinList } from '../../runtime/reveal';
 import { Dropdown } from '../../../../facade';
 import { VisuallyHidden } from '../../../../foundation';
 import type {
@@ -425,7 +426,9 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
 
     refreshOverflow();
     const activeTab = currentKey ? tabRefs.current.get(currentKey) : null;
-    activeTab?.scrollIntoView?.({ block: 'nearest', inline: 'nearest' });
+    // Scrollport-local: `scrollIntoView` walks every ancestor and yanked the
+    // document even when the tablist did not overflow — see `runtime/reveal`.
+    if (activeTab) revealTabWithinList(list, activeTab, elementDirection(list));
 
     if (recipe !== 'underline' || indicator === 'none' || !currentKey) {
       setIndicatorPosition(null);

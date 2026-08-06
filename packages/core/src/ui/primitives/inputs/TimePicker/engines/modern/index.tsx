@@ -257,7 +257,7 @@ const TimePanel: React.FC<TimePanelProps> = ({
             <div
               ref={col.ref}
               data-part="time-column"
-              role="group"
+              role="listbox"
               aria-label={col.label}
               onKeyDown={handleColumnKeyDown}
             >
@@ -265,6 +265,8 @@ const TimePanel: React.FC<TimePanelProps> = ({
                 <button
                   key={opt.value}
                   type="button"
+                  role="option"
+                  aria-selected={opt.value === col.selected}
                   data-part="time-option"
                   data-selected={opt.value === col.selected || undefined}
                   data-disabled={opt.disabled || undefined}
@@ -288,7 +290,7 @@ const TimePanel: React.FC<TimePanelProps> = ({
               ref={meridiemRef}
               data-part="time-column"
               data-column="meridiem"
-              role="group"
+              role="listbox"
               aria-label={meridiemLabel}
               onKeyDown={handleColumnKeyDown}
             >
@@ -296,6 +298,8 @@ const TimePanel: React.FC<TimePanelProps> = ({
                 <button
                   key={mer}
                   type="button"
+                  role="option"
+                  aria-selected={meridiem === mer}
                   data-part="time-option"
                   data-selected={meridiem === mer || undefined}
                   tabIndex={meridiem === mer ? 0 : -1}
@@ -624,7 +628,9 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
           role="combobox"
           aria-expanded={isOpen}
           aria-haspopup="dialog"
-          aria-label={placeholder}
+          // The placeholder is only a LAST-RESORT name: with an `id` an
+          // external <label for> owns the name, and aria-label would outrank it.
+          aria-label={id ? undefined : placeholder}
         />
         {allowClear && displayText && !disabled && (
           <button

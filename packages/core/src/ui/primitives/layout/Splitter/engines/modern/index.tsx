@@ -63,14 +63,15 @@ interface PanelMeta {
   min: SplitterPanelProps['min'];
   max: SplitterPanelProps['max'];
   resizable: boolean;
+  collapsible: boolean;
 }
 
 /** Read the constraint metadata of a panel child (non-element children
  *  carry no constraints and are always resizable). */
 function readPanelMeta(child: React.ReactNode): PanelMeta {
-  if (!isValidElement(child)) return { min: undefined, max: undefined, resizable: true };
+  if (!isValidElement(child)) return { min: undefined, max: undefined, resizable: true, collapsible: false };
   const props = (child as React.ReactElement<SplitterPanelProps>).props;
-  return { min: props.min, max: props.max, resizable: props.resizable !== false };
+  return { min: props.min, max: props.max, resizable: props.resizable !== false, collapsible: props.collapsible === true };
 }
 
 /** Resolve a panel's `defaultSize` prop to a percentage. Numbers are
@@ -131,6 +132,48 @@ function redistributePair(
   return newSizes;
 }
 
+/** A gutter's aria value is its BOUNDARY on the container's 0-100 scale: the
+ *  cumulative size of every panel before it, not panel `index`'s own size. */
+function boundaryAt(sizes: number[], index: number): number {
+  let total = 0;
+  for (let i = 0; i <= index && i < sizes.length; i += 1) total += sizes[i] ?? 0;
+  return Math.round(total);
+}
+
+/** Home/End endpoint: the pair is redistributed as usual, but a collapsible
+ *  panel may pass its declared min all the way to 0. One helper so the
+ *  keyboard endpoints and the advertised ARIA range can never disagree. */
+function endpointSizes(
+  sizes: number[],
+  index: number,
+  meta: ReadonlyArray<PanelMeta>,
+  edge: 'minimize' | 'maximize'
+): number[] {
+  const collapsing = edge === 'minimize' ? meta[index] : meta[index + 1];
+  const relaxed = collapsing?.collapsible
+    ? meta.map((m, i) =>
+        i === (edge === 'minimize' ? index : index + 1) ? { ...m, min: 0 } : m
+      )
+    : meta;
+  return redistributePair(sizes, index, edge === 'minimize' ? -100 : 100, relaxed);
+}
+
+/** The boundary range this gutter can actually reach. Derived by running the
+ *  SAME endpoint helper the keyboard uses, so the advertised range cannot
+ *  drift from real behavior. */
+function boundaryRangeAt(
+  sizes: number[],
+  index: number,
+  meta: ReadonlyArray<PanelMeta>
+): { min: number; max: number } {
+  const low = boundaryAt(endpointSizes(sizes, index, meta, 'minimize'), index);
+  const high = boundaryAt(endpointSizes(sizes, index, meta, 'maximize'), index);
+  // An impossible spec can leave the current boundary outside what a resize
+  // can reach; aria-valuenow must still fall inside the advertised range.
+  const now = boundaryAt(sizes, index);
+  return { min: Math.min(low, high, now), max: Math.max(low, high, now) };
+}
+
 /**
  * Modern engine implementation of the Splitter.Panel sub-component.
  * Uses percentage-based `flex: 0 0 {size}%` to size each panel, with
@@ -146,13 +189,16 @@ function redistributePair(
  */
 export const Panel = React.forwardRef<HTMLDivElement, SplitterPanelProps & { size?: number }>(
   (props, ref) => {
-    const { size, min, max, children, className = '', style } = props;
+    const { size, min, max, collapsible, children, className = '', style } = props;
 
     // Normalize min/max to numeric percentages; default to the full 0-100 range
     // so panels without constraints behave naturally.
     const minSize = typeof min === 'number' ? min : 0;
     const maxSize = typeof max === 'number' ? max : 100;
-    const clampedSize = Math.min(Math.max(size ?? 50, minSize), maxSize);
+    // A collapsible panel handed exactly 0 is collapsed on purpose; clamping it
+    // back to its min would leave it visible while aria-valuenow reads 0.
+    const collapsed = collapsible === true && size === 0;
+    const clampedSize = collapsed ? 0 : Math.min(Math.max(size ?? 50, minSize), maxSize);
 
     return (
       <div
@@ -162,7 +208,8 @@ export const Panel = React.forwardRef<HTMLDivElement, SplitterPanelProps & { siz
         aria-hidden={clampedSize === 0 ? true : undefined}
         inert={clampedSize === 0 ? true : undefined}
         style={{
-          flex: `0 0 ${clampedSize}%`,
+          // Grow from zero: a basis summing to 100% overflowed by the gutters.
+          flex: `${clampedSize} 1 0%`,
           // Prevent content from forcing the panel wider than its flex-basis
           minInlineSize: 0,
           minBlockSize: 0,
@@ -286,6 +333,14 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
       });
     }, [onResize]);
 
+    const applyEndpoint = useCallback((index: number, edge: 'minimize' | 'maximize') => {
+      setSizes((prevSizes: number[]) => {
+        const newSizes = endpointSizes(prevSizes, index, panelsMetaRef.current, edge);
+        onResize?.(newSizes);
+        return newSizes;
+      });
+    }, [onResize]);
+
     /** Move gutter `index` so the cumulative size of the panels before (and
      *  including) it equals `percentage`, honoring each side's [min, max]
      *  contract range. Reads the FRESH sizes inside the updater -- a drag is
@@ -369,9 +424,9 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
       const STEP = 2;
       if (intent === 'increase') applyDelta(index, STEP);
       else if (intent === 'decrease') applyDelta(index, -STEP);
-      else if (intent === 'minimize') applyDelta(index, -100);
-      else applyDelta(index, 100);
-    }, [applyDelta]);
+      else if (intent === 'minimize') applyEndpoint(index, 'minimize');
+      else applyEndpoint(index, 'maximize');
+    }, [applyDelta, applyEndpoint]);
 
     // A gutter is operable only while BOTH adjacent panels allow resizing;
     // a `resizable={false}` panel locks its boundary into an inert
@@ -409,10 +464,10 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
                 arrows="position"
                 operable={gutterOperable[index]}
                 label={i18n?.t('splitter.resize_gutter') ?? 'Resize panels'}
-                min={0}
-                max={100}
-                value={Math.round(arrayValueAt(sizes, index) ?? 0)}
-                valueText={`${Math.round(arrayValueAt(sizes, index) ?? 0)}%`}
+                min={boundaryRangeAt(sizes, index, panelsMetaRef.current).min}
+                max={boundaryRangeAt(sizes, index, panelsMetaRef.current).max}
+                value={boundaryAt(sizes, index)}
+                valueText={`${boundaryAt(sizes, index)}%`}
                 keyShortcuts={
                   isVertical
                     ? 'ArrowUp ArrowDown Home End'

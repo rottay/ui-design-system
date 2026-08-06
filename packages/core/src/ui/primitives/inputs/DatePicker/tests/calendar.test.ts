@@ -114,3 +114,16 @@ describe('DatePicker calendar utilities', () => {
     expect(getKeyboardNavDate(current, 'Enter')).toBeNull();
   });
 });
+
+describe('formatDateStr year padding', () => {
+  it('pads a two-digit year to the YYYY-MM-DD contract', () => {
+    const d = new Date(0);
+    d.setFullYear(99, 7, 6);
+    d.setHours(0, 0, 0, 0);
+    expect(formatDateStr(d)).toBe('0099-08-06');
+  });
+
+  it('leaves an ordinary four-digit year unchanged', () => {
+    expect(formatDateStr(new Date(2026, 7, 6))).toBe('2026-08-06');
+  });
+});

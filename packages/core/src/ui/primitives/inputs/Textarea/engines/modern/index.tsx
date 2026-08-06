@@ -31,6 +31,7 @@ import type { TextareaProps } from '../../contracts';
 import { TEXTAREA_DEFAULTS } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
+import { composeRefs } from '@/ui/primitives/foundation/compose-refs';
 
 /* ------------------------------------------------------------------ */
 /*  Component                                                          */
@@ -46,7 +47,8 @@ import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generate
  * @param props - Standard TextareaProps shared across all engines.
  * @returns A styled native textarea element with optional count and clear anatomy.
  */
-export default function ModernTextarea(props: TextareaProps): React.ReactElement {
+const ModernTextarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
+  function ModernTextarea(props, forwardedRef): React.ReactElement {
   const {
     size = TEXTAREA_DEFAULTS.size,
     variant = TEXTAREA_DEFAULTS.variant,
@@ -82,6 +84,13 @@ export default function ModernTextarea(props: TextareaProps): React.ReactElement
   const generatedId = useId();
   const controlId = id || `textarea-modern-${generatedId.replace(/:/g, '')}`;
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const forwardedCleanupRef = useRef<(() => void) | undefined>(undefined);
+  // The forwarded ref must not be spread in via ...rest: React 19 would
+  // overwrite textareaRef and every autoSize measurement would see null.
+  const setTextarea = React.useMemo(
+    () => composeRefs<HTMLTextAreaElement>(forwardedRef, { own: textareaRef, forwardedCleanup: forwardedCleanupRef }),
+    [forwardedRef]
+  );
 
   // Controlled/uncontrolled tracking so count and clear see the live value.
   const [internalValue, setInternalValue] = useState(defaultValue ?? '');
@@ -132,7 +141,7 @@ export default function ModernTextarea(props: TextareaProps): React.ReactElement
   // (pinned by Textarea.modern-engine). minRows rides the native `rows`
   // attribute, which the browser already enforces as the floor.
   const autoSizeMaxRows = typeof autoSize === 'object' ? autoSize.maxRows : undefined;
-  useLayoutEffect(() => {
+  const measureAutoSize = useCallback(() => {
     const el = textareaRef.current;
     if (!el) return;
     if (!autoSize) {
@@ -161,19 +170,31 @@ export default function ModernTextarea(props: TextareaProps): React.ReactElement
     }
     el.style.blockSize = `${next}px`;
     el.style.overflowY = overflowY;
-  }, [currentValue, autoSize, autoSizeMaxRows]);
+  }, [autoSize, autoSizeMaxRows]);
+
+  useLayoutEffect(() => {
+    measureAutoSize();
+  }, [currentValue, measureAutoSize]);
 
   // onResize reports both autoSize-driven growth and manual drag resizes from
   // a single source (the observer fires on mount with the initial geometry).
   useEffect(() => {
     const el = textareaRef.current;
-    if (!el || !onResize || typeof ResizeObserver === 'undefined') return undefined;
+    if (!el || (!onResize && !autoSize) || typeof ResizeObserver === 'undefined') return undefined;
+    // A width change rewraps the text, so autoSize re-measures; the width guard
+    // stops that measurement retriggering itself via its own block-size write.
+    let lastWidth = el.offsetWidth;
     const observer = new ResizeObserver(() => {
-      onResize({ width: el.offsetWidth, height: el.offsetHeight });
+      const width = el.offsetWidth;
+      if (autoSize && width !== lastWidth) {
+        lastWidth = width;
+        measureAutoSize();
+      }
+      onResize?.({ width: el.offsetWidth, height: el.offsetHeight });
     });
     observer.observe(el);
     return () => observer.disconnect();
-  }, [onResize]);
+  }, [onResize, autoSize, measureAutoSize]);
 
   return (
     <div
@@ -184,7 +205,7 @@ export default function ModernTextarea(props: TextareaProps): React.ReactElement
       style={style}
     >
       <textarea
-        ref={textareaRef}
+        ref={setTextarea}
         id={controlId}
         className="ds-textarea ds-textarea--modern"
         data-part="root"
@@ -240,4 +261,6 @@ export default function ModernTextarea(props: TextareaProps): React.ReactElement
       )}
     </div>
   );
-}
+});
+
+export default ModernTextarea;

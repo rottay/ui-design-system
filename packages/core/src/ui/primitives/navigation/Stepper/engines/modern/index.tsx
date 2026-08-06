@@ -149,7 +149,9 @@ function renderModernSteps(
         data-status={status}
         data-disabled={item.disabled || undefined}
         data-clickable={isClickable || undefined}
-        aria-current={status === 'process' ? 'step' : undefined}
+        // An ancestor <li> does not convey state to a focused button, so a
+        // clickable step carries aria-current on the trigger instead.
+        aria-current={!isClickable && status === 'process' ? 'step' : undefined}
       >
         {item.icon && !progressDot && <span data-part="icon">{item.icon}</span>}
         {typeof progressDot === 'function' && (
@@ -166,6 +168,7 @@ function renderModernSteps(
           <button
             type="button"
             data-part="trigger"
+            aria-current={status === 'process' ? 'step' : undefined}
             onClick={() => onChange?.(index)}
           >
             {text}

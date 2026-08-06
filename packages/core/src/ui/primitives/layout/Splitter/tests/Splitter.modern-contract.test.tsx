@@ -56,7 +56,7 @@ describe('Splitter modern contract: anatomy', () => {
     renderSplitter();
     const [first] = panels();
     expect(first.className).not.toMatch(/overflow-auto/);
-    expect(first.style.flex).toContain('50%');
+    expect(first.style.flexGrow).toBe('50');
   });
 
   it('gutter is a focusable separator with value aria, no utility classes', () => {
@@ -88,8 +88,8 @@ describe('Splitter modern contract: keyboard resize', () => {
 
     fireEvent.keyDown(gutter, { key: 'ArrowRight' });
     expect(gutter.getAttribute('aria-valuenow')).toBe('52');
-    expect(panels()[0].style.flex).toContain('52%');
-    expect(panels()[1].style.flex).toContain('48%');
+    expect(panels()[0].style.flexGrow).toBe('52');
+    expect(panels()[1].style.flexGrow).toBe('48');
 
     fireEvent.keyDown(gutter, { key: 'ArrowLeft' });
     expect(gutter.getAttribute('aria-valuenow')).toBe('50');
@@ -103,13 +103,13 @@ describe('Splitter modern contract: keyboard resize', () => {
 
     fireEvent.keyDown(gutter, { key: 'End' });
     expect(gutter.getAttribute('aria-valuenow')).toBe('100');
-    expect(panels()[0].style.flex).toContain('100%');
-    expect(panels()[1].style.flex).toContain('0%');
+    expect(panels()[0].style.flexGrow).toBe('100');
+    expect(panels()[1].style.flexGrow).toBe('0');
 
     fireEvent.keyDown(gutter, { key: 'Home' });
     expect(gutter.getAttribute('aria-valuenow')).toBe('0');
-    expect(panels()[0].style.flex).toContain('0%');
-    expect(panels()[1].style.flex).toContain('100%');
+    expect(panels()[0].style.flexGrow).toBe('0');
+    expect(panels()[1].style.flexGrow).toBe('100');
   });
 
   it('vertical layout uses ArrowDown/ArrowUp', () => {
@@ -193,13 +193,13 @@ describe('Splitter modern contract: pointer drag', () => {
     expect(document.activeElement).toBe(gutter);
 
     fireEvent.pointerMove(document, { clientX: 600, clientY: 200 });
-    expect(panels()[0].style.flex).toContain('60%');
-    expect(panels()[1].style.flex).toContain('40%');
+    expect(panels()[0].style.flexGrow).toBe('60');
+    expect(panels()[1].style.flexGrow).toBe('40');
     expect(onResize).toHaveBeenCalled();
 
     // A second move uses FRESH sizes (the stale-closure bug class).
     fireEvent.pointerMove(document, { clientX: 700, clientY: 200 });
-    expect(panels()[0].style.flex).toContain('70%');
+    expect(panels()[0].style.flexGrow).toBe('70');
 
     fireEvent.pointerUp(document);
     expect(onResizeEnd).toHaveBeenCalledTimes(1);
@@ -212,12 +212,12 @@ describe('Splitter modern contract: pointer drag', () => {
 
     fireEvent.pointerDown(gutter, { clientX: 500, clientY: 200 });
     fireEvent.pointerMove(document, { clientX: 5000, clientY: 200 });
-    expect(panels()[0].style.flex).toContain('100%');
-    expect(panels()[1].style.flex).toContain('0%');
+    expect(panels()[0].style.flexGrow).toBe('100');
+    expect(panels()[1].style.flexGrow).toBe('0');
 
     fireEvent.pointerMove(document, { clientX: -500, clientY: 200 });
-    expect(panels()[0].style.flex).toContain('0%');
-    expect(panels()[1].style.flex).toContain('100%');
+    expect(panels()[0].style.flexGrow).toBe('0');
+    expect(panels()[1].style.flexGrow).toBe('100');
     fireEvent.pointerUp(document);
   });
 
@@ -238,7 +238,7 @@ describe('Splitter modern contract: pointer drag', () => {
     fireEvent.pointerDown(gutter, { clientX: 500, clientY: 200 });
     // clientX 400 with rect.right 1000 -> offset 600 from the right -> 60%.
     fireEvent.pointerMove(document, { clientX: 400, clientY: 200 });
-    expect(panels()[0].style.flex).toContain('60%');
+    expect(panels()[0].style.flexGrow).toBe('60');
     fireEvent.pointerUp(document);
   });
 });

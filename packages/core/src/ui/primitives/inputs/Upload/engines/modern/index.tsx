@@ -498,6 +498,13 @@ const FileItem: React.FC<FileItemProps> = ({
             </span>
           )}
         </div>
+        {/* The thumbnail click is a mouse-only affordance (the skin paints it
+            `cursor: pointer`); preview needs a real tab stop of its own. */}
+        {isImg && showPreviewAction && (
+          <button type="button" data-part="file-item-action" data-action="preview" onClick={() => onPreview?.(file)} aria-label={previewLabel}>
+            <ActionRevealIcon decorative size={14} />
+          </button>
+        )}
         {retryButton}
         {showRemoveAction && (
           <button type="button" data-part="file-item-action" data-action="remove" onClick={() => onRemove(file)} aria-label={removeLabel}>
@@ -751,7 +758,7 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
     return (
       <div ref={ref} data-part="root" className={rootClassName} style={style}>
         {isPictureCardOrCircle ? (
-          <div data-part="file-list" role="list" aria-label={fileListLabel}>
+          <div data-part="file-list" role="list" aria-label={fileListLabel} aria-live="polite" aria-atomic="false">
             {showUploadList && fileItems}
             {uploadTrigger}
           </div>
@@ -759,7 +766,7 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
           <>
             {uploadTrigger}
             {showUploadList && actualFileList.length > 0 && (
-              <div data-part="file-list" role="list" aria-label={fileListLabel}>
+              <div data-part="file-list" role="list" aria-label={fileListLabel} aria-live="polite" aria-atomic="false">
                 {fileItems}
               </div>
             )}
@@ -960,7 +967,7 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
         </div>
 
         {showUploadList && actualFileList.length > 0 && (
-          <div data-part="file-list" role="list" aria-label={fileListLabel}>
+          <div data-part="file-list" role="list" aria-label={fileListLabel} aria-live="polite" aria-atomic="false">
             {actualFileList.map(file => (
               <FileItem
                 key={file.uid}

@@ -55,7 +55,27 @@ import {
   generateCalendarGrid,
   getKeyboardNavDate,
 } from '../../runtime/calendar';
+
 import { toCanonicalSize } from '../../../../../../foundation/contracts/kernel/common';
+
+/** Date-only strings are UTC by spec; parse them in the local zone instead. */
+const parseLocalDateValue = (value: Date | string | null | undefined): Date | null => {
+  if (typeof value === 'string') {
+    const m = /^([0-9]{4})-([0-9]{2})-([0-9]{2})$/.exec(value.trim());
+    if (m) {
+      const [year, month, day] = [Number(m[1]), Number(m[2]), Number(m[3])];
+      const d = new Date(0);
+      // setFullYear keeps years 0000-0099 out of the 1900 window; the
+      // round-trip rejects what the constructor would silently roll over.
+      d.setFullYear(year, month - 1, day);
+      d.setHours(0, 0, 0, 0);
+      const roundTrips =
+        d.getFullYear() === year && d.getMonth() === month - 1 && d.getDate() === day;
+      return roundTrips ? d : null;
+    }
+  }
+  return parseDateValue(value);
+};
 
 // ---------------------------------------------------------------------------
 // Size config
@@ -583,6 +603,19 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
     return firstInMonth >= 0 ? firstInMonth : 0;
   })();
 
+  // The flat 42-cell grid is chunked into calendar weeks so every gridcell has
+  // an owning role="row" (a grid with direct gridcell children exposes no rows).
+  const weekRows = useMemo(
+    () =>
+      Array.from({ length: Math.ceil(grid.length / 7) }, (_, week) => ({
+        key: week,
+        cells: grid
+          .slice(week * 7, week * 7 + 7)
+          .map((cell, offset) => ({ cell, idx: week * 7 + offset })),
+      })),
+    [grid],
+  );
+
   return (
     <div data-part="panel" data-mode="date" data-range={isRangePanel || undefined} className="rottay-datepicker-panel rottay-datepicker-panel--modern" role="dialog" aria-label={t('datepicker.date_picker')}>
       {/* Header navigation */}
@@ -608,22 +641,6 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
         </div>
       </div>
 
-      {/* Day-of-week headers (locale-rotated with the week start). Column
-          gap is skin-owned so range panels can keep headers and day tracks
-          aligned when the band drops the gutter. */}
-      <div data-part="weekday-row" role="row">
-        {orderedWeekdays.map((d) => (
-          <div
-            key={d}
-            data-part="weekday-header"
-            role="columnheader"
-            aria-label={d}
-          >
-            {d}
-          </div>
-        ))}
-      </div>
-
       {/* Calendar grid */}
       <div
         ref={gridRef}
@@ -632,7 +649,30 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
         onKeyDown={handleGridKeyDown}
         aria-label={t('datepicker.calendar_dates')}
       >
-        {grid.map((cell, idx) => {
+        {/* Day-of-week headers (locale-rotated with the week start). The
+            header row is a row OF the grid (APG owns columnheaders inside
+            role="grid"); it spans every day track so its 7 sub-tracks stay
+            aligned with the day columns. Column gap is skin-owned so range
+            panels can keep headers and day tracks aligned when the band
+            drops the gutter. */}
+        <div data-part="weekday-row" role="row" style={{ gridColumn: '1 / -1' }}>
+          {orderedWeekdays.map((d) => (
+            <div
+              key={d}
+              data-part="weekday-header"
+              role="columnheader"
+              aria-label={d}
+            >
+              {d}
+            </div>
+          ))}
+        </div>
+
+        {weekRows.map((week) => (
+          // `display: contents` keeps the week semantic (role="row") without
+          // adding a box, so the 7 cells stay direct items of the day grid.
+          <div key={week.key} data-part="week-row" role="row" style={{ display: 'contents' }}>
+        {week.cells.map(({ cell, idx }) => {
           const isSelected = selectedDate ? isSameDay(cell.date, selectedDate) : false;
           const inCommittedRange = isDateInRange(cell.date, rangeStart ?? null, rangeEnd ?? null);
           const inPreviewRange = !inCommittedRange && isDateInRange(cell.date, rangeStart ?? null, previewEnd);
@@ -676,6 +716,8 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
             </button>
           );
         })}
+          </div>
+        ))}
       </div>
 
       {/* Time picker */}
@@ -776,14 +818,14 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
 
     // State
     const [internalDate, setInternalDate] = useState<Date | null>(() =>
-      parseDateValue(defaultValue),
+      parseLocalDateValue(defaultValue),
     );
     const [internalOpen, setInternalOpen] = useState(false);
     const [focusedDate, setFocusedDate] = useState<Date | null>(null);
     const [hours, setHours] = useState(0);
     const [minutes, setMinutes] = useState(0);
 
-    const selectedDate = isControlled ? parseDateValue(value) : internalDate;
+    const selectedDate = isControlled ? parseLocalDateValue(value) : internalDate;
     const isOpen = isOpenControlled ? controlledOpen! : internalOpen;
 
     // Initialize view to selected date or today
@@ -998,7 +1040,9 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
             role="combobox"
             aria-expanded={isOpen}
             aria-haspopup="dialog"
-            aria-label={displayPlaceholder}
+            // The placeholder is only a LAST-RESORT name: with an `id` an
+            // external <label for> owns the name, and aria-label would outrank it.
+            aria-label={id ? undefined : displayPlaceholder}
           />
           {allowClear && displayText && !disabled && (
             <button
@@ -1147,10 +1191,10 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
 
     // State
     const [internalStart, setInternalStart] = useState<Date | null>(() =>
-      defaultValue ? parseDateValue(defaultValue[0]) : null,
+      defaultValue ? parseLocalDateValue(defaultValue[0]) : null,
     );
     const [internalEnd, setInternalEnd] = useState<Date | null>(() =>
-      defaultValue ? parseDateValue(defaultValue[1]) : null,
+      defaultValue ? parseLocalDateValue(defaultValue[1]) : null,
     );
     const [internalOpen, setInternalOpen] = useState(false);
     // Tracks which side of the range the calendar is filling. After selecting
@@ -1163,8 +1207,8 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
     // panel previews the would-be band from it (never committed paint).
     const [hoveredDate, setHoveredDate] = useState<Date | null>(null);
 
-    const startDate = isControlled ? parseDateValue(value?.[0]) : internalStart;
-    const endDate = isControlled ? parseDateValue(value?.[1]) : internalEnd;
+    const startDate = isControlled ? parseLocalDateValue(value?.[0]) : internalStart;
+    const endDate = isControlled ? parseLocalDateValue(value?.[1]) : internalEnd;
     const isOpen = isOpenControlled ? controlledOpen! : internalOpen;
 
     const initialView = startDate || new Date();
