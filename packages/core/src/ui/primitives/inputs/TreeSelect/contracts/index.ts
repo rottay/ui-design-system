@@ -205,6 +205,15 @@ export interface TreeSelectBaseProps {
   style?: CSSProperties;
   /** Popup class name */
   popupClassName?: string;
+  /** Accessible name for the trigger. Resolution: `aria-labelledby`, then this,
+   *  then `placeholder` (itself falling back to the i18n catalog entry). */
+  'aria-label'?: string;
+  /** Trigger id. A reference anchor only: the trigger is a `div role="combobox"`,
+   *  so `<label for>` cannot name it and `id` alone keeps the synthesized name. */
+  id?: string;
+  /** External label reference; the only external naming channel. Suppresses the
+   *  synthesized `aria-label`, and the popup `role="tree"` mirrors it. */
+  'aria-labelledby'?: string;
   /** Rendering engine override */
   engine?: 'classic' | 'modern' | 'rustic';
 }

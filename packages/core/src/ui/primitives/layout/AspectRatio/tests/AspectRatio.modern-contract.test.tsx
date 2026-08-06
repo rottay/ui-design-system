@@ -15,7 +15,7 @@ const layoutSkin = readFileSync(
 );
 
 describe("AspectRatio modern premium contract", () => {
-  it("forwards semantics and ref while protecting its anatomy", () => {
+  it("forwards semantics, ref, and caller-owned anatomy", () => {
     const ref = createRef<HTMLDivElement>();
     render(
       <ModernAspectRatio
@@ -30,7 +30,7 @@ describe("AspectRatio modern premium contract", () => {
     );
 
     const frame = screen.getByRole("group", { name: "Candidate introduction" });
-    expect(frame).toHaveAttribute("data-part", "root");
+    expect(frame).toHaveAttribute("data-part", "consumer-value");
     expect(frame).toHaveAttribute("lang", "en");
     expect(ref.current).toBe(frame);
   });

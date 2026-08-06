@@ -6,6 +6,8 @@ import {
   Affix,
   Alert,
   Anchor,
+  AspectRatio,
+  Box,
   BackTop,
   Breadcrumb,
   Button,
@@ -22,6 +24,8 @@ import {
   Form,
   FormField,
   Grid,
+  Hide,
+  IconFrame,
   Input,
   Layout,
   NavLink,
@@ -32,9 +36,12 @@ import {
   PasswordInput,
   Radio,
   Rate,
+  ResponsiveSlot,
   Result,
   ScrollArea,
   Segmented,
+  SemanticSurface,
+  Show,
   Skeleton,
   Space,
   Stack,
@@ -45,6 +52,7 @@ import {
   Textarea,
   TimePicker,
   Toggle,
+  TreeSelect,
   Upload,
   Watermark,
 } from '@rottay/design-system';
@@ -95,7 +103,14 @@ export type R2BehaviorCase =
   | 'stack'
   | 'empty'
   | 'container'
-  | 'flex';
+  | 'flex'
+  | 'box'
+  | 'aspectratio'
+  | 'semanticsurface'
+  | 'responsiveslot'
+  | 'showhide'
+  | 'iconframe'
+  | 'treeselect';
 
 const CRUMB_ITEMS = [
   { key: 'home', label: 'Home', href: '/' },
@@ -829,6 +844,112 @@ export function R2BehaviorScene({ only }: { only: R2BehaviorCase }) {
               <div style={{ padding: 12, background: 'var(--ds-color-surface-raised, #eee)' }}>Two</div>
               <div style={{ padding: 12, background: 'var(--ds-color-surface-raised, #eee)' }}>Three</div>
             </Grid>
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'box' && (
+        <SpecimenRow axis="BOX - a conditional style that resolved away keeps the governed stamp">
+          <div data-testid="lab-box" style={{ display: 'grid', gap: 12, inlineSize: 'min(460px, 100%)' }}>
+            <Box
+              data-testid="lab-box-resolved"
+              rounded="xl"
+              shadow="lg"
+              style={{ borderRadius: undefined, boxShadow: undefined, padding: 12 }}
+            >
+              Conditional resolved away
+            </Box>
+            <Box
+              data-testid="lab-box-owned"
+              rounded="xl"
+              shadow="lg"
+              style={{ borderRadius: '3px', boxShadow: 'none', padding: 12 }}
+            >
+              Caller owns both
+            </Box>
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'aspectratio' && (
+        <SpecimenRow axis="ASPECTRATIO - a composing caller owns the anatomy part (P-79)">
+          <div data-testid="lab-aspectratio" style={{ inlineSize: 'min(420px, 100%)' }}>
+            <AspectRatio
+              engine="modern"
+              ratio={16 / 9}
+              data-part="media-frame"
+              data-testid="lab-aspectratio-root"
+            >
+              <div style={{ blockSize: '100%', background: 'var(--ds-color-primary)' }} />
+            </AspectRatio>
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'semanticsurface' && (
+        <SpecimenRow axis="SEMANTICSURFACE - a caller aria state survives the spread">
+          <div data-testid="lab-semanticsurface" style={{ inlineSize: 'min(460px, 100%)' }}>
+            <SemanticSurface
+              surfaceRole="card"
+              data-testid="lab-semanticsurface-root"
+              aria-disabled
+              style={{ padding: 12 }}
+            >
+              Caller-owned aria-disabled
+            </SemanticSurface>
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'responsiveslot' && (
+        <SpecimenRow axis="RESPONSIVESLOT - a slot whose condition resolved to false emits nothing">
+          <div data-testid="lab-responsiveslot" style={{ inlineSize: 'min(460px, 100%)' }}>
+            <ResponsiveSlot
+              phone={false && <span>phone banner</span>}
+              desktop={<span data-testid="lab-slot-desktop">desktop content</span>}
+            />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'showhide' && (
+        <SpecimenRow axis="SHOW/HIDE - a 0px bound is a real bound, and they stay complements">
+          <div data-testid="lab-showhide" style={{ display: 'grid', gap: 8, inlineSize: 'min(460px, 100%)' }}>
+            <Show from="phone">
+              <span data-testid="lab-show-always">show-from-phone always renders</span>
+            </Show>
+            <Hide from="phone">
+              <span data-testid="lab-hide-never">hide-from-phone never renders</span>
+            </Hide>
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'iconframe' && (
+        <SpecimenRow axis="ICONFRAME - a badge stays outside the named frame's pruned subtree">
+          <div data-testid="lab-iconframe" style={{ display: 'flex', gap: 16 }}>
+            <span data-testid="lab-iconframe-badged">
+              <IconFrame icon="status.success" label="Completed" badge={<span>3</span>} />
+            </span>
+            <span data-testid="lab-iconframe-plain">
+              <IconFrame icon="status.success" label="Completed" />
+            </span>
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'treeselect' && (
+        <SpecimenRow axis="TREESELECT - an external label reference names the combobox">
+          <div data-testid="lab-treeselect" style={{ inlineSize: 'min(420px, 100%)' }}>
+            <span id="lab-treeselect-label">Owning team</span>
+            <TreeSelect
+              engine="modern"
+              aria-labelledby="lab-treeselect-label"
+              placeholder="Please select"
+              treeData={[
+                { value: 'eng', title: 'Engineering', children: [{ value: 'fe', title: 'Frontend', isLeaf: true }] },
+              ]}
+            />
           </div>
         </SpecimenRow>
       )}

@@ -22266,7 +22266,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 
 /* Responsive media frames use the same material channel as every other
    layout primitive, without owning product-specific imagery or gradients. */
-.rottay-aspect-ratio.rottay-aspect-ratio--modern[data-part="root"] {
+.rottay-aspect-ratio.rottay-aspect-ratio--modern {
   position: relative;
   inline-size: 100%;
   min-inline-size: 0;
@@ -22303,7 +22303,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
    removes the inline baseline strut, whose extra line-box slack would paint a
    letterbox sliver the moment a tenant opens `--ds-aspect-ratio-overflow` to
    `visible` (the reserved ratio box must match the media box exactly). */
-.rottay-aspect-ratio.rottay-aspect-ratio--modern[data-part="root"]
+.rottay-aspect-ratio.rottay-aspect-ratio--modern
   > :where(img, video, canvas, iframe) {
   display: block;
   inline-size: 100%;
@@ -22319,14 +22319,14 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
    block fill and forwards the same governed object-fit/object-position
    channels to its img, so art-directed media honors the frame exactly like a
    direct child. */
-.rottay-aspect-ratio.rottay-aspect-ratio--modern[data-part="root"]
+.rottay-aspect-ratio.rottay-aspect-ratio--modern
   > :where(picture) {
   display: block;
   inline-size: 100%;
   block-size: 100%;
 }
 
-.rottay-aspect-ratio.rottay-aspect-ratio--modern[data-part="root"]
+.rottay-aspect-ratio.rottay-aspect-ratio--modern
   > :where(picture) > img {
   display: block;
   inline-size: 100%;
@@ -22404,7 +22404,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 
 @media (prefers-reduced-motion: reduce) {
   .rottay-container.rottay-container--modern[data-part="root"],
-  .rottay-aspect-ratio.rottay-aspect-ratio--modern[data-part="root"],
+  .rottay-aspect-ratio.rottay-aspect-ratio--modern,
   .rottay-space.rottay-space--modern[data-part="root"] {
     transition: none;
   }

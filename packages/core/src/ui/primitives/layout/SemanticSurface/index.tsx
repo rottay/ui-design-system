@@ -38,10 +38,15 @@ export const SemanticSurface = forwardRef<HTMLElement, SemanticSurfaceProps>(
     const Component = as as React.ElementType;
     const isInteractive = interactive && !disabled;
     const isDragging = dragging && !disabled;
+    // The surface owns these ARIA states only while its own posture is set;
+    // otherwise the caller's value must survive the spread.
     const nativeButtonProps =
       as === 'button'
         ? { type: type ?? 'button', disabled }
-        : { 'aria-disabled': disabled || undefined };
+        : disabled
+          ? { 'aria-disabled': true }
+          : {};
+    const busyProps = loading ? { 'aria-busy': true } : {};
 
     // P-79: the default root part lands BEFORE the `rest` spread so an
     // explicit caller data-part wins; the skin anchors on the class +
@@ -51,6 +56,7 @@ export const SemanticSurface = forwardRef<HTMLElement, SemanticSurfaceProps>(
         data-part="root"
         {...rest}
         {...nativeButtonProps}
+        {...busyProps}
         ref={ref}
         className={`ds-semantic-surface ${className}`.trim()}
         data-surface-role={surfaceRole}
@@ -60,7 +66,6 @@ export const SemanticSurface = forwardRef<HTMLElement, SemanticSurfaceProps>(
         data-loading={loading ? 'true' : undefined}
         data-dragging={isDragging ? 'true' : undefined}
         data-emphasis={emphasis === 'strong' ? 'strong' : undefined}
-        aria-busy={loading || undefined}
       >
         {children}
       </Component>

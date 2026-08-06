@@ -29,6 +29,16 @@ describe('IconFrame', () => {
     expect(frame.querySelector('[data-part="badge"]')).toHaveTextContent('3');
   });
 
+  it('keeps a badge outside the presentational subtree of a named frame', () => {
+    const { container } = render(
+      <IconFrame icon="status.success" label="Completed" badge={<span>3</span>} />
+    );
+    const named = screen.getByRole('img', { name: 'Completed' });
+    const badge = container.querySelector('[data-part="badge"]') as HTMLElement;
+    expect(badge).toHaveTextContent('3');
+    expect(named.contains(badge)).toBe(false);
+  });
+
   it('is presentation-only: no control, no interactive vocabulary', () => {
     const { container } = render(<IconFrame icon="status.success" label="Completed" />);
     expect(container.querySelector('button')).toBeNull();

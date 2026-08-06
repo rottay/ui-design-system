@@ -46,6 +46,13 @@ const CASES: R2BehaviorCase[] = [
   'empty',
   'container',
   'flex',
+  'box',
+  'aspectratio',
+  'semanticsurface',
+  'responsiveslot',
+  'showhide',
+  'iconframe',
+  'treeselect',
 ];
 
 export default async function R2BehaviorPage({

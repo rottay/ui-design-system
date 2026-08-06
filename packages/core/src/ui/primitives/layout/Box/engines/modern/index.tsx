@@ -442,14 +442,10 @@ const ModernBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
   // for X's own root would match them too. Box's skin anchors on its class.
   const ElementType = Component as ElementType;
   const radiusValue = props.borderRadius || props.rounded;
-  const callerOwnsRadius = Object.prototype.hasOwnProperty.call(
-    props.style ?? {},
-    "borderRadius"
-  );
-  const callerOwnsShadow = Object.prototype.hasOwnProperty.call(
-    props.style ?? {},
-    "boxShadow"
-  );
+  // Caller ownership is decided by the painted value, not by key presence:
+  // React drops an `undefined` style value, so a key alone paints nothing.
+  const callerOwnsRadius = props.style?.borderRadius !== undefined;
+  const callerOwnsShadow = props.style?.boxShadow !== undefined;
   const elementProps = {
     ...htmlAttributes,
     ref: ref as Ref<HTMLElement>,

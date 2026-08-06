@@ -72,6 +72,10 @@ export const IconFrame = forwardRef<HTMLSpanElement, IconFrameProps>(function Ic
   const label = props.label;
   const decorativeOnly = props.decorative === true;
 
+  // `role="img"` prunes its subtree from the accessibility tree, so a named
+  // frame carrying a badge names the icon instead and leaves the badge exposed.
+  const nameOnIcon = !decorativeOnly && label != null && badge != null;
+
   const rootClassName = ['ds-icon-frame', className].filter(Boolean).join(' ');
 
   return (
@@ -88,21 +92,32 @@ export const IconFrame = forwardRef<HTMLSpanElement, IconFrameProps>(function Ic
       data-loading={loading ? 'true' : undefined}
       data-disabled={disabled ? 'true' : undefined}
       data-testid={props['data-testid']}
-      role={decorativeOnly ? undefined : 'img'}
-      aria-label={decorativeOnly ? undefined : label}
+      role={decorativeOnly || nameOnIcon ? undefined : 'img'}
+      aria-label={decorativeOnly || nameOnIcon ? undefined : label}
       aria-hidden={decorativeOnly && badge == null ? true : undefined}
       aria-disabled={disabled || undefined}
       aria-busy={loading || undefined}
       aria-describedby={props['aria-describedby']}
     >
-      <Icon
-        name={icon}
-        decorative
-        size={ICON_SIZE_BY_FRAME_SIZE[size]}
-        mirrored={iconMirroring}
-        state={loading ? 'busy' : undefined}
-        data-part="icon"
-      />
+      {nameOnIcon && label != null ? (
+        <Icon
+          name={icon}
+          label={label}
+          size={ICON_SIZE_BY_FRAME_SIZE[size]}
+          mirrored={iconMirroring}
+          state={loading ? 'busy' : undefined}
+          data-part="icon"
+        />
+      ) : (
+        <Icon
+          name={icon}
+          decorative
+          size={ICON_SIZE_BY_FRAME_SIZE[size]}
+          mirrored={iconMirroring}
+          state={loading ? 'busy' : undefined}
+          data-part="icon"
+        />
+      )}
       {badge != null ? <span data-part="badge">{badge}</span> : null}
     </span>
   );

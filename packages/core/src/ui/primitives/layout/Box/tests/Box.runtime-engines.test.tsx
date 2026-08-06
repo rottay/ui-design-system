@@ -346,9 +346,16 @@ describe("Box runtime engines", () => {
       expect(caller.style.borderRadius).toBe("3px");
       expect(caller.style.boxShadow).toBe("none");
 
+      // An `undefined` style value paints nothing, so modern keeps the governed
+      // stamp. Rustic still reads key presence and is knowingly divergent here.
       const suppressed = screen.getByTestId(`box-caller-undefined-${engine}`);
-      expect(suppressed).not.toHaveAttribute("data-radius");
-      expect(suppressed).not.toHaveAttribute("data-shadow");
+      if (engine === "modern") {
+        expect(suppressed).toHaveAttribute("data-radius", "xl");
+        expect(suppressed).toHaveAttribute("data-shadow", "lg");
+      } else {
+        expect(suppressed).not.toHaveAttribute("data-radius");
+        expect(suppressed).not.toHaveAttribute("data-shadow");
+      }
       expect(suppressed.style.borderRadius).toBe("");
       expect(suppressed.style.boxShadow).toBe("");
     }

@@ -61,8 +61,12 @@ const ModernAspectRatio = React.forwardRef<HTMLDivElement, AspectRatioProps>(
       style,
       maxWidth,
       "data-testid": dataTestId,
+      "data-part": dataPart,
+      engine: _engine,
       ...rest
     } = props;
+
+    void _engine;
 
     const ratioIsValid = Number.isFinite(ratio) && ratio > 0;
     const resolvedRatio = ratioIsValid ? ratio : ASPECT_RATIO_DEFAULTS.ratio;
@@ -90,7 +94,7 @@ const ModernAspectRatio = React.forwardRef<HTMLDivElement, AspectRatioProps>(
         className={`rottay-aspect-ratio rottay-aspect-ratio--modern ${className}`.trim()}
         style={containerStyle}
         data-testid={dataTestId}
-        data-part="root"
+        data-part={dataPart ?? "root"}
         data-ratio={resolvedRatio}
         data-invalid-ratio={ratioIsValid ? undefined : "true"}
         data-component="aspect-ratio"

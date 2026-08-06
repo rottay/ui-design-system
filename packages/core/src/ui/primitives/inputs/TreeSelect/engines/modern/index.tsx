@@ -444,6 +444,9 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
       className,
       style,
       popupClassName,
+      id,
+      'aria-label': ariaLabel,
+      'aria-labelledby': ariaLabelledBy,
     } = props;
 
     // The skin's data-size rules are keyed by the legacy 'small' | 'middle' |
@@ -452,6 +455,10 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
 
     const displayPlaceholder = placeholder ?? t('treeselect.placeholder');
     const displayNotFound = notFoundContent ?? t('treeselect.not_found');
+
+    // combobox/tree never name from content, so the placeholder stays as a
+    // last-resort name; only aria-labelledby outranks and suppresses it.
+    const resolvedAriaLabel = ariaLabelledBy ? undefined : (ariaLabel ?? displayPlaceholder);
 
     // Normalize once per data/fieldNames change so every downstream helper
     // can rely on standard title/value/children property names.
@@ -849,6 +856,7 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
               handleOpenChange(false);
             }
           }}
+          id={id}
           data-part="trigger"
           data-size={size}
           data-status={status || undefined}
@@ -858,7 +866,8 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
           aria-expanded={isOpen}
           aria-haspopup="tree"
           aria-controls={isOpen ? dropdownId : undefined}
-          aria-label={displayPlaceholder}
+          aria-labelledby={ariaLabelledBy}
+          aria-label={resolvedAriaLabel}
           aria-disabled={disabled || undefined}
           tabIndex={disabled ? -1 : 0}
         >
@@ -929,7 +938,8 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
               <ul
                 data-part="tree-list"
                 role="tree"
-                aria-label={displayPlaceholder}
+                aria-labelledby={ariaLabelledBy}
+                aria-label={resolvedAriaLabel}
                 aria-multiselectable={(multiple || treeCheckable) || undefined}
               >
                 {treeData.map((node) => (

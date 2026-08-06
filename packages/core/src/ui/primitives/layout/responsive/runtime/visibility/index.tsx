@@ -52,14 +52,15 @@ export function buildVisibilityMediaQuery({
     return `(min-width: ${range.min}px) and (max-width: ${range.max}px)`;
   }
 
+  // A 0px breakpoint is a real bound, not a missing one: as a lower bound it
+  // means "always", as an upper bound it means "never". `null` means unbounded.
   if (from) {
-    const pixels = resolveBreakpointPx(from);
-    return pixels === 0 ? null : `(min-width: ${pixels}px)`;
+    return `(min-width: ${resolveBreakpointPx(from)}px)`;
   }
 
   if (below) {
     const pixels = resolveBreakpointPx(below);
-    return pixels === 0 ? null : `(max-width: ${pixels - 1}px)`;
+    return pixels === 0 ? 'not all' : `(max-width: ${pixels - 1}px)`;
   }
 
   return null;

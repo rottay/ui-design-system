@@ -122,7 +122,9 @@ ResponsiveSlot.displayName = 'ResponsiveSlot';
 /** Sparse slot sets must not emit colocated style tags and wrapper nodes that
  *  render nothing — a slot is only wrapped when it actually has content. */
 function isRenderable(content: React.ReactNode): boolean {
-  return content !== undefined && content !== null;
+  // React paints nothing for null/undefined/booleans, and `cond && <Node/>`
+  // hands us `false` -- treating it as content emits an empty wrapper.
+  return content !== undefined && content !== null && typeof content !== 'boolean';
 }
 
 /**
@@ -141,7 +143,7 @@ function renderDeviceSlots(props: ResponsiveSlotProps): React.ReactElement {
   // Optimization: if all three resolve to the same content, render without
   // any Show wrappers since the content is identical at all sizes.
   if (phoneContent === tabletContent && tabletContent === desktopContent) {
-    if (phoneContent === undefined) return <></>;
+    if (!isRenderable(phoneContent)) return <></>;
     return <>{phoneContent}</>;
   }
 
@@ -248,7 +250,7 @@ function renderBreakpointSlots(props: ResponsiveSlotProps): React.ReactElement {
   }
 
   // Filter out groups with undefined content (no slot provided at any breakpoint in range)
-  const validGroups = groups.filter((g) => g.content !== undefined);
+  const validGroups = groups.filter((g) => isRenderable(g.content));
 
   if (validGroups.length === 0) {
     return <></>;
