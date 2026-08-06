@@ -281,8 +281,30 @@
   color: inherit;
 }
 
-/* Text selection stays tenant-tinted instead of the UA default blue. */
-.rottay-typography.rottay-typography--modern::selection {
+/* `sub`/`sup`: the UA pair (`vertical-align: sub|super` + `font-size: smaller`)
+   grows the line box, so a single footnote marker opens a gap in the leading
+   of the paragraph around it. Raising the glyph with a relative offset in `em`
+   keeps it out of the line-height calculation, so the paragraph's rhythm holds
+   whatever the tenant's ramp is. */
+.rottay-typography.rottay-typography--modern:is(sub, sup) {
+  position: relative;
+  vertical-align: baseline;
+  font-size: var(--ds-type-sub-sup-size, 0.75em);
+  line-height: 0;
+}
+.rottay-typography.rottay-typography--modern:is(sup) {
+  inset-block-end: var(--ds-type-sup-offset, 0.45em);
+}
+.rottay-typography.rottay-typography--modern:is(sub) {
+  inset-block-start: var(--ds-type-sub-offset, 0.25em);
+}
+
+/* Text selection stays tenant-tinted instead of the UA default blue. The
+   descendant rule is not redundant: `::selection` does not inherit, so a
+   `<strong>`, `<code>` or `<a>` inside a governed paragraph fell back to the
+   UA blue mid-sentence. */
+.rottay-typography.rottay-typography--modern::selection,
+.rottay-typography.rottay-typography--modern *::selection {
   background: var(
     --ds-type-selection-bg,
     color-mix(in srgb, var(--ds-color-primary) 22%, transparent)

@@ -70,3 +70,28 @@ describe('Kbd modern skin resilience', () => {
     expect(SKIN).toContain('ButtonText');
   });
 });
+
+describe('Kbd key-cap elevation is mode-adaptive', () => {
+  // A fixed white specular is a light-mode idiom: on a dark theme a 55% white
+  // top edge blows the cap out. The elevated-surface token resolves near-white
+  // in light mode and a raised dark neutral in dark mode.
+  it('derives every specular highlight from the elevated surface, never from white', () => {
+    const highlights = SKIN.match(/inset 0 1px 0 color-mix\([^)]*\)[^,;]*/g) ?? [];
+
+    expect(highlights.length).toBeGreaterThanOrEqual(2);
+    for (const highlight of highlights) {
+      expect(highlight).toContain('--ds-color-bg-elevated');
+    }
+    expect(SKIN).not.toContain('--ds-color-white');
+  });
+
+  it('exposes one tenant channel for the cap specular across rest and pressed', () => {
+    expect(SKIN.match(/--ds-kbd-specular/g)?.length).toBe(2);
+  });
+
+  it('keeps the cap depth on the neutral ramp, not a literal shadow colour', () => {
+    expect(SKIN).toContain('--ds-color-neutral-900');
+    expect(SKIN).not.toMatch(/box-shadow:[^;]*#[0-9a-fA-F]{3,8}/);
+    expect(SKIN).not.toMatch(/box-shadow:[^;]*rgba?\(/);
+  });
+});

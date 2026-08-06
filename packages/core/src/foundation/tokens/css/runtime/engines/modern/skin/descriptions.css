@@ -313,6 +313,15 @@
   .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='horizontal']:not([data-column-count='1']) > [data-part='body'] > [data-part='rows'] {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  /* The engine clamps `span` to the AUTHORED column count, which is still
+     wider than the two tracks left here -- and a span wider than the explicit
+     track list grows implicit columns and re-tracks every other row. A
+     multi-span item takes the whole narrow row instead (the same value the
+     560px block below settles all rows on, so the two never disagree). */
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='horizontal']:not([data-column-count='1']) > [data-part='body'] > [data-part='rows'] > [data-part='row']:not([data-span='1']) {
+    grid-column: 1 / -1;
+  }
 }
 
 @container (max-width: 560px) {

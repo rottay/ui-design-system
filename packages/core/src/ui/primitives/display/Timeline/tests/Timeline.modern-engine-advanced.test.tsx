@@ -163,3 +163,74 @@ describe('Timeline modern advanced engine coverage', () => {
     expect(skinRules).not.toMatch(/\.timeline-end/);
   });
 });
+
+describe('Timeline modern — pass-through honesty law', () => {
+  it('forwards id/aria-*/data-* to the ordered list it owns', () => {
+    const { container } = render(
+      <ModernTimeline
+        id="caller-timeline"
+        aria-label="Release history"
+        data-testid="timeline-root"
+        data-custom="caller-data"
+        items={[{ children: 'Shipped' }]}
+      />
+    );
+
+    const root = container.querySelector('ol.rottay-timeline--modern') as HTMLElement;
+    expect(root).toHaveAttribute('id', 'caller-timeline');
+    expect(root).toHaveAttribute('aria-label', 'Release history');
+    expect(root).toHaveAttribute('data-testid', 'timeline-root');
+    expect(root).toHaveAttribute('data-custom', 'caller-data');
+  });
+
+  it('lets a composing owner name the root part and keeps the default otherwise', () => {
+    const { container: named } = render(
+      <ModernTimeline data-part="activity-rail" items={[{ children: 'a' }]} />
+    );
+    expect(named.querySelector('ol')).toHaveAttribute('data-part', 'activity-rail');
+
+    const { container: plain } = render(<ModernTimeline items={[{ children: 'a' }]} />);
+    expect(plain.querySelector('ol')).toHaveAttribute('data-part', 'root');
+  });
+
+  it('never leaks the engine selector prop onto the DOM', () => {
+    const { container } = render(<ModernTimeline engine="modern" items={[{ children: 'a' }]} />);
+    expect(container.querySelector('ol')).not.toHaveAttribute('engine');
+  });
+});
+
+describe('Timeline modern — off-preset item colors reach the dot', () => {
+  const CUSTOM_TONE_RULE =
+    /\[data-tone='custom'\] > \[data-part='dot'\] > \[data-part='dot-marker'\]\s*\{\s*background:\s*var\(--ds-timeline-dot-color,\s*var\(--ds-color-primary\)\)/;
+
+  it('routes a raw CSS color to the custom tone plus a value channel', () => {
+    const { container } = render(
+      <ModernTimeline items={[{ color: '#ff00aa', children: 'Custom' }]} />
+    );
+
+    const item = container.querySelector('[data-part="item"]') as HTMLElement;
+    // Previously stamped data-tone="#ff00aa", which matches no skin rule, so
+    // the caller's color painted nothing and the dot fell back to primary.
+    expect(item).toHaveAttribute('data-tone', 'custom');
+    expect(item.style.getPropertyValue('--ds-timeline-dot-color')).toBe('#ff00aa');
+    expect(SKIN).toMatch(CUSTOM_TONE_RULE);
+  });
+
+  it('leaves every preset tone on its own named channel', () => {
+    const presets = ['blue', 'red', 'green', 'gray', 'primary', 'success', 'warning', 'error'];
+    const { container } = render(
+      <ModernTimeline items={presets.map((color) => ({ color, children: color }))} />
+    );
+
+    const items = Array.from(container.querySelectorAll('[data-part="item"]')) as HTMLElement[];
+    expect(items.map((item) => item.getAttribute('data-tone'))).toEqual(presets);
+    items.forEach((item) => {
+      expect(item.style.getPropertyValue('--ds-timeline-dot-color')).toBe('');
+    });
+  });
+
+  it('falls back to the primary tone when no color is given', () => {
+    const { container } = render(<ModernTimeline items={[{ children: 'Plain' }]} />);
+    expect(container.querySelector('[data-part="item"]')).toHaveAttribute('data-tone', 'primary');
+  });
+});

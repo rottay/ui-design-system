@@ -157,6 +157,19 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
     [isInteractive, onClick]
   );
 
+  // An interactive avatar is exposed as a button, and a button must be named.
+  // Every source of a name can legitimately be absent: a photo-only avatar
+  // hides its `img` from AT (the decorative law above) and an empty fallback
+  // renders a decorative glyph, so the button reached AT unnamed. Caller copy
+  // wins, then the component catalogue's own avatar label.
+  const showsImage = Boolean(src) && !imageError;
+  const hasContentName = showsImage
+    ? Boolean(alt || name)
+    : Boolean(displayInitials || children);
+  const interactiveLabel = isInteractive && !hasContentName
+    ? (i18n?.tOr("avatar.image_alt", "Avatar") ?? "Avatar")
+    : undefined;
+
   // Ring color rides a custom property; the skin paints the frame, offset ring
   // and elevation shadow from it.
   const hasRing = Boolean(bordered || ring);
@@ -179,6 +192,7 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
       data-loaded={loaded ? "true" : undefined}
       data-interactive={isInteractive ? "true" : undefined}
       role={isInteractive ? "button" : undefined}
+      aria-label={interactiveLabel}
       tabIndex={isInteractive ? 0 : undefined}
       onClick={onClick}
       onKeyDown={handleKeyDown}

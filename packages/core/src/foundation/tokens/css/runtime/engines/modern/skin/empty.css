@@ -6,10 +6,19 @@
  * non-operable element is a false affordance; the only hover/focus paint an
  * empty state may carry belongs to the real controls slotted into its footer.
  *
- * Craft grammar: one quiet framed region (hairline border, flat tenant
- * surface, bounded rhythm), a single restrained accent in the visual well,
- * secondary-copy description, and an action tray that is a plain row of the
- * caller's own buttons — the tray is not a second boxed card.
+ * GROUND: none. Empty is a placeholder INSIDE something that already has a
+ * surface — a table body, a list well, a panel, a card. Painting its own
+ * border + radius + fill made every one of those a nested box, and the
+ * tinted ring around the icon made it two nested boxes. The region is now
+ * transparent and spends its whole budget on space and ink: the illustration
+ * is the single emphasis moment, the description is the support ink, and the
+ * action tray is a plain row of the caller's own buttons.
+ *
+ * The illustration size rides `--ds-empty-icon-size` (declared 48px in
+ * presentation/components/empty.css and, before this pass, read by nothing
+ * but the classic theme — the modern engine hardcoded 36/28 as an Icon
+ * prop). Consuming it here is what makes the illustration the emphasis and
+ * gives the declared channel a modern reader.
  *
  * DELIBERATELY UNLAYERED (P-47): layered rules sort before Tailwind preflight
  * and lose to it; unlayered paint outranks the reset and still yields to a
@@ -26,12 +35,7 @@
   align-items: center;
   justify-content: center;
   gap: var(--ds-empty-gap, var(--ds-spacing-md));
-  overflow: hidden;
   padding: var(--ds-empty-padding, clamp(var(--ds-spacing-lg), 4vw, var(--ds-spacing-2xl)));
-  border: var(--ds-empty-border-width, 1px) solid var(--ds-empty-border-color, var(--ds-color-border));
-  border-radius: var(--ds-empty-radius, var(--ds-radius-xl));
-  background: var(--ds-empty-surface, var(--ds-color-surface));
-  box-shadow: var(--ds-empty-shadow, none);
   color: var(--ds-color-text-primary);
   text-align: center;
   /* Container-driven compactness: the expansive posture (below) collapses to
@@ -55,26 +59,28 @@
   padding-block-end: var(--ds-empty-footer-padding, var(--ds-spacing-lg));
 }
 
-/* The visual well is the single accent the component spends: a calm tinted
-   tile with a hairline ring, no bloom shadow. */
+/* The visual slot reserves the illustration's space and nothing else — no
+   tile, no ring, no fill. It is a sizing box, not a surface. */
 .rottay-empty.rottay-empty--modern > .rottay-empty__visual[data-part='image'][data-part='image'] {
   display: grid;
-  inline-size: var(--ds-empty-visual-size, 4rem);
-  block-size: var(--ds-empty-visual-size, 4rem);
   place-items: center;
-  border: 1px solid var(--ds-empty-visual-border, color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border)));
-  border-radius: var(--ds-empty-visual-radius, var(--ds-radius-lg));
-  background: var(--ds-empty-visual-bg, color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-color-surface)));
-  color: var(--ds-empty-icon-color, var(--ds-color-primary));
+  color: var(--ds-empty-icon-color, var(--ds-color-text-secondary));
 }
 
-.rottay-empty.rottay-empty--modern[data-image='simple'] > .rottay-empty__visual[data-part='image'][data-part='image'] {
-  inline-size: var(--ds-empty-simple-visual-size, 3rem);
-  block-size: var(--ds-empty-simple-visual-size, 3rem);
-}
-
+/* The illustration is the one emphasis moment, so it is sized from the
+   declared channel rather than from the engine's Icon prop. A caller-supplied
+   ReactNode image is NOT force-sized: it owns its own dimensions. */
 .rottay-empty.rottay-empty--modern .rottay-empty__illustration[data-part='icon'] {
-  color: var(--ds-empty-icon-color, var(--ds-color-primary));
+  inline-size: var(--ds-empty-icon-size, 3rem);
+  block-size: var(--ds-empty-icon-size, 3rem);
+  color: var(--ds-empty-icon-color, var(--ds-color-text-secondary));
+}
+
+/* The compact variant scales the same single emphasis down; it does not
+   switch to a different grammar. */
+.rottay-empty.rottay-empty--modern[data-image='simple'] .rottay-empty__illustration[data-part='icon'] {
+  inline-size: var(--ds-empty-simple-icon-size, 2rem);
+  block-size: var(--ds-empty-simple-icon-size, 2rem);
 }
 
 .rottay-empty.rottay-empty--modern > .rottay-empty__description[data-part='description'][data-part='description'] {
@@ -116,25 +122,21 @@
     padding: var(--ds-empty-simple-padding, var(--ds-spacing-lg));
   }
 
-  .rottay-empty.rottay-empty--modern > .rottay-empty__visual[data-part='image'][data-part='image'] {
-    inline-size: var(--ds-empty-simple-visual-size, 3rem);
-    block-size: var(--ds-empty-simple-visual-size, 3rem);
+  .rottay-empty.rottay-empty--modern .rottay-empty__illustration[data-part='icon'] {
+    inline-size: var(--ds-empty-simple-icon-size, 2rem);
+    block-size: var(--ds-empty-simple-icon-size, 2rem);
   }
 }
 
-/* Forced colors: the tinted well collapses to Canvas and the 7%/22% mixes
-   vanish, so the frame and the illustration are re-asserted in system colors
-   — the placeholder must stay visible as a placeholder. */
+/* Forced colors: `--ds-empty-icon-color` is a resolved author color and is
+   dropped by the forced-colors palette, so the illustration is re-asserted in
+   system ink. There is no frame or fill left to restore. */
 @media (forced-colors: active) {
   .rottay-empty.rottay-empty--modern[data-part='root'][data-image] {
-    border-color: ButtonText;
-    background: Canvas;
     color: CanvasText;
   }
 
   .rottay-empty.rottay-empty--modern[data-image] > .rottay-empty__visual[data-part='image'] {
-    border-color: ButtonText;
-    background: Canvas;
     color: CanvasText;
   }
 }

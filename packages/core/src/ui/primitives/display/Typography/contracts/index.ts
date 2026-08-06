@@ -268,7 +268,19 @@ export interface TextProps extends BaseComponentProps, EngineAwareProps, Typogra
    * Allows semantic flexibility while maintaining consistent styling.
    * @default 'span'
    */
-  as?: 'span' | 'p' | 'div' | 'label' | 'strong' | 'em' | 'small' | 'code' | 's' | 'mark';
+  as?:
+    | 'span'
+    | 'p'
+    | 'div'
+    | 'label'
+    | 'strong'
+    | 'em'
+    | 'small'
+    | 'code'
+    | 's'
+    | 'mark'
+    | 'sub'
+    | 'sup';
 
   /** Native label association when `as="label"`. */
   htmlFor?: string;

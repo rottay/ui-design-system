@@ -114,3 +114,58 @@ describe('MarkdownView -- XSS safety', () => {
     );
   });
 });
+
+describe('MarkdownView -- onNavigate leaves browser gestures to the browser', () => {
+  const renderLink = () => {
+    const onNavigate = vi.fn();
+    const { container } = render(
+      <MarkdownView source="[go](https://x.com)" linkPolicy={{ onNavigate }} />,
+    );
+    return { onNavigate, anchor: container.querySelector('a')! };
+  };
+
+  it.each([
+    ['meta (open in a new tab)', { metaKey: true }],
+    ['ctrl (open in a new tab)', { ctrlKey: true }],
+    ['shift (open in a new window)', { shiftKey: true }],
+    ['alt (download)', { altKey: true }],
+    ['middle button (background tab)', { button: 1 }],
+  ])('does not hijack a %s click', (_label, init) => {
+    const { onNavigate, anchor } = renderLink();
+
+    const event = new MouseEvent('click', { bubbles: true, cancelable: true, ...init });
+    anchor.dispatchEvent(event);
+
+    // The anchor carries a real href; swallowing these left the user with a
+    // gesture that did nothing at all.
+    expect(onNavigate).not.toHaveBeenCalled();
+    expect(event.defaultPrevented).toBe(false);
+  });
+
+  it('still takes over a plain primary click and stops the navigation', () => {
+    const { onNavigate, anchor } = renderLink();
+
+    const event = new MouseEvent('click', { bubbles: true, cancelable: true, button: 0 });
+    anchor.dispatchEvent(event);
+
+    expect(onNavigate).toHaveBeenCalledWith('https://x.com');
+    expect(event.defaultPrevented).toBe(true);
+  });
+
+  it('keeps the real destination on the anchor so the UA can act on it', () => {
+    const { anchor } = renderLink();
+    expect(anchor).toHaveAttribute('href', 'https://x.com');
+    expect(anchor).toHaveAttribute('rel', 'noopener noreferrer');
+  });
+});
+
+describe('MarkdownView -- table header association', () => {
+  it('scopes every header cell to its column', () => {
+    const { container } = render(
+      <MarkdownView source={'| Name | Role |\n| --- | --- |\n| Ada | Author |'} />,
+    );
+    const headers = Array.from(container.querySelectorAll('th'));
+    expect(headers).toHaveLength(2);
+    headers.forEach((header) => expect(header).toHaveAttribute('scope', 'col'));
+  });
+});

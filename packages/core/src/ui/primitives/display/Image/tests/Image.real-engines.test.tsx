@@ -155,3 +155,98 @@ describe('Image real engine coverage', () => {
     });
   });
 });
+
+describe('Image modern — intrinsic sizing and space reservation', () => {
+  it('reserves the frame from a known pixel pair so the reveal costs no shift', () => {
+    const { container } = render(<ModernImage src="/p.jpg" alt="Photo" width={640} height={360} />);
+
+    const root = container.querySelector('.rottay-image--modern') as HTMLElement;
+    const img = container.querySelector('img') as HTMLImageElement;
+
+    expect(root.style.aspectRatio).toBe('640 / 360');
+    expect(img).toHaveAttribute('width', '640');
+    expect(img).toHaveAttribute('height', '360');
+  });
+
+  it('keeps CSS lengths off the width/height attributes', () => {
+    const { container } = render(
+      <ModernImage src="/p.jpg" alt="Photo" width="100%" height="12rem" />
+    );
+
+    const img = container.querySelector('img') as HTMLImageElement;
+    // The attributes take pixel integers only; '100%' reaching them made the
+    // UA read a bare 100 and hand the img a wrong intrinsic ratio.
+    expect(img).not.toHaveAttribute('width');
+    expect(img).not.toHaveAttribute('height');
+    // The CSS channel still carries them.
+    const root = container.querySelector('.rottay-image--modern') as HTMLElement;
+    expect(root.style.width).toBe('100%');
+    expect(root.style.height).toBe('12rem');
+    expect(root.style.aspectRatio).toBe('');
+  });
+
+  it('accepts pixel-suffixed and bare-number strings as intrinsic dimensions', () => {
+    const { container } = render(
+      <ModernImage src="/p.jpg" alt="Photo" width="800px" height="600" />
+    );
+    const img = container.querySelector('img') as HTMLImageElement;
+    expect(img).toHaveAttribute('width', '800');
+    expect(img).toHaveAttribute('height', '600');
+    expect((container.querySelector('.rottay-image--modern') as HTMLElement).style.aspectRatio)
+      .toBe('800 / 600');
+  });
+
+  it('lets an explicit aspectRatio win over the derived pair', () => {
+    const { container } = render(
+      <ModernImage src="/p.jpg" alt="Photo" width={640} height={360} aspectRatio="1 / 1" />
+    );
+    expect((container.querySelector('.rottay-image--modern') as HTMLElement).style.aspectRatio)
+      .toBe('1 / 1');
+  });
+
+  it('reserves nothing when only one dimension is known', () => {
+    const { container } = render(<ModernImage src="/p.jpg" alt="Photo" width={640} />);
+    const root = container.querySelector('.rottay-image--modern') as HTMLElement;
+    expect(root.style.aspectRatio).toBe('');
+    expect(container.querySelector('img')).not.toHaveAttribute('height');
+  });
+});
+
+describe('Image modern — pass-through honesty law', () => {
+  it('forwards id/aria-*/data-* to the frame it owns and keeps the engine part', () => {
+    const { container } = render(
+      <ModernImage
+        src="/p.jpg"
+        alt="Photo"
+        id="caller-image"
+        aria-describedby="caption-1"
+        data-testid="image-root"
+        data-custom="caller-data"
+      />
+    );
+
+    const root = container.querySelector('.rottay-image--modern') as HTMLElement;
+    expect(root).toHaveAttribute('id', 'caller-image');
+    expect(root).toHaveAttribute('aria-describedby', 'caption-1');
+    expect(root).toHaveAttribute('data-testid', 'image-root');
+    expect(root).toHaveAttribute('data-custom', 'caller-data');
+    expect(root).toHaveAttribute('data-part', 'root');
+  });
+
+  it('lets a composing owner name the root part', () => {
+    const { container } = render(
+      <ModernImage src="/p.jpg" alt="Photo" data-part="card-media" />
+    );
+    expect(container.querySelector('.rottay-image--modern')).toHaveAttribute('data-part', 'card-media');
+  });
+
+  it('never leaks non-DOM contract fields onto the frame', () => {
+    const { container } = render(
+      <ModernImage src="/p.jpg" alt="Photo" engine="modern" quality={80} blurDataURL="data:," />
+    );
+    const root = container.querySelector('.rottay-image--modern') as HTMLElement;
+    expect(root).not.toHaveAttribute('engine');
+    expect(root).not.toHaveAttribute('quality');
+    expect(root).not.toHaveAttribute('blurdataurl');
+  });
+});

@@ -754,6 +754,19 @@
     outline-offset: -2px;
   }
 
+  /* Unavailable cards carry their state in `opacity` and a disabled ink token,
+     and forced colors honours neither — the card re-read as fully live. The
+     system inactive colour is the only signal that survives (the same law the
+     Typography skin applies to a disabled link). It is placed after the
+     selected rule so an unavailable selected card still reads unavailable. */
+  .ds-card.ds-card--modern[data-part='root'][data-disabled='true'],
+  .ds-card.ds-card--modern[data-part='root'][data-disabled='true'] [data-part='title'],
+  .ds-card.ds-card--modern[data-part='root'][data-disabled='true'] [data-part='description'] {
+    border-color: GrayText;
+    color: GrayText;
+    outline-color: GrayText;
+  }
+
   .ds-card.ds-card--modern[data-part='root'][data-loading='true'] [data-part='loading-overlay'] {
     background: Canvas;
     backdrop-filter: none;

@@ -151,3 +151,53 @@ describe('Avatar modern advanced coverage', () => {
     expect(screen.getByText('JD')).toBeInTheDocument();
   });
 });
+
+describe('Avatar interactive accessible name', () => {
+  // An interactive avatar is exposed as a button, and every name source can be
+  // absent at once: a photo-only avatar hides its img from AT, and an empty
+  // fallback renders a decorative glyph.
+  it('names a photo-only clickable avatar that carries no alt or name', () => {
+    render(<ModernAvatar src="/user.jpg" onClick={vi.fn()} />);
+
+    expect(screen.getByRole('button', { name: 'Avatar' })).toBeInTheDocument();
+  });
+
+  it('names a clickable avatar with neither image nor initials', () => {
+    render(<ModernAvatar clickable onClick={vi.fn()} />);
+
+    expect(screen.getByRole('button', { name: 'Avatar' })).toBeInTheDocument();
+  });
+
+  it('prefers the caller name over the generic label', () => {
+    render(<ModernAvatar src="/user.jpg" name="Jane Doe" onClick={vi.fn()} />);
+
+    const button = screen.getByRole('button', { name: 'Jane Doe' });
+    expect(button).not.toHaveAttribute('aria-label');
+  });
+
+  it('lets rendered initials carry the name instead of the generic label', () => {
+    render(<ModernAvatar initials="AZ" onClick={vi.fn()} />);
+
+    const button = screen.getByRole('button', { name: 'AZ' });
+    expect(button).not.toHaveAttribute('aria-label');
+  });
+
+  it('falls back to the generic label once a named image fails to load', () => {
+    render(<ModernAvatar src="/broken.jpg" initials="AZ" onClick={vi.fn()} />);
+
+    // While the image renders it is the only content, and it is hidden from AT
+    // because no alt/name was given -- so the root must be labelled.
+    expect(screen.getByRole('button', { name: 'Avatar' })).toBeInTheDocument();
+
+    fireEvent.error(document.querySelector('[data-part="img"]') as HTMLImageElement);
+    // The fallback now paints real initials, which name the button on their own.
+    expect(screen.getByRole('button', { name: 'AZ' })).toBeInTheDocument();
+  });
+
+  it('leaves a non-interactive avatar unlabelled and out of the button role', () => {
+    render(<ModernAvatar src="/user.jpg" />);
+
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
+    expect(document.querySelector('[data-part="root"]')).not.toHaveAttribute('aria-label');
+  });
+});

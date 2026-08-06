@@ -14,11 +14,29 @@
 'use client';
 
 import React, { useRef } from 'react';
-import type { QRCodeProps } from '../../contracts';
+import type { QRCodeErrorLevel, QRCodeProps } from '../../contracts';
 import { QRCODE_DEFAULTS } from '../../contracts';
 import { EncodedQRCodeSymbol } from '../../runtime/encoded-symbol';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { StatusSuccessIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-success';
+
+/** Codeword recovery capacity per error-correction level (ISO/IEC 18004). */
+const RECOVERY_BUDGET: Record<QRCodeErrorLevel, number> = {
+  L: 0.07,
+  M: 0.15,
+  Q: 0.25,
+  H: 0.3,
+};
+
+/**
+ * The icon excavates center modules, so the symbol stays decodable only while
+ * the lost AREA fits the level's recovery budget -- hence the square root.
+ */
+function clampIconSize(iconSize: number, size: number, errorLevel: QRCodeErrorLevel): number {
+  if (!Number.isFinite(iconSize) || iconSize <= 0) return 0;
+  const budget = RECOVERY_BUDGET[errorLevel] ?? RECOVERY_BUDGET.M;
+  return Math.min(iconSize, Math.floor(size * Math.sqrt(budget)));
+}
 
 /**
  * Modern QRCode engine. Renders the shared standards-compliant Canvas/SVG
@@ -42,9 +60,15 @@ export default function ModernQRCode(props: QRCodeProps): React.ReactElement {
     onRefresh,
     className = '',
     style,
+    engine: _engine,
+    'data-part': dataPart,
+    // Caller passthrough (id / aria-* / data-* / data-testid): spreads BEFORE
+    // the engine's own stamps so the skin contract always lands last.
+    ...rest
   } = props;
 
   const paintOwnerRef = useRef<HTMLDivElement>(null);
+  const safeIconSize = clampIconSize(iconSize, size, errorLevel);
 
   // Status strings: translated when an I18nProvider is mounted, with the
   // documented English fallbacks otherwise (a missing catalog key echoes the
@@ -107,9 +131,10 @@ export default function ModernQRCode(props: QRCodeProps): React.ReactElement {
 
   return (
     <div
+      {...rest}
       className={`rottay-qrcode rottay-qrcode--modern ${className}`}
       style={containerInlineStyle}
-      data-part="root"
+      data-part={dataPart ?? 'root'}
       data-status={status}
       data-bordered={bordered ? 'true' : undefined}
     >
@@ -123,14 +148,15 @@ export default function ModernQRCode(props: QRCodeProps): React.ReactElement {
           bgColor={bgColor}
           errorLevel={errorLevel}
           icon={status === 'active' ? icon : undefined}
-          iconSize={iconSize}
+          iconSize={safeIconSize}
         />
-        {icon && status === 'active' && (
+        {icon && status === 'active' && safeIconSize > 0 && (
           <div
             data-part="icon"
-            // width/height ride the `iconSize` prop (runtime arithmetic, stays
-            // JS-bound); the padding is owned by the skin (K4-C single owner).
-            style={{ width: iconSize, height: iconSize }}
+            // width/height ride the clamped `iconSize` (runtime arithmetic,
+            // stays JS-bound) so the DS chrome tracks the excavated area
+            // exactly; the padding is owned by the skin (K4-C single owner).
+            style={{ width: safeIconSize, height: safeIconSize }}
           >
             <img
               src={icon}

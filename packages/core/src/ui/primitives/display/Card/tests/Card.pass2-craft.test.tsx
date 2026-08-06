@@ -267,3 +267,39 @@ describe('Card Pass 2 craft contract', () => {
     expect(skin).not.toContain("[data-cover-position='right']");
   });
 });
+
+describe('Card unavailable state under forced colors', () => {
+  const skin = readFileSync(modernSkinPath, 'utf-8');
+  const forcedColors = skin.slice(skin.indexOf('@media (forced-colors: active)'));
+
+  // The disabled card carries its state in `opacity` plus a disabled ink
+  // token, and forced colors honours neither -- the card read as fully live.
+  it('re-expresses the unavailable card in the system inactive colour', () => {
+    expect(forcedColors).toContain("[data-disabled='true']");
+    expect(forcedColors).toMatch(/\[data-disabled='true'\][\s\S]{0,400}?GrayText/);
+  });
+
+  it('carries the inactive signal into the card title and description', () => {
+    const rule = forcedColors.slice(forcedColors.indexOf("[data-disabled='true']"));
+    expect(rule).toContain("[data-part='title']");
+    expect(rule).toContain("[data-part='description']");
+  });
+
+  it('places the unavailable rule after selection so a selected card still reads inactive', () => {
+    expect(forcedColors.indexOf("[data-selected='true']")).toBeLessThan(
+      forcedColors.indexOf("[data-disabled='true']"),
+    );
+  });
+
+  it('still stamps the hook the rule selects on', () => {
+    const { container } = render(
+      <ModernCard disabled onClick={vi.fn()} title="Archived">
+        Body
+      </ModernCard>,
+    );
+
+    const root = container.querySelector('[data-part="root"]') as HTMLElement;
+    expect(root).toHaveAttribute('data-disabled', 'true');
+    expect(root.querySelector('[data-part="title"]')).not.toBeNull();
+  });
+});

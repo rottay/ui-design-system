@@ -118,8 +118,9 @@
   background: var(--ds-surface-card);
   color: var(--ds-color-text-primary);
   border-radius: 50%;
+  /* Ground and edge stay: the arrow floats over arbitrary slide art and must
+     stay legible. Elevation does not -- nothing rests raised except a tooltip. */
   border: 1px solid var(--ds-color-border);
-  box-shadow: var(--ds-elevation-1);
   inline-size: calc(var(--ds-carousel-arrow-size, 32px) * var(--ds-density-effective-scale));
   block-size: calc(var(--ds-carousel-arrow-size, 32px) * var(--ds-density-effective-scale));
   font-size: var(--ds-font-size-xs);
@@ -137,7 +138,6 @@
   .rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]:hover:not(:disabled) {
     border-color: color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-color-border));
     color: var(--ds-color-primary);
-    box-shadow: var(--ds-elevation-2);
   }
   .rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'][data-selected='false']:hover {
     background: var(--ds-surface-inset);

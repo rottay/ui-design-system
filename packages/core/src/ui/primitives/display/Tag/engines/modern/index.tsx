@@ -138,6 +138,12 @@ export default function ModernTag(props: TagProps): React.ReactElement {
     (event: React.KeyboardEvent<HTMLSpanElement>) => {
       if (!clickable || !onClick) return;
       if (event.key !== 'Enter' && event.key !== ' ') return;
+      // A clickable tag with a close control nests a real button inside a
+      // role="button" span. `handleClose` stops the mouse path, but a keyboard
+      // activation of the close button bubbles here as a plain keydown -- so
+      // Enter on "remove" used to remove AND activate the tag. The root is the
+      // only part this handler speaks for.
+      if (event.target !== event.currentTarget) return;
       event.preventDefault();
       onClick();
     },

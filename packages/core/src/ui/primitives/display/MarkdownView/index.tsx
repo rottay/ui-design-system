@@ -163,6 +163,25 @@ function renderInline(
   });
 }
 
+/**
+ * A click the host router may legally take over: primary button, no modifier,
+ * not already handled. Every other gesture is the user asking the BROWSER for
+ * something a router cannot do -- cmd/ctrl-click opens a tab, shift-click a
+ * window, middle-click a background tab, alt-click downloads. Intercepting
+ * those unconditionally is what silently broke them, since the anchor carries
+ * a real `href` the UA would otherwise honor.
+ */
+function isRouterClick(event: React.MouseEvent<HTMLAnchorElement>): boolean {
+  return (
+    event.button === 0 &&
+    !event.defaultPrevented &&
+    !event.metaKey &&
+    !event.ctrlKey &&
+    !event.shiftKey &&
+    !event.altKey
+  );
+}
+
 function renderLink(
   node: Extract<MarkdownInlineNode, { type: 'link' }>,
   policy: MarkdownLinkPolicy | undefined,
@@ -184,6 +203,7 @@ function renderLink(
       onClick={
         onNavigate
           ? (event: React.MouseEvent<HTMLAnchorElement>) => {
+              if (!isRouterClick(event)) return;
               event.preventDefault();
               onNavigate(safe);
             }
@@ -422,6 +442,10 @@ function renderBlocks(
                     <th
                       key={`${key}-h${cellIndex}`}
                       data-part="table-header-cell"
+                      // A GFM table header always labels its column; without
+                      // the association a screen reader reading a body cell
+                      // announces the value with no field name.
+                      scope="col"
                       style={{
                         // Null align defaults to logical start (UA centers th,
                         // which misaligns against the start-aligned body

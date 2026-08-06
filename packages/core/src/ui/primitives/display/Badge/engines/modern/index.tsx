@@ -418,7 +418,11 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
             {!dot && overlayValue}
           </button>
         ) : (
-          <span {...indicatorProps} aria-label={ariaLabel}>
+          // `aria-label` on a role-less generic span is discarded by browsers,
+          // so a caller naming a count/dot overlay ("3 unread") got silence.
+          // `role="img"` makes the label the element's whole accessible name --
+          // the same idiom the Avatar status dot uses for its presence label.
+          <span {...indicatorProps} role={ariaLabel ? 'img' : undefined} aria-label={ariaLabel}>
             {!dot && overlayValue}
           </span>
         )}

@@ -31,8 +31,23 @@ import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
  * @returns Resolved column count as a number
  */
 function resolveColumnCount(column: DescriptionsProps['column']): number {
-  if (typeof column === 'number') return column;
-  return column?.md ?? column?.lg ?? 3;
+  const raw = typeof column === 'number' ? column : (column?.md ?? column?.lg ?? 3);
+  // A zero/negative/fractional track count produces an invalid `repeat()`, so
+  // anything outside the usable range falls back to the contract default.
+  return Number.isFinite(raw) && raw >= 1 ? Math.floor(raw) : 3;
+}
+
+/**
+ * Clamps an item's `span` to the row's track count.
+ *
+ * `span` is caller data and the contract does not bound it. CSS grid grows
+ * IMPLICIT columns to fit a span wider than the explicit track list, so one
+ * `span={5}` item in a 3-column grid silently re-tracks the whole list and
+ * every other row inherits the skew.
+ */
+function clampSpan(span: number | undefined, columnCount: number): number {
+  if (typeof span !== 'number' || !Number.isFinite(span)) return 1;
+  return Math.min(Math.max(Math.floor(span), 1), columnCount);
 }
 
 /**
@@ -130,7 +145,7 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
             >
               {itemElements.map((child, index) => {
                 const itemProps = child.props as DescriptionsItemProps;
-                const span = itemProps.span || 1;
+                const span = clampSpan(itemProps.span, columnCount);
 
                 return (
                   <div
@@ -178,7 +193,7 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
                     className="rottay-descriptions-row"
                     data-part="row"
                     data-index={index}
-                    data-span={itemProps.span || 1}
+                    data-span={clampSpan(itemProps.span, columnCount)}
                     role="listitem"
                   >
                     <dt

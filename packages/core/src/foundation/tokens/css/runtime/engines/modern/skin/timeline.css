@@ -99,7 +99,9 @@
 .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'] > [data-part='content'] {
   margin: var(--ds-spacing-1);
   min-inline-size: 0;
-  overflow-wrap: break-word;
+  /* `anywhere`, not `break-word`: only the former lowers min-content, and the
+     track is sized from it. */
+  overflow-wrap: anywhere;
   color: var(--ds-timeline-content-color, var(--ds-text-primary, var(--ds-color-text-primary)));
 }
 .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'] > [data-part='content'][data-side='start'] {
@@ -202,6 +204,16 @@
 }
 .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-tone='error'] > [data-part='dot'] > [data-part='dot-marker'] {
   background: var(--ds-timeline-color-error, var(--ds-color-error));
+}
+/* ---- off-preset tone: the contract types `color` as
+        `TimelineItemColor | string`, so a caller may hand the item a raw CSS
+        color. The engine routes those to `custom` and publishes the value on
+        `--ds-timeline-dot-color`; without this the node fell back to the
+        primary fill and the caller's color painted NOTHING. Ties with the
+        preset rules at (0,7,0) and wins on source order -- it can only match
+        when the engine chose `custom`, which no preset ever is. ---- */
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-tone='custom'] > [data-part='dot'] > [data-part='dot-marker'] {
+  background: var(--ds-timeline-dot-color, var(--ds-color-primary));
 }
 
 /* ---- state law (B1.4/B1.5): semantic tones never ride hue alone. Success,

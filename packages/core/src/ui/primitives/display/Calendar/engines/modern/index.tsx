@@ -296,7 +296,18 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
   const [focusedDate, setFocusedDate] = useState<Date | null>(null);
   const [focusedMonthIndex, setFocusedMonthIndex] = useState<number | null>(null);
 
-  const anchorDate = focusedDate
+  // Header navigation (prev/next month or year) moves the page without
+  // touching the roving stop, so a keyboard-focused date can fall off the
+  // rendered grid. A stop pinned to an unrendered date is no stop at all --
+  // every cell would carry tabIndex -1 and the grid would be unreachable by
+  // Tab. Only a focused date inside the viewed month may anchor it; otherwise
+  // the chain below re-anchors on the selection, today, or the 1st.
+  const focusedDateInView =
+    focusedDate && focusedDate.getFullYear() === viewYear && focusedDate.getMonth() === viewMonth
+      ? focusedDate
+      : null;
+
+  const anchorDate = focusedDateInView
     ?? (isSameDay(currentDate, new Date(viewYear, viewMonth, currentDate.getDate())) ? currentDate : null)
     ?? (today.getFullYear() === viewYear && today.getMonth() === viewMonth ? today : null)
     ?? new Date(viewYear, viewMonth, 1);

@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
@@ -159,5 +161,68 @@ describe('Typography modern advanced engine coverage', () => {
     expect(disabledLink).toHaveAttribute('aria-disabled', 'true');
     expect(disabledLink).toHaveAttribute('rel', 'external');
     expect(disabledLink).not.toHaveAttribute('href');
+  });
+});
+
+describe('Typography inline semantics: sub, sup and selection', () => {
+  const SKIN = readFileSync(
+    resolve(
+      __dirname,
+      '../../../../../foundation/tokens/css/runtime/engines/modern/skin/typography.css'
+    ),
+    'utf8'
+  );
+
+  it('accepts sub and sup so a footnote marker needs no raw element', () => {
+    render(
+      <ModernText as="sup" data-testid="marker">
+        1
+      </ModernText>
+    );
+
+    const marker = screen.getByTestId('marker');
+    expect(marker.tagName).toBe('SUP');
+    expect(marker).toHaveClass('rottay-typography--modern');
+  });
+
+  it('renders sub through the same governed scope', () => {
+    render(
+      <ModernText as="sub" data-testid="index">
+        2
+      </ModernText>
+    );
+
+    expect(screen.getByTestId('index').tagName).toBe('SUB');
+  });
+
+  // The UA pair (vertical-align: sub|super + font-size: smaller) grows the line
+  // box, so one marker opens a gap in the leading of the paragraph around it.
+  it('keeps sub and sup out of the line-box calculation', () => {
+    const rule = SKIN.slice(SKIN.indexOf(':is(sub, sup)'));
+    const body = rule.slice(0, rule.indexOf('}'));
+
+    expect(body).toContain('position: relative');
+    expect(body).toContain('vertical-align: baseline');
+    expect(body).toContain('line-height: 0');
+    expect(body).not.toContain('font-size: smaller');
+  });
+
+  it('offsets each on its own logical axis through a tenant channel', () => {
+    expect(SKIN).toMatch(/:is\(sup\)[\s\S]{0,120}inset-block-end:\s*var\(--ds-type-sup-offset/);
+    expect(SKIN).toMatch(/:is\(sub\)[\s\S]{0,120}inset-block-start:\s*var\(--ds-type-sub-offset/);
+    expect(SKIN).not.toMatch(/:is\(sub, sup\)[\s\S]{0,200}(top|bottom):/);
+  });
+
+  // ::selection does not inherit, so nested emphasis inside a governed
+  // paragraph fell back to the UA blue mid-sentence.
+  it('tints selection on descendants, not just the element itself', () => {
+    const rule = SKIN.match(
+      /^\.rottay-typography[^{}]*::selection[^{]*\{[^}]*\}/m,
+    )?.[0];
+
+    expect(rule).toBeDefined();
+    expect(rule).toContain('.rottay-typography--modern::selection');
+    expect(rule).toContain('.rottay-typography--modern *::selection');
+    expect(rule).toContain('--ds-type-selection-bg');
   });
 });

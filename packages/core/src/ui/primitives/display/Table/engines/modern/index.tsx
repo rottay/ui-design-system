@@ -46,6 +46,7 @@ import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/ge
 /** Row-shaped skeleton placeholders rendered while the first page loads. */
 const SKELETON_ROW_COUNT = 4;
 
+
 /**
  * Modern Table engine painted by the modern skin (`table.css`).
  *
@@ -149,6 +150,18 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
   // passing `headerBordered={false}` is the only way to reach a fully
   // borderless table. The skin paints the hairline keyed on `data-hairline`.
   const showHeaderHairline = bordered || headerBordered;
+
+  // ---- grid position contract ----
+  // `role="grid"` describes the WHOLE set, but the DOM holds one page (and,
+  // when virtualized, one window of that page). Without a declared row count
+  // and per-row index, assistive tech reports "row 3 of 10" on page 4 of 900
+  // records -- it can only count what is mounted. Both are omitted when the
+  // DOM already holds every row, which is what the spec asks for.
+  const headerRowCount = showHeader ? headerRows.length + (hasFilters ? 1 : 0) : 0;
+  const pageOffset = pagination !== false ? (currentPage - 1) * pageSize : 0;
+  const isPartialGrid = displayData.length < totalItems;
+  const gridRowIndex = (indexInPage: number) =>
+    isPartialGrid ? headerRowCount + pageOffset + indexInPage + 1 : undefined;
 
   const getColumnWidth = (col: ColumnType<T>): number | string | undefined => {
     const field = columnFieldKey(col) || String(col.key);
@@ -395,7 +408,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
   const renderFilterRow = () => {
     if (!hasFilters) return null;
     return (
-      <tr data-part="filter-row">
+      <tr data-part="filter-row" aria-rowindex={isPartialGrid ? headerRows.length + 1 : undefined}>
         {rowSelection && <th data-part="filter-spacer" data-hairline={showHeaderHairline ? 'true' : undefined} />}
         {showExpandCol && <th data-part="filter-spacer" data-hairline={showHeaderHairline ? 'true' : undefined} />}
         {leafColumns.map((col, i) => {
@@ -503,6 +516,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
         <Fragment key={key}>
           <tr
             className={rowClass || undefined}
+            aria-rowindex={gridRowIndex(actualIndex)}
             data-part="row"
             data-selected={isSelected ? 'true' : undefined}
             data-hoverable={rowHoverable ? 'true' : undefined}
@@ -650,6 +664,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
       data-bordered={bordered ? 'true' : undefined}
       data-size={sizeKey}
       aria-busy={isLoading || undefined}
+      aria-rowcount={isPartialGrid ? headerRowCount + totalItems : undefined}
       style={{
         // The table's own width is a projection of the consumer's `scroll.x`
         // contract, and `tableLayout` is a direct prop -- both stay inline.
@@ -672,7 +687,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
       {showHeader && (
         <thead>
           {headerRows.map((row, rowIndex) => (
-            <tr key={rowIndex}>
+            <tr key={rowIndex} aria-rowindex={isPartialGrid ? rowIndex + 1 : undefined}>
               {/* Expand + Selection header cells only on first header row */}
               {rowIndex === 0 && showExpandCol && (
                 <th
@@ -758,7 +773,11 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
   );
 
   return (
-    <div className={['ds-table', 'ds-table--modern', className].filter(Boolean).join(' ')} style={style} id={id}>
+    <div
+      className={['ds-table', 'ds-table--modern', className].filter(Boolean).join(' ')}
+      style={style}
+      id={id}
+    >
       {/* Title */}
       {title && (
         <div data-part="title">

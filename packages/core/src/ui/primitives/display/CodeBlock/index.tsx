@@ -311,6 +311,18 @@ export function CodeBlock({
                     background: highlighted
                       ? 'var(--ds-code-block-line-highlight-bg, color-mix(in srgb, var(--ds-color-warning) 14%, transparent))'
                       : undefined,
+                    // The wash is the only thing that carried `highlightLines`,
+                    // and forced-colors strips backgrounds -- emphasis vanished
+                    // in exactly the mode that needs it most, and never reached
+                    // a monochrome reader at all. A leading rail is geometry, so
+                    // it survives both. Every line reserves the same rail width
+                    // (transparent when unhighlighted) so marking a line never
+                    // shifts the code by a pixel.
+                    borderInlineStart: `var(--ds-code-block-line-highlight-rail-width, 2px) solid ${
+                      highlighted
+                        ? 'var(--ds-code-block-line-highlight-rail, var(--ds-color-warning))'
+                        : 'transparent'
+                    }`,
                     whiteSpace: wrap ? 'pre-wrap' : 'pre',
                     wordBreak: wrap ? 'break-word' : undefined,
                   }}

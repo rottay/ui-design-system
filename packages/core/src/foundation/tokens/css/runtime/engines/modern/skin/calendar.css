@@ -93,10 +93,9 @@
  */
 
 .rottay-calendar.rottay-calendar--modern[data-part='root'] {
-  background: var(--ds-surface-card);
-  /* W10: the panel edge. A hairline + tenant-scaled radius make the calendar
-     read as ONE surface on canvases where surface-card == page bg (the old
-     borderless card dissolved into the page). */
+  /* No ground: a display primitive sits ON a surface, it does not bring one.
+     The date grid is a real region boundary, so it keeps a hairline edge and
+     the tenant-scaled radius -- an edge, not a card. */
   border: 1px solid var(--ds-calendar-border, var(--ds-color-border-subtle));
   border-radius: var(--ds-calendar-radius, var(--ds-radius-lg));
   /* Drained layout (the former live `p-4` / `w-full` / `w-80` utilities):

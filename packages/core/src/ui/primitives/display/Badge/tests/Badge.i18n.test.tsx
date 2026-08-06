@@ -122,9 +122,12 @@ describe('Badge modern i18n (R2+R3)', () => {
     expect(screen.getByRole('button', { name: 'Sincronizando' })).toBeDisabled();
   });
 
-  it('paints the optical highlight from the white token channel, never a bare literal', () => {
+  it('paints the optical highlight from a mode-adaptive channel, never a literal or a fixed white', () => {
+    // Supersedes the earlier white-token rule: a token that is white in every
+    // mode still blows the chip out on a dark theme, so the specular now rides
+    // the tenant's elevated surface.
     expect(modernSkin).not.toMatch(/color-mix\(in srgb, white /);
-    expect(modernSkin).toContain('var(--ds-color-white)');
-    expect(modernSkin).not.toContain('var(--ds-color-white, white)');
+    expect(modernSkin).not.toContain('--ds-color-white');
+    expect(modernSkin).toContain('--ds-badge-specular, var(--ds-color-bg-elevated)');
   });
 });

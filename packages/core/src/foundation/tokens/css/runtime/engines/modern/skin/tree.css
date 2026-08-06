@@ -118,6 +118,9 @@
   position: relative;
   display: inline-flex;
   min-inline-size: 0;
+  /* Shrink-to-fit resolves against max-content, so a nowrap label widened the
+     row past its own node and the document with it. */
+  max-inline-size: 100%;
   align-items: center;
   /* B4-04: the fallback padding splits into the private proto axes so row
      rhythm scales with the governed density authority. An explicit
@@ -153,9 +156,9 @@
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-selected='true'] {
   background: var(--ds-tree-node-bg-selected, color-mix(in srgb, var(--ds-color-primary) 10%, transparent));
   color: var(--ds-tree-node-color-selected, var(--ds-color-primary));
+  /* The selected node is the tree's one emphasis moment: tint, ink and weight
+     carry it. A frame on top turned every selection into a small card. */
   font-weight: var(--ds-tree-node-font-weight-selected, var(--ds-font-weight-medium));
-  box-shadow: inset 0 0 0 1px
-    var(--ds-tree-node-frame-selected, color-mix(in srgb, var(--ds-color-primary) 34%, transparent));
 }
 
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-drop-target][data-drop-position='inside'] {
@@ -199,11 +202,10 @@
     color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
 }
 
-/* Selected AND focused: the frame and the ring compose. */
+/* Selected AND focused: the focus ring alone, over the selected tint. */
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-selected='true'][data-focused='true'] {
-  box-shadow:
-    inset 0 0 0 1px var(--ds-tree-node-frame-selected, color-mix(in srgb, var(--ds-color-primary) 34%, transparent)),
-    0 0 0 var(--ds-focus-ring-width) color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
+  box-shadow: 0 0 0 var(--ds-focus-ring-width)
+    color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
 }
 
 /* Keyboard reachability: the roving tab stop lands DOM focus on the row

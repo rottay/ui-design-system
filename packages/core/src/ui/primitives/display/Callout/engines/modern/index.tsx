@@ -71,6 +71,8 @@ export default function ModernCallout(props: CalloutProps): React.ReactElement |
   // Uncontrolled dismiss state -- once closed, the node is removed from the tree
   const [visible, setVisible] = useState(true);
 
+  const isUrgent = variant === 'warning' || variant === 'error';
+
   if (!visible) return null;
 
   const handleClose = () => {
@@ -80,8 +82,8 @@ export default function ModernCallout(props: CalloutProps): React.ReactElement |
 
   return (
     <div
-      className={`rottay-callout-shell rottay-callout-shell--modern ${className}`}
-      role="alert"
+      className={`rottay-callout-shell rottay-callout-shell--modern ${className}`.trim()}
+      role={isUrgent ? 'alert' : 'status'}
       data-part="root"
       data-tone={variant}
       data-has-title={Boolean(title)}

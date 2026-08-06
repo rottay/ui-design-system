@@ -95,7 +95,17 @@
   width: var(--ds-spacing-24);
 }
 
-/* ---- loading skeleton bars (height/width/margin stay inline) ---- */
+@keyframes ds-statistic-skeleton-sweep {
+  from { background-position: 120% 0; }
+  to { background-position: -120% 0; }
+}
+
+/* ---- loading skeleton bars. The 180% gradient exists to TRAVEL: without a
+        background-position animation it rendered as a static off-centre
+        smear, so the bars only ever carried the root's opacity pulse. The
+        sweep is the Card skeleton's keyframe shape and duration channel, and
+        the reduced-motion block below drops both the travel and the
+        gradient (never leaving a frozen highlight mid-bar). ---- */
 .rottay-statistic.rottay-statistic--modern[data-part='root'] > [data-part='skeleton-line'] {
   background: var(
     --ds-statistic-loading-bg,
@@ -110,6 +120,9 @@
   border-radius: var(--ds-radius-sm);
   box-shadow: inset 0 1px 0
     color-mix(in srgb, var(--ds-color-bg-elevated) 66%, transparent);
+  animation: ds-statistic-skeleton-sweep
+    var(--ds-statistic-skeleton-duration, var(--ds-motion-glacial))
+    var(--ds-motion-ease-in-out) infinite;
 }
 
 /* ---- value: trend color. The unqualified rule carries the `default` value
@@ -233,6 +246,13 @@
   }
   .rottay-statistic.rottay-statistic--modern[data-part='root'][data-loading='true'] {
     animation: none;
+  }
+  /* The travel stops; the gradient stays. `--ds-statistic-loading-bg` is a
+     whole-`background` channel, so blanking the image here would erase a
+     tenant's entire skeleton fill. */
+  .rottay-statistic.rottay-statistic--modern[data-part='root'] > [data-part='skeleton-line'] {
+    animation: none;
+    background-position: 0 0;
   }
 }
 

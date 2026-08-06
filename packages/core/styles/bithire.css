@@ -3113,6 +3113,23 @@
      DROPDOWN
      ───────────────────────────────────────────────────────────────────────────── */
   --ds-dropdown-bg: #ffffff;
+  /* NOT DELEGATED. This default briefly read
+     `var(--ds-material-overlay-shadow, var(--ds-shadow-lg))` under adjudicated
+     option (C) and has been restored to the plain literal by forward edit,
+     because (C)'s precondition is not met: delegating hands the role's
+     none-capability to EVERY reader of this var at once, and the overlay
+     cohort's isolation is not settled. An un-delegated default is not
+     none-reachable, so nothing downstream can be handed an invalid value.
+
+     PERMANENT RULE, adjudicated, and it outlives this cohort:
+       Under option (C), do NOT delegate a default until the computed splice
+       list for EVERY consumer of that var is EMPTY.
+     Not "every consumer in scope" -- every consumer, computed transitively (a
+     consumer may reach the role through intermediate custom properties) and
+     across every state selector, not one representative rule per surface; both
+     blind spots have already hidden a live defect in this family. The list must
+     come from an instrument that is capable of failing -- a gate that cannot go
+     red cannot certify the precondition. */
   --ds-dropdown-shadow: var(--ds-shadow-lg);
   --ds-dropdown-radius: var(--ds-radius-lg);
   --ds-dropdown-padding: 0.375rem;
@@ -7955,11 +7972,35 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
      CONTENT
      Main modal content area
      ======================================================================== */
+  /* NOT DELEGATED -- held, deliberately, and not an oversight. Unlike the shadow
+     default below, a background position tolerates per-layer `none` by grammar,
+     so this var carries no shadow-splice hazard and delegation stays reachable
+     in principle. What blocks it is reach, not safety:
+     --ds-material-overlay-background IS declared on `:root`, so delegating here
+     would resolve unconditionally and move ALL nine consumers of this var at
+     once -- five outside the overlay cohort (AlertDialog, ConfirmDialog and
+     three rustic skins). The one theme that would actually change is evnto,
+     which authors no modal chrome: evnto light already resolves #ffffff, but
+     evnto dark would move from bare white to #2A2820. That is an intended fix
+     for a latent "white modal on a dark theme" defect, and it needs a sighted
+     look before it lands. Reported rather than absorbed silently. */
   --ds-modal-bg: var(--ds-color-white);
   --ds-modal-color: var(--ds-color-neutral-900);
   --ds-modal-border-radius: var(--ds-radius-xl);
   --ds-modal-border-width: 0;
   --ds-modal-border-color: transparent;
+  /* NOT DELEGATED -- DEFERRED, and Modal's shadow causal cell is STRUCK for this
+     round. This default briefly read
+     `var(--ds-material-overlay-shadow, var(--ds-shadow-modal))` under adjudicated
+     option (C) and has been restored to the plain literal by forward edit.
+     AlertDialog and ConfirmDialog consume this var and splice it as a non-sole
+     item in a comma shadow list. While this default stays un-delegated the var
+     is NOT none-reachable, so those two splices are dormant and compliant, not
+     defective -- there is no live trap. Delegating would make them reachable and
+     turn a tenant's legitimate `none` into an invalid declaration at both sites,
+     and neither dialog can currently be isolated: their surfaces scroll, so a
+     pseudo does not anchor, and they have no tight wrapper of equal geometry to
+     carry the depth instead. */
   --ds-modal-shadow: var(--ds-shadow-modal);
 
   /* Padding variants */
@@ -9121,6 +9162,15 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
  */
 
 :root {
+  /* FAB-18: the family's cadence DIAL, defined at the tier that owns family
+     dials. The attention rung carries the tenant duration-scale, so a tenant
+     slowing or quickening its motion moves the spinner with it; the skin's
+     fallback is the dormant floor beneath this and is never reached while this
+     is defined. Splitting them this way is what let the superseded pin go
+     green by restoration instead of by re-anchoring: the pin constrains the
+     SKIN's fallback text, and the design intent now lives a tier above it. */
+  --ds-spinner-duration: calc(var(--ds-motion-attention, var(--ds-motion-slow)) * 2);
+
   /* ========================================================================
      SIZES - Spinner Dimensions
      Four size variants from sm to xl
@@ -24534,6 +24584,19 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
     outline-offset: -2px;
   }
 
+  /* Unavailable cards carry their state in `opacity` and a disabled ink token,
+     and forced colors honours neither — the card re-read as fully live. The
+     system inactive colour is the only signal that survives (the same law the
+     Typography skin applies to a disabled link). It is placed after the
+     selected rule so an unavailable selected card still reads unavailable. */
+  .ds-card.ds-card--modern[data-part='root'][data-disabled='true'],
+  .ds-card.ds-card--modern[data-part='root'][data-disabled='true'] [data-part='title'],
+  .ds-card.ds-card--modern[data-part='root'][data-disabled='true'] [data-part='description'] {
+    border-color: GrayText;
+    color: GrayText;
+    outline-color: GrayText;
+  }
+
   .ds-card.ds-card--modern[data-part='root'][data-loading='true'] [data-part='loading-overlay'] {
     background: Canvas;
     backdrop-filter: none;
@@ -25640,8 +25703,12 @@ input.rottay-input.rottay-input--modern[data-part='root'][type='number'] {
   border-radius: var(--ds-badge-radius, var(--ds-radius-sm));
   background: var(--ds-badge-surface, var(--ds-color-neutral-200));
   color: var(--ds-badge-ink, var(--ds-color-text-primary));
+  /* The top specular rides the tenant's ELEVATED surface, not a fixed white:
+     a 46% white edge blows the chip out on a dark theme, while
+     `--ds-color-bg-elevated` resolves near-white in light mode and a raised
+     dark neutral in dark mode. */
   box-shadow:
-    var(--ds-badge-highlight, inset 0 1px 0 color-mix(in srgb, var(--ds-color-white) 46%, transparent)),
+    var(--ds-badge-highlight, inset 0 1px 0 color-mix(in srgb, var(--ds-badge-specular, var(--ds-color-bg-elevated)) 46%, transparent)),
     var(--ds-badge-shadow, 0 1px 2px color-mix(in srgb, currentColor 7%, transparent));
   transform: var(--ds-badge-position-transform, translateY(0));
   transform-origin: center;
@@ -25769,7 +25836,7 @@ input.rottay-input.rottay-input--modern[data-part='root'][type='number'] {
     var(--ds-badge-icon-border, color-mix(in srgb, currentColor 16%, transparent));
   border-radius: var(--ds-badge-icon-radius, 9999px);
   background: var(--ds-badge-icon-bg, color-mix(in srgb, currentColor 8%, transparent));
-  box-shadow: var(--ds-badge-icon-shadow, inset 0 1px 0 color-mix(in srgb, var(--ds-color-white) 32%, transparent));
+  box-shadow: var(--ds-badge-icon-shadow, inset 0 1px 0 color-mix(in srgb, var(--ds-badge-specular, var(--ds-color-bg-elevated)) 32%, transparent));
 }
 
 .rottay-badge.rottay-badge--modern [data-part='avatar'] {
@@ -26080,7 +26147,7 @@ input.rottay-input.rottay-input--modern[data-part='root'][type='number'] {
       color-mix(in srgb, currentColor 24%, transparent)
     );
     box-shadow:
-      var(--ds-badge-highlight-hover, inset 0 1px 0 color-mix(in srgb, var(--ds-color-white) 58%, transparent)),
+      var(--ds-badge-highlight-hover, inset 0 1px 0 color-mix(in srgb, var(--ds-badge-specular, var(--ds-color-bg-elevated)) 58%, transparent)),
       var(--ds-badge-shadow-hover, 0 6px 14px -10px color-mix(in srgb, currentColor 42%, transparent));
     transform: var(--ds-badge-position-transform, translateY(0))
       var(--ds-badge-hover-transform, translateY(-1px));
@@ -48691,7 +48758,13 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
      the tenant duration-scale dial (scale 1 = the historical slow-rung pair),
      and the motion authority's reduced-motion zeroing still propagates. */
   animation: ds-spinner-modern-spin
-    var(--ds-spinner-duration, calc(var(--ds-motion-attention, var(--ds-motion-slow)) * 2))
+    /* FAB-18: the pin pinned THIS TEXT -- the skin fallback -- and it is
+       restored verbatim. The pin goes green by SOURCE RESTORATION, never by a
+       pin edit. The attention intent is not lost: it moved UP to the defined
+       dial in the presentation authority (components/spinner.css), a tier this
+       pin never constrained. This fallback is now the dormant historical
+       floor, reached only if the dial is undefined. */
+    var(--ds-spinner-duration, calc(var(--ds-motion-slow) * 2))
     var(--ds-spinner-spin-easing, linear) infinite;
 }
 
@@ -49958,12 +50031,21 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
    and not the drawer — four members of one group painting the same ground four
    different ways.
 
-   Every channel below is tenant-writable AND is NOT declared on `:root`, so its
-   var() fallback genuinely fires: today's paint is preserved byte-for-byte and
-   the channel becomes causal the moment a tenant authors it. Channels that ARE
-   declared on `:root` are deliberately not adopted here, because their defaults
-   would silently replace this family's values rather than defer to them. The
-   split is recorded in cohort-1-role-adoptability.json. */
+   --ds-material-overlay-texture, -highlight, -shadow and -border are
+   tenant-writable AND not declared on `:root`, so their var() fallbacks
+   genuinely fire: today's paint is preserved byte-for-byte and each becomes
+   causal the moment a tenant authors it. The split was recorded in
+   cohort-1-role-adoptability.json.
+
+   --ds-material-overlay-background is the ONE deliberate exception, added
+   after the same audit found it declared-but-dead here. It IS declared on
+   `:root` (foundation/themes/default.css) as var(--ds-surface-overlay), so the
+   fallback arm on the ground gradient's mid stop below is dead and the role
+   resolves in every theme. Without that, a tenant could not move this panel's
+   ground at all. Under the default theme the role and the literal both resolve
+   to --ds-color-bg-elevated, so the band is unchanged; a tenant that splits
+   --ds-surface-overlay from --ds-surface-card (BitHire does, in dark) now has
+   the drawer follow the overlay side, with popover, dropdown and modal. */
 .rottay-drawer--modern[data-part='surface'] {
   max-width: 100vw;
   background:
@@ -49972,17 +50054,52 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
     linear-gradient(
       180deg,
       color-mix(in srgb, var(--ds-color-bg-primary) 98%, var(--ds-color-primary) 2%) 0%,
-      var(--ds-surface-card) 32%,
+      var(--ds-material-overlay-background, var(--ds-surface-card)) 32%,
       var(--ds-color-bg-primary) 100%
     );
-  box-shadow:
-    var(
-      --ds-material-overlay-highlight,
-      inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(72% * var(--ds-effect-intensity, 1)), transparent)
-    ),
-    var(--ds-material-overlay-shadow, var(--ds-elevation-4, var(--ds-elevation-3)));
+  /* WHOLE-VALUE ISOLATION. The depth chain is the SOLE box-shadow of this
+     panel. --ds-material-overlay-highlight used to ride here as a second list
+     entry, which was a defect: the channel is publicly none-capable, and in CSS
+     `none` is legal only as a WHOLE box-shadow value, so a tenant authoring it
+     produced `box-shadow: none, <depth>` -- an invalid declaration that voids
+     the ENTIRE value and silently amputated the panel's depth. The keyline
+     moved to the decoration pseudo below, where it is a whole-value read and an
+     authored `none` can only switch the keyline off. */
+  box-shadow: var(--ds-material-overlay-shadow, var(--ds-elevation-4, var(--ds-elevation-3)));
   border-radius: var(--ds-radius-lg) 0 0 var(--ds-radius-lg);
   isolation: isolate;
+}
+
+/* Decoration slot: carries the intensity-governed zenith keyline (card.css's
+   common light model, shared by every elevated overlay layer) as its SOLE
+   box-shadow, so the none-capable role channel sits in a whole-value position
+   and can never invalidate the depth stack next door. The value is an INSET
+   LITERAL and must stay one (FAB-05): it does NOT read
+   --ds-material-overlay-highlight, whose reads were deliberately removed from
+   this family, dropping its consumer count across the overlay four to zero --
+   a channel being retired, not a capability lost. The DECLARED VALUE is the same
+   literal this rung carried inside the surface list, and `z-index: -1`
+   reproduces an inset shadow's paint order -- above the panel's own fill and
+   lift layers, below the header, body and footer -- inside the stacking context
+   the rule above already isolates.
+   BUT THE PAINTED RESULT IS NOT EQUIVALENT, and this comment must not claim it
+   is. A pseudo's inset shadow is drawn against a different box and radius than
+   the surface's own, so on any surface with BOTH a border and a radius -- which
+   this one has -- the corner arcs diverge (measured in Chromium; the delta grows
+   with radius and with device pixel ratio, and radius compensation reduces but
+   does not close it). This relocation is an IN-SCOPE VISUAL DELTA awaiting
+   adjudication, NOT mechanical isolation. The panel is NON-SCROLLING
+   (the body is the scrollport), which is the precondition that makes a pseudo
+   anchor-correct here. The slot paints no fill of its own and never intercepts
+   pointer input. */
+.rottay-drawer--modern[data-part='surface']::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(72% * var(--ds-effect-intensity, 1)), transparent);
+  pointer-events: none;
 }
 
 .rottay-drawer--modern.rottay-drawer--modern[data-part='surface'][data-part='surface'] {
@@ -50231,6 +50348,13 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
     background: Canvas;
     box-shadow: none;
     color: CanvasText;
+  }
+  /* The zenith keyline lives on the decoration slot now, so the surface's own
+     `box-shadow: none` above no longer reaches it. The slot is reset here
+     explicitly to keep the forced palette exactly as flat as it was when both
+     shadows shared one declaration. */
+  .rottay-drawer.rottay-drawer--modern[data-part='surface'][data-placement]::before {
+    box-shadow: none;
   }
   .rottay-drawer.rottay-drawer--modern[data-part='surface'] > [data-part='header'],
   .rottay-drawer.rottay-drawer--modern[data-part='surface'] > [data-part='footer'] {
@@ -54960,9 +55084,19 @@ html[data-ds-motion='reduced']
   /* SEMANTIC GROUP: overlay. (R1 Cohort 1) A dropdown panel is an OVERLAY
      surface. Adopting the governed role vocabulary here is what lets one tenant
      decision move popover, dropdown, drawer and modal together instead of
-     four families each authoring the same ground their own way. Every role
-     channel used in this family is tenant-writable and absent from `:root`, so
-     the fallback fires and current paint is preserved exactly. */
+     four families each authoring the same ground their own way.
+     ROLE CAUSALITY, per channel -- the split matters and is NOT uniform:
+     --ds-material-overlay-texture, -highlight and -shadow are absent from
+     `:root`, so their fallbacks genuinely fire and today's paint is preserved.
+     --ds-material-overlay-background is the exception: it IS declared on
+     `:root` (foundation/themes/default.css) as var(--ds-surface-overlay), so
+     the fallback arm on the ground rung below is DEAD and the role resolves in
+     every theme. That is deliberate. The channel was declared but never reached
+     this family's paint, so no tenant could move the panel's ground. Under the
+     default theme both sides resolve to --ds-color-bg-elevated and the ground
+     is unchanged; a tenant that splits --ds-surface-overlay from
+     --ds-surface-card (BitHire does, in dark) now has this panel follow the
+     overlay side -- the group it belongs to. */
   /* OVL-DD-01 (R1 Cohort 1): the 145deg primary sweep that used to sit here was
      DELETED, not gated. It was a bare background list entry outside every
      channel — no tenant could zero it — which directly contradicted this file's
@@ -54979,27 +55113,69 @@ html[data-ds-motion='reduced']
   background:
     var(--ds-material-overlay-texture, none),
     linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
-    var(--ds-surface-card);
-  /* The final rung reads the private layer-step proto: a dropdown nested
-     inside a modal steps one elevation rung up (rule below) so the layering
-     reads over the panel; unset, the chain composes exactly as before and
-     the tenant --ds-dropdown-shadow channel still wins outright. The zenith
-     keyline (card.css's common light model, intensity-governed) composes as
-     its own list entry above the whole chain — every elevated overlay layer
-     catches the same top-light. */
-  box-shadow:
+    var(--ds-material-overlay-background, var(--ds-surface-card));
+  /* WHOLE-VALUE ISOLATION. The depth chain is the SOLE box-shadow of this
+     surface. --ds-material-overlay-highlight used to ride here as a second
+     list entry, which was a defect: the channel is publicly none-capable, and
+     in CSS `none` is legal only as a WHOLE box-shadow value, so a tenant
+     authoring it produced `box-shadow: none, <depth>` -- an invalid
+     declaration that voids the ENTIRE value and silently amputated the panel's
+     depth. Reproduced live: this surface collapsed to `none` while Popover,
+     which reads the same channel in an image position, kept its shadow. The
+     keyline moved to the decoration pseudo below, where it is a whole-value
+     read and an authored `none` can only switch the keyline off.
+     FAMILY CHROME STAYS SENIOR. --ds-dropdown-shadow is outermost, the role
+     channel is the next rung, the layer-step proto and the elevation literal
+     close the chain. foundation/themes/default.css declares --ds-dropdown-shadow
+     on `:root`, so today the outer rung resolves unconditionally and the role
+     rung is not consulted -- this cell is NOT causal yet. It is made causal
+     under adjudicated option (C), the delegating default, which re-keys the
+     family var's OWN `:root` default to read the role. Both properties then
+     hold at once: a family override still wins here, and the role reaches paint
+     whenever only the DS default exists. Hoisting the role above the family var
+     was tried and REJECTED -- it is a pixel no-op today only because nothing
+     authors the role, and it inverts an adjudicated ordering. */
+  box-shadow: var(
+    --ds-dropdown-shadow,
     var(
-      --ds-material-overlay-highlight,
-      inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(72% * var(--ds-effect-intensity, 1)), transparent)
-    ),
-    var(
-      --ds-dropdown-shadow,
-      var(
-        --ds-material-overlay-shadow,
-        var(--_ds-dropdown-layer-step-shadow, var(--ds-elevation-3))
-      )
-    );
+      --ds-material-overlay-shadow,
+      var(--_ds-dropdown-layer-step-shadow, var(--ds-elevation-3))
+    )
+  );
   transform-origin: center top;
+}
+
+/* Decoration slot: carries the intensity-governed zenith keyline (card.css's
+   common light model, shared by every elevated overlay layer) as its SOLE
+   box-shadow, so the none-capable role channel sits in a whole-value position
+   and can never invalidate the depth stack next door. The value is an INSET
+   LITERAL and must stay one (FAB-05): it does NOT read
+   --ds-material-overlay-highlight. That channel's reads were deliberately
+   removed from this family, so its consumer count across the overlay four is
+   zero -- a live-but-unclaimed channel being retired, NOT a capability lost and
+   NOT causal adoption anywhere. The DECLARED VALUE is the same literal this rung
+   carried inside the surface list, and `z-index: -1` reproduces an inset
+   shadow's paint order -- above the surface's own fill and lift layers, below
+   every child -- inside the stacking context the surface already isolates.
+   BUT THE PAINTED RESULT IS NOT EQUIVALENT, and this comment must not claim it
+   is. A pseudo's inset shadow is drawn against a different box and radius than
+   the surface's own, so on any surface with BOTH a border and a radius -- which
+   this one has -- the corner arcs diverge. Measured in Chromium: at radius 12
+   with a 1px border, ~100 px differ with a max channel delta near 140, and it
+   grows with radius and with device pixel ratio. Compensating the pseudo's
+   radius reduces the gap but does not close it. So this relocation is an
+   IN-SCOPE VISUAL DELTA awaiting adjudication, NOT mechanical isolation. This surface is NON-SCROLLING (`overflow: visible`; the list is the
+   scrollport), which is the precondition that makes a pseudo anchor-correct
+   here. The slot paints no fill of its own and never intercepts pointer
+   input. */
+.rottay-dropdown__surface.rottay-dropdown__surface[data-part='surface']::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(72% * var(--ds-effect-intensity, 1)), transparent);
+  pointer-events: none;
 }
 
 /* Nested-layer grammar (popover.css idiom): the surface renders inside the
@@ -55322,15 +55498,42 @@ html[data-ds-motion='reduced']
     linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
     var(--ds-surface-card);
   /* Reads the same inherited layer-step proto as its parent surface, so a
-     submenu of a modal-nested dropdown keeps the stepped elevation; the
-     common-light keyline composes on top, exactly as on the parent. */
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(72% * var(--ds-effect-intensity, 1)), transparent),
-    var(
-      --ds-dropdown-shadow,
-      var(--_ds-dropdown-layer-step-shadow, var(--ds-elevation-3))
-    );
+     submenu of a modal-nested dropdown keeps the stepped elevation.
+     WHOLE-VALUE ISOLATION, and here it is a SEQUENCING PREREQUISITE rather
+     than a live defect. The keyline used to sit as item 1 of a comma list with
+     this chain as item 2. That is safe only while --ds-dropdown-shadow cannot
+     resolve to `none` -- true today, since its `:root` default is a literal.
+     Option (C) re-keys that default to read the none-capable
+     --ds-material-overlay-shadow, at which point this splice would inherit
+     none-capability THROUGH the family var and expand to
+     `inset <literal>, none`: invalid, collapsing the whole declaration and
+     taking the submenu's depth with it. Isolating before delegating is a
+     correctness constraint, not an ordering preference. */
+  box-shadow: var(
+    --ds-dropdown-shadow,
+    var(--_ds-dropdown-layer-step-shadow, var(--ds-elevation-3))
+  );
+  isolation: isolate;
   animation: ds-dropdown-popover-enter-modern var(--ds-motion-fast) var(--ds-ease-standard, ease) both;
+}
+
+/* The submenu is a DISTINCT surface, so it carries its own decoration slot
+   rather than inheriting the panel's -- the panel's slot is bounded to the
+   panel box and never covered this element. Same terms as the panel: the
+   keyline is an INSET LITERAL and must stay one (FAB-05) -- it does NOT read
+   --ds-material-overlay-highlight, whose reads were deliberately removed from
+   this family. `z-index: -1` inside the stacking context isolated above
+   reproduces the inset shadow's paint order (above this fill, below the items).
+   The submenu declares NO overflow, so it is non-scrolling and a pseudo anchors
+   correctly here. */
+.rottay-dropdown__surface[data-part='surface'] [data-part='submenu']::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(72% * var(--ds-effect-intensity, 1)), transparent);
+  pointer-events: none;
 }
 
 .rottay-dropdown__surface[data-part='surface'] [data-part='submenu'][data-part='submenu'] {
@@ -55383,6 +55586,12 @@ html[data-ds-motion='reduced']
     inset: auto;
     min-inline-size: 0;
     margin-block-start: 0.25rem;
+    box-shadow: none;
+  }
+  /* The keyline lives on the decoration slot now, so the reset above no longer
+     reaches it. Cleared explicitly to keep the inlined narrow-container
+     submenu as flat as it was when both shadows shared one declaration. */
+  .rottay-dropdown__surface[data-part='surface'] [data-part='submenu']::before {
     box-shadow: none;
   }
 }
@@ -57359,7 +57568,26 @@ html[data-ds-motion='reduced']
 .rottay-overlay-modal-shell--modern[data-part='root'] > [data-part='surface'] {
   max-inline-size: var(--ds-modal-max-inline-size, 90vw);
   max-block-size: var(--ds-modal-max-block-size, 85vh);
-  background-color: var(--ds-modal-bg, var(--ds-material-card-background, var(--ds-surface-card)));
+  /* SEMANTIC GROUP: overlay. The blocking chamber read the CARD role here,
+     which is the wrong group -- a modal is not a card, and the tenant decision
+     that moves popover, dropdown and drawer skipped it. The overlay role now
+     occupies that rung. Be precise about what this does and does not achieve:
+     presentation/components/modal.css declares --ds-modal-bg on `:root`, so the
+     senior rung resolves unconditionally and EVERYTHING beneath it -- the role
+     channel included -- is still unreachable. The ordering is now correct and
+     the rung becomes causal the moment that `:root` default is retired; the
+     channel is NOT causal yet, and this edit changes no pixel.
+     The two shadow chains in this cohort solved the identical block by hoisting
+     the role above the family channel. That fix is NOT available here, and the
+     asymmetry is the whole reason: --ds-material-overlay-shadow is authored in
+     zero files, so hoisting it moves nothing today, whereas
+     --ds-material-overlay-background is declared on `:root` and in the BitHire
+     artifact, so hoisting it would resolve unconditionally and OVERRIDE the
+     --ds-modal-bg values Rottay (#1A1A1E dark, #FFFFFF light) and BitHire
+     (#FFFFFF) actively author. That is a regression, not an adoption. This cell
+     stays blocked until the `:root` default in presentation/components/modal.css
+     is retired -- a one-line change outside this file's write domain. */
+  background-color: var(--ds-modal-bg, var(--ds-material-overlay-background, var(--ds-surface-card)));
   background-image:
     linear-gradient(var(--ds-elevation-surface-4), var(--ds-elevation-surface-4)),
     var(--ds-gradient-surface);
@@ -57367,6 +57595,14 @@ html[data-ds-motion='reduced']
   border-radius: var(--ds-overlay-modal-radius);
   box-shadow: none;
   outline: none;
+  /* The decoration slot below paints at `z-index: -1` to reproduce an inset
+     shadow's order (above this fill, below the header/body/footer). That is
+     only contained if this surface forms a stacking context, which
+     `position: relative` alone does not do -- without isolation the slot would
+     escape to the shell root and paint BEHIND this opaque fill, losing the
+     keyline entirely. Dropdown and drawer already isolate their panels; this
+     brings the third member in line. No layout effect. */
+  isolation: isolate;
 }
 .rottay-overlay-modal-shell--modern[data-part='root'] > [data-part='surface'][data-size='xs'] {
   inline-size: var(--ds-modal-width-xs, 360px);
@@ -57438,16 +57674,62 @@ html[data-ds-motion='reduced']
      3) — so the stratigraphy reads even in a tree without the tenant
      artifact; the authored --ds-modal-shadow channel still wins outright. */
   /* SEMANTIC GROUP: overlay. (R1 Cohort 1) The blocking chamber is an OVERLAY
-     surface and now reads the same governed role vocabulary as popover,
-     dropdown and drawer, so one tenant decision moves the whole group. Both
-     role channels are tenant-writable and absent from `:root`, so the
-     fallbacks fire and today's paint is preserved exactly. */
-  box-shadow:
-    var(
-      --ds-material-overlay-highlight,
-      inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(72% * var(--ds-effect-intensity, 1)), transparent)
-    ),
-    var(--ds-modal-shadow, var(--ds-material-overlay-shadow, var(--ds-elevation-4)));
+     surface and reads the same governed role vocabulary as popover, dropdown
+     and drawer, so one tenant decision moves the whole group.
+     WHOLE-VALUE ISOLATION. The depth chain is the SOLE box-shadow of this
+     chamber. --ds-material-overlay-highlight used to ride here as a second list
+     entry, which was a defect: the channel is publicly none-capable, and in CSS
+     `none` is legal only as a WHOLE box-shadow value, so a tenant authoring it
+     produced `box-shadow: none, <depth>` -- an invalid declaration that voids
+     the ENTIRE value and silently amputated the chamber's depth. The keyline
+     moved to the decoration pseudo below, where it is a whole-value read and an
+     authored `none` can only switch the keyline off.
+     FAMILY CHROME STAYS SENIOR. --ds-modal-shadow is outermost, the role
+     channel is the next rung, the elevation literal closes the chain.
+     presentation/components/modal.css declares --ds-modal-shadow on `:root`, so
+     today the outer rung resolves unconditionally and the role rung is not
+     consulted -- this cell is NOT causal yet. It is made causal under
+     adjudicated option (C), the delegating default, which re-keys the family
+     var's OWN `:root` default to read the role. Hoisting the role above the
+     family var was tried and REJECTED: it inverts an adjudicated ordering, and
+     being a pixel no-op today is not contract-equivalence. */
+  box-shadow: var(--ds-modal-shadow, var(--ds-material-overlay-shadow, var(--ds-elevation-4)));
+}
+
+/* Decoration slot: carries the intensity-governed zenith keyline (card.css's
+   common light model, shared by every elevated overlay layer) as its SOLE
+   box-shadow, so the none-capable role channel sits in a whole-value position
+   and can never invalidate the depth stack next door. The selector repeats the
+   surface rule's conditions exactly -- the keyline has always been part of the
+   `data-shadow` treatment and must not appear on a shadowless or
+   adaptive-fullscreen chamber. The value is an INSET LITERAL and must stay one
+   (FAB-05): it does NOT read --ds-material-overlay-highlight, whose reads were
+   deliberately removed from this family, dropping its consumer count across the
+   overlay four to zero -- a channel being retired, not a capability lost. The
+   DECLARED VALUE is the same literal this rung carried inside the surface list,
+   and `z-index: -1` reproduces an inset shadow's paint order -- above the
+   chamber's own fill, below the header, body and footer, which matters because
+   tenant header backgrounds are opaque and have always covered this hairline.
+   BUT THE PAINTED RESULT IS NOT EQUIVALENT, and this comment must not claim it
+   is. A pseudo's inset shadow is drawn against a different box and radius than
+   the surface's own, so on any surface with BOTH a border and a radius -- which
+   this one has -- the corner arcs diverge (measured in Chromium; the delta grows
+   with radius and with device pixel ratio, and radius compensation reduces but
+   does not close it). This relocation is an IN-SCOPE VISUAL DELTA awaiting
+   adjudication, NOT mechanical isolation.
+   The chamber is NON-SCROLLING (`overflow: hidden` on the surface, with the
+   body carrying `overflow-y: auto`), which is the precondition that makes a
+   pseudo anchor-correct here. The slot paints no fill of its own and never
+   intercepts pointer input. */
+.rottay-overlay-modal-shell--modern[data-part='root']
+  > [data-part='surface'][data-shadow='true']:not([data-adaptive-fullscreen='true'])::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(72% * var(--ds-effect-intensity, 1)), transparent);
+  pointer-events: none;
 }
 /* a colored border SHORTHAND, held to the (0,4,0) floor by the repeated part */
 .rottay-overlay-modal-shell--modern[data-part='root']
@@ -58728,11 +59010,13 @@ html[data-ds-motion='reduced']
  * reconstructing the component.
  *
  * Material stack (governed six layers): the opaque base fill and the
- * elevation lift live on the surface background; the bounded tint/highlight
- * and the tenant motif (layers 2-3) ride a private `::before` decoration
- * slot whose opacity is the governed `--ds-effect-intensity` dial -- at 0
- * the decoration dissolves while fill, edge, elevation and focus ring keep
- * the hierarchy. Glass is deliberately ABSENT: this is a panel, and the
+ * elevation lift live on the surface background; the tenant motif (layer 3)
+ * rides a private `::before` decoration slot whose opacity is the governed
+ * `--ds-effect-intensity` dial -- at 0 the decoration dissolves while fill,
+ * edge, elevation and focus ring keep the hierarchy. Layer 2 (the bounded
+ * tint/sheen) is deliberately EMPTY on this family: the surface already
+ * declares the intensity-governed zenith keyline in its own box-shadow, and
+ * a second top-light on the same surface is what OVL-PV-01 struck. Glass is deliberately ABSENT: this is a panel, and the
  * lane's grammar sanctions backdrop blur on overlay backdrops only
  * (hover-card.css precedent). Because the shared overlay material channel
  * may still resolve translucent, `prefers-reduced-transparency` forces an
@@ -58825,34 +59109,20 @@ html[data-ds-motion='reduced']
     --ds-popover-bordered-texture,
     var(--ds-material-overlay-texture, none)
   );
-  /* OVL-PV-01 (R1 Cohort 1): the role channel is inserted BETWEEN the family
-     channel and the literal. The shape was already governed — indirection plus a
-     currentColor mix, which is the idiom the dropdown fix cites as correct — but
-     it was governed by --ds-popover-bordered-highlight, which is NOT in
-     TENANT_THEME_OVERRIDE_TOKENS. So no tenant could ever zero it and the
-     fallback fired unconditionally: measured live at opacity .58 under BitHire
-     and .2 under The Management, a sheen on a ledger that forbids exactly that.
-     CROSS-SYNTAX CORRECTION: this chain sits in an IMAGE position, so it routes
-     through --ds-material-overlay-texture. Using --ds-material-overlay-highlight
-     here was a real regression: Dropdown, Drawer and Modal consume that SAME
-     channel in a box-shadow position, so a tenant authoring it to none produced
-     `box-shadow: none, <depth>` — invalid CSS that voids the WHOLE declaration
-     and silently dropped the ledger hard offset depth on three of four overlay
-     members. One role cannot carry both an image and a shadow syntax. */
-  /* REVERTED to the original chain per the channel-typing adjudication. My
-     reroute through --ds-material-overlay-texture made this a SECOND consumer
-     of a channel the panel already reads for its pseudo-element and arrow, so
-     any non-none tenant texture would have painted twice. One channel, one
-     paint site per family: the panel's existing texture-current consumption is
-     the single site, and this keyline keeps its own family channel. */
-  --ds-popover-highlight-current: var(
-    --ds-popover-bordered-highlight,
-    linear-gradient(
-      150deg,
-      color-mix(in srgb, currentColor 5%, transparent),
-      transparent 48%
-    )
-  );
+  /* OVL-PV-01 (R1 Cohort 1, option A): the family sheen that used to sit here
+     -- a 150deg gradient carried by a private --ds-popover-highlight-current
+     channel -- is DELETED, not gated. The surface below declares the
+     intensity-governed zenith keyline in its own box-shadow, so this was a
+     SECOND top-light on the same surface, and stacked decorative gradients are
+     the exact smell both tenant directions forbid. It is the third
+     engine-authored sheen struck in this cohort; the dropdown 145deg sweep and
+     the popover title sheen went first. The private -current channel is removed
+     with it -- here, in every recipe, and at the two accessibility guards --
+     because an unused private var is census bait and a reintroduction seam.
+     BitHire loses a 5% currentColor sheen on popovers; the inverse and rich
+     recipes lose their 8%/7% variants. Declared, accepted, in-round deltas. If
+     a sighted look wants the top-light stronger it retunes the zenith keyline,
+     never a second gradient. */
   --ds-popover-padding-block-current: var(
     --ds-popover-bordered-padding-block,
     var(--ds-spacing-md)
@@ -58934,14 +59204,15 @@ html[data-ds-motion='reduced']
   background:
     linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
     var(--ds-popover-surface);
-  /* Common light model (card.css's C-03 recipe, shared by every elevated
-     overlay layer): the intensity-governed zenith keyline composes with the
-     resolved shadow chain as its own list entry, so authored recipe/tenant
-     shadows keep winning untouched while the panel catches the same
-     top-light as the modal chamber above it. */
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(72% * var(--ds-effect-intensity, 1)), transparent),
-    var(--ds-popover-shadow-current);
+  /* WHOLE-VALUE ISOLATION, state 1 of 2 on this family. The depth chain is the
+     SOLE box-shadow. --ds-popover-shadow-current forwards transitively to
+     --ds-material-overlay-shadow (through --ds-popover-bordered-shadow), so the
+     keyline riding beside it as a comma-list item meant an authored `none`
+     expanded to `inset <literal>, none` -- invalid, voiding the declaration and
+     amputating this panel's depth. The forwarding is why a resolver that only
+     greps for a literal --ds-material-* occurrence misses this site. The
+     keyline moved to the decoration slot below. */
+  box-shadow: var(--ds-popover-shadow-current);
   color: var(--ds-popover-ink);
   font-family: var(--ds-font-family-base);
   text-align: start;
@@ -58957,22 +59228,60 @@ html[data-ds-motion='reduced']
   will-change: opacity, transform;
 }
 
-/* Material layers 2-3 (bounded tint/gradient + tenant motif) ride this
- * private decoration slot instead of the surface background so the governed
- * --ds-effect-intensity dial scales them directly: at 0 the decoration
- * dissolves while the opaque fill, lift layer, edge, elevation and focus
- * ring keep the hierarchy (button.css/card.css idiom). Title, body and the
- * arrow paint above it; it never intercepts pointer input. */
+/* Material layer 3 (the tenant motif) rides this private decoration slot
+ * instead of the surface background so the governed --ds-effect-intensity
+ * dial scales it directly: at 0 the decoration dissolves while the opaque
+ * fill, lift layer, edge, elevation and focus ring keep the hierarchy
+ * (button.css/card.css idiom). The slot carries the motif ONLY -- the layer-2
+ * sheen it used to stack underneath was struck by OVL-PV-01, since the
+ * surface's own zenith keyline already supplies the top-light. Title, body
+ * and the arrow paint above it; it never intercepts pointer input. */
 .rottay-popover--modern[data-part="trigger"]
   > [data-part="surface"][data-part="surface"]::before {
   position: absolute;
   z-index: 0;
   inset: 0;
   border-radius: inherit;
-  background-image: var(--ds-popover-texture-current),
-    var(--ds-popover-highlight-current);
+  background-image: var(--ds-popover-texture-current);
   content: "";
   opacity: var(--ds-effect-intensity);
+  pointer-events: none;
+}
+
+/* Decoration slot for the zenith keyline, deliberately SEPARATE from the motif
+   slot above. The motif slot scales its whole layer by `opacity:
+   var(--ds-effect-intensity)`, and this keyline already scales its own alpha by
+   the same dial inside the color-mix -- sharing one slot would apply the
+   intensity twice and darken the hairline at every setting below 1. That is the
+   two-authorities defect in dial space: one dial applied twice. Keeping the
+   slots separate is load-bearing, so do NOT merge them in a future cleanup; the
+   shipped intensity-linearity probe fails if anyone does.
+   The value is an INSET LITERAL and must stay one (FAB-05): it does NOT read
+   --ds-material-overlay-highlight, whose reads were deliberately removed across
+   the overlay four, dropping its consumer count there to zero -- a channel
+   being retired, not a capability lost. The DECLARED VALUE is exactly what it
+   carried inside the surface's shadow list. `z-index: -1` inside the stacking
+   context the surface isolates reproduces the inset shadow's paint order, and
+   one slot on the base surface covers every state including the
+   collision-adjusted one.
+   BUT THE PAINTED RESULT IS NOT EQUIVALENT, and this comment must not claim it
+   is. A pseudo's inset shadow is drawn against a different box and radius than
+   the surface's own, so on any surface with BOTH a border and a radius -- which
+   this one has -- the corner arcs diverge (measured in Chromium; the delta grows
+   with radius and with device pixel ratio, and radius compensation reduces but
+   does not close it). This relocation is an IN-SCOPE VISUAL DELTA awaiting
+   adjudication, NOT mechanical isolation.
+   The surface is NON-SCROLLING (`overflow: visible`; the body is the
+   scrollport), which is the precondition that makes a pseudo anchor-correct
+   here. */
+.rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"][data-part="surface"]::after {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(72% * var(--ds-effect-intensity, 1)), transparent);
+  content: "";
   pointer-events: none;
 }
 
@@ -59061,7 +59370,6 @@ html[data-ds-motion='reduced']
     var(--ds-shadow-md)
   );
   --ds-popover-texture-current: var(--ds-popover-minimal-texture, none);
-  --ds-popover-highlight-current: var(--ds-popover-minimal-highlight, none);
   --ds-popover-padding-block-current: var(
     --ds-popover-minimal-padding-block,
     var(--ds-spacing-sm)
@@ -59100,14 +59408,6 @@ html[data-ds-motion='reduced']
     var(--ds-shadow-xl)
   );
   --ds-popover-texture-current: var(--ds-popover-inverse-texture, none);
-  --ds-popover-highlight-current: var(
-    --ds-popover-inverse-highlight,
-    linear-gradient(
-      155deg,
-      color-mix(in srgb, currentColor 8%, transparent),
-      transparent 58%
-    )
-  );
 }
 
 .rottay-popover--modern[data-part="trigger"]
@@ -59139,14 +59439,6 @@ html[data-ds-motion='reduced']
   --ds-popover-texture-current: var(
     --ds-popover-rich-texture,
     var(--ds-material-raised-texture, none)
-  );
-  --ds-popover-highlight-current: var(
-    --ds-popover-rich-highlight,
-    linear-gradient(
-      145deg,
-      color-mix(in srgb, currentColor 7%, transparent),
-      transparent 54%
-    )
   );
   --ds-popover-padding-block-current: var(
     --ds-popover-rich-padding-block,
@@ -59207,14 +59499,21 @@ html[data-ds-motion='reduced']
   );
 }
 
+/* WHOLE-VALUE ISOLATION, state 2 of 2. This state carried the SAME defect as
+   the base surface, with a narrower trigger, and a state-scoped fix that only
+   held in the default state would have been the same defect wearing a
+   condition. --ds-popover-collision-shadow is declared NOWHERE in the repo, so
+   its fallback always resolves to --ds-popover-shadow-current, which forwards
+   on to --ds-material-overlay-shadow: an authored `none` therefore expanded to
+   `inset <literal>, none` here too. Depth is now the sole box-shadow; the
+   decoration slot supplies the keyline in every state, so this state needs no
+   keyline of its own. */
 .rottay-popover--modern[data-part="trigger"]
   > [data-part="surface"][data-collision-adjusted="true"] {
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(72% * var(--ds-effect-intensity, 1)), transparent),
-    var(
-      --ds-popover-collision-shadow,
-      var(--ds-popover-shadow-current)
-    );
+  box-shadow: var(
+    --ds-popover-collision-shadow,
+    var(--ds-popover-shadow-current)
+  );
 }
 
 /* Nested-layer grammar: a popover that opens INSIDE a modal (the modal's
@@ -59537,7 +59836,6 @@ html[data-ds-motion="reduced"]
 @media (prefers-reduced-transparency: reduce) {
   .rottay-popover--modern[data-part="trigger"]
     > [data-part="surface"][data-part="surface"] {
-    --ds-popover-highlight-current: none;
     --ds-popover-texture-current: none;
   }
 
@@ -59556,13 +59854,20 @@ html[data-ds-motion="reduced"]
 @media (forced-colors: active) {
   .rottay-popover--modern[data-part="trigger"]
     > [data-part="surface"][data-part="surface"] {
-    --ds-popover-highlight-current: none;
     --ds-popover-texture-current: none;
 
     border-color: CanvasText;
     background: Canvas;
     box-shadow: none;
     color: CanvasText;
+  }
+
+  /* The keyline moved to the decoration slot, so the reset above no longer
+     reaches it. Cleared explicitly so the forced palette stays as flat as it
+     was when both shadows shared one declaration. */
+  .rottay-popover--modern[data-part="trigger"]
+    > [data-part="surface"][data-part="surface"]::after {
+    box-shadow: none;
   }
 
   .rottay-popover--modern[data-part="trigger"]
@@ -59970,14 +60275,26 @@ html[data-ds-motion="reduced"]
     --ds-segmented-bg,
     var(--ds-material-control-background, var(--ds-color-bg-secondary))
   );
-  box-shadow: var(
-    --ds-segmented-shadow,
-    /* material layer 4 (optical edge): intensity-scaled inset top keyline —
-       at `--ds-effect-intensity: 0` it dissolves while the shadow channel
-       keeps the track's hierarchy (card.css precedent). */
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(80% * var(--ds-effect-intensity)), transparent),
-    var(--ds-shadow-xs)
-  );
+  /* DEPTH IS THE SOLE BOX-SHADOW (adjudicated). The intensity-scaled inset top
+     keyline that used to sit in this fallback is DELETED rather than relocated.
+
+     PRECISELY WHAT THAT COSTS, because an earlier version of this comment
+     over-claimed it as "never painted". `--ds-segmented-shadow` IS declared at
+     default.css:1953 and in both the BitHire and Rottay artifacts, so on every
+     SHIPPED ground this fallback is unreachable and the deletion is
+     paint-identical. It is NOT structurally dead: neutralize the family var
+     (`initial`, or a ground that never declares it) and the old fallback
+     painted `inset <keyline>, var(--ds-shadow-xs)` while this one paints depth
+     alone. That delta is real and MUST appear in the family-neutralized mode of
+     the three-mode causality matrix; it must not be described as
+     neutralization-equivalent. Whether the byte-identical claim is accepted at
+     shipped-ground scope, or the fallback semantics have to be preserved, is
+     referred and not decided here.
+
+     Relocating it instead would have TURNED IT ON for the shipped grounds — a
+     paint change dressed as a refactor. The hover rule below is the one that
+     genuinely paints a keyline on every ground, and that one is relocated. */
+  box-shadow: var(--ds-segmented-shadow, var(--ds-shadow-xs));
   transition:
     border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
     box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
@@ -60001,9 +60318,60 @@ html[data-ds-motion="reduced"]
       --ds-segmented-border-hover,
       var(--ds-material-control-border-hover, color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border)))
     );
+    /* KEYLINE AS A TOP-LINE BACKGROUND LAYER, not an inset shadow item.
+       `--ds-segmented-shadow-hover` is declared NOWHERE in the repo, so this
+       fallback always applies — and it used to compose the keyline and the
+       depth channel as TWO ITEMS of one comma-separated box-shadow. A tenant
+       authoring `--ds-material-control-shadow-hover: none` (which the
+       Management fixture validly does) made the composed value
+       `inset <keyline>, none`. `none` is only legal as a WHOLE box-shadow
+       value, so the entire declaration became invalid and the keyline died
+       along with the depth it never asked about. Reproduced live: BitHire hover
+       computed keyline + 2 authored layers; the same DOM under the monochrome
+       tenant computed `box-shadow: none`.
+
+       COMPOSED WITH THE FAMILY GROUND, NOT SUBSTITUTED FOR IT. A first version
+       of this wrote a bare `background-image`, which would have CLOBBERED any
+       `--ds-segmented-bg` that resolves to a gradient, an image, or a full
+       background shorthand — silently inverting the family seniority this
+       cohort exists to protect. That the shipped fixtures all happen to author
+       plain colours is luck, not a contract. The keyline is therefore the FIRST
+       layer of a two-layer `background` shorthand and the family ground is the
+       LAST, which is the only position the shorthand accepts a bare colour in —
+       so colour, gradient and full-shorthand family values all survive.
+
+       DECLARED DELTA, NOT AN EQUIVALENCE. A background top-line is NOT
+       byte-identical to the inset shadow it replaces on a ROUNDED box, and this
+       root is rounded. Measured in Chromium on a 100x50 box at radius 12 with
+       the same colour at 1px: 78 pixels differ, max channel delta 228. The
+       inset shadow FOLLOWS THE INTERIOR CURVE; a gradient is a flat strip
+       clipped only by the outer radius, so they diverge at the corners and in
+       the second row. This is held rather than reverted because reverting
+       restores a live defect — the monochrome tenant's valid `none` authoring
+       collapsed the whole hover declaration — and a declared corner delta is
+       strictly better than an amputated hover state. The mechanism is under
+       re-adjudication; a curve-preserving form may supersede this.
+
+       A background layer rather than a pseudo-element because THIS ROOT IS A
+       SCROLLPORT (`overflow-x: auto` above). An absolutely-positioned pseudo is
+       scroll CONTENT and would slide away from the edge as the track scrolls;
+       a background layer is painted against the element's own box under the
+       default `scroll` attachment and stays put. That is the same reason the
+       inset shadow it replaces looked correct. */
+    background:
+      linear-gradient(
+          to bottom,
+          color-mix(in srgb, var(--ds-color-bg-elevated) calc(86% * var(--ds-effect-intensity)), transparent) 0,
+          color-mix(in srgb, var(--ds-color-bg-elevated) calc(86% * var(--ds-effect-intensity)), transparent) 1px,
+          transparent 1px
+        )
+        no-repeat,
+      var(--ds-segmented-bg, var(--ds-material-control-background, var(--ds-color-bg-secondary)));
+    /* DEPTH IS THE SOLE BOX-SHADOW: one item, so a tenant-authored `none` is a
+       valid whole value that turns depth off and can no longer amputate
+       anything else. */
     box-shadow: var(
       --ds-segmented-shadow-hover,
-      inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(86% * var(--ds-effect-intensity)), transparent),
       var(--ds-material-control-shadow-hover, var(--ds-elevation-1))
     );
   }
@@ -66594,10 +66962,9 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
  */
 
 .rottay-calendar.rottay-calendar--modern[data-part='root'] {
-  background: var(--ds-surface-card);
-  /* W10: the panel edge. A hairline + tenant-scaled radius make the calendar
-     read as ONE surface on canvases where surface-card == page bg (the old
-     borderless card dissolved into the page). */
+  /* No ground: a display primitive sits ON a surface, it does not bring one.
+     The date grid is a real region boundary, so it keeps a hairline edge and
+     the tenant-scaled radius -- an edge, not a card. */
   border: 1px solid var(--ds-calendar-border, var(--ds-color-border-subtle));
   border-radius: var(--ds-calendar-radius, var(--ds-radius-lg));
   /* Drained layout (the former live `p-4` / `w-full` / `w-80` utilities):
@@ -67196,7 +67563,7 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
   gap: var(--ds-spacing-sm);
   margin-block-start: var(--ds-spacing-sm);
   padding: var(--ds-spacing-sm);
-  border: 1px solid color-mix(in srgb, var(--ds-callout-tone) 20%, var(--ds-color-border));
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-callout-tone) 20%, var(--ds-color-border));
   border-radius: var(--ds-radius-md);
   background: color-mix(in srgb, var(--ds-color-surface-raised) 86%, transparent);
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 32%, transparent);
@@ -67209,7 +67576,7 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
   flex: 0 0 auto;
   place-items: center;
   padding: 0;
-  border: 1px solid color-mix(in srgb, var(--ds-callout-tone) 24%, var(--ds-color-border));
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-callout-tone) 24%, var(--ds-color-border));
   border-radius: var(--ds-radius-md);
   background: color-mix(in srgb, var(--ds-color-surface-raised) 86%, transparent);
   color: var(--ds-color-text-secondary);
@@ -67505,8 +67872,9 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
   background: var(--ds-surface-card);
   color: var(--ds-color-text-primary);
   border-radius: 50%;
+  /* Ground and edge stay: the arrow floats over arbitrary slide art and must
+     stay legible. Elevation does not -- nothing rests raised except a tooltip. */
   border: 1px solid var(--ds-color-border);
-  box-shadow: var(--ds-elevation-1);
   inline-size: calc(var(--ds-carousel-arrow-size, 32px) * var(--ds-density-effective-scale));
   block-size: calc(var(--ds-carousel-arrow-size, 32px) * var(--ds-density-effective-scale));
   font-size: var(--ds-font-size-xs);
@@ -67524,7 +67892,6 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
   .rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]:hover:not(:disabled) {
     border-color: color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-color-border));
     color: var(--ds-color-primary);
-    box-shadow: var(--ds-elevation-2);
   }
   .rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'][data-selected='false']:hover {
     background: var(--ds-surface-inset);
@@ -68491,6 +68858,15 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
   .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='horizontal']:not([data-column-count='1']) > [data-part='body'] > [data-part='rows'] {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  /* The engine clamps `span` to the AUTHORED column count, which is still
+     wider than the two tracks left here -- and a span wider than the explicit
+     track list grows implicit columns and re-tracks every other row. A
+     multi-span item takes the whole narrow row instead (the same value the
+     560px block below settles all rows on, so the two never disagree). */
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='horizontal']:not([data-column-count='1']) > [data-part='body'] > [data-part='rows'] > [data-part='row']:not([data-span='1']) {
+    grid-column: 1 / -1;
+  }
 }
 
 @container (max-width: 560px) {
@@ -68908,10 +69284,19 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
  * non-operable element is a false affordance; the only hover/focus paint an
  * empty state may carry belongs to the real controls slotted into its footer.
  *
- * Craft grammar: one quiet framed region (hairline border, flat tenant
- * surface, bounded rhythm), a single restrained accent in the visual well,
- * secondary-copy description, and an action tray that is a plain row of the
- * caller's own buttons — the tray is not a second boxed card.
+ * GROUND: none. Empty is a placeholder INSIDE something that already has a
+ * surface — a table body, a list well, a panel, a card. Painting its own
+ * border + radius + fill made every one of those a nested box, and the
+ * tinted ring around the icon made it two nested boxes. The region is now
+ * transparent and spends its whole budget on space and ink: the illustration
+ * is the single emphasis moment, the description is the support ink, and the
+ * action tray is a plain row of the caller's own buttons.
+ *
+ * The illustration size rides `--ds-empty-icon-size` (declared 48px in
+ * presentation/components/empty.css and, before this pass, read by nothing
+ * but the classic theme — the modern engine hardcoded 36/28 as an Icon
+ * prop). Consuming it here is what makes the illustration the emphasis and
+ * gives the declared channel a modern reader.
  *
  * DELIBERATELY UNLAYERED (P-47): layered rules sort before Tailwind preflight
  * and lose to it; unlayered paint outranks the reset and still yields to a
@@ -68928,12 +69313,7 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
   align-items: center;
   justify-content: center;
   gap: var(--ds-empty-gap, var(--ds-spacing-md));
-  overflow: hidden;
   padding: var(--ds-empty-padding, clamp(var(--ds-spacing-lg), 4vw, var(--ds-spacing-2xl)));
-  border: var(--ds-empty-border-width, 1px) solid var(--ds-empty-border-color, var(--ds-color-border));
-  border-radius: var(--ds-empty-radius, var(--ds-radius-xl));
-  background: var(--ds-empty-surface, var(--ds-color-surface));
-  box-shadow: var(--ds-empty-shadow, none);
   color: var(--ds-color-text-primary);
   text-align: center;
   /* Container-driven compactness: the expansive posture (below) collapses to
@@ -68957,26 +69337,28 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
   padding-block-end: var(--ds-empty-footer-padding, var(--ds-spacing-lg));
 }
 
-/* The visual well is the single accent the component spends: a calm tinted
-   tile with a hairline ring, no bloom shadow. */
+/* The visual slot reserves the illustration's space and nothing else — no
+   tile, no ring, no fill. It is a sizing box, not a surface. */
 .rottay-empty.rottay-empty--modern > .rottay-empty__visual[data-part='image'][data-part='image'] {
   display: grid;
-  inline-size: var(--ds-empty-visual-size, 4rem);
-  block-size: var(--ds-empty-visual-size, 4rem);
   place-items: center;
-  border: 1px solid var(--ds-empty-visual-border, color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border)));
-  border-radius: var(--ds-empty-visual-radius, var(--ds-radius-lg));
-  background: var(--ds-empty-visual-bg, color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-color-surface)));
-  color: var(--ds-empty-icon-color, var(--ds-color-primary));
+  color: var(--ds-empty-icon-color, var(--ds-color-text-secondary));
 }
 
-.rottay-empty.rottay-empty--modern[data-image='simple'] > .rottay-empty__visual[data-part='image'][data-part='image'] {
-  inline-size: var(--ds-empty-simple-visual-size, 3rem);
-  block-size: var(--ds-empty-simple-visual-size, 3rem);
-}
-
+/* The illustration is the one emphasis moment, so it is sized from the
+   declared channel rather than from the engine's Icon prop. A caller-supplied
+   ReactNode image is NOT force-sized: it owns its own dimensions. */
 .rottay-empty.rottay-empty--modern .rottay-empty__illustration[data-part='icon'] {
-  color: var(--ds-empty-icon-color, var(--ds-color-primary));
+  inline-size: var(--ds-empty-icon-size, 3rem);
+  block-size: var(--ds-empty-icon-size, 3rem);
+  color: var(--ds-empty-icon-color, var(--ds-color-text-secondary));
+}
+
+/* The compact variant scales the same single emphasis down; it does not
+   switch to a different grammar. */
+.rottay-empty.rottay-empty--modern[data-image='simple'] .rottay-empty__illustration[data-part='icon'] {
+  inline-size: var(--ds-empty-simple-icon-size, 2rem);
+  block-size: var(--ds-empty-simple-icon-size, 2rem);
 }
 
 .rottay-empty.rottay-empty--modern > .rottay-empty__description[data-part='description'][data-part='description'] {
@@ -69018,25 +69400,21 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
     padding: var(--ds-empty-simple-padding, var(--ds-spacing-lg));
   }
 
-  .rottay-empty.rottay-empty--modern > .rottay-empty__visual[data-part='image'][data-part='image'] {
-    inline-size: var(--ds-empty-simple-visual-size, 3rem);
-    block-size: var(--ds-empty-simple-visual-size, 3rem);
+  .rottay-empty.rottay-empty--modern .rottay-empty__illustration[data-part='icon'] {
+    inline-size: var(--ds-empty-simple-icon-size, 2rem);
+    block-size: var(--ds-empty-simple-icon-size, 2rem);
   }
 }
 
-/* Forced colors: the tinted well collapses to Canvas and the 7%/22% mixes
-   vanish, so the frame and the illustration are re-asserted in system colors
-   — the placeholder must stay visible as a placeholder. */
+/* Forced colors: `--ds-empty-icon-color` is a resolved author color and is
+   dropped by the forced-colors palette, so the illustration is re-asserted in
+   system ink. There is no frame or fill left to restore. */
 @media (forced-colors: active) {
   .rottay-empty.rottay-empty--modern[data-part='root'][data-image] {
-    border-color: ButtonText;
-    background: Canvas;
     color: CanvasText;
   }
 
   .rottay-empty.rottay-empty--modern[data-image] > .rottay-empty__visual[data-part='image'] {
-    border-color: ButtonText;
-    background: Canvas;
     color: CanvasText;
   }
 }
@@ -69460,9 +69838,13 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
   border-radius: var(--ds-kbd-radius, var(--ds-radius-sm));
   background: var(--ds-kbd-surface, var(--ds-surface-inset, var(--ds-color-neutral-100)));
   color: var(--ds-kbd-ink, var(--ds-color-text-primary));
+  /* The cap's top specular rides the tenant's ELEVATED surface, not a fixed
+     white: on a dark theme a 55% white edge blows the cap out, while
+     `--ds-color-bg-elevated` resolves near-white in light mode and a raised
+     dark neutral in dark mode (the Statistic/Card skeleton-highlight idiom). */
   box-shadow: var(
     --ds-kbd-shadow,
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-white) 55%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--ds-kbd-specular, var(--ds-color-bg-elevated)) 55%, transparent),
     0 1px 2px color-mix(in srgb, var(--ds-color-neutral-900) 8%, transparent)
   );
   transition:
@@ -69509,7 +69891,7 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
   border-block-end-width: 1px;
   box-shadow: var(
     --_ds-kbd-pressed-shadow,
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-white) 40%, transparent)
+    inset 0 1px 0 color-mix(in srgb, var(--ds-kbd-specular, var(--ds-color-bg-elevated)) 40%, transparent)
   );
 }
 
@@ -70314,6 +70696,45 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
    size instead of forcing horizontal scroll. */
 .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'] > * {
   min-inline-size: 0;
+}
+
+/* ---- responsive grid tracks ----
+   `ListGridConfig` declares per-breakpoint column counts (xs..xxl). They can
+   only be honored from here: an inline `grid-template-columns` outranks every
+   media query, so the engine drops the inline track list for these callers and
+   publishes each tier's count instead. The engine also carries the nearest
+   smaller declared count forward into every undeclared tier, so each query
+   reads exactly one property with no fallback chain. Widths are the shared
+   scale in foundation/contracts/kernel/responsive/breakpoints (the contract's
+   `xxl` is that scale's `2xl`); `xs` is the 0px baseline and needs no query. */
+.rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'] {
+  display: grid;
+  grid-template-columns: repeat(var(--ds-list-grid-columns-xs, 1), minmax(0, 1fr));
+}
+@media (min-width: 640px) {
+  .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'] {
+    grid-template-columns: repeat(var(--ds-list-grid-columns-sm, 1), minmax(0, 1fr));
+  }
+}
+@media (min-width: 768px) {
+  .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'] {
+    grid-template-columns: repeat(var(--ds-list-grid-columns-md, 1), minmax(0, 1fr));
+  }
+}
+@media (min-width: 1024px) {
+  .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'] {
+    grid-template-columns: repeat(var(--ds-list-grid-columns-lg, 1), minmax(0, 1fr));
+  }
+}
+@media (min-width: 1280px) {
+  .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'] {
+    grid-template-columns: repeat(var(--ds-list-grid-columns-xl, 1), minmax(0, 1fr));
+  }
+}
+@media (min-width: 1536px) {
+  .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'] {
+    grid-template-columns: repeat(var(--ds-list-grid-columns-xxl, 1), minmax(0, 1fr));
+  }
 }
 
 /* split divider between items: full-bleed by default; the inset channel pulls
@@ -71274,7 +71695,17 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
   width: var(--ds-spacing-24);
 }
 
-/* ---- loading skeleton bars (height/width/margin stay inline) ---- */
+@keyframes ds-statistic-skeleton-sweep {
+  from { background-position: 120% 0; }
+  to { background-position: -120% 0; }
+}
+
+/* ---- loading skeleton bars. The 180% gradient exists to TRAVEL: without a
+        background-position animation it rendered as a static off-centre
+        smear, so the bars only ever carried the root's opacity pulse. The
+        sweep is the Card skeleton's keyframe shape and duration channel, and
+        the reduced-motion block below drops both the travel and the
+        gradient (never leaving a frozen highlight mid-bar). ---- */
 .rottay-statistic.rottay-statistic--modern[data-part='root'] > [data-part='skeleton-line'] {
   background: var(
     --ds-statistic-loading-bg,
@@ -71289,6 +71720,9 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
   border-radius: var(--ds-radius-sm);
   box-shadow: inset 0 1px 0
     color-mix(in srgb, var(--ds-color-bg-elevated) 66%, transparent);
+  animation: ds-statistic-skeleton-sweep
+    var(--ds-statistic-skeleton-duration, var(--ds-motion-glacial))
+    var(--ds-motion-ease-in-out) infinite;
 }
 
 /* ---- value: trend color. The unqualified rule carries the `default` value
@@ -71412,6 +71846,13 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
   }
   .rottay-statistic.rottay-statistic--modern[data-part='root'][data-loading='true'] {
     animation: none;
+  }
+  /* The travel stops; the gradient stays. `--ds-statistic-loading-bg` is a
+     whole-`background` channel, so blanking the image here would erase a
+     tenant's entire skeleton fill. */
+  .rottay-statistic.rottay-statistic--modern[data-part='root'] > [data-part='skeleton-line'] {
+    animation: none;
+    background-position: 0 0;
   }
 }
 
@@ -72117,7 +72558,9 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
 .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'] > [data-part='content'] {
   margin: var(--ds-spacing-1);
   min-inline-size: 0;
-  overflow-wrap: break-word;
+  /* `anywhere`, not `break-word`: only the former lowers min-content, and the
+     track is sized from it. */
+  overflow-wrap: anywhere;
   color: var(--ds-timeline-content-color, var(--ds-text-primary, var(--ds-color-text-primary)));
 }
 .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'] > [data-part='content'][data-side='start'] {
@@ -72220,6 +72663,16 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
 }
 .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-tone='error'] > [data-part='dot'] > [data-part='dot-marker'] {
   background: var(--ds-timeline-color-error, var(--ds-color-error));
+}
+/* ---- off-preset tone: the contract types `color` as
+        `TimelineItemColor | string`, so a caller may hand the item a raw CSS
+        color. The engine routes those to `custom` and publishes the value on
+        `--ds-timeline-dot-color`; without this the node fell back to the
+        primary fill and the caller's color painted NOTHING. Ties with the
+        preset rules at (0,7,0) and wins on source order -- it can only match
+        when the engine chose `custom`, which no preset ever is. ---- */
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-tone='custom'] > [data-part='dot'] > [data-part='dot-marker'] {
+  background: var(--ds-timeline-dot-color, var(--ds-color-primary));
 }
 
 /* ---- state law (B1.4/B1.5): semantic tones never ride hue alone. Success,
@@ -73365,6 +73818,9 @@ html[data-ds-motion="reduced"]
   position: relative;
   display: inline-flex;
   min-inline-size: 0;
+  /* Shrink-to-fit resolves against max-content, so a nowrap label widened the
+     row past its own node and the document with it. */
+  max-inline-size: 100%;
   align-items: center;
   /* B4-04: the fallback padding splits into the private proto axes so row
      rhythm scales with the governed density authority. An explicit
@@ -73400,9 +73856,9 @@ html[data-ds-motion="reduced"]
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-selected='true'] {
   background: var(--ds-tree-node-bg-selected, color-mix(in srgb, var(--ds-color-primary) 10%, transparent));
   color: var(--ds-tree-node-color-selected, var(--ds-color-primary));
+  /* The selected node is the tree's one emphasis moment: tint, ink and weight
+     carry it. A frame on top turned every selection into a small card. */
   font-weight: var(--ds-tree-node-font-weight-selected, var(--ds-font-weight-medium));
-  box-shadow: inset 0 0 0 1px
-    var(--ds-tree-node-frame-selected, color-mix(in srgb, var(--ds-color-primary) 34%, transparent));
 }
 
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-drop-target][data-drop-position='inside'] {
@@ -73446,11 +73902,10 @@ html[data-ds-motion="reduced"]
     color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
 }
 
-/* Selected AND focused: the frame and the ring compose. */
+/* Selected AND focused: the focus ring alone, over the selected tint. */
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-selected='true'][data-focused='true'] {
-  box-shadow:
-    inset 0 0 0 1px var(--ds-tree-node-frame-selected, color-mix(in srgb, var(--ds-color-primary) 34%, transparent)),
-    0 0 0 var(--ds-focus-ring-width) color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
+  box-shadow: 0 0 0 var(--ds-focus-ring-width)
+    color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
 }
 
 /* Keyboard reachability: the roving tab stop lands DOM focus on the row
@@ -74157,8 +74612,30 @@ html[data-ds-motion="reduced"]
   color: inherit;
 }
 
-/* Text selection stays tenant-tinted instead of the UA default blue. */
-.rottay-typography.rottay-typography--modern::selection {
+/* `sub`/`sup`: the UA pair (`vertical-align: sub|super` + `font-size: smaller`)
+   grows the line box, so a single footnote marker opens a gap in the leading
+   of the paragraph around it. Raising the glyph with a relative offset in `em`
+   keeps it out of the line-height calculation, so the paragraph's rhythm holds
+   whatever the tenant's ramp is. */
+.rottay-typography.rottay-typography--modern:is(sub, sup) {
+  position: relative;
+  vertical-align: baseline;
+  font-size: var(--ds-type-sub-sup-size, 0.75em);
+  line-height: 0;
+}
+.rottay-typography.rottay-typography--modern:is(sup) {
+  inset-block-end: var(--ds-type-sup-offset, 0.45em);
+}
+.rottay-typography.rottay-typography--modern:is(sub) {
+  inset-block-start: var(--ds-type-sub-offset, 0.25em);
+}
+
+/* Text selection stays tenant-tinted instead of the UA default blue. The
+   descendant rule is not redundant: `::selection` does not inherit, so a
+   `<strong>`, `<code>` or `<a>` inside a governed paragraph fell back to the
+   UA blue mid-sentence. */
+.rottay-typography.rottay-typography--modern::selection,
+.rottay-typography.rottay-typography--modern *::selection {
   background: var(
     --ds-type-selection-bg,
     color-mix(in srgb, var(--ds-color-primary) 22%, transparent)

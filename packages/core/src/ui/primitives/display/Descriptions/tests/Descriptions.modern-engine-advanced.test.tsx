@@ -1,4 +1,8 @@
 import React from 'react';
+import { readFileSync } from 'node:fs';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
@@ -68,5 +72,82 @@ describe('Descriptions modern advanced coverage', () => {
     // Vertical mode carries the data-layout hook the W6-D subgrid skin scopes to.
     expect(container.querySelector('[data-part="root"][data-layout="vertical"]')).toBeTruthy();
     expect(screen.getByText('Standalone')).toBeInTheDocument();
+  });
+});
+
+describe('Descriptions modern — span is clamped to the row track count', () => {
+  const SKIN = readFileSync(
+    join(
+      dirname(fileURLToPath(import.meta.url)),
+      '../../../../../foundation/tokens/css/runtime/engines/modern/skin/descriptions.css'
+    ),
+    'utf8'
+  );
+
+  it('never lets an item span more tracks than the grid declares', () => {
+    const { container } = render(
+      <ModernDescriptions column={3}>
+        <ModernItem label="Wide" span={5}>Overreaching</ModernItem>
+        <ModernItem label="Normal">Fine</ModernItem>
+      </ModernDescriptions>
+    );
+
+    const [wide, normal] = Array.from(
+      container.querySelectorAll('[data-part="row"]')
+    ) as HTMLElement[];
+
+    // 5 > 3 would grow two implicit columns and re-track every other row.
+    expect(wide).toHaveAttribute('data-span', '3');
+    expect(wide.style.getPropertyValue('--ds-descriptions-item-span')).toBe('3');
+    expect(normal).toHaveAttribute('data-span', '1');
+  });
+
+  it('floors a zero, negative, fractional or absent span at one track', () => {
+    const { container } = render(
+      <ModernDescriptions column={4}>
+        <ModernItem label="Zero" span={0}>a</ModernItem>
+        <ModernItem label="Negative" span={-2}>b</ModernItem>
+        <ModernItem label="Fractional" span={2.7}>c</ModernItem>
+        <ModernItem label="Absent">d</ModernItem>
+      </ModernDescriptions>
+    );
+
+    const spans = Array.from(container.querySelectorAll('[data-part="row"]')).map((row) =>
+      row.getAttribute('data-span')
+    );
+    // `span={0}` used to reach CSS as the invalid `grid-column: span 0`.
+    expect(spans).toEqual(['1', '1', '2', '1']);
+  });
+
+  it('clamps the vertical layout the same way', () => {
+    const { container } = render(
+      <ModernDescriptions layout="vertical" column={2}>
+        <ModernItem label="Wide" span={9}>x</ModernItem>
+      </ModernDescriptions>
+    );
+
+    expect(container.querySelector('[data-part="row"]')).toHaveAttribute('data-span', '2');
+  });
+
+  it('falls back to the contract default when the column count is unusable', () => {
+    const { container } = render(
+      <ModernDescriptions column={0}>
+        <ModernItem label="Wide" span={9}>x</ModernItem>
+      </ModernDescriptions>
+    );
+
+    const root = container.querySelector('[data-part="root"]') as HTMLElement;
+    // `repeat(0, ...)` is invalid CSS; the default track count takes over and
+    // the span clamps to it.
+    expect(root).toHaveAttribute('data-column-count', '3');
+    expect(container.querySelector('[data-part="row"]')).toHaveAttribute('data-span', '3');
+  });
+
+  it('the narrow container query re-tracks a multi-span row instead of growing columns', () => {
+    // At <=860px the grid drops to two tracks; a span authored for the wide
+    // grid is still wider than that, so the skin gives it the whole row.
+    expect(SKIN).toMatch(
+      /@container \(max-width: 860px\)[\s\S]*?\[data-part='row'\]:not\(\[data-span='1'\]\)\s*\{\s*grid-column:\s*1 \/ -1;/
+    );
   });
 });

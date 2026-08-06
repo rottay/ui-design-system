@@ -85,3 +85,66 @@ describe('CodeBlock W10 second visual pass (Modern craft)', () => {
     expect(skin).not.toContain('font-size: 0.8125rem');
   });
 });
+
+describe('CodeBlock highlighted lines carry a non-colour signal', () => {
+  // The wash was the only carrier of `highlightLines`. Forced colors strips
+  // backgrounds, so the emphasis disappeared in the mode that needs it most,
+  // and it never reached a monochrome reader at all.
+  const renderBlock = () =>
+    render(
+      <CodeBlock
+        code={'const a = 1;\nconst b = 2;\nconst c = 3;'}
+        highlightLines={[2]}
+        copyLabel="Copy"
+        copiedLabel="Copied"
+      />,
+    );
+
+  it('gives the marked line a leading rail in addition to the wash', () => {
+    const { container } = renderBlock();
+    const marked = container.querySelector('[data-highlighted="true"]') as HTMLElement;
+
+    expect(marked).toHaveTextContent('const b = 2;');
+    expect(marked.style.borderInlineStart).toContain(
+      'var(--ds-code-block-line-highlight-rail, var(--ds-color-warning))',
+    );
+  });
+
+  it('reserves the same rail width on unmarked lines so marking never shifts code', () => {
+    const { container } = renderBlock();
+    const lines = Array.from(
+      container.querySelectorAll('[data-part="line"]'),
+    ) as HTMLElement[];
+
+    expect(lines).toHaveLength(3);
+    const widths = new Set(
+      lines.map((line) => line.style.borderInlineStart.split(' solid ')[0]),
+    );
+    expect(Array.from(widths)).toEqual([
+      'var(--ds-code-block-line-highlight-rail-width, 2px)',
+    ]);
+
+    const unmarked = lines.filter((line) => !line.hasAttribute('data-highlighted'));
+    expect(unmarked).toHaveLength(2);
+    for (const line of unmarked) {
+      expect(line.style.borderInlineStart).toContain('transparent');
+    }
+  });
+
+  it('keeps the rail on the logical inline start so RTL needs no fork', () => {
+    const { container } = renderBlock();
+    const marked = container.querySelector('[data-highlighted="true"]') as HTMLElement;
+
+    expect(marked.style.borderLeft).toBe('');
+    expect(marked.style.borderRight).toBe('');
+  });
+
+  it('exposes the rail width as its own tenant channel', () => {
+    const { container } = renderBlock();
+    const marked = container.querySelector('[data-highlighted="true"]') as HTMLElement;
+
+    expect(marked.style.borderInlineStart).toContain(
+      '--ds-code-block-line-highlight-rail-width',
+    );
+  });
+});

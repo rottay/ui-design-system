@@ -234,3 +234,76 @@ describe('modern QRCode chrome (K4-C)', () => {
     expect(screen.getByRole('status', { name: 'Scanned' })).toBeInTheDocument();
   });
 });
+
+describe('modern QRCode — the embedded icon stays inside the recovery budget', () => {
+  const iconBox = (container: HTMLElement) =>
+    container.querySelector('[data-part="icon"]') as HTMLElement | null;
+
+  it('clamps an oversized icon to the level the caller chose', () => {
+    // 120px of a 160px symbol excavates 56% of the area; level L recovers ~7%,
+    // so the symbol the caller got back was unscannable.
+    const { container } = render(
+      <ModernQRCode value="https://rottay.com" size={160} icon="/logo.png" iconSize={120} errorLevel="L" />
+    );
+    // floor(160 * sqrt(0.07)) = 42
+    expect(iconBox(container)?.style.width).toBe('42px');
+    expect(iconBox(container)?.style.height).toBe('42px');
+  });
+
+  it('gives a higher level the larger budget it paid for', () => {
+    const widths = (['L', 'M', 'Q', 'H'] as const).map((errorLevel) => {
+      const { container } = render(
+        <ModernQRCode value="v" size={200} icon="/logo.png" iconSize={200} errorLevel={errorLevel} />
+      );
+      return iconBox(container)?.style.width;
+    });
+
+    // floor(200 * sqrt(budget)) for 7% / 15% / 25% / 30%
+    expect(widths).toEqual(['52px', '77px', '100px', '109px']);
+  });
+
+  it('leaves a within-budget icon exactly as authored', () => {
+    const { container } = render(
+      <ModernQRCode value="v" size={160} icon="/logo.png" iconSize={40} errorLevel="L" />
+    );
+    // The contract defaults (40 on 160 = 6.25% area) clear even the L budget.
+    expect(iconBox(container)?.style.width).toBe('40px');
+  });
+
+  it('drops the icon chrome entirely for a non-positive icon size', () => {
+    const { container } = render(
+      <ModernQRCode value="v" size={160} icon="/logo.png" iconSize={0} />
+    );
+    expect(iconBox(container)).toBeNull();
+  });
+});
+
+describe('modern QRCode — pass-through honesty law', () => {
+  it('forwards id/aria-*/data-* to the root it owns and keeps the engine part', () => {
+    const { container } = render(
+      <ModernQRCode
+        value="https://rottay.com"
+        id="caller-qr"
+        aria-describedby="qr-help"
+        data-testid="qr-root"
+        data-custom="caller-data"
+      />
+    );
+
+    const root = container.querySelector('.rottay-qrcode--modern') as HTMLElement;
+    expect(root).toHaveAttribute('id', 'caller-qr');
+    expect(root).toHaveAttribute('aria-describedby', 'qr-help');
+    expect(root).toHaveAttribute('data-testid', 'qr-root');
+    expect(root).toHaveAttribute('data-custom', 'caller-data');
+    expect(root).toHaveAttribute('data-part', 'root');
+  });
+
+  it('lets a composing owner name the root part and never leaks the engine prop', () => {
+    const { container } = render(
+      <ModernQRCode value="v" engine="modern" data-part="ticket-code" />
+    );
+    const root = container.querySelector('.rottay-qrcode--modern') as HTMLElement;
+    expect(root).toHaveAttribute('data-part', 'ticket-code');
+    expect(root).not.toHaveAttribute('engine');
+  });
+});

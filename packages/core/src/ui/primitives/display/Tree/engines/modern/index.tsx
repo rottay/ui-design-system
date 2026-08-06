@@ -110,6 +110,19 @@ function highlightText(text: React.ReactNode, searchValue: string): React.ReactN
 // motion and forced colors; the tree skin keeps only the 16px layout box and
 // the margin. The former family-local SVG spinner is retired (B4-04).
 
+// A search filter culls siblings from the DOM. Set position, set size and the
+// tree-line termination all describe what is actually drawn, so they are all
+// derived from this list rather than from the source array -- otherwise the
+// last rendered row announces the wrong position and draws a guide running
+// down to a sibling that is not there.
+function renderedSiblings(
+  nodes: TreeDataNode[],
+  filteredKeys: Set<TreeEngineKey> | null
+): TreeDataNode[] {
+  if (!filteredKeys) return nodes;
+  return nodes.filter((node) => filteredKeys.has(normalizeTreeKey(node.key)));
+}
+
 // ---------------------------------------------------------------------------
 // Drop indicator line
 // ---------------------------------------------------------------------------
@@ -187,6 +200,10 @@ interface TreeNodeInternalProps extends TreeDataNode {
   nodeRef: (key: TreeEngineKey, el: HTMLDivElement | null) => void;
   isLast: boolean;
   parentIsLast: boolean[];
+  /** 1-based position within the rendered sibling set (aria-posinset). */
+  posInSet: number;
+  /** Size of the rendered sibling set (aria-setsize). */
+  setSize: number;
 }
 
 const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
@@ -235,6 +252,8 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
   nodeRef,
   isLast,
   parentIsLast,
+  posInSet,
+  setSize,
 }) => {
   const hasChildren = children && children.length > 0;
   // Non-leaf nodes without children are assumed to support async loading,
@@ -373,6 +392,8 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
         aria-disabled={disabled}
         aria-checked={checkable ? (isHalfChecked ? 'mixed' : isChecked) : undefined}
         aria-level={level + 1}
+        aria-posinset={posInSet}
+        aria-setsize={setSize}
         aria-busy={isLoading || undefined}
         tabIndex={nodeKey === tabbableKey ? 0 : -1}
         data-tree-node-key={nodeKey}
@@ -475,11 +496,10 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
       {/* Children */}
       {isExpanded && hasChildren && (
         <div role="group">
-          {children!.map((child, index) => {
+          {renderedSiblings(children!, filteredKeys).map((child, index, siblings) => {
             const { key: rawChildKey, ...childRest } = child;
             const childKey = normalizeTreeKey(rawChildKey);
-            if (filteredKeys && !filteredKeys.has(childKey)) return null;
-            const childIsLast = index === children!.length - 1;
+            const childIsLast = index === siblings.length - 1;
             return (
               <TreeNodeInternal
                 key={childKey}
@@ -523,6 +543,8 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
                 nodeRef={nodeRef}
                 isLast={childIsLast}
                 parentIsLast={[...parentIsLast, isLast]}
+                posInSet={index + 1}
+                setSize={siblings.length}
               />
             );
           })}
@@ -1034,11 +1056,10 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
       onKeyDown={handleKeyDown}
       tabIndex={-1}
     >
-      {treeData.map((node, index) => {
+      {renderedSiblings(treeData, filteredKeys).map((node, index, siblings) => {
         const { key: rawNodeKey, ...nodeRest } = node;
         const nodeKey = normalizeTreeKey(rawNodeKey);
-        if (filteredKeys && !filteredKeys.has(nodeKey)) return null;
-        const nodeIsLast = index === treeData.length - 1;
+        const nodeIsLast = index === siblings.length - 1;
         return (
           <TreeNodeInternal
             key={nodeKey}
@@ -1082,6 +1103,8 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
             nodeRef={registerNodeRef}
             isLast={nodeIsLast}
             parentIsLast={[]}
+            posInSet={index + 1}
+            setSize={siblings.length}
           />
         );
       })}

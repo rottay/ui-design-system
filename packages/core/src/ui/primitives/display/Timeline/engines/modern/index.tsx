@@ -40,6 +40,37 @@ import { TIMELINE_DEFAULTS } from '../../contracts';
 const SCOPE_CLASSES = 'rottay-timeline rottay-timeline--modern';
 
 /**
+ * The tones the skin paints by name. `TimelineItemProps.color` is contractually
+ * `TimelineItemColor | string`, so anything else is a raw CSS color the caller
+ * chose -- it used to reach `data-tone` unrecognised and silently resolve to the
+ * primary fill. Off-preset colors now travel as `custom` plus a value channel.
+ */
+const TONE_PRESETS = new Set<string>([
+  'blue',
+  'red',
+  'green',
+  'gray',
+  'primary',
+  'success',
+  'warning',
+  'error',
+]);
+
+interface ResolvedTone {
+  tone: string;
+  style?: React.CSSProperties;
+}
+
+function resolveTone(color: TimelineItemProps['color']): ResolvedTone {
+  if (!color) return { tone: 'primary' };
+  if (TONE_PRESETS.has(color)) return { tone: color };
+  return {
+    tone: 'custom',
+    style: { '--ds-timeline-dot-color': color } as React.CSSProperties,
+  };
+}
+
+/**
  * ModernTimeline - skin-painted Timeline (modern engine).
  *
  * Features:
@@ -65,6 +96,13 @@ function ModernTimeline(props: TimelineProps): React.ReactElement {
     children,
     className = '',
     style,
+    engine: _engine,
+    'data-part': dataPart,
+    // Caller passthrough (id / aria-* / data-* / data-testid): the pass-through
+    // honesty law on BaseComponentProps binds every engine to forward it to the
+    // root it owns. It spreads BEFORE the engine's own stamps so the skin
+    // contract always lands last.
+    ...rest
   } = props;
 
   // Normalise data source: items array prop takes priority over JSX children.
@@ -86,8 +124,9 @@ function ModernTimeline(props: TimelineProps): React.ReactElement {
     /* A timeline is a chronological sequence: the list is ORDERED (ol), not
        ul. The skin resets list styling, so the change is purely semantic. */
     <ol
+      {...rest}
       className={`${SCOPE_CLASSES}${className ? ` ${className}` : ''}`}
-      data-part="root"
+      data-part={dataPart ?? 'root'}
       data-mode={mode}
       style={style}
     >
@@ -104,8 +143,10 @@ function ModernTimeline(props: TimelineProps): React.ReactElement {
           ? itemProps.position === 'left' ? 'start' : 'end'
           : getSide(index);
 
+        const { tone, style: toneStyle } = resolveTone(itemProps.color);
+
         return (
-          <li key={index} data-part="item" data-side={side} data-tone={itemProps.color || 'primary'}>
+          <li key={index} data-part="item" data-side={side} data-tone={tone} style={toneStyle}>
             {/* Connectors are pure visual rails between nodes: hidden from AT
                 so the sequence reads as exactly its items (an hr would
                 otherwise announce as a separator between every row). */}

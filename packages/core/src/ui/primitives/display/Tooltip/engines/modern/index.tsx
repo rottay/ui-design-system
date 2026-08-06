@@ -94,6 +94,9 @@ type TooltipPortalScope = {
   "data-density"?: string;
 };
 
+const FOCUSABLE_SELECTOR =
+  'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+
 const INTERACTIVE_POINTER_GRACE_MS = 120;
 const DEFAULT_EXIT_FALLBACK_MS = 240;
 const EXIT_FALLBACK_GRACE_MS = 64;
@@ -589,16 +592,44 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
     closeAll();
     if (!shouldRestoreFocus) return;
     suppressNextFocusRef.current = true;
-    anchorEl
-      ?.querySelector<HTMLElement>(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-      )
-      ?.focus();
+    anchorEl?.querySelector<HTMLElement>(FOCUSABLE_SELECTOR)?.focus();
     focusResetTimeoutRef.current = setTimeout(() => {
       suppressNextFocusRef.current = false;
       focusResetTimeoutRef.current = null;
     }, 0);
   }, [anchorEl, closeAll, interactive]);
+
+  // An interactive bubble is a `dialog` with real controls, but it renders
+  // through the overlay portal — outside the trigger's DOM ancestry — so
+  // sequential navigation would walk straight past it. Bridge the seam in
+  // both directions. The FORWARD exit off the last control is deliberately
+  // left native: a tooltip is not modal, so it must not trap focus.
+  const handleWrapperKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLDivElement>) => {
+      if (!interactive || !isVisible || event.key !== "Tab" || event.shiftKey)
+        return;
+      if (!bubbleEl || bubbleEl.contains(event.target as Node)) return;
+      const first = bubbleEl.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
+      if (!first) return;
+      event.preventDefault();
+      first.focus();
+    },
+    [bubbleEl, interactive, isVisible]
+  );
+
+  const handleBubbleKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLDivElement>) => {
+      if (event.key !== "Tab" || !event.shiftKey || !bubbleEl) return;
+      const first = bubbleEl.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
+      if (first && event.target !== first) return;
+      const triggerEl =
+        anchorEl?.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
+      if (!triggerEl) return;
+      event.preventDefault();
+      triggerEl.focus();
+    },
+    [anchorEl, bubbleEl]
+  );
 
   const { isTopMost, zIndex: layerZIndex, layerProps } = useOverlayLayer({
     kind: "tooltip",
@@ -850,6 +881,7 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
             }
           : undefined
       }
+      onKeyDown={interactive ? handleBubbleKeyDown : undefined}
       onTransitionEnd={(event) => {
         if (event.target === event.currentTarget && !isVisible)
           setPresent(false);
@@ -889,6 +921,7 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
       data-trigger={Array.from(triggers).join(" ")}
       data-density={density}
       style={style}
+      onKeyDown={handleWrapperKeyDown}
       {...anchorAttrs}
       {...eventHandlers}
     >

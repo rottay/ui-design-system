@@ -33,6 +33,10 @@ const SCENES = [
   { slug: 'overlay-blocking', label: 'Overlay — Modal + Drawer (blocking layer, combined)' },
   { slug: 'overlay-drawer', label: 'Overlay — Drawer (isolated chamber, unoccluded)' },
   { slug: 'feedback', label: 'Feedback — Alert + Skeleton + Spinner' },
+  { slug: 'display-labels', label: 'Display — Avatar + Badge + Tag + Kbd + Tooltip' },
+  { slug: 'display-surfaces', label: 'Display — Card + Callout + Empty + Descriptions + Statistic' },
+  { slug: 'display-collections', label: 'Display — Table + List + Tree + Timeline + Calendar' },
+  { slug: 'display-content', label: 'Display — Typography + MarkdownView + CodeBlock + Image + Carousel + QRCode' },
 ] as const;
 
 const GROUNDS = [

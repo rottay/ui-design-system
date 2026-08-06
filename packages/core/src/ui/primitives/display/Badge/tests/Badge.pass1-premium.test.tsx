@@ -227,3 +227,70 @@ describe('Modern Badge / Chip / Pill premium contract — Pass 1', () => {
     expect(skin).not.toMatch(/margin-(left|right)\s*:/);
   });
 });
+
+describe('Badge overlay indicator accessible name', () => {
+  // `aria-label` on a role-less generic span is discarded, so a caller naming
+  // a count overlay used to get silence from assistive technology.
+  it('exposes the caller label on a count overlay', () => {
+    render(
+      <ModernBadge count={3} aria-label="3 unread messages">
+        <button type="button">Inbox</button>
+      </ModernBadge>,
+    );
+
+    expect(screen.getByRole('img', { name: '3 unread messages' })).toBeInTheDocument();
+  });
+
+  it('exposes the caller label on a bare dot overlay that has no text at all', () => {
+    render(
+      <ModernBadge dot aria-label="Unsaved changes">
+        <button type="button">Draft</button>
+      </ModernBadge>,
+    );
+
+    const indicator = screen.getByRole('img', { name: 'Unsaved changes' });
+    expect(indicator).toHaveAttribute('data-indicator', 'true');
+    expect(indicator).toHaveTextContent('');
+  });
+
+  it('leaves an unlabelled overlay role-less rather than inventing an image', () => {
+    const { container } = render(
+      <ModernBadge count={7}>
+        <button type="button">Inbox</button>
+      </ModernBadge>,
+    );
+
+    const indicator = container.querySelector('[data-indicator="true"]') as HTMLElement;
+    expect(indicator).not.toHaveAttribute('role');
+    expect(indicator).toHaveTextContent('7');
+  });
+
+  it('does not put the img role on the interactive overlay, which is a button', () => {
+    render(
+      <ModernBadge count={2} aria-label="2 alerts" onClick={vi.fn()}>
+        <button type="button">Bell</button>
+      </ModernBadge>,
+    );
+
+    expect(screen.queryByRole('img')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '2 alerts' })).toBeInTheDocument();
+  });
+});
+
+describe('Badge elevation is mode-adaptive', () => {
+  // A fixed white specular is a light-mode idiom; on a dark theme a 46-58%
+  // white top edge blows the chip out.
+  it('derives every inset highlight from the elevated surface, never from white', () => {
+    const highlights = skin.match(/inset 0 1px 0 color-mix\([^)]*\)/g) ?? [];
+
+    expect(highlights.length).toBeGreaterThanOrEqual(3);
+    for (const highlight of highlights) {
+      expect(highlight).toContain('--ds-color-bg-elevated');
+      expect(highlight).not.toContain('--ds-color-white');
+    }
+  });
+
+  it('routes rest, hover and icon specular through one tenant channel', () => {
+    expect(skin.match(/--ds-badge-specular/g)?.length).toBe(3);
+  });
+});

@@ -26,6 +26,22 @@ import { IMAGE_DEFAULTS } from '../../contracts';
 import type { ImageRadius, ImageStatus } from '../../contracts';
 
 /**
+ * Resolves a contract dimension to a pixel integer, or `undefined` for a CSS
+ * length that the `width`/`height` HTML attributes cannot legally carry.
+ */
+function toIntrinsicPixels(value: number | string | undefined): number | undefined {
+  if (typeof value === 'number') {
+    return Number.isFinite(value) && value > 0 ? Math.round(value) : undefined;
+  }
+  if (typeof value !== 'string') return undefined;
+  const trimmed = value.trim();
+  const bare = /^\d+(\.\d+)?$/.test(trimmed) ? Number(trimmed) : undefined;
+  if (bare !== undefined) return bare > 0 ? Math.round(bare) : undefined;
+  const px = /^(\d+(\.\d+)?)px$/.exec(trimmed);
+  return px ? Math.round(Number(px[1])) : undefined;
+}
+
+/**
  * Modern (skin-painted) Image engine. Tracks the loading lifecycle and
  * composes the frame, the reveal and the overlays through the modern skin's
  * data contract -- no Tailwind utilities remain (the zoom badge's logical
@@ -56,6 +72,16 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
     hoverOverlay,
     className = '',
     style = {},
+    // Contract fields with no modern-engine binding; named so they cannot
+    // reach the DOM as unknown attributes through the passthrough below.
+    engine: _engine,
+    quality: _quality,
+    blurDataURL: _blurDataURL,
+    'data-part': dataPart,
+    // Caller passthrough (id / aria-* / data-* / data-testid): spreads BEFORE
+    // the engine's own stamps so the skin and interaction-state contracts land
+    // last.
+    ...rest
   } = props;
 
   // Tracks loading/loaded/error lifecycle for opacity transition and fallback
@@ -99,11 +125,30 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
     .filter(Boolean)
     .join(' ');
 
+  // `width`/`height` are `number | string` by contract, but the HTML attributes
+  // accept pixel integers ONLY. A CSS length ('100%', '20rem') reaching them is
+  // parsed by the UA as a bare number, which hands the img a WRONG intrinsic
+  // ratio and shifts the layout once the real bitmap arrives; only the CSS
+  // channel should carry those.
+  const intrinsicWidth = toIntrinsicPixels(width);
+  const intrinsicHeight = toIntrinsicPixels(height);
+
+  // Space reservation: with both intrinsic dimensions known, the frame holds
+  // the image's shape from first paint even when the CSS box is fluid, so the
+  // placeholder does not collapse and the reveal costs no layout shift. An
+  // explicit `aspectRatio` prop still wins.
+  const reservedRatio =
+    aspectRatio !== undefined && aspectRatio !== null
+      ? String(aspectRatio)
+      : intrinsicWidth !== undefined && intrinsicHeight !== undefined
+        ? `${intrinsicWidth} / ${intrinsicHeight}`
+        : undefined;
+
   // Container styles
   const containerStyle: React.CSSProperties = {
     width: typeof width === 'number' ? `${width}px` : width || 'auto',
     height: typeof height === 'number' ? `${height}px` : height || 'auto',
-    aspectRatio: aspectRatio ? String(aspectRatio) : undefined,
+    aspectRatio: reservedRatio,
     ...style,
   };
 
@@ -111,6 +156,7 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
 
   return (
     <div
+      {...rest}
       className={containerClasses}
       data-status={status}
       data-radius={radius}
@@ -132,7 +178,7 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
           }
         : {})}
       {...interactionHandlers}
-      {...partAttributes('root', interaction)}
+      {...partAttributes(dataPart ?? 'root', interaction)}
       role={onClick ? 'button' : undefined}
       tabIndex={onClick ? 0 : undefined}
     >
@@ -166,8 +212,8 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
         data-part="img"
         src={src}
         alt={alt ?? ''}
-        width={width}
-        height={height}
+        width={intrinsicWidth}
+        height={intrinsicHeight}
         loading={lazy ? 'lazy' : 'eager'}
         onLoad={handleLoad}
         onError={handleError}

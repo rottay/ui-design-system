@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, render, screen, waitFor } from '@testing-library/react';
@@ -105,5 +107,46 @@ describe('Statistic modern advanced engine coverage', () => {
     });
 
     expect(screen.getByText('00')).toBeInTheDocument();
+  });
+});
+
+describe('Statistic loading skeleton sweep', () => {
+  const SKELETON_SKIN = readFileSync(
+    resolve(
+      __dirname,
+      '../../../../../foundation/tokens/css/runtime/engines/modern/skin/statistic.css'
+    ),
+    'utf8'
+  );
+
+  // The bars declared a 180%-wide gradient, which only means anything if the
+  // background position travels. Without the animation the "shimmer" rendered
+  // as a static off-centre smear and the bars carried nothing but the root's
+  // opacity pulse.
+  it('travels the oversized gradient instead of freezing it', () => {
+    expect(SKELETON_SKIN).toContain('@keyframes ds-statistic-skeleton-sweep');
+    expect(SKELETON_SKIN).toMatch(/from\s*{\s*background-position:/);
+    expect(SKELETON_SKIN).toMatch(/to\s*{\s*background-position:/);
+
+    const bar = SKELETON_SKIN.slice(
+      SKELETON_SKIN.indexOf("> [data-part='skeleton-line'] {"),
+    );
+    const rule = bar.slice(0, bar.indexOf('}'));
+    expect(rule).toContain('background-size: 180% 100%');
+    expect(rule).toContain('animation: ds-statistic-skeleton-sweep');
+  });
+
+  it('routes the sweep duration through a tenant channel', () => {
+    expect(SKELETON_SKIN).toContain('--ds-statistic-skeleton-duration');
+  });
+
+  it('stops the travel under reduced motion without erasing the fill', () => {
+    const reduced = SKELETON_SKIN.slice(
+      SKELETON_SKIN.indexOf('@media (prefers-reduced-motion: reduce)'),
+    );
+    expect(reduced).toContain("[data-part='skeleton-line']");
+    expect(reduced).toMatch(/skeleton-line'\] \{\s*animation: none;\s*background-position: 0 0;/);
+    // Blanking the image here would erase a tenant's whole `--ds-statistic-loading-bg`.
+    expect(reduced).not.toContain('background-image: none');
   });
 });

@@ -237,8 +237,10 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
      * Autoplay is continuous motion: reduced-motion turns it OFF entirely
      * (WCAG 2.2.2 — the user navigates manually instead).
      */
+    const autoRotating = autoplay && !isPaused && !reduceMotion;
+
     useEffect(() => {
-      if (autoplay && !isPaused && !reduceMotion) {
+      if (autoRotating) {
         autoplayRef.current = setInterval(next, autoplaySpeed);
       }
       return () => {
@@ -246,7 +248,7 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
           clearInterval(autoplayRef.current);
         }
       };
-    }, [autoplay, autoplaySpeed, isPaused, next, reduceMotion]);
+    }, [autoRotating, autoplaySpeed, next]);
 
     /**
      * Pause autoplay on mouse hover.
@@ -390,6 +392,21 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
     const prevDisabled = !infinite && currentSlide === 0;
     const nextDisabled = !infinite && currentSlide === slides.length - 1;
 
+    // The click that lands the final slide is the same click that disables the
+    // arrow that delivered it. Focus left on a disabled control is dead focus
+    // (WCAG 2.4.3): hand it to the counterpart, which a boundary guarantees is
+    // live, so the keyboard user can still walk back out.
+    const prevArrowRef = useRef<HTMLButtonElement>(null);
+    const nextArrowRef = useRef<HTMLButtonElement>(null);
+    useEffect(() => {
+      const active = document.activeElement;
+      if (active === nextArrowRef.current && nextDisabled && !prevDisabled) {
+        prevArrowRef.current?.focus();
+      } else if (active === prevArrowRef.current && prevDisabled && !nextDisabled) {
+        nextArrowRef.current?.focus();
+      }
+    }, [prevDisabled, nextDisabled]);
+
     // A blank/whitespace-only name is not meaningful: the root stays a plain
     // (non-landmark) div and the naming attribute is dropped. Only a named
     // carousel is a `region` landmark (axe landmark-unique; W8, mirror of
@@ -423,6 +440,10 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
         {/* Slides Container */}
         <div
           data-part="track"
+          // APG carousel: an automatic rotation must not narrate itself over
+          // whatever the user is doing, but a slide the user asked for must be
+          // announced. The region opens exactly when rotation is not running.
+          aria-live={autoRotating ? 'off' : 'polite'}
           style={{ height: style?.height || 'var(--ds-carousel-height, 300px)' }}
           onPointerDown={handleTrackPointerDown}
           onPointerUp={handleTrackPointerUp}
@@ -479,6 +500,7 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
         {arrows && (
           <>
             <button
+              ref={prevArrowRef}
               className="absolute start-2 top-1/2 -translate-y-1/2 z-10"
               data-part="arrow"
               data-direction="prev"
@@ -497,6 +519,7 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
               ))}
             </button>
             <button
+              ref={nextArrowRef}
               className="absolute end-2 top-1/2 -translate-y-1/2 z-10"
               data-part="arrow"
               data-direction="next"

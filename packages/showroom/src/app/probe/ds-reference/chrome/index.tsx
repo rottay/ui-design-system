@@ -110,4 +110,35 @@ export const TORTURE_CONTENT = {
   spanish: 'Revisar y aprobar las solicitudes pendientes del trimestre en curso',
   arabic: 'مراجعة واعتماد الطلبات المعلقة لهذا الربع من السنة المالية الحالية',
   unbroken: 'Reconciliation_2026Q3_FINAL_v4_approved_by_committee_long_token',
+  /**
+   * A multi-sentence block, distinct from `longLabel` (one long line): this
+   * is for primitives whose failure mode is BLOCK rhythm (paragraph leading,
+   * list-item wrap, table-cell wrap) rather than single-line overflow —
+   * Typography.Paragraph, MarkdownView, Descriptions values, List
+   * descriptions.
+   */
+  longParagraph:
+    'The committee reviewed twelve outstanding submissions from the prior quarter and returned a ' +
+    'provisional decision on each: eight were approved without condition, three were approved ' +
+    'pending a follow-up attachment, and one was returned for a full resubmission because the ' +
+    'supporting ledger did not reconcile against the reported total.',
 } as const;
+
+/**
+ * Deterministic, offline-safe placeholder bitmap for the few display
+ * primitives that require a real `src` (Avatar, Image, Carousel background).
+ * A `data:` URI keeps every capture free of network dependency — the lab's
+ * zero-product-dependency rule applies to fixture assets exactly as it does
+ * to fixture text, so this is drawn inline rather than fetched from a URL.
+ * Neutral gray-scale rect + two shapes reads as an anonymous portrait/photo
+ * silhouette without implying any tenant's brand color.
+ */
+export const PLACEHOLDER_IMAGE_SRC =
+  'data:image/svg+xml;utf8,' +
+  encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">' +
+      '<rect width="200" height="200" fill="#94a3b8"/>' +
+      '<circle cx="100" cy="78" r="34" fill="#e2e8f0"/>' +
+      '<rect x="34" y="130" width="132" height="52" rx="26" fill="#e2e8f0"/>' +
+      '</svg>'
+  );

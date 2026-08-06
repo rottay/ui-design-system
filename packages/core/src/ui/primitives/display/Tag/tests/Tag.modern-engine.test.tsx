@@ -90,3 +90,65 @@ describe('Tag modern engine contract', () => {
     expect(root.style.backgroundColor).toBe('');
   });
 });
+
+describe('Tag nested close control inside a clickable tag', () => {
+  // The close button is a real button nested inside a role="button" span, so
+  // its keyboard activation bubbles to the tag's own keydown handler.
+  it('removes without also activating the tag on Enter', () => {
+    const onClick = vi.fn();
+    const onClose = vi.fn();
+    render(
+      <ModernTag clickable onClick={onClick} closable onClose={onClose}>
+        Design
+      </ModernTag>
+    );
+
+    const close = screen.getByRole('button', { name: 'Remove tag' });
+    fireEvent.keyDown(close, { key: 'Enter', bubbles: true });
+
+    expect(onClick).not.toHaveBeenCalled();
+  });
+
+  it('removes without also activating the tag on Space', () => {
+    const onClick = vi.fn();
+    render(
+      <ModernTag clickable onClick={onClick} closable onClose={vi.fn()}>
+        Design
+      </ModernTag>
+    );
+
+    fireEvent.keyDown(screen.getByRole('button', { name: 'Remove tag' }), {
+      key: ' ',
+      bubbles: true,
+    });
+
+    expect(onClick).not.toHaveBeenCalled();
+  });
+
+  it('still activates the tag from its own root', () => {
+    const onClick = vi.fn();
+    const { container } = render(
+      <ModernTag clickable onClick={onClick} closable onClose={vi.fn()}>
+        Design
+      </ModernTag>
+    );
+
+    const root = container.querySelector('.rottay-tag-shell--modern') as HTMLElement;
+    fireEvent.keyDown(root, { key: 'Enter' });
+    expect(onClick).toHaveBeenCalledTimes(1);
+  });
+
+  it('leaves the mouse path on the close control unchanged', () => {
+    const onClick = vi.fn();
+    const onClose = vi.fn();
+    render(
+      <ModernTag clickable onClick={onClick} closable onClose={onClose}>
+        Design
+      </ModernTag>
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Remove tag' }));
+    expect(onClose).toHaveBeenCalledTimes(1);
+    expect(onClick).not.toHaveBeenCalled();
+  });
+});

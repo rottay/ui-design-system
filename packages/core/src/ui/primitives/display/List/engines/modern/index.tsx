@@ -20,9 +20,57 @@
  * ```
  */
 import React from 'react';
-import type { ListProps, ListItemProps, ListItemMetaProps } from '../../contracts';
+import type { ListProps, ListGridConfig, ListItemProps, ListItemMetaProps } from '../../contracts';
 import { LIST_DEFAULTS } from '../../contracts';
 import { Empty } from '../../../../facade';
+
+/**
+ * `ListGridConfig`'s per-breakpoint column counts, smallest first. `xxl` is the
+ * contract's spelling of the shared scale's `2xl` tier.
+ */
+const GRID_BREAKPOINTS = ['xs', 'sm', 'md', 'lg', 'xl', 'xxl'] as const;
+
+interface GridProjection {
+  /** `fixed` keeps the single-count inline track list; `responsive` hands the tracks to the skin. */
+  mode: 'fixed' | 'responsive';
+  style: React.CSSProperties;
+}
+
+/**
+ * Projects `grid` onto the `<ul>`.
+ *
+ * A single `column` stays an inline track list. Per-breakpoint counts cannot:
+ * an inline `grid-template-columns` outranks every media query, so the six
+ * declared tiers used to be read and then silently dropped. Those callers get
+ * the count published per tier as a custom property instead, with each
+ * undeclared tier carrying the nearest smaller one forward so the skin's
+ * mobile-first queries need no fallback chain.
+ */
+function projectGrid(grid: ListGridConfig): GridProjection {
+  const gap = grid.gutter ?? 16;
+  const declared = GRID_BREAKPOINTS.filter(
+    (tier) => typeof grid[tier] === 'number' && (grid[tier] as number) >= 1
+  );
+
+  if (declared.length === 0) {
+    return {
+      mode: 'fixed',
+      style: { gridTemplateColumns: `repeat(${grid.column || 1}, 1fr)`, gap },
+    };
+  }
+
+  const style: Record<string, string | number> = { gap };
+  let carried = grid.column && grid.column >= 1 ? Math.floor(grid.column) : 1;
+  for (const tier of GRID_BREAKPOINTS) {
+    const declaredCount = grid[tier];
+    if (typeof declaredCount === 'number' && declaredCount >= 1) {
+      carried = Math.floor(declaredCount);
+    }
+    style[`--ds-list-grid-columns-${tier}`] = carried;
+  }
+
+  return { mode: 'responsive', style: style as React.CSSProperties };
+}
 
 /** Modern List Item Meta. Renders avatar + title + description with a flex row. */
 export const Meta = React.forwardRef<HTMLDivElement, ListItemMetaProps>(
@@ -183,6 +231,7 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
     // through the composed public Empty primitive (single paint owner), never
     // a hand-rolled empty box.
     const isDataDrivenEmpty = dataSource && renderItem && dataSource.length === 0;
+    const gridProjection = grid ? projectGrid(grid) : undefined;
 
     return (
       <div
@@ -202,9 +251,10 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
           </div>
         )}
         {/* When grid is set, switch to CSS Grid; otherwise render as a standard vertical list.
-            The grid tracks/gutter are a data-driven projection of the `grid` prop,
-            so they stay inline. The `grid` utility class is a test-pinned
-            bridge string and stays. */}
+            The gutter and the single-count track list are a data-driven
+            projection of the `grid` prop, so they stay inline; per-breakpoint
+            counts travel as custom properties the skin's media queries read.
+            The `grid` utility class is a test-pinned bridge string and stays. */}
         {isDataDrivenEmpty ? (
           <div data-part="empty">
             <Empty description={locale?.emptyText} />
@@ -213,10 +263,8 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
           <ul
             className={`${grid ? 'grid' : ''}`}
             data-part="list"
-            style={grid ? {
-              gridTemplateColumns: `repeat(${grid.column || 1}, 1fr)`,
-              gap: grid.gutter || 16,
-            } : undefined}
+            data-grid={gridProjection?.mode}
+            style={gridProjection?.style}
           >
             {React.Children.map(listContent, (child, index) => (
               <React.Fragment key={index}>

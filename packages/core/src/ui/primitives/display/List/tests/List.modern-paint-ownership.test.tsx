@@ -125,3 +125,81 @@ describe('List modern — geometry lives in the skin, hooks in the DOM', () => {
     );
   });
 });
+
+describe('List modern — responsive grid columns are honored', () => {
+  const items = ['a', 'b', 'c'];
+  const renderList = (grid: Record<string, number>) =>
+    render(
+      <ModernList
+        grid={grid}
+        dataSource={items}
+        renderItem={(x) => <ModernItem key={String(x)}>{String(x)}</ModernItem>}
+      />
+    );
+
+  it('publishes every tier and carries the nearest smaller count forward', () => {
+    const { container } = renderList({ gutter: 24, xs: 1, md: 3, xxl: 6 });
+    const ul = container.querySelector('ul') as HTMLElement;
+
+    expect(ul).toHaveAttribute('data-grid', 'responsive');
+    // The declared tiers used to be read off the prop and dropped on the floor.
+    expect(ul.style.getPropertyValue('--ds-list-grid-columns-xs')).toBe('1');
+    expect(ul.style.getPropertyValue('--ds-list-grid-columns-sm')).toBe('1');
+    expect(ul.style.getPropertyValue('--ds-list-grid-columns-md')).toBe('3');
+    expect(ul.style.getPropertyValue('--ds-list-grid-columns-lg')).toBe('3');
+    expect(ul.style.getPropertyValue('--ds-list-grid-columns-xl')).toBe('3');
+    expect(ul.style.getPropertyValue('--ds-list-grid-columns-xxl')).toBe('6');
+    expect(ul.style.gap).toBe('24px');
+  });
+
+  it('drops the inline track list so the media queries can actually win', () => {
+    const { container } = renderList({ md: 4 });
+    // An inline grid-template-columns outranks every media query; leaving it
+    // in place is exactly why the breakpoints never took effect.
+    expect((container.querySelector('ul') as HTMLElement).style.gridTemplateColumns).toBe('');
+  });
+
+  it('seeds undeclared small tiers from `column` when both are given', () => {
+    const { container } = renderList({ column: 2, lg: 5 });
+    const ul = container.querySelector('ul') as HTMLElement;
+    expect(ul.style.getPropertyValue('--ds-list-grid-columns-xs')).toBe('2');
+    expect(ul.style.getPropertyValue('--ds-list-grid-columns-md')).toBe('2');
+    expect(ul.style.getPropertyValue('--ds-list-grid-columns-lg')).toBe('5');
+    expect(ul.style.getPropertyValue('--ds-list-grid-columns-xl')).toBe('5');
+  });
+
+  it('keeps the fixed single-count projection inline and unchanged', () => {
+    const { container } = renderList({ column: 2, gutter: 24 });
+    const ul = container.querySelector('ul') as HTMLElement;
+    expect(ul).toHaveAttribute('data-grid', 'fixed');
+    expect(ul.style.gridTemplateColumns).toBe('repeat(2, 1fr)');
+    expect(ul.style.getPropertyValue('--ds-list-grid-columns-md')).toBe('');
+  });
+
+  it('stamps no grid hook at all when the list is not a grid', () => {
+    const { container } = render(
+      <ModernList dataSource={items} renderItem={(x) => <ModernItem key={String(x)}>{String(x)}</ModernItem>} />
+    );
+    expect(container.querySelector('ul')).not.toHaveAttribute('data-grid');
+  });
+
+  it('the skin owns one track rule per breakpoint on the shared scale', () => {
+    for (const [tier, query] of [
+      ['sm', '640px'],
+      ['md', '768px'],
+      ['lg', '1024px'],
+      ['xl', '1280px'],
+      ['xxl', '1536px'],
+    ] as const) {
+      expect(SKIN).toMatch(
+        new RegExp(
+          `@media \\(min-width: ${query}\\)[\\s\\S]*?\\[data-grid='responsive'\\][\\s\\S]*?repeat\\(var\\(--ds-list-grid-columns-${tier}, 1\\), minmax\\(0, 1fr\\)\\)`
+        )
+      );
+    }
+    // The xs tier is the 0px baseline and needs no query.
+    expect(SKIN).toMatch(
+      /\[data-grid='responsive'\]\s*\{\s*display: grid;\s*grid-template-columns: repeat\(var\(--ds-list-grid-columns-xs, 1\), minmax\(0, 1fr\)\)/
+    );
+  });
+});
