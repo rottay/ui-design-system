@@ -113,6 +113,8 @@ interface FormContextValue {
   setError: (name: string, errors: string[]) => void;
   setTouched: (name: string, touched: boolean) => void;
   registerField: (name: string, initialValue?: unknown, rules?: FormRule[]) => void;
+  /** Drops a field's rules and errors when its Item leaves the tree, so a removed control cannot keep failing submit. */
+  unregisterField: (name: string) => void;
   layout?: 'horizontal' | 'vertical' | 'inline';
   /** Canonical `sm | md | lg` step; the public `size` prop's legacy spelling is normalized once via `toCanonicalSize` before entering context. */
   size?: 'sm' | 'md' | 'lg';
@@ -389,6 +391,16 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
     }
   }, [values]);
 
+  const unregisterField = useCallback((fieldName: string) => {
+    deleteOwnRecordValue(fieldRulesRef.current, fieldName);
+    setErrors((prev) => {
+      if (readOwnRecordValue(prev, fieldName) === undefined) return prev;
+      const next = { ...prev };
+      deleteOwnRecordValue(next, fieldName);
+      return next;
+    });
+  }, []);
+
   // Runs every configured rule sequentially for a single field.
   // Sequential execution matters because later rules may depend on earlier
   // ones (e.g., a custom validator that only makes sense after required passes).
@@ -537,6 +549,7 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
     setError,
     setTouched: setFieldTouched,
     registerField,
+    unregisterField,
     layout,
     size: toCanonicalSize(size),
     labelAlign,
@@ -546,7 +559,7 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
     hasFeedback: formHasFeedback,
     validateField,
     getFieldRules,
-  }), [values, errors, touched, validating, setValue, setError, setFieldTouched, registerField, layout, size, labelAlign, disabled, colon, requiredMark, formHasFeedback, validateField, getFieldRules]);
+  }), [values, errors, touched, validating, setValue, setError, setFieldTouched, registerField, unregisterField, layout, size, labelAlign, disabled, colon, requiredMark, formHasFeedback, validateField, getFieldRules]);
 
   useImperativeHandle(ref, () => resolvedForm as FormInstance, [resolvedForm]);
 
@@ -616,6 +629,7 @@ const FormItem: React.FC<FormItemProps> = (props) => {
     validating: validatingMap,
     setValue,
     registerField,
+    unregisterField,
     layout,
     colon,
     disabled,
@@ -632,6 +646,13 @@ const FormItem: React.FC<FormItemProps> = (props) => {
       registerField(fieldName, initialValue, rules);
     }
   }, [fieldName, initialValue, registerField, rules]);
+
+  // Separate from registration: `rules` is usually an inline literal, so the
+  // effect above re-runs every render and must never carry the teardown.
+  React.useEffect(() => {
+    if (!fieldName) return undefined;
+    return () => unregisterField(fieldName);
+  }, [fieldName, unregisterField]);
 
   // Field dependencies: when a dependency changes, re-validate this field
   const depsKey = dependencies?.map((d) => {

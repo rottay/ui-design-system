@@ -226,7 +226,9 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
 
         {paragraph &&
           Array.from({
-            length: typeof paragraph === 'object' ? paragraph.rows || rows! : rows!,
+            // `?? rows` and not `|| rows`: a declared `rows: 0` is a real
+            // count, not an absent one (classic forwards it to AntD as zero).
+            length: typeof paragraph === 'object' ? paragraph.rows ?? rows! : rows!,
           }).map((_, i) => (
             <div
               key={i}

@@ -10,7 +10,9 @@ import {
   Checkbox,
   Collapse,
   DatePicker,
+  Drawer,
   FloatButton,
+  Form,
   FormField,
   Input,
   Layout,
@@ -25,6 +27,7 @@ import {
   Result,
   ScrollArea,
   Segmented,
+  Skeleton,
   Splitter,
   Stepper,
   Switch,
@@ -33,6 +36,7 @@ import {
   TimePicker,
   Toggle,
   Upload,
+  Watermark,
 } from '@rottay/design-system';
 
 import { SceneFrame, SpecimenRow } from '../../chrome';
@@ -66,7 +70,11 @@ export type R2BehaviorCase =
   | 'result'
   | 'link'
   | 'segmented'
-  | 'popover';
+  | 'popover'
+  | 'drawer'
+  | 'skeleton'
+  | 'form'
+  | 'watermark';
 
 const CRUMB_ITEMS = [
   { key: 'home', label: 'Home', href: '/' },
@@ -349,6 +357,72 @@ function PopoverRefusedCloseHarness() {
   );
 }
 
+/** The inner drawer is opened by the operator, so it always registers last. */
+function StackedDrawerHarness() {
+  const [outer, setOuter] = React.useState(true);
+  const [inner, setInner] = React.useState(false);
+  return (
+    <div>
+      <Drawer open={outer} title="Outer" placement="right" onClose={() => setOuter(false)}>
+        <div style={{ padding: 12 }}>
+          <button type="button" data-testid="lab-drawer-open-inner" onClick={() => setInner(true)}>
+            Open inner
+          </button>
+        </div>
+      </Drawer>
+      {inner && (
+        <Drawer open title="Inner" placement="right" onClose={() => setInner(false)}>
+          <div style={{ padding: 12 }}>Inner body</div>
+        </Drawer>
+      )}
+      <div data-testid="lab-drawer-state">
+        outer: {String(outer)} / inner: {String(inner)}
+      </div>
+    </div>
+  );
+}
+
+function FormUnmountedFieldHarness() {
+  const [showOptional, setShowOptional] = React.useState(true);
+  const [submits, setSubmits] = React.useState(0);
+  return (
+    <div>
+      <Form initialValues={{ always: 'filled' }} onFinish={() => setSubmits((n) => n + 1)}>
+        <Form.Item name="always" label="Always" rules={[{ required: true, message: 'Required' }]}>
+          <Input id="lab-form-always" />
+        </Form.Item>
+        {showOptional && (
+          <Form.Item name="optional" label="Optional" rules={[{ required: true, message: 'Required' }]}>
+            <Input id="lab-form-optional" />
+          </Form.Item>
+        )}
+        <button type="submit" data-testid="lab-form-submit">Submit</button>
+      </Form>
+      <button type="button" data-testid="lab-form-toggle" onClick={() => setShowOptional(false)}>
+        Remove optional
+      </button>
+      <div data-testid="lab-form-state">
+        optional mounted: {String(showOptional)} / submits: {submits}
+      </div>
+    </div>
+  );
+}
+
+function WatermarkStabilityHarness() {
+  const [tick, setTick] = React.useState(0);
+  return (
+    <div>
+      <button type="button" data-testid="lab-watermark-tick" onClick={() => setTick((n) => n + 1)}>
+        Re-render parent
+      </button>
+      <Watermark content="Draft" gap={[80, 80]} font={{ fontSize: 14 }}>
+        <div style={{ blockSize: 160, padding: 12 }}>Document body</div>
+      </Watermark>
+      <div data-testid="lab-watermark-state">Parent renders: {tick}</div>
+    </div>
+  );
+}
+
 export function R2BehaviorScene({ only }: { only: R2BehaviorCase }) {
   return (
     <SceneFrame title={`R2 BEHAVIOR - ${only.toUpperCase()}`}>
@@ -618,6 +692,43 @@ export function R2BehaviorScene({ only }: { only: R2BehaviorCase }) {
         <SpecimenRow axis="POPOVER - a refused close still reports the next dismissal">
           <div data-testid="lab-popover" style={{ inlineSize: 'min(420px, 100%)' }}>
             <PopoverRefusedCloseHarness />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'drawer' && (
+        <SpecimenRow axis="DRAWER - Escape dismisses only the top-most layer">
+          <div data-testid="lab-drawer" style={{ inlineSize: 'min(420px, 100%)' }}>
+            <StackedDrawerHarness />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'skeleton' && (
+        <SpecimenRow axis="SKELETON - a declared zero row count is a real count">
+          <div data-testid="lab-skeleton" style={{ display: 'grid', gap: 16, inlineSize: 'min(420px, 100%)' }}>
+            <div data-testid="lab-skeleton-zero">
+              <Skeleton paragraph={{ rows: 0 }} />
+            </div>
+            <div data-testid="lab-skeleton-three">
+              <Skeleton paragraph={{ rows: 3 }} />
+            </div>
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'form' && (
+        <SpecimenRow axis="FORM - an unmounted field stops blocking submit">
+          <div data-testid="lab-form" style={{ inlineSize: 'min(420px, 100%)' }}>
+            <FormUnmountedFieldHarness />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'watermark' && (
+        <SpecimenRow axis="WATERMARK - equal literals never re-rasterise the tile">
+          <div data-testid="lab-watermark" style={{ inlineSize: 'min(420px, 100%)' }}>
+            <WatermarkStabilityHarness />
           </div>
         </SpecimenRow>
       )}

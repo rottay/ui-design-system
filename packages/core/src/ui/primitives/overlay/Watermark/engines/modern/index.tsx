@@ -41,6 +41,25 @@ import type { WatermarkProps } from '../../contracts';
 import { WATERMARK_DEFAULTS } from '../../contracts';
 import { useWatermarkCanvasPattern } from '../../runtime/canvas-pattern';
 
+function shallowEqual(a: unknown, b: unknown): boolean {
+  if (Object.is(a, b)) return true;
+  if (typeof a !== 'object' || a === null || typeof b !== 'object' || b === null) return false;
+  const left = Object.entries(a);
+  const right = Object.fromEntries(Object.entries(b));
+  return (
+    left.length === Object.keys(right).length &&
+    left.every(([key, item]) => Object.is(item, right[key]))
+  );
+}
+
+/** Holds a tuple/object prop's identity while its contents are unchanged, so a
+ *  literal call site cannot re-rasterise the tile on every parent render. */
+function useStableInput<T>(value: T): T {
+  const held = React.useRef(value);
+  if (!shallowEqual(held.current, value)) held.current = value;
+  return held.current;
+}
+
 /**
  * Modern engine implementation of Watermark.
  *
@@ -79,13 +98,13 @@ export const Watermark = React.forwardRef<HTMLDivElement, WatermarkProps>(
     } = props;
 
     const { backgroundImage, backgroundSize, patternRef } = useWatermarkCanvasPattern({
-      content,
+      content: useStableInput(content),
       image,
       width,
       height,
       rotate,
-      gap,
-      font,
+      gap: useStableInput(gap),
+      font: useStableInput(font),
     });
 
     return (

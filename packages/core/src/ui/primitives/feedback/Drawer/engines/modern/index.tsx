@@ -148,6 +148,7 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
     lockScroll: false,
     restoreFocus: false,
   });
+  const { isTopMost } = overlayLayer;
 
   // overlay.sheet recipe (motion canon): a drawer is a side panel, so its
   // enter/exit timing resolves from the sheet recipe's stamped `--ds-recipe-*`
@@ -162,11 +163,13 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
   useEffect(() => {
     if (!open || !closeOnEscape) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') handleClose();
+      // Escape belongs to the top-most layer: stacked drawers must not all
+      // dismiss on one keypress (Popover/Select/Tooltip modern idiom).
+      if (e.key === 'Escape' && isTopMost()) handleClose();
     };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
-  }, [open, closeOnEscape, handleClose]);
+  }, [open, closeOnEscape, handleClose, isTopMost]);
 
   // -- body scroll lock (with scrollbar-width compensation) -------------------
 
