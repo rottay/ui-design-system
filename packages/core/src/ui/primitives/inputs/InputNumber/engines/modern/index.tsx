@@ -68,6 +68,16 @@ const governedFlashMs = (el: HTMLElement): number => {
   return Math.max(toMs(animationDuration), toMs(transitionDuration)) + 50;
 };
 
+/** Decimal places incl. exponent notation (1e-7 -> 7); "1e-7" as 0 would round a tiny step to zero. */
+const decimalsOf = (n: number): number => {
+  if (!Number.isFinite(n)) return 0;
+  const parsed = /^-?\d*\.?(\d*)(?:[eE]([+-]?\d+))?$/.exec(String(n));
+  if (!parsed) return 0;
+  const fraction = parsed[1]?.length ?? 0;
+  const exponent = parsed[2] ? parseInt(parsed[2], 10) : 0;
+  return Math.max(0, fraction - exponent);
+};
+
 /**
  * Modern engine InputNumber painted by the `input-number.css` modern skin.
  * Implements controlled/uncontrolled modes, step buttons, keyboard navigation,
@@ -229,6 +239,11 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
       // Re-apply precision to counteract floating-point arithmetic drift
       if (precision !== undefined) {
         newValue = parseFloat(newValue.toFixed(precision));
+      } else {
+        // Undeclared precision renders the raw sum (0.1 step -> 0.30000000000000004).
+        // Above toFixed's 100-digit range, leave the sum rather than flatten it.
+        const scale = Math.max(decimalsOf(current), decimalsOf(stepNum));
+        if (scale > 0 && scale <= 100) newValue = parseFloat(newValue.toFixed(scale));
       }
 
       if (!Number.isNaN(current) && newValue === current) {

@@ -1,12 +1,18 @@
 'use client';
 
 import {
+  Checkbox,
   DatePicker,
+  InputNumber,
+  Mentions,
+  PasswordInput,
+  Radio,
   Splitter,
   Stepper,
   Tabs,
   Textarea,
   TimePicker,
+  Toggle,
   Upload,
 } from '@rottay/design-system';
 
@@ -19,7 +25,13 @@ export type R2BehaviorCase =
   | 'stepper'
   | 'upload'
   | 'splitter'
-  | 'textarea';
+  | 'textarea'
+  | 'radio'
+  | 'checkbox'
+  | 'toggle'
+  | 'inputnumber'
+  | 'passwordinput'
+  | 'mentions';
 
 const TAB_ITEMS = [
   { key: 'roster', label: 'Roster', children: 'Reviewer roster' },
@@ -100,6 +112,71 @@ export function R2BehaviorScene({ only }: { only: R2BehaviorCase }) {
         <SpecimenRow axis="TEXTAREA - autoSize survives a width change">
           <div data-testid="lab-textarea" style={{ inlineSize: 320 }}>
             <Textarea autoSize defaultValue={'Reconciliation notes for this quarter.\nSecond line.\nThird line.'} />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'radio' && (
+        <SpecimenRow axis="RADIO - one native group, exactly one checked">
+          <div data-testid="lab-radio">
+            <Radio name="plan" value="monthly" label="Monthly" defaultChecked />
+            <Radio name="plan" value="yearly" label="Yearly" description="Two months included." />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'checkbox' && (
+        <SpecimenRow axis="CHECKBOX - description describes, it does not name">
+          <div data-testid="lab-checkbox">
+            <Checkbox
+              label="Marketing emails"
+              description="We send at most one message per week."
+            />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'toggle' && (
+        <SpecimenRow axis="TOGGLE - name stays stable while the state label swaps">
+          <div data-testid="lab-toggle" style={{ inlineSize: 320 }}>
+            <Toggle
+              label="Profile visibility"
+              description="Anyone with the link can view."
+              checkedLabel="On"
+              uncheckedLabel="Off"
+            />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'inputnumber' && (
+        <SpecimenRow axis="INPUTNUMBER - fractional step keeps its precision">
+          <div data-testid="lab-inputnumber" style={{ inlineSize: 240 }}>
+            <InputNumber step={0.1} defaultValue={0.1} />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'passwordinput' && (
+        <SpecimenRow axis="PASSWORDINPUT - toggle focus depends on activation kind">
+          <div data-testid="lab-passwordinput" style={{ inlineSize: 300 }}>
+            <PasswordInput aria-label="Account password" defaultValue="correct horse battery" strengthIndicator strengthLevel="good" />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'mentions' && (
+        <SpecimenRow axis="MENTIONS - external label owns the name (ancillary)">
+          <div data-testid="lab-mentions" style={{ inlineSize: 320 }}>
+            <label htmlFor="lab-mentions-field">Notify reviewer</label>
+            <Mentions
+              id="lab-mentions-field"
+              options={[
+                { value: 'jane', label: 'Jane Doe' },
+                { value: 'sam', label: 'Sam Lee' },
+              ]}
+              placeholder="Mention a reviewer"
+            />
           </div>
         </SpecimenRow>
       )}

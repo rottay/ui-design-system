@@ -25,7 +25,7 @@
 
 'use client';
 
-import React, { useState, useId, useCallback } from 'react';
+import React, { useState, useId, useCallback, useEffect, useRef } from 'react';
 import type { RadioProps } from '../../contracts';
 import { RADIO_DEFAULTS } from '../../contracts';
 import { useRadioGroup } from '../../runtime/group-context';
@@ -68,6 +68,9 @@ export default function ModernRadio(props: RadioProps): React.ReactElement {
 
   const generatedId = useId();
   const inputId = providedId || `radio-modern-${generatedId.replace(/:/g, '')}`;
+  const labelId = `${inputId}-label`;
+  const descriptionId = `${inputId}-description`;
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const [internalChecked, setInternalChecked] = useState(defaultChecked);
   const isControlled = controlledChecked !== undefined;
@@ -84,6 +87,26 @@ export default function ModernRadio(props: RadioProps): React.ReactElement {
   const disabled = disabledProp || group?.disabled === true;
   const name = nameProp ?? (groupControlled ? group?.name : undefined);
 
+  // Self-managed radios let the native input own checkedness (no `checked`,
+  // no aria-checked): a parallel React value drifts from the DOM the browser
+  // silently updates. internalChecked then only drives the skin's data-checked.
+  const selfManaged = !groupControlled && !isControlled;
+  useEffect(() => {
+    if (!selfManaged || !name) return;
+    const syncFromNativeGroup = (event: Event) => {
+      const self = inputRef.current;
+      const target = event.target;
+      if (!self || !(target instanceof HTMLInputElement) || target === self) return;
+      if (target.type !== 'radio' || target.name !== name) return;
+      if (target.form !== self.form) return;
+      if (target.checked) setInternalChecked(false);
+    };
+    // click capture, not change: pre-click activation has already set the
+    // sibling's checkedness, while React restores it before `change` arrives.
+    document.addEventListener('click', syncFromNativeGroup, true);
+    return () => document.removeEventListener('click', syncFromNativeGroup, true);
+  }, [selfManaged, name]);
+
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if (groupControlled && group) {
       if (e.target.checked) {
@@ -96,6 +119,11 @@ export default function ModernRadio(props: RadioProps): React.ReactElement {
   }, [groupControlled, group, value, isControlled, onChange]);
 
   const displayLabel = label || children;
+  // The description sits inside the <label>, so an explicit name source is
+  // what keeps it out of the accessible name.
+  const hasDescription = Boolean(description);
+  const labelledBy =
+    hasDescription && displayLabel && !ariaLabel ? labelId : undefined;
 
   return (
     <div className={className} style={style}>
@@ -113,18 +141,22 @@ export default function ModernRadio(props: RadioProps): React.ReactElement {
         {/* Visually hidden native input: accessibility + form participation.
             The clip geometry lives in the skin (single paint/layout owner). */}
         <input
+          ref={inputRef}
           id={inputId}
           type="radio"
           name={name}
           value={value}
-          checked={isChecked}
+          {...(selfManaged
+            ? { defaultChecked }
+            : { checked: isChecked })}
           disabled={disabled}
           required={required}
           autoFocus={autoFocus}
           onChange={handleChange}
-          aria-checked={isChecked}
           aria-invalid={error || undefined}
           aria-label={ariaLabel}
+          aria-labelledby={labelledBy}
+          aria-describedby={hasDescription ? descriptionId : undefined}
         />
 
         {/* Custom visual indicator */}
@@ -136,10 +168,10 @@ export default function ModernRadio(props: RadioProps): React.ReactElement {
         {(displayLabel || description) && (
           <span data-part="text">
             {displayLabel && (
-              <span data-part="label">{displayLabel}</span>
+              <span id={labelId} data-part="label">{displayLabel}</span>
             )}
             {description && (
-              <span data-part="description">{description}</span>
+              <span id={descriptionId} data-part="description">{description}</span>
             )}
           </span>
         )}

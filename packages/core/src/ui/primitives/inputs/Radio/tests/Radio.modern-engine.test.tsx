@@ -96,3 +96,16 @@ describe('Modern Radio public anatomy', () => {
     }
   });
 });
+
+describe('Modern Radio checked indicator channels', () => {
+  it('reads the checked border and dot channels, never the fill channel', () => {
+    const checkedCircle =
+      SKIN.match(/\[data-checked='true'\] \[data-part='circle'\]\s*\{[^}]*\}/)?.[0] ?? '';
+    expect(checkedCircle).toContain('var(--ds-radio-checked-border,');
+    expect(checkedCircle).not.toContain('--ds-radio-checked-bg');
+
+    const dot = SKIN.match(/\[data-part='dot'\]\s*\{[^}]*\}/)?.[0] ?? '';
+    expect(dot).toContain('background-color: var(--ds-radio-checked-dot,');
+    expect(dot).not.toContain('--ds-radio-checked-bg');
+  });
+});

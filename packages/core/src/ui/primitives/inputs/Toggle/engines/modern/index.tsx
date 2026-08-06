@@ -84,6 +84,8 @@ export default function ModernToggle(props: ToggleProps): React.ReactElement {
   const inputId = providedId || `toggle-modern-${generatedId.replace(/:/g, '')}`;
   const helperId = `${inputId}-helper`;
   const errorId = `${inputId}-error`;
+  const labelId = `${inputId}-label`;
+  const descriptionId = `${inputId}-description`;
 
   // Dual-mode state: controlled when `checked` prop is provided, uncontrolled otherwise
   const [internalChecked, setInternalChecked] = useState(defaultChecked);
@@ -102,9 +104,19 @@ export default function ModernToggle(props: ToggleProps): React.ReactElement {
   const stateLabel = isChecked ? checkedLabel : uncheckedLabel;
   const hasText = Boolean(displayLabel || description || stateLabel);
   const describedBy = [
+    description ? descriptionId : undefined,
     error && errorMessage ? errorId : undefined,
     !error && helperText ? helperId : undefined,
   ].filter(Boolean).join(' ') || undefined;
+  // Description and state label live inside the <label>; without an explicit
+  // name source the name absorbs them and mutates on every toggle.
+  // A caller-supplied name wins: aria-labelledby outranks aria-label, so
+  // emitting ours would silently void an explicit one arriving via ...rest.
+  const callerNamed =
+    (rest as Record<string, unknown>)['aria-label'] !== undefined ||
+    (rest as Record<string, unknown>)['aria-labelledby'] !== undefined;
+  const labelledBy =
+    !callerNamed && displayLabel && (description || stateLabel) ? labelId : undefined;
 
   return (
     <div
@@ -139,6 +151,7 @@ export default function ModernToggle(props: ToggleProps): React.ReactElement {
           aria-required={required || undefined}
           aria-busy={loading || undefined}
           aria-describedby={describedBy}
+          aria-labelledby={labelledBy}
           {...rest}
         />
         <span data-part="track" aria-hidden="true">
@@ -166,13 +179,13 @@ export default function ModernToggle(props: ToggleProps): React.ReactElement {
         {hasText && (
           <span data-part="text">
             {displayLabel && (
-              <span data-part="label">{displayLabel}</span>
+              <span id={labelId} data-part="label">{displayLabel}</span>
             )}
             {stateLabel && (
               <span data-part="state-label">{stateLabel}</span>
             )}
             {description && (
-              <span data-part="description">{description}</span>
+              <span id={descriptionId} data-part="description">{description}</span>
             )}
           </span>
         )}

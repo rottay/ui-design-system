@@ -122,6 +122,8 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
 
   const generatedId = useId();
   const inputId = providedId || `checkbox-modern-${generatedId.replace(/:/g, '')}`;
+  const labelId = `${inputId}-label`;
+  const descriptionId = `${inputId}-description`;
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [internalChecked, setInternalChecked] = useState(defaultChecked);
@@ -161,6 +163,11 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
   const active = isChecked || indeterminate;
   const displayLabel = label || children;
   const isStandaloneIndicator = !displayLabel && !description;
+  // The description sits inside the <label>, so an explicit name source is
+  // what keeps it out of the accessible name.
+  const hasDescription = Boolean(description);
+  const labelledBy =
+    hasDescription && displayLabel && !ariaLabel ? labelId : undefined;
 
   return (
     <div className={className} style={style}>
@@ -195,6 +202,8 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
           aria-checked={indeterminate ? 'mixed' : isChecked}
           aria-invalid={error || undefined}
           aria-label={ariaLabel}
+          aria-labelledby={labelledBy}
+          aria-describedby={hasDescription ? descriptionId : undefined}
         />
 
         {/* Custom visual indicator */}
@@ -209,10 +218,10 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
         {(displayLabel || description) && (
           <span data-part="text">
             {displayLabel && (
-              <span data-part="label">{displayLabel}</span>
+              <span id={labelId} data-part="label">{displayLabel}</span>
             )}
             {description && (
-              <span data-part="description">{description}</span>
+              <span id={descriptionId} data-part="description">{description}</span>
             )}
           </span>
         )}

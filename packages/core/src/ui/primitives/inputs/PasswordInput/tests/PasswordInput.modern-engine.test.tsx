@@ -33,7 +33,7 @@ describe('Modern PasswordInput public anatomy', () => {
     expect(control).toHaveAttribute('type', 'password');
     expect(toggle).not.toHaveAttribute('tabindex', '-1');
 
-    fireEvent.click(toggle);
+    fireEvent.click(toggle, { detail: 1 });
     expect(control).toHaveAttribute('type', 'text');
     expect(screen.getByRole('button', { name: 'Hide password' })).toHaveAttribute('data-visible', 'true');
     expect(document.activeElement).toBe(control);

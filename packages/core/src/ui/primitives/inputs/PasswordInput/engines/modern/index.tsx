@@ -191,9 +191,11 @@ export default function ModernPasswordInput(props: PasswordInputProps): React.Re
     onBlur?.(e);
   }, [interactionHandlers, onBlur, capsLockHint]);
 
-  const handleToggleVisibility = useCallback(() => {
+  const handleToggleVisibility = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
     setVisible((previous) => !previous);
-    inputRef.current?.focus();
+    // detail is 0 only for keyboard/AT activation; a pointer click hands focus
+    // to the field, keyboard keeps it so Enter can toggle back.
+    if (event.detail > 0) inputRef.current?.focus();
   }, []);
 
   const isFilled = String(value ?? defaultValue ?? '').length > 0;

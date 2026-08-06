@@ -42,6 +42,8 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
       placeholder,
       disabled,
       readOnly,
+      id,
+      'aria-labelledby': ariaLabelledBy,
       autoSize,
       rows,
       status,
@@ -76,6 +78,8 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
         loading={loading}
         filterOption={filterOption as any}
         className={className}
+        id={id}
+        aria-labelledby={ariaLabelledBy}
         style={{ width: '100%', ...style }}
       />
     );

@@ -133,6 +133,10 @@ export interface MentionsProps {
    *  this prop, then `placeholder`, then the localized `mentions.input_label`
    *  catalog entry (English fallback "Mentions"). */
   'aria-label'?: string;
+  /** Textarea id, so an external `<label for>` can own the accessible name. */
+  id?: string;
+  /** External label reference; outranks the synthesized `aria-label`. */
+  'aria-labelledby'?: string;
   /** Textarea class name */
   textareaClassName?: string;
   /** Popup class name */

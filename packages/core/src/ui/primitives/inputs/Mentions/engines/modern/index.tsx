@@ -86,9 +86,15 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
     const emptyContent = notFoundContent ?? mentionsLabel('mentions.not_found', 'No results');
     const suggestionsLabel = mentionsLabel('mentions.suggestions_label', 'Mention suggestions');
     const loadingContent = mentionsLabel('mentions.loading', 'Loading…');
+    // A dropped id leaves a field wrapper's <label for> pointing at nothing.
+    const { id: providedId, 'aria-labelledby': ariaLabelledBy } = props;
+
     // Accessible name: explicit aria-label wins, then the visible placeholder,
     // then the localized default (axe `label` critical, K4-D remediation).
     const inputLabel = ariaLabel ?? placeholder ?? mentionsLabel('mentions.input_label', 'Mentions');
+    // A synthesized name must never outrank a real one: an external
+    // aria-labelledby OR a <label for> bound through the caller's id.
+    const resolvedAriaLabel = ariaLabelledBy || providedId ? ariaLabel : inputLabel;
 
     const [internalValue, setInternalValue] = useState(defaultValue);
     const [isOpen, setIsOpen] = useState(false);
@@ -319,7 +325,9 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
           aria-haspopup="listbox"
           aria-controls={isOpen ? listboxId : undefined}
           aria-activedescendant={activeOptionId}
-          aria-label={inputLabel}
+          id={providedId}
+          aria-labelledby={ariaLabelledBy}
+          aria-label={resolvedAriaLabel}
           data-part="textarea"
           data-disabled={disabled || undefined}
           data-readonly={readOnly || undefined}

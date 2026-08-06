@@ -51,7 +51,7 @@
  * @category Layout
  * @package @rottay/design-system
  */
-import React, { useState, useRef, useCallback, Children, cloneElement, isValidElement } from 'react';
+import React, { useState, useRef, useEffect, useCallback, Children, cloneElement, isValidElement } from 'react';
 import { arrayValueAt } from '@/foundation/kernel/collections';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ResizeHandle, type ResizeHandleIntent } from '../../../../foundation/ResizeHandle';
@@ -297,6 +297,9 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
     // data-dragging anatomy attribute -- the drag math binds the gutter
     // index at pointerdown and reads fresh sizes inside the state updater.
     const [draggingIndex, setDraggingIndex] = useState<number>(-1);
+    // A mid-drag unmount never sees a pointerup, so the listeners need this detach.
+    const releaseDragRef = useRef<(() => void) | null>(null);
+    useEffect(() => () => releaseDragRef.current?.(), []);
 
     // Fresh per-panel constraint metadata for the drag/keyboard updaters:
     // a gesture outlives the render it started in, so constraints are read
@@ -397,15 +400,20 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
         applyPointerPercentage(index, percentage);
       };
 
+      function detach() {
+        document.removeEventListener('pointermove', handlePointerMove);
+        document.removeEventListener('pointerup', endDrag);
+        document.removeEventListener('pointercancel', endDrag);
+        releaseDragRef.current = null;
+      }
+
       const endDrag = () => {
         if (isDragging.current) {
           isDragging.current = false;
           setDraggingIndex(-1);
           onResizeEnd?.(sizesRef.current);
         }
-        document.removeEventListener('pointermove', handlePointerMove);
-        document.removeEventListener('pointerup', endDrag);
-        document.removeEventListener('pointercancel', endDrag);
+        detach();
       };
 
       document.addEventListener('pointermove', handlePointerMove);
@@ -413,6 +421,8 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
       // A cancelled touch drag (browser gesture takeover) must still release
       // the drag state and report the final sizes, not leak `data-dragging`.
       document.addEventListener('pointercancel', endDrag);
+      // Detach WITHOUT endDrag: a torn-down splitter must not report a resize.
+      releaseDragRef.current = detach;
     }, [isVertical, onResizeStart, onResizeEnd, applyPointerPercentage]);
 
     // Keyboard resize (WAI separator pattern): the ResizeHandle primitive owns

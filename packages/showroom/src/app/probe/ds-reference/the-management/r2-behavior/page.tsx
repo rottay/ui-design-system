@@ -9,6 +9,12 @@ const CASES: R2BehaviorCase[] = [
   'upload',
   'splitter',
   'textarea',
+  'radio',
+  'checkbox',
+  'toggle',
+  'inputnumber',
+  'passwordinput',
+  'mentions',
 ];
 
 export default async function R2BehaviorPage({

@@ -14,7 +14,7 @@
  * of `circle`.
  *
  * CHECKED GRAMMAR (documented defect fix): the indicator is a bordered ring
- * with a filled dot. The dot paints `--ds-radio-checked-bg` (primary by
+ * with a filled dot. The dot paints `--ds-radio-checked-dot` (primary by
  * default) -- before this pass it painted `--ds-color-text-on-primary` on a
  * transparent circle, which made the checked state invisible on light
  * surfaces. Color-independent clarity: the dot also scales 0 -> 1, so state
@@ -106,7 +106,7 @@
   border: var(--ds-radio-border-width, 2px) solid var(--ds-radio-border, var(--ds-color-border-secondary));
 }
 .ds-radio.ds-radio--modern[data-checked='true'] [data-part='circle'] {
-  border: var(--ds-radio-border-width, 2px) solid var(--ds-radio-checked-bg, var(--ds-color-primary));
+  border: var(--ds-radio-border-width, 2px) solid var(--ds-radio-checked-border, var(--ds-color-primary));
 }
 
 /* Color grammar: the color prop picks the canonical per-variant channels. */
@@ -190,8 +190,8 @@
   opacity: var(--ds-radio-disabled-opacity);
 }
 
-/* Dot: scales in with the checked state; color follows the same channel the
-   ring uses, so the two can never drift apart. The governed token carries a
+/* Dot: scales in with the checked state; color follows the paired
+   checked-border/checked-dot channels, so the two can never drift apart. The governed token carries a
    unitless RATIO (`--ds-radio-dot-scale: 0.5`), so the size must multiply it
    back into a percentage -- reading it as a raw length was invalid at
    computed-value time and collapsed the dot to zero (invisible checked
@@ -200,7 +200,7 @@
   inline-size: calc(var(--ds-radio-dot-scale) * 100%);
   block-size: calc(var(--ds-radio-dot-scale) * 100%);
   border-radius: 50%;
-  background-color: var(--ds-radio-checked-bg, var(--ds-color-primary));
+  background-color: var(--ds-radio-checked-dot, var(--ds-color-primary));
   transform: scale(0);
   transition: transform var(--ds-radio-transition-duration, var(--ds-motion-fast)) var(--ds-motion-ease-out);
 }

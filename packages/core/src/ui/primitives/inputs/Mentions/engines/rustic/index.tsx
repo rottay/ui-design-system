@@ -51,6 +51,8 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
       placeholder,
       disabled,
       readOnly,
+      id,
+      'aria-labelledby': ariaLabelledBy,
       autoSize,
       rows = MENTIONS_DEFAULTS.rows,
       status,
@@ -303,6 +305,8 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
           onChange={handleChange}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
+          id={id}
+          aria-labelledby={ariaLabelledBy}
           disabled={disabled}
           readOnly={readOnly}
           rows={typeof autoSize === 'object' ? autoSize.minRows || 1 : autoSize === true ? 1 : rows}
