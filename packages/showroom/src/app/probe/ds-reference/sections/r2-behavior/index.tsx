@@ -4,6 +4,7 @@ import React from 'react';
 
 import {
   Affix,
+  Alert,
   Anchor,
   BackTop,
   Breadcrumb,
@@ -11,9 +12,11 @@ import {
   Collapse,
   DatePicker,
   Drawer,
+  Dropdown,
   FloatButton,
   Form,
   FormField,
+  Grid,
   Input,
   Layout,
   NavLink,
@@ -74,7 +77,11 @@ export type R2BehaviorCase =
   | 'drawer'
   | 'skeleton'
   | 'form'
-  | 'watermark';
+  | 'watermark'
+  | 'alert'
+  | 'input'
+  | 'grid'
+  | 'dropdown';
 
 const CRUMB_ITEMS = [
   { key: 'home', label: 'Home', href: '/' },
@@ -423,6 +430,48 @@ function WatermarkStabilityHarness() {
   );
 }
 
+const ALERT_MESSAGES = ['Upload failed', 'Retrying upload'];
+
+function AlertReturnHarness() {
+  const [index, setIndex] = React.useState(0);
+  return (
+    <div>
+      <Alert tone="danger" closable message={ALERT_MESSAGES[index]} />
+      <button type="button" data-testid="lab-alert-swap" onClick={() => setIndex((i) => (i + 1) % 2)}>
+        Swap message
+      </button>
+      <div data-testid="lab-alert-state">Showing: {ALERT_MESSAGES[index]}</div>
+    </div>
+  );
+}
+
+function InputCompositionHarness() {
+  const [submits, setSubmits] = React.useState(0);
+  return (
+    <div>
+      <Input id="lab-input-field" placeholder="Type here" onPressEnter={() => setSubmits((n) => n + 1)} />
+      <div data-testid="lab-input-state">Submitted: {submits}</div>
+    </div>
+  );
+}
+
+function DropdownReentryHarness() {
+  return (
+    <Dropdown
+      trigger="click"
+      menu={{
+        items: [
+          { key: 'edit', label: 'Edit' },
+          { key: 'duplicate', label: 'Duplicate' },
+          { key: 'archive', label: 'Archive' },
+        ],
+      }}
+    >
+      <button type="button" data-testid="lab-dropdown-trigger">Row actions</button>
+    </Dropdown>
+  );
+}
+
 export function R2BehaviorScene({ only }: { only: R2BehaviorCase }) {
   return (
     <SceneFrame title={`R2 BEHAVIOR - ${only.toUpperCase()}`}>
@@ -729,6 +778,42 @@ export function R2BehaviorScene({ only }: { only: R2BehaviorCase }) {
         <SpecimenRow axis="WATERMARK - equal literals never re-rasterise the tile">
           <div data-testid="lab-watermark" style={{ inlineSize: 'min(420px, 100%)' }}>
             <WatermarkStabilityHarness />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'alert' && (
+        <SpecimenRow axis="ALERT - a returning message re-opens a dismissed alert">
+          <div data-testid="lab-alert" style={{ inlineSize: 'min(460px, 100%)' }}>
+            <AlertReturnHarness />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'input' && (
+        <SpecimenRow axis="INPUT - Enter confirming an IME candidate is not a submit">
+          <div data-testid="lab-input" style={{ inlineSize: 'min(360px, 100%)' }}>
+            <InputCompositionHarness />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'grid' && (
+        <SpecimenRow axis="GRID - a responsive axis never wipes its static sibling">
+          <div data-testid="lab-grid" style={{ inlineSize: '100%' }}>
+            <Grid data-testid="lab-grid-root" columns={3} rows={{ xs: 1, md: 2 }} gap="md">
+              <div style={{ padding: 12, background: 'var(--ds-color-surface-raised, #eee)' }}>One</div>
+              <div style={{ padding: 12, background: 'var(--ds-color-surface-raised, #eee)' }}>Two</div>
+              <div style={{ padding: 12, background: 'var(--ds-color-surface-raised, #eee)' }}>Three</div>
+            </Grid>
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'dropdown' && (
+        <SpecimenRow axis="DROPDOWN - ArrowDown enters a menu that is already open">
+          <div data-testid="lab-dropdown" style={{ inlineSize: 'min(360px, 100%)' }}>
+            <DropdownReentryHarness />
           </div>
         </SpecimenRow>
       )}

@@ -66,7 +66,7 @@
  * @package @rottay/design-system
  */
 
-import React, { useState, useId } from 'react';
+import React, { useState, useId, useEffect } from 'react';
 import type { AlertProps, AlertType } from '../../contracts';
 import { ALERT_DEFAULTS, TONE_TO_ALERT_TYPE } from '../../contracts';
 import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '@/infrastructure/runtime/responsive/runtime/style-properties';
@@ -160,7 +160,7 @@ export default function ModernAlert(props: AlertProps): React.ReactElement | nul
    * Visibility state for dismiss functionality.
    * Managed internally when closable is true.
    */
-  const [visible, setVisible] = useState(true);
+  const [dismissed, setDismissed] = useState(false);
   const rootRef = React.useRef<HTMLDivElement | null>(null);
 
   // ---------------------------------------------------------------------------
@@ -217,12 +217,20 @@ export default function ModernAlert(props: AlertProps): React.ReactElement | nul
 
   const isCompact = !compactIsResponsive && compactProp === true;
 
+  // A dismissal dies with the message it dismissed: any change of a primitive
+  // message re-opens the alert, while a non-primitive node stays sticky.
+  const dismissKey = typeof message === 'string' || typeof message === 'number' ? message : null;
+  useEffect(() => {
+    if (dismissKey === null) return;
+    setDismissed(false);
+  }, [dismissKey]);
+
   // ---------------------------------------------------------------------------
   // Early Return
   // ---------------------------------------------------------------------------
 
   // Don't render if dismissed
-  if (!visible) return null;
+  if (dismissed) return null;
 
   // ---------------------------------------------------------------------------
   // Event Handlers
@@ -258,7 +266,7 @@ export default function ModernAlert(props: AlertProps): React.ReactElement | nul
         target?.focus({ preventScroll: true });
       }
     }
-    setVisible(false);
+    setDismissed(true);
     onClose?.();
   };
 

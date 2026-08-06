@@ -259,7 +259,9 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === 'Enter') {
+      // An IME candidate is confirmed with Enter; that keydown carries
+      // `isComposing` and must not read as the user submitting the field.
+      if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
         onPressEnter?.(e);
       }
       onKeyDown?.(e);

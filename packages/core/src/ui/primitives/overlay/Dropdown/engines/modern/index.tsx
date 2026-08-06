@@ -519,6 +519,17 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>((props, 
     handleOpenChange(false);
   };
 
+  // Returns whether an edge item existed to receive focus.
+  const focusMenuEdge = useCallback((edge: 'first' | 'last') => {
+    const items = surfaceRef.current?.querySelectorAll<HTMLElement>(
+      '[data-part="menu"] > [data-part="item-shell"] > [data-part="item"]:not(:disabled)',
+    );
+    if (!items?.length) return false;
+    const target = edge === 'first' ? items[0] : items[items.length - 1];
+    target?.focus();
+    return true;
+  }, []);
+
   // Consume the keyboard-open focus edge once the surface exists (inside
   // `<Portal>` it mounts one commit after the host resolves, so the flag
   // survives until then; a close before that clears it).
@@ -529,13 +540,9 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>((props, 
     }
     const edge = focusEdgeOnOpenRef.current;
     if (!edge || !surfaceEl) return;
-    const items = surfaceEl.querySelectorAll<HTMLElement>(
-      '[data-part="menu"] > [data-part="item-shell"] > [data-part="item"]:not(:disabled)',
-    );
-    const target = edge === 'first' ? items[0] : items[items.length - 1];
     focusEdgeOnOpenRef.current = null;
-    target?.focus();
-  }, [isOpen, surfaceEl]);
+    focusMenuEdge(edge);
+  }, [focusMenuEdge, isOpen, surfaceEl]);
 
   // The in-tree branch stamps the DECLARED placement (declarative fallback,
   // no measurement); the portal branch stamps the collision-RESOLVED one.
@@ -656,7 +663,11 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>((props, 
         const fromMenu = (event.target as HTMLElement | null)?.closest('[data-part="menu"]');
         if (!fromMenu && (event.key === 'ArrowDown' || event.key === 'ArrowUp')) {
           event.preventDefault();
-          focusEdgeOnOpenRef.current = event.key === 'ArrowDown' ? 'first' : 'last';
+          const edge = event.key === 'ArrowDown' ? 'first' : 'last';
+          // An already-open menu re-renders on nothing, so the deferred-edge
+          // effect never re-runs: enter now, defer only before the surface mounts.
+          if (isOpen && focusMenuEdge(edge)) return;
+          focusEdgeOnOpenRef.current = edge;
           handleOpenChange(true);
         }
         if (event.key === 'Escape') handleOpenChange(false);
