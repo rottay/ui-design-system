@@ -151,9 +151,18 @@ export const Sider = React.forwardRef<HTMLElement, LayoutSiderProps>(
     // Controlled prop takes priority over internal state
     const isCollapsed = controlledCollapsed ?? internalCollapsed;
 
+    // The volatile props are read through refs so the subscription below can
+    // key on `breakpoint` alone while still calling the CURRENT onCollapse.
+    const onCollapseRef = React.useRef(onCollapse);
+    onCollapseRef.current = onCollapse;
+    const controlledCollapsedRef = React.useRef(controlledCollapsed);
+    controlledCollapsedRef.current = controlledCollapsed;
+
     // Contract `breakpoint`: auto-collapse when the viewport shrinks past the
     // named ladder rung (crossing only -- never auto-expands, and the initial
     // match collapses silently without firing onCollapse, Ant parity).
+    // Deps are `[breakpoint]` alone: the initial match is a MOUNT event, so a
+    // fresh inline onCollapse must not re-run this and replay that collapse.
     useEffect(() => {
       if (!breakpoint || typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
         return undefined;
@@ -162,23 +171,23 @@ export const Sider = React.forwardRef<HTMLElement, LayoutSiderProps>(
       if (!px) return undefined;
       const mq = window.matchMedia(`(max-width: ${px - 0.02}px)`);
       let wasMatching = mq.matches;
-      if (wasMatching && controlledCollapsed === undefined) {
+      if (wasMatching && controlledCollapsedRef.current === undefined) {
         setInternalCollapsed(true);
       }
       const handleChange = () => {
         if (mq.matches && !wasMatching) {
           wasMatching = true;
-          if (controlledCollapsed === undefined) {
+          if (controlledCollapsedRef.current === undefined) {
             setInternalCollapsed(true);
           }
-          onCollapse?.(true);
+          onCollapseRef.current?.(true);
         } else if (!mq.matches) {
           wasMatching = false;
         }
       };
       mq.addEventListener('change', handleChange);
       return () => mq.removeEventListener('change', handleChange);
-    }, [breakpoint, controlledCollapsed, onCollapse]);
+    }, [breakpoint]);
 
     /* Localized trigger name (components catalog, English floor; the catalog
        keys are a pending coordinator request — the tOr fallback is the

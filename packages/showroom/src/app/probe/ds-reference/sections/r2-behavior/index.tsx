@@ -10,6 +10,9 @@ import {
   Collapse,
   DatePicker,
   FloatButton,
+  FormField,
+  Input,
+  Layout,
   OTPInput,
   InputNumber,
   Mentions,
@@ -49,7 +52,9 @@ export type R2BehaviorCase =
   | 'switch'
   | 'scrollarea'
   | 'breadcrumb'
-  | 'anchor';
+  | 'anchor'
+  | 'formfield'
+  | 'layout';
 
 const CRUMB_ITEMS = [
   { key: 'home', label: 'Home', href: '/' },
@@ -186,6 +191,48 @@ function AnchorInterceptHarness() {
       </Anchor>
       <div data-testid="lab-anchor-prevented">External defaultPrevented: {prevented}</div>
       <div id="lab-anchor-section" style={{ marginBlockStart: 16 }}>Section body</div>
+    </div>
+  );
+}
+
+function FormFieldBindingHarness() {
+  const [focused, setFocused] = React.useState('none');
+  return (
+    <div>
+      <FormField label="Account email" name="email">
+        <Input id="account-email" onFocus={() => setFocused('account-email')} />
+      </FormField>
+      <div data-testid="lab-formfield-focused">Focused: {focused}</div>
+    </div>
+  );
+}
+
+/** The inline onCollapse is a fresh closure per render — what re-armed the collapse. */
+function LayoutBreakpointHarness() {
+  const [reported, setReported] = React.useState('none');
+  const [renders, setRenders] = React.useState(0);
+  return (
+    <div>
+      <Layout>
+        <Layout.Sider
+          collapsible
+          breakpoint="md"
+          width={200}
+          collapsedWidth={64}
+          onCollapse={(collapsed) => {
+            setReported(String(collapsed));
+            setRenders((n) => n + 1);
+          }}
+        >
+          <div style={{ padding: 12 }}>Nav</div>
+        </Layout.Sider>
+        <Layout.Content>
+          <div style={{ padding: 12 }}>Content</div>
+        </Layout.Content>
+      </Layout>
+      <div data-testid="lab-layout-state">
+        Reported: {reported} / parent renders: {renders}
+      </div>
     </div>
   );
 }
@@ -383,6 +430,22 @@ export function R2BehaviorScene({ only }: { only: R2BehaviorCase }) {
         <SpecimenRow axis="ANCHOR - only in-page fragments are intercepted">
           <div data-testid="lab-anchor" style={{ inlineSize: 360 }}>
             <AnchorInterceptHarness />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'formfield' && (
+        <SpecimenRow axis="FORMFIELD - the label binds the id the control really has">
+          <div data-testid="lab-formfield" style={{ inlineSize: 'min(360px, 100%)' }}>
+            <FormFieldBindingHarness />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'layout' && (
+        <SpecimenRow axis="LAYOUT.SIDER - a re-render never replays the breakpoint collapse">
+          <div data-testid="lab-layout" style={{ inlineSize: '100%' }}>
+            <LayoutBreakpointHarness />
           </div>
         </SpecimenRow>
       )}

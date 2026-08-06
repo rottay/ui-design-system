@@ -5,6 +5,27 @@ import type { FormFieldProps } from '../../contracts';
 import { FORMFIELD_DEFAULTS } from '../../contracts';
 import { StatusErrorIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-error';
 
+type BoundControlProps = {
+  id?: string;
+  disabled?: boolean;
+  required?: boolean;
+  'aria-describedby'?: string;
+  'aria-invalid'?: boolean | string;
+  'aria-required'?: boolean | 'false' | 'true';
+};
+
+/**
+ * A child receives the field binding unless it is a host element that cannot
+ * be a form control: component children accept `id`/`aria-*` by DS contract.
+ */
+function receivesFieldBinding(
+  child: React.ReactNode
+): child is React.ReactElement<BoundControlProps> {
+  if (!React.isValidElement<BoundControlProps>(child)) return false;
+  if (child.type === React.Fragment) return false;
+  return typeof child.type !== 'string' || ['input', 'textarea', 'select'].includes(child.type);
+}
+
 /** Modern, CSS-first form-field anatomy shared by every tenant skin. */
 export default function ModernFormField(props: FormFieldProps): React.ReactElement {
   const {
@@ -28,6 +49,11 @@ export default function ModernFormField(props: FormFieldProps): React.ReactEleme
   const errorId = `${fieldId}-error`;
   const helpId = `${fieldId}-help`;
   const describedBy = error ? errorId : help ? helpId : undefined;
+
+  // The label must point at the id the control actually renders, so a
+  // caller-supplied id wins and `fieldId` is only the fallback.
+  const boundChild = React.Children.toArray(children).find(receivesFieldBinding);
+  const controlId = boundChild?.props.id ?? fieldId;
 
   const rootStyle = {
     '--ds-form-field-label-width': labelWidth,
@@ -80,7 +106,7 @@ export default function ModernFormField(props: FormFieldProps): React.ReactEleme
       data-testid={testId}
     >
       <div data-part="layout">
-        <label htmlFor={fieldId} data-part="label-wrap">
+        <label htmlFor={controlId} data-part="label-wrap">
           <span data-part="label">
             {label}
             {required && <span data-part="required-mark" aria-hidden="true">*</span>}
@@ -90,26 +116,13 @@ export default function ModernFormField(props: FormFieldProps): React.ReactEleme
         <div data-part="body">
           <div data-part="control-slot">
             {React.Children.map(children, (child) => {
-              if (!React.isValidElement<{
-                id?: string;
-                disabled?: boolean;
-                required?: boolean;
-                'aria-describedby'?: string;
-                'aria-invalid'?: boolean | string;
-                'aria-required'?: boolean | 'false' | 'true';
-              }>(child)) return child;
-
-              if (child.type === React.Fragment) return child;
-              if (
-                typeof child.type === 'string' &&
-                !['input', 'textarea', 'select'].includes(child.type)
-              ) return child;
+              if (!receivesFieldBinding(child)) return child;
 
               const childDescription = child.props['aria-describedby'];
               const mergedDescription = [childDescription, describedBy].filter(Boolean).join(' ') || undefined;
 
               return React.cloneElement(child, {
-                id: fieldId,
+                id: child.props.id ?? controlId,
                 disabled: disabled || child.props.disabled,
                 required: required || child.props.required,
                 'aria-describedby': mergedDescription,

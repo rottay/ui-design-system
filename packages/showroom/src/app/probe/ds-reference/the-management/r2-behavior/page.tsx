@@ -23,6 +23,8 @@ const CASES: R2BehaviorCase[] = [
   'scrollarea',
   'breadcrumb',
   'anchor',
+  'formfield',
+  'layout',
 ];
 
 export default async function R2BehaviorPage({
