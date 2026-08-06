@@ -56,6 +56,8 @@ const CASES: R2BehaviorCase[] = [
   'resizehandle',
   'loadingindicator',
   'voiceinput',
+  'meter',
+  'visuallyhidden',
 ];
 
 export default async function R2BehaviorPage({

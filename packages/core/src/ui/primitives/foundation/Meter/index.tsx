@@ -205,6 +205,15 @@ export const Meter = forwardRef<HTMLSpanElement, MeterProps>(function Meter(prop
   const formatted = formatter.format(format === 'percent' ? range.ratio : range.value);
   const valueNode = formatValue ? formatValue(formatted, range.value) : formatted;
 
+  // A primitive `formatValue` return IS the visible reading, so it must also be
+  // the announced one; a ReactNode has no announceable text and keeps `formatted`.
+  const announcedValue =
+    typeof valueNode === 'string' && valueNode.trim() !== ''
+      ? valueNode
+      : typeof valueNode === 'number' && Number.isFinite(valueNode)
+        ? String(valueNode)
+        : formatted;
+
   const thresholdText =
     threshold === 'none'
       ? undefined
@@ -220,7 +229,7 @@ export const Meter = forwardRef<HTMLSpanElement, MeterProps>(function Meter(prop
     'aria-valuemin': range.min,
     'aria-valuemax': range.max,
     'aria-valuenow': range.value,
-    'aria-valuetext': thresholdText ? `${formatted}, ${thresholdText}` : formatted,
+    'aria-valuetext': thresholdText ? `${announcedValue}, ${thresholdText}` : announcedValue,
     'aria-labelledby': labelId,
     'aria-label': labelId ? undefined : props['aria-label'],
     'aria-describedby': descriptionId,

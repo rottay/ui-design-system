@@ -28,6 +28,7 @@ import {
   IconFrame,
   Input,
   LoadingIndicator,
+  Meter,
   Layout,
   NavLink,
   OTPInput,
@@ -56,6 +57,7 @@ import {
   Toggle,
   TreeSelect,
   Upload,
+  VisuallyHidden,
   VoiceInputButton,
   Watermark,
 } from '@rottay/design-system';
@@ -116,7 +118,9 @@ export type R2BehaviorCase =
   | 'treeselect'
   | 'resizehandle'
   | 'loadingindicator'
-  | 'voiceinput';
+  | 'voiceinput'
+  | 'meter'
+  | 'visuallyhidden';
 
 const CRUMB_ITEMS = [
   { key: 'home', label: 'Home', href: '/' },
@@ -995,6 +999,34 @@ export function R2BehaviorScene({ only }: { only: R2BehaviorCase }) {
                 { value: 'eng', title: 'Engineering', children: [{ value: 'fe', title: 'Frontend', isLeaf: true }] },
               ]}
             />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'meter' && (
+        <SpecimenRow axis="METER - the announced reading is the reading on screen">
+          <div data-testid="lab-meter" style={{ display: 'grid', gap: 20, inlineSize: 'min(420px, 100%)' }}>
+            <div data-testid="lab-meter-custom">
+              <Meter value={40} label="Storage" formatValue={() => '~40'} />
+            </div>
+            <div data-testid="lab-meter-node">
+              <Meter value={40} label="Backups" formatValue={() => <em>40</em>} />
+            </div>
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'visuallyhidden' && (
+        <SpecimenRow axis="VISUALLYHIDDEN - the focusable gate owns focus reachability">
+          <div data-testid="lab-visuallyhidden" style={{ inlineSize: 'min(420px, 100%)' }}>
+            <button type="button" data-testid="lab-vh-before">Before</button>
+            <VisuallyHidden data-testid="lab-vh-gated" tabIndex={0}>
+              Gated sr-only text
+            </VisuallyHidden>
+            <VisuallyHidden data-testid="lab-vh-open" focusable tabIndex={0}>
+              Skip to content
+            </VisuallyHidden>
+            <button type="button" data-testid="lab-vh-after">After</button>
           </div>
         </SpecimenRow>
       )}

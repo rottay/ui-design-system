@@ -24,6 +24,11 @@ import type { VisuallyHiddenProps } from './contracts';
  */
 export const VisuallyHidden = forwardRef<HTMLElement, VisuallyHiddenProps>(
   function VisuallyHidden({ as: Tag = 'span', focusable = false, className, children, ...rest }, ref) {
+    // `focusable` owns focus reachability: a sequential tab stop behind the gate
+    // would be a permanently clipped one. A negative tabIndex adds none.
+    const { tabIndex, ...passthrough } = rest;
+    const resolvedTabIndex =
+      focusable || (typeof tabIndex === 'number' && tabIndex < 0) ? tabIndex : undefined;
     const classes = [
       'ds-visually-hidden',
       focusable ? 'ds-visually-hidden--focusable' : undefined,
@@ -32,7 +37,7 @@ export const VisuallyHidden = forwardRef<HTMLElement, VisuallyHiddenProps>(
       .filter(Boolean)
       .join(' ');
     return (
-      <Tag ref={ref as React.Ref<never>} className={classes} {...rest}>
+      <Tag ref={ref as React.Ref<never>} className={classes} {...passthrough} tabIndex={resolvedTabIndex}>
         {children}
       </Tag>
     );
