@@ -20,7 +20,13 @@
 
 "use client";
 
-import React, { forwardRef, useId, type ElementType, type Ref } from "react";
+import React, {
+  forwardRef,
+  useId,
+  type ElementType,
+  type ReactNode,
+  type Ref,
+} from "react";
 import type { StackProps, StackDirection } from "../../contracts";
 import { STACK_DEFAULTS } from "../../contracts";
 import {
@@ -32,6 +38,24 @@ import {
   renderStackChildren,
 } from "../../runtime/responsive";
 import { resolveStackPresentation } from "../../runtime/presentation";
+
+// `toArray` counts a fragment as ONE child, so its members would share a
+// single divider; flattening restores per-member separation.
+function flattenFragments(node: ReactNode): ReactNode[] {
+  return React.Children.toArray(node).flatMap((child) => {
+    if (
+      !React.isValidElement<{ children?: ReactNode }>(child) ||
+      child.type !== React.Fragment
+    ) {
+      return [child];
+    }
+    return flattenFragments(child.props.children).map((member, index) =>
+      React.isValidElement<Record<string, unknown>>(member)
+        ? React.cloneElement(member, { key: `${String(child.key)}-${index}` })
+        : member
+    );
+  });
+}
 
 /**
  * Modern (Hermes) engine implementation of the Stack component.
@@ -66,7 +90,7 @@ const HermesStack = forwardRef<HTMLElement, StackProps>((props, ref) => {
 
   const presentation = resolveStackPresentation(props);
   const renderedChildren = renderStackChildren(
-    children,
+    flattenFragments(children),
     divider,
     scalarDirection
   );

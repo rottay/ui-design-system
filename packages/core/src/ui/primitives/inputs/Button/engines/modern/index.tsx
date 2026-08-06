@@ -247,7 +247,10 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
   const isFocused = interaction.focusVisible;
 
   const isFullWidth = fullWidth ?? block;
-  const hasLabel = React.Children.count(children) > 0;
+  // `toArray` drops null/undefined/booleans, so a conditional label that
+  // resolved away is icon-only; `count` still sees the empty slot.
+  const renderedChildren = React.Children.toArray(children);
+  const hasLabel = renderedChildren.length > 0;
   const isIconOnly = !hasLabel && Boolean(icon || prefix || suffix);
 
   // -------------------------------------------------------------------------
@@ -383,12 +386,11 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
   // -------------------------------------------------------------------------
   const startContent = iconPosition === 'start' ? icon : undefined;
   const endContent = iconPosition === 'end' ? icon : undefined;
-  const renderedChildren = React.Children.toArray(children);
 
   const restingContentNode = (
     <>
       {startContent ? (
-        <span data-part="icon" data-position="start" aria-hidden="true">
+        <span data-part="icon" data-position="start" aria-hidden={isIconOnly ? undefined : true}>
           {startContent}
         </span>
       ) : prefix ? (
@@ -398,7 +400,7 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
         <span data-part="label">{renderedChildren}</span>
       )}
       {endContent ? (
-        <span data-part="icon" data-position="end" aria-hidden="true">
+        <span data-part="icon" data-position="end" aria-hidden={isIconOnly ? undefined : true}>
           {endContent}
         </span>
       ) : suffix ? (

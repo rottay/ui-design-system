@@ -8,9 +8,11 @@ import {
   Anchor,
   BackTop,
   Breadcrumb,
+  Button,
   Checkbox,
   Collapse,
   DatePicker,
+  Divider,
   Drawer,
   Dropdown,
   FloatButton,
@@ -31,6 +33,8 @@ import {
   ScrollArea,
   Segmented,
   Skeleton,
+  Space,
+  Stack,
   Splitter,
   Stepper,
   Switch,
@@ -81,7 +85,11 @@ export type R2BehaviorCase =
   | 'alert'
   | 'input'
   | 'grid'
-  | 'dropdown';
+  | 'dropdown'
+  | 'button'
+  | 'divider'
+  | 'space'
+  | 'stack';
 
 const CRUMB_ITEMS = [
   { key: 'home', label: 'Home', href: '/' },
@@ -472,6 +480,15 @@ function DropdownReentryHarness() {
   );
 }
 
+function LabelledSearchIcon() {
+  return (
+    <svg role="img" aria-label="Search" viewBox="0 0 16 16" width={16} height={16} fill="none" stroke="currentColor">
+      <circle cx="7" cy="7" r="4.5" />
+      <path d="M10.5 10.5 L14 14" />
+    </svg>
+  );
+}
+
 export function R2BehaviorScene({ only }: { only: R2BehaviorCase }) {
   return (
     <SceneFrame title={`R2 BEHAVIOR - ${only.toUpperCase()}`}>
@@ -806,6 +823,65 @@ export function R2BehaviorScene({ only }: { only: R2BehaviorCase }) {
               <div style={{ padding: 12, background: 'var(--ds-color-surface-raised, #eee)' }}>Two</div>
               <div style={{ padding: 12, background: 'var(--ds-color-surface-raised, #eee)' }}>Three</div>
             </Grid>
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'button' && (
+        <SpecimenRow axis="BUTTON - a label that resolved away leaves an icon-only name">
+          <div data-testid="lab-button" style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+            <span data-testid="lab-button-resolved">
+              <Button variant="primary" icon={<LabelledSearchIcon />}>
+                {false && <span>Search records</span>}
+              </Button>
+            </span>
+            <span data-testid="lab-button-labelled">
+              <Button variant="secondary" icon={<LabelledSearchIcon />}>Search records</Button>
+            </span>
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'divider' && (
+        <SpecimenRow axis="DIVIDER - a composite label still names the separator">
+          <div data-testid="lab-divider" style={{ inlineSize: 'min(460px, 100%)' }}>
+            <Divider>
+              Section <strong>two</strong>
+            </Divider>
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'space' && (
+        <SpecimenRow axis="SPACE - fragment members each get their own separator">
+          <div data-testid="lab-space" style={{ inlineSize: 'min(460px, 100%)' }}>
+            <Space split={<span data-part="lab-split">|</span>}>
+              <>
+                <span>alpha</span>
+                <span>beta</span>
+              </>
+              <>
+                <span>gamma</span>
+                <span>delta</span>
+              </>
+            </Space>
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'stack' && (
+        <SpecimenRow axis="STACK - fragment members each get their own divider">
+          <div data-testid="lab-stack" style={{ inlineSize: 'min(460px, 100%)' }}>
+            <Stack divider={<span data-part="lab-divider">/</span>}>
+              <>
+                <span>alpha</span>
+                <span>beta</span>
+              </>
+              <>
+                <span>gamma</span>
+                <span>delta</span>
+              </>
+            </Stack>
           </div>
         </SpecimenRow>
       )}

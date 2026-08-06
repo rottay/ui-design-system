@@ -49,6 +49,24 @@ function safeGap(value: number): string {
   return Number.isFinite(value) && value >= 0 ? `${value}px` : "0px";
 }
 
+// `toArray` counts a fragment as ONE child, so its members would share a
+// single separator; flattening restores per-member separation.
+function flattenFragments(node: React.ReactNode): React.ReactNode[] {
+  return Children.toArray(node).flatMap((child) => {
+    if (
+      !React.isValidElement<{ children?: React.ReactNode }>(child) ||
+      child.type !== React.Fragment
+    ) {
+      return [child];
+    }
+    return flattenFragments(child.props.children).map((member, index) =>
+      React.isValidElement<Record<string, unknown>>(member)
+        ? React.cloneElement(member, { key: `${String(child.key)}-${index}` })
+        : member
+    );
+  });
+}
+
 type SpaceInstanceStyle = React.CSSProperties & {
   "--ds-space-instance-gap": string;
 };
@@ -106,7 +124,7 @@ export const Space = React.forwardRef<HTMLDivElement, SpaceProps>(
 
     // When a split separator is provided, interleave it between each child.
     // Otherwise pass children through unmodified to avoid unnecessary array conversion.
-    const childArray = Children.toArray(children);
+    const childArray = flattenFragments(children);
     const renderedChildren = split
       ? childArray.map((child, index) => (
           <React.Fragment

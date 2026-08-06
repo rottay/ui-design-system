@@ -39,6 +39,10 @@ const CASES: R2BehaviorCase[] = [
   'input',
   'grid',
   'dropdown',
+  'button',
+  'divider',
+  'space',
+  'stack',
 ];
 
 export default async function R2BehaviorPage({

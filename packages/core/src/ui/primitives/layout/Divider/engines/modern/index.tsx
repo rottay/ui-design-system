@@ -15,7 +15,7 @@
 
 "use client";
 
-import React, { forwardRef } from "react";
+import React, { forwardRef, useId } from "react";
 import type {
   DividerProps,
   DividerVariant,
@@ -157,11 +157,17 @@ const ModernDivider = forwardRef<HTMLDivElement, DividerProps>((props, ref) => {
       ? String(children)
       : undefined;
 
+  // `separator` has presentational children, so composite label content is
+  // never exposed by name-from-content: point at it instead of losing the name.
+  const contentId = useId();
+  const labelsFromContent = !ariaLabel && inferredLabel === undefined;
+
   // Two render paths: with inline text or simple line
   if (hasChildren) {
     return (
       <div
         ref={ref}
+        aria-labelledby={labelsFromContent ? contentId : undefined}
         {...rest}
         className={classNames}
         style={containerStyle}
@@ -182,7 +188,7 @@ const ModernDivider = forwardRef<HTMLDivElement, DividerProps>((props, ref) => {
           data-part="line-before"
           style={lineBeforeStyle}
         />
-        <span className="divider-content" data-part="text">
+        <span className="divider-content" data-part="text" id={contentId}>
           {children}
         </span>
         <span
