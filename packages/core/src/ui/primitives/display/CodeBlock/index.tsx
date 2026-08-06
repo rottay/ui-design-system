@@ -318,9 +318,9 @@ export function CodeBlock({
                     // it survives both. Every line reserves the same rail width
                     // (transparent when unhighlighted) so marking a line never
                     // shifts the code by a pixel.
-                    borderInlineStart: `var(--ds-code-block-line-highlight-rail-width, 2px) solid ${
+                    borderInlineStart: `var(--ds-border-width-medium, 2px) solid ${
                       highlighted
-                        ? 'var(--ds-code-block-line-highlight-rail, var(--ds-color-warning))'
+                        ? 'var(--ds-color-warning)'
                         : 'transparent'
                     }`,
                     whiteSpace: wrap ? 'pre-wrap' : 'pre',

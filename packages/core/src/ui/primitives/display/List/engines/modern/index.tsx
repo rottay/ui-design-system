@@ -66,7 +66,7 @@ function projectGrid(grid: ListGridConfig): GridProjection {
     if (typeof declaredCount === 'number' && declaredCount >= 1) {
       carried = Math.floor(declaredCount);
     }
-    style[`--ds-list-grid-columns-${tier}`] = carried;
+    style[`--_ds-list-grid-columns-${tier}`] = carried;
   }
 
   return { mode: 'responsive', style: style as React.CSSProperties };

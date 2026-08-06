@@ -25708,7 +25708,7 @@ input.rottay-input.rottay-input--modern[data-part='root'][type='number'] {
      `--ds-color-bg-elevated` resolves near-white in light mode and a raised
      dark neutral in dark mode. */
   box-shadow:
-    var(--ds-badge-highlight, inset 0 1px 0 color-mix(in srgb, var(--ds-badge-specular, var(--ds-color-bg-elevated)) 46%, transparent)),
+    var(--ds-badge-highlight, inset 0 1px 0 color-mix(in srgb, var(--_ds-badge-specular, var(--ds-color-bg-elevated)) 46%, transparent)),
     var(--ds-badge-shadow, 0 1px 2px color-mix(in srgb, currentColor 7%, transparent));
   transform: var(--ds-badge-position-transform, translateY(0));
   transform-origin: center;
@@ -25836,7 +25836,7 @@ input.rottay-input.rottay-input--modern[data-part='root'][type='number'] {
     var(--ds-badge-icon-border, color-mix(in srgb, currentColor 16%, transparent));
   border-radius: var(--ds-badge-icon-radius, 9999px);
   background: var(--ds-badge-icon-bg, color-mix(in srgb, currentColor 8%, transparent));
-  box-shadow: var(--ds-badge-icon-shadow, inset 0 1px 0 color-mix(in srgb, var(--ds-badge-specular, var(--ds-color-bg-elevated)) 32%, transparent));
+  box-shadow: var(--ds-badge-icon-shadow, inset 0 1px 0 color-mix(in srgb, var(--_ds-badge-specular, var(--ds-color-bg-elevated)) 32%, transparent));
 }
 
 .rottay-badge.rottay-badge--modern [data-part='avatar'] {
@@ -26147,7 +26147,7 @@ input.rottay-input.rottay-input--modern[data-part='root'][type='number'] {
       color-mix(in srgb, currentColor 24%, transparent)
     );
     box-shadow:
-      var(--ds-badge-highlight-hover, inset 0 1px 0 color-mix(in srgb, var(--ds-badge-specular, var(--ds-color-bg-elevated)) 58%, transparent)),
+      var(--ds-badge-highlight-hover, inset 0 1px 0 color-mix(in srgb, var(--_ds-badge-specular, var(--ds-color-bg-elevated)) 58%, transparent)),
       var(--ds-badge-shadow-hover, 0 6px 14px -10px color-mix(in srgb, currentColor 42%, transparent));
     transform: var(--ds-badge-position-transform, translateY(0))
       var(--ds-badge-hover-transform, translateY(-1px));
@@ -41936,8 +41936,8 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
      fill. */
   background:
     linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
-    var(--ds-colorpicker-panel-bg, var(--ds-material-overlay-background, var(--ds-surface-card)));
-  box-shadow: var(--ds-colorpicker-panel-shadow, var(--ds-material-overlay-shadow, var(--ds-elevation-2)));
+    var(--ds-material-overlay-background, var(--ds-surface-card));
+  box-shadow: var(--ds-material-overlay-shadow, var(--ds-elevation-2));
   /* K4-C Pass 2: the dropdown sized to the UA-native color input (~44px),
      truncating the hex input and wrapping every preset onto its own row.
      A token-bound minimum keeps the panel legible; 11rem fits the hex input,
@@ -41960,7 +41960,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 /* The panel's hairline frame (overlay register) rides the root-scoped rule:
    border-color paint needs (0,4,0) against the tenant `*` floor (P-48). */
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='root'] [data-part='dropdown'] {
-  border: 1px solid var(--ds-colorpicker-panel-border, var(--ds-material-overlay-border, var(--ds-color-border-subtle)));
+  border: 1px solid var(--ds-material-overlay-border, var(--ds-color-border-subtle));
 }
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='dropdown'][data-placement*='top'] {
   inset-block-start: auto;
@@ -47305,7 +47305,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
     ),
     var(--ds-cascader-dropdown-bg, var(--ds-material-overlay-background, var(--ds-surface-card)));
   box-shadow: var(--ds-cascader-dropdown-shadow, var(--ds-material-overlay-shadow, var(--ds-elevation-2)));
-  border-color: var(--ds-cascader-dropdown-border, var(--ds-material-overlay-border, var(--ds-color-border)));
+  border-color: var(--ds-material-overlay-border, var(--ds-color-border));
   border-width: 1px;
   border-style: solid;
   animation: ds-cascader-slide-in var(--ds-motion-fast)
@@ -69432,8 +69432,8 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
 /* The compact variant scales the same single emphasis down; it does not
    switch to a different grammar. */
 .rottay-empty.rottay-empty--modern[data-image='simple'] .rottay-empty__illustration[data-part='icon'] {
-  inline-size: var(--ds-empty-simple-icon-size, 2rem);
-  block-size: var(--ds-empty-simple-icon-size, 2rem);
+  inline-size: var(--ds-icon-xl-size, 2rem);
+  block-size: var(--ds-icon-xl-size, 2rem);
 }
 
 .rottay-empty.rottay-empty--modern > .rottay-empty__description[data-part='description'][data-part='description'] {
@@ -69476,8 +69476,8 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
   }
 
   .rottay-empty.rottay-empty--modern .rottay-empty__illustration[data-part='icon'] {
-    inline-size: var(--ds-empty-simple-icon-size, 2rem);
-    block-size: var(--ds-empty-simple-icon-size, 2rem);
+    inline-size: var(--ds-icon-xl-size, 2rem);
+    block-size: var(--ds-icon-xl-size, 2rem);
   }
 }
 
@@ -69919,7 +69919,7 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
      dark neutral in dark mode (the Statistic/Card skeleton-highlight idiom). */
   box-shadow: var(
     --ds-kbd-shadow,
-    inset 0 1px 0 color-mix(in srgb, var(--ds-kbd-specular, var(--ds-color-bg-elevated)) 55%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--_ds-kbd-specular, var(--ds-color-bg-elevated)) 55%, transparent),
     0 1px 2px color-mix(in srgb, var(--ds-color-neutral-900) 8%, transparent)
   );
   transition:
@@ -69966,7 +69966,7 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
   border-block-end-width: 1px;
   box-shadow: var(
     --_ds-kbd-pressed-shadow,
-    inset 0 1px 0 color-mix(in srgb, var(--ds-kbd-specular, var(--ds-color-bg-elevated)) 40%, transparent)
+    inset 0 1px 0 color-mix(in srgb, var(--_ds-kbd-specular, var(--ds-color-bg-elevated)) 40%, transparent)
   );
 }
 
@@ -70784,31 +70784,31 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
    `xxl` is that scale's `2xl`); `xs` is the 0px baseline and needs no query. */
 .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'] {
   display: grid;
-  grid-template-columns: repeat(var(--ds-list-grid-columns-xs, 1), minmax(0, 1fr));
+  grid-template-columns: repeat(var(--_ds-list-grid-columns-xs, 1), minmax(0, 1fr));
 }
 @media (min-width: 640px) {
   .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'] {
-    grid-template-columns: repeat(var(--ds-list-grid-columns-sm, 1), minmax(0, 1fr));
+    grid-template-columns: repeat(var(--_ds-list-grid-columns-sm, 1), minmax(0, 1fr));
   }
 }
 @media (min-width: 768px) {
   .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'] {
-    grid-template-columns: repeat(var(--ds-list-grid-columns-md, 1), minmax(0, 1fr));
+    grid-template-columns: repeat(var(--_ds-list-grid-columns-md, 1), minmax(0, 1fr));
   }
 }
 @media (min-width: 1024px) {
   .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'] {
-    grid-template-columns: repeat(var(--ds-list-grid-columns-lg, 1), minmax(0, 1fr));
+    grid-template-columns: repeat(var(--_ds-list-grid-columns-lg, 1), minmax(0, 1fr));
   }
 }
 @media (min-width: 1280px) {
   .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'] {
-    grid-template-columns: repeat(var(--ds-list-grid-columns-xl, 1), minmax(0, 1fr));
+    grid-template-columns: repeat(var(--_ds-list-grid-columns-xl, 1), minmax(0, 1fr));
   }
 }
 @media (min-width: 1536px) {
   .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'] {
-    grid-template-columns: repeat(var(--ds-list-grid-columns-xxl, 1), minmax(0, 1fr));
+    grid-template-columns: repeat(var(--_ds-list-grid-columns-xxl, 1), minmax(0, 1fr));
   }
 }
 
@@ -71796,7 +71796,7 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
   box-shadow: inset 0 1px 0
     color-mix(in srgb, var(--ds-color-bg-elevated) 66%, transparent);
   animation: ds-statistic-skeleton-sweep
-    var(--ds-statistic-skeleton-duration, var(--ds-motion-glacial))
+    var(--ds-motion-glacial)
     var(--ds-motion-ease-in-out) infinite;
 }
 
@@ -74695,14 +74695,14 @@ html[data-ds-motion="reduced"]
 .rottay-typography.rottay-typography--modern:is(sub, sup) {
   position: relative;
   vertical-align: baseline;
-  font-size: var(--ds-type-sub-sup-size, 0.75em);
+  font-size: var(--_ds-type-sub-sup-size, 0.75em);
   line-height: 0;
 }
 .rottay-typography.rottay-typography--modern:is(sup) {
-  inset-block-end: var(--ds-type-sup-offset, 0.45em);
+  inset-block-end: var(--_ds-type-sup-offset, 0.45em);
 }
 .rottay-typography.rottay-typography--modern:is(sub) {
-  inset-block-start: var(--ds-type-sub-offset, 0.25em);
+  inset-block-start: var(--_ds-type-sub-offset, 0.25em);
 }
 
 /* Text selection stays tenant-tinted instead of the UA default blue. The

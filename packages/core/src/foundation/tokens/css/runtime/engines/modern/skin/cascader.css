@@ -241,7 +241,7 @@
     ),
     var(--ds-cascader-dropdown-bg, var(--ds-material-overlay-background, var(--ds-surface-card)));
   box-shadow: var(--ds-cascader-dropdown-shadow, var(--ds-material-overlay-shadow, var(--ds-elevation-2)));
-  border-color: var(--ds-cascader-dropdown-border, var(--ds-material-overlay-border, var(--ds-color-border)));
+  border-color: var(--ds-material-overlay-border, var(--ds-color-border));
   border-width: 1px;
   border-style: solid;
   animation: ds-cascader-slide-in var(--ds-motion-fast)

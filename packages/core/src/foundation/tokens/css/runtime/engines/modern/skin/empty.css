@@ -79,8 +79,8 @@
 /* The compact variant scales the same single emphasis down; it does not
    switch to a different grammar. */
 .rottay-empty.rottay-empty--modern[data-image='simple'] .rottay-empty__illustration[data-part='icon'] {
-  inline-size: var(--ds-empty-simple-icon-size, 2rem);
-  block-size: var(--ds-empty-simple-icon-size, 2rem);
+  inline-size: var(--ds-icon-xl-size, 2rem);
+  block-size: var(--ds-icon-xl-size, 2rem);
 }
 
 .rottay-empty.rottay-empty--modern > .rottay-empty__description[data-part='description'][data-part='description'] {
@@ -123,8 +123,8 @@
   }
 
   .rottay-empty.rottay-empty--modern .rottay-empty__illustration[data-part='icon'] {
-    inline-size: var(--ds-empty-simple-icon-size, 2rem);
-    block-size: var(--ds-empty-simple-icon-size, 2rem);
+    inline-size: var(--ds-icon-xl-size, 2rem);
+    block-size: var(--ds-icon-xl-size, 2rem);
   }
 }
 

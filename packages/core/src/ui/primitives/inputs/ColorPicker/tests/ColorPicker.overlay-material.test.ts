@@ -1,15 +1,4 @@
-/**
- * ColorPicker modern engine — overlay material commitment.
- *
- * The picker dropdown is a floating panel, so its ground, hairline and depth
- * belong to the overlay material role. The file's own comment already called
- * the panel frame the "overlay register", but the paint was hard-wired:
- * `--ds-surface-card`, a BARE `--ds-elevation-2` and a literal
- * `--ds-color-border-subtle`, none of them restateable by a tenant.
- * Reachability proof: `--ds-colorpicker-panel-{bg,border,shadow}` have zero
- * declarations anywhere in foundation/tokens/css, so no ancestor buries the
- * inserted rung.
- */
+/** The picker panel consumes the shared overlay material roles directly. */
 import { readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -27,10 +16,10 @@ const SKIN = readFileSync(
 describe('ColorPicker modern engine — overlay material commitment', () => {
   it('routes the panel ground and hairline through the overlay material role', () => {
     expect(SKIN).toContain(
-      'var(--ds-colorpicker-panel-bg, var(--ds-material-overlay-background, var(--ds-surface-card)))'
+      'var(--ds-material-overlay-background, var(--ds-surface-card))'
     );
     expect(SKIN).toContain(
-      'border: 1px solid var(--ds-colorpicker-panel-border, var(--ds-material-overlay-border, var(--ds-color-border-subtle)));'
+      'border: 1px solid var(--ds-material-overlay-border, var(--ds-color-border-subtle));'
     );
     expect(SKIN).not.toContain('border: 1px solid var(--ds-color-border-subtle);');
   });
@@ -39,10 +28,10 @@ describe('ColorPicker modern engine — overlay material commitment', () => {
     // FAB-05: `none` is legal only as an entire box-shadow value. A role
     // channel riding a comma list lets a tenant `none` void the declaration.
     expect(SKIN).toMatch(
-      /box-shadow:\s*var\(--ds-colorpicker-panel-shadow,\s*var\(--ds-material-overlay-shadow,\s*var\(--ds-elevation-2\)\)\);/
+      /box-shadow:\s*var\(--ds-material-overlay-shadow,\s*var\(--ds-elevation-2\)\);/
     );
     const panelShadow =
-      SKIN.match(/box-shadow:\s*var\(--ds-colorpicker-panel-shadow[\s\S]*?;/)?.[0] ?? '';
+      SKIN.match(/box-shadow:\s*var\(--ds-material-overlay-shadow[\s\S]*?;/)?.[0] ?? '';
     expect(panelShadow).not.toContain('inset');
     expect(panelShadow).not.toContain(', 0');
   });

@@ -168,8 +168,8 @@
      fill. */
   background:
     linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
-    var(--ds-colorpicker-panel-bg, var(--ds-material-overlay-background, var(--ds-surface-card)));
-  box-shadow: var(--ds-colorpicker-panel-shadow, var(--ds-material-overlay-shadow, var(--ds-elevation-2)));
+    var(--ds-material-overlay-background, var(--ds-surface-card));
+  box-shadow: var(--ds-material-overlay-shadow, var(--ds-elevation-2));
   /* K4-C Pass 2: the dropdown sized to the UA-native color input (~44px),
      truncating the hex input and wrapping every preset onto its own row.
      A token-bound minimum keeps the panel legible; 11rem fits the hex input,
@@ -192,7 +192,7 @@
 /* The panel's hairline frame (overlay register) rides the root-scoped rule:
    border-color paint needs (0,4,0) against the tenant `*` floor (P-48). */
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='root'] [data-part='dropdown'] {
-  border: 1px solid var(--ds-colorpicker-panel-border, var(--ds-material-overlay-border, var(--ds-color-border-subtle)));
+  border: 1px solid var(--ds-material-overlay-border, var(--ds-color-border-subtle));
 }
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='dropdown'][data-placement*='top'] {
   inset-block-start: auto;

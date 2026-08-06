@@ -121,7 +121,7 @@
   box-shadow: inset 0 1px 0
     color-mix(in srgb, var(--ds-color-bg-elevated) 66%, transparent);
   animation: ds-statistic-skeleton-sweep
-    var(--ds-statistic-skeleton-duration, var(--ds-motion-glacial))
+    var(--ds-motion-glacial)
     var(--ds-motion-ease-in-out) infinite;
 }
 

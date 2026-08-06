@@ -208,8 +208,8 @@ describe('Typography inline semantics: sub, sup and selection', () => {
   });
 
   it('offsets each on its own logical axis through a tenant channel', () => {
-    expect(SKIN).toMatch(/:is\(sup\)[\s\S]{0,120}inset-block-end:\s*var\(--ds-type-sup-offset/);
-    expect(SKIN).toMatch(/:is\(sub\)[\s\S]{0,120}inset-block-start:\s*var\(--ds-type-sub-offset/);
+    expect(SKIN).toMatch(/:is\(sup\)[\s\S]{0,120}inset-block-end:\s*var\(--_ds-type-sup-offset/);
+    expect(SKIN).toMatch(/:is\(sub\)[\s\S]{0,120}inset-block-start:\s*var\(--_ds-type-sub-offset/);
     expect(SKIN).not.toMatch(/:is\(sub, sup\)[\s\S]{0,200}(top|bottom):/);
   });
 

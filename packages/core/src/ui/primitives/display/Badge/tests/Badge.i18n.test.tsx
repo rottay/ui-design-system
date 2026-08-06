@@ -128,6 +128,6 @@ describe('Badge modern i18n (R2+R3)', () => {
     // the tenant's elevated surface.
     expect(modernSkin).not.toMatch(/color-mix\(in srgb, white /);
     expect(modernSkin).not.toContain('--ds-color-white');
-    expect(modernSkin).toContain('--ds-badge-specular, var(--ds-color-bg-elevated)');
+    expect(modernSkin).toContain('--_ds-badge-specular, var(--ds-color-bg-elevated)');
   });
 });

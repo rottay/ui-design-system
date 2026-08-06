@@ -143,12 +143,12 @@ describe('List modern — responsive grid columns are honored', () => {
 
     expect(ul).toHaveAttribute('data-grid', 'responsive');
     // The declared tiers used to be read off the prop and dropped on the floor.
-    expect(ul.style.getPropertyValue('--ds-list-grid-columns-xs')).toBe('1');
-    expect(ul.style.getPropertyValue('--ds-list-grid-columns-sm')).toBe('1');
-    expect(ul.style.getPropertyValue('--ds-list-grid-columns-md')).toBe('3');
-    expect(ul.style.getPropertyValue('--ds-list-grid-columns-lg')).toBe('3');
-    expect(ul.style.getPropertyValue('--ds-list-grid-columns-xl')).toBe('3');
-    expect(ul.style.getPropertyValue('--ds-list-grid-columns-xxl')).toBe('6');
+    expect(ul.style.getPropertyValue('--_ds-list-grid-columns-xs')).toBe('1');
+    expect(ul.style.getPropertyValue('--_ds-list-grid-columns-sm')).toBe('1');
+    expect(ul.style.getPropertyValue('--_ds-list-grid-columns-md')).toBe('3');
+    expect(ul.style.getPropertyValue('--_ds-list-grid-columns-lg')).toBe('3');
+    expect(ul.style.getPropertyValue('--_ds-list-grid-columns-xl')).toBe('3');
+    expect(ul.style.getPropertyValue('--_ds-list-grid-columns-xxl')).toBe('6');
     expect(ul.style.gap).toBe('24px');
   });
 
@@ -162,10 +162,10 @@ describe('List modern — responsive grid columns are honored', () => {
   it('seeds undeclared small tiers from `column` when both are given', () => {
     const { container } = renderList({ column: 2, lg: 5 });
     const ul = container.querySelector('ul') as HTMLElement;
-    expect(ul.style.getPropertyValue('--ds-list-grid-columns-xs')).toBe('2');
-    expect(ul.style.getPropertyValue('--ds-list-grid-columns-md')).toBe('2');
-    expect(ul.style.getPropertyValue('--ds-list-grid-columns-lg')).toBe('5');
-    expect(ul.style.getPropertyValue('--ds-list-grid-columns-xl')).toBe('5');
+    expect(ul.style.getPropertyValue('--_ds-list-grid-columns-xs')).toBe('2');
+    expect(ul.style.getPropertyValue('--_ds-list-grid-columns-md')).toBe('2');
+    expect(ul.style.getPropertyValue('--_ds-list-grid-columns-lg')).toBe('5');
+    expect(ul.style.getPropertyValue('--_ds-list-grid-columns-xl')).toBe('5');
   });
 
   it('keeps the fixed single-count projection inline and unchanged', () => {
@@ -173,7 +173,7 @@ describe('List modern — responsive grid columns are honored', () => {
     const ul = container.querySelector('ul') as HTMLElement;
     expect(ul).toHaveAttribute('data-grid', 'fixed');
     expect(ul.style.gridTemplateColumns).toBe('repeat(2, 1fr)');
-    expect(ul.style.getPropertyValue('--ds-list-grid-columns-md')).toBe('');
+    expect(ul.style.getPropertyValue('--_ds-list-grid-columns-md')).toBe('');
   });
 
   it('stamps no grid hook at all when the list is not a grid', () => {
@@ -193,13 +193,13 @@ describe('List modern — responsive grid columns are honored', () => {
     ] as const) {
       expect(SKIN).toMatch(
         new RegExp(
-          `@media \\(min-width: ${query}\\)[\\s\\S]*?\\[data-grid='responsive'\\][\\s\\S]*?repeat\\(var\\(--ds-list-grid-columns-${tier}, 1\\), minmax\\(0, 1fr\\)\\)`
+          `@media \\(min-width: ${query}\\)[\\s\\S]*?\\[data-grid='responsive'\\][\\s\\S]*?repeat\\(var\\(--_ds-list-grid-columns-${tier}, 1\\), minmax\\(0, 1fr\\)\\)`
         )
       );
     }
     // The xs tier is the 0px baseline and needs no query.
     expect(SKIN).toMatch(
-      /\[data-grid='responsive'\]\s*\{\s*display: grid;\s*grid-template-columns: repeat\(var\(--ds-list-grid-columns-xs, 1\), minmax\(0, 1fr\)\)/
+      /\[data-grid='responsive'\]\s*\{\s*display: grid;\s*grid-template-columns: repeat\(var\(--_ds-list-grid-columns-xs, 1\), minmax\(0, 1fr\)\)/
     );
   });
 });

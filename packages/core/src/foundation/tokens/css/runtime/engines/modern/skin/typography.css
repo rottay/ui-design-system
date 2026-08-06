@@ -289,14 +289,14 @@
 .rottay-typography.rottay-typography--modern:is(sub, sup) {
   position: relative;
   vertical-align: baseline;
-  font-size: var(--ds-type-sub-sup-size, 0.75em);
+  font-size: var(--_ds-type-sub-sup-size, 0.75em);
   line-height: 0;
 }
 .rottay-typography.rottay-typography--modern:is(sup) {
-  inset-block-end: var(--ds-type-sup-offset, 0.45em);
+  inset-block-end: var(--_ds-type-sup-offset, 0.45em);
 }
 .rottay-typography.rottay-typography--modern:is(sub) {
-  inset-block-start: var(--ds-type-sub-offset, 0.25em);
+  inset-block-start: var(--_ds-type-sub-offset, 0.25em);
 }
 
 /* Text selection stays tenant-tinted instead of the UA default blue. The

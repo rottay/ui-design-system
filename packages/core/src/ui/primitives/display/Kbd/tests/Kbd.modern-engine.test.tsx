@@ -86,7 +86,7 @@ describe('Kbd key-cap elevation is mode-adaptive', () => {
   });
 
   it('exposes one tenant channel for the cap specular across rest and pressed', () => {
-    expect(SKIN.match(/--ds-kbd-specular/g)?.length).toBe(2);
+    expect(SKIN.match(/--_ds-kbd-specular/g)?.length).toBe(2);
   });
 
   it('keeps the cap depth on the neutral ramp, not a literal shadow colour', () => {

@@ -291,6 +291,6 @@ describe('Badge elevation is mode-adaptive', () => {
   });
 
   it('routes rest, hover and icon specular through one tenant channel', () => {
-    expect(skin.match(/--ds-badge-specular/g)?.length).toBe(3);
+    expect(skin.match(/--_ds-badge-specular/g)?.length).toBe(3);
   });
 });

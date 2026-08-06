@@ -106,7 +106,7 @@ describe('CodeBlock highlighted lines carry a non-colour signal', () => {
 
     expect(marked).toHaveTextContent('const b = 2;');
     expect(marked.style.borderInlineStart).toContain(
-      'var(--ds-code-block-line-highlight-rail, var(--ds-color-warning))',
+      'var(--ds-color-warning)',
     );
   });
 
@@ -121,7 +121,7 @@ describe('CodeBlock highlighted lines carry a non-colour signal', () => {
       lines.map((line) => line.style.borderInlineStart.split(' solid ')[0]),
     );
     expect(Array.from(widths)).toEqual([
-      'var(--ds-code-block-line-highlight-rail-width, 2px)',
+      'var(--ds-border-width-medium, 2px)',
     ]);
 
     const unmarked = lines.filter((line) => !line.hasAttribute('data-highlighted'));
@@ -144,7 +144,7 @@ describe('CodeBlock highlighted lines carry a non-colour signal', () => {
     const marked = container.querySelector('[data-highlighted="true"]') as HTMLElement;
 
     expect(marked.style.borderInlineStart).toContain(
-      '--ds-code-block-line-highlight-rail-width',
+      '--ds-border-width-medium',
     );
   });
 });

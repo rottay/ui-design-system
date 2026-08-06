@@ -30,7 +30,7 @@ describe('Cascader modern engine — overlay material commitment', () => {
       'var(--ds-cascader-dropdown-bg, var(--ds-material-overlay-background, var(--ds-surface-card)))'
     );
     expect(SKIN).toMatch(
-      /border-color:\s*var\(--ds-cascader-dropdown-border,\s*var\(--ds-material-overlay-border,\s*var\(--ds-color-border\)\)\);/
+      /border-color:\s*var\(--ds-material-overlay-border,\s*var\(--ds-color-border\)\);/
     );
     // The unreachable hard-wired ground is gone from the panel rule.
     expect(SKIN).not.toMatch(/\),\n\s*var\(--ds-surface-card\);/);

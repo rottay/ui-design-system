@@ -137,7 +137,7 @@ describe('Statistic loading skeleton sweep', () => {
   });
 
   it('routes the sweep duration through a tenant channel', () => {
-    expect(SKELETON_SKIN).toContain('--ds-statistic-skeleton-duration');
+    expect(SKELETON_SKIN).toContain('--ds-motion-glacial');
   });
 
   it('stops the travel under reduced motion without erasing the fill', () => {
