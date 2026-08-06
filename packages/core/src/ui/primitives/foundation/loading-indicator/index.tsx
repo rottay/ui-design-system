@@ -36,7 +36,11 @@ export function LoadingIndicator({
         aria-label={statusLabel}
         aria-hidden={statusLabel ? undefined : true}
       />
-      {label ? <span data-part="label">{label}</span> : null}
+      {label ? (
+        <span data-part="label" aria-hidden={label === statusLabel ? true : undefined}>
+          {label}
+        </span>
+      ) : null}
       {children}
     </div>
   );

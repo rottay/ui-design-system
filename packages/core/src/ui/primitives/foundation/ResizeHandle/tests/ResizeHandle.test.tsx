@@ -145,6 +145,54 @@ describe('ResizeHandle', () => {
     ).toEqual(['increase', 'decrease']);
   });
 
+  it('leaves browser and OS modifier chords to the page', () => {
+    const onAdjust = vi.fn();
+    const { getByRole } = render(
+      <ResizeHandle
+        orientation="vertical"
+        label="Resize"
+        min={0}
+        max={100}
+        value={50}
+        onAdjust={onAdjust}
+      />
+    );
+    const node = getByRole('separator');
+
+    const chords = [
+      { key: 'ArrowLeft', altKey: true },
+      { key: 'ArrowRight', metaKey: true },
+      { key: 'Home', ctrlKey: true },
+      { key: 'End', ctrlKey: true },
+    ];
+    for (const chord of chords) {
+      const event = new KeyboardEvent('keydown', {
+        ...chord,
+        bubbles: true,
+        cancelable: true,
+      });
+      fireEvent(node, event);
+      expect(event.defaultPrevented).toBe(false);
+    }
+    expect(onAdjust).not.toHaveBeenCalled();
+  });
+
+  it('still adjusts on a bare Shift chord so the owner can scale the step', () => {
+    const onAdjust = vi.fn();
+    const { getByRole } = render(
+      <ResizeHandle
+        orientation="vertical"
+        label="Resize"
+        min={0}
+        max={100}
+        value={50}
+        onAdjust={onAdjust}
+      />
+    );
+    fireEvent.keyDown(getByRole('separator'), { key: 'ArrowRight', shiftKey: true });
+    expect(onAdjust).toHaveBeenCalledWith('increase', expect.anything());
+  });
+
   it('leaves unrelated keys to the page', () => {
     const onAdjust = vi.fn();
     const { getByRole } = render(

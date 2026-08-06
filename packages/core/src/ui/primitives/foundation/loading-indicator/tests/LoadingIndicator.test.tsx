@@ -45,6 +45,22 @@ describe('LoadingIndicator', () => {
     expect(container.querySelector('[data-part="indicator"]')?.getAttribute('role')).toBeNull();
   });
 
+  it('announces the copy once when the visible label duplicates the status text', () => {
+    const { container } = render(<LoadingIndicator label="Processing" statusLabel="Processing" />);
+
+    expect(screen.getByRole('status', { name: 'Processing' })).not.toBeNull();
+    expect(container.querySelector('[data-part="label"]')?.getAttribute('aria-hidden')).toBe('true');
+  });
+
+  it('keeps a visible label that differs from the status text in the a11y tree', () => {
+    const { container } = render(
+      <LoadingIndicator label="Uploading 3 of 9" statusLabel="Uploading files" />
+    );
+
+    expect(screen.getByRole('status', { name: 'Uploading files' })).not.toBeNull();
+    expect(container.querySelector('[data-part="label"]')?.getAttribute('aria-hidden')).toBeNull();
+  });
+
   it('routes the instance ink through the spinner channel, never a literal', () => {
     const { container } = render(<LoadingIndicator color="var(--ds-color-primary)" />);
     const root = container.querySelector('.rottay-spinner') as HTMLElement;

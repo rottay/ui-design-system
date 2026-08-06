@@ -35,6 +35,7 @@
  */
 
 import { Box, Tooltip } from '../..';
+import { VisuallyHidden } from '../../foundation/VisuallyHidden';
 import {
   AudioLinesIcon as AudioLines,
   LoaderCircleIcon as LoaderCircle,
@@ -139,47 +140,58 @@ export function VoiceInputButton({
   const tooltipContent = isError ? errorMessage ?? '' : transcriptPreview ?? '';
   const tooltipDisabled = !isError && !transcriptPreview;
 
+  // The error otherwise exists only in a hover/focus tooltip and a native
+  // `title` the Modern Tooltip strips from the trigger, so AT never gets it.
+  const liveMessage = isError
+    ? errorMessage ?? voiceLabel('voiceInput.unavailable', 'Voice input unavailable')
+    : '';
+
   return (
-    <Tooltip
-      content={tooltipContent}
-      disabled={tooltipDisabled}
-      placement="top"
-      color={isError ? 'error' : 'default'}
-      maxWidth="var(--ds-voice-input-tooltip-max-width, 280px)"
-    >
-      {/* `type='button'`: without it the UA default is `submit` and a mic
-          toggle inside a form would submit it (Box's own contract flags this
-          exact hazard for `as='button'`). The passthrough spreads first so
-          every engine-owned hook below wins the tie — the pinned law of the
-          layout sisters. */}
-      <Box
-        as="button"
-        type="button"
-        {...passthrough}
-        className={['ds-voice-input-button', className].filter(Boolean).join(' ')}
-        data-part="root"
-        data-size={size}
-        data-status={status}
-        data-active={isActive ? 'true' : 'false'}
-        data-error={isError ? 'true' : 'false'}
-        data-variant={variant}
-        data-blocked={isBlocked ? 'true' : 'false'}
-        onClick={handleClick}
-        aria-label={resolvedAriaLabel}
-        aria-pressed={isActive}
-        title={title}
-        style={style}
+    <>
+      <Tooltip
+        content={tooltipContent}
+        disabled={tooltipDisabled}
+        placement="top"
+        color={isError ? 'error' : 'default'}
+        maxWidth="var(--ds-voice-input-tooltip-max-width, 280px)"
       >
-        {status === 'transcribing' ? (
-          <LoaderCircle />
-        ) : status === 'listening' ? (
-          <AudioLines />
-        ) : isBlocked ? (
-          <MicOff />
-        ) : (
-          <Mic />
-        )}
-      </Box>
-    </Tooltip>
+        {/* `type='button'`: without it the UA default is `submit` and a mic
+            toggle inside a form would submit it (Box's own contract flags this
+            exact hazard for `as='button'`). The passthrough spreads first so
+            every engine-owned hook below wins the tie — the pinned law of the
+            layout sisters. */}
+        <Box
+          as="button"
+          type="button"
+          {...passthrough}
+          className={['ds-voice-input-button', className].filter(Boolean).join(' ')}
+          data-part="root"
+          data-size={size}
+          data-status={status}
+          data-active={isActive ? 'true' : 'false'}
+          data-error={isError ? 'true' : 'false'}
+          data-variant={variant}
+          data-blocked={isBlocked ? 'true' : 'false'}
+          onClick={handleClick}
+          aria-label={resolvedAriaLabel}
+          aria-pressed={isActive}
+          title={title}
+          style={style}
+        >
+          {status === 'transcribing' ? (
+            <LoaderCircle />
+          ) : status === 'listening' ? (
+            <AudioLines />
+          ) : isBlocked ? (
+            <MicOff />
+          ) : (
+            <Mic />
+          )}
+        </Box>
+      </Tooltip>
+      {/* Mounted unconditionally: AT only observes mutations of a live region
+          that already existed before the text changed. */}
+      <VisuallyHidden role="status">{liveMessage}</VisuallyHidden>
+    </>
   );
 }

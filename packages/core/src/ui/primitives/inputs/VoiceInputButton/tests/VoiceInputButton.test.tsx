@@ -187,6 +187,25 @@ describe('VoiceInputButton', () => {
     expect(root.getAttribute('data-blocked')).toBe('true');
     expect(root.getAttribute('title')).toContain('Microphone blocked');
   });
+
+  it('announces the recognition error through a live region, not only the hover tooltip', async () => {
+    render(<VoiceInputButton lang="en-US" onTranscript={vi.fn()} />);
+    await screen.findByRole('button', { name: 'Start voice input' });
+
+    // The region must already be mounted while idle: AT only observes
+    // mutations of live regions that existed before the change.
+    const live = screen.getByRole('status');
+    expect(live).toBeEmptyDOMElement();
+
+    await act(async () => {
+      FakeSpeechRecognition.lastInstance?.onerror?.({ error: 'no-speech' });
+    });
+
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'No speech detected. Try again or type your query.',
+    );
+    expect(screen.getByRole('button', { name: 'Start voice input' })).toBeInTheDocument();
+  });
 });
 
 describe('VoiceInputButton guarded i18n channel (K4-B)', () => {

@@ -27,6 +27,7 @@ import {
   Hide,
   IconFrame,
   Input,
+  LoadingIndicator,
   Layout,
   NavLink,
   OTPInput,
@@ -36,6 +37,7 @@ import {
   PasswordInput,
   Radio,
   Rate,
+  ResizeHandle,
   ResponsiveSlot,
   Result,
   ScrollArea,
@@ -54,6 +56,7 @@ import {
   Toggle,
   TreeSelect,
   Upload,
+  VoiceInputButton,
   Watermark,
 } from '@rottay/design-system';
 
@@ -110,7 +113,10 @@ export type R2BehaviorCase =
   | 'responsiveslot'
   | 'showhide'
   | 'iconframe'
-  | 'treeselect';
+  | 'treeselect'
+  | 'resizehandle'
+  | 'loadingindicator'
+  | 'voiceinput';
 
 const CRUMB_ITEMS = [
   { key: 'home', label: 'Home', href: '/' },
@@ -507,6 +513,45 @@ function LabelledSearchIcon() {
       <circle cx="7" cy="7" r="4.5" />
       <path d="M10.5 10.5 L14 14" />
     </svg>
+  );
+}
+
+function ResizeHandleChordHarness() {
+  const [value, setValue] = React.useState(50);
+  return (
+    <div>
+      {/* A separator has no intrinsic size: it needs a host that gives it one. */}
+      <div style={{ display: 'flex', blockSize: 120, border: '1px solid var(--ds-color-border)' }}>
+        <div style={{ flex: `0 0 ${value}%`, background: 'var(--ds-color-surface-raised)' }} />
+        <ResizeHandle
+          label="Resize panel"
+          orientation="vertical"
+          min={0}
+          max={100}
+          value={value}
+          valueText={`${value}%`}
+          style={{ inlineSize: 8, background: 'var(--ds-color-primary)', cursor: 'col-resize' }}
+          onAdjust={(intent) =>
+            setValue((current) => {
+              if (intent === 'minimize') return 0;
+              if (intent === 'maximize') return 100;
+              const next = intent === 'increase' ? current + 10 : current - 10;
+              return Math.min(100, Math.max(0, next));
+            })
+          }
+        />
+        <div style={{ flex: 1, background: 'var(--ds-color-surface)' }} />
+      </div>
+      <div data-testid="lab-resizehandle-state">Value: {value}</div>
+    </div>
+  );
+}
+
+function VoiceErrorLiveRegionHarness() {
+  return (
+    <div data-testid="lab-voiceinput-host">
+      <VoiceInputButton lang="en-US" onTranscript={() => {}} />
+    </div>
   );
 }
 
@@ -950,6 +995,35 @@ export function R2BehaviorScene({ only }: { only: R2BehaviorCase }) {
                 { value: 'eng', title: 'Engineering', children: [{ value: 'fe', title: 'Frontend', isLeaf: true }] },
               ]}
             />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'resizehandle' && (
+        <SpecimenRow axis="RESIZEHANDLE - an OS arrow chord is left to the browser">
+          <div data-testid="lab-resizehandle" style={{ inlineSize: 'min(420px, 100%)' }}>
+            <ResizeHandleChordHarness />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'loadingindicator' && (
+        <SpecimenRow axis="LOADINGINDICATOR - a duplicated label is announced once">
+          <div data-testid="lab-loadingindicator" style={{ display: 'grid', gap: 16 }}>
+            <span data-testid="lab-li-duplicated">
+              <LoadingIndicator label="Loading results" statusLabel="Loading results" />
+            </span>
+            <span data-testid="lab-li-distinct">
+              <LoadingIndicator label="Loading" statusLabel="Loading results" />
+            </span>
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'voiceinput' && (
+        <SpecimenRow axis="VOICEINPUTBUTTON - a recognition error reaches AT without hover">
+          <div data-testid="lab-voiceinput" style={{ inlineSize: 'min(420px, 100%)' }}>
+            <VoiceErrorLiveRegionHarness />
           </div>
         </SpecimenRow>
       )}

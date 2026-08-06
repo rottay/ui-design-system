@@ -130,6 +130,9 @@ export const ResizeHandle = forwardRef<HTMLDivElement, ResizeHandleProps>(
     const handleKeyDown = useCallback(
       (event: React.KeyboardEvent<HTMLDivElement>) => {
         if (!onAdjust) return;
+        // Alt/Ctrl/Meta arrow chords are browser and OS commands (history
+        // navigation, document scroll); only Shift stays with the separator.
+        if (event.altKey || event.ctrlKey || event.metaKey) return;
         const intent = resolveResizeIntent(
           event.key,
           orientation,
