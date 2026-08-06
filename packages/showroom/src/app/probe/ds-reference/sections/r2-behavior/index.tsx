@@ -3,6 +3,7 @@
 import React from 'react';
 
 import {
+  Affix,
   Anchor,
   BackTop,
   Breadcrumb,
@@ -18,6 +19,7 @@ import {
   Mentions,
   PasswordInput,
   Radio,
+  Rate,
   ScrollArea,
   Splitter,
   Stepper,
@@ -54,7 +56,9 @@ export type R2BehaviorCase =
   | 'breadcrumb'
   | 'anchor'
   | 'formfield'
-  | 'layout';
+  | 'layout'
+  | 'rate'
+  | 'affix';
 
 const CRUMB_ITEMS = [
   { key: 'home', label: 'Home', href: '/' },
@@ -232,6 +236,61 @@ function LayoutBreakpointHarness() {
       </Layout>
       <div data-testid="lab-layout-state">
         Reported: {reported} / parent renders: {renders}
+      </div>
+    </div>
+  );
+}
+
+function RateClearHarness() {
+  const [committed, setCommitted] = React.useState('none');
+  return (
+    <div>
+      <Rate defaultValue={3} allowClear onChange={(next) => setCommitted(String(next))} />
+      <div data-testid="lab-rate-committed">Committed: {committed}</div>
+    </div>
+  );
+}
+
+function AffixLateTargetHarness() {
+  const scrollRef = React.useRef<HTMLDivElement>(null);
+  const armedRef = React.useRef(false);
+  const [bound, setBound] = React.useState(false);
+  const [affixed, setAffixed] = React.useState('none');
+  // A memoized accessor whose FIRST answer is not its final one: until the
+  // post-mount commit arms it, the container reads as absent.
+  const target = React.useCallback(() => (armedRef.current ? scrollRef.current : null) ?? window, []);
+  // Stable, so a fresh handler identity cannot re-run the binding effect for us.
+  const handleChange = React.useCallback((next: boolean) => setAffixed(String(next)), []);
+  React.useEffect(() => {
+    armedRef.current = true;
+    setBound(true);
+  }, []);
+  return (
+    <div>
+      <div
+        ref={scrollRef}
+        data-testid="lab-affix-scroller"
+        style={{
+          inlineSize: 'min(320px, 100%)',
+          blockSize: 200,
+          overflow: 'auto',
+          position: 'relative',
+          border: '1px solid var(--ds-color-border)',
+        }}
+      >
+        <div style={{ blockSize: 90 }}>Above</div>
+        <Affix target={target} offsetTop={0} onChange={handleChange}>
+          <div
+            data-testid="lab-affix-bar"
+            style={{ padding: 8, background: 'var(--ds-color-primary)', color: '#fff' }}
+          >
+            Affixed bar
+          </div>
+        </Affix>
+        <div style={{ blockSize: 900 }}>Below</div>
+      </div>
+      <div data-testid="lab-affix-state">
+        Bound: {bound ? 'yes' : 'no'} / affixed: {affixed}
       </div>
     </div>
   );
@@ -446,6 +505,22 @@ export function R2BehaviorScene({ only }: { only: R2BehaviorCase }) {
         <SpecimenRow axis="LAYOUT.SIDER - a re-render never replays the breakpoint collapse">
           <div data-testid="lab-layout" style={{ inlineSize: '100%' }}>
             <LayoutBreakpointHarness />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'rate' && (
+        <SpecimenRow axis="RATE - clearing wins over the preview under the pointer">
+          <div data-testid="lab-rate" style={{ inlineSize: 'min(320px, 100%)' }}>
+            <RateClearHarness />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'affix' && (
+        <SpecimenRow axis="AFFIX - binds the scroll container it resolves late">
+          <div data-testid="lab-affix" style={{ inlineSize: 'min(360px, 100%)' }}>
+            <AffixLateTargetHarness />
           </div>
         </SpecimenRow>
       )}

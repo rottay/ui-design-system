@@ -205,6 +205,9 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
       // Allow clearing if clicking on current value
       if (allowClear && starValue === currentValue) {
         newValue = 0;
+        // The pointer is still resting on the star, so the live preview would
+        // keep outranking the committed 0 and the clear would paint nothing.
+        setHoverValue(null);
       }
 
       if (!isControlled) {

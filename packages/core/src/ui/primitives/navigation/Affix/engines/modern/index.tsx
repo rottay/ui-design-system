@@ -168,6 +168,10 @@ export const ModernAffix = forwardRef<HTMLDivElement, AffixProps>(
     const [state, setState] = useState<AffixState>({ affixed: false });
     const lastAffixedRef = useRef<boolean>(false);
 
+    // Bound scroll source. A memoized `target` reading a container that is
+    // still unmounted on the first commit must not pin the listener to `window`.
+    const [scrollSource, setScrollSource] = useState<Window | HTMLElement | null>(null);
+
     // The caller's zIndex is runtime input, but the property owner remains
     // the skin. Passing the value through a family-scoped custom property
     // preserves caller customization without creating a second inline-paint
@@ -260,7 +264,7 @@ export const ModernAffix = forwardRef<HTMLDivElement, AffixProps>(
       // If no onChange, use simple sticky and skip measurements
       if (!onChange) return;
 
-      const targetContainer = getTargetContainer(target);
+      const targetContainer = scrollSource;
       if (!targetContainer) return;
 
       // Throttle scroll events using requestAnimationFrame
@@ -289,7 +293,15 @@ export const ModernAffix = forwardRef<HTMLDivElement, AffixProps>(
         targetContainer.removeEventListener('scroll', handleScroll);
         window.removeEventListener('resize', handleResize);
       };
-    }, [measure, target, onChange]);
+    }, [measure, scrollSource, onChange]);
+
+    // Re-resolve after every commit: a container attaching its ref in a later
+    // commit must still become the bound source. Equal resolutions bail out.
+    useEffect(() => {
+      if (!onChange) return;
+      const next = getTargetContainer(target);
+      setScrollSource((current) => (current === next ? current : next));
+    });
 
     // ========================================================================
     // Render - Simple Sticky Mode
