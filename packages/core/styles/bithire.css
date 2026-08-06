@@ -33784,7 +33784,11 @@ input.rottay-input.rottay-input--modern[data-part='root'][type='number'] {
 }
 .ds-tag-input.ds-tag-input--modern[data-part='root']:focus-within {
   border-color: var(--ds-tag-input-border-focus, var(--ds-color-primary));
-  box-shadow: var(--ds-tag-input-shadow-focus, var(--ds-focus-ring));
+  /* The fallback is --ds-shadow-focus-ring, not --ds-focus-ring: only the
+     former is re-declared by tenant artifacts, so the offset-ring channel
+     left this family's focus frozen at the default theme while every sibling
+     picker followed the tenant. */
+  box-shadow: var(--ds-tag-input-shadow-focus, var(--ds-shadow-focus-ring));
 }
 /* Rejection feedback (duplicate / maxTags / validateTag add-refusals): a
    transient warning frame + halo while the engine stamps `data-rejected`.
@@ -41926,8 +41930,8 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
      fill. */
   background:
     linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
-    var(--ds-surface-card);
-  box-shadow: var(--ds-elevation-2);
+    var(--ds-colorpicker-panel-bg, var(--ds-material-overlay-background, var(--ds-surface-card)));
+  box-shadow: var(--ds-colorpicker-panel-shadow, var(--ds-material-overlay-shadow, var(--ds-elevation-2)));
   /* K4-C Pass 2: the dropdown sized to the UA-native color input (~44px),
      truncating the hex input and wrapping every preset onto its own row.
      A token-bound minimum keeps the panel legible; 11rem fits the hex input,
@@ -41950,7 +41954,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 /* The panel's hairline frame (overlay register) rides the root-scoped rule:
    border-color paint needs (0,4,0) against the tenant `*` floor (P-48). */
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='root'] [data-part='dropdown'] {
-  border: 1px solid var(--ds-color-border-subtle);
+  border: 1px solid var(--ds-colorpicker-panel-border, var(--ds-material-overlay-border, var(--ds-color-border-subtle)));
 }
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='dropdown'][data-placement*='top'] {
   inset-block-start: auto;
@@ -45594,7 +45598,17 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   color: var(--ds-color-text-primary);
   font-family: var(--ds-select-font-family, var(--ds-font-family-base));
   border-radius: var(--ds-select-dropdown-radius, var(--ds-radius-lg));
-  background: var(--ds-select-dropdown-bg, var(--ds-surface-card));
+  /* OVERLAY REGISTER: this panel is portaled, so it joins Dropdown and
+     ContextMenu's floating material -- the tenant-writable overlay texture and
+     the `--ds-elevation-surface-3` dark-lift layer ride above the family
+     ground channel. Both are read at top level with no ancestor channel, so
+     they are the only rungs here that can reach paint: `--ds-select-dropdown-bg`
+     is `:root`-declared by presentation/components/select.css, which makes any
+     material rung placed BENEATH it permanently dormant. */
+  background:
+    var(--ds-material-overlay-texture, none),
+    linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
+    var(--ds-select-dropdown-bg, var(--ds-surface-card));
   box-shadow: var(--ds-select-dropdown-shadow, var(--ds-elevation-3));
   backdrop-filter: var(--ds-select-backdrop-filter, none);
   transform-origin: center top;
@@ -45758,10 +45772,11 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-active='true'] {
   color: var(--ds-select-option-color-hover, var(--ds-color-text-primary));
   border-color: var(--ds-select-option-border-hover, var(--ds-color-border-subtle));
-  background: var(
-    --ds-select-option-bg-hover,
-    color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-surface-card))
-  );
+  /* The primary sweep that stood in this fallback was DELETED, not re-tinted:
+     it mixed against the CARD ground while its own panel sits in the overlay
+     register, and it could never reach paint anyway (the channel is
+     `:root`-declared). Row feedback stays legible via color + border. */
+  background: var(--ds-select-option-bg-hover, transparent);
 }
 
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-selected='true'] {
@@ -45770,10 +45785,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
     --ds-select-option-border-selected,
     color-mix(in srgb, var(--ds-color-primary) 32%, var(--ds-color-border-subtle))
   );
-  background: var(
-    --ds-select-option-bg-selected,
-    color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card))
-  );
+  background: var(--ds-select-option-bg-selected, transparent);
   font-weight: var(--ds-font-weight-semibold);
 }
 
@@ -47285,9 +47297,9 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
       var(--ds-elevation-surface-3),
       var(--ds-elevation-surface-3)
     ),
-    var(--ds-surface-card);
-  box-shadow: var(--ds-elevation-2);
-  border-color: var(--ds-color-border);
+    var(--ds-cascader-dropdown-bg, var(--ds-material-overlay-background, var(--ds-surface-card)));
+  box-shadow: var(--ds-cascader-dropdown-shadow, var(--ds-material-overlay-shadow, var(--ds-elevation-2)));
+  border-color: var(--ds-cascader-dropdown-border, var(--ds-material-overlay-border, var(--ds-color-border)));
   border-width: 1px;
   border-style: solid;
   animation: ds-cascader-slide-in var(--ds-motion-fast)

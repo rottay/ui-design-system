@@ -510,7 +510,17 @@
   color: var(--ds-color-text-primary);
   font-family: var(--ds-select-font-family, var(--ds-font-family-base));
   border-radius: var(--ds-select-dropdown-radius, var(--ds-radius-lg));
-  background: var(--ds-select-dropdown-bg, var(--ds-surface-card));
+  /* OVERLAY REGISTER: this panel is portaled, so it joins Dropdown and
+     ContextMenu's floating material -- the tenant-writable overlay texture and
+     the `--ds-elevation-surface-3` dark-lift layer ride above the family
+     ground channel. Both are read at top level with no ancestor channel, so
+     they are the only rungs here that can reach paint: `--ds-select-dropdown-bg`
+     is `:root`-declared by presentation/components/select.css, which makes any
+     material rung placed BENEATH it permanently dormant. */
+  background:
+    var(--ds-material-overlay-texture, none),
+    linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
+    var(--ds-select-dropdown-bg, var(--ds-surface-card));
   box-shadow: var(--ds-select-dropdown-shadow, var(--ds-elevation-3));
   backdrop-filter: var(--ds-select-backdrop-filter, none);
   transform-origin: center top;
@@ -674,10 +684,11 @@
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-active='true'] {
   color: var(--ds-select-option-color-hover, var(--ds-color-text-primary));
   border-color: var(--ds-select-option-border-hover, var(--ds-color-border-subtle));
-  background: var(
-    --ds-select-option-bg-hover,
-    color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-surface-card))
-  );
+  /* The primary sweep that stood in this fallback was DELETED, not re-tinted:
+     it mixed against the CARD ground while its own panel sits in the overlay
+     register, and it could never reach paint anyway (the channel is
+     `:root`-declared). Row feedback stays legible via color + border. */
+  background: var(--ds-select-option-bg-hover, transparent);
 }
 
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-selected='true'] {
@@ -686,10 +697,7 @@
     --ds-select-option-border-selected,
     color-mix(in srgb, var(--ds-color-primary) 32%, var(--ds-color-border-subtle))
   );
-  background: var(
-    --ds-select-option-bg-selected,
-    color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card))
-  );
+  background: var(--ds-select-option-bg-selected, transparent);
   font-weight: var(--ds-font-weight-semibold);
 }
 

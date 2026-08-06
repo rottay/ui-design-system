@@ -113,7 +113,11 @@
 }
 .ds-tag-input.ds-tag-input--modern[data-part='root']:focus-within {
   border-color: var(--ds-tag-input-border-focus, var(--ds-color-primary));
-  box-shadow: var(--ds-tag-input-shadow-focus, var(--ds-focus-ring));
+  /* The fallback is --ds-shadow-focus-ring, not --ds-focus-ring: only the
+     former is re-declared by tenant artifacts, so the offset-ring channel
+     left this family's focus frozen at the default theme while every sibling
+     picker followed the tenant. */
+  box-shadow: var(--ds-tag-input-shadow-focus, var(--ds-shadow-focus-ring));
 }
 /* Rejection feedback (duplicate / maxTags / validateTag add-refusals): a
    transient warning frame + halo while the engine stamps `data-rejected`.
