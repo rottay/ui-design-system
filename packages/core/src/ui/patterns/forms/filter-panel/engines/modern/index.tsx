@@ -194,6 +194,7 @@ function renderFilterControl(
             placeholder={filter.placeholder}
             value={(value as string) ?? ''}
             onChange={(val) => onChange(filter.key, val)}
+            aria-label={filter.label}
           />
         </div>
       );
@@ -210,12 +211,13 @@ function renderFilterControl(
             onChange={(val) => onChange(filter.key, val || undefined)}
             options={filter.options?.map((option) => enrichFilterOption(filter, option)) ?? []}
             allowClear
+            aria-label={filter.label}
           />
         </div>
       );
     case 'multi-select':
       return (
-        <div data-part="option-group">
+        <div data-part="option-group" role="group" aria-label={filter.label}>
           {filter.options?.map((o) => {
             const checked = ((value as string[]) ?? []).includes(o.value);
             return (
@@ -242,6 +244,7 @@ function renderFilterControl(
           size="small"
           checked={!!value}
           onChange={(checked) => onChange(filter.key, checked)}
+          aria-label={filter.label}
         />
       );
     case 'date':
@@ -252,13 +255,14 @@ function renderFilterControl(
             type="date"
             value={(value as string) ?? ''}
             onChange={(val) => onChange(filter.key, val)}
+            aria-label={filter.label}
           />
         </div>
       );
     case 'date-range': {
       const range = (value as [string, string]) ?? ['', ''];
       return (
-        <div data-part="range-group">
+        <div data-part="range-group" role="group" aria-label={filter.label}>
           <div data-part="input">
             <ModernInput
               size="sm"
@@ -288,13 +292,16 @@ function renderFilterControl(
             placeholder={filter.placeholder}
             value={toNumberInputValue(value)}
             onChange={(val) => onChange(filter.key, val == null ? undefined : Number(val))}
+            aria-label={filter.label}
           />
         </div>
       );
     case 'number-range': {
       const range = (value as [number | '', number | '']) ?? ['', ''];
       return (
-        <div data-part="range-group">
+        /* The group carries the field name; each bound carries its own
+           standalone label — never a concatenation of translated fragments. */
+        <div data-part="range-group" role="group" aria-label={filter.label}>
           <div data-part="input">
             <ModernInputNumber
               size="sm"
@@ -302,6 +309,7 @@ function renderFilterControl(
               placeholder={copy.min}
               value={toNumberInputValue(range[0])}
               onChange={(val) => onChange(filter.key, [val == null ? undefined : Number(val), range[1]])}
+              aria-label={copy.min}
             />
           </div>
           <span data-part="range-separator">-</span>
@@ -312,6 +320,7 @@ function renderFilterControl(
               placeholder={copy.max}
               value={toNumberInputValue(range[1])}
               onChange={(val) => onChange(filter.key, [range[0], val == null ? undefined : Number(val)])}
+              aria-label={copy.max}
             />
           </div>
         </div>

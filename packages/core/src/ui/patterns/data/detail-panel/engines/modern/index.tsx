@@ -233,6 +233,21 @@ function Breadcrumbs({
                 data-part="breadcrumb-current"
                 data-clickable={isClickable ? 'true' : 'false'}
                 data-last={isLast ? 'true' : 'false'}
+                aria-current={isLast ? 'page' : undefined}
+                /* Breadcrumb primitive law: an ancestor crumb whose only
+                   affordance is onClick has to be operable without a pointer. */
+                role={isClickable ? 'button' : undefined}
+                tabIndex={isClickable ? 0 : undefined}
+                onKeyDown={
+                  isClickable
+                    ? (event: React.KeyboardEvent<HTMLSpanElement>) => {
+                        if (event.key === 'Enter' || event.key === ' ') {
+                          event.preventDefault();
+                          crumb.onClick?.();
+                        }
+                      }
+                    : undefined
+                }
                 onClick={crumb.onClick}
               >
                 {crumb.label}
@@ -297,7 +312,12 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
   const [internalActiveTab, setInternalActiveTab] = useState<string>(
     tabs?.[0]?.key ?? '',
   );
-  const activeTab = controlledActiveTab ?? internalActiveTab;
+  // The uncontrolled seed is captured on the first render only, so tabs that
+  // arrive later would leave it naming no tab and the body empty.
+  const seedNamesATab = tabs?.some((t) => t.key === internalActiveTab) ?? true;
+  const activeTab =
+    controlledActiveTab ??
+    (seedNamesATab ? internalActiveTab : tabs?.[0]?.key ?? internalActiveTab);
 
   // Chrome copy: catalogued when an I18nProvider is mounted, the documented
   // English floor otherwise (a missing key echoes the full key back, which
@@ -328,6 +348,9 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
         data-part="root"
         data-pattern="detail-panel"
         data-loading="true"
+        /* Skeletons carry no text, so aria-busy is the only pending signal an
+           assistive technology gets while the detail loads. */
+        aria-busy="true"
         style={style}
       >
         <div data-part="panel-inner">

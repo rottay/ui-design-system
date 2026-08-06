@@ -34,7 +34,7 @@
  * />
  */
 
-import React, { useState, useCallback, useMemo, useRef, useEffect, type ReactNode } from 'react';
+import React, { useState, useCallback, useMemo, useRef, useEffect, useId, type ReactNode } from 'react';
 import { arrayValueAt } from '@/foundation/kernel/collections';
 import type { FormBuilderProps } from '../../contracts';
 import type { FieldDef } from '../../../../../../foundation/contracts/runtime/components/patterns/core';
@@ -157,6 +157,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const fieldErrorIdBase = useId();
   const [internalStep, setInternalStep] = useState(0);
   const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>({});
 
@@ -604,43 +605,6 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
     [currentValues, disabled, readOnly, updateValue, errors, renderReadOnlyValue]
   );
 
-  /* -- Loading skeleton -------------------------------------------------- */
-
-  if (loading) {
-    return (
-      <div
-        data-part="root"
-        data-loading="true"
-        className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')}
-        style={style}
-        role="status"
-        aria-busy="true"
-      >
-        {/* The shimmer bars are paint-only; the live region needs real text
-            to announce (EmptyState's loading-label precedent). */}
-        <VisuallyHidden>
-          {tOr('form_builder.loading', 'Loading form…')}
-        </VisuallyHidden>
-        {/* Bar geometry is skin-owned per data-variant; the shimmer animation
-            is skin-owned too (reduced-motion governs it). */}
-        <div data-part="skeleton-bar" data-variant="title" />
-        <div data-part="skeleton-bar" data-variant="description" />
-        {/* Field shimmer rows */}
-        {[1, 2, 3].map((i) => (
-          <div key={i} data-part="skeleton-field">
-            <div data-part="skeleton-bar" data-variant="label" />
-            <div data-part="skeleton-bar" data-variant="field" />
-          </div>
-        ))}
-        {/* Action bar shimmer (same part as the real tray: one layout rule) */}
-        <div data-part="action-bar">
-          <div data-part="skeleton-bar" data-variant="action" />
-          <div data-part="skeleton-bar" data-variant="action-wide" />
-        </div>
-      </div>
-    );
-  }
-
   /* -- Visible fields --------------------------------------------------- */
 
   const visibleFields = useMemo(() => fields.filter((f) => !isHidden(f)), [fields, isHidden]);
@@ -706,6 +670,45 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
     return sections;
   }, [adaptedLayout, stepFields, currentStep, visibleFields]);
 
+  /* -- Loading skeleton -------------------------------------------------- */
+
+  /* Stays BELOW every hook: `loading` flips on the async path, and an earlier
+     return would change the hook count between renders and crash React. */
+  if (loading) {
+    return (
+      <div
+        data-part="root"
+        data-loading="true"
+        className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')}
+        style={style}
+        role="status"
+        aria-busy="true"
+      >
+        {/* The shimmer bars are paint-only; the live region needs real text
+            to announce (EmptyState's loading-label precedent). */}
+        <VisuallyHidden>
+          {tOr('form_builder.loading', 'Loading form…')}
+        </VisuallyHidden>
+        {/* Bar geometry is skin-owned per data-variant; the shimmer animation
+            is skin-owned too (reduced-motion governs it). */}
+        <div data-part="skeleton-bar" data-variant="title" />
+        <div data-part="skeleton-bar" data-variant="description" />
+        {/* Field shimmer rows */}
+        {[1, 2, 3].map((i) => (
+          <div key={i} data-part="skeleton-field">
+            <div data-part="skeleton-bar" data-variant="label" />
+            <div data-part="skeleton-bar" data-variant="field" />
+          </div>
+        ))}
+        {/* Action bar shimmer (same part as the real tray: one layout rule) */}
+        <div data-part="action-bar">
+          <div data-part="skeleton-bar" data-variant="action" />
+          <div data-part="skeleton-bar" data-variant="action-wide" />
+        </div>
+      </div>
+    );
+  }
+
   /* -- Field renderer --------------------------------------------------- */
 
   const renderFormField = (field: FieldDef) => {
@@ -715,6 +718,14 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
       : defaultRender;
     const error = readRecordValue(errors, field.name) as string | undefined;
     const showLabel = showLabels && field.type !== 'checkbox';
+    // Unlabelled branch: FormField is not there to own the error wiring, so the
+    // control is tied to the message here and the message announces itself.
+    const errorId = error ? `${fieldErrorIdBase}-${field.name}-error` : undefined;
+    const describedContent =
+      errorId &&
+      React.isValidElement<{ 'aria-describedby'?: string; 'aria-invalid'?: boolean }>(content)
+        ? React.cloneElement(content, { 'aria-describedby': errorId, 'aria-invalid': true })
+        : content;
     const columnSpan = resolveAdaptiveFormFieldColumnSpan({
       columnSpan: field.colSpan,
       columns: adaptedColumns,
@@ -750,14 +761,14 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
           </FormField>
         ) : (
           <>
-            {content}
+            {describedContent}
             {field.description && !error && (
               <div data-part="field-description">
                 {field.description}
               </div>
             )}
             {error && (
-              <div data-part="field-error">
+              <div data-part="field-error" id={errorId} role="alert">
                 {error}
               </div>
             )}

@@ -71,6 +71,10 @@ import {
   PatternGridView,
   PatternSavedViewsBar,
   cellRenderers,
+  PatternDetailPanel,
+  PatternFileManager,
+  PatternFormBuilder,
+  PatternFilterPanel,
 } from '@rottay/design-system';
 import { AlertIcon } from '@rottay/design-system/icons';
 
@@ -143,7 +147,11 @@ export type R2BehaviorCase =
   | 'savedviewsfocus'
   | 'bulkselectcount'
   | 'cellreveal'
-  | 'celleditorerror';
+  | 'celleditorerror'
+  | 'detailpanellate'
+  | 'filemanagerrows'
+  | 'formbuilderresolve'
+  | 'filterpanelnames';
 
 const CRUMB_ITEMS = [
   { key: 'home', label: 'Home', href: '/' },
@@ -233,6 +241,49 @@ function LiveFeedPollingHarness() {
       <div data-testid="lab-livefeed-refreshes">Refreshes: {refreshes}</div>
       <div data-testid="lab-livefeed-churn">Rerenders: {churn}</div>
     </div>
+  );
+}
+
+/** Tabs arrive after the first render, exactly like an async detail load. */
+function DetailPanelLateTabsHarness() {
+  const [tabs, setTabs] = React.useState<{ key: string; label: string; content: React.ReactNode }[]>([]);
+  React.useEffect(() => {
+    const id = setTimeout(
+      () =>
+        setTabs([
+          { key: 'overview', label: 'Overview', content: <span>Overview body</span> },
+          { key: 'activity', label: 'Activity', content: <span>Activity body</span> },
+        ]),
+      120,
+    );
+    return () => clearTimeout(id);
+  }, []);
+  return (
+    <PatternDetailPanel
+      engine="modern"
+      data={{ id: 'u1', name: 'Ada Lovelace' }}
+      title="Ada Lovelace"
+      breadcrumbs={[{ label: 'Users', onClick: () => undefined }, { label: 'Ada Lovelace' }]}
+      tabs={tabs}
+    />
+  );
+}
+
+/** loading flips true -> false; an early return above the hooks would crash. */
+function FormBuilderResolveHarness() {
+  const [loading, setLoading] = React.useState(true);
+  React.useEffect(() => {
+    const id = setTimeout(() => setLoading(false), 120);
+    return () => clearTimeout(id);
+  }, []);
+  return (
+    <PatternFormBuilder
+      engine="modern"
+      loading={loading}
+      fields={[{ name: 'terms', label: 'Accept terms', type: 'checkbox', required: true }]}
+      onSubmit={() => undefined}
+      actions={<button type="submit" data-testid="lab-fb-submit">Save</button>}
+    />
   );
 }
 
@@ -1363,6 +1414,65 @@ export function R2BehaviorScene({ only }: { only: R2BehaviorCase }) {
                   },
                 },
                 { key: 'name', header: 'Name', accessorKey: 'name' },
+              ]}
+            />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'detailpanellate' && (
+        <SpecimenRow axis="DETAILPANEL - late tabs select, crumbs operable, skeleton busy">
+          <div data-testid="lab-detailpanellate" style={{ inlineSize: '100%' }}>
+            <DetailPanelLateTabsHarness />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'filemanagerrows' && (
+        <SpecimenRow axis="FILEMANAGER - row actions name their item, dragleave survives descendants">
+          <div data-testid="lab-filemanagerrows" style={{ inlineSize: '100%' }}>
+            <PatternFileManager
+              engine="modern"
+              folders={[]}
+              files={[
+                { id: 'f1', name: 'quarterly-report.pdf', type: 'file', mimeType: 'application/pdf', size: 2048 },
+                { id: 'f2', name: 'headshot.jpg', type: 'file', mimeType: 'image/jpeg', size: 1024 },
+              ]}
+              onRename={() => undefined}
+              onDelete={() => undefined}
+              onUpload={() => undefined}
+            />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'formbuilderresolve' && (
+        <SpecimenRow axis="FORMBUILDER - loading resolves, a rejected checkbox is announced">
+          <div data-testid="lab-formbuilderresolve" style={{ inlineSize: '100%' }}>
+            <FormBuilderResolveHarness />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'filterpanelnames' && (
+        <SpecimenRow axis="FILTERPANEL - every control and composite carries its field name">
+          <div data-testid="lab-filterpanelnames" style={{ inlineSize: '100%' }}>
+            <PatternFilterPanel
+              engine="modern"
+              values={{}}
+              onChange={() => undefined}
+              filters={[
+                { key: 'query', label: 'Query', type: 'text' },
+                {
+                  key: 'tags',
+                  label: 'Tags',
+                  type: 'multi-select',
+                  options: [
+                    { label: 'Alpha', value: 'a' },
+                    { label: 'Beta', value: 'b' },
+                  ],
+                },
+                { key: 'capacity', label: 'Capacity', type: 'number-range' },
               ]}
             />
           </div>

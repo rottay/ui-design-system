@@ -111,6 +111,7 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
     style,
   } = props;
   const ariaLabel = props['aria-label'];
+  const ariaDescribedBy = props['aria-describedby'];
 
   // Group participation (children-mode `<Checkbox.Group>`): when the control
   // carries a `value` and no explicit checked state of its own, the group
@@ -166,6 +167,17 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
   // The description sits inside the <label>, so an explicit name source is
   // what keeps it out of the accessible name.
   const hasDescription = Boolean(description);
+  // Merge, never replace: an external id (a form-level error) must not
+  // silence the checkbox's own description.
+  const describedBy =
+    Array.from(
+      new Set(
+        [hasDescription ? descriptionId : undefined, ariaDescribedBy]
+          .filter((token): token is string => Boolean(token))
+          .flatMap((token) => token.split(/\s+/))
+          .filter(Boolean),
+      ),
+    ).join(' ') || undefined;
   const labelledBy =
     hasDescription && displayLabel && !ariaLabel ? labelId : undefined;
 
@@ -203,7 +215,7 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
           aria-invalid={error || undefined}
           aria-label={ariaLabel}
           aria-labelledby={labelledBy}
-          aria-describedby={hasDescription ? descriptionId : undefined}
+          aria-describedby={describedBy}
         />
 
         {/* Custom visual indicator */}

@@ -184,6 +184,11 @@ export interface CheckboxProps extends EngineAwareProps {
    * already expose.
    */
   'aria-label'?: string;
+  /**
+   * Extra description ids for the native input, merged with the primitive's own
+   * `description` id rather than replacing it. Same field Input and Select expose.
+   */
+  'aria-describedby'?: string;
 }
 
 /**

@@ -31,7 +31,7 @@
  * />
  */
 
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useId, useRef, useState } from 'react';
 import type { FileManagerProps, FileItem, FileSystemItem } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { LayoutGridIcon } from '@/graphics/icons/presentation/semantic/generated/roles/layout-grid';
@@ -129,6 +129,9 @@ export default function ModernFileManager(props: FileManagerProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   // Drag-over feedback state for the content-area drop zone.
   const [isDragOver, setIsDragOver] = useState(false);
+  // Row actions are named by their own text plus the row's name node, so the
+  // announced name is item-specific without concatenating translated fragments.
+  const rowIdBase = useId();
 
   // Merge folders first, then files, so folders always appear at the top (OS convention).
   const items: FileSystemItem[] = [
@@ -165,6 +168,14 @@ export default function ModernFileManager(props: FileManagerProps) {
       onUpload(Array.from(e.dataTransfer.files));
     }
   }, [onUpload]);
+
+  // dragleave bubbles from every descendant, so only a relatedTarget outside
+  // the zone is a real exit; otherwise the tint pulses off row by row.
+  const handleDragLeave = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+    const nextTarget = e.relatedTarget;
+    if (nextTarget instanceof Node && e.currentTarget.contains(nextTarget)) return;
+    setIsDragOver(false);
+  }, []);
 
   // Grid cards are action surfaces: Enter/Space mirrors the click contract so
   // keyboard users can navigate folders and toggle selection.
@@ -278,7 +289,7 @@ export default function ModernFileManager(props: FileManagerProps) {
           data-part="content"
           data-drag-over={isDragOver ? 'true' : 'false'}
           onDragOver={e => { e.preventDefault(); if (onUpload) setIsDragOver(true); }}
-          onDragLeave={() => setIsDragOver(false)}
+          onDragLeave={handleDragLeave}
           onDrop={handleDrop}
         >
           {items.length === 0 ? (
@@ -360,13 +371,14 @@ export default function ModernFileManager(props: FileManagerProps) {
                               data-part="folder-link"
                               data-action="navigate-folder"
                               className="ds-file-manager__folder-link"
+                              id={`${rowIdBase}-${item.id}-name`}
                               title={item.name}
                               onClick={() => onNavigate?.(item.id)}
                             >
                               {item.name}
                             </ModernButton>
                           ) : (
-                            <span data-part="file-name" title={item.name}>{item.name}</span>
+                            <span id={`${rowIdBase}-${item.id}-name`} data-part="file-name" title={item.name}>{item.name}</span>
                           )}
                         </div>
                       </td>
@@ -380,6 +392,8 @@ export default function ModernFileManager(props: FileManagerProps) {
                               size="xs"
                               data-part="item-action"
                               data-action="rename"
+                              id={`${rowIdBase}-${item.id}-rename`}
+                              aria-labelledby={`${rowIdBase}-${item.id}-rename ${rowIdBase}-${item.id}-name`}
                               onClick={() => {
                                 const newName = window.prompt(copy.newNamePrompt, item.name);
                                 if (newName && newName !== item.name) onRename(item.id, newName);
@@ -394,6 +408,8 @@ export default function ModernFileManager(props: FileManagerProps) {
                               size="xs"
                               data-part="item-action"
                               data-action="delete"
+                              id={`${rowIdBase}-${item.id}-delete`}
+                              aria-labelledby={`${rowIdBase}-${item.id}-delete ${rowIdBase}-${item.id}-name`}
                               onClick={() => onDelete([item.id])}
                             >
                               {copy.delete}

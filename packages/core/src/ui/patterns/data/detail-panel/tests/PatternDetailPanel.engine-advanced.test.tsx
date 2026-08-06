@@ -72,7 +72,11 @@ describe('PatternDetailPanel advanced engine coverage', () => {
     fireEvent.click(screen.getByText('Customers'));
     expect(props.breadcrumbs?.[0].onClick).toHaveBeenCalled();
 
-    const backButtons = screen.getAllByRole('button');
+    // Ancestor crumbs are keyboard-operable controls, so they also answer to
+    // the button role -- the back button is the first one outside the trail.
+    const backButtons = screen
+      .getAllByRole('button')
+      .filter((el) => !el.closest('[data-part="breadcrumbs"]'));
     fireEvent.click(backButtons[0]);
     expect(props.onBack).toHaveBeenCalled();
 

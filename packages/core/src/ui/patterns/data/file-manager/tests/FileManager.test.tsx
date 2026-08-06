@@ -137,6 +137,39 @@ describe('PatternFileManager', () => {
     },
   );
 
+  it('keeps the modern drop-zone affordance lit while the pointer crosses descendants', () => {
+    const onUpload = vi.fn();
+    const { container } = renderWithEngine(
+      <ModernFileManager {...createProps({ onUpload })} />,
+      'modern',
+    );
+
+    const innerRow = screen.getByText('report.pdf');
+    const content = innerRow.closest<HTMLElement>('[data-part="content"]');
+    if (!(content instanceof HTMLElement)) {
+      throw new Error('Expected modern drop zone');
+    }
+
+    // jsdom's DragEvent init drops relatedTarget; a MouseEvent named
+    // 'dragleave' carries it and React reads the same native field.
+    const dragLeaveToward = (from: HTMLElement, relatedTarget: Node) =>
+      fireEvent(
+        from,
+        new MouseEvent('dragleave', { bubbles: true, cancelable: true, relatedTarget }),
+      );
+
+    fireEvent.dragOver(content);
+    expect(content).toHaveAttribute('data-drag-over', 'true');
+
+    // dragleave bubbling out of a descendant is not an exit from the zone.
+    dragLeaveToward(innerRow, innerRow);
+    expect(content).toHaveAttribute('data-drag-over', 'true');
+
+    // Leaving toward a node outside the zone still clears the affordance.
+    dragLeaveToward(content, document.body);
+    expect(content).toHaveAttribute('data-drag-over', 'false');
+  });
+
   it('covers classic uploads, drag-drop, breadcrumbs, custom icons, selection toggles, and grid mode actions', () => {
     const onUpload = vi.fn();
     const onRename = vi.fn();
