@@ -67,6 +67,9 @@ export default function ModernUserProfileCard(props: UserProfileCardProps) {
         className={`ds-pattern-user-profile-card ds-engine-modern ${className ?? ''}`}
         data-part="root"
         data-loading={true}
+        /* The spinner is decorative-only, so aria-busy is the sole pending
+           signal AT gets for this card (page-shell modern idiom). */
+        aria-busy="true"
         data-variant={variant}
         data-size={size}
         data-interactive="false"

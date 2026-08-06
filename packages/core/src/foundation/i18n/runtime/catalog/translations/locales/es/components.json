@@ -287,6 +287,7 @@
     "pinSideRight": "R"
   },
   "pricingTable": {
+    "yearlyBilling": "Facturación anual",
     "monthly": "Mensual",
     "yearly": "Anual",
     "features": "Características",

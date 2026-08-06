@@ -169,6 +169,14 @@ describe('PatternWorkbenchHeader (modern engine)', () => {
     expect(await screen.findByText('7')).toBeInTheDocument();
   });
 
+  it('exposes the exception badge parametric name to assistive tech', async () => {
+    renderSurface(
+      <PatternWorkbenchHeader title="Modern Hub" exceptionCount={7} />,
+      { engine: 'modern' },
+    );
+    expect(await screen.findByRole('img', { name: '7 exceptions' })).toBeInTheDocument();
+  });
+
   it('renders quick actions and handles click', async () => {
     const onClick = vi.fn();
     renderSurface(

@@ -1,6 +1,8 @@
 import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
-import { fireEvent, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+
+import { I18nProvider } from '@/infrastructure/runtime/i18n';
 
 import type { StableEngineName } from '../../../../../tooling/testing/helpers/engine';
 import { STABLE_ENGINES, renderWithEngine } from '../../../../../tooling/testing/helpers/engine';
@@ -146,4 +148,41 @@ describe('PatternPricingTable', () => {
       expect(onBillingCycleChange).toHaveBeenCalledWith('yearly');
     },
   );
+
+  it('names the standalone billing toggle in the modern engine', () => {
+    renderWithEngine(
+      <ModernPricingTable {...createProps({ billingCycle: 'monthly', onBillingCycleChange: vi.fn() })} />,
+      'modern',
+    );
+
+    // The name states what checked asserts, so the checked state is readable
+    // on its own: unchecked on monthly, checked on yearly.
+    const monthly = screen.getByRole('checkbox', { name: 'Yearly billing' });
+    expect(monthly).not.toBeChecked();
+
+    cleanup();
+    renderWithEngine(
+      <ModernPricingTable {...createProps({ billingCycle: 'yearly', onBillingCycleChange: vi.fn() })} />,
+      'modern',
+    );
+    expect(screen.getByRole('checkbox', { name: 'Yearly billing' })).toBeChecked();
+  });
+
+  // An English floor is indistinguishable from a missing key at the call site,
+  // so parity is asserted against the shipped catalogs, not the fallback.
+  it.each([
+    ['es', 'Facturación anual'],
+    ['ar', 'الفوترة السنوية'],
+    ['pt', 'Faturamento anual'],
+    ['fr', 'Facturation annuelle'],
+  ])('names the billing toggle from the %s catalog, not the English floor', async (locale, expected) => {
+    render(
+      <I18nProvider locale={locale} fallbackLocale={locale}>
+        <ModernPricingTable {...createProps({ billingCycle: 'monthly', onBillingCycleChange: vi.fn() })} />
+      </I18nProvider>,
+    );
+
+    expect(await screen.findByRole('checkbox', { name: expected })).toBeInTheDocument();
+    expect(screen.queryByRole('checkbox', { name: 'Yearly billing' })).not.toBeInTheDocument();
+  });
 });

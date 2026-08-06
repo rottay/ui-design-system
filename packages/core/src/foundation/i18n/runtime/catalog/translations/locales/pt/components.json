@@ -1017,6 +1017,7 @@
     "settings_for": "Configurações de {name}"
   },
   "pricingTable": {
+    "yearlyBilling": "Faturamento anual",
     "monthly": "Mensal",
     "yearly": "Anual",
     "features": "Recursos",

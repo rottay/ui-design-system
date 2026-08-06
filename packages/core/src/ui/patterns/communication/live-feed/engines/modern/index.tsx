@@ -83,14 +83,25 @@ export default function ModernLiveFeed<T extends FeedItem>(props: LiveFeedProps<
   // clear the correct timer when dependencies change or the component unmounts.
   const intervalRef = useRef<ReturnType<typeof setInterval>>(undefined);
 
+  // Callers pass an inline arrow far more often than a memoized handler, so
+  // onRefresh identity cannot gate the timer: the tick reads the latest ref.
+  const onRefreshRef = useRef(onRefresh);
+  useEffect(() => {
+    onRefreshRef.current = onRefresh;
+  });
+
   // Auto-refresh polls at the given interval (ms). Setting autoRefresh to 0
   // or omitting it disables polling entirely.
+  // Presence of a handler is a dependency; its identity is not, so an inline
+  // arrow cannot restart the timer. Cleanup closes over its own id.
+  const hasRefresh = Boolean(onRefresh);
   useEffect(() => {
-    if (autoRefresh && autoRefresh > 0 && onRefresh) {
-      intervalRef.current = setInterval(onRefresh, autoRefresh);
-      return () => clearInterval(intervalRef.current);
+    if (autoRefresh && autoRefresh > 0 && hasRefresh) {
+      const id = setInterval(() => onRefreshRef.current?.(), autoRefresh);
+      intervalRef.current = id;
+      return () => clearInterval(id);
     }
-  }, [autoRefresh, onRefresh]);
+  }, [autoRefresh, hasRefresh]);
 
   // Cap visible items to prevent excessive DOM nodes in high-throughput feeds.
   const displayItems = maxItems ? items.slice(0, maxItems) : items;
@@ -166,31 +177,32 @@ export default function ModernLiveFeed<T extends FeedItem>(props: LiveFeedProps<
             When omitted, the feed grows unbounded. maxHeight/overflow stay inline:
             they are runtime-measured values (the ScrollArea precedent), not paint. */}
         <div ref={scrollContainerRef} style={{ maxHeight: maxHeight ?? undefined, overflow: maxHeight ? 'auto' : undefined }}>
-          {displayItems.length === 0 ? (
-            emptyState ?? (
-              <div data-part="empty">
-                <Empty image="simple" description={emptyLabel} />
-              </div>
-            )
-          ) : (
-            /* The Tailwind layout classes on the list are PINNED by
-               LiveFeed.pulse.test.tsx (`.flex.flex-col.gap-2 > div` row
-               queries) — they stay as layout utilities until the test is
-               re-pointed at `data-part='list'`. The list is a polite live
-               region: arriving items are announced to assistive tech. */
-            <div data-part="list" className="flex flex-col gap-2" aria-live="polite">
-              {/* ds-pulse-changed (foundation/animations/transitions.css) flashes
-                  ONCE on insertion to signal a freshly-arrived item. Each item
-                  has a stable key, so the flash plays when its DOM node is first
-                  inserted and does not replay on subsequent re-renders while
-                  isNew stays true, satisfying the never-loop pulse discipline. */}
-              {displayItems.map((item, i) => (
-                <div key={item.key} className={item.isNew ? 'ds-pulse-changed' : ''}>
-                  {renderItem(item, i)}
+          {displayItems.length === 0
+            ? emptyState ?? (
+                <div data-part="empty">
+                  <Empty image="simple" description={emptyLabel} />
                 </div>
-              ))}
-            </div>
-          )}
+              )
+            : null}
+          {/* Stays mounted while empty: a live region created already-populated
+              is not announced, so it must exist before the first items land. */}
+          {/* The Tailwind layout classes on the list are PINNED by
+              LiveFeed.pulse.test.tsx (`.flex.flex-col.gap-2 > div` row
+              queries) — they stay as layout utilities until the test is
+              re-pointed at `data-part='list'`. The list is a polite live
+              region: arriving items are announced to assistive tech. */}
+          <div data-part="list" className="flex flex-col gap-2" role="log" aria-live="polite">
+            {/* ds-pulse-changed (foundation/animations/transitions.css) flashes
+                ONCE on insertion to signal a freshly-arrived item. Each item
+                has a stable key, so the flash plays when its DOM node is first
+                inserted and does not replay on subsequent re-renders while
+                isNew stays true, satisfying the never-loop pulse discipline. */}
+            {displayItems.map((item, i) => (
+              <div key={item.key} className={item.isNew ? 'ds-pulse-changed' : ''}>
+                {renderItem(item, i)}
+              </div>
+            ))}
+          </div>
           {/* End-of-feed sentinel: triggers onLoadMore when scrolled into view. */}
           {hasMore && onLoadMore ? (
             <div ref={sentinelRef} data-part="sentinel" aria-hidden="true" />

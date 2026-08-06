@@ -961,6 +961,7 @@
     "settings_for": "Paramètres de {name}"
   },
   "pricingTable": {
+    "yearlyBilling": "Facturation annuelle",
     "monthly": "Mensuel",
     "yearly": "Annuel",
     "features": "Fonctionnalités",

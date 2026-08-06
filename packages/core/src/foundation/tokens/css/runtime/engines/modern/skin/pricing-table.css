@@ -151,6 +151,9 @@
   vertical-align: bottom;
 }
 .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__plan-head {
+  /* Without a floor the auto table shrinks plan columns until the CTA sets one
+     glyph per line; the floor is what makes the scroll frame overflow instead. */
+  min-inline-size: var(--ds-pricing-table-plan-head-min-inline-size, 9rem);
   padding: var(--ds-spacing-2, 8px);
   text-align: center;
   vertical-align: top;

@@ -127,6 +127,7 @@ export default function ModernPricingTable(props: PricingTableProps) {
     included: tOr('pricingTable.included', 'Included'),
     excluded: tOr('pricingTable.excluded', 'Not included'),
     empty: tOr('pricingTable.empty', 'No plans available'),
+    yearlyBilling: tOr('pricingTable.yearlyBilling', 'Yearly billing'),
   };
 
   const rootClass = `ds-pattern-pricing-table ds-engine-modern ${className ?? ''}`;
@@ -236,8 +237,11 @@ export default function ModernPricingTable(props: PricingTableProps) {
             data-part="toggle-control"
             className="ds-pricing-table__toggle-control"
           >
+            {/* The flanking spans are siblings, not a label. The name states
+                what checked asserts, so checked reads as "yearly billing". */}
             <Checkbox
               size="sm"
+              aria-label={labels.yearlyBilling}
               checked={cycle === 'yearly'}
               onChange={(checked) =>
                 onBillingCycleChange(checked ? 'yearly' : 'monthly')

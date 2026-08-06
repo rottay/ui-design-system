@@ -44,6 +44,7 @@ import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 // Lazy import to avoid pulling appearance compiler into main bundle
 // when sandbox is not used (tree-shaken)
 import { appearanceToVariables } from '@/infrastructure/compilers/kernel/runtime/appearance';
+import { isSafePreviewCssValue } from '@/infrastructure/runtime/tenant/runtime/preview-scope';
 
 interface BrandingPreviewSandboxProps {
   /** Proposed tenant appearance to preview. */
@@ -82,13 +83,21 @@ export function BrandingPreviewSandbox({
     return vars;
   }, [appearance, extraVars]);
 
-  // Build scoped CSS string
+  // This string reaches dangerouslySetInnerHTML, so every declaration passes
+  // the governed preview guard before it is emitted.
+  const appliedVars = useMemo(
+    () =>
+      Object.entries(cssVars).filter(
+        ([name, value]) => /^--ds-[a-z0-9-]+$/i.test(name) && isSafePreviewCssValue(value),
+      ),
+    [cssVars],
+  );
+
   const scopedCss = useMemo(() => {
-    const entries = Object.entries(cssVars);
-    if (entries.length === 0) return '';
-    const declarations = entries.map(([k, v]) => `  ${k}: ${v};`).join('\n');
-    return `[${scopeAttr}] {\n${declarations}\n}`;
-  }, [cssVars, scopeAttr]);
+    if (appliedVars.length === 0) return '';
+    const declarations = appliedVars.map(([name, value]) => `  ${name}: ${value};`);
+    return `[${scopeAttr}] {\n${declarations.join('\n')}\n}`;
+  }, [appliedVars, scopeAttr]);
 
   return (
     <>
@@ -263,7 +272,8 @@ export function BrandingPreviewSandbox({
 
         {/* Footer: var count */}
         <Box data-part="subtitle" data-variant="variable-count">
-          {t('brandingPreview.varsApplied', '{count} CSS variables applied', { count: Object.keys(cssVars).length })}
+          {/* Counts what the guard let through, not what was proposed. */}
+          {t('brandingPreview.varsApplied', '{count} CSS variables applied', { count: appliedVars.length })}
         </Box>
       </div>
     </>

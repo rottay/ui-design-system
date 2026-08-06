@@ -295,6 +295,7 @@
     "pinSideRight": "R"
   },
   "pricingTable": {
+    "yearlyBilling": "الفوترة السنوية",
     "monthly": "شهري",
     "yearly": "سنوي",
     "features": "الميزات",

@@ -280,7 +280,13 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
               {/* Exception count badge: the bare count is meaningless out of
                   context, so the pill names itself parametrically for AT. */}
               {exceptionCount != null && exceptionCount > 0 && (
-                <span data-part="exception" aria-label={exceptionsLabelFor(exceptionCount)}>
+                <span
+                  data-part="exception"
+                  /* ARIA prohibits aria-label on generic; role=img is what
+                     makes the parametric name reach the accessibility tree. */
+                  role="img"
+                  aria-label={exceptionsLabelFor(exceptionCount)}
+                >
                   <StatusWarningIcon size={12} decorative />
                   {exceptionCount}
                 </span>

@@ -60,6 +60,11 @@ import {
   VisuallyHidden,
   VoiceInputButton,
   Watermark,
+  BrandingPreviewSandbox,
+  PatternLiveFeed,
+  PatternPricingTable,
+  PatternUserProfileCard,
+  PatternWorkbenchHeader,
 } from '@rottay/design-system';
 
 import { SceneFrame, SpecimenRow } from '../../chrome';
@@ -120,7 +125,12 @@ export type R2BehaviorCase =
   | 'loadingindicator'
   | 'voiceinput'
   | 'meter'
-  | 'visuallyhidden';
+  | 'visuallyhidden'
+  | 'pricingtable'
+  | 'livefeed'
+  | 'brandingpreview'
+  | 'userprofilecard'
+  | 'workbenchheader';
 
 const CRUMB_ITEMS = [
   { key: 'home', label: 'Home', href: '/' },
@@ -183,6 +193,32 @@ function LateTargetHarness({ kind }: { kind: 'backtop' | 'floatbutton' }) {
       ) : (
         <FloatButton.BackTop type="primary" target={target} visibilityHeight={120} />
       )}
+    </div>
+  );
+}
+
+/** A 90ms churn hands LiveFeed a fresh inline onRefresh far faster than its
+ *  500ms poll: a timer keyed on handler identity could never fire. */
+function LiveFeedPollingHarness() {
+  const [churn, setChurn] = React.useState(0);
+  const [refreshes, setRefreshes] = React.useState(0);
+
+  React.useEffect(() => {
+    const id = setInterval(() => setChurn((n) => n + 1), 90);
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <div style={{ display: 'grid', gap: 12, inlineSize: '100%' }}>
+      <PatternLiveFeed
+        engine="modern"
+        items={[{ key: 'a', timestamp: new Date(0) }]}
+        renderItem={() => <span>feed row</span>}
+        autoRefresh={500}
+        onRefresh={() => setRefreshes((n) => n + 1)}
+      />
+      <div data-testid="lab-livefeed-refreshes">Refreshes: {refreshes}</div>
+      <div data-testid="lab-livefeed-churn">Rerenders: {churn}</div>
     </div>
   );
 }
@@ -1158,6 +1194,77 @@ export function R2BehaviorScene({ only }: { only: R2BehaviorCase }) {
         <SpecimenRow axis="DROPDOWN - ArrowDown enters a menu that is already open">
           <div data-testid="lab-dropdown" style={{ inlineSize: 'min(360px, 100%)' }}>
             <DropdownReentryHarness />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'pricingtable' && (
+        <SpecimenRow axis="PRICINGTABLE - the standalone billing toggle carries a name">
+          <div data-testid="lab-pricingtable" style={{ inlineSize: '100%' }}>
+            <PatternPricingTable
+              engine="modern"
+              billingCycle="monthly"
+              onBillingCycleChange={() => undefined}
+              plans={[
+                { id: 'free', name: 'Free', price: 0, cta: 'Get started', features: { seats: '1' } },
+                { id: 'pro', name: 'Pro', price: 29, cta: 'Upgrade', popular: true, features: { seats: '10' } },
+              ]}
+              features={[{ key: 'seats', label: 'Seats' }]}
+            />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'livefeed' && (
+        <SpecimenRow axis="LIVEFEED - polling survives caller churn and the log region precedes its items">
+          <div data-testid="lab-livefeed" style={{ display: 'grid', gap: 24, inlineSize: 'min(520px, 100%)' }}>
+            <div data-testid="lab-livefeed-polling">
+              <LiveFeedPollingHarness />
+            </div>
+            {/* Empty on purpose: a live region announced only once it already
+                has content would never announce its first arrival. */}
+            <div data-testid="lab-livefeed-empty">
+              <PatternLiveFeed engine="modern" items={[]} renderItem={() => null} />
+            </div>
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'brandingpreview' && (
+        <SpecimenRow axis="BRANDINGPREVIEW - only guard-passed declarations reach the style sink">
+          <div data-testid="lab-brandingpreview" style={{ inlineSize: '100%' }}>
+            <BrandingPreviewSandbox
+              compact
+              showLabels={false}
+              appearance={{}}
+              extraVars={{
+                '--ds-color-primary': '#2f6feb',
+                '--ds-color-accent': 'red; } [data-preview-escape] { display: none',
+                '--ds-color-border': 'url(javascript:alert(1))',
+                'color: red; --ds-color-text-primary': '#111111',
+              }}
+            />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'userprofilecard' && (
+        <SpecimenRow axis="USERPROFILECARD - the pending card announces itself as busy">
+          <div data-testid="lab-userprofilecard" style={{ display: 'grid', gap: 24, inlineSize: 'min(420px, 100%)' }}>
+            <div data-testid="lab-upc-loading">
+              <PatternUserProfileCard engine="modern" loading user={{ name: 'Ada Lovelace', role: 'Engineer' }} />
+            </div>
+            <div data-testid="lab-upc-settled">
+              <PatternUserProfileCard engine="modern" user={{ name: 'Ada Lovelace', role: 'Engineer' }} />
+            </div>
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'workbenchheader' && (
+        <SpecimenRow axis="WORKBENCHHEADER - the exception count reaches the accessibility tree">
+          <div data-testid="lab-workbenchheader" style={{ inlineSize: '100%' }}>
+            <PatternWorkbenchHeader engine="modern" title="Operations" subtitle="Today" exceptionCount={3} />
           </div>
         </SpecimenRow>
       )}

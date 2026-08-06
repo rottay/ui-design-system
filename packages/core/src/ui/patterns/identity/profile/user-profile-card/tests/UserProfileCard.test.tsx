@@ -106,4 +106,21 @@ describe('PatternUserProfileCard', () => {
       expect(onClick).toHaveBeenCalled();
     },
   );
+
+  it('announces the modern loading card as busy', () => {
+    const { container } = renderWithEngine(
+      <ModernUserProfileCard {...createProps({ loading: true })} />,
+      'modern',
+    );
+
+    expect(container.querySelector('[data-part="root"]')).toHaveAttribute('aria-busy', 'true');
+  });
+
+  it('drops aria-busy once the modern card has settled', () => {
+    // A permanently busy card is as wrong as a never-busy one: AT would keep
+    // reporting pending work on a card that already has its content.
+    const { container } = renderWithEngine(<ModernUserProfileCard {...createProps()} />, 'modern');
+
+    expect(container.querySelector('[data-part="root"]')).not.toHaveAttribute('aria-busy');
+  });
 });
