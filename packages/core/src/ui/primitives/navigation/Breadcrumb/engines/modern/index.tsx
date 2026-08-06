@@ -225,6 +225,8 @@ export default function ModernBreadcrumb(props: BreadcrumbProps): React.ReactEle
           const item = slot.item;
           const isCurrent = item.key === lastItemKey;
           const labelTitle = typeof item.label === 'string' ? item.label : undefined;
+          const itemMenu = item.menu;
+          const hasMenu = Boolean(itemMenu && itemMenu.length > 0);
 
           const crumbElement =
             item.href && !isCurrent ? (
@@ -249,6 +251,18 @@ export default function ModernBreadcrumb(props: BreadcrumbProps): React.ReactEle
                 {item.icon && <span data-part="icon">{item.icon}</span>}
                 <span data-part="label" title={labelTitle}>{item.label}</span>
               </button>
+            ) : hasMenu ? (
+              // A menu-bearing crumb is the disclosure trigger, so it must be a
+              // real button: a span is unfocusable and cannot carry aria-haspopup.
+              <button
+                type="button"
+                data-part="crumb"
+                data-current={isCurrent ? 'true' : 'false'}
+                aria-current={isCurrent ? 'page' : undefined}
+              >
+                {item.icon && <span data-part="icon">{item.icon}</span>}
+                <span data-part="label" title={labelTitle}>{item.label}</span>
+              </button>
             ) : (
               <span
                 data-part="crumb"
@@ -263,8 +277,6 @@ export default function ModernBreadcrumb(props: BreadcrumbProps): React.ReactEle
                 <span data-part="label" title={labelTitle}>{item.label}</span>
               </span>
             );
-
-          const itemMenu = item.menu;
 
           return (
             <React.Fragment key={item.key}>

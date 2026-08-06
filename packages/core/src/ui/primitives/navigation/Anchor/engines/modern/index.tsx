@@ -92,6 +92,15 @@ function scrollBehavior(): ScrollBehavior {
   return 'smooth';
 }
 
+function isFragmentHref(href: string): boolean {
+  return href.startsWith('#');
+}
+
+// getElementById, not querySelector: an id need not be a valid CSS ident.
+function resolveSection(href: string): HTMLElement | null {
+  return isFragmentHref(href) ? document.getElementById(href.slice(1)) : null;
+}
+
 // ============================================================================
 // Link Component
 // ============================================================================
@@ -134,10 +143,10 @@ export const Link = React.forwardRef<HTMLAnchorElement, AnchorLinkProps>(
     const handleClick = (e: React.MouseEvent) => {
       context?.onClick?.(e, { title, href });
 
-      if (!e.defaultPrevented) {
+      // Only an in-page fragment is ours to intercept; anything else navigates.
+      if (!e.defaultPrevented && isFragmentHref(href)) {
         e.preventDefault();
-        const element = document.querySelector(href);
-        element?.scrollIntoView({ behavior: scrollBehavior() });
+        resolveSection(href)?.scrollIntoView({ behavior: scrollBehavior() });
       }
     };
 
@@ -283,7 +292,7 @@ export const Anchor = React.forwardRef<HTMLDivElement, AnchorProps>(
         // scrolled past the threshold wins, giving us the deepest visible section
         let currentAnchor = '';
         for (const anchor of anchors) {
-          const element = document.querySelector(anchor);
+          const element = resolveSection(anchor);
           if (element) {
             const rect = element.getBoundingClientRect();
             // Convert viewport-relative position to absolute document position

@@ -19,6 +19,10 @@ const CASES: R2BehaviorCase[] = [
   'collapse',
   'backtop',
   'floatbutton',
+  'switch',
+  'scrollarea',
+  'breadcrumb',
+  'anchor',
 ];
 
 export default async function R2BehaviorPage({

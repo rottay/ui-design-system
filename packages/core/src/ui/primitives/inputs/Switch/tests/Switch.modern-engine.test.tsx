@@ -55,7 +55,7 @@ describe('Modern Switch public anatomy', () => {
     expect(screen.getByText('On').style.cssText).toBe('');
   });
 
-  it('toggles uncontrolled state and fires onClick with the previous value', () => {
+  it('toggles uncontrolled state and fires onClick with the post-activation value', () => {
     const handleChange = vi.fn();
     const handleClick = vi.fn();
     const { container } = render(<ModernSwitch onChange={handleChange} onClick={handleClick} />);
@@ -63,7 +63,7 @@ describe('Modern Switch public anatomy', () => {
 
     fireEvent.click(input);
     expect(handleChange).toHaveBeenCalledWith(true);
-    expect(handleClick).toHaveBeenCalledWith(false, expect.anything());
+    expect(handleClick).toHaveBeenCalledWith(true, expect.anything());
     expect(container.querySelector('[data-part="root"]')).toHaveAttribute('data-checked', 'true');
   });
 

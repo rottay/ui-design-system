@@ -77,9 +77,11 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
       onChange?.(newChecked);
     }, [isControlled, onChange]);
 
+    // Pre-click activation already flipped the input, so currentTarget.checked
+    // is this activation's value; the render closure still holds the previous.
     const handleClick = useCallback((e: React.MouseEvent<HTMLInputElement>) => {
-      onClick?.(isChecked, e as unknown as React.MouseEvent);
-    }, [isChecked, onClick]);
+      onClick?.(e.currentTarget.checked, e as unknown as React.MouseEvent);
+    }, [onClick]);
 
     const sizeKey = toCanonicalSize(size) ?? 'md';
 

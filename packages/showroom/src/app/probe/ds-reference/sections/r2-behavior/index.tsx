@@ -3,7 +3,9 @@
 import React from 'react';
 
 import {
+  Anchor,
   BackTop,
+  Breadcrumb,
   Checkbox,
   Collapse,
   DatePicker,
@@ -13,8 +15,10 @@ import {
   Mentions,
   PasswordInput,
   Radio,
+  ScrollArea,
   Splitter,
   Stepper,
+  Switch,
   Tabs,
   Textarea,
   TimePicker,
@@ -41,7 +45,20 @@ export type R2BehaviorCase =
   | 'otpinput'
   | 'collapse'
   | 'backtop'
-  | 'floatbutton';
+  | 'floatbutton'
+  | 'switch'
+  | 'scrollarea'
+  | 'breadcrumb'
+  | 'anchor';
+
+const CRUMB_ITEMS = [
+  { key: 'home', label: 'Home', href: '/' },
+  { key: 'a', label: 'Level A', href: '/a' },
+  { key: 'b', label: 'Level B', href: '/b' },
+  { key: 'c', label: 'Level C', href: '/c' },
+  { key: 'd', label: 'Level D', href: '/d' },
+  { key: 'current', label: 'Current page' },
+];
 
 const TAB_ITEMS = [
   { key: 'roster', label: 'Roster', children: 'Reviewer roster' },
@@ -95,6 +112,80 @@ function LateTargetHarness({ kind }: { kind: 'backtop' | 'floatbutton' }) {
       ) : (
         <FloatButton.BackTop type="primary" target={target} visibilityHeight={120} />
       )}
+    </div>
+  );
+}
+
+function SwitchClickValueHarness() {
+  const [reported, setReported] = React.useState('none');
+  return (
+    <div>
+      <Switch onClick={(checked) => setReported(String(checked))} />
+      <div data-testid="lab-switch-reported">Reported: {reported}</div>
+    </div>
+  );
+}
+
+/** The pinned badge resolves against the scroll root only if the root is a containing block. */
+function ScrollAreaContainingBlockHarness() {
+  return (
+    <div
+      style={{
+        paddingInlineStart: 'clamp(8px, 8vw, 200px)',
+        paddingInlineEnd: 8,
+        paddingBlockStart: 32,
+      }}
+    >
+      <ScrollArea
+        maxHeight={180}
+        style={{ inlineSize: 'min(320px, 100%)', border: '1px solid var(--ds-color-border)' }}
+        data-testid="lab-scrollarea-root"
+      >
+        <div
+          data-testid="lab-scrollarea-pinned"
+          style={{
+            position: 'absolute',
+            insetBlockStart: 8,
+            insetInlineEnd: 8,
+            padding: '2px 8px',
+            background: 'var(--ds-color-primary)',
+            color: 'var(--ds-color-text-inverse, #fff)',
+            fontSize: 12,
+          }}
+        >
+          Pinned
+        </div>
+        <div style={{ blockSize: 720, paddingBlockStart: 44, paddingInline: 12 }}>
+          Scrollable content
+        </div>
+      </ScrollArea>
+    </div>
+  );
+}
+
+function AnchorInterceptHarness() {
+  const [prevented, setPrevented] = React.useState('none');
+  React.useEffect(() => {
+    const onDocumentClick = (event: MouseEvent) => {
+      const node = event.target as HTMLElement | null;
+      if (!node?.closest('[data-lab-external]')) return;
+      setPrevented(String(event.defaultPrevented));
+      // The lab records the verdict, then stops the real navigation.
+      event.preventDefault();
+    };
+    document.addEventListener('click', onDocumentClick);
+    return () => document.removeEventListener('click', onDocumentClick);
+  }, []);
+  return (
+    <div>
+      <Anchor>
+        <Anchor.Link href="#lab-anchor-section" title="In-page section" />
+        <span data-lab-external>
+          <Anchor.Link href="https://example.com/pricing" title="External pricing" target="_blank" />
+        </span>
+      </Anchor>
+      <div data-testid="lab-anchor-prevented">External defaultPrevented: {prevented}</div>
+      <div id="lab-anchor-section" style={{ marginBlockStart: 16 }}>Section body</div>
     </div>
   );
 }
@@ -260,6 +351,38 @@ export function R2BehaviorScene({ only }: { only: R2BehaviorCase }) {
         <SpecimenRow axis="FLOATBUTTON.BACKTOP - same late-target binding">
           <div data-testid="lab-floatbutton">
             <LateTargetHarness kind="floatbutton" />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'switch' && (
+        <SpecimenRow axis="SWITCH - onClick reports the value the activation produced">
+          <div data-testid="lab-switch" style={{ inlineSize: 320 }}>
+            <SwitchClickValueHarness />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'scrollarea' && (
+        <SpecimenRow axis="SCROLLAREA - the scroll root is its own containing block">
+          <div data-testid="lab-scrollarea">
+            <ScrollAreaContainingBlockHarness />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'breadcrumb' && (
+        <SpecimenRow axis="BREADCRUMB - collapsed items reachable without a pointer">
+          <div data-testid="lab-breadcrumb" style={{ inlineSize: 460 }}>
+            <Breadcrumb items={CRUMB_ITEMS} overflow={{ maxVisible: 4, keepFirst: 1, keepLast: 2 }} />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'anchor' && (
+        <SpecimenRow axis="ANCHOR - only in-page fragments are intercepted">
+          <div data-testid="lab-anchor" style={{ inlineSize: 360 }}>
+            <AnchorInterceptHarness />
           </div>
         </SpecimenRow>
       )}
