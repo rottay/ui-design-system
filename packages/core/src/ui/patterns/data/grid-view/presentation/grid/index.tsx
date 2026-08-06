@@ -50,7 +50,9 @@ function buildGridTemplateColumns(
   minColumnWidth: number,
 ): string {
   if (columns === 'auto') {
-    return `repeat(auto-fill, minmax(var(--ds-listing-grid-min-compact-width, ${minColumnWidth}px), 1fr))`;
+    // Responsive law: the track floor must never exceed its own container, or
+    // a single track overflows the page below the resolved compact width.
+    return `repeat(auto-fill, minmax(min(var(--ds-listing-grid-min-compact-width, ${minColumnWidth}px), 100%), 1fr))`;
   }
   const clamped = Math.max(1, Math.min(columns, MAX_FIXED_COLUMNS));
   return `repeat(${clamped}, 1fr)`;
@@ -293,6 +295,7 @@ export function PatternGridView<T>(
         data-part="root"
         data-loading="false"
         data-empty="true"
+        style={style}
       >
         {emptyState ?? (
           <Text data-part="empty-state">{emptyLabel}</Text>

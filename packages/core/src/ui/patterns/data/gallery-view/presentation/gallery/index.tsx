@@ -54,7 +54,9 @@ function buildGridTemplateColumns(
   minColumnWidth: number,
 ): string {
   if (columns === 'auto') {
-    return `repeat(auto-fill, minmax(${minColumnWidth}px, 1fr))`;
+    // Responsive law: the track floor must never exceed its own container, or
+    // a single track overflows the page below `minColumnWidth`.
+    return `repeat(auto-fill, minmax(min(${minColumnWidth}px, 100%), 1fr))`;
   }
   return `repeat(${Math.max(1, columns)}, 1fr)`;
 }
@@ -494,8 +496,9 @@ export function PatternGalleryView<T extends object>(
       display: 'grid',
       gridTemplateColumns: buildGridTemplateColumns(columns, minColumnWidth),
       gap: normalizedGap,
+      ...style,
     }),
-    [columns, minColumnWidth, normalizedGap],
+    [columns, minColumnWidth, normalizedGap, style],
   );
 
   // -------------------------------------------------------------------------

@@ -799,11 +799,12 @@
 }
 
 .ds-pattern-data-table.ds-engine-modern [data-part="editor-error"] {
-  position: absolute;
-  inset-block-start: calc(100% + 0.25rem);
-  inset-inline-start: 0;
-  font-size: var(--ds-table-editor-error-font-size, 0.6875rem);
-  white-space: nowrap;
+  /* In flow, not absolute: an out-of-flow message is painted past the row box
+     the cell never grew for, so half of it lands outside the table. */
+  display: block;
+  margin-block-start: var(--ds-spacing-1, 0.25rem);
+  font-size: var(--ds-table-editor-error-font-size, var(--ds-font-size-xs));
+  overflow-wrap: anywhere;
 }
 
 .ds-pattern-data-table.ds-engine-modern [data-part="expanded-row"],

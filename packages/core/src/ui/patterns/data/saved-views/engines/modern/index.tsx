@@ -47,7 +47,7 @@
  * />
  */
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import type { SavedViewsBarProps, SavedView } from '../../contracts';
 import type { DropdownMenuItem } from '../../../../../primitives/overlay/Dropdown/contracts';
 import Dropdown from '../../../../../primitives/overlay/Dropdown/engines/modern';
@@ -111,6 +111,31 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
   const [dragViewId, setDragViewId] = useState<string | null>(null);
   const [dropTargetId, setDropTargetId] = useState<string | null>(null);
 
+  /* A keyboard exit (Enter/Escape) hands focus back to the control the editor
+     replaced; a blur exit must not, or it steals the pointer's new target. */
+  const pillSelectRefs = useRef(
+    new Map<string, HTMLButtonElement | HTMLAnchorElement>(),
+  );
+  const restoreFocusViewId = useRef<string | null>(null);
+  const createButtonRef = useRef<HTMLButtonElement | HTMLAnchorElement | null>(
+    null,
+  );
+  const restoreCreateFocus = useRef(false);
+
+  useEffect(() => {
+    if (editingViewId !== null) return;
+    const pendingId = restoreFocusViewId.current;
+    if (pendingId === null) return;
+    restoreFocusViewId.current = null;
+    pillSelectRefs.current.get(pendingId)?.focus();
+  }, [editingViewId]);
+
+  useEffect(() => {
+    if (isCreating || !restoreCreateFocus.current) return;
+    restoreCreateFocus.current = false;
+    createButtonRef.current?.focus();
+  }, [isCreating]);
+
   /* RTL: nothing to probe here. The Dropdown primitive (K4-A) resolves the
      trigger's reading direction itself and mirrors `bottomRight` under
      `dir="rtl"` — the bar declares one logical placement. */
@@ -144,6 +169,20 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
     setEditingViewId(null);
     setEditingName('');
   }, [editingViewId, editingName, onViewRename]);
+
+  /** Keyboard dismissal of the rename editor; arms the focus handback. */
+  const handleRenameKeyExit = useCallback(
+    (commit: boolean) => {
+      restoreFocusViewId.current = editingViewId;
+      if (commit) {
+        handleRenameConfirm();
+        return;
+      }
+      setEditingViewId(null);
+      setEditingName('');
+    },
+    [editingViewId, handleRenameConfirm],
+  );
 
   const handleDragStart = useCallback(
     (e: React.DragEvent, viewId: string) => {
@@ -312,11 +351,8 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
                 value={editingName}
                 onChange={(value) => setEditingName(value)}
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter') handleRenameConfirm();
-                  if (e.key === 'Escape') {
-                    setEditingViewId(null);
-                    setEditingName('');
-                  }
+                  if (e.key === 'Enter') handleRenameKeyExit(true);
+                  if (e.key === 'Escape') handleRenameKeyExit(false);
                 }}
                 onBlur={handleRenameConfirm}
                 autoFocus
@@ -324,6 +360,10 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
               />
             ) : (
               <Button
+                ref={(node) => {
+                  if (node) pillSelectRefs.current.set(view.id, node);
+                  else pillSelectRefs.current.delete(view.id);
+                }}
                 variant="ghost"
                 size="sm"
                 data-part="pill-select"
@@ -404,8 +444,12 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
             value={newViewName}
             onChange={(value) => setNewViewName(value)}
             onKeyDown={(e) => {
-              if (e.key === 'Enter') handleCreate();
+              if (e.key === 'Enter') {
+                restoreCreateFocus.current = true;
+                handleCreate();
+              }
               if (e.key === 'Escape') {
+                restoreCreateFocus.current = true;
                 setIsCreating(false);
                 setNewViewName('');
               }
@@ -422,6 +466,7 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
       ) : (
         canCreate && (
           <Button
+            ref={createButtonRef}
             variant="dashed"
             size="sm"
             data-part="create-button"

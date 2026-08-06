@@ -16,7 +16,7 @@ import {
   XIcon,
 } from '../../../../graphics/icons';
 
-import { Badge, Button, Flex, Text } from '../../../primitives';
+import { Badge, Button, Flex, Text, VisuallyHidden } from '../../../primitives';
 import { useOptionalTranslation } from '../../../../infrastructure/runtime/i18n';
 
 export interface BulkSelectToggleProps {
@@ -65,17 +65,26 @@ export function BulkSelectToggle({
         ) : (
           <CheckSquareIcon data-part="icon" />
         )}
-        <Text data-part="label" size="sm">{active ? doneLabel : selectLabel}</Text>
+        {/* The button owns the foreground for its variant; a Text that paints
+            its own color lands near-invisible on the active/primary fill. */}
+        <Text data-part="label" size="sm" color="inherit">{active ? doneLabel : selectLabel}</Text>
       </Button>
 
       {active && selectedCount > 0 && (
         <Badge
           className="ds-bulk-select-toggle__count"
           variant="primary"
+          aria-hidden="true"
         >
           {selectedCount} {selectedLabel}
         </Badge>
       )}
+
+      {/* The Badge is the sighted read-out only; a polite region has to be
+          mounted BEFORE its text changes for AT to report a new count. */}
+      <VisuallyHidden data-part="count-live" role="status">
+        {active && selectedCount > 0 ? `${selectedCount} ${selectedLabel}` : ''}
+      </VisuallyHidden>
     </Flex>
   );
 }

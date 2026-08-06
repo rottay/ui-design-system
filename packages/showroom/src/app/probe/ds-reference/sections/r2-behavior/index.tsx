@@ -64,8 +64,15 @@ import {
   PatternLiveFeed,
   PatternPricingTable,
   PatternUserProfileCard,
+  PatternDataTable,
   PatternWorkbenchHeader,
+  BulkSelectToggle,
+  PatternGalleryView,
+  PatternGridView,
+  PatternSavedViewsBar,
+  cellRenderers,
 } from '@rottay/design-system';
+import { AlertIcon } from '@rottay/design-system/icons';
 
 import { SceneFrame, SpecimenRow } from '../../chrome';
 
@@ -130,7 +137,13 @@ export type R2BehaviorCase =
   | 'livefeed'
   | 'brandingpreview'
   | 'userprofilecard'
-  | 'workbenchheader';
+  | 'workbenchheader'
+  | 'gridtrack'
+  | 'gallerytrack'
+  | 'savedviewsfocus'
+  | 'bulkselectcount'
+  | 'cellreveal'
+  | 'celleditorerror';
 
 const CRUMB_ITEMS = [
   { key: 'home', label: 'Home', href: '/' },
@@ -1257,6 +1270,101 @@ export function R2BehaviorScene({ only }: { only: R2BehaviorCase }) {
             <div data-testid="lab-upc-settled">
               <PatternUserProfileCard engine="modern" user={{ name: 'Ada Lovelace', role: 'Engineer' }} />
             </div>
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'gridtrack' && (
+        <SpecimenRow axis="GRIDVIEW - the auto track floor cannot outgrow its container">
+          {/* Deliberately narrower than the 220px/280px track floor: the old
+              bare minmax() floor could not shrink and overflowed here. */}
+          <div data-testid="lab-gridtrack" style={{ inlineSize: 'min(200px, 100%)', outline: '1px dashed rgba(0,0,0,.25)' }}>
+            <PatternGridView
+              data={[{ id: 'a', name: 'Alpha' }, { id: 'b', name: 'Beta' }]}
+              renderCard={(row: { id: string; name: string }) => <span>{row.name}</span>}
+              columns="auto"
+            />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'gallerytrack' && (
+        <SpecimenRow axis="GALLERYVIEW - the track floor yields and the caller style survives data">
+          <div data-testid="lab-gallerytrack" style={{ inlineSize: 'min(200px, 100%)', outline: '1px dashed rgba(0,0,0,.25)' }}>
+            <PatternGalleryView
+              data={[{ id: 'a', title: 'Alpha', url: '' }, { id: 'b', title: 'Beta', url: '' }]}
+              imageField="url"
+              renderCard={(row) => <span>{row.title}</span>}
+              columns="auto"
+              minColumnWidth={240}
+            />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'savedviewsfocus' && (
+        <SpecimenRow axis="SAVEDVIEWS - a keyboard-dismissed editor hands focus back">
+          <div data-testid="lab-savedviewsfocus" style={{ inlineSize: '100%' }}>
+            <PatternSavedViewsBar
+              engine="modern"
+              views={[
+                { id: 'v1', name: 'All records', config: {} },
+                { id: 'v2', name: 'Mine', config: {} },
+              ]}
+              activeViewId="v1"
+              onViewSelect={() => undefined}
+              onViewRename={() => undefined}
+            />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'bulkselectcount' && (
+        <SpecimenRow axis="BULKSELECT - the selection count reaches a mounted live region">
+          <div data-testid="lab-bulkselectcount" style={{ inlineSize: '100%' }}>
+            <BulkSelectToggle active selectedCount={3} onToggle={() => undefined} />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'cellreveal' && (
+        <SpecimenRow axis="CELLRENDERERS - clipped text keeps a reveal path">
+          <div data-testid="lab-cellreveal" style={{ display: 'grid', gap: 16, inlineSize: 140, maxInlineSize: '100%' }}>
+            {/* minInlineSize:0 — a grid item defaults to min-width:auto and
+                would refuse to shrink, so nothing would ever clip here. */}
+            <div data-testid="lab-cellreveal-avatar" style={{ minInlineSize: 0, overflow: 'hidden' }}>
+              {cellRenderers.avatarName('Alexandra Konstantinopolous', 'alexandra.konstantinopolous@example.com')}
+            </div>
+            <div data-testid="lab-cellreveal-icontext" style={{ minInlineSize: 0, overflow: 'hidden' }}>
+              {cellRenderers.iconText(AlertIcon, 'alexandra.konstantinopolous@example.com')}
+            </div>
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'celleditorerror' && (
+        <SpecimenRow axis="DATATABLE - a rejected checkbox save is announced, not silent">
+          {/* validate rejects the checked value, so toggling the box in edit
+              mode is the only way to reach the rejected-save branch. */}
+          <div data-testid="lab-celleditorerror" style={{ inlineSize: '100%' }}>
+            <PatternDataTable
+              engine="modern"
+              rowKey="id"
+              data={[{ id: 'r1', enabled: false, name: 'Alpha' }]}
+              columns={[
+                {
+                  key: 'enabled',
+                  header: 'Enabled',
+                  accessorKey: 'enabled',
+                  editable: {
+                    type: 'checkbox',
+                    validate: (value: unknown) =>
+                      value === true ? 'Cannot enable this row' : null,
+                  },
+                },
+                { key: 'name', header: 'Name', accessorKey: 'name' },
+              ]}
+            />
           </div>
         </SpecimenRow>
       )}

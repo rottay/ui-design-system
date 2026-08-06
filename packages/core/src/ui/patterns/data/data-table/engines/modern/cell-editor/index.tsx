@@ -174,6 +174,7 @@ export function InlineCellEditor<T>({
           type="checkbox"
           data-part="editor-checkbox"
           aria-label={accessibleName}
+          aria-invalid={error ? true : undefined}
           checked={Boolean(editValue)}
           onChange={(e) => {
             setEditValue(e.target.checked);
@@ -182,6 +183,13 @@ export function InlineCellEditor<T>({
           }}
           onKeyDown={handleKeyDown}
         />
+        {/* The checkbox saves on toggle, so a rejected save has no other tell:
+            without this node the failure is silent and never announced. */}
+        {error && (
+          <span data-part="editor-error" role="alert">
+            {error}
+          </span>
+        )}
       </div>
     );
   }
@@ -200,6 +208,7 @@ export function InlineCellEditor<T>({
           onChange={(e) => {
             const selected = config.options?.find((o) => String(o.value) === e.target.value);
             setEditValue(selected ? selected.value : e.target.value);
+            setError(null);
           }}
           onKeyDown={handleKeyDown}
         >

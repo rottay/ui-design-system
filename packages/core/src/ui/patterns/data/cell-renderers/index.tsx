@@ -153,6 +153,9 @@ function avatarName(
     React.createElement('div', { 'data-part': 'content', style: { minWidth: 0 } },
       React.createElement('div', {
         'data-part': 'name',
+        // Same reveal contract as the subtitle below: ellipsis truncation is
+        // only honest when the full string stays one hover away.
+        title: name,
         style: {
           fontWeight: 500,
           fontSize: 'var(--ds-font-size-sm, 14px)',
@@ -315,6 +318,9 @@ function iconText(
     }),
     React.createElement('span', {
       'data-part': 'value',
+      // Emails and paths clip here more often than anywhere else; the reveal
+      // path is the same native tooltip the other truncating renderers use.
+      title: value ? display : undefined,
       style: {
         fontSize: 'var(--ds-font-size-sm, 14px)',
         whiteSpace: 'nowrap',
