@@ -96,6 +96,8 @@ function formatAmount(amount: number): string {
  */
 function InboxItemRow({
   item,
+  index,
+  count,
   selectable,
   selected,
   pendingAction,
@@ -107,6 +109,8 @@ function InboxItemRow({
   t,
 }: {
   item: ApprovalItem;
+  index: number;
+  count: number;
   selectable: boolean;
   selected: boolean;
   pendingAction: 'approve' | 'reject' | null;
@@ -151,7 +155,15 @@ function InboxItemRow({
   })();
 
   return (
-    <div data-part="item" data-selected={selected || undefined}>
+    <div
+      data-part="item"
+      data-selected={selected || undefined}
+      /* A queue is a ranked list: without a role and a rank, AT could not say
+         which of how many approvals the user had landed on. */
+      role="listitem"
+      aria-posinset={index + 1}
+      aria-setsize={count}
+    >
       {selectable && (
         <div data-part="item-select">
           <ModernCheckbox
@@ -347,10 +359,27 @@ export default function ModernApprovalInbox(props: ApprovalInboxProps) {
     [pendingItem, orderedIds]
   );
 
+  /* The batch toolbar ALWAYS unmounts once the batch settles (the selection is
+     cleared), so the button the user just pressed disappears and focus falls to
+     <body> — the same drop the per-row policy already repairs. */
+  const pendingBatchFocus = useRef<string[] | null>(null);
+
+  useEffect(() => {
+    const batched = pendingBatchFocus.current;
+    if (!batched || activeSelection.length > 0) return;
+    pendingBatchFocus.current = null;
+    const survivor =
+      batched.find((id) => liveIds.has(id)) ?? orderedIds.find((id) => liveIds.has(id));
+    const node = survivor ? rowActionRefs.current.get(survivor) : undefined;
+    if (node) node.focus();
+    else rootRef.current?.focus();
+  }, [activeSelection.length, liveIds, orderedIds]);
+
   /** Runs the batch approve, clearing the selection once it settles. */
   const runBatchApprove = useCallback(() => {
     if (!onBatchApprove || batchPending || activeSelection.length === 0) return;
     const ids = activeSelection;
+    pendingBatchFocus.current = ids;
     const result: unknown = onBatchApprove(ids);
     if (isThenable(result)) {
       setBatchPending(true);
@@ -495,11 +524,13 @@ export default function ModernApprovalInbox(props: ApprovalInboxProps) {
                 content={group.items.length}
               />
             </div>
-            <div data-part="group-items">
-              {group.items.map((item) => (
+            <div data-part="group-items" role="list">
+              {group.items.map((item, index) => (
                 <InboxItemRow
                   key={item.id}
                   item={item}
+                  index={index}
+                  count={group.items.length}
                   selectable={Boolean(onBatchApprove)}
                   selected={selectedIds.has(item.id)}
                   pendingAction={pendingItem?.id === item.id ? pendingItem.action : null}

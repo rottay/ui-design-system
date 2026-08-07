@@ -82,10 +82,11 @@
   background: var(--ds-surface-panel);
 }
 
+/* Frame only: `object-fit` never applied here (this is a span, not a replaced
+   element) — the composed Image primitive owns the fit via its own contract. */
 .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-thumbnail'] {
   inline-size: 100%;
   block-size: 100%;
-  object-fit: cover;
   display: block;
 }
 

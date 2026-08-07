@@ -165,10 +165,48 @@
   white-space: nowrap;
 }
 
-/* --- Narrow collapse: low-priority columns hide under 40rem of inline size ------------------ */
+/* --- Folded detail stack ---------------------------------------------------------------------
+   Content integrity: the folded fields are never deleted. The stack is hidden
+   in the wide posture, so exactly one copy of actor/reason/reference is in the
+   accessibility tree at a time. */
+.ds-pattern-operational-ledger.ds-engine-modern [data-part='entry-detail'] {
+  display: none;
+  flex-direction: column;
+  gap: var(--ds-spacing-1, 4px);
+  margin-block-start: var(--ds-spacing-1, 4px);
+}
+
+.ds-pattern-operational-ledger.ds-engine-modern [data-part='detail-item'] {
+  display: flex;
+  align-items: baseline;
+  gap: var(--ds-spacing-2, 10px);
+}
+
+.ds-pattern-operational-ledger.ds-engine-modern [data-part='detail-label'] {
+  flex: 0 0 auto;
+  min-inline-size: var(--ds-spacing-16, 64px);
+  color: var(--ds-color-text-muted);
+  font-size: var(--ds-type-caption-font-size, 11px);
+  font-weight: var(--ds-font-weight-semibold, 600);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* --- Narrow collapse: the fold is driven by the ledger's OWN inline size ---------------------
+   A viewport query folded a narrow ledger sitting inside a wide page not at
+   all; the named container measures the component itself. */
 @container ds-operational-ledger (max-width: 40rem) {
-  .ds-pattern-operational-ledger.ds-engine-modern [data-priority='low'] {
+  .ds-pattern-operational-ledger.ds-engine-modern [data-part='header-cell'][data-column='actor'],
+  .ds-pattern-operational-ledger.ds-engine-modern [data-part='header-cell'][data-column='reason'],
+  .ds-pattern-operational-ledger.ds-engine-modern [data-part='header-cell'][data-column='reference'],
+  .ds-pattern-operational-ledger.ds-engine-modern [data-part='cell'][data-column='actor'],
+  .ds-pattern-operational-ledger.ds-engine-modern [data-part='cell'][data-column='reason'],
+  .ds-pattern-operational-ledger.ds-engine-modern [data-part='cell'][data-column='reference'] {
     display: none;
+  }
+
+  .ds-pattern-operational-ledger.ds-engine-modern [data-part='entry-detail'] {
+    display: flex;
   }
 }
 

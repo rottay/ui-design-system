@@ -9,8 +9,8 @@
  * from the Select primitive — never a recreation.
  *
  * ADAPTIVE LAW: low-priority columns (actor / reason / reference) FOLD into a
- * labelled stack inside the description cell on narrow viewports — they are
- * never dropped; the header stays sticky when the region scrolls.
+ * labelled stack inside the description cell under a narrow `ds-operational-ledger`
+ * container — they are never dropped; the header stays sticky when the region scrolls.
  *
  * COPY: all strings resolve through the optional `components` i18n channel
  * with a documented English floor.
@@ -30,7 +30,6 @@ import ModernSelect from '../../../../../primitives/inputs/Select/engines/modern
 import { ModernEmptyState } from '../../../../facade';
 import { VisuallyHidden } from '../../../../../primitives/foundation/VisuallyHidden';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
-import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
 
 /** Formats an ISO timestamp to a compact, locale-aware date/time string. */
 function formatTimestamp(ts: string): string {
@@ -48,14 +47,15 @@ function formatQuantity(entry: LedgerEntry): string {
   return `${sign}${entry.quantity.toLocaleString()}`;
 }
 
-/** Column model: priority 'low' columns fold into the stacked narrow row. */
-const COLUMNS: Array<{ key: string; priority?: 'low' }> = [
+/** Column model. Which columns fold under a narrow container is a presentation
+    decision and lives in the modern skin, not in this render. */
+const COLUMNS: Array<{ key: string }> = [
   { key: 'timestamp' },
   { key: 'description' },
   { key: 'quantity' },
-  { key: 'actor', priority: 'low' },
-  { key: 'reason', priority: 'low' },
-  { key: 'reference', priority: 'low' },
+  { key: 'actor' },
+  { key: 'reason' },
+  { key: 'reference' },
 ];
 
 const COLUMN_FLOOR: Record<string, string> = {
@@ -78,12 +78,10 @@ export default function ModernOperationalLedger(props: OperationalLedgerProps) {
   const t = (key: string, floor: string, params?: Record<string, string | number>): string =>
     translation?.tOr(key, floor, params) ?? floor;
 
-  /* NARROW POSTURE: actor / reason / reference used to be dropped outright
-     under a narrow container. Content integrity forbids deleting data to save
-     width, so the narrow layout STACKS those fields (labelled) inside the
-     description cell instead of hiding them. */
-  const { isMobile } = useBreakpoints();
-  const columns = isMobile ? COLUMNS.filter((col) => col.priority !== 'low') : COLUMNS;
+  /* NARROW POSTURE: both postures are rendered and the named container decides
+     which one is exposed, so a narrow ledger inside a wide viewport folds too.
+     `display: none` keeps exactly one copy in the accessibility tree. */
+  const columns = COLUMNS;
 
   const {
     entries,
@@ -188,32 +186,30 @@ export default function ModernOperationalLedger(props: OperationalLedgerProps) {
                   </td>
                   <td data-part="cell" data-column="description">
                     <span data-part="cell-description">{entry.description}</span>
-                    {isMobile && (
-                      <div data-part="entry-detail">
-                        <div data-part="detail-item" data-column="actor">
-                          <span data-part="detail-label">
-                            {t('operationalLedger.column.actor', COLUMN_FLOOR.actor)}
-                          </span>
-                          <span data-part="cell-actor">{entry.actor}</span>
-                        </div>
-                        {entry.reason && (
-                          <div data-part="detail-item" data-column="reason">
-                            <span data-part="detail-label">
-                              {t('operationalLedger.column.reason', COLUMN_FLOOR.reason)}
-                            </span>
-                            <span data-part="cell-reason">{entry.reason}</span>
-                          </div>
-                        )}
-                        {entry.reference && (
-                          <div data-part="detail-item" data-column="reference">
-                            <span data-part="detail-label">
-                              {t('operationalLedger.column.reference', COLUMN_FLOOR.reference)}
-                            </span>
-                            <span data-part="cell-reference">{entry.reference}</span>
-                          </div>
-                        )}
+                    <div data-part="entry-detail">
+                      <div data-part="detail-item" data-column="actor">
+                        <span data-part="detail-label">
+                          {t('operationalLedger.column.actor', COLUMN_FLOOR.actor)}
+                        </span>
+                        <span data-part="cell-actor">{entry.actor}</span>
                       </div>
-                    )}
+                      {entry.reason && (
+                        <div data-part="detail-item" data-column="reason">
+                          <span data-part="detail-label">
+                            {t('operationalLedger.column.reason', COLUMN_FLOOR.reason)}
+                          </span>
+                          <span data-part="cell-reason">{entry.reason}</span>
+                        </div>
+                      )}
+                      {entry.reference && (
+                        <div data-part="detail-item" data-column="reference">
+                          <span data-part="detail-label">
+                            {t('operationalLedger.column.reference', COLUMN_FLOOR.reference)}
+                          </span>
+                          <span data-part="cell-reference">{entry.reference}</span>
+                        </div>
+                      )}
+                    </div>
                   </td>
                   <td data-part="cell" data-column="quantity">
                     <span data-part="cell-quantity" data-type={entry.type}>
@@ -223,19 +219,15 @@ export default function ModernOperationalLedger(props: OperationalLedgerProps) {
                       {formatQuantity(entry)}
                     </span>
                   </td>
-                  {!isMobile && (
-                    <>
-                      <td data-part="cell" data-column="actor">
-                        <span data-part="cell-actor">{entry.actor}</span>
-                      </td>
-                      <td data-part="cell" data-column="reason">
-                        <span data-part="cell-reason">{entry.reason ?? '—'}</span>
-                      </td>
-                      <td data-part="cell" data-column="reference">
-                        <span data-part="cell-reference">{entry.reference ?? '—'}</span>
-                      </td>
-                    </>
-                  )}
+                  <td data-part="cell" data-column="actor">
+                    <span data-part="cell-actor">{entry.actor}</span>
+                  </td>
+                  <td data-part="cell" data-column="reason">
+                    <span data-part="cell-reason">{entry.reason ?? '—'}</span>
+                  </td>
+                  <td data-part="cell" data-column="reference">
+                    <span data-part="cell-reference">{entry.reference ?? '—'}</span>
+                  </td>
                 </tr>
               ))}
             </tbody>
