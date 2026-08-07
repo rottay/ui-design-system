@@ -37,7 +37,8 @@
     "no_options": "Aucune option disponible",
     "loading": "Chargement des options...",
     "search": "Rechercher...",
-    "clear": "Effacer la sélection"
+    "clear": "Effacer la sélection",
+    "search_label": "Rechercher des options"
   },
   "modal": {
     "close": "Fermer",
@@ -63,11 +64,17 @@
     "edit_cell": "Modifier la cellule"
   },
   "upload": {
+    "button": "Envoyer",
     "drag_drop": "Glissez les fichiers ici ou cliquez pour sélectionner",
     "uploading": "Envoi en cours...",
     "success": "Fichier envoyé avec succès",
     "error": "Erreur lors de l'envoi du fichier",
     "remove": "Retirer le fichier",
+    "preview": "Aperçu de {name}",
+    "close_preview": "Fermer l'aperçu",
+    "add_file": "Ajouter un fichier",
+    "upload_file": "Envoyer un fichier",
+    "drop_hint": "Déposez les fichiers ici ou cliquez pour envoyer",
     "max_size": "Taille maximale: {size}",
     "accepted_formats": "Formats acceptés: {formats}",
     "retry_named": "Réessayer {name}"
@@ -884,7 +891,8 @@
     "move_to_target": "Déplacer vers la destination",
     "move_to_source": "Déplacer vers la source",
     "move_right": ">",
-    "move_left": "<"
+    "move_left": "<",
+    "remove_item": "Retirer {item}"
   },
   "editFields": {
     "requirement": {
@@ -1097,6 +1105,12 @@
     "loading": "Chargement"
   },
   "colorpicker": {
+    "clear": "Effacer",
+    "chooseColor": "Choisir une couleur",
+    "hexLabel": "Couleur hexadécimale",
+    "selectColor": "Sélectionner la couleur {color}",
+    "invalidHex": "Saisissez une couleur hexadécimale valide (par ex. #1677ff)",
+    "panelLabel": "Panneau de sélection de couleur",
     "triggerLabel": "Sélecteur de couleurs",
     "formatLabel": "Format de couleur"
   },
@@ -1105,12 +1119,19 @@
     "codeRegionLabel": "Bloc de code"
   },
   "cascader": {
+    "placeholder": "Veuillez sélectionner",
+    "search_placeholder": "Rechercher...",
+    "not_found": "Aucune donnée",
+    "clear": "Effacer",
+    "column_label": "Niveau {level}",
+    "search_results": "Résultats de recherche",
     "loading": "Chargement..."
   },
   "tree": {
     "label": "Arbre"
   },
   "taginput": {
+    "placeholder": "Tapez et appuyez sur Entrée",
     "feedback_duplicate": "L'étiquette existe déjà",
     "feedback_max": "Nombre maximal d'étiquettes atteint",
     "feedback_invalid": "L'étiquette n'est pas autorisée"
@@ -1131,8 +1152,15 @@
     "strength_strong": "Fort"
   },
   "autocomplete": {
+    "not_found": "Aucun résultat",
+    "clear": "Effacer",
     "input_label": "Saisie semi-automatique",
     "loading": "Chargement des suggestions..."
+  },
+  "slider": {
+    "label": "Curseur",
+    "start_value": "Valeur minimale",
+    "end_value": "Valeur maximale"
   },
   "breadcrumb": {
     "expand_hidden": "Afficher les éléments masqués"

@@ -13,7 +13,8 @@
   "previous": "Anterior",
   "finish": "Finalizar",
   "tour": {
-    "step_progress": "Paso {current} de {total}"
+    "step_progress": "Paso {current} de {total}",
+    "label": "Recorrido guiado"
   },
   "submit": "Enviar",
   "search": "Buscar",

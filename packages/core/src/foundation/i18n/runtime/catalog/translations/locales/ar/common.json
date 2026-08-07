@@ -13,7 +13,8 @@
   "previous": "السابق",
   "finish": "إنهاء",
   "tour": {
-    "step_progress": "الخطوة {current} من {total}"
+    "step_progress": "الخطوة {current} من {total}",
+    "label": "جولة إرشادية"
   },
   "submit": "إرسال",
   "search": "بحث",

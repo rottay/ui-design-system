@@ -37,7 +37,8 @@
     "no_options": "لا توجد خيارات متاحة",
     "loading": "جارٍ تحميل الخيارات...",
     "search": "بحث...",
-    "clear": "مسح التحديد"
+    "clear": "مسح التحديد",
+    "search_label": "البحث في الخيارات"
   },
   "modal": {
     "close": "إغلاق",
@@ -250,7 +251,8 @@
     "selectColor": "حدد اللون {color}",
     "invalidHex": "أدخل لونًا سداسيًا عشريًا صالحًا (مثل #1677ff)",
     "triggerLabel": "منتقي اللون",
-    "formatLabel": "تنسيق اللون"
+    "formatLabel": "تنسيق اللون",
+    "panelLabel": "لوحة منتقي الألوان"
   },
   "qrcode": {
     "loading": "جارٍ التحميل",
@@ -334,7 +336,8 @@
     "move_to_target": "نقل إلى الوجهة",
     "move_to_source": "نقل إلى المصدر",
     "move_right": ">",
-    "move_left": "<"
+    "move_left": "<",
+    "remove_item": "إزالة {item}"
   },
   "empty": {
     "description": "لا توجد بيانات"

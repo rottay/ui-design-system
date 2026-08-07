@@ -37,7 +37,8 @@
     "no_options": "No options available",
     "loading": "Loading options...",
     "search": "Search...",
-    "clear": "Clear selection"
+    "clear": "Clear selection",
+    "search_label": "Search options"
   },
   "modal": {
     "close": "Close",
@@ -242,7 +243,8 @@
     "selectColor": "Select color {color}",
     "invalidHex": "Enter a valid hex color (e.g. #1677ff)",
     "triggerLabel": "Color picker",
-    "formatLabel": "Color format"
+    "formatLabel": "Color format",
+    "panelLabel": "Color picker panel"
   },
   "qrcode": {
     "loading": "Loading",
@@ -326,7 +328,8 @@
     "move_to_target": "Move to target",
     "move_to_source": "Move to source",
     "move_right": ">",
-    "move_left": "<"
+    "move_left": "<",
+    "remove_item": "Remove {item}"
   },
   "treeselect": {
     "placeholder": "Please select",

@@ -37,7 +37,8 @@
     "no_options": "Sem opções disponíveis",
     "loading": "Carregando opções...",
     "search": "Buscar...",
-    "clear": "Limpar seleção"
+    "clear": "Limpar seleção",
+    "search_label": "Buscar opções"
   },
   "modal": {
     "close": "Fechar",
@@ -926,7 +927,8 @@
     "move_to_target": "Mover para o destino",
     "move_to_source": "Mover para a origem",
     "move_right": ">",
-    "move_left": "<"
+    "move_left": "<",
+    "remove_item": "Remover {item}"
   },
   "editFields": {
     "requirement": {
@@ -1074,6 +1076,12 @@
     "overflowMore": "+{count} a mais"
   },
   "colorpicker": {
+    "clear": "Limpar",
+    "chooseColor": "Escolher cor",
+    "hexLabel": "Cor hexadecimal",
+    "selectColor": "Selecionar a cor {color}",
+    "invalidHex": "Insira uma cor hexadecimal válida (ex.: #1677ff)",
+    "panelLabel": "Painel de seleção de cor",
     "triggerLabel": "Seletor de cor",
     "formatLabel": "Formato de cor"
   },
@@ -1082,12 +1090,19 @@
     "codeRegionLabel": "Bloco de código"
   },
   "cascader": {
+    "placeholder": "Selecione",
+    "search_placeholder": "Buscar...",
+    "not_found": "Sem dados",
+    "clear": "Limpar",
+    "column_label": "Nível {level}",
+    "search_results": "Resultados da busca",
     "loading": "Carregando..."
   },
   "tree": {
     "label": "Árvore"
   },
   "taginput": {
+    "placeholder": "Digite e pressione Enter",
     "feedback_duplicate": "A tag já existe",
     "feedback_max": "Número máximo de tags atingido",
     "feedback_invalid": "Tag não permitida"
@@ -1108,8 +1123,15 @@
     "strength_strong": "Forte"
   },
   "autocomplete": {
+    "not_found": "Sem resultados",
+    "clear": "Limpar",
     "input_label": "Preenchimento automático",
     "loading": "Carregando sugestões..."
+  },
+  "slider": {
+    "label": "Controle deslizante",
+    "start_value": "Valor mínimo",
+    "end_value": "Valor máximo"
   },
   "breadcrumb": {
     "expand_hidden": "Mostrar itens ocultos"

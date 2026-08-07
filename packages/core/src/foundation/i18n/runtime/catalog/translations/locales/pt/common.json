@@ -72,7 +72,8 @@
   "password_strength": "Força da senha",
   "finish": "Concluir",
   "tour": {
-    "step_progress": "Etapa {current} de {total}"
+    "step_progress": "Etapa {current} de {total}",
+    "label": "Tour guiado"
   },
   "breadcrumb_more_items": "Mais itens da trilha de navegação",
   "opens_in_new_tab": "Abre em uma nova aba",
