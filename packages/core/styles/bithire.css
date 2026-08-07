@@ -80524,25 +80524,33 @@ html[data-ds-motion="reduced"]
  * "deliberately unlayered" note predates that wiring). Caller inline `style`
  * still wins over every rule here.
  *
- * SCOPE ROOT: the palette's outer `<div>` carries
- * `ds-pattern-command-palette ds-engine-modern` + `data-part='root'` (two
- * distinct classes + one attribute, (0,3,0); repetition is prohibited — the
- * old P-48 border-color floor is bought from this scope + a single target
- * part, never a repeated attribute). NOT portaled: the dialog is a
- * `position:fixed` DOM descendant of the tenant-scoped root, so descendant
- * selectors reach it.
+ * SCOPE ROOT: the pattern now composes the certified Modal, so the scope
+ * classes `ds-pattern-command-palette ds-engine-modern` ride Modal's
+ * `data-part='surface'` (two distinct classes + one attribute, (0,3,0);
+ * repetition is prohibited — the old P-48 border-color floor is bought from
+ * this scope + a single target part, never a repeated attribute). PORTALED:
+ * the chamber is a native `<dialog>` under the shared portal root, and
+ * `usePortalScope` re-stamps the tenant/locale/density lineage onto it, so
+ * descendant selectors and tenant `--ds-*` overrides still resolve.
  *
  * COMPOSITION: the search box is the certified Input primitive, shortcut
  * hints are the certified Kbd, the argument chip wraps the certified Tag and
  * the empty state wraps the certified Empty — those primitives own their
  * paint (the pre-composition kbd/chip/empty color rules were deleted with
- * the raw elements). This file owns the overlay chrome: root/backdrop/
- * dialog geometry, the listbox scroll frame, row layout + keyboard/pointer
+ * the raw elements). The overlay frame, backdrop, chamber fill, elevation,
+ * border, entrance motion and z-index belong to Modal (overlay-modal.css);
+ * the frame/backdrop/card blocks this file used to own were retired with the
+ * hand-rolled overlay. What remains here is the palette's own content: the
+ * card measure, the listbox scroll frame, row layout + keyboard/pointer
  * states, section labels, the argument panel and the footer hairline.
  *
- * Z-INDEX: the arbitrary Tailwind `z-50` is re-mapped to the sanctioned
- * `--ds-z-modal` rung — a command palette stacks with modal overlays, not
- * below them.
+ * CASCADE: `max-inline-size` on the surface ties overlay-modal.css's own
+ * (0,3,0) surface rule and wins on source order — command-palette.css is
+ * imported after it inside `layer(rottay-engines)`. The phone posture is
+ * deliberately NOT contested: Modal's `[data-fullscreen='true']` rule is
+ * (0,4,0) and correctly releases the measure. Modal's footer/body/header
+ * rules all use a child combinator from the surface, so the palette's own
+ * `[data-part='footer']` (a grandchild, inside Modal's body) never collides.
  *
  * INTERACTION: the keyboard-active row keys on `[data-active='true']`;
  * pointer hover is hover-capable-only (`@media (hover: hover)`) AND keyed on
@@ -80552,44 +80560,13 @@ html[data-ds-motion="reduced"]
  * Highlight/HighlightText so the keyboard cursor stays visible.
  */
 
-/* ---- root: fixed top-anchored overlay frame (was Tailwind
-        `fixed inset-0 z-50 flex items-start justify-center pt-[15vh]`) ---- */
-.ds-pattern-command-palette.ds-engine-modern[data-part='root'] {
-  position: fixed;
-  inset: 0;
-  z-index: var(--ds-z-modal, 1500);
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding-block-start: 15vh;
-  padding-inline: var(--ds-spacing-3, 12px);
-  container-type: inline-size;
-}
-
-/* backdrop: scrim + sanctioned glass layer. Frost tint + backdrop blur scale
-   with --ds-effect-intensity, collapsing to a plain scrim at 0; glass is
-   sanctioned on overlay backdrops only (spec section 5). */
-.ds-pattern-command-palette.ds-engine-modern [data-part='backdrop'] {
-  position: absolute;
-  inset: 0;
-  background-color: var(--ds-overlay-scrim, var(--ds-color-bg-overlay));
-  background-image: linear-gradient(var(--ds-glass-scrim-tint), var(--ds-glass-scrim-tint));
-  backdrop-filter: var(--ds-glass-backdrop-filter);
-  -webkit-backdrop-filter: var(--ds-glass-backdrop-filter);
-}
-
-/* ---- dialog card (was `relative rounded-xl w-full max-w-lg
-        overflow-hidden`) ---- */
-.ds-pattern-command-palette.ds-engine-modern [data-part='dialog'] {
-  position: relative;
-  inline-size: 100%;
+/* ---- card measure: the ONE geometry the palette still owns on Modal's
+        chamber. Fill, elevation, border, radius (through Modal's `radius`
+        prop), entrance motion, z-index and the backdrop are all governed by
+        overlay-modal.css — the palette's former frame/backdrop/card blocks
+        were retired with the hand-rolled overlay they described. ---- */
+.ds-pattern-command-palette.ds-engine-modern[data-part='surface'] {
   max-inline-size: 32rem;
-  overflow: hidden;
-  border-radius: var(--ds-radius-xl);
-  background: var(--ds-surface-card);
-  box-shadow: var(--ds-elevation-2);
-  color: var(--ds-color-text-primary);
-  animation: ds-foundation-fade-in-down var(--ds-motion-normal) var(--ds-motion-ease-enter, ease-out);
 }
 
 /* ---- loading footprint: skeleton rows mirror the real row anatomy (icon
@@ -80642,7 +80619,7 @@ html[data-ds-motion="reduced"]
 
 /* ---- search row: always a flex line so the argument chip can sit beside
         the composed Input (which owns its own paint). ---- */
-.ds-pattern-command-palette.ds-engine-modern[data-part='root'] [data-part='search'] {
+.ds-pattern-command-palette.ds-engine-modern[data-part='surface'] [data-part='search'] {
   display: flex;
   align-items: center;
   gap: var(--ds-spacing-2, 8px);
@@ -80797,19 +80774,16 @@ html[data-ds-motion="reduced"]
   color: var(--ds-color-text-secondary);
   font-size: var(--ds-font-size-xs, 12px);
 }
-.ds-pattern-command-palette.ds-engine-modern[data-part='root'] [data-part='footer'] {
+.ds-pattern-command-palette.ds-engine-modern[data-part='surface'] [data-part='footer'] {
   border-top: 1px solid var(--ds-color-border);
 }
 
-/* ---- narrow overlay: full-width top sheet with a smaller top offset ---- */
-@container (inline-size < 40rem) {
-  .ds-pattern-command-palette.ds-engine-modern[data-part='root'] {
-    padding-block-start: var(--ds-spacing-8, 32px);
-  }
-  .ds-pattern-command-palette.ds-engine-modern [data-part='dialog'] {
-    max-inline-size: 100%;
-  }
-}
+/* The narrow-viewport `@container` block that used to live here is RETIRED.
+   It keyed on a `container-type` declared by the palette's own overlay frame,
+   which no longer exists, and the top offset it retuned is now Modal's inline
+   `padding-top` on the dialog root — unreachable from a stylesheet. Modal's
+   `adaptiveFullscreen` posture (default on) is the governed phone answer:
+   full-viewport chamber, radius flattened, safe-area insets. */
 
 /* ---- coarse pointers: option rows meet the physical 44px floor ---- */
 @media (pointer: coarse) {
@@ -80823,9 +80797,9 @@ html[data-ds-motion="reduced"]
         labels and the dialog frame follow in system ink. No data-viz here,
         so no forced-color-adjust opt-out anywhere. ---- */
 @media (forced-colors: active) {
-  .ds-pattern-command-palette.ds-engine-modern [data-part='dialog'] {
-    border: 1px solid ButtonText;
-  }
+  /* The chamber frame is NOT re-declared here: overlay-modal.css already
+     paints `border: 1px solid CanvasText` on the surface in forced colors, at
+     (0,4,0) — a (0,3,0) palette rule would be dead CSS, not a floor. */
 
   .ds-pattern-command-palette.ds-engine-modern [data-part='item'][data-active='true'] {
     background: Highlight;
@@ -80839,8 +80813,8 @@ html[data-ds-motion="reduced"]
     color: HighlightText;
   }
 
-  .ds-pattern-command-palette.ds-engine-modern[data-part='root'] [data-part='search'],
-  .ds-pattern-command-palette.ds-engine-modern[data-part='root'] [data-part='footer'] {
+  .ds-pattern-command-palette.ds-engine-modern[data-part='surface'] [data-part='search'],
+  .ds-pattern-command-palette.ds-engine-modern[data-part='surface'] [data-part='footer'] {
     border-color: ButtonText;
   }
 
@@ -82045,6 +82019,17 @@ html[data-ds-motion="reduced"]
   background: var(--ds-surface-card);
   box-shadow: var(--ds-elevation-2);
   animation: ds-foundation-fade-in-down var(--ds-motion-fast) var(--ds-motion-ease-enter, ease-out);
+}
+
+/* ---- inline-end flip: the engine measures the real panel against the
+        viewport and stamps data-placement='end' when the inline-start
+        anchor would push the panel past the inline-end edge (a switcher in
+        the end of a 320px toolbar). The extra attribute outranks the base
+        anchor rule at equal class weight. ---- */
+.ds-pattern-locale-switcher.ds-engine-modern[data-part='root']
+  [data-part='panel'][data-placement='end'] {
+  inset-inline-start: auto;
+  inset-inline-end: 0;
 }
 
 /* ---- options ---- */
@@ -119634,6 +119619,9 @@ html[lang]:lang(ar) {
   }
   .flex-1 {
     flex: 1;
+  }
+  .flex-shrink {
+    flex-shrink: 1;
   }
   .flex-shrink-0 {
     flex-shrink: 0;
