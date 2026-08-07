@@ -77883,6 +77883,18 @@ html[data-ds-motion="reduced"]
   font-weight: var(--ds-font-weight-bold, 700);
   line-height: 1.25;
 }
+/* Party blocks are flex items: min-inline-size: auto would resolve to
+   min-content and push one unbroken token past the document frame. */
+.ds-pattern-invoice-template.ds-engine-modern [data-part='company'],
+.ds-pattern-invoice-template.ds-engine-modern [data-part='metadata'] {
+  min-inline-size: 0;
+}
+.ds-pattern-invoice-template.ds-engine-modern [data-part='company-name'],
+.ds-pattern-invoice-template.ds-engine-modern [data-part='client-name'],
+.ds-pattern-invoice-template.ds-engine-modern [data-part='company-address-line'],
+.ds-pattern-invoice-template.ds-engine-modern [data-part='client-address-line'] {
+  overflow-wrap: anywhere;
+}
 .ds-pattern-invoice-template.ds-engine-modern [data-part='company-address-line'],
 .ds-pattern-invoice-template.ds-engine-modern [data-part='client-address-line'] {
   margin: 0;
@@ -77955,6 +77967,11 @@ html[data-ds-motion="reduced"]
 .ds-pattern-invoice-template.ds-engine-modern [data-part='items-table-wrapper'] {
   margin-block-end: var(--ds-spacing-6, 1.5rem);
   overflow-x: auto;
+}
+/* The scroll wrapper is a real tab stop, so it carries the canonical ring. */
+.ds-pattern-invoice-template.ds-engine-modern [data-part='items-table-wrapper']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
 }
 .ds-pattern-invoice-template.ds-engine-modern [data-part='items-table'] {
   inline-size: 100%;
@@ -78050,6 +78067,13 @@ html[data-ds-motion="reduced"]
 @media print {
   .ds-pattern-invoice-template.ds-engine-modern [data-part='actions-bar'] {
     display: none;
+  }
+  /* Paper cannot scroll: a clipped wrapper loses the trailing amount columns. */
+  .ds-pattern-invoice-template.ds-engine-modern [data-part='items-table-wrapper'] {
+    overflow-x: visible;
+  }
+  .ds-pattern-invoice-template.ds-engine-modern[data-part='root'][data-loading='false'] {
+    box-shadow: none;
   }
 }
 
@@ -81904,6 +81928,15 @@ html[data-ds-motion="reduced"]
   line-height: 1.2;
 }
 
+/* ---- compact trigger carrier: the BCP-47 code reads as a tracked uppercase
+        tag so a label-less trigger is never chevron-only ---- */
+.ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger-code'] {
+  font-weight: var(--ds-font-weight-semibold, 600);
+  letter-spacing: var(--ds-letter-spacing-wide, 0.025em);
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
 /* ---- flag glyph (emoji; geometry only) ---- */
 .ds-pattern-locale-switcher.ds-engine-modern [data-part='flag'] {
   font-size: var(--ds-font-size-lg);
@@ -81993,7 +82026,8 @@ html[data-ds-motion="reduced"]
    below the canonical --ds-touch-target-min channel; fine pointers keep the
    authored size untouched. */
 @media (hover: none), (pointer: coarse) {
-  .ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger'] {
+  .ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger'],
+  .ds-pattern-locale-switcher.ds-engine-modern [data-part='option'] {
     min-block-size: var(--ds-touch-target-min, 44px);
   }
 }
@@ -117011,8 +117045,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* ---- boxed treatment: the retired `timeline-box`. The card always carried
         it; the timestamp slot carried it only on the side that renders no
         timestamp of its own, which is the shipped shape. ---- */
-.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'],
-.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__timestamp-slot[data-part='timestamp-slot'][data-side='right'] {
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'] {
   border: var(--ds-border-width-1) solid var(--ds-color-bg-tertiary);
   border-radius: var(--ds-radius-lg);
   background: var(--ds-color-bg-primary);
@@ -117158,9 +117191,16 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
         reduced motion, forced colors — the retired hand-rolled rules). ---- */
 .ds-pattern-timeline.ds-engine-modern[data-part='root'][data-loading='true'] {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  gap: var(--ds-spacing-4, 1rem);
   justify-content: center;
   padding-block: var(--ds-timeline-loading-padding-block, 3rem);
+}
+
+/* The composed Spinner is a direct child of the loading frame and carries no
+   private class of this family, so the child combinator scopes the rule. */
+.ds-pattern-timeline.ds-engine-modern[data-part='root'][data-loading='true'] > [data-part='spinner'] {
+  align-self: center;
 }
 
 /* ---- narrow containers: the zigzag collapses to a single rail at the
@@ -117177,12 +117217,25 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     grid-column-start: 1;
   }
 
+  /* The two content parts get SEPARATE rows of the single content column:
+     sharing one grid area painted the card on top of its own timestamp. */
   .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__timestamp-slot[data-part='timestamp-slot'][data-side='left'],
-  .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__timestamp-slot[data-part='timestamp-slot'][data-side='right'],
+  .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__timestamp-slot[data-part='timestamp-slot'][data-side='right'] {
+    grid-area: 1 / 2 / 2 / 3;
+    align-self: end;
+    justify-self: stretch;
+  }
+
   .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-side='left'],
   .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-side='right'] {
-    grid-area: 1 / 2 / 4 / 3;
+    grid-area: 2 / 2 / 4 / 3;
     justify-self: stretch;
+  }
+
+  /* Row 1 now holds only the timestamp, so the rail needs its own floor to
+     stay continuous when `showTimestamp` is off. */
+  .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__connector[data-part='connector'][data-edge='leading'] {
+    min-block-size: var(--ds-spacing-4, 1rem);
   }
 }
 
@@ -117238,8 +117291,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     background: ButtonText;
   }
 
-  .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'],
-  .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__timestamp-slot[data-part='timestamp-slot'][data-side='right'] {
+  .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'] {
     border-color: ButtonText;
     box-shadow: none;
   }

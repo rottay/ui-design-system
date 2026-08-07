@@ -14,10 +14,11 @@
  * />
  */
 
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useId } from 'react';
 import type { LocaleSwitcherProps } from '../../contracts';
 import { DEFAULT_LOCALES } from '../../runtime/default-locales';
 import { StatusVerifiedIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-verified';
+import { SkeletonButton } from '../../../../../primitives/feedback/Skeleton';
 import { NavigationDownIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-down';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
@@ -62,8 +63,18 @@ export default function ModernLocaleSwitcher(props: LocaleSwitcherProps) {
 
   const [open, setOpen] = useState(false);
   const [focusIndex, setFocusIndex] = useState(-1);
+  const isLoading = Boolean(loading);
+  const isOpen = open && !isLoading;
   const containerRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+
+  // Instance-scoped ids: two switchers on one page must not collide, or the
+  // trigger's aria-activedescendant resolves to the wrong panel's option.
+  const instanceId = useId();
+  const listboxId = `${instanceId}-listbox`;
+  const optionId = (code: string) => `${instanceId}-option-${code}`;
+  const activeDescendantId =
+    focusIndex >= 0 && focusIndex < locales.length ? optionId(locales[focusIndex].code) : undefined;
 
   const activeLocale = locales.find(l => l.code === locale);
 
@@ -87,11 +98,18 @@ export default function ModernLocaleSwitcher(props: LocaleSwitcherProps) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [open, handleClickOutside]);
 
+  useEffect(() => {
+    if (!isLoading) return;
+    setOpen(false);
+    setFocusIndex(-1);
+  }, [isLoading]);
+
   /* ---------------------------------------------------------------- */
   /*  Keyboard navigation                                              */
   /* ---------------------------------------------------------------- */
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
+      if (isLoading) return;
       if (!open) {
         if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
@@ -133,7 +151,7 @@ export default function ModernLocaleSwitcher(props: LocaleSwitcherProps) {
           break;
       }
     },
-    [open, focusIndex, locales, locale, onChange],
+    [open, focusIndex, locales, locale, onChange, isLoading],
   );
 
   /* ---------------------------------------------------------------- */
@@ -171,10 +189,13 @@ export default function ModernLocaleSwitcher(props: LocaleSwitcherProps) {
       className={`ds-pattern-locale-switcher ds-engine-modern ${className ?? ''}`}
       data-part="root"
       data-loading={loading ? 'true' : 'false'}
+      aria-busy={isLoading || undefined}
       style={style}
       onKeyDown={handleKeyDown}
     >
-      {/* Trigger button */}
+      {isLoading ? (
+        <SkeletonButton size={size} />
+      ) : (
       <button
         type="button"
         data-part="trigger"
@@ -183,8 +204,13 @@ export default function ModernLocaleSwitcher(props: LocaleSwitcherProps) {
           setOpen(prev => !prev);
           if (!open) setFocusIndex(-1);
         }}
+        // APG select-only combobox: DOM focus never leaves this trigger, so the
+        // active option must be pointed at from here — on the panel it is inert.
+        role="combobox"
         aria-haspopup="listbox"
-        aria-expanded={open}
+        aria-expanded={isOpen}
+        aria-controls={isOpen ? listboxId : undefined}
+        aria-activedescendant={isOpen ? activeDescendantId : undefined}
         aria-label={tOr('locale_switcher.trigger_aria', 'Language: {locale}', {
           locale: activeLocale?.label ?? locale,
         })}
@@ -195,24 +221,31 @@ export default function ModernLocaleSwitcher(props: LocaleSwitcherProps) {
             {activeLocale.flag}
           </span>
         )}
-        {showLabel && (
+        {showLabel ? (
           /* Autoglottonym: never translated; dir=auto keeps a RTL locale name
              (e.g. العربية) honest inside a LTR chrome, and lang lets screen
              readers pronounce it in its own language. */
           <span data-part="trigger-label" lang={activeLocale?.code ?? locale} dir="auto">
             {activeLocale?.label ?? locale}
           </span>
+        ) : (
+          /* The compact trigger still carries text: `flag` is optional on
+             LocaleDef and is aria-hidden, so the label-less variant would
+             otherwise render as a bare chevron. */
+          <span data-part="trigger-code">{activeLocale?.code ?? locale}</span>
         )}
         <NavigationDownIcon size={12} decorative />
       </button>
+      )}
 
       {/* Dropdown menu */}
-      {open && (
+      {isOpen && (
         <div
           ref={menuRef}
+          id={listboxId}
           role="listbox"
           data-part="panel"
-          aria-activedescendant={focusIndex >= 0 ? `locale-option-${locales[focusIndex].code}` : undefined}
+          aria-label={tOr('locale_switcher.panel_aria', 'Languages')}
           data-testid="locale-switcher-menu"
         >
           {locales.map((loc, idx) => {
@@ -222,7 +255,7 @@ export default function ModernLocaleSwitcher(props: LocaleSwitcherProps) {
             return (
               <button
                 key={loc.code}
-                id={`locale-option-${loc.code}`}
+                id={optionId(loc.code)}
                 type="button"
                 role="option"
                 aria-selected={isActive}

@@ -30,6 +30,16 @@ vi.mock('@/infrastructure/runtime/responsive', () => ({
 }));
 
 // ---------------------------------------------------------------------------
+// Mock: text direction (the i18n provider's resolved locale direction)
+// ---------------------------------------------------------------------------
+
+const mockDirection = { value: 'ltr' as 'ltr' | 'rtl' };
+
+vi.mock('@/infrastructure/runtime/i18n', () => ({
+  useOptionalDirection: () => mockDirection.value,
+}));
+
+// ---------------------------------------------------------------------------
 // Mock: Modal
 // ---------------------------------------------------------------------------
 
@@ -222,6 +232,7 @@ function setDeviceClass(deviceClass: 'phone' | 'tablet' | 'desktop') {
 describe('AdaptiveOverlay', () => {
   beforeEach(() => {
     setDeviceClass('desktop');
+    mockDirection.value = 'ltr';
   });
 
   // -----------------------------------------------------------------------
@@ -462,6 +473,52 @@ describe('AdaptiveOverlay', () => {
       expect(screen.getByText('Save')).toBeInTheDocument();
     });
 
+    it.each([
+      ['desktop', 'modal-footer'],
+      ['tablet', 'drawer-footer'],
+    ] as const)(
+      'keeps footer actions as individual children of the %s footer rail',
+      (deviceClass, footerTestId) => {
+        setDeviceClass(deviceClass);
+        render(
+          <AdaptiveOverlay
+            open
+            onOpenChange={() => {}}
+            footer={
+              <>
+                <button>Cancel</button>
+                <button>Save</button>
+              </>
+            }
+          >
+            Content
+          </AdaptiveOverlay>
+        );
+
+        // The engine footer is a flex action rail; a compositor wrapper would
+        // collapse both commitments into a single flex item and drop the gap.
+        expect(screen.getByTestId(footerTestId).children).toHaveLength(2);
+      }
+    );
+
+    it('wraps the modal footer only when a footer hook is supplied', () => {
+      setDeviceClass('desktop');
+      render(
+        <AdaptiveOverlay
+          open
+          onOpenChange={() => {}}
+          footerClassName="footer-hook"
+          footer={<button>Save</button>}
+        >
+          Content
+        </AdaptiveOverlay>
+      );
+
+      expect(
+        screen.getByTestId('modal-footer').querySelector('.footer-hook')
+      ).toBeInTheDocument();
+    });
+
     it('keeps the sheet footer outside its body hook', () => {
       setDeviceClass('phone');
       render(
@@ -499,6 +556,68 @@ describe('AdaptiveOverlay', () => {
         </AdaptiveOverlay>
       );
       expect(screen.getByTestId('adaptive-overlay')).toHaveAttribute('data-width', '600');
+    });
+
+    it('does not pin a forced phone drawer to the desktop width', () => {
+      setDeviceClass('phone');
+      render(
+        <AdaptiveOverlay open onOpenChange={() => {}} mode="drawer" width={640}>
+          Content
+        </AdaptiveOverlay>
+      );
+
+      // The engine Drawer paints `width` inline, so 640px would overflow a
+      // 360px viewport; the phone measure must be viewport-bound instead.
+      expect(screen.getByTestId('adaptive-overlay')).toHaveAttribute('data-width', '100vw');
+    });
+
+    it('keeps the default width viewport-bound on a forced phone drawer', () => {
+      setDeviceClass('phone');
+      render(
+        <AdaptiveOverlay open onOpenChange={() => {}} mode="drawer">
+          Content
+        </AdaptiveOverlay>
+      );
+
+      expect(screen.getByTestId('adaptive-overlay')).toHaveAttribute('data-width', '100vw');
+    });
+
+    it('mirrors the trailing side panel to the inline-end edge in RTL', () => {
+      setDeviceClass('tablet');
+      mockDirection.value = 'rtl';
+      render(
+        <AdaptiveOverlay open onOpenChange={() => {}}>
+          Content
+        </AdaptiveOverlay>
+      );
+
+      // Drawer placement is a physical screen side, so RTL must be mirrored
+      // by hand or the panel enters from the reading-order start edge.
+      expect(screen.getByTestId('adaptive-overlay')).toHaveAttribute('data-placement', 'left');
+    });
+
+    it('does not wrap drawer content when no body hook is supplied', () => {
+      setDeviceClass('tablet');
+      render(
+        <AdaptiveOverlay open onOpenChange={() => {}}>
+          Content
+        </AdaptiveOverlay>
+      );
+
+      expect(screen.getByTestId('drawer-content').children).toHaveLength(0);
+    });
+
+    it('still wraps drawer content when a body hook is supplied', () => {
+      setDeviceClass('tablet');
+      render(
+        <AdaptiveOverlay open onOpenChange={() => {}} bodyClassName="body-hook">
+          Content
+        </AdaptiveOverlay>
+      );
+
+      expect(
+        screen.getByTestId('drawer-content').querySelector('.body-hook')
+      ).toBeInTheDocument();
     });
   });
 

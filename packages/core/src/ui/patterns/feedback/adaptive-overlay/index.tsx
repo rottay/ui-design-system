@@ -52,6 +52,7 @@
 
 import React, { useCallback } from 'react';
 import { useResponsive } from '../../../../infrastructure/runtime/responsive';
+import { useOptionalDirection } from '@/infrastructure/runtime/i18n';
 import { Modal } from '@/ui/primitives/feedback/Modal';
 import { Drawer } from '@/ui/primitives/feedback/Drawer';
 import { Sheet } from '@/ui/primitives/overlay/Sheet';
@@ -136,6 +137,7 @@ export function AdaptiveOverlay({
 }: AdaptiveOverlayProps): React.ReactElement | null {
   const resolvedMode = useResolvedMode(mode);
   const { isPhone } = useResponsive();
+  const direction = useOptionalDirection();
 
   const testId = dataTestId ?? 'adaptive-overlay';
   const resolvedSurfaceClassName = [className, surfaceClassName]
@@ -147,11 +149,26 @@ export function AdaptiveOverlay({
     ...(!isPhone && normalizedWidth ? { width: normalizedWidth } : {}),
     ...resolvedSurfaceStyle,
   };
-  const resolvedFooter = footer != null ? (
-    <div className={footerClassName} style={footerStyle}>
-      {footer}
-    </div>
-  ) : undefined;
+  // The engine Drawer paints `width` inline on the panel, so no media query can
+  // rescue a forced side drawer on a phone: the desktop measure would overflow.
+  const drawerWidth = isPhone ? '100vw' : width;
+  // The Drawer contract's placement is a physical screen side, so the trailing
+  // side panel has to be mirrored by hand for RTL reading order.
+  const drawerPlacement = direction === 'rtl' ? 'left' : 'right';
+  // Modal/Drawer footers are flex action rails owned by the engine skin; a
+  // wrapper turns every action into one flex item, so it exists only to carry
+  // a caller hook.
+  const hasFooterHook = footerClassName != null || footerStyle != null;
+  const hasBodyHook = bodyClassName != null || bodyStyle != null;
+  const resolvedFooter = footer == null
+    ? undefined
+    : hasFooterHook
+      ? (
+        <div className={footerClassName} style={footerStyle}>
+          {footer}
+        </div>
+      )
+      : footer;
   const handleOpenChange = useCallback(
     (nextOpen: boolean) => {
       onOpenChange?.(nextOpen);
@@ -198,8 +215,8 @@ export function AdaptiveOverlay({
         onClose={() => handleOpenChange(false)}
         title={title}
         footer={resolvedFooter}
-        placement="right"
-        width={width}
+        placement={drawerPlacement}
+        width={drawerWidth}
         className={resolvedSurfaceClassName}
         style={resolvedSurfaceStyle}
         id={id}
@@ -209,9 +226,11 @@ export function AdaptiveOverlay({
         closeOnOverlayClick
         closeOnEscape
       >
-        <div className={bodyClassName} style={bodyStyle}>
-          {children}
-        </div>
+        {hasBodyHook ? (
+          <div className={bodyClassName} style={bodyStyle}>
+            {children}
+          </div>
+        ) : children}
       </Drawer>
     );
   }

@@ -903,7 +903,8 @@
     "card_role": "Movable card",
     "move_column": "Moved to {column}, position {position}",
     "move_reorder": "Moved to position {position} in {column}",
-    "move_edge": "Cannot move further in that direction"
+    "move_edge": "Cannot move further in that direction",
+    "empty_column": "No items"
   },
   "map_view": {
     "placeholder": "Map placeholder",

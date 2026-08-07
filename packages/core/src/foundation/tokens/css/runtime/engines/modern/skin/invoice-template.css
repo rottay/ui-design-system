@@ -90,6 +90,18 @@
   font-weight: var(--ds-font-weight-bold, 700);
   line-height: 1.25;
 }
+/* Party blocks are flex items: min-inline-size: auto would resolve to
+   min-content and push one unbroken token past the document frame. */
+.ds-pattern-invoice-template.ds-engine-modern [data-part='company'],
+.ds-pattern-invoice-template.ds-engine-modern [data-part='metadata'] {
+  min-inline-size: 0;
+}
+.ds-pattern-invoice-template.ds-engine-modern [data-part='company-name'],
+.ds-pattern-invoice-template.ds-engine-modern [data-part='client-name'],
+.ds-pattern-invoice-template.ds-engine-modern [data-part='company-address-line'],
+.ds-pattern-invoice-template.ds-engine-modern [data-part='client-address-line'] {
+  overflow-wrap: anywhere;
+}
 .ds-pattern-invoice-template.ds-engine-modern [data-part='company-address-line'],
 .ds-pattern-invoice-template.ds-engine-modern [data-part='client-address-line'] {
   margin: 0;
@@ -162,6 +174,11 @@
 .ds-pattern-invoice-template.ds-engine-modern [data-part='items-table-wrapper'] {
   margin-block-end: var(--ds-spacing-6, 1.5rem);
   overflow-x: auto;
+}
+/* The scroll wrapper is a real tab stop, so it carries the canonical ring. */
+.ds-pattern-invoice-template.ds-engine-modern [data-part='items-table-wrapper']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
 }
 .ds-pattern-invoice-template.ds-engine-modern [data-part='items-table'] {
   inline-size: 100%;
@@ -257,6 +274,13 @@
 @media print {
   .ds-pattern-invoice-template.ds-engine-modern [data-part='actions-bar'] {
     display: none;
+  }
+  /* Paper cannot scroll: a clipped wrapper loses the trailing amount columns. */
+  .ds-pattern-invoice-template.ds-engine-modern [data-part='items-table-wrapper'] {
+    overflow-x: visible;
+  }
+  .ds-pattern-invoice-template.ds-engine-modern[data-part='root'][data-loading='false'] {
+    box-shadow: none;
   }
 }
 

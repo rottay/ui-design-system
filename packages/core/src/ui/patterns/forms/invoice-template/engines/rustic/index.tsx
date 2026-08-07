@@ -194,7 +194,7 @@ export default function RusticInvoiceTemplate(props: InvoiceTemplateProps) {
           </div>
           {/* Tax line -- muted color to de-emphasize relative to grand total */}
           <div data-part="totals-row" data-row="tax" style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', fontSize: 14 }}>
-            <span>Tax{invoice.taxRate ? ` (${invoice.taxRate}%)` : ''}</span>
+            <span>Tax{invoice.taxRate ? ` (${invoice.taxRate * 100}%)` : ''}</span>
             <span>{formatCurrency(invoice.tax)}</span>
           </div>
           {/* Horizontal rule separating subtotal/tax from the grand total */}

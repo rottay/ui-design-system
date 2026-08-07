@@ -39,7 +39,7 @@
  * />
  */
 
-import React from 'react';
+import React, { useId } from 'react';
 import type { InvoiceTemplateProps } from '../../contracts';
 import { panelCardStyle } from '../../../../foundation/engine-styles/modern';
 import ModernButton from '../../../../../primitives/inputs/Button/engines/modern';
@@ -47,6 +47,7 @@ import ModernSpinner from '../../../../../primitives/feedback/Spinner/engines/mo
 import ModernTag from '../../../../../primitives/display/Tag/engines/modern';
 import ModernEmpty from '../../../../../primitives/display/Empty/engines/modern';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { formatCurrency, formatNumber } from '@/foundation/i18n/runtime/formatting';
 
 /** Status → Tag semantic variant (the uppercase status TEXT stays the DOM
     copy -- the public test pins 'SENT' -- while the variant carries the
@@ -83,6 +84,10 @@ export default function ModernInvoiceTemplate(props: InvoiceTemplateProps) {
   const tOr = (key: string, floor: string, params?: Record<string, string | number>): string =>
     i18n?.tOr(key, floor, params) ?? floor;
 
+  // The table caption names BOTH the table and the scroll group that owns it,
+  // so the new tab stop reuses existing localized copy instead of new keys.
+  const captionId = `${useId()}items`;
+
   const copy = {
     print: tOr('invoice_template.print', 'Print'),
     export: tOr('invoice_template.export', 'Export'),
@@ -106,19 +111,11 @@ export default function ModernInvoiceTemplate(props: InvoiceTemplateProps) {
   // hardcoded symbol). Without a currency code the legacy pinned floor
   // applies byte-for-byte ('$' + toFixed(2)); an unrecognised code degrades
   // to the same floor instead of throwing.
-  const formatCurrency = (amount: number): string => {
-    if (invoice.currency) {
-      try {
-        return new Intl.NumberFormat(undefined, {
-          style: 'currency',
-          currency: invoice.currency,
-        }).format(amount);
-      } catch {
-        /* fall through to the legacy floor */
-      }
-    }
-    return `$${amount.toFixed(2)}`;
-  };
+  const localeTag = i18n?.locale ?? 'en-US';
+  const formatAmount = (amount: number): string =>
+    invoice.currency
+      ? formatCurrency(amount, localeTag, invoice.currency)
+      : `$${amount.toFixed(2)}`;
 
   /* Loading: the composed Spinner owns ring and cadence; the skin owns the
      centering frame. The scope classes ride the loading root too, with the
@@ -187,8 +184,12 @@ export default function ModernInvoiceTemplate(props: InvoiceTemplateProps) {
                 {invoice.company.city}{invoice.company.country ? `, ${invoice.company.country}` : ''}
               </p>
             )}
+            {!invoice.company.city && invoice.company.country && (
+              <p data-part="company-address-line" data-field="country">{invoice.company.country}</p>
+            )}
             {invoice.company.taxId && <p data-part="company-address-line" data-field="taxId">{copy.taxIdLabel} {invoice.company.taxId}</p>}
             {invoice.company.email && <p data-part="company-address-line" data-field="email">{invoice.company.email}</p>}
+            {invoice.company.phone && <p data-part="company-address-line" data-field="phone">{invoice.company.phone}</p>}
           </div>
           {/* Invoice metadata -- watermark as quiet background text */}
           <div data-part="metadata">
@@ -218,6 +219,9 @@ export default function ModernInvoiceTemplate(props: InvoiceTemplateProps) {
               {invoice.client.city}{invoice.client.country ? `, ${invoice.client.country}` : ''}
             </div>
           )}
+          {!invoice.client.city && invoice.client.country && (
+            <div data-part="client-address-line" data-field="country">{invoice.client.country}</div>
+          )}
           {invoice.client.taxId && <div data-part="client-address-line" data-field="taxId">{copy.taxIdLabel} {invoice.client.taxId}</div>}
           {invoice.client.email && <div data-part="client-address-line" data-field="email">{invoice.client.email}</div>}
         </div>
@@ -225,11 +229,18 @@ export default function ModernInvoiceTemplate(props: InvoiceTemplateProps) {
         {/* Line Items -- pattern-owned document table (see the fileoverview
             for why the DS Table primitive is not composed here); the wrapper
             keeps horizontal scroll on narrow compositions. */}
-        <div data-part="items-table-wrapper">
+        {/* The wrapper holds no focusable descendant, so the scroll container
+            must itself be a named tab stop to stay keyboard-operable. */}
+        <div
+          data-part="items-table-wrapper"
+          role="group"
+          tabIndex={0}
+          aria-labelledby={captionId}
+        >
           <table data-part="items-table">
             {/* The table's accessible name: the localized document label,
                 one string — never a concatenation of translated fragments. */}
-            <caption className="ds-visually-hidden">{copy.watermark}</caption>
+            <caption id={captionId} className="ds-visually-hidden">{copy.watermark}</caption>
             <thead>
               <tr data-part="items-header-row">
                 <th scope="col" data-part="items-header-cell" data-col="index">#</th>
@@ -254,8 +265,8 @@ export default function ModernInvoiceTemplate(props: InvoiceTemplateProps) {
                     <td data-part="items-cell" data-col="index">{i + 1}</td>
                     <td data-part="items-cell" data-col="description">{item.description}</td>
                     <td data-part="items-cell" data-col="quantity">{item.quantity}</td>
-                    <td data-part="items-cell" data-col="unit-price">{formatCurrency(item.unitPrice)}</td>
-                    <td data-part="items-cell" data-col="total">{formatCurrency(item.total)}</td>
+                    <td data-part="items-cell" data-col="unit-price">{formatAmount(item.unitPrice)}</td>
+                    <td data-part="items-cell" data-col="total">{formatAmount(item.total)}</td>
                   </tr>
                 ))
               )}
@@ -268,22 +279,24 @@ export default function ModernInvoiceTemplate(props: InvoiceTemplateProps) {
         <div data-part="totals">
           <div data-part="totals-row" data-row="subtotal">
             <span>{copy.subtotal}</span>
-            <span data-part="totals-value">{formatCurrency(invoice.subtotal)}</span>
+            <span data-part="totals-value">{formatAmount(invoice.subtotal)}</span>
           </div>
           {/* Tax line de-emphasized relative to the grand total */}
           <div data-part="totals-row" data-row="tax">
             <span>
               {invoice.taxRate != null
-                ? tOr('invoice_template.tax_with_rate', 'Tax ({rate}%)', { rate: invoice.taxRate })
+                ? tOr('invoice_template.tax_with_rate', 'Tax ({rate}%)', {
+                    rate: formatNumber(invoice.taxRate * 100, localeTag),
+                  })
                 : tOr('invoice_template.tax', 'Tax')}
             </span>
-            <span data-part="totals-value">{formatCurrency(invoice.tax)}</span>
+            <span data-part="totals-value">{formatAmount(invoice.tax)}</span>
           </div>
           <div data-part="totals-divider" />
           {/* Grand total -- larger weight makes this the visual focal point */}
           <div data-part="totals-row" data-row="total">
             <span>{copy.total}</span>
-            <span data-part="totals-value">{formatCurrency(invoice.total)}</span>
+            <span data-part="totals-value">{formatAmount(invoice.total)}</span>
           </div>
         </div>
 

@@ -903,7 +903,8 @@
     "card_role": "Tarjeta movible",
     "move_column": "Movido a {column}, posición {position}",
     "move_reorder": "Movido a la posición {position} en {column}",
-    "move_edge": "No se puede mover más en esa dirección"
+    "move_edge": "No se puede mover más en esa dirección",
+    "empty_column": "Sin elementos"
   },
   "map_view": {
     "placeholder": "Marcador de posición del mapa",

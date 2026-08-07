@@ -115,6 +115,7 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
 
   const addItemLabel = addItemLabelProp ?? tOr('kanbanBoard.add_item', 'Add item');
   const emptyBoardLabel = tOr('kanbanBoard.empty_board', 'No columns');
+  const emptyColumnLabel = tOr('kanbanBoard.empty_column', 'No items');
   const cardRoleLabel = tOr('kanbanBoard.card_role', 'Movable card');
 
   // Two pieces of drag state: `dragData` mirrors what we put in dataTransfer
@@ -177,6 +178,7 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
   const handleDrop = useCallback(
     (e: React.DragEvent, columnId: string, position: number) => {
       e.preventDefault();
+      e.stopPropagation();
       if (dragData) {
         measure(); // snapshot every registered card's rect before the parent's reorder
         onItemMove(dragData.itemId, dragData.fromColumn, columnId, position);
@@ -199,6 +201,9 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
      FLIP measure, so a keyboard move animates exactly like a drag move. */
   const handleCardKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLElement>, item: T, columnIndex: number, index: number) => {
+      // renderCard is a consumer slot: a key pressed on a control INSIDE the
+      // card belongs to that control, never to the move protocol.
+      if (e.target !== e.currentTarget) return;
       const column = columns[columnIndex];
       const id = itemKey(item);
 
@@ -375,7 +380,9 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
                   <div data-part="column-header-content">
                     <div data-part="column-title-row">
                       {column.icon}
-                      <span data-part="column-title">
+                      {/* The skin ellipsises at the column measure; the
+                          tooltip is the only recovery for the clipped tail. */}
+                      <span data-part="column-title" title={column.title}>
                         {column.title}
                       </span>
                       {/* WIP count: the composed Badge owns chrome; the tone
@@ -409,12 +416,12 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
                   }
                   onDrop={(e) => handleDrop(e, column.id, column.items.length)}
                 >
-                  {column.items.length === 0 && emptyColumn ? (
+                  {column.items.length === 0 ? (
                     <div data-part="empty-column">
-                      {emptyColumn}
+                      {emptyColumn ?? <ModernEmpty description={emptyColumnLabel} />}
                     </div>
                   ) : (
-                    <div data-part="card-list" role="list">
+                    <div data-part="card-list" role="list" aria-label={column.title}>
                       {/* Each card is both a drag source (draggable) and a
                           drop target (onDragOver/onDrop) to allow reordering
                           within the same column or moving across columns —
@@ -438,9 +445,10 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
                           onDragStart={(e) =>
                             handleDragStart(e, item, column.id)
                           }
-                          onDragOver={(e) =>
-                            handleDragOver(e, column.id, index)
-                          }
+                          onDragOver={(e) => {
+                            e.stopPropagation();
+                            handleDragOver(e, column.id, index);
+                          }}
                           onDrop={(e) => handleDrop(e, column.id, index)}
                           onDragEnd={handleDragEnd}
                           onClick={() => onItemClick?.(item, column.id)}

@@ -1124,7 +1124,8 @@
     "loading": "Carregando formulário…"
   },
   "step_wizard": {
-    "loading": "Carregando assistente…"
+    "loading": "Carregando assistente…",
+    "progress": "Etapa {current} de {total}: {title}"
   },
   "filter_panel": {
     "apply": "Aplicar",
@@ -1147,7 +1148,10 @@
     "card_role": "Cartão móvel",
     "move_column": "Movido para {column}, posição {position}",
     "move_reorder": "Movido para a posição {position} em {column}",
-    "move_edge": "Não é possível mover mais nessa direção"
+    "move_edge": "Não é possível mover mais nessa direção",
+    "add_item": "Adicionar item",
+    "empty_board": "Sem colunas",
+    "empty_column": "Nenhum item"
   },
   "map_view": {
     "viewport": "Janela do mapa"

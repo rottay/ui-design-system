@@ -104,6 +104,15 @@
   line-height: 1.2;
 }
 
+/* ---- compact trigger carrier: the BCP-47 code reads as a tracked uppercase
+        tag so a label-less trigger is never chevron-only ---- */
+.ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger-code'] {
+  font-weight: var(--ds-font-weight-semibold, 600);
+  letter-spacing: var(--ds-letter-spacing-wide, 0.025em);
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
 /* ---- flag glyph (emoji; geometry only) ---- */
 .ds-pattern-locale-switcher.ds-engine-modern [data-part='flag'] {
   font-size: var(--ds-font-size-lg);
@@ -193,7 +202,8 @@
    below the canonical --ds-touch-target-min channel; fine pointers keep the
    authored size untouched. */
 @media (hover: none), (pointer: coarse) {
-  .ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger'] {
+  .ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger'],
+  .ds-pattern-locale-switcher.ds-engine-modern [data-part='option'] {
     min-block-size: var(--ds-touch-target-min, 44px);
   }
 }

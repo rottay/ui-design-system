@@ -75,6 +75,12 @@ import {
   PatternFileManager,
   PatternFormBuilder,
   PatternFilterPanel,
+  AdaptiveOverlay,
+  PatternInvoiceTemplate,
+  PatternStepWizard,
+  PatternLocaleSwitcher,
+  PatternTimeline,
+  PatternKanbanBoard,
 } from '@rottay/design-system';
 import { AlertIcon } from '@rottay/design-system/icons';
 
@@ -151,7 +157,13 @@ export type R2BehaviorCase =
   | 'detailpanellate'
   | 'filemanagerrows'
   | 'formbuilderresolve'
-  | 'filterpanelnames';
+  | 'filterpanelnames'
+  | 'adaptiveoverlay'
+  | 'invoicetemplate'
+  | 'stepwizard'
+  | 'localeswitcher'
+  | 'patterntimeline'
+  | 'patternkanban';
 
 const CRUMB_ITEMS = [
   { key: 'home', label: 'Home', href: '/' },
@@ -284,6 +296,50 @@ function FormBuilderResolveHarness() {
       onSubmit={() => undefined}
       actions={<button type="submit" data-testid="lab-fb-submit">Save</button>}
     />
+  );
+}
+
+/** Deterministic opener: the overlay starts closed so a run can prove the
+ *  forced-drawer phone width only after an explicit open. */
+function AdaptiveOverlayHarness() {
+  const [open, setOpen] = React.useState(false);
+  return (
+    <div style={{ display: 'grid', gap: 12 }}>
+      <button type="button" data-testid="lab-ao-open" onClick={() => setOpen(true)}>
+        Open overlay
+      </button>
+      <button type="button" data-testid="lab-ao-close" onClick={() => setOpen(false)}>
+        Close overlay
+      </button>
+      <AdaptiveOverlay
+        open={open}
+        mode="drawer"
+        title="Adaptive overlay"
+        width={640}
+        onClose={() => setOpen(false)}
+      >
+        <div data-testid="lab-ao-body">Drawer body content</div>
+      </AdaptiveOverlay>
+    </div>
+  );
+}
+
+/** Deterministic loading toggle: the skeleton branch and the live combobox are
+ *  both reachable from one scene without a timer. */
+function LocaleSwitcherHarness() {
+  const [loading, setLoading] = React.useState(false);
+  const [locale, setLocale] = React.useState('en');
+  return (
+    <div style={{ display: 'grid', gap: 12 }}>
+      <button type="button" data-testid="lab-ls-loading-on" onClick={() => setLoading(true)}>
+        Start loading
+      </button>
+      <button type="button" data-testid="lab-ls-loading-off" onClick={() => setLoading(false)}>
+        Stop loading
+      </button>
+      <PatternLocaleSwitcher engine="modern" locale={locale} loading={loading} onChange={setLocale} />
+      <div data-testid="lab-ls-locale">Locale: {locale}</div>
+    </div>
   );
 }
 
@@ -1474,6 +1530,98 @@ export function R2BehaviorScene({ only }: { only: R2BehaviorCase }) {
                 },
                 { key: 'capacity', label: 'Capacity', type: 'number-range' },
               ]}
+            />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'adaptiveoverlay' && (
+        <SpecimenRow axis="ADAPTIVEOVERLAY - a forced phone drawer yields to the viewport">
+          <div data-testid="lab-adaptiveoverlay" style={{ inlineSize: '100%' }}>
+            <AdaptiveOverlayHarness />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'invoicetemplate' && (
+        <SpecimenRow axis="INVOICETEMPLATE - decimal tax rate, country-only party, locale currency">
+          <div data-testid="lab-invoicetemplate" style={{ inlineSize: '100%' }}>
+            <PatternInvoiceTemplate
+              engine="modern"
+              invoice={{
+                number: 'INV-2026-001',
+                date: '2026-03-14',
+                dueDate: '2026-04-14',
+                status: 'sent',
+                currency: 'EUR',
+                taxRate: 0.21,
+                tax: 210,
+                total: 1210,
+                subtotal: 1000,
+                company: {
+                  name: 'Rottay Inc.',
+                  country: 'Portugal',
+                  phone: '+1 (555) 123-4567',
+                },
+                client: { name: 'Acme Ltd.', country: 'Brazil' },
+                items: [{ id: 'li-1', description: 'Design retainer', quantity: 1, unitPrice: 1000, total: 1000 }],
+              }}
+            />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'stepwizard' && (
+        <SpecimenRow axis="STEPWIZARD - a caller-supplied step icon reaches the rail">
+          <div data-testid="lab-stepwizard" style={{ inlineSize: '100%' }}>
+            <PatternStepWizard
+              engine="modern"
+              currentStep={0}
+              steps={[
+                { key: 'draft', title: 'Draft', icon: <span data-testid="lab-sw-icon">D</span>, content: <span>Draft body</span> },
+                { key: 'review', title: 'Review', content: <span>Review body</span> },
+              ]}
+            />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'localeswitcher' && (
+        <SpecimenRow axis="LOCALESWITCHER - loading is a skeleton with no operable control">
+          <div data-testid="lab-localeswitcher" style={{ inlineSize: '100%' }}>
+            <LocaleSwitcherHarness />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'patterntimeline' && (
+        <SpecimenRow axis="TIMELINE - type drives the glyph, item.color overrides both channels">
+          <div data-testid="lab-patterntimeline" style={{ inlineSize: 'min(520px, 100%)' }}>
+            <PatternTimeline
+              engine="modern"
+              groupByDate
+              items={[
+                { key: 'a', title: 'Deploy failed', timestamp: '2026-03-15T10:00:00.000Z', type: 'error' },
+                { key: 'b', title: 'Override tint', timestamp: '2026-03-15T11:00:00.000Z', type: 'error', color: 'rgb(10, 20, 30)' },
+                { key: 'c', title: 'Checks passed', timestamp: '2026-03-16T09:00:00.000Z', type: 'success', user: { name: 'Ana Ruiz', avatar: '' } },
+              ]}
+            />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'patternkanban' && (
+        <SpecimenRow axis="KANBAN - one drop is one move, an empty column has a default">
+          <div data-testid="lab-patternkanban" style={{ inlineSize: '100%' }}>
+            <PatternKanbanBoard
+              engine="modern"
+              columns={[
+                { id: 'todo', title: 'To do', items: [{ id: 'task-1', title: 'Task A' }, { id: 'task-2', title: 'Task B' }] },
+                { id: 'doing', title: 'Doing', items: [] },
+              ]}
+              itemKey={(item: { id: string }) => item.id}
+              renderCard={(item: { id: string; title: string }) => <span>{item.title}</span>}
+              onItemMove={() => undefined}
             />
           </div>
         </SpecimenRow>

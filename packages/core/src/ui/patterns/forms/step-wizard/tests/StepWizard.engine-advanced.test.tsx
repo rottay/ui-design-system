@@ -193,4 +193,78 @@ describe('StepWizard advanced engine coverage', () => {
       expect(screen.getByTestId('step-wizard-action-dock')).toBe(dock);
     }
   );
+
+  it('passes a caller-supplied step icon through to the modern step rail', async () => {
+    render(
+      <ModernStepWizard
+        {...buildProps({
+          steps: [
+            {
+              key: 'details',
+              title: 'Details',
+              content: <div>Details content</div>,
+              icon: <span data-testid="wizard-step-icon" />,
+            },
+            { key: 'review', title: 'Review', content: <div>Review content</div> },
+          ],
+        })}
+      />
+    );
+
+    expect(await screen.findByTestId('wizard-step-icon')).toBeInTheDocument();
+  });
+
+  it('keeps an empty step list inert instead of walking past the last step', async () => {
+    const { container } = render(<ModernStepWizard {...buildProps({ steps: [] })} />);
+
+    // No steps means no rail track to paint and nothing to advance to; the
+    // progress math must not divide by zero either.
+    expect(container.querySelector('[data-part="step-rail"]')).toBeNull();
+    expect(await screen.findByRole('button', { name: 'Next' })).toBeDisabled();
+  });
+
+  it('announces the active step in the default rail posture', async () => {
+    const { rerender } = render(<ModernStepWizard {...buildProps({ currentStep: 0 })} />);
+
+    const announcer = await screen.findByRole('status');
+    expect(announcer).toHaveTextContent('Step 1 of 2: Details');
+
+    rerender(<ModernStepWizard {...buildProps({ currentStep: 1 })} />);
+    expect(screen.getByRole('status')).toHaveTextContent('Step 2 of 2: Review');
+  });
+
+  it('never surfaces raw copy placeholders when the progress key is unresolved', () => {
+    render(<ModernStepWizard {...buildProps({ progressPosture: 'counter' })} />);
+
+    const counter = screen.getByRole('status');
+    expect(counter).toHaveTextContent('Step 1 of 2: Details');
+    expect(counter.textContent ?? '').not.toContain('{');
+  });
+
+  it('marks the active rail indicator as errored when an advance is blocked', async () => {
+    const { container } = render(
+      <ModernStepWizard
+        {...buildProps({
+          steps: [
+            {
+              key: 'details',
+              title: 'Details',
+              content: <div>Details content</div>,
+              validate: () => 'Fix the details first',
+            },
+            { key: 'review', title: 'Review', content: <div>Review content</div> },
+          ],
+        })}
+      />
+    );
+
+    expect(container.querySelector('[data-part="item"][data-status="error"]')).toBeNull();
+
+    fireEvent.click(await screen.findByRole('button', { name: 'Next' }));
+    expect(await screen.findByRole('alert')).toHaveTextContent('Fix the details first');
+
+    await waitFor(() => {
+      expect(container.querySelector('[data-part="item"][data-status="error"]')).not.toBeNull();
+    });
+  });
 });

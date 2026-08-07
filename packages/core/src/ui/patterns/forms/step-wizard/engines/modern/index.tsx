@@ -36,13 +36,26 @@ import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 const ROOT_CLASS_NAME = 'ds-pattern-step-wizard ds-engine-modern';
 
+/**
+ * The floor is prose, not a template: an unresolved key (no provider, or the
+ * locale missing it) must never surface `{current}` to a reader.
+ */
+function fillPlaceholders(template: string, params?: Record<string, string | number>): string {
+  if (!params) return template;
+  return template.replace(/\{(\w+)\}/g, (match, name: string) =>
+    Object.prototype.hasOwnProperty.call(params, name) ? String(params[name]) : match
+  );
+}
+
 /** Hook-local `tOr`: catalogue value with an English floor, never a raw key. */
 function useStepWizardTranslation() {
   const i18n = useOptionalTranslation('components');
   const tOr = (key: string, fallback: string, params?: Record<string, string | number>): string => {
     const resolved = i18n?.t(key, params);
-    if (!resolved || resolved === key || resolved === `components.${key}`) return fallback;
-    return resolved;
+    if (!resolved || resolved === key || resolved === `components.${key}`) {
+      return fillPlaceholders(fallback, params);
+    }
+    return fillPlaceholders(resolved, params);
   };
   return { tOr };
 }
@@ -107,21 +120,26 @@ export default function ModernStepWizard(props: StepWizardProps) {
     setValidationMessage(null);
   };
 
-  const isLast = current === steps.length - 1;
+  // A step list can arrive empty or shrink under the active index (async
+  // sources), so length-derived state is guarded rather than assumed.
+  const stepCount = steps.length;
+  const hasSteps = stepCount > 0;
+  const isLast = hasSteps && current >= stepCount - 1;
   const currentDef = steps[current];
   const stickyActions = actionPosture === 'sticky-bottom';
+  const showProgressChrome = showProgress && hasSteps;
   const progressLabel =
     formatProgressLabel?.({
       current: current + 1,
-      total: steps.length,
+      total: stepCount,
       title: currentDef?.title ?? '',
     }) ?? tOr('step_wizard.progress', 'Step {current} of {total}: {title}', {
       current: current + 1,
-      total: steps.length,
+      total: stepCount,
       title: currentDef?.title ?? '',
     });
   // Progress percentage: 1-based so step 1 of 3 shows 33%, not 0%.
-  const progress = Math.round(((current + 1) / steps.length) * 100);
+  const progress = hasSteps ? Math.round(((current + 1) / stepCount) * 100) : 0;
 
   /**
    * Runs the active step's async `validate` function (if defined).
@@ -207,6 +225,10 @@ export default function ModernStepWizard(props: StepWizardProps) {
 
   const isVertical = orientation === 'vertical';
 
+  /* A blocked advance is state, not just a message: the rail's active
+     indicator carries it too, so the failure is not one panel deep. */
+  const railStatus = validationMessage ? ('error' as const) : undefined;
+
   /* -- Error display ------------------------------------------------------ */
 
   const errorDisplay = validationMessage ? (
@@ -220,7 +242,7 @@ export default function ModernStepWizard(props: StepWizardProps) {
 
   /* -- Navigation buttons ------------------------------------------------- */
 
-  const navDisabled = isValidating || actionsDisabled;
+  const navDisabled = isValidating || actionsDisabled || !hasSteps;
 
   const navigationContent = (
     <div data-part="nav-bar">
@@ -305,15 +327,23 @@ export default function ModernStepWizard(props: StepWizardProps) {
     >
       <div data-part="body">
         {/* Compact posture retains a live, named progress status. */}
-        {showProgress && progressPosture === 'counter' && (
+        {showProgressChrome && progressPosture === 'counter' && (
           <div data-part="step-counter" role="status" aria-live="polite" aria-label={progressLabel}>
             {progressLabel}
           </div>
         )}
 
+        {/* Rail posture: the meter's aria-label and the rail's aria-current
+            both change silently, so the step change needs a real live region. */}
+        {showProgressChrome && progressPosture === 'rail' && (
+          <VisuallyHidden data-part="step-announcer" role="status" aria-live="polite">
+            {progressLabel}
+          </VisuallyHidden>
+        )}
+
         {/* Progress bar (subtle, at the very top): compose the canonical
             meter primitive instead of recreating progressbar semantics. */}
-        {showProgress && progressPosture === 'rail' && (
+        {showProgressChrome && progressPosture === 'rail' && (
           <ModernProgress
             percent={progress}
             showInfo={false}
@@ -324,11 +354,12 @@ export default function ModernStepWizard(props: StepWizardProps) {
 
         {/* Step rail: the public Steps primitive (display-only -- wizard
             navigation happens through the nav buttons, so no onChange). */}
-        {showProgress && progressPosture === 'rail' && !isVertical && (
+        {showProgressChrome && progressPosture === 'rail' && !isVertical && (
           <div data-part="step-rail" data-orientation="horizontal">
             <ModernSteps
-              items={steps.map((s) => ({ title: s.title, description: s.description }))}
+              items={steps.map((s) => ({ title: s.title, description: s.description, icon: s.icon }))}
               current={current}
+              status={railStatus}
               direction="horizontal"
               size="small"
               responsive
@@ -337,13 +368,14 @@ export default function ModernStepWizard(props: StepWizardProps) {
         )}
 
         {/* Vertical layout: indicators alongside content */}
-        {showProgress && progressPosture === 'rail' && isVertical ? (
+        {showProgressChrome && progressPosture === 'rail' && isVertical ? (
           <div data-part="wizard-split">
             {/* Vertical step rail */}
             <div data-part="step-rail" data-orientation="vertical">
               <ModernSteps
-                items={steps.map((s) => ({ title: s.title, description: s.description }))}
+                items={steps.map((s) => ({ title: s.title, description: s.description, icon: s.icon }))}
                 current={current}
+                status={railStatus}
                 direction="vertical"
                 size="small"
               />

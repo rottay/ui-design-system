@@ -1167,7 +1167,10 @@
     "card_role": "Carte déplaçable",
     "move_column": "Déplacé vers {column}, position {position}",
     "move_reorder": "Déplacé à la position {position} dans {column}",
-    "move_edge": "Impossible de déplacer plus loin dans cette direction"
+    "move_edge": "Impossible de déplacer plus loin dans cette direction",
+    "add_item": "Ajouter un élément",
+    "empty_board": "Aucune colonne",
+    "empty_column": "Aucun élément"
   },
   "tableToolbar": {
     "searchPlaceholder": "Rechercher...",

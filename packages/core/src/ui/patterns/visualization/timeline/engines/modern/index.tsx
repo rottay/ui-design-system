@@ -12,8 +12,8 @@
  *
  * COMPOSITION LAW: loading composes the public Spinner primitive (the
  * hand-rolled border spinner + its skin rules are retired — merge note in
- * the skin), and the default marker is the governed `StatusSuccessIcon`
- * semantic role (the local inline checkmark SVG is retired) inheriting the
+ * the skin), and the default marker is the governed status semantic role for
+ * the item's type (the local inline checkmark SVG is retired) inheriting the
  * skin's per-type `currentColor`. Timestamps are real `<time>` elements with
  * a machine-readable `dateTime` and locale-formatted text.
  *
@@ -25,13 +25,35 @@
  * />
  */
 
-import React, { useMemo } from 'react';
+import React, { useId, useMemo } from 'react';
 import type { TimelinePatternProps, TimelineItem } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import ModernSpinner from '../../../../../primitives/feedback/Spinner/engines/modern';
 import { StatusSuccessIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-success';
+import { StatusWarningIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-warning';
+import { StatusErrorIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-error';
+import { StatusInfoIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-info';
 
 const ROOT_CLASS_NAME = 'ds-pattern-timeline ds-engine-modern';
+
+/* The glyph carries the item's type: the skin only recolors marker-icon, so a
+   shared glyph would leave the type readable by colour alone. */
+const MARKER_ICON_BY_TYPE = {
+  default: StatusSuccessIcon,
+  success: StatusSuccessIcon,
+  warning: StatusWarningIcon,
+  error: StatusErrorIcon,
+  info: StatusInfoIcon,
+} as const;
+
+/* The badge is product copy, not a debug token: the raw union member used to
+   reach the screen verbatim in every locale. */
+const TYPE_BADGE_FLOOR = {
+  success: 'Success',
+  warning: 'Warning',
+  error: 'Error',
+  info: 'Info',
+} as const;
 
 /** Formats a timestamp for display inside a timeline item (active locale). */
 function formatTimestamp(ts: string | Date, locale: string): string {
@@ -69,6 +91,7 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
   /* Timestamps and group keys follow the active locale (floor: the runtime
      default, matching the historical behaviour). */
   const locale = i18n?.locale ?? 'default';
+  const groupHeadingIdPrefix = useId();
   const {
     items,
     renderItem,
@@ -105,6 +128,9 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
   const buildDefaultRender = (item: TimelineItem<T>, index: number, total: number) => {
     const isAlternate = mode === 'alternate';
     const isRight = mode === 'right' || (isAlternate && index % 2 === 1);
+    const MarkerIcon = MARKER_ICON_BY_TYPE[item.type ?? 'default'];
+    const badgeType = item.type && item.type !== 'default' ? item.type : null;
+    const markerColorStyle = item.color ? { color: item.color } : undefined;
     const clickable = Boolean(onItemClick);
     const activate = clickable
       ? {
@@ -124,24 +150,29 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
       <>
         {index !== 0 && <hr data-part="connector" data-edge="leading" aria-hidden="true" className="ds-timeline-modern__connector" />}
         {showTimestamp && (
+          /* The timestamp has ONE home on both sides: it always reads on the
+             track opposite its card, so no side renders an empty counterweight. */
           <div data-part="timestamp-slot" data-side={isRight ? 'right' : 'left'} className="ds-timeline-modern__timestamp-slot">
-            {!isRight && (
-              <time data-part="timestamp" dateTime={toIsoTimestamp(item.timestamp)} className="ds-timeline-modern__timestamp">
-                {formatTimestamp(item.timestamp, locale)}
-              </time>
-            )}
+            <time
+              data-part="timestamp"
+              dateTime={toIsoTimestamp(item.timestamp)}
+              dir="auto"
+              className="ds-timeline-modern__timestamp"
+            >
+              {formatTimestamp(item.timestamp, locale)}
+            </time>
           </div>
         )}
         <div data-part="marker" className="ds-timeline-modern__marker">
-          {/* Custom icon if provided; otherwise the governed status.success
-              semantic role (the retired local checkmark SVG), decorative and
-              inheriting the skin's per-type currentColor — the item's title
-              carries the meaning. */}
+          {/* Custom icon if provided; otherwise the governed status semantic
+              role matching the item's type (the retired local checkmark SVG),
+              decorative and inheriting the skin's per-type currentColor — the
+              item's title carries the meaning. */}
           {item.icon ? (
-            <span data-part="marker-icon" data-type={item.type ?? 'default'} className="ds-timeline-modern__marker-icon">{item.icon}</span>
+            <span data-part="marker-icon" data-type={item.type ?? 'default'} style={markerColorStyle} className="ds-timeline-modern__marker-icon">{item.icon}</span>
           ) : (
-            <span data-part="marker-icon" data-type={item.type ?? 'default'} className="ds-timeline-modern__marker-icon">
-              <StatusSuccessIcon decorative size="md" />
+            <span data-part="marker-icon" data-type={item.type ?? 'default'} style={markerColorStyle} className="ds-timeline-modern__marker-icon">
+              <MarkerIcon decorative size="md" />
             </span>
           )}
         </div>
@@ -155,20 +186,17 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
           <div data-part="item-meta" className="ds-timeline-modern__item-meta">
             {item.user?.avatar && (
               <div data-part="avatar" className="ds-timeline-modern__avatar">
-                <img src={item.user.avatar} alt={item.user.name} />
+                <img src={item.user.avatar} alt="" />
               </div>
             )}
             {item.user && <span data-part="user-name" className="ds-timeline-modern__user-name">{item.user.name}</span>}
-            {item.type && item.type !== 'default' && (
-              <span data-part="type-badge" data-type={item.type} className="ds-timeline-modern__type-badge">{item.type}</span>
+            {badgeType && (
+              <span data-part="type-badge" data-type={badgeType} className="ds-timeline-modern__type-badge">
+                {i18n?.tOr(`timeline.type.${badgeType}`, TYPE_BADGE_FLOOR[badgeType]) ?? TYPE_BADGE_FLOOR[badgeType]}
+              </span>
             )}
           </div>
           <div data-part="item-title" className="ds-timeline-modern__item-title">{item.title}</div>
-          {isRight && showTimestamp && (
-            <time data-part="timestamp" dateTime={toIsoTimestamp(item.timestamp)} className="ds-timeline-modern__timestamp">
-              {formatTimestamp(item.timestamp, locale)}
-            </time>
-          )}
           {item.description && <p data-part="item-description" className="ds-timeline-modern__item-description">{item.description}</p>}
         </div>
         {index !== total - 1 && <hr data-part="connector" data-edge="trailing" aria-hidden="true" className="ds-timeline-modern__connector" />}
@@ -177,14 +205,17 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
   };
 
   /** Renders a list of timeline items as a vertical timeline. */
-  const renderList = (list: TimelineItem<T>[]) => (
-    <ul data-part="list" className="ds-timeline-modern__list">
+  const renderList = (list: TimelineItem<T>[], labelledBy?: string) => (
+    <ul data-part="list" aria-labelledby={labelledBy} className="ds-timeline-modern__list">
       {list.map((item, index) => {
         const defaultRender = buildDefaultRender(item, index, list.length);
+        const itemStyle = item.color
+          ? ({ '--ds-timeline-line-color': item.color } as React.CSSProperties)
+          : undefined;
         return renderItem ? (
-          <li data-part="item" data-type={item.type ?? 'default'} className="ds-timeline-modern__item" key={item.key}>{renderItem(item, defaultRender)}</li>
+          <li data-part="item" data-type={item.type ?? 'default'} style={itemStyle} className="ds-timeline-modern__item" key={item.key}>{renderItem(item, defaultRender)}</li>
         ) : (
-          <li data-part="item" data-type={item.type ?? 'default'} className="ds-timeline-modern__item" key={item.key}>{defaultRender}</li>
+          <li data-part="item" data-type={item.type ?? 'default'} style={itemStyle} className="ds-timeline-modern__item" key={item.key}>{defaultRender}</li>
         );
       })}
     </ul>
@@ -195,8 +226,10 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
   // its skin rules are retired — merge note in the skin).
   if (loading) {
     return (
-      <div data-part="root" data-loading="true" data-empty="false" data-mode={mode} className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')} style={style}>
+      <div data-part="root" data-loading="true" data-empty="false" data-mode={mode} aria-busy="true" className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')} style={style}>
+        {header}
         <ModernSpinner size="md" data-part="spinner" />
+        {footer}
       </div>
     );
   }
@@ -222,12 +255,15 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
       {/* When groupByDate is active, render each date cluster with its
           own heading; otherwise render all items as a single flat list. */}
       {grouped ? (
-        Object.entries(grouped).map(([dateKey, group]) => (
-          <div data-part="date-group" key={dateKey} className="ds-timeline-modern__date-group">
-            <div data-part="date-heading" className="ds-timeline-modern__date-heading">{dateKey}</div>
-            {renderList(group)}
-          </div>
-        ))
+        Object.entries(grouped).map(([dateKey, group]) => {
+          const headingId = `${groupHeadingIdPrefix}-${dateKey}`;
+          return (
+            <div data-part="date-group" role="group" aria-labelledby={headingId} key={dateKey} className="ds-timeline-modern__date-group">
+              <div data-part="date-heading" id={headingId} role="heading" aria-level={3} dir="auto" className="ds-timeline-modern__date-heading">{dateKey}</div>
+              {renderList(group, headingId)}
+            </div>
+          );
+        })
       ) : (
         renderList(items)
       )}

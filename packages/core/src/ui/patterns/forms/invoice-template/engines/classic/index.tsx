@@ -188,7 +188,7 @@ export default function ClassicInvoiceTemplate(props: InvoiceTemplateProps) {
               color: 'var(--ds-color-text-secondary)',
             }}
           >
-            <span>Tax{invoice.taxRate ? ` (${invoice.taxRate}%)` : ''}</span>
+            <span>Tax{invoice.taxRate ? ` (${invoice.taxRate * 100}%)` : ''}</span>
             <span>{formatCurrency(invoice.tax)}</span>
           </div>
           {/* Ant Divider separates subtotal/tax from the final total */}

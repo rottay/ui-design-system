@@ -903,7 +903,8 @@
     "card_role": "بطاقة قابلة للنقل",
     "move_column": "تم النقل إلى {column}، الموضع {position}",
     "move_reorder": "تم النقل إلى الموضع {position} في {column}",
-    "move_edge": "لا يمكن النقل أكثر في هذا الاتجاه"
+    "move_edge": "لا يمكن النقل أكثر في هذا الاتجاه",
+    "empty_column": "لا توجد عناصر"
   },
   "map_view": {
     "placeholder": "عنصر نائب للخريطة",
