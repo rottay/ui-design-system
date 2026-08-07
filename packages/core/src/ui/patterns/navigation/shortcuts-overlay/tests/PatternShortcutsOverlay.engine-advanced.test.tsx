@@ -117,3 +117,13 @@ for (const engineName of ['modern', 'rustic'] as const) {
     });
   });
 }
+
+// WO-CRA-23 / Lane W4 — the modern search box must carry its own accessible
+// name; a placeholder alone leaves an unnamed textbox for AT.
+describe('ShortcutsOverlay - modern search accessible name', () => {
+  it('names the search input', async () => {
+    renderWithEngine(<ModernShortcutsOverlay {...createProps()} />, 'modern');
+    const search = await screen.findByRole('textbox', { name: 'Search shortcuts...' });
+    expect(search).toBeInTheDocument();
+  });
+});

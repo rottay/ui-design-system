@@ -111,12 +111,32 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [dropdownOpen, handleClickOutside]);
 
+  /** Returns focus to the composed trigger Button (the facade does not
+      guarantee ref forwarding, so the target is queried by its caller part). */
+  const focusTrigger = useCallback(() => {
+    dropdownRef.current?.querySelector<HTMLElement>('[data-part="trigger"]')?.focus();
+  }, []);
+
+  /* Escape dismisses the dropdown and returns focus to the trigger. */
+  useEffect(() => {
+    if (!dropdownOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return;
+      event.stopPropagation();
+      setDropdownOpen(false);
+      focusTrigger();
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [dropdownOpen, focusTrigger]);
+
   /**
    * Handles environment switching with production safety gate.
    * Routes to a confirmation dialog if switching to production.
    */
   const handleSwitch = useCallback(
     (envId: string) => {
+      if (loading) return;
       if (envId === activeEnvironment) return;
       if (envId === productionId && confirmProductionSwitch) {
         /* Show confirmation dialog instead of switching immediately */
@@ -126,7 +146,7 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
         setDropdownOpen(false);
       }
     },
-    [activeEnvironment, productionId, confirmProductionSwitch, onChange],
+    [loading, activeEnvironment, productionId, confirmProductionSwitch, onChange],
   );
 
   /** APG radiogroup keyboard contract for the segmented/pills variants:
@@ -167,7 +187,9 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
             data-part="trigger"
             onClick={() => setDropdownOpen(!dropdownOpen)}
             data-testid="env-toggle-trigger"
+            disabled={loading}
             aria-haspopup="true"
+            aria-controls="env-toggle-panel"
             aria-expanded={dropdownOpen}
           >
             <span
@@ -187,7 +209,7 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
           </ModernButton>
 
           {dropdownOpen && (
-            <div data-part="panel">
+            <div data-part="panel" id="env-toggle-panel">
               {environments.map(env => (
                 <ModernButton
                   key={env.id}
@@ -195,6 +217,7 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
                   size="sm"
                   data-part="option"
                   data-active={env.id === activeEnvironment}
+                  disabled={loading}
                   onClick={() => handleSwitch(env.id)}
                   data-testid={`env-option-${env.id}`}
                 >
@@ -237,6 +260,7 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
               aria-checked={env.id === activeEnvironment}
               tabIndex={env.id === tabStopId ? 0 : -1}
               style={{ '--ds-envtoggle-accent': env.color } as React.CSSProperties}
+              disabled={loading}
               onClick={() => handleSwitch(env.id)}
               data-testid={`env-option-${env.id}`}
             >
@@ -274,6 +298,7 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
             aria-checked={env.id === activeEnvironment}
             tabIndex={env.id === tabStopId ? 0 : -1}
             style={{ '--ds-envtoggle-accent': env.color } as React.CSSProperties}
+            disabled={loading}
             onClick={() => handleSwitch(env.id)}
             data-testid={`env-option-${env.id}`}
           >
@@ -291,7 +316,13 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
   };
 
   return (
-    <div className={`ds-pattern-environment-toggle ds-engine-modern ${className ?? ''}`} data-part="root" style={style}>
+    <div
+      className={`ds-pattern-environment-toggle ds-engine-modern ${className ?? ''}`}
+      data-part="root"
+      data-loading={loading ? 'true' : 'false'}
+      aria-busy={loading ? true : undefined}
+      style={style}
+    >
       {/* Banner -- dot + message in env color; only for non-production environments.
           The soft tint rides color-mix on the consumer-supplied accent hatch
           (config data, format-agnostic -- the retired `color + '15'` hex-alpha

@@ -32,8 +32,8 @@ import { renderWithEngine } from '../../../../tooling/testing/helpers/engine';
 // `data-part` on every component, so `tsc` accepts the stamp anywhere, but the
 // engines build their DOM props from allowlists and Grid/Card/Button silently
 // DROP it. This ENTIRE family renders raw DOM exclusively (div/span/button/
-// input/kbd/svg/h2 -- zero DS primitives are imported in any of the ten engine
-// files), so P-79 cannot bite here and every stamp below is expected to land.
+// input/kbd/svg/h2), except command-palette/modern, which now composes the
+// governed Modal; every stamp below is still expected to land.
 // That is a property of today's source, not a licence to skip the assertion:
 // the day one of these files composes a Box or a Button, this test is what
 // notices.
@@ -44,11 +44,9 @@ import { renderWithEngine } from '../../../../tooling/testing/helpers/engine';
 //      (Cockpit/Workbench mapped rustic -> classic), every rustic.tsx here is a
 //      real file on disk, so both engines of all five are asserted.
 //
-//   2. THE FAMILY IS NOT PORTALED. `createPortal` appears nowhere in
-//      patterns/navigation; both dialogs use position:fixed and stay DOM
-//      descendants of the tenant-scoped root. The stamps are therefore reachable
-//      by ordinary descendant selectors from the scope class -- no portal-root
-//      escape needed, none minted.
+//   2. ONLY command-palette/modern IS PORTALED, through the governed Modal,
+//      which re-stamps the tenant portal scope. Every other engine here stays a
+//      DOM descendant of the tenant-scoped root.
 //
 //   3. ENGINE ANATOMY ASYMMETRIES, preserved (not defects):
 //      - command-palette: modern's "Recent" heading is NOT stamped group-label
@@ -66,12 +64,15 @@ import { renderWithEngine } from '../../../../tooling/testing/helpers/engine';
 const noop = () => undefined;
 
 /** Every `data-part` present in the container, after the root has mounted. */
-async function partsOf(container: HTMLElement): Promise<Set<string>> {
+async function partsOf(container: HTMLElement, anchorPart = 'root'): Promise<Set<string>> {
+  // command-palette/modern composes the governed Modal, so its content lands in
+  // the portal root rather than under `container`; scope the sweep accordingly.
+  const scope: ParentNode = container.ownerDocument ?? container;
   await waitFor(() => {
-    expect(container.querySelector('[data-part="root"]')).not.toBeNull();
+    expect(scope.querySelector(`[data-part="${anchorPart}"]`)).not.toBeNull();
   });
   return new Set(
-    Array.from(container.querySelectorAll('[data-part]')).map(
+    Array.from(scope.querySelectorAll('[data-part]')).map(
       (el) => el.getAttribute('data-part') as string,
     ),
   );
@@ -116,29 +117,39 @@ describe('command-palette -- data-part contract (CK-G)', () => {
       />,
       engine,
     );
-    const parts = await partsOf(container);
+    const parts = await partsOf(container, engine === 'modern' ? 'content' : 'root');
 
-    const expectedParts = ['root', 'backdrop', 'dialog', 'search', 'item', 'description', 'shortcut', 'group-label', 'footer'];
+    // modern retired its hand-rolled root/backdrop/dialog when it adopted the
+    // governed Modal; `content` is the palette-owned chamber that replaced them.
+    const expectedParts = engine === 'modern'
+      ? ['content', 'search', 'item', 'description', 'shortcut', 'group-label', 'footer']
+      : ['root', 'backdrop', 'dialog', 'search', 'item', 'description', 'shortcut', 'group-label', 'footer'];
     if (engine === 'rustic') expectedParts.push('input');
     for (const part of expectedParts) {
       expect(parts, `command-palette/${engine} must stamp data-part="${part}"`).toContain(part);
     }
+    // modern portals through the governed Modal, so its chamber is document-scoped.
+    const scope = engine === 'modern' ? container.ownerDocument : container;
     if (engine === 'modern') {
-      expect(container.querySelector('[data-part="search"] input[data-part="root"]')).not.toBeNull();
+      expect(scope.querySelector('[data-part="search"] input[data-part="root"]')).not.toBeNull();
     }
 
     // activeIndex starts at 0 -> exactly the first row across all sections is
     // keyboard-active. This is the guard a shared :hover rule must not clobber.
-    expect(container.querySelectorAll('[data-part="item"][data-active="true"]')).toHaveLength(1);
-    expect(container.querySelectorAll('[data-part="item"][data-active="false"]').length).toBeGreaterThanOrEqual(1);
+    expect(scope.querySelectorAll('[data-part="item"][data-active="true"]')).toHaveLength(1);
+    expect(scope.querySelectorAll('[data-part="item"][data-active="false"]').length).toBeGreaterThanOrEqual(1);
     // Recent + two grouped rows all render one row markup.
-    expect(partCount(container, 'item')).toBe(3);
+    expect(scope.querySelectorAll('[data-part="item"]').length).toBe(3);
 
     // The scope class the migration keys on, minted greenfield (command-palette
     // had no first-party class before this pre-step).
-    const root = container.querySelector('[data-part="root"]') as HTMLElement;
-    expect(root.className).toContain('ds-pattern-command-palette');
-    expect(root.className).toContain(`ds-engine-${engine}`);
+    // modern carries the scope on the governed Modal surface it now composes.
+    const scopeCarrier = (engine === 'modern'
+      ? scope.querySelector('[data-part="surface"]')
+      : container.querySelector('[data-part="root"]')) as HTMLElement;
+    expect(scopeCarrier).not.toBeNull();
+    expect(scopeCarrier.className).toContain('ds-pattern-command-palette');
+    expect(scopeCarrier.className).toContain(`ds-engine-${engine}`);
   });
 
   it.each(ENGINES)('stamps the empty branch when nothing matches (%s)', async (engine) => {

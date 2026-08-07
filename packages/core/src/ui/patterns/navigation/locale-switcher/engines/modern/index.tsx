@@ -16,6 +16,17 @@
 
 import React, { useState, useRef, useEffect, useCallback, useId } from 'react';
 import type { LocaleSwitcherProps } from '../../contracts';
+// Measure before paint so the panel never shows in the overflowing placement.
+const useIsomorphicLayoutEffect =
+  typeof window !== 'undefined' ? React.useLayoutEffect : React.useEffect;
+
+/** Reading-direction probe (house idiom): nearest explicit `dir` wins,
+    otherwise the document direction applies. */
+function isRtlContext(el: HTMLElement): boolean {
+  const scoped = el.closest('[dir]');
+  if (scoped) return scoped.getAttribute('dir') === 'rtl';
+  return document.documentElement.dir === 'rtl';
+}
 import { DEFAULT_LOCALES } from '../../runtime/default-locales';
 import { StatusVerifiedIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-verified';
 import { SkeletonButton } from '../../../../../primitives/feedback/Skeleton';
@@ -63,6 +74,9 @@ export default function ModernLocaleSwitcher(props: LocaleSwitcherProps) {
 
   const [open, setOpen] = useState(false);
   const [focusIndex, setFocusIndex] = useState(-1);
+  /* 'start' = panel's inline-start edge on the trigger's (the default);
+     'end' = flipped so its inline-end edge lands on the trigger's. */
+  const [placement, setPlacement] = useState<'start' | 'end'>('start');
   const isLoading = Boolean(loading);
   const isOpen = open && !isLoading;
   const containerRef = useRef<HTMLDivElement>(null);
@@ -166,6 +180,42 @@ export default function ModernLocaleSwitcher(props: LocaleSwitcherProps) {
   }, [open, focusIndex]);
 
   /* ---------------------------------------------------------------- */
+  /*  Inline-end flip                                                  */
+  /*  The panel is anchored on the trigger's inline-start edge and     */
+  /*  grows toward the inline-end, so a trigger sitting near that      */
+  /*  viewport edge pushes it off-screen. Measure the real panel and   */
+  /*  flip only when the opposite anchor genuinely has more room.      */
+  /* ---------------------------------------------------------------- */
+  useIsomorphicLayoutEffect(() => {
+    if (!isOpen) {
+      setPlacement('start');
+      return;
+    }
+    const container = containerRef.current;
+    const panel = menuRef.current;
+    if (!container || !panel) return;
+
+    const resolve = () => {
+      const viewport = window.innerWidth || document.documentElement.clientWidth;
+      const anchor = container.getBoundingClientRect();
+      const panelWidth = panel.getBoundingClientRect().width;
+      if (!viewport || panelWidth <= 0) return;
+      const rtl = isRtlContext(container);
+      const roomFromStartAnchor = rtl ? anchor.right : viewport - anchor.left;
+      const roomFromEndAnchor = rtl ? viewport - anchor.left : anchor.right;
+      setPlacement(
+        panelWidth > roomFromStartAnchor && roomFromEndAnchor > roomFromStartAnchor
+          ? 'end'
+          : 'start',
+      );
+    };
+
+    resolve();
+    window.addEventListener('resize', resolve);
+    return () => window.removeEventListener('resize', resolve);
+  }, [isOpen, locales.length]);
+
+  /* ---------------------------------------------------------------- */
   /*  Select handler                                                   */
   /* ---------------------------------------------------------------- */
   const handleSelect = useCallback(
@@ -245,6 +295,7 @@ export default function ModernLocaleSwitcher(props: LocaleSwitcherProps) {
           id={listboxId}
           role="listbox"
           data-part="panel"
+          data-placement={placement}
           aria-label={tOr('locale_switcher.panel_aria', 'Languages')}
           data-testid="locale-switcher-menu"
         >

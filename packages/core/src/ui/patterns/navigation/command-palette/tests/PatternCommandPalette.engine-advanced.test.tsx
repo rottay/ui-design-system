@@ -194,12 +194,15 @@ describe('PatternCommandPalette advanced engine coverage', () => {
     expect(screen.getByText('Rename branch')).toBeInTheDocument();
     if (engine !== 'classic') {
       // CK-G stamps anatomy on modern + rustic; classic carries no data-part.
-      const chip = container.querySelector("[data-part='argument-chip']");
+      // The modern engine composes Modal, so its content portals OUT of
+      // `container` -- the scope for both queries is the whole document, and
+      // the mode stamp rides the palette's own content wrapper.
+      const scope = engine === 'modern' ? container.ownerDocument : container;
+      const modeHost = engine === 'modern' ? "[data-part='content']" : "[data-part='root']";
+      const chip = scope.querySelector("[data-part='argument-chip']");
       expect(chip).not.toBeNull();
       expect(chip!.textContent).toBe('Rename branch');
-      expect(
-        container.querySelector("[data-part='root']")!.getAttribute('data-mode'),
-      ).toBe('argument');
+      expect(scope.querySelector(modeHost)!.getAttribute('data-mode')).toBe('argument');
     }
 
     // Confirming an invalid value keeps argument mode open with the error.
@@ -223,9 +226,9 @@ describe('PatternCommandPalette advanced engine coverage', () => {
     expect(screen.getByText('Rename branch')).toBeInTheDocument();
     expect(falseCloseCalls(props)).toBe(1);
     if (engine !== 'classic') {
-      expect(
-        container.querySelector("[data-part='root']")!.getAttribute('data-mode'),
-      ).toBe('search');
+      const scope = engine === 'modern' ? container.ownerDocument : container;
+      const modeHost = engine === 'modern' ? "[data-part='content']" : "[data-part='root']";
+      expect(scope.querySelector(modeHost)!.getAttribute('data-mode')).toBe('search');
     }
   });
 
@@ -237,10 +240,127 @@ describe('PatternCommandPalette advanced engine coverage', () => {
       engine
     );
 
-    if (engine === 'classic') {
-      expect(screen.queryByText('Create event')).not.toBeInTheDocument();
-    } else {
+    if (engine === 'rustic') {
       expect(container.firstChild).toBeNull();
+    } else if (engine === 'modern') {
+      // The modern engine composes Modal, whose portal-scope anchor renders
+      // even while closed (it is the lineage source the portal snapshot reads
+      // from). The closed branch is therefore "no chamber anywhere in the
+      // document", asserted at full strength -- not "container is empty".
+      expect(container.firstChild).not.toBeNull();
+      expect((container.firstChild as HTMLElement).getAttribute('data-part')).toBe('anchor');
+      expect(container.ownerDocument.querySelector('dialog')).toBeNull();
+      expect(
+        container.ownerDocument.querySelector("[data-part='content']"),
+      ).toBeNull();
     }
+    expect(screen.queryByText('Create event')).not.toBeInTheDocument();
+  });
+});
+
+// Modern-only: the palette delegates its overlay shell to the governed Modal
+// and scopes every APG id to the instance.
+describe('modern command palette -- governed shell + instance scoping', () => {
+  it('scopes listbox/option ids per instance so two palettes on one page never collide', async () => {
+    const first = createProps({ onSearch: undefined });
+    const second = createProps({ onSearch: undefined });
+
+    renderWithEngine(
+      <>
+        <ModernCommandPalette {...first} />
+        <ModernCommandPalette {...second} />
+      </>,
+      'modern',
+    );
+
+    await screen.findAllByPlaceholderText('Type a command...');
+    const [comboA, comboB] = screen.getAllByRole('combobox');
+    expect(comboA).toBeDefined();
+    expect(comboB).toBeDefined();
+
+    const listboxIdA = comboA!.getAttribute('aria-controls');
+    const listboxIdB = comboB!.getAttribute('aria-controls');
+    expect(listboxIdA).toBeTruthy();
+    expect(listboxIdB).toBeTruthy();
+    // The collision itself: a global literal id makes these identical.
+    expect(listboxIdA).not.toBe(listboxIdB);
+
+    const listboxA = document.getElementById(listboxIdA!);
+    const listboxB = document.getElementById(listboxIdB!);
+    expect(listboxA).not.toBeNull();
+    expect(listboxB).not.toBeNull();
+    expect(listboxA).not.toBe(listboxB);
+    expect(listboxA!.contains(comboA!)).toBe(false);
+
+    // Each input's virtual focus must resolve INSIDE its own listbox.
+    const activeA = document.getElementById(comboA!.getAttribute('aria-activedescendant')!);
+    const activeB = document.getElementById(comboB!.getAttribute('aria-activedescendant')!);
+    expect(activeA).not.toBeNull();
+    expect(activeB).not.toBeNull();
+    expect(listboxA!.contains(activeA)).toBe(true);
+    expect(listboxB!.contains(activeB)).toBe(true);
+    expect(activeA).not.toBe(activeB);
+  });
+
+  it('is keyboard-operable from a focus target that is not the search input', async () => {
+    const props = createProps({ onSearch: undefined, recentItems: undefined });
+
+    renderWithEngine(<ModernCommandPalette {...props} />, 'modern');
+
+    const combobox = await screen.findByRole('combobox');
+    const listbox = screen.getByRole('listbox');
+
+    // The keydown never touches the input: with the handler bound to the input
+    // only, this event has no listener on its bubble path.
+    fireEvent.keyDown(listbox, { key: 'ArrowDown' });
+    const secondOptionId = combobox.getAttribute('aria-activedescendant');
+    expect(secondOptionId).toBe(screen.getAllByRole('option')[1]!.id);
+
+    fireEvent.keyDown(listbox, { key: 'Enter' });
+    expect(props.items[1].onSelect).toHaveBeenCalledTimes(1);
+    expect(props.items[0].onSelect).not.toHaveBeenCalled();
+  });
+
+  it('renders inside the governed Modal shell instead of a hand-rolled overlay', async () => {
+    renderWithEngine(<ModernCommandPalette {...createProps()} />, 'modern');
+
+    const combobox = await screen.findByRole('combobox');
+    const dialog = document.querySelector('dialog[aria-modal="true"]');
+    expect(dialog).not.toBeNull();
+
+    // The palette scope now rides Modal's surface part.
+    const surface = dialog!.querySelector("[data-part='surface']");
+    expect(surface).not.toBeNull();
+    expect(surface!.classList.contains('ds-pattern-command-palette')).toBe(true);
+    expect(surface!.classList.contains('ds-engine-modern')).toBe(true);
+    expect(surface!.contains(combobox)).toBe(true);
+
+    // The retired hand-rolled chrome must be gone, not merely unstyled: the
+    // focus trap and the backdrop it wrapped are now Modal's.
+    expect(document.querySelector("[data-part='dialog']")).toBeNull();
+  });
+});
+
+// Modern-only: the empty result set must not leave a dangling virtual focus.
+describe('modern command palette -- empty result announcement', () => {
+  it('drops aria-activedescendant when the query matches no row', () => {
+    const props = createProps({ onSearch: undefined, recentItems: [] });
+
+    const { container } = renderWithEngine(<ModernCommandPalette {...props} />, 'modern');
+
+    const combobox = screen.getByRole('combobox');
+    // Ids are instance-scoped now, so the pin is by IDENTITY: the virtual
+    // focus must name the first rendered option, whatever its generated id.
+    const firstOption = screen.getAllByRole('option')[0]!;
+    expect(firstOption.id).toBeTruthy();
+    expect(combobox.getAttribute('aria-activedescendant')).toBe(firstOption.id);
+
+    fireEvent.change(combobox, { target: { value: 'zzzz-no-such-command' } });
+
+    expect(screen.queryByRole('option')).toBeNull();
+    expect(combobox.getAttribute('aria-activedescendant')).toBeNull();
+    expect(
+      container.ownerDocument.querySelector("[data-part='empty']")?.getAttribute('role'),
+    ).toBe('status');
   });
 });

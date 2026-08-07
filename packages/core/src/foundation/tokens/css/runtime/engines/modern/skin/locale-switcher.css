@@ -145,6 +145,17 @@
   animation: ds-foundation-fade-in-down var(--ds-motion-fast) var(--ds-motion-ease-enter, ease-out);
 }
 
+/* ---- inline-end flip: the engine measures the real panel against the
+        viewport and stamps data-placement='end' when the inline-start
+        anchor would push the panel past the inline-end edge (a switcher in
+        the end of a 320px toolbar). The extra attribute outranks the base
+        anchor rule at equal class weight. ---- */
+.ds-pattern-locale-switcher.ds-engine-modern[data-part='root']
+  [data-part='panel'][data-placement='end'] {
+  inset-inline-start: auto;
+  inset-inline-end: 0;
+}
+
 /* ---- options ---- */
 .ds-pattern-locale-switcher.ds-engine-modern [data-part='option'] {
   display: flex;

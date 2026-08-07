@@ -147,3 +147,59 @@ describe('PatternEnvironmentToggle', () => {
     },
   );
 });
+
+// WO-CRA-23 / Lane W4 — modern-engine regressions.
+describe('PatternEnvironmentToggle - modern lifecycle and dropdown dismissal', () => {
+  it('honours the declared PatternBaseProps.loading posture', async () => {
+    const onChange = vi.fn();
+    const { container } = renderWithEngine(
+      <ModernEnvironmentToggle {...createProps({ loading: true, onChange })} />,
+      'modern',
+    );
+
+    const root = container.querySelector('[data-part="root"]');
+    expect(root).toHaveAttribute('data-loading', 'true');
+    expect(root).toHaveAttribute('aria-busy', 'true');
+
+    const options = await screen.findAllByTestId(/^env-option-/);
+    for (const option of options) {
+      expect(option).toBeDisabled();
+    }
+
+    // The APG radiogroup arrow contract must not switch while busy: it calls
+    // handleSwitch directly and therefore bypasses the disabled attribute.
+    fireEvent.keyDown(screen.getByTestId('env-toggle-trigger'), { key: 'ArrowRight' });
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it('leaves the loading posture off by default', async () => {
+    const { container } = renderWithEngine(
+      <ModernEnvironmentToggle {...createProps()} />,
+      'modern',
+    );
+    const root = container.querySelector('[data-part="root"]');
+    expect(root).toHaveAttribute('data-loading', 'false');
+    expect(root).not.toHaveAttribute('aria-busy');
+    const options = await screen.findAllByTestId(/^env-option-/);
+    expect(options[0]).not.toBeDisabled();
+  });
+
+  it('dismisses the dropdown on Escape and returns focus to the trigger', async () => {
+    renderWithEngine(
+      <ModernEnvironmentToggle {...createProps({ variant: 'dropdown' })} />,
+      'modern',
+    );
+
+    const trigger = await screen.findByTestId('env-toggle-trigger');
+    expect(trigger).toHaveAttribute('aria-controls', 'env-toggle-panel');
+
+    fireEvent.click(trigger);
+    expect(await screen.findByTestId('env-option-live')).toBeInTheDocument();
+    expect(document.getElementById('env-toggle-panel')).not.toBeNull();
+
+    fireEvent.keyDown(document, { key: 'Escape' });
+
+    expect(screen.queryByTestId('env-option-live')).toBeNull();
+    expect(document.activeElement).toBe(trigger);
+  });
+});

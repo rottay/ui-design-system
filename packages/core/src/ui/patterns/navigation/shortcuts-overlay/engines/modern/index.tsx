@@ -212,6 +212,9 @@ export default function ModernShortcutsOverlay(props: ShortcutsOverlayProps) {
             ref={inputRef}
             value={query}
             placeholder={placeholderText}
+            /* A placeholder is not an accessible name: the search box needs
+               its own label or it reaches AT as an unnamed textbox. */
+            aria-label={placeholderText}
             onChange={(newValue) => setQuery(newValue)}
           />
         </div>

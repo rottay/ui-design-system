@@ -3,17 +3,18 @@
 /**
  * @fileoverview Modern engine for the CommandPalette pattern.
  *
- * A searchable command list in a custom fixed-position overlay (not a
- * framework modal) with backdrop click-to-close, FULL APG combobox wiring
- * (role=combobox + aria-expanded/controls/activedescendant on the input,
- * listbox/options, arrows to move, Enter to select, Escape to close and
- * return focus), a focus trap, and argument mode for parameterized commands.
- * The overlay is conditionally unmounted rather than hidden to avoid
- * stacking invisible listeners.
+ * A searchable command list inside the certified Modal primitive, with FULL
+ * APG combobox wiring (role=combobox + aria-expanded/controls/
+ * activedescendant on the input, listbox/options, arrows to move, Enter to
+ * select, Escape to close) and argument mode for parameterized commands. The
+ * blocking chamber, backdrop, native top-layer focus trap, sibling inerting
+ * and focus restore all belong to Modal — this pattern hand-rolls none of
+ * them. Every APG id is instance-scoped through `useId`, so two palettes on
+ * one page never cross-wire their virtual focus.
  *
  * COMPOSITION LAW: the search box is the certified Input primitive (its
- * contract exposes the combobox aria props and forwards onKeyDown/ref — it
- * was built for exactly this), shortcut hints compose Kbd, the argument
+ * contract exposes the combobox aria props and forwards ref — it was built
+ * for exactly this), shortcut hints compose Kbd, the argument
  * breadcrumb composes Tag inside its pinned data-part wrapper, and the
  * no-results state composes Empty. ScrollArea is deliberately NOT composed:
  * the listbox element must keep its own role/id for `aria-controls`, and
@@ -38,10 +39,11 @@
  * />
  */
 
-import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useMemo, useRef, useEffect, useCallback, useId } from 'react';
 import { arrayValueAt } from '@/foundation/kernel/collections';
 import type { CommandPaletteProps, CommandItem } from '../../contracts';
 import { useCommandArgumentMode } from '../../runtime/argument-mode';
+import Modal from '../../../../../primitives/feedback/Modal/engines/modern';
 import Input from '../../../../../primitives/inputs/Input/engines/modern';
 import Empty from '../../../../../primitives/display/Empty/engines/modern';
 import Tag from '../../../../../primitives/display/Tag/engines/modern';
@@ -62,7 +64,7 @@ function useCommandPaletteTranslation() {
 /**
  * Modern (token-driven) command palette with full keyboard navigation.
  * @param props - CommandPaletteProps controlling open state, items, search, and footer.
- * @returns A fixed overlay with backdrop and a rounded dialog card, or null when closed.
+ * @returns The governed Modal chamber carrying the palette content.
  */
 export default function ModernCommandPalette(props: CommandPaletteProps) {
   const { tOr } = useCommandPaletteTranslation();
@@ -90,8 +92,11 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
   const [query, setQuery] = useState('');
   const [activeIndex, setActiveIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
-  const dialogRef = useRef<HTMLDivElement>(null);
-  const triggerRef = useRef<Element | null>(null);
+  // Instance-scoped APG ids: two palettes on one page must not collide, or the
+  // input's aria-activedescendant resolves into the OTHER palette's listbox.
+  const instanceId = useId();
+  const listboxId = `${instanceId}-listbox`;
+  const optionId = (idx: number) => `${instanceId}-option-${idx}`;
   const {
     mode,
     pendingItem,
@@ -153,23 +158,17 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
   // Reset the keyboard cursor to the first item whenever the query changes.
   useEffect(() => { setActiveIndex(0); }, [query]);
 
-  // Store the element that had focus before the palette opened so we
-  // can return focus when it closes. Reset search and auto-focus the
-  // input. The short delay is needed because the DOM element must be
-  // mounted before focus() can succeed.
+  // Reset search and route INITIAL focus to the search box on open. Focus
+  // RESTORE on close is deliberately absent: the composed Modal opens a native
+  // <dialog> with showModal(), and the dialog's close steps return focus to the
+  // previously-focused element for us. The short delay is needed because the
+  // Modal portals its content, so the input exists a commit later.
   useEffect(() => {
-    if (open) {
-      triggerRef.current = document.activeElement;
-      setQuery('');
-      resetArgumentMode();
-      setTimeout(() => inputRef.current?.focus(), 50);
-    } else {
-      // Return focus to the element that opened the palette
-      if (triggerRef.current && triggerRef.current instanceof HTMLElement) {
-        triggerRef.current.focus();
-      }
-      triggerRef.current = null;
-    }
+    if (!open) return;
+    setQuery('');
+    resetArgumentMode();
+    const focusTimer = setTimeout(() => inputRef.current?.focus(), 50);
+    return () => clearTimeout(focusTimer);
   }, [open, resetArgumentMode]);
 
   // Execute the item's onSelect callback and close the palette. Disabled
@@ -192,6 +191,18 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
   // Escape closes. preventDefault on arrows stops the input caret from jumping.
   // In argument mode, Enter confirms the value and Escape pops back to
   // search (never closes) -- stopPropagation keeps outer dismiss handlers out.
+  //
+  // Bound to the palette CONTENT wrapper, not the input: the whole chamber is
+  // operable, so a user who tabbed to a row or to a caller footer control can
+  // still drive the list. Tab is NOT handled here on purpose -- the native
+  // <dialog> top layer owns focus cycling, and intercepting it would fight the
+  // browser's own trap.
+  //
+  // Escape preventDefault matters in BOTH modes: it suppresses the native
+  // dialog close request so this handler stays the single authority -- popping
+  // back to search in argument mode, closing explicitly in search mode. Modal's
+  // own closeOnEscape remains the backstop for focus parked outside this
+  // wrapper.
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (mode === 'argument') {
       if (e.key === 'Enter') {
@@ -215,36 +226,10 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
       const item = activeIndex >= 0 ? arrayValueAt(navigableItems, activeIndex) : undefined;
       if (item) handleSelect(item);
     } else if (e.key === 'Escape') {
+      e.preventDefault();
       onOpenChange(false);
     }
   };
-
-  // Focus trap: cycle Tab/Shift+Tab within the dialog when open.
-  const handleFocusTrap = useCallback((e: React.KeyboardEvent) => {
-    if (e.key !== 'Tab' || !dialogRef.current) return;
-    const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
-      'input, button, [tabindex]:not([tabindex="-1"]), a[href]'
-    );
-    if (focusable.length === 0) return;
-    const first = focusable.item(0);
-    const last = focusable.item(focusable.length - 1);
-    if (!first || !last) return;
-    if (e.shiftKey) {
-      if (document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-      }
-    } else {
-      if (document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-      }
-    }
-  }, []);
-
-  // Early return avoids rendering the backdrop/portal when closed, which
-  // is cheaper than CSS visibility toggling for a rarely-open overlay.
-  if (!open) return null;
 
   // Mutable counter spans all sections (recent + grouped) so the
   // keyboard activeIndex always maps to the correct visual row.
@@ -254,7 +239,7 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
   const renderItem = (item: CommandItem, idx: number) => (
     <div
       key={item.id}
-      id={`command-palette-option-${idx}`}
+      id={optionId(idx)}
       role="option"
       aria-selected={activeIndex === idx}
       aria-disabled={item.disabled || undefined}
@@ -282,27 +267,40 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
   );
 
   return (
-    <div
-      ref={dialogRef}
-      onKeyDown={handleFocusTrap}
-      className="ds-pattern-command-palette ds-engine-modern"
-      data-part="root"
-      data-mode={mode}
-      data-loading={loading}
-      style={style}
-      role="dialog"
-      aria-modal="true"
+    /* The blocking chamber IS the certified Modal: native <dialog> top layer,
+       backdrop + click-to-close, sibling inerting, focus trap and focus
+       restore all arrive certified. This pattern supplies content only.
+       `padding='none'` because the palette owns its own section rhythm;
+       `closable`/`hideFooter` off because the palette has no chrome row of its
+       own; `radius='xl'` rides Modal's governed radius channel so the phone
+       fullscreen posture can still flatten it to 0 (a hard-coded skin radius
+       could not). The caller's className/style join the palette scope on the
+       surface — the card they used to describe. */
+    <Modal
+      open={open}
+      onClose={() => onOpenChange(false)}
       aria-label={dialogLabel}
+      placement="top"
+      padding="none"
+      radius="xl"
+      hideFooter
+      closable={false}
+      blurBackdrop
+      className={['ds-pattern-command-palette', 'ds-engine-modern', className]
+        .filter(Boolean)
+        .join(' ')}
+      style={style}
     >
-      {/* Backdrop: scrim + sanctioned glass layer; painted by the engine skin. */}
+      {/* Palette content wrapper: carries the pattern's own state stamps
+          (data-mode / data-loading) and the chamber-wide key handler. */}
       <div
-        data-part="backdrop"
-        onClick={() => onOpenChange(false)}
-      />
-      {/* Dialog */}
-      <div className={className} data-part="dialog">
+        data-part="content"
+        data-mode={mode}
+        data-loading={loading}
+        onKeyDown={handleKeyDown}
+      >
         {/* Search: argument mode adds the breadcrumb chip beside the input
-            (the flex layout switch is skin-owned off root[data-mode]). */}
+            (the flex layout switch is skin-owned off the surface scope). */}
         <div data-part="search">
           {mode === 'argument' && pendingItem && (
             /* The pinned chip wrapper keeps data-part + exact textContent;
@@ -314,8 +312,9 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
             </span>
           )}
           {/* Certified Input: its contract carries the combobox aria props
-              first-class and forwards ref + onKeyDown — the APG wiring lands
-              on the real textbox. */}
+              first-class and forwards ref — the APG wiring lands on the real
+              textbox. The key handler now sits on the content wrapper above,
+              so the whole chamber is operable, not just this field. */}
           <Input
             ref={inputRef}
             value={mode === 'argument' ? argumentValue : query}
@@ -328,11 +327,14 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
               setQuery(newValue);
               onSearch?.(newValue);
             }}
-            onKeyDown={handleKeyDown}
             role="combobox"
             aria-expanded={mode === 'search'}
-            aria-controls={mode === 'search' ? 'command-palette-listbox' : undefined}
-            aria-activedescendant={mode === 'search' && activeIndex >= 0 ? `command-palette-option-${activeIndex}` : undefined}
+            aria-controls={mode === 'search' ? listboxId : undefined}
+            aria-activedescendant={
+              mode === 'search' && activeIndex >= 0 && activeIndex < navigableItems.length
+                ? optionId(activeIndex)
+                : undefined
+            }
           />
         </div>
         {/* Argument mode replaces the result list with the parameter prompt. */}
@@ -354,7 +356,7 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
         /* ScrollArea is NOT composed here: the listbox must keep role+id for
            aria-controls and its viewport does not forward them. maxHeight
            stays inline (runtime prop, the ScrollArea precedent). */
-        <div data-part="list" style={{ maxHeight }} role="listbox" id="command-palette-listbox">
+        <div data-part="list" style={{ maxHeight }} role="listbox" id={listboxId}>
           {/* Loading footprint: skeleton rows mirror the real row anatomy
               (icon well + two text bars) so the panel never reflows when
               async results land. */}
@@ -412,19 +414,21 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
             </div>
           ))}
           {filtered.length === 0 && !loading && (
-            <div data-part="empty">
+            <div data-part="empty" role="status">
               <Empty image="simple" description={emptyText} />
             </div>
           )}
         </div>
         )}
-        {/* Footer (caller slot: hints/links arrive already composed). */}
+        {/* Footer (caller slot: hints/links arrive already composed). This is
+            the PALETTE's footer, inside Modal's body — Modal's own footer is
+            suppressed via hideFooter, so the two never collide. */}
         {footer && (
           <div data-part="footer">
             {footer}
           </div>
         )}
       </div>
-    </div>
+    </Modal>
   );
 }
