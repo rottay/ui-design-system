@@ -300,7 +300,9 @@
   "activityLog": {
     "filter": {
       "allActions": "All actions",
-      "allUsers": "All users"
+      "allUsers": "All users",
+      "byAction": "Filter by action",
+      "byUser": "Filter by user"
     },
     "empty": "No activity recorded",
     "time": {
@@ -310,7 +312,8 @@
       "daysAgo": "{count}d ago"
     },
     "onEntity": "on {entity}",
-    "onEntityWithId": "on {entity} #{id}"
+    "onEntityWithId": "on {entity} #{id}",
+    "feedLabel": "Activity feed"
   },
   "transfer": {
     "source_title": "Source",
@@ -1047,7 +1050,11 @@
     "justNow": "just now",
     "minutesAgo": "{count}m ago",
     "hoursAgo": "{count}h ago",
-    "daysAgo": "{count}d ago"
+    "daysAgo": "{count}d ago",
+    "groupToday": "Today",
+    "groupEarlier": "Earlier",
+    "unread": "Unread",
+    "unreadCount": "{count} unread"
   },
   "popconfirm": {
     "ok": "Yes",
@@ -1395,6 +1402,103 @@
       "packOther": "packs",
       "packMissing": "{variable} is referenced but not loaded",
       "packMissingDetail": "{referencedBy} falls through to its authored fallback fonts"
+    },
+    "contrast": {
+      "allPass": "Every checkable color pair meets its required ratio.",
+      "failing": "{count} failing",
+      "pass": "WCAG AA clean",
+      "titleDark": "Dark ground contrast",
+      "titleLight": "Light ground contrast"
+    },
+    "editorHeading": "Bounded BrandTheme fields",
+    "field": {
+      "accent": "Accent",
+      "activeTabColor": "Active tab color",
+      "baseFont": "Base font",
+      "cardBg": "Card bg",
+      "cardBorder": "Card border",
+      "cardMutedText": "Card muted text",
+      "cardText": "Card text",
+      "darkBackground": "Dark background (dark ground)",
+      "darkPrimary": "Dark primary (dark ground)",
+      "densityScale": "Density scale",
+      "displayFont": "Display font",
+      "effectIntensity": "Effect intensity",
+      "entrance": "Entrance",
+      "entranceDuration": "Entrance duration (ms)",
+      "error": "Error",
+      "headingFont": "Heading font",
+      "headingWeight": "Heading weight",
+      "hoverLift": "Hover lift",
+      "hoverScale": "Hover scale",
+      "info": "Info",
+      "inputBg": "Input bg",
+      "inputBorder": "Input border",
+      "labelStyle": "Label style",
+      "modalBg": "Modal bg",
+      "modalOverlay": "Modal overlay",
+      "monoFont": "Mono font",
+      "primary": "Primary",
+      "primaryButtonBg": "Primary button bg",
+      "primaryButtonText": "Primary button text",
+      "pulseSpeed": "Pulse speed",
+      "radiusLg": "Radius lg",
+      "radiusMd": "Radius md",
+      "radiusSm": "Radius sm",
+      "radiusXl": "Radius xl",
+      "secondary": "Secondary",
+      "skeleton": "Skeleton",
+      "success": "Success",
+      "tableHeaderBg": "Table header bg",
+      "tableRowHover": "Table row hover",
+      "tabsBorder": "Tabs border",
+      "warning": "Warning"
+    },
+    "hostile": {
+      "helper": "Applies deliberately extreme values and reports the failing color pairs per ground.",
+      "run": "Run check",
+      "title": "Hostile input check"
+    },
+    "inherit": "Inherit",
+    "option": {
+      "bounce": "Bounce",
+      "capitalize": "Capitalize",
+      "fade": "Fade",
+      "fast": "Fast",
+      "heavier": "Heavier",
+      "lighter": "Lighter",
+      "none": "None",
+      "normal": "Normal",
+      "pulse": "Pulse",
+      "sentence": "Sentence",
+      "shimmer": "Shimmer",
+      "slideUp": "Slide up",
+      "slow": "Slow",
+      "spring": "Spring",
+      "uppercase": "Uppercase",
+      "wave": "Wave"
+    },
+    "preview": {
+      "fallback": "Pass a galleries slot to render live component states here."
+    },
+    "previewHeading": "Live preview on both grounds",
+    "section": {
+      "chrome": "Chrome",
+      "motion": "Motion",
+      "palette": "Palette",
+      "surfaces": "Surfaces",
+      "typography": "Typography"
+    },
+    "tenantPreview": {
+      "fallback": "Pass a galleries slot to render live surfaces under this theme.",
+      "heading": "Tenant theme live preview",
+      "invalidDocument": "invalid document"
+    },
+    "title": "Brand Studio",
+    "violation": {
+      "detail": "{foreground} on {ground}",
+      "detailSuggestion": "{foreground} on {ground} — try {suggestion} ({ratio} : 1)",
+      "ratio": "{ratio} : 1 · needs {required} : 1 ({level})"
     }
   },
   "brandingPreview": {
@@ -1406,7 +1510,12 @@
     }
   },
   "tokenInspector": {
-    "hint": "Ctrl+Shift+T or Esc to close | Click to pin"
+    "hint": "Ctrl+Shift+T or Esc to close | Click to pin",
+    "title": "Token Inspector",
+    "pinned": "PINNED",
+    "hover": "HOVER",
+    "empty": "Hover an element to inspect its tokens",
+    "hintTruncated": "Showing {shown} of {total} | Ctrl+Shift+T or Esc to close | Click to pin"
   },
   "presence": {
     "barLabel": "People present",
@@ -1453,5 +1562,149 @@
   "bottomTabBar": {
     "itemWithBadge": "{label}, {count}",
     "navigation": "Bottom navigation"
+  },
+  "assistant": {
+    "delivery": {
+      "error": "Error",
+      "pending": "Pending",
+      "sending": "Sending",
+      "sent": "Sent",
+      "streaming": "Streaming"
+    },
+    "diff": {
+      "after": "After",
+      "before": "Before"
+    },
+    "role": {
+      "assistant": "Assistant",
+      "system": "System",
+      "tool": "Tool",
+      "user": "User"
+    },
+    "status": {
+      "acting": "Acting",
+      "error": "Error",
+      "idle": "Idle",
+      "streaming": "Streaming",
+      "thinking": "Thinking"
+    },
+    "tool": {
+      "input": "Input",
+      "output": "Output",
+      "status": {
+        "complete": "Complete",
+        "error": "Error",
+        "pending": "Pending",
+        "running": "Running"
+      }
+    }
+  },
+  "approvalInbox": {
+    "approve": "Approve",
+    "approveItem": "Approve {title}",
+    "approving": "Approving…",
+    "batchApprove": "Batch approve",
+    "batchRegion": "Batch actions",
+    "clear": "Clear",
+    "empty": "No pending approvals",
+    "reject": "Reject",
+    "rejectItem": "Reject {title}",
+    "rejecting": "Rejecting…",
+    "risk": {
+      "critical": "CRITICAL",
+      "high": "HIGH",
+      "low": "LOW",
+      "medium": "MEDIUM"
+    },
+    "selectItem": "Select {title}",
+    "selectedCount": "{count} selected",
+    "sla": {
+      "daysLeft": "{count}d left",
+      "hoursLeft": "{count}h left",
+      "minutesLeft": "{count}m left",
+      "overdue": "Overdue"
+    },
+    "submitted": {
+      "daysAgo": "{count}d ago",
+      "hoursAgo": "{count}h ago",
+      "justNow": "just now",
+      "minutesAgo": "{count}m ago"
+    }
+  },
+  "moderationGallery": {
+    "approve": "Approve",
+    "approveAll": "Approve all",
+    "approveItem": "Approve media by {uploader}",
+    "approving": "Approving…",
+    "bulkRegion": "Bulk actions",
+    "cancel": "Cancel",
+    "clear": "Clear",
+    "confirmRejectDescription": "Reject {count} selected item(s)? This marks them as rejected.",
+    "confirmRejectTitle": "Reject selected media",
+    "empty": "No media items to review",
+    "mediaAlt": "Media by {uploader}",
+    "reject": "Reject",
+    "rejectAll": "Reject all",
+    "rejectItem": "Reject media by {uploader}",
+    "rejecting": "Rejecting…",
+    "selectItem": "Select media by {uploader}",
+    "selectedCount": "{count} selected",
+    "type": {
+      "video": "Video"
+    },
+    "uploaded": {
+      "daysAgo": "{count}d ago",
+      "hoursAgo": "{count}h ago",
+      "justNow": "just now",
+      "minutesAgo": "{count}m ago"
+    },
+    "views": "{count} views"
+  },
+  "operationalLedger": {
+    "column": {
+      "actor": "Actor",
+      "description": "Description",
+      "quantity": "Quantity",
+      "reason": "Reason",
+      "reference": "Reference",
+      "timestamp": "Timestamp"
+    },
+    "empty": "No ledger entries found",
+    "entryCount": "{count} entries",
+    "filterRegion": "Ledger filters",
+    "filterType": "Filter by type",
+    "tableRegion": "Ledger entries",
+    "type": {
+      "credit": "Credit",
+      "debit": "Debit"
+    }
+  },
+  "shiftMatrix": {
+    "cell": {
+      "assignAria": "{role}, {slot}: {assigned} of {required} assigned — {coverage}. Activate to quick-assign.",
+      "assignAriaWithStaff": "{role}, {slot}: {assigned} of {required} assigned ({staff}) — {coverage}. Activate to quick-assign."
+    },
+    "coverage": {
+      "critical": "Critical",
+      "empty": "No assignment",
+      "full": "Full coverage",
+      "gap": "Gap"
+    },
+    "empty": "No shifts to display",
+    "legend": {
+      "critical": "Critical",
+      "full": "Full coverage",
+      "gap": "Gap"
+    },
+    "role": "Role",
+    "tableRegion": "Shift coverage matrix"
+  },
+  "timeline": {
+    "type": {
+      "error": "Error",
+      "info": "Info",
+      "success": "Success",
+      "warning": "Warning"
+    }
   }
 }

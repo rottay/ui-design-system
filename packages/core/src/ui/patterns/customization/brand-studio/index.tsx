@@ -1422,7 +1422,7 @@ export function PatternBrandStudio({
         className="brand-studio-layout ds-pattern-brand-studio__preview-grid"
         data-part="preview-grid"
       >
-        <Stack className="ds-pattern-brand-studio__editor" data-part="editor" spacing="md">
+        <Stack className="ds-pattern-brand-studio__editor" data-part="editor-column" spacing="md">
           <Text
             className="ds-pattern-brand-studio__editor-heading"
             data-part="editor-heading"
@@ -1434,7 +1434,7 @@ export function PatternBrandStudio({
           <BrandThemeEditor theme={theme} emit={emit} />
         </Stack>
 
-        <Stack className="ds-pattern-brand-studio__preview-grid" data-part="preview-grid" spacing="lg">
+        <Stack className="ds-pattern-brand-studio__preview-grid" data-part="preview-column" spacing="lg">
           <Text
             className="ds-pattern-brand-studio__preview-heading"
             data-part="preview-heading"
@@ -1460,7 +1460,7 @@ export function PatternBrandStudio({
 
           <Card
             className="ds-pattern-brand-studio__action-panel"
-            data-part="action"
+            data-part="action-panel"
             data-state={hostileReports ? 'complete' : 'idle'}
           >
             <Stack spacing="sm">

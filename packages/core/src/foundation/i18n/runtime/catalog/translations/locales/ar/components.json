@@ -308,7 +308,9 @@
   "activityLog": {
     "filter": {
       "allActions": "كل الإجراءات",
-      "allUsers": "كل المستخدمين"
+      "allUsers": "كل المستخدمين",
+      "byAction": "تصفية حسب الإجراء",
+      "byUser": "تصفية حسب المستخدم"
     },
     "empty": "لا يوجد نشاط مسجل",
     "time": {
@@ -318,7 +320,8 @@
       "daysAgo": "قبل {count} ي"
     },
     "onEntity": "على {entity}",
-    "onEntityWithId": "على {entity} #{id}"
+    "onEntityWithId": "على {entity} #{id}",
+    "feedLabel": "موجز النشاط"
   },
   "transfer": {
     "source_title": "المصدر",
@@ -1039,7 +1042,11 @@
     "justNow": "الآن",
     "minutesAgo": "منذ {count} دقيقة",
     "hoursAgo": "منذ {count} ساعة",
-    "daysAgo": "منذ {count} يوم"
+    "daysAgo": "منذ {count} يوم",
+    "groupToday": "اليوم",
+    "groupEarlier": "سابقًا",
+    "unread": "غير مقروءة",
+    "unreadCount": "{count} غير مقروءة"
   },
   "popconfirm": {
     "ok": "نعم",
@@ -1395,6 +1402,103 @@
       "packOther": "حزم",
       "packMissing": "{variable} مُشار إليها لكنها غير محمّلة",
       "packMissingDetail": "{referencedBy} يعود إلى خطوطه الاحتياطية المؤلَّفة"
+    },
+    "contrast": {
+      "allPass": "كل أزواج الألوان القابلة للفحص تحقق النسبة المطلوبة.",
+      "failing": "{count} غير مطابق",
+      "pass": "متوافق مع WCAG AA",
+      "titleDark": "التباين على خلفية داكنة",
+      "titleLight": "التباين على خلفية فاتحة"
+    },
+    "editorHeading": "حقول BrandTheme المحدودة",
+    "field": {
+      "accent": "لون التمييز",
+      "activeTabColor": "لون التبويب النشط",
+      "baseFont": "الخط الأساسي",
+      "cardBg": "خلفية البطاقة",
+      "cardBorder": "حدود البطاقة",
+      "cardMutedText": "نص البطاقة الخافت",
+      "cardText": "نص البطاقة",
+      "darkBackground": "الخلفية الداكنة (الوضع الداكن)",
+      "darkPrimary": "الأساسي الداكن (الوضع الداكن)",
+      "densityScale": "مقياس الكثافة",
+      "displayFont": "خط العرض",
+      "effectIntensity": "شدة التأثيرات",
+      "entrance": "الدخول",
+      "entranceDuration": "مدة الدخول (مللي ثانية)",
+      "error": "خطأ",
+      "headingFont": "خط العناوين",
+      "headingWeight": "وزن العناوين",
+      "hoverLift": "ارتفاع عند التحويم",
+      "hoverScale": "تكبير عند التحويم",
+      "info": "معلومات",
+      "inputBg": "خلفية الحقل",
+      "inputBorder": "حدود الحقل",
+      "labelStyle": "نمط التسمية",
+      "modalBg": "خلفية النافذة المنبثقة",
+      "modalOverlay": "طبقة تغطية النافذة المنبثقة",
+      "monoFont": "خط أحادي المسافة",
+      "primary": "أساسي",
+      "primaryButtonBg": "خلفية الزر الأساسي",
+      "primaryButtonText": "نص الزر الأساسي",
+      "pulseSpeed": "سرعة النبض",
+      "radiusLg": "الانحناء lg",
+      "radiusMd": "الانحناء md",
+      "radiusSm": "الانحناء sm",
+      "radiusXl": "الانحناء xl",
+      "secondary": "ثانوي",
+      "skeleton": "الهيكل العظمي",
+      "success": "نجاح",
+      "tableHeaderBg": "خلفية رأس الجدول",
+      "tableRowHover": "تحويم صف الجدول",
+      "tabsBorder": "حدود التبويبات",
+      "warning": "تحذير"
+    },
+    "hostile": {
+      "helper": "يطبّق قيمًا متطرفة عن قصد ويعرض أزواج الألوان غير المطابقة لكل خلفية.",
+      "run": "تشغيل الفحص",
+      "title": "فحص المدخلات القصوى"
+    },
+    "inherit": "وراثة",
+    "option": {
+      "bounce": "ارتداد",
+      "capitalize": "بحرف كبير",
+      "fade": "تلاشٍ",
+      "fast": "سريع",
+      "heavier": "أثقل",
+      "lighter": "أخف",
+      "none": "بلا",
+      "normal": "عادي",
+      "pulse": "نبض",
+      "sentence": "نمط الجملة",
+      "shimmer": "بريق",
+      "slideUp": "انزلاق لأعلى",
+      "slow": "بطيء",
+      "spring": "زنبركي",
+      "uppercase": "أحرف كبيرة",
+      "wave": "موجة"
+    },
+    "preview": {
+      "fallback": "مرّر فتحة galleries لعرض حالات المكوّنات الحية هنا."
+    },
+    "previewHeading": "معاينة حية على كلتا الخلفيتين",
+    "section": {
+      "chrome": "عناصر الواجهة",
+      "motion": "الحركة",
+      "palette": "لوحة الألوان",
+      "surfaces": "الأسطح",
+      "typography": "الطباعة"
+    },
+    "tenantPreview": {
+      "fallback": "مرّر فتحة galleries لعرض الأسطح الحية ضمن هذا السمة.",
+      "heading": "معاينة حية لسمة المستأجر",
+      "invalidDocument": "مستند غير صالح"
+    },
+    "title": "استوديو العلامة التجارية",
+    "violation": {
+      "detail": "{foreground} على {ground}",
+      "detailSuggestion": "{foreground} على {ground} — جرّب {suggestion} ({ratio} : 1)",
+      "ratio": "{ratio} : 1 · يتطلب {required} : 1 ({level})"
     }
   },
   "brandingPreview": {
@@ -1406,7 +1510,12 @@
     }
   },
   "tokenInspector": {
-    "hint": "Ctrl+Shift+T أو Esc للإغلاق | انقر للتثبيت"
+    "hint": "Ctrl+Shift+T أو Esc للإغلاق | انقر للتثبيت",
+    "title": "مفتش الرموز",
+    "pinned": "مثبّت",
+    "hover": "تحويم",
+    "empty": "مرّر المؤشر فوق عنصر لفحص رموزه",
+    "hintTruncated": "عرض {shown} من {total} | Ctrl+Shift+T أو Esc للإغلاق | انقر للتثبيت"
   },
   "presence": {
     "barLabel": "الأشخاص المتواجدون",
@@ -1453,5 +1562,149 @@
   "bottomTabBar": {
     "itemWithBadge": "{label}, {count}",
     "navigation": "التنقل السفلي"
+  },
+  "assistant": {
+    "delivery": {
+      "error": "خطأ",
+      "pending": "قيد الانتظار",
+      "sending": "جارٍ الإرسال",
+      "sent": "أُرسل",
+      "streaming": "بث مباشر"
+    },
+    "diff": {
+      "after": "بعد",
+      "before": "قبل"
+    },
+    "role": {
+      "assistant": "المساعد",
+      "system": "النظام",
+      "tool": "أداة",
+      "user": "المستخدم"
+    },
+    "status": {
+      "acting": "قيد التنفيذ",
+      "error": "خطأ",
+      "idle": "خامل",
+      "streaming": "بث مباشر",
+      "thinking": "يفكّر"
+    },
+    "tool": {
+      "input": "الإدخال",
+      "output": "الإخراج",
+      "status": {
+        "complete": "مكتمل",
+        "error": "خطأ",
+        "pending": "قيد الانتظار",
+        "running": "قيد التشغيل"
+      }
+    }
+  },
+  "approvalInbox": {
+    "approve": "اعتماد",
+    "approveItem": "اعتماد {title}",
+    "approving": "جارٍ الاعتماد…",
+    "batchApprove": "اعتماد جماعي",
+    "batchRegion": "إجراءات جماعية",
+    "clear": "مسح",
+    "empty": "لا توجد موافقات معلّقة",
+    "reject": "رفض",
+    "rejectItem": "رفض {title}",
+    "rejecting": "جارٍ الرفض…",
+    "risk": {
+      "critical": "حرج",
+      "high": "مرتفع",
+      "low": "منخفض",
+      "medium": "متوسط"
+    },
+    "selectItem": "تحديد {title}",
+    "selectedCount": "{count} محدد",
+    "sla": {
+      "daysLeft": "يتبقى {count} ي",
+      "hoursLeft": "يتبقى {count} س",
+      "minutesLeft": "يتبقى {count} د",
+      "overdue": "متأخر"
+    },
+    "submitted": {
+      "daysAgo": "قبل {count} ي",
+      "hoursAgo": "قبل {count} س",
+      "justNow": "الآن",
+      "minutesAgo": "قبل {count} د"
+    }
+  },
+  "moderationGallery": {
+    "approve": "اعتماد",
+    "approveAll": "اعتماد الكل",
+    "approveItem": "اعتماد وسائط {uploader}",
+    "approving": "جارٍ الاعتماد…",
+    "bulkRegion": "إجراءات جماعية",
+    "cancel": "إلغاء",
+    "clear": "مسح",
+    "confirmRejectDescription": "رفض {count} عنصر (عناصر) محدد؟ سيؤدي هذا إلى تعليمها كمرفوضة.",
+    "confirmRejectTitle": "رفض الوسائط المحددة",
+    "empty": "لا توجد وسائط للمراجعة",
+    "mediaAlt": "وسائط بواسطة {uploader}",
+    "reject": "رفض",
+    "rejectAll": "رفض الكل",
+    "rejectItem": "رفض وسائط {uploader}",
+    "rejecting": "جارٍ الرفض…",
+    "selectItem": "تحديد وسائط {uploader}",
+    "selectedCount": "{count} محدد",
+    "type": {
+      "video": "فيديو"
+    },
+    "uploaded": {
+      "daysAgo": "قبل {count} ي",
+      "hoursAgo": "قبل {count} س",
+      "justNow": "الآن",
+      "minutesAgo": "قبل {count} د"
+    },
+    "views": "{count} مشاهدة"
+  },
+  "operationalLedger": {
+    "column": {
+      "actor": "الجهة",
+      "description": "الوصف",
+      "quantity": "الكمية",
+      "reason": "السبب",
+      "reference": "المرجع",
+      "timestamp": "الطابع الزمني"
+    },
+    "empty": "لم يتم العثور على قيود دفتر",
+    "entryCount": "{count} قيد",
+    "filterRegion": "عوامل تصفية الدفتر",
+    "filterType": "تصفية حسب النوع",
+    "tableRegion": "قيود الدفتر",
+    "type": {
+      "credit": "دائن",
+      "debit": "مدين"
+    }
+  },
+  "shiftMatrix": {
+    "cell": {
+      "assignAria": "{role}، {slot}: {assigned} من {required} معيّن — {coverage}. فعّل للتعيين السريع.",
+      "assignAriaWithStaff": "{role}، {slot}: {assigned} من {required} معيّن ({staff}) — {coverage}. فعّل للتعيين السريع."
+    },
+    "coverage": {
+      "critical": "حرج",
+      "empty": "لا يوجد تعيين",
+      "full": "تغطية كاملة",
+      "gap": "نقص"
+    },
+    "empty": "لا توجد نوبات لعرضها",
+    "legend": {
+      "critical": "حرج",
+      "full": "تغطية كاملة",
+      "gap": "نقص"
+    },
+    "role": "الدور",
+    "tableRegion": "مصفوفة تغطية النوبات"
+  },
+  "timeline": {
+    "type": {
+      "error": "خطأ",
+      "info": "معلومات",
+      "success": "نجاح",
+      "warning": "تحذير"
+    }
   }
 }

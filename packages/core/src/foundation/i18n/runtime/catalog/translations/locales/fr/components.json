@@ -917,12 +917,18 @@
     "justNow": "à l’instant",
     "minutesAgo": "il y a {count} min",
     "hoursAgo": "il y a {count} h",
-    "daysAgo": "il y a {count} j"
+    "daysAgo": "il y a {count} j",
+    "groupToday": "Aujourd'hui",
+    "groupEarlier": "Précédentes",
+    "unread": "Non lue",
+    "unreadCount": "{count} non lues"
   },
   "activityLog": {
     "filter": {
       "allActions": "Toutes les actions",
-      "allUsers": "Tous les utilisateurs"
+      "allUsers": "Tous les utilisateurs",
+      "byAction": "Filtrer par action",
+      "byUser": "Filtrer par utilisateur"
     },
     "empty": "Aucune activité enregistrée",
     "time": {
@@ -932,7 +938,8 @@
       "daysAgo": "il y a {count} j"
     },
     "onEntity": "sur {entity}",
-    "onEntityWithId": "sur {entity} n° {id}"
+    "onEntityWithId": "sur {entity} n° {id}",
+    "feedLabel": "Flux d'activité"
   },
   "approvalWorkflow": {
     "status": {
@@ -1195,6 +1202,103 @@
       "packOther": "packs",
       "packMissing": "{variable} est référencée mais non chargée",
       "packMissingDetail": "{referencedBy} revient à ses polices de repli déclarées"
+    },
+    "contrast": {
+      "allPass": "Toutes les paires de couleurs vérifiables respectent le ratio requis.",
+      "failing": "{count} en échec",
+      "pass": "Conforme WCAG AA",
+      "titleDark": "Contraste sur fond sombre",
+      "titleLight": "Contraste sur fond clair"
+    },
+    "editorHeading": "Champs délimités de BrandTheme",
+    "field": {
+      "accent": "Accent",
+      "activeTabColor": "Couleur de l'onglet actif",
+      "baseFont": "Police de base",
+      "cardBg": "Fond de carte",
+      "cardBorder": "Bordure de carte",
+      "cardMutedText": "Texte atténué de carte",
+      "cardText": "Texte de carte",
+      "darkBackground": "Fond sombre (base sombre)",
+      "darkPrimary": "Primaire sombre (base sombre)",
+      "densityScale": "Échelle de densité",
+      "displayFont": "Police d'affichage",
+      "effectIntensity": "Intensité des effets",
+      "entrance": "Entrée",
+      "entranceDuration": "Durée d'entrée (ms)",
+      "error": "Erreur",
+      "headingFont": "Police des titres",
+      "headingWeight": "Graisse des titres",
+      "hoverLift": "Levée au survol",
+      "hoverScale": "Échelle au survol",
+      "info": "Info",
+      "inputBg": "Fond de champ",
+      "inputBorder": "Bordure de champ",
+      "labelStyle": "Style d'étiquette",
+      "modalBg": "Fond de modale",
+      "modalOverlay": "Superposition de modale",
+      "monoFont": "Police monospace",
+      "primary": "Primaire",
+      "primaryButtonBg": "Fond du bouton primaire",
+      "primaryButtonText": "Texte du bouton primaire",
+      "pulseSpeed": "Vitesse de pulsation",
+      "radiusLg": "Rayon lg",
+      "radiusMd": "Rayon md",
+      "radiusSm": "Rayon sm",
+      "radiusXl": "Rayon xl",
+      "secondary": "Secondaire",
+      "skeleton": "Squelette",
+      "success": "Succès",
+      "tableHeaderBg": "Fond d'en-tête de tableau",
+      "tableRowHover": "Survol de ligne de tableau",
+      "tabsBorder": "Bordure des onglets",
+      "warning": "Avertissement"
+    },
+    "hostile": {
+      "helper": "Applique des valeurs délibérément extrêmes et signale les paires de couleurs en échec pour chaque fond.",
+      "run": "Lancer la vérification",
+      "title": "Vérification des entrées extrêmes"
+    },
+    "inherit": "Hériter",
+    "option": {
+      "bounce": "Rebond",
+      "capitalize": "Capitaliser",
+      "fade": "Fondu",
+      "fast": "Rapide",
+      "heavier": "Plus épais",
+      "lighter": "Plus léger",
+      "none": "Aucun",
+      "normal": "Normal",
+      "pulse": "Pulsation",
+      "sentence": "Type phrase",
+      "shimmer": "Scintillement",
+      "slideUp": "Glisser vers le haut",
+      "slow": "Lent",
+      "spring": "Ressort",
+      "uppercase": "Majuscules",
+      "wave": "Vague"
+    },
+    "preview": {
+      "fallback": "Fournissez un emplacement galleries pour afficher ici les états de composants en direct."
+    },
+    "previewHeading": "Aperçu en direct sur les deux fonds",
+    "section": {
+      "chrome": "Chrome",
+      "motion": "Mouvement",
+      "palette": "Palette",
+      "surfaces": "Surfaces",
+      "typography": "Typographie"
+    },
+    "tenantPreview": {
+      "fallback": "Fournissez un emplacement galleries pour afficher des surfaces en direct sous ce thème.",
+      "heading": "Aperçu en direct du thème du tenant",
+      "invalidDocument": "document non valide"
+    },
+    "title": "Brand Studio",
+    "violation": {
+      "detail": "{foreground} sur {ground}",
+      "detailSuggestion": "{foreground} sur {ground} — essayez {suggestion} ({ratio} : 1)",
+      "ratio": "{ratio} : 1 · nécessite {required} : 1 ({level})"
     }
   },
   "brandingPreview": {
@@ -1206,7 +1310,12 @@
     }
   },
   "tokenInspector": {
-    "hint": "Ctrl+Shift+T ou Échap pour fermer | Cliquer pour épingler"
+    "hint": "Ctrl+Shift+T ou Échap pour fermer | Cliquer pour épingler",
+    "title": "Inspecteur de tokens",
+    "pinned": "ÉPINGLÉ",
+    "hover": "SURVOL",
+    "empty": "Survolez un élément pour inspecter ses tokens",
+    "hintTruncated": "Affichage de {shown} sur {total} | Ctrl+Shift+T ou Échap pour fermer | Cliquer pour épingler"
   },
   "presence": {
     "barLabel": "Personnes présentes",
@@ -1253,5 +1362,149 @@
   "bottomTabBar": {
     "itemWithBadge": "{label}, {count}",
     "navigation": "Navigation inférieure"
+  },
+  "assistant": {
+    "delivery": {
+      "error": "Erreur",
+      "pending": "En attente",
+      "sending": "Envoi en cours",
+      "sent": "Envoyé",
+      "streaming": "Diffusion en cours"
+    },
+    "diff": {
+      "after": "Après",
+      "before": "Avant"
+    },
+    "role": {
+      "assistant": "Assistant",
+      "system": "Système",
+      "tool": "Outil",
+      "user": "Utilisateur"
+    },
+    "status": {
+      "acting": "Action en cours",
+      "error": "Erreur",
+      "idle": "Inactif",
+      "streaming": "Diffusion en cours",
+      "thinking": "Réflexion en cours"
+    },
+    "tool": {
+      "input": "Entrée",
+      "output": "Sortie",
+      "status": {
+        "complete": "Terminé",
+        "error": "Erreur",
+        "pending": "En attente",
+        "running": "En cours"
+      }
+    }
+  },
+  "approvalInbox": {
+    "approve": "Approuver",
+    "approveItem": "Approuver {title}",
+    "approving": "Approbation en cours…",
+    "batchApprove": "Approuver en lot",
+    "batchRegion": "Actions groupées",
+    "clear": "Effacer",
+    "empty": "Aucune approbation en attente",
+    "reject": "Rejeter",
+    "rejectItem": "Rejeter {title}",
+    "rejecting": "Rejet en cours…",
+    "risk": {
+      "critical": "CRITIQUE",
+      "high": "ÉLEVÉ",
+      "low": "FAIBLE",
+      "medium": "MOYEN"
+    },
+    "selectItem": "Sélectionner {title}",
+    "selectedCount": "{count} sélectionnés",
+    "sla": {
+      "daysLeft": "reste {count} j",
+      "hoursLeft": "reste {count} h",
+      "minutesLeft": "reste {count} min",
+      "overdue": "En retard"
+    },
+    "submitted": {
+      "daysAgo": "il y a {count} j",
+      "hoursAgo": "il y a {count} h",
+      "justNow": "à l'instant",
+      "minutesAgo": "il y a {count} min"
+    }
+  },
+  "moderationGallery": {
+    "approve": "Approuver",
+    "approveAll": "Tout approuver",
+    "approveItem": "Approuver le média de {uploader}",
+    "approving": "Approbation en cours…",
+    "bulkRegion": "Actions groupées",
+    "cancel": "Annuler",
+    "clear": "Effacer",
+    "confirmRejectDescription": "Rejeter {count} élément(s) sélectionné(s) ? Cela les marquera comme rejetés.",
+    "confirmRejectTitle": "Rejeter le média sélectionné",
+    "empty": "Aucun média à examiner",
+    "mediaAlt": "Média de {uploader}",
+    "reject": "Rejeter",
+    "rejectAll": "Tout rejeter",
+    "rejectItem": "Rejeter le média de {uploader}",
+    "rejecting": "Rejet en cours…",
+    "selectItem": "Sélectionner le média de {uploader}",
+    "selectedCount": "{count} sélectionnés",
+    "type": {
+      "video": "Vidéo"
+    },
+    "uploaded": {
+      "daysAgo": "il y a {count} j",
+      "hoursAgo": "il y a {count} h",
+      "justNow": "à l'instant",
+      "minutesAgo": "il y a {count} min"
+    },
+    "views": "{count} vues"
+  },
+  "operationalLedger": {
+    "column": {
+      "actor": "Acteur",
+      "description": "Description",
+      "quantity": "Quantité",
+      "reason": "Motif",
+      "reference": "Référence",
+      "timestamp": "Horodatage"
+    },
+    "empty": "Aucune écriture trouvée",
+    "entryCount": "{count} écritures",
+    "filterRegion": "Filtres du grand livre",
+    "filterType": "Filtrer par type",
+    "tableRegion": "Écritures du grand livre",
+    "type": {
+      "credit": "Crédit",
+      "debit": "Débit"
+    }
+  },
+  "shiftMatrix": {
+    "cell": {
+      "assignAria": "{role}, {slot} : {assigned} sur {required} affectés — {coverage}. Activer pour une affectation rapide.",
+      "assignAriaWithStaff": "{role}, {slot} : {assigned} sur {required} affectés ({staff}) — {coverage}. Activer pour une affectation rapide."
+    },
+    "coverage": {
+      "critical": "Critique",
+      "empty": "Aucune affectation",
+      "full": "Couverture complète",
+      "gap": "Écart"
+    },
+    "empty": "Aucun quart à afficher",
+    "legend": {
+      "critical": "Critique",
+      "full": "Couverture complète",
+      "gap": "Écart"
+    },
+    "role": "Rôle",
+    "tableRegion": "Matrice de couverture des quarts"
+  },
+  "timeline": {
+    "type": {
+      "error": "Erreur",
+      "info": "Info",
+      "success": "Succès",
+      "warning": "Avertissement"
+    }
   }
 }

@@ -23,7 +23,8 @@
 
 import React from 'react';
 
-import { Box, Text } from '../../../primitives';
+import { Avatar, Box, Text } from '../../../primitives';
+import type { AvatarSize } from '../../../primitives';
 import { formatList, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 // ---------------------------------------------------------------------------
@@ -89,12 +90,25 @@ export interface LiveCursorProps {
 // Shared constants
 // ---------------------------------------------------------------------------
 
+// The face geometry is the Avatar primitive's governed size scale, not a
+// pattern-local pixel table: `token` selects the primitive size and the ring
+// is the only px the stack still owns.
 const SIZE_MAP = {
-  sm: { avatar: 28, font: 10, ring: 2 },
-  md: { avatar: 36, font: 12, ring: 2.5 },
+  sm: { token: 'sm' as AvatarSize, font: 10, ring: 2 },
+  md: { token: 'md' as AvatarSize, font: 12, ring: 2 },
 } as const;
 
 const DEFAULT_COLOR = 'var(--ds-color-primary)';
+
+/** Outer slot edge = the primitive's face plus the pattern-owned ring. */
+function slotSize(token: AvatarSize, ring: number): string {
+  return `calc(var(--ds-avatar-${token}-size) + ${ring * 2}px)`;
+}
+
+/** Stack overlap, kept at the historical 0.3 of the face. */
+function slotOverlap(token: AvatarSize): string {
+  return `calc(var(--ds-avatar-${token}-size) * -0.3)`;
+}
 
 // ---------------------------------------------------------------------------
 // PresenceBar
@@ -138,7 +152,8 @@ export function PresenceBar({
   const dims = SIZE_MAP[size];
   const visibleUsers = users.slice(0, maxVisible);
   const overflowCount = Math.max(0, users.length - maxVisible);
-  const overlap = Math.round(dims.avatar * 0.3);
+  const slotEdge = slotSize(dims.token, dims.ring);
+  const overlap = slotOverlap(dims.token);
 
   // The stack reads as a LIST to assistive tech: who is present is
   // information, not decoration -- each avatar is a named listitem (the
@@ -165,37 +180,21 @@ export function PresenceBar({
             aria-label={user.name}
             title={showNames ? user.name : undefined}
             style={{
-              // Runtime-only inline: size-variant pixel geometry, the
-              // caller-supplied ring color (bound to the same size variant),
-              // the overlap offset and the stacking order. Static geometry,
-              // the hover lift and its transition are skin-owned.
-              inlineSize: dims.avatar,
-              blockSize: dims.avatar,
+              // Runtime-only inline: the slot edge derived from the primitive's
+              // size token, the caller-supplied ring color, the overlap offset
+              // and the stacking order. Static geometry, the hover lift and its
+              // transition are skin-owned.
+              inlineSize: slotEdge,
+              blockSize: slotEdge,
               border: `${dims.ring}px solid ${ringColor}`,
-              marginInlineStart: index > 0 ? -overlap : 0,
+              marginInlineStart: index > 0 ? overlap : 0,
               zIndex: users.length - index,
             }}
           >
-            {user.avatar ? (
-              <img
-                src={user.avatar}
-                alt={user.name}
-              />
-            ) : (
-              <Text
-                data-part="avatar-initials"
-                weight="semibold"
-                style={{
-                  // Runtime-only inline: size-variant font + the caller ring
-                  // color as the initials ink. Static line-height/user-select
-                  // are skin-owned.
-                  fontSize: dims.font,
-                  color: ringColor,
-                }}
-              >
-                {getInitials(user.name)}
-              </Text>
-            )}
+            {/* The face is the Avatar primitive: it owns the image element, the
+                derived initials, the empty-fallback glyph, the load/error
+                lifecycle and initials typography. */}
+            <Avatar size={dims.token} src={user.avatar} name={user.name} />
           </Box>
         );
       })}
@@ -217,13 +216,13 @@ export function PresenceBar({
             i18n?.locale ?? 'en',
           )}
           style={{
-            // Runtime-only inline: size-variant geometry, the ring-width
-            // hatch (tracks `size`, consumed by the skin's static border) and
-            // the overlap offset. Statics live in the skin.
-            inlineSize: dims.avatar,
-            blockSize: dims.avatar,
+            // Runtime-only inline: the slot edge shared with the faces, the
+            // ring-width hatch (tracks `size`, consumed by the skin's static
+            // border) and the overlap offset. Statics live in the skin.
+            inlineSize: slotEdge,
+            blockSize: slotEdge,
             '--ds-presence-badge-ring': `${dims.ring}px`,
-            marginInlineStart: -overlap,
+            marginInlineStart: overlap,
           } as React.CSSProperties}
         >
           <Text
@@ -390,13 +389,6 @@ export function LiveCursor({
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
-
-/** Extracts up to two uppercase initials from a full name. */
-function getInitials(name: string): string {
-  const parts = name.trim().split(/\s+/);
-  if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
-  return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
-}
 
 /**
  * Builds a grammatically correct typing label from a list of users.

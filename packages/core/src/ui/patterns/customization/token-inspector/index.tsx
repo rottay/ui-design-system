@@ -33,9 +33,27 @@ interface TokenInfo {
 interface InspectorState {
   active: boolean;
   tokens: TokenInfo[];
+  /** Total collected before the display cap, so truncation stays visible. */
+  totalTokens: number;
   position: { x: number; y: number };
   element: string;
   pinned: boolean;
+}
+
+/** Display cap for the token list; the footer reports the full count. */
+const TOKEN_ROW_LIMIT = 20;
+
+/** Gap kept between the panel and the viewport edge when there is room. */
+const VIEWPORT_MARGIN = 8;
+
+/** Interpolates `{name}` placeholders into a floor string. The optional i18n
+ *  channel returns the floor verbatim with no provider mounted, so the floor
+ *  has to carry its own substitution or the raw placeholder ships. */
+function applyFloorParams(floor: string, params?: Record<string, string | number>): string {
+  if (!params) return floor;
+  return floor.replace(/\{(\w+)\}/g, (match, name: string) =>
+    Object.prototype.hasOwnProperty.call(params, name) ? String(params[name]) : match
+  );
 }
 
 /**
@@ -46,11 +64,15 @@ export function TokenInspector(): React.ReactElement | null {
   // Optional channel with an English floor: the overlay renders standalone
   // (no I18nProvider) without crashing, and never echoes a raw key.
   const i18n = useOptionalTranslation('components');
-  const t = (key: string, floor: string): string => i18n?.tOr(key, floor) ?? floor;
+  const t = (key: string, floor: string, params?: Record<string, string | number>): string => {
+    const resolvedFloor = applyFloorParams(floor, params);
+    return i18n?.tOr(key, resolvedFloor, params) ?? resolvedFloor;
+  };
 
   const [state, setState] = useState<InspectorState>({
     active: false,
     tokens: [],
+    totalTokens: 0,
     position: { x: 0, y: 0 },
     element: '',
     pinned: false,
@@ -62,7 +84,7 @@ export function TokenInspector(): React.ReactElement | null {
     const handler = (e: KeyboardEvent) => {
       if (e.ctrlKey && e.shiftKey && e.key === 'T') {
         e.preventDefault();
-        setState(s => ({ ...s, active: !s.active, pinned: false, tokens: [] }));
+        setState(s => ({ ...s, active: !s.active, pinned: false, tokens: [], totalTokens: 0, element: '' }));
         return;
       }
       if (e.key === 'Escape') {
@@ -70,7 +92,7 @@ export function TokenInspector(): React.ReactElement | null {
           if (!s.active) return s;
           return s.pinned
             ? { ...s, pinned: false }
-            : { ...s, active: false, tokens: [] };
+            : { ...s, active: false, tokens: [], totalTokens: 0, element: '' };
         });
       }
     };
@@ -123,14 +145,27 @@ export function TokenInspector(): React.ReactElement | null {
     const tagName = el.tagName.toLowerCase();
     const className = el.className ? `.${String(el.className).split(' ').slice(0, 2).join('.')}` : '';
 
+    // Clamp against the panel's MEASURED box, not a copy of the skin's size:
+    // the skin owns `inline-size`, and hardcoded extents overflowed any
+    // viewport between the panel width and the retired 380/400 constants.
+    const panelBox = panelRef.current?.getBoundingClientRect();
+    const panelWidth = panelBox?.width ?? 0;
+    const panelHeight = panelBox?.height ?? 0;
+    const clampAxis = (desired: number, extent: number, viewport: number): number => {
+      const upper = viewport - extent - VIEWPORT_MARGIN;
+      // Panel wider/taller than the viewport: hug the start edge instead of
+      // adding a margin the viewport cannot pay for.
+      if (upper < VIEWPORT_MARGIN) return Math.max(0, viewport - extent);
+      return Math.max(VIEWPORT_MARGIN, Math.min(desired, upper));
+    };
+
     setState(s => ({
       ...s,
-      tokens: tokens.slice(0, 20),
+      tokens: tokens.slice(0, TOKEN_ROW_LIMIT),
+      totalTokens: tokens.length,
       position: {
-        // clamped both ways: a viewport narrower than the panel offset must
-        // never push the panel offscreen (negative coordinates)
-        x: Math.max(8, Math.min(e.clientX + 16, window.innerWidth - 380)),
-        y: Math.max(8, Math.min(e.clientY + 16, window.innerHeight - 400)),
+        x: clampAxis(e.clientX + 16, panelWidth, window.innerWidth),
+        y: clampAxis(e.clientY + 16, panelHeight, window.innerHeight),
       },
       element: `${tagName}${className} | tenant:${tenant} engine:${engine} theme:${theme}`,
     }));
@@ -166,6 +201,8 @@ export function TokenInspector(): React.ReactElement | null {
     pointerEvents: state.pinned ? 'auto' : 'none',
   };
 
+  const hiddenTokenCount = Math.max(0, state.totalTokens - state.tokens.length);
+
   return React.createElement('div', {
     ref: panelRef,
     className: 'ds-pattern-token-inspector',
@@ -173,6 +210,9 @@ export function TokenInspector(): React.ReactElement | null {
     'data-pinned': state.pinned,
     role: 'region',
     'aria-label': t('tokenInspector.title', 'Token Inspector'),
+    // The skin caps the panel and lets it scroll; a scrollable region must be
+    // keyboard-reachable, and only the pinned panel accepts pointer events.
+    tabIndex: state.pinned ? 0 : undefined,
     style: panelStyle,
   },
     // Header
@@ -185,45 +225,55 @@ export function TokenInspector(): React.ReactElement | null {
         'data-pinned': state.pinned,
       }, state.pinned ? t('tokenInspector.pinned', 'PINNED') : t('tokenInspector.hover', 'HOVER')),
     ),
-    // Element info
-    React.createElement('div', {
-      'data-part': 'element-info',
-    }, state.element),
+    // Element info -- omitted before the first hover so the panel never opens
+    // on an empty bordered strip.
+    state.element
+      ? React.createElement('div', {
+          'data-part': 'element-info',
+        }, state.element)
+      : null,
     // Tokens
     state.tokens.length === 0
       ? React.createElement('div', {
           'data-part': 'empty',
         }, t('tokenInspector.empty', 'Hover an element to inspect its tokens'))
-      : state.tokens.map((t, i) =>
+      : state.tokens.map((token, i) =>
           React.createElement('div', {
             key: i,
             'data-part': 'token-row',
           },
-            React.createElement('span', { 'data-part': 'token-name' }, t.name),
+            React.createElement('span', { 'data-part': 'token-name' }, token.name),
             React.createElement('span', {
               'data-part': 'token-value',
-              'data-value-kind': t.value.startsWith('#') || t.value.startsWith('rgb') ? 'color' : 'text',
+              'data-value-kind': token.value.startsWith('#') || token.value.startsWith('rgb') ? 'color' : 'text',
               // Truncation strategy: the value ellipsizes and the full string
               // stays reachable on `title` (never eaten silently).
-              title: t.value,
+              title: token.value,
             },
               // Color values get a live swatch of the INSPECTED value (runtime
               // data -- the debugger shows what the element actually computed;
               // geometry is skin-owned).
-              t.value.startsWith('#') || t.value.startsWith('rgb')
+              token.value.startsWith('#') || token.value.startsWith('rgb')
                 ? React.createElement('span', {
                     'data-part': 'token-swatch',
                     'aria-hidden': true,
-                    style: { '--ds-token-inspector-swatch': t.value } as React.CSSProperties,
+                    style: { '--ds-token-inspector-swatch': token.value } as React.CSSProperties,
                   })
                 : null,
-              t.value,
+              token.value,
             ),
           ),
     ),
-    // Footer
+    // Footer -- carries the row cap so the capped rows are never a silent drop.
     React.createElement('div', {
       'data-part': 'footer',
-    }, t('tokenInspector.hint', 'Ctrl+Shift+T or Esc to close | Click to pin')),
+      'data-truncated': hiddenTokenCount > 0,
+    }, hiddenTokenCount > 0
+      ? t(
+          'tokenInspector.hintTruncated',
+          'Showing {shown} of {total} | Ctrl+Shift+T or Esc to close | Click to pin',
+          { shown: state.tokens.length, total: state.totalTokens }
+        )
+      : t('tokenInspector.hint', 'Ctrl+Shift+T or Esc to close | Click to pin')),
   );
 }

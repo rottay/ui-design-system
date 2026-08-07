@@ -24,7 +24,7 @@
  * />
  */
 
-import React, { useMemo, useEffect, useRef } from 'react';
+import React, { useMemo, useEffect, useId, useRef, useState } from 'react';
 import type { TenantPreviewProps, PreviewComponent } from '../../contracts';
 import { createTenantConfig } from '../../../../../../infrastructure/runtime/tenant/runtime/authoring/configuration';
 import { resolvePersonalityPreset } from '../../../../../../infrastructure/runtime/tenant/foundation/personality/presets';
@@ -81,6 +81,16 @@ function buildPaletteSteps(base: string): { step: number; color: string }[] {
 }
 
 /** Returns black or white for optimal contrast against the given background */
+/** Interpolates `{name}` placeholders into a floor string. The optional i18n
+ *  channel returns the floor verbatim when no provider is mounted, so the
+ *  floor has to carry its own substitution or the raw placeholder ships. */
+function applyFloorParams(floor: string, params?: Record<string, string | number>): string {
+  if (!params) return floor;
+  return floor.replace(/\{(\w+)\}/g, (match, name: string) =>
+    Object.prototype.hasOwnProperty.call(params, name) ? String(params[name]) : match
+  );
+}
+
 function getContrastColor(hex: string): string {
   const rgb = hexToRgb(hex);
   if (!rgb) return '#000000';
@@ -101,8 +111,10 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
   // Optional channel with an English floor: the preview renders standalone
   // (no I18nProvider) without crashing, and never echoes a raw key.
   const i18n = useOptionalTranslation('components');
-  const tOr = (key: string, floor: string, params?: Record<string, string | number>): string =>
-    i18n?.tOr(key, floor, params) ?? floor;
+  const tOr = (key: string, floor: string, params?: Record<string, string | number>): string => {
+    const resolvedFloor = applyFloorParams(floor, params);
+    return i18n?.tOr(key, resolvedFloor, params) ?? resolvedFloor;
+  };
 
   const {
     config: creationConfig,
@@ -181,6 +193,24 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
 
   const primaryFg = getContrastColor(creationConfig.primaryColor);
 
+  const sectionId = useId();
+  const paletteLabelId = `${sectionId}-palette`;
+  const samplesLabelId = `${sectionId}-samples`;
+  const personalityLabelId = `${sectionId}-personality`;
+
+  /* A tenant logo is a remote URL owned by the consumer; a dead one must not
+     leave a broken-image glyph inside the preview frame. */
+  const [logoFailed, setLogoFailed] = useState(false);
+  useEffect(() => {
+    setLogoFailed(false);
+  }, [creationConfig.logo]);
+
+  const edgeAccent = personalityInfo.tokens.accent;
+  const edgeAccentValue =
+    !edgeAccent || edgeAccent.barPosition === 'none' || !edgeAccent.barThickness
+      ? copy.disabled
+      : `${edgeAccent.barPosition} ${edgeAccent.barThickness}px ${edgeAccent.barStyle ?? 'solid'}`;
+
   const personalityTiles = [
     { label: tOr('tenantPreview.tileAnimation', 'Animation'), value: personalityInfo.tokens.animation?.entrance ?? 'fade' },
     { label: tOr('tenantPreview.tileIntensity', 'Intensity'), value: String(personalityInfo.tokens.animation?.intensity ?? 0.5) },
@@ -189,7 +219,7 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
     { label: tOr('tenantPreview.tileBadgeShape', 'Badge Shape'), value: personalityInfo.tokens.accent?.badgeShape ?? 'rounded' },
     { label: tOr('tenantPreview.tileLabelStyle', 'Label Style'), value: personalityInfo.tokens.typography?.labelStyle ?? 'sentence' },
     { label: tOr('tenantPreview.tileHoverLift', 'Hover Lift'), value: `${personalityInfo.tokens.animation?.hoverLift ?? 0}px` },
-    { label: tOr('tenantPreview.tileEdgeAccent', 'Edge Accent'), value: copy.disabled },
+    { label: tOr('tenantPreview.tileEdgeAccent', 'Edge Accent'), value: edgeAccentValue },
   ];
 
   return (
@@ -210,27 +240,37 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
       <div data-part="body">
         {/* Header */}
         <div data-part="header">
-          {creationConfig.logo && (
+          {creationConfig.logo && !logoFailed && (
             <div data-part="logo">
-              <img src={creationConfig.logo} alt={creationConfig.name} />
+              <img
+                src={creationConfig.logo}
+                alt={creationConfig.name}
+                onError={() => setLogoFailed(true)}
+              />
             </div>
           )}
           <div>
             {/* title mirrors the full name: the skin truncates long tenant
                 names with ellipsis (truncation never eats content silently). */}
             <h2 data-part="tenant-name" title={creationConfig.name}>
-              {creationConfig.name}
+              {/* tenant-supplied strings are bidi-isolated: neighbouring copy
+                  and separators must not reorder around them under RTL */}
+              <bdi>{creationConfig.name}</bdi>
             </h2>
             <p data-part="tenant-slug">
-              {creationConfig.slug} | {creationConfig.engine ?? 'classic'} | {creationConfig.personality ?? 'neutral'}
+              <bdi>{creationConfig.slug}</bdi>
+              {' | '}
+              <bdi>{creationConfig.engine ?? 'classic'}</bdi>
+              {' | '}
+              <bdi>{creationConfig.personality ?? 'neutral'}</bdi>
             </p>
           </div>
         </div>
 
         {/* Color Palette */}
         {showColorPalette && (
-          <div data-part="palette">
-            <div data-part="section-label" data-palette="all">
+          <div data-part="palette-section" role="group" aria-labelledby={paletteLabelId}>
+            <div data-part="section-label" data-palette="all" id={paletteLabelId}>
               {copy.colorPalette}
             </div>
             <div data-part="palette-groups">
@@ -238,7 +278,7 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                 <div data-part="swatch-label" data-palette="primary">
                   {copy.primary}
                 </div>
-                <div data-part="palette" data-palette="primary" role="list">
+                <div data-part="palette" data-palette="primary" role="list" aria-label={copy.primary}>
                   {primaryPalette.map(({ step, color }) => (
                     <div
                       key={step}
@@ -274,7 +314,7 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                   <div data-part="swatch-label" data-palette="secondary">
                     {copy.secondary}
                   </div>
-                  <div data-part="palette" data-palette="secondary" role="list">
+                  <div data-part="palette" data-palette="secondary" role="list" aria-label={copy.secondary}>
                     {secondaryPalette.map(({ step, color }) => (
                       <div
                         key={step}
@@ -299,8 +339,8 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
             like under this tenant). Each sample type is gated behind the
             components array for selective rendering. */}
         {components.length > 0 && (
-          <div>
-            <div data-part="section-label">{copy.componentPreview}</div>
+          <div role="group" aria-labelledby={samplesLabelId}>
+            <div data-part="section-label" id={samplesLabelId}>{copy.componentPreview}</div>
             <div data-part="samples">
               {/* Buttons -- primary/outline/default variants under the tenant
                   primary injected into the preview scope. */}
@@ -420,8 +460,8 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
         {/* Personality Info -- grid showing key personality tokens
             so designers can verify the preset configuration. */}
         {showPersonalityInfo && (
-          <div>
-            <div data-part="section-label">
+          <div role="group" aria-labelledby={personalityLabelId}>
+            <div data-part="section-label" id={personalityLabelId}>
               {tOr('tenantPreview.personalityLabel', 'Personality: {preset}', { preset: personalityInfo.preset })}
             </div>
             <div data-part="personality-grid">

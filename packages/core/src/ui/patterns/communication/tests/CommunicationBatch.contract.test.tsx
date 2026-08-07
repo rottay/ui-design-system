@@ -470,7 +470,7 @@ describe('assistant -- data-part contract (CK-F)', () => {
 // forwarding primitives per the CK-A precedent).
 // ===========================================================================
 describe('presence -- data-part contract (CK-F)', () => {
-  it.each(ENGINES)('PresenceBar: root/avatar/avatar-initials/overflow-badge (%s)', async (engine) => {
+  it.each(ENGINES)('PresenceBar: root/avatar/composed-fallback/overflow-badge (%s)', async (engine) => {
     const { container } = renderWithEngine(
       <PresenceBar
         users={[
@@ -485,8 +485,12 @@ describe('presence -- data-part contract (CK-F)', () => {
     const root = await waitForPart(container, 'root');
     expect(root.className).toContain('ds-presence-bar');
     expect(q(container, '[data-part="avatar"]')).toHaveLength(2);
-    // one of the two visible avatars has no image -> fallback initials
-    expect(q(container, '[data-part="avatar-initials"]')).toHaveLength(1);
+    // One visible user has no image. The pattern no longer hand-rolls the
+    // initials span: it composes the Avatar primitive, which owns the fallback.
+    expect(q(container, '[data-part="avatar-initials"]')).toHaveLength(0);
+    expect(q(container, '[data-part="avatar"] .ds-avatar, [data-part="avatar"] [class*="avatar"]').length)
+      .toBeGreaterThanOrEqual(1);
+    expect(container.textContent).toContain('B');
     expect(q(container, '[data-part="overflow-badge"]')).toHaveLength(1);
     expect(q(container, '[data-part="overflow-badge-count"]')).toHaveLength(1);
   });
