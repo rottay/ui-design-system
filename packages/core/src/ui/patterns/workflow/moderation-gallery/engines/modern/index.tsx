@@ -33,7 +33,7 @@
  * />
  */
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import type { ModerationGalleryProps, ModerationItem, ModerationBulkAction } from '../../contracts';
 import ModernButton from '../../../../../primitives/inputs/Button/engines/modern';
 import ModernCheckbox from '../../../../../primitives/inputs/Checkbox/engines/modern';
@@ -259,6 +259,14 @@ export default function ModernModerationGallery(props: ModerationGalleryProps) {
     });
   }, []);
 
+  /* Selection is derived against the live items: once a consumer removes a
+     moderated card the toolbar must stop counting and submitting that id. */
+  const liveIds = useMemo(() => new Set(items.map((item) => item.id)), [items]);
+  const activeSelection = useMemo(
+    () => Array.from(selectedIds).filter((id) => liveIds.has(id)),
+    [selectedIds, liveIds]
+  );
+
   /** Runs a card action, holding the governed busy state while it settles. */
   const runItemAction = useCallback(
     (id: string, action: 'approve' | 'reject', callback: ((id: string) => void) | undefined) => {
@@ -275,8 +283,8 @@ export default function ModernModerationGallery(props: ModerationGalleryProps) {
   /** Runs a bulk action, clearing the selection once it settles. */
   const runBulkAction = useCallback(
     (action: ModerationBulkAction) => {
-      if (!onBulkAction || bulkPending || selectedIds.size === 0) return;
-      const ids = Array.from(selectedIds);
+      if (!onBulkAction || bulkPending || activeSelection.length === 0) return;
+      const ids = activeSelection;
       const result: unknown = onBulkAction(action, ids);
       if (isThenable(result)) {
         setBulkPending(true);
@@ -288,7 +296,7 @@ export default function ModernModerationGallery(props: ModerationGalleryProps) {
         setSelectedIds(new Set());
       }
     },
-    [onBulkAction, bulkPending, selectedIds]
+    [onBulkAction, bulkPending, activeSelection]
   );
 
   const rootClassName = ['ds-pattern-moderation-gallery', 'ds-engine-modern', className]
@@ -298,7 +306,15 @@ export default function ModernModerationGallery(props: ModerationGalleryProps) {
   /* Skeleton keeps the intrinsic grid footprint (square media cells). */
   if (loading) {
     return (
-      <div className={rootClassName} data-part="root" data-loading="true" style={style}>
+      <div
+        className={rootClassName}
+        data-part="root"
+        data-loading="true"
+        /* Skeletons carry no text: aria-busy is the only pending signal an
+           assistive technology gets while the gallery loads. */
+        aria-busy="true"
+        style={style}
+      >
         <div data-part="skeleton-grid">
           {Array.from({ length: 8 }).map((_, i) => (
             <div key={`skel-${i}`} data-part="skeleton-card">
@@ -330,14 +346,16 @@ export default function ModernModerationGallery(props: ModerationGalleryProps) {
       {/* Bulk toolbar appears only while a selection exists. Reject is the
           destructive path: it arms the composed ConfirmDialog instead of
           firing the callback directly. */}
-      {selectable && selectedIds.size > 0 && onBulkAction && (
+      {selectable && activeSelection.length > 0 && onBulkAction && (
         <div
           data-part="bulk-toolbar"
           role="region"
           aria-label={t('moderationGallery.bulkRegion', 'Bulk actions')}
         >
           <span data-part="bulk-count" aria-live="polite">
-            {t('moderationGallery.selectedCount', `${selectedIds.size} selected`, { count: selectedIds.size })}
+            {t('moderationGallery.selectedCount', `${activeSelection.length} selected`, {
+              count: activeSelection.length,
+            })}
           </span>
           <ModernButton
             variant="primary"
@@ -397,8 +415,8 @@ export default function ModernModerationGallery(props: ModerationGalleryProps) {
           title={t('moderationGallery.confirmRejectTitle', 'Reject selected media')}
           description={t(
             'moderationGallery.confirmRejectDescription',
-            `Reject ${selectedIds.size} selected item(s)? This marks them as rejected.`,
-            { count: selectedIds.size }
+            `Reject ${activeSelection.length} selected item(s)? This marks them as rejected.`,
+            { count: activeSelection.length }
           )}
           confirmLabel={t('moderationGallery.rejectAll', 'Reject all')}
           cancelLabel={t('moderationGallery.cancel', 'Cancel')}

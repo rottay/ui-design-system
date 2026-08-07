@@ -94,7 +94,15 @@ export default function ModernOperationalLedger(props: OperationalLedgerProps) {
   /* Skeleton keeps the table footprint (header bar + uniform rows). */
   if (loading) {
     return (
-      <div className={rootClassName} data-part="root" data-loading="true" style={style}>
+      <div
+        className={rootClassName}
+        data-part="root"
+        data-loading="true"
+        /* Skeletons carry no text: aria-busy is the only pending signal an
+           assistive technology gets while the ledger loads. */
+        aria-busy="true"
+        style={style}
+      >
         <div data-part="skeleton">
           <div data-part="skeleton-header" />
           {Array.from({ length: 5 }).map((_, i) => (
@@ -141,7 +149,14 @@ export default function ModernOperationalLedger(props: OperationalLedgerProps) {
           />
         </div>
       ) : (
-        <div data-part="table-region">
+        /* The region owns its scroll and the table holds no focusable cell:
+           without a tab stop the overflowing columns are keyboard-unreachable. */
+        <div
+          data-part="table-region"
+          role="region"
+          tabIndex={0}
+          aria-label={t('operationalLedger.tableRegion', 'Ledger entries')}
+        >
           <table data-part="table">
             <thead data-part="table-head">
               <tr>

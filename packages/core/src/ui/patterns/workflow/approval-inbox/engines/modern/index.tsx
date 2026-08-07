@@ -31,7 +31,7 @@
  * />
  */
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import type { ApprovalInboxProps, ApprovalItem, ApprovalGroup } from '../../contracts';
 import ModernButton from '../../../../../primitives/inputs/Button/engines/modern';
 import ModernCheckbox from '../../../../../primitives/inputs/Checkbox/engines/modern';
@@ -271,6 +271,17 @@ export default function ModernApprovalInbox(props: ApprovalInboxProps) {
     });
   }, []);
 
+  /* Selection is derived against the live groups: once a consumer removes an
+     approved row the toolbar must stop counting and submitting that id. */
+  const liveIds = useMemo(
+    () => new Set(groups.flatMap((group: ApprovalGroup) => group.items.map((item) => item.id))),
+    [groups]
+  );
+  const activeSelection = useMemo(
+    () => Array.from(selectedIds).filter((id) => liveIds.has(id)),
+    [selectedIds, liveIds]
+  );
+
   /** Runs an item action, holding the governed busy state while it settles. */
   const runItemAction = useCallback(
     (id: string, action: 'approve' | 'reject', callback: ((id: string) => void) | undefined) => {
@@ -286,8 +297,8 @@ export default function ModernApprovalInbox(props: ApprovalInboxProps) {
 
   /** Runs the batch approve, clearing the selection once it settles. */
   const runBatchApprove = useCallback(() => {
-    if (!onBatchApprove || batchPending || selectedIds.size === 0) return;
-    const ids = Array.from(selectedIds);
+    if (!onBatchApprove || batchPending || activeSelection.length === 0) return;
+    const ids = activeSelection;
     const result: unknown = onBatchApprove(ids);
     if (isThenable(result)) {
       setBatchPending(true);
@@ -298,7 +309,7 @@ export default function ModernApprovalInbox(props: ApprovalInboxProps) {
     } else {
       setSelectedIds(new Set());
     }
-  }, [onBatchApprove, batchPending, selectedIds]);
+  }, [onBatchApprove, batchPending, activeSelection]);
 
   const rootClassName = ['ds-pattern-approval-inbox', 'ds-engine-modern', className]
     .filter(Boolean)
@@ -310,7 +321,15 @@ export default function ModernApprovalInbox(props: ApprovalInboxProps) {
      inbox holds its approximate geometry while data loads. */
   if (loading) {
     return (
-      <div className={rootClassName} data-part="root" data-loading="true" style={style}>
+      <div
+        className={rootClassName}
+        data-part="root"
+        data-loading="true"
+        /* Skeletons carry no text: aria-busy is the only pending signal an
+           assistive technology gets while the inbox loads. */
+        aria-busy="true"
+        style={style}
+      >
         <div data-part="skeleton">
           {[1, 2].map((group) => (
             <div key={group} data-part="skeleton-group">
@@ -346,14 +365,16 @@ export default function ModernApprovalInbox(props: ApprovalInboxProps) {
   return (
     <div className={rootClassName} data-part="root" data-loading="false" style={style}>
       {/* Batch toolbar appears only while a selection exists. */}
-      {onBatchApprove && selectedIds.size > 0 && (
+      {onBatchApprove && activeSelection.length > 0 && (
         <div
           data-part="batch-toolbar"
           role="region"
           aria-label={t('approvalInbox.batchRegion', 'Batch actions')}
         >
           <span data-part="batch-count" aria-live="polite">
-            {t('approvalInbox.selectedCount', `${selectedIds.size} selected`, { count: selectedIds.size })}
+            {t('approvalInbox.selectedCount', `${activeSelection.length} selected`, {
+              count: activeSelection.length,
+            })}
           </span>
           <ModernButton
             variant="primary"

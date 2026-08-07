@@ -247,6 +247,9 @@ export default function ModernApprovalWorkflow(props: ApprovalWorkflowProps) {
         className={['ds-pattern-approval-workflow', 'ds-engine-modern', className].filter(Boolean).join(' ')}
         data-part="root"
         data-loading="true"
+        /* Skeletons carry no text: aria-busy is the only pending signal an
+           assistive technology gets while the chain loads. */
+        aria-busy="true"
         style={style}
       >
         <div data-part="skeleton">

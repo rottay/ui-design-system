@@ -96,7 +96,15 @@ export default function ModernShiftMatrix(props: ShiftMatrixProps) {
   /* Skeleton keeps the matrix footprint (header bar + uniform role rows). */
   if (loading) {
     return (
-      <div className={rootClassName} data-part="root" data-loading="true" style={style}>
+      <div
+        className={rootClassName}
+        data-part="root"
+        data-loading="true"
+        /* Skeletons carry no text: aria-busy is the only pending signal an
+           assistive technology gets while the matrix loads. */
+        aria-busy="true"
+        style={style}
+      >
         <div data-part="skeleton">
           <div data-part="skeleton-header" />
           {Array.from({ length: 4 }).map((_, i) => (
@@ -119,7 +127,15 @@ export default function ModernShiftMatrix(props: ShiftMatrixProps) {
 
   return (
     <div className={rootClassName} data-part="root" data-loading="false" style={style}>
-      <div data-part="table-region">
+      {/* The region owns its scroll, and a read-only matrix (no onQuickAssign)
+          holds no focusable cell: without a tab stop a keyboard-only user can
+          never reach the slots that overflow the card. */}
+      <div
+        data-part="table-region"
+        role="region"
+        tabIndex={0}
+        aria-label={t('shiftMatrix.tableRegion', 'Shift coverage matrix')}
+      >
         <table data-part="table">
           <thead data-part="table-head">
             <tr>
@@ -146,6 +162,12 @@ export default function ModernShiftMatrix(props: ShiftMatrixProps) {
                   /* Classic made every non-full cell assignable (gap, critical
                      AND empty intersections) — that capability is preserved. */
                   const assignable = Boolean(onQuickAssign) && status !== 'full';
+                  /* A button's aria-label replaces its content, so the roster
+                     rendered inside an assignable cell is otherwise silent. */
+                  const staffRoster =
+                    assignment?.staff && assignment.staff.length > 0
+                      ? assignment.staff.join(', ')
+                      : null;
 
                   const cellContent = assignment ? (
                     <>
@@ -183,17 +205,32 @@ export default function ModernShiftMatrix(props: ShiftMatrixProps) {
                         <ModernButton
                           variant="ghost"
                           data-part="cell-button"
-                          aria-label={t(
-                            'shiftMatrix.cell.assignAria',
-                            `${role}, ${slot.label}: ${assignment?.assigned ?? 0} of ${assignment?.required ?? 0} assigned — ${coverageLabel}. Activate to quick-assign.`,
-                            {
-                              role,
-                              slot: slot.label,
-                              assigned: assignment?.assigned ?? 0,
-                              required: assignment?.required ?? 0,
-                              coverage: coverageLabel,
-                            }
-                          )}
+                          aria-label={
+                            staffRoster
+                              ? t(
+                                  'shiftMatrix.cell.assignAriaWithStaff',
+                                  `${role}, ${slot.label}: ${assignment?.assigned ?? 0} of ${assignment?.required ?? 0} assigned (${staffRoster}) — ${coverageLabel}. Activate to quick-assign.`,
+                                  {
+                                    role,
+                                    slot: slot.label,
+                                    assigned: assignment?.assigned ?? 0,
+                                    required: assignment?.required ?? 0,
+                                    staff: staffRoster,
+                                    coverage: coverageLabel,
+                                  }
+                                )
+                              : t(
+                                  'shiftMatrix.cell.assignAria',
+                                  `${role}, ${slot.label}: ${assignment?.assigned ?? 0} of ${assignment?.required ?? 0} assigned — ${coverageLabel}. Activate to quick-assign.`,
+                                  {
+                                    role,
+                                    slot: slot.label,
+                                    assigned: assignment?.assigned ?? 0,
+                                    required: assignment?.required ?? 0,
+                                    coverage: coverageLabel,
+                                  }
+                                )
+                          }
                           onClick={() => onQuickAssign?.(role, slot.label)}
                         >
                           {cellContent}
