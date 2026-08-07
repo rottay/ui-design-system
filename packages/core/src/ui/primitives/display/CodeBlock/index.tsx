@@ -139,19 +139,41 @@ export function CodeBlock({
     [],
   );
 
+  const codeRef = React.useRef<HTMLElement>(null);
+
+  // Recovery path when the platform refuses the write: select the source so the
+  // keyboard copy the user reached for still works. A control that cannot copy
+  // must still leave a way to copy.
+  const selectCode = React.useCallback(() => {
+    const node = codeRef.current;
+    const selection = typeof window !== 'undefined' ? window.getSelection?.() : null;
+    if (!node || !selection || typeof document.createRange !== 'function') return;
+    const range = document.createRange();
+    range.selectNodeContents(node);
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }, []);
+
   const handleCopy = React.useCallback(async () => {
-    try {
-      const clipboard = typeof navigator !== 'undefined' ? navigator.clipboard : undefined;
-      if (clipboard?.writeText) {
-        await clipboard.writeText(code);
-      }
-      setCopied(true);
-      if (resetTimer.current) clearTimeout(resetTimer.current);
-      resetTimer.current = setTimeout(() => setCopied(false), CODE_BLOCK_DEFAULTS.copiedResetMs);
-    } catch {
-      // Clipboard denial is non-fatal; leave the idle label in place.
+    const clipboard = typeof navigator !== 'undefined' ? navigator.clipboard : undefined;
+    // No clipboard (insecure context, blocked by permissions policy, older
+    // engine): the confirmation used to fire anyway, so the label flipped to
+    // "Copied" and the live region announced a copy that never happened.
+    if (!clipboard?.writeText) {
+      selectCode();
+      return;
     }
-  }, [code]);
+    try {
+      await clipboard.writeText(code);
+    } catch {
+      // Clipboard denial is non-fatal, but it is never a success either.
+      selectCode();
+      return;
+    }
+    setCopied(true);
+    if (resetTimer.current) clearTimeout(resetTimer.current);
+    resetTimer.current = setTimeout(() => setCopied(false), CODE_BLOCK_DEFAULTS.copiedResetMs);
+  }, [code, selectCode]);
 
   const rawLines = React.useMemo(() => code.replace(/\n$/, '').split('\n'), [code]);
   const highlightSet = React.useMemo(() => new Set(highlightLines ?? []), [highlightLines]);
@@ -297,7 +319,7 @@ export function CodeBlock({
             tabSize: 2,
           }}
         >
-          <code data-part="code" style={{ display: 'block', fontFamily: MONO_FONT }}>
+          <code ref={codeRef} data-part="code" style={{ display: 'block', fontFamily: MONO_FONT }}>
             {rawLines.map((_, lineIndex) => {
               const lineNumber = lineIndex + 1;
               const highlighted = highlightSet.has(lineNumber);

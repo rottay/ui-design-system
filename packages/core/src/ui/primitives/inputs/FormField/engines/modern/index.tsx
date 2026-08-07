@@ -52,8 +52,17 @@ export default function ModernFormField(props: FormFieldProps): React.ReactEleme
 
   // The label must point at the id the control actually renders, so a
   // caller-supplied id wins and `fieldId` is only the fallback.
-  const boundChild = React.Children.toArray(children).find(receivesFieldBinding);
-  const controlId = boundChild?.props.id ?? fieldId;
+  const boundChildren = React.Children.toArray(children).filter(receivesFieldBinding);
+  const controlId = boundChildren[0]?.props.id ?? fieldId;
+
+  // `fieldId` can only name ONE element, so a field holding several id-less
+  // controls (a range pair, a split code entry) needs a suffix after the first;
+  // the counter advances in the same document order the map below walks.
+  let boundIndex = 0;
+  const nextFallbackId = (): string => {
+    boundIndex += 1;
+    return boundIndex === 1 ? fieldId : `${fieldId}-${boundIndex}`;
+  };
 
   const rootStyle = {
     '--ds-form-field-label-width': labelWidth,
@@ -122,7 +131,7 @@ export default function ModernFormField(props: FormFieldProps): React.ReactEleme
               const mergedDescription = [childDescription, describedBy].filter(Boolean).join(' ') || undefined;
 
               return React.cloneElement(child, {
-                id: child.props.id ?? controlId,
+                id: child.props.id ?? nextFallbackId(),
                 disabled: disabled || child.props.disabled,
                 required: required || child.props.required,
                 'aria-describedby': mergedDescription,

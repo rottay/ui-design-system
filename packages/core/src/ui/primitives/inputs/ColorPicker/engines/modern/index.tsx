@@ -35,7 +35,7 @@
  * @category Inputs
  * @package @rottay/design-system
  */
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useId } from 'react';
 import type { ColorPickerProps, Color, ColorFormat } from '../../contracts';
 import { COLORPICKER_DEFAULTS } from '../../contracts';
 import { toLegacySize } from '../../../../../../foundation/contracts/kernel/common';
@@ -159,6 +159,27 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
     const containerRef = useRef<HTMLDivElement>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const triggerRef = useRef<HTMLDivElement>(null);
+    /** Set only by the trigger's own key handlers, so a pointer (and, under
+     *  `trigger='hover'`, a passing cursor) never steals focus. */
+    const keyboardOpenRef = useRef(false);
+
+    /**
+     * Keyboard open moves focus into the panel. Escape already returns it to
+     * the trigger; without the outbound half the restore had nothing to undo
+     * and a keyboard user had to Tab past the trigger to reach the controls
+     * they had just asked for.
+     */
+    useEffect(() => {
+      if (!isOpen) {
+        keyboardOpenRef.current = false;
+        return;
+      }
+      if (!keyboardOpenRef.current) return;
+      keyboardOpenRef.current = false;
+      dropdownRef.current
+        ?.querySelector<HTMLElement>('input, select, button')
+        ?.focus();
+    }, [isOpen]);
 
     // Viewport collision handling (K4-C Pass 2): the in-tree dropdown is
     // start-aligned by default, which overflows narrow viewports when the
@@ -193,6 +214,15 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
     const clearLabel = colorPickerLabel('colorpicker.clear', 'Clear');
     const triggerLabel = colorPickerLabel('colorpicker.triggerLabel', 'Color picker');
     const formatLabel = colorPickerLabel('colorpicker.formatLabel', 'Color format');
+    const panelLabel = colorPickerLabel('colorpicker.panelLabel', 'Color picker panel');
+
+    /* The panel and its error message need stable ids so the trigger can point
+       at the surface it opens and the hex field at the message that explains
+       its own invalid state. */
+    const instanceId = useId();
+    const panelId = `${instanceId}-panel`;
+    const hexErrorId = `${instanceId}-hex-error`;
+    const hexIsInvalid = hexDraft !== null && !HEX_DRAFT_RE.test(hexDraft);
 
     /** Format switcher: fires the contract callback and, when the consumer
      *  does not control `format`, moves the internal display format. */
@@ -223,9 +253,11 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
       if (disabled) return;
       if (event.key === 'Enter' || event.key === ' ') {
         event.preventDefault();
+        if (!isOpen) keyboardOpenRef.current = true;
         handleOpenChange(!isOpen);
       } else if (event.key === 'ArrowDown' && !isOpen) {
         event.preventDefault();
+        keyboardOpenRef.current = true;
         handleOpenChange(true);
       }
     };
@@ -331,6 +363,12 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
       <div
         ref={dropdownRef}
         data-part="dropdown"
+        /* The trigger has always advertised `aria-haspopup="dialog"`, but the
+           surface it opened was an anonymous div: AT was promised a named
+           dialog and handed an unlabelled group of stray controls. */
+        id={panelId}
+        role="dialog"
+        aria-label={panelLabel}
         data-edge={alignEdge}
         data-placement={placement}
       >
@@ -351,7 +389,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
           <input
             type="text"
             data-part="hex-input"
-            data-invalid={hexDraft !== null && !HEX_DRAFT_RE.test(hexDraft) ? 'true' : undefined}
+            data-invalid={hexIsInvalid ? 'true' : undefined}
             value={hexDraft ?? currentValue}
             onChange={(e) => setHexDraft(e.target.value)}
             onKeyDown={handleHexKeyDown}
@@ -359,10 +397,14 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
             placeholder="#000000"
             disabled={disabled}
             aria-label={colorPickerLabel('colorpicker.hexLabel', 'Hex color')}
-            aria-invalid={hexDraft !== null && !HEX_DRAFT_RE.test(hexDraft) || undefined}
+            aria-invalid={hexIsInvalid || undefined}
+            /* The message named the field's problem but nothing tied it to the
+               field: a user arriving on the input by keyboard heard "invalid"
+               with no statement of what would be valid. */
+            aria-describedby={hexIsInvalid ? hexErrorId : undefined}
           />
-          {hexDraft !== null && !HEX_DRAFT_RE.test(hexDraft) && (
-            <span data-part="hex-error" role="alert">
+          {hexIsInvalid && (
+            <span id={hexErrorId} data-part="hex-error" role="alert">
               {colorPickerLabel('colorpicker.invalidHex', 'Enter a valid hex color (e.g. #1677ff)')}
             </span>
           )}
@@ -444,6 +486,12 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
         className={`rottay-colorpicker rottay-colorpicker--modern ${className || ''}`}
         style={style}
         onKeyDown={handleRootKeyDown}
+        /* Hover disclosure is owned by the root, not the trigger: the panel is
+           the trigger's SIBLING, so a trigger-scoped mouseleave closed the
+           panel the moment the pointer travelled toward it, making the hex
+           input, presets and clear control unreachable by pointer. */
+        onMouseEnter={trigger === 'hover' && !disabled ? () => handleOpenChange(true) : undefined}
+        onMouseLeave={trigger === 'hover' && !disabled ? () => handleOpenChange(false) : undefined}
       >
         {/* Trigger area: opens/closes dropdown on click or hover depending on
             `trigger` prop. A real focusable disclosure button (keyboard law):
@@ -458,11 +506,10 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
           aria-label={triggerLabel}
           aria-haspopup="dialog"
           aria-expanded={isOpen}
+          aria-controls={isOpen ? panelId : undefined}
           aria-disabled={disabled || undefined}
           onClick={() => !disabled && (trigger === 'click' ? handleOpenChange(!isOpen) : null)}
           onKeyDown={handleTriggerKeyDown}
-          onMouseEnter={() => !disabled && trigger === 'hover' && handleOpenChange(true)}
-          onMouseLeave={() => !disabled && trigger === 'hover' && handleOpenChange(false)}
         >
           <div
             data-part="swatch"

@@ -136,6 +136,10 @@ const ModernTourChrome = ({
   const dialogIds = useId();
   const titleId = step?.title ? `${dialogIds}-title` : undefined;
   const descriptionId = step?.description ? `${dialogIds}-description` : undefined;
+  const progressId = `${dialogIds}-progress`;
+  // A title-less step must still name its dialog: without this the surface
+  // resolved to an unnamed `dialog` node (aria-labelledby pointed at nothing).
+  const fallbackDialogLabel = translation?.tOr('tour.label', 'Guided tour') ?? 'Guided tour';
   const stepProgressLabel =
     translation?.tOr('tour.step_progress', `Step ${currentStep + 1} of ${steps.length}`, {
       current: currentStep + 1,
@@ -161,6 +165,22 @@ const ModernTourChrome = ({
   }, [onClose]);
 
   const handleSurfaceKeyDown = (e: React.KeyboardEvent) => {
+    // Step content is arbitrary consumer markup. Taking the horizontal arrows
+    // unconditionally meant a text field, textarea, select or slider inside a
+    // step lost caret movement and value adjustment to tour navigation -- the
+    // user could not move the cursor one character left without jumping steps.
+    const origin = e.target as HTMLElement | null;
+    if (origin && origin !== e.currentTarget) {
+      const tag = origin.tagName;
+      if (
+        tag === 'INPUT' ||
+        tag === 'TEXTAREA' ||
+        tag === 'SELECT' ||
+        origin.isContentEditable
+      ) {
+        return;
+      }
+    }
     const rtl = portalScope.direction === 'rtl';
     const forwardKey = rtl ? 'ArrowLeft' : 'ArrowRight';
     const backwardKey = rtl ? 'ArrowRight' : 'ArrowLeft';
@@ -277,7 +297,13 @@ const ModernTourChrome = ({
         role="dialog"
         aria-modal="false"
         aria-labelledby={titleId}
-        aria-describedby={descriptionId}
+        aria-label={titleId ? undefined : fallbackDialogLabel}
+        /* "Step 2 of 5" is the one thing that tells a non-sighted user where
+           they are in the tour, and it was reachable only by tabbing onto the
+           indicator graphic -- which is not a tab stop. Chaining it into the
+           description means focus landing on the surface (on open and on every
+           step change) announces the position with the step's own copy. */
+        aria-describedby={[descriptionId, progressId].filter(Boolean).join(' ')}
         tabIndex={-1}
         onKeyDown={handleSurfaceKeyDown}
         style={{
@@ -295,14 +321,20 @@ const ModernTourChrome = ({
           type="button"
           data-part="close-button"
           onClick={onClose}
-          aria-label={translation?.t('close') ?? 'Close'}
+          /* `t` echoes the key back when the catalog lacks it, so a host app
+             shipping a partial `common` namespace labelled this button the
+             literal string "close". `tOr` is the floor the rest of the file
+             already uses. Same for the two nav actions below. */
+          aria-label={translation?.tOr('close', 'Close') ?? 'Close'}
         >
           <ActionCloseIcon decorative size={16} />
         </button>
 
         {/* Content */}
         {step?.cover && <div data-part="cover">{step.cover}</div>}
-        <h3 id={titleId} data-part="title">{step?.title}</h3>
+        {/* Gated: an unconditional heading published an EMPTY `h3` to the
+            accessibility tree for every title-less step. */}
+        {step?.title && <h3 id={titleId} data-part="title">{step.title}</h3>}
         {step?.description && (
           <p id={descriptionId} data-part="description">{step.description}</p>
         )}
@@ -311,6 +343,11 @@ const ModernTourChrome = ({
         <div data-part="footer">
           {/* Indicators: a single accessible image with the step counter as
               its name (dots are decorative; numbers are not localized) */}
+          {/* A describedby target contributes its text, not its aria-label, so
+              the counter has to exist as real text to be announced at all. */}
+          <span id={progressId} data-part="progress-text" className="ds-visually-hidden">
+            {stepProgressLabel}
+          </span>
           <div data-part="indicators" role="img" aria-label={stepProgressLabel}>
             {steps.map((_, index) => (
               <div
@@ -334,7 +371,7 @@ const ModernTourChrome = ({
                 data-action="prev"
                 onClick={onPrev}
               >
-                {translation?.t('previous') ?? 'Previous'}
+                {translation?.tOr('previous', 'Previous') ?? 'Previous'}
               </button>
             )}
             <button
@@ -343,7 +380,7 @@ const ModernTourChrome = ({
               data-action="next"
               onClick={onNext}
             >
-              {currentStep === steps.length - 1 ? (translation?.tOr('finish', 'Finish') ?? 'Finish') : (translation?.t('next') ?? 'Next')}
+              {currentStep === steps.length - 1 ? (translation?.tOr('finish', 'Finish') ?? 'Finish') : (translation?.tOr('next', 'Next') ?? 'Next')}
             </button>
           </div>
         </div>

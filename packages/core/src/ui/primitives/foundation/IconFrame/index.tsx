@@ -97,7 +97,10 @@ export const IconFrame = forwardRef<HTMLSpanElement, IconFrameProps>(function Ic
       aria-hidden={decorativeOnly && badge == null ? true : undefined}
       aria-disabled={disabled || undefined}
       aria-busy={loading || undefined}
-      aria-describedby={props['aria-describedby']}
+      // A description only survives on the element that carries the name: when
+      // the name moved to the icon, leaving it here dropped it on a nameless
+      // generic span.
+      aria-describedby={nameOnIcon ? undefined : props['aria-describedby']}
     >
       {nameOnIcon && label != null ? (
         <Icon
@@ -106,6 +109,7 @@ export const IconFrame = forwardRef<HTMLSpanElement, IconFrameProps>(function Ic
           size={ICON_SIZE_BY_FRAME_SIZE[size]}
           mirrored={iconMirroring}
           state={loading ? 'busy' : undefined}
+          aria-describedby={props['aria-describedby']}
           data-part="icon"
         />
       ) : (

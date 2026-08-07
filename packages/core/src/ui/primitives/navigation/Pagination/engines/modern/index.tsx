@@ -66,6 +66,7 @@ import React from 'react';
 import type { PaginationProps } from '../../contracts';
 import { PAGINATION_DEFAULTS } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { revealInlineWithinScroller } from '../../../../foundation/scroll-reveal';
 import { NavigationBackIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-back';
 import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-forward';
 import { NavigationDownIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-down';
@@ -233,18 +234,24 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
   );
 
   /**
-   * Narrow frames let the joined controls row scroll (see the skin). When the
-   * page changes, keep the current page button inside the scrollport instead
-   * of stranding it off-edge; `inline: 'nearest'` is a no-op when it already
-   * fits, and the optional call keeps jsdom (no layout) safe.
+   * Narrow frames let the joined controls row scroll on the INLINE axis (see
+   * the skin: `overflow-x: auto`). When the page changes, keep the current page
+   * button inside that scrollport instead of stranding it off-edge.
+   *
+   * The reveal is confined to this row's own `scrollLeft`. It used to call
+   * `scrollIntoView({ block: 'nearest', inline: 'nearest' })`, which walks the
+   * WHOLE ancestor chain: `'nearest'` minimises each individual scroll but does
+   * not confine the operation to one element, so paging a table could scroll
+   * any scrollable ancestor and the document out from under the reader. It also
+   * wrote the BLOCK axis, which this control never scrolls for the user.
    */
   const controlsRef = React.useRef<HTMLDivElement | null>(null);
   React.useEffect(() => {
-    controlsRef.current
-      ?.querySelector<HTMLElement>(
-        '[data-part="pagination-page-button"][data-current="true"]'
-      )
-      ?.scrollIntoView?.({ block: 'nearest', inline: 'nearest' });
+    const row = controlsRef.current;
+    const currentButton = row?.querySelector<HTMLElement>(
+      '[data-part="pagination-page-button"][data-current="true"]'
+    );
+    if (row && currentButton) revealInlineWithinScroller(row, currentButton);
   }, [current]);
 
   // A boundary page disables the edge button that was just activated, and a

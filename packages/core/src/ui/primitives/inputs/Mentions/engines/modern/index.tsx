@@ -154,10 +154,21 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
       return options.filter((opt) => filterOption(searchText, opt));
     }, [options, searchText, filterOption]);
 
-    const activeOptionId =
-      isOpen && !loading && filteredOptions.length > 0
-        ? `mentions-${mentionsId}-option-${focusedIndex}`
-        : undefined;
+    // aria-activedescendant must reference an element that EXISTS right now.
+    // `onSearch` refills `options` without a keystroke, so an arrowed index can
+    // outlive the list it pointed into; an unclamped id then named a removed
+    // row while no row painted active and Enter committed nothing.
+    const hasActiveOption =
+      isOpen && !loading && focusedIndex >= 0 && focusedIndex < filteredOptions.length;
+    const activeOptionId = hasActiveOption
+      ? `mentions-${mentionsId}-option-${focusedIndex}`
+      : undefined;
+
+    // Restore the highlight (rather than merely hiding the dangling reference)
+    // when an async refill shrinks the list under the cursor.
+    useEffect(() => {
+      if (focusedIndex >= filteredOptions.length) setFocusedIndex(0);
+    }, [filteredOptions.length, focusedIndex]);
 
     // Keyboard navigation keeps the active option in view: aria-activedescendant
     // never moves DOM focus, so the row must be scrolled into the popup's
@@ -350,9 +361,15 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
               </li>
             ) : filteredOptions.length > 0 ? (
               filteredOptions.map((option, index) => (
-                <li key={option.value} role="option" aria-selected={focusedIndex === index} id={`mentions-${mentionsId}-option-${index}`}>
+                /* The option role rides the BUTTON, not the wrapper: a
+                   focusable control inside role="option" is a nested-interactive
+                   violation and APG forbids focusable content in an option. */
+                <li key={option.value} role="none">
                   <button
                     type="button"
+                    role="option"
+                    id={`mentions-${mentionsId}-option-${index}`}
+                    aria-selected={focusedIndex === index}
                     className={`${option.disabled ? 'disabled' : ''} ${focusedIndex === index ? 'active' : ''}`}
                     disabled={option.disabled}
                     onClick={() => handleSelect(option)}

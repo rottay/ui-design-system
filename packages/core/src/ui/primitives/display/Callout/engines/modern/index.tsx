@@ -20,7 +20,7 @@
  * @package @rottay/design-system
  */
 
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import type { CalloutProps } from '../../contracts';
 import type { CalloutVariant } from '../../contracts';
 import { CALLOUT_DEFAULTS, TONE_TO_CALLOUT_VARIANT } from '../../contracts';
@@ -30,6 +30,16 @@ import { StatusSuccessIcon } from '@/graphics/icons/presentation/semantic/genera
 import { StatusWarningIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-warning';
 import { StatusErrorIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-error';
 import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
+
+/**
+ * Focusable candidates for the keyboard-dismiss focus return (deterministic
+ * document-order query; disabled and tabindex="-1" nodes excluded). Same
+ * vocabulary the Alert shell uses, so the two dismissible message shells
+ * cannot diverge on where a keyboard dismissal lands.
+ * @internal
+ */
+const FOCUSABLE_SELECTOR =
+  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 const VARIANT_ICONS: Record<CalloutVariant, React.ReactNode> = {
   info: <StatusInfoIcon decorative size={20} />,
@@ -69,19 +79,55 @@ export default function ModernCallout(props: CalloutProps): React.ReactElement |
   const variant = tone ? TONE_TO_CALLOUT_VARIANT[tone] : variantProp;
 
   // Uncontrolled dismiss state -- once closed, the node is removed from the tree
-  const [visible, setVisible] = useState(true);
+  const [dismissed, setDismissed] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  // A dismissal dies with the message it dismissed (Alert precedent): any change
+  // of primitive body copy re-opens the callout, so a reused instance cannot
+  // swallow every later message; a non-primitive node stays sticky.
+  const dismissKey =
+    typeof children === 'string' || typeof children === 'number' ? children : null;
+  useEffect(() => {
+    if (dismissKey === null) return;
+    setDismissed(false);
+  }, [dismissKey]);
 
   const isUrgent = variant === 'warning' || variant === 'error';
 
-  if (!visible) return null;
+  if (dismissed) return null;
 
-  const handleClose = () => {
-    setVisible(false);
+  /**
+   * FOCUS RETURN: a keyboard-originated dismiss (detail === 0 -- the click came
+   * from Enter/Space, not a pointer) must not strand focus on a node that is
+   * about to unmount, which dropped focus to `<body>`. The landing spot is
+   * deterministic: the first focusable element AFTER the callout in document
+   * order (scope: the callout's parent subtree, then the document), else the
+   * last one before it. Pointer dismissals keep the browser default.
+   */
+  const handleClose = (event: React.MouseEvent<HTMLButtonElement>) => {
+    if (event.detail === 0) {
+      const root = rootRef.current;
+      if (root) {
+        const collect = (scope: ParentNode): HTMLElement[] =>
+          Array.from(scope.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter(
+            (el) => el !== root && !root.contains(el)
+          );
+        const inParent = collect(root.parentElement ?? document);
+        const focusable = inParent.length > 0 ? inParent : collect(document);
+        const after = focusable.filter(
+          (el) => root.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING
+        );
+        const target = after[0] ?? focusable[focusable.length - 1];
+        target?.focus({ preventScroll: true });
+      }
+    }
+    setDismissed(true);
     onClose?.();
   };
 
   return (
     <div
+      ref={rootRef}
       className={`rottay-callout-shell rottay-callout-shell--modern ${className}`.trim()}
       role={isUrgent ? 'alert' : 'status'}
       data-part="root"

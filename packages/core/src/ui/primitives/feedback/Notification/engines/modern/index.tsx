@@ -651,6 +651,23 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
     onClose?.();
   };
 
+  /**
+   * Card-level activation. A click that originated on an interactive control
+   * inside the card (a consumer `actions` button/link, an input) belongs to
+   * that control alone: letting it bubble here fired the card's navigation on
+   * top of the action the user actually pressed.
+   */
+  const handleCardActivate = (event: React.MouseEvent<HTMLDivElement>) => {
+    const origin = event.target as HTMLElement | null;
+    if (
+      origin !== event.currentTarget &&
+      origin?.closest?.('button, a[href], input, select, textarea, [role="button"], [role="link"]')
+    ) {
+      return;
+    }
+    onClick?.();
+  };
+
   // ========================================================================
   // Style Definitions
   // ========================================================================
@@ -689,7 +706,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
         '--ds-notification-duration': duration && duration > 0 ? `${duration}s` : undefined,
         ...style,
       } as React.CSSProperties}
-      onClick={onClick}
+      onClick={onClick ? handleCardActivate : undefined}
       onMouseEnter={pauseCountdown}
       onMouseLeave={resumeCountdown}
       onFocus={pauseCountdown}
@@ -703,7 +720,11 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
           if (closable) handleClose();
           return;
         }
-        if (onClick && (event.key === 'Enter' || event.key === ' ')) {
+        // Only the card itself activates on Enter/Space. Keystrokes bubbling
+        // from a control inside the card belong to that control: swallowing
+        // them here both fired the card's own onClick and (via preventDefault)
+        // suppressed the button's activation.
+        if (onClick && event.currentTarget === event.target && (event.key === 'Enter' || event.key === ' ')) {
           event.preventDefault();
           onClick();
         }

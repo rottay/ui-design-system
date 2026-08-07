@@ -119,26 +119,39 @@ export default function ModernTagInput(props: TagInputProps): React.ReactElement
     };
   }, []);
 
-  /** Validates and appends a single tag, enforcing max/duplicate/custom rules.
-   *  Returns true when the tag was accepted; refusals raise feedback. */
-  const addTag = useCallback((tag: string): boolean => {
-    const trimmed = tag.trim();
-    if (!trimmed) return false;
-    if (maxTags && value.length >= maxTags) {
-      notifyRejection('max', trimmed);
-      return false;
+  /** Validates and appends a batch of candidate tags, enforcing max/duplicate/
+   *  custom rules against a RUNNING accumulator and committing exactly one
+   *  onChange. Per-candidate commits would each rebuild from the same stale
+   *  `value` prop, so a separator paste would keep only its last part and
+   *  every part would pass the maxTags check. Returns true when at least one
+   *  tag was accepted; the first refusal raises feedback. */
+  const addTags = useCallback((candidates: string[]): boolean => {
+    const next = [...value];
+    let accepted = false;
+    let rejection: TagRejection | null = null;
+    for (const candidate of candidates) {
+      const trimmed = candidate.trim();
+      if (!trimmed) continue;
+      let reason: TagRejectionReason | null = null;
+      if (maxTags && next.length >= maxTags) reason = 'max';
+      else if (!allowDuplicates && next.includes(trimmed)) reason = 'duplicate';
+      else if (validateTag && !validateTag(trimmed)) reason = 'invalid';
+      if (reason) {
+        // Only the first refusal is announced: a paste can trip several rules
+        // and a burst of live-region updates would drown each other out.
+        if (!rejection) rejection = { reason, tag: trimmed };
+        continue;
+      }
+      next.push(trimmed);
+      accepted = true;
     }
-    if (!allowDuplicates && value.includes(trimmed)) {
-      notifyRejection('duplicate', trimmed);
-      return false;
-    }
-    if (validateTag && !validateTag(trimmed)) {
-      notifyRejection('invalid', trimmed);
-      return false;
-    }
-    onChange?.([...value, trimmed]);
-    return true;
+    if (rejection) notifyRejection(rejection.reason, rejection.tag);
+    if (accepted) onChange?.(next);
+    return accepted;
   }, [value, maxTags, allowDuplicates, onChange, validateTag, notifyRejection]);
+
+  /** Single-tag entry point (Enter / separator keystroke). */
+  const addTag = useCallback((tag: string): boolean => addTags([tag]), [addTags]);
 
   /** Removes tag at index and notifies parent via both onChange and onRemove. */
   const removeTag = useCallback((index: number) => {
@@ -164,13 +177,12 @@ export default function ModernTagInput(props: TagInputProps): React.ReactElement
     const val = e.target.value;
     // Separator found mid-value means paste or fast typing -- split into multiple tags
     if (val.includes(separator)) {
-      const parts = val.split(separator);
-      parts.forEach((part) => addTag(part));
+      addTags(val.split(separator));
       setInputValue('');
     } else {
       setInputValue(val);
     }
-  }, [separator, addTag]);
+  }, [separator, addTags]);
 
   const rejectionMessage = rejection
     ? `${tOr(`taginput.feedback_${rejection.reason}`, {

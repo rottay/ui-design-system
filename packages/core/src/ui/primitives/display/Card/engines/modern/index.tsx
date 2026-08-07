@@ -39,7 +39,7 @@
 
 'use client';
 
-import React, { useCallback, useId } from 'react';
+import React, { useCallback, useEffect, useId, useState } from 'react';
 
 import { partAttributes, useInteractionState } from '../../../../../../foundation/behavior';
 import { defineRecipe } from '@/infrastructure/runtime/foundation/recipes/engine';
@@ -148,6 +148,24 @@ export default function ModernCard(props: CardProps): React.ReactElement {
       ? (cardProfileDefaults.variant as CardProps['variant'])
       : undefined) ??
     CARD_DEFAULTS.variant;
+
+  // A cover that 404s used to paint the browser's broken-image glyph inside the
+  // frame. The wrapper survives the failure so the reserved cover geometry never
+  // collapses (the Avatar fallback law); only the dead `img` is dropped and the
+  // skin paints the wrapper as a neutral placeholder.
+  const [coverFailed, setCoverFailed] = useState(false);
+  const coverRef = React.useRef<HTMLImageElement>(null);
+  useEffect(() => {
+    setCoverFailed(false);
+  }, [cover]);
+
+  // A server-rendered cover can fail BEFORE hydration attaches `onError`, so
+  // the failure would never be observed; reconcile against the real element.
+  useEffect(() => {
+    const img = coverRef.current;
+    if (!img || !img.complete) return;
+    if (img.naturalWidth === 0) setCoverFailed(true);
+  }, [cover]);
 
   // Responsive padding handling
   const reactId = useId();
@@ -265,6 +283,21 @@ export default function ModernCard(props: CardProps): React.ReactElement {
   ) : null;
   const responsiveAttrs = responsive ? responsive.attrs : {};
 
+  const coverNode = cover ? (
+    <div data-part="cover" data-error={coverFailed ? 'true' : undefined}>
+      {!coverFailed && (
+        <img
+          ref={coverRef}
+          data-part="cover-image"
+          src={cover}
+          alt={resolvedCoverAlt}
+          decoding="async"
+          onError={() => setCoverFailed(true)}
+        />
+      )}
+    </div>
+  ) : null;
+
   // ============================================================================
   // Loading state
   // ============================================================================
@@ -360,16 +393,7 @@ export default function ModernCard(props: CardProps): React.ReactElement {
         {...partAttributes('root', interaction)}
       >
         {/* Cover image - top */}
-        {cover && (logicalCoverPosition === 'top' || logicalCoverPosition === 'start') && (
-          <div data-part="cover">
-            <img
-              data-part="cover-image"
-              src={cover}
-              alt={resolvedCoverAlt}
-              decoding="async"
-            />
-          </div>
-        )}
+        {(logicalCoverPosition === 'top' || logicalCoverPosition === 'start') && coverNode}
 
         {/* Body */}
         <div data-part="body">
@@ -414,16 +438,7 @@ export default function ModernCard(props: CardProps): React.ReactElement {
         </div>
 
         {/* Cover image - bottom */}
-        {cover && (logicalCoverPosition === 'bottom' || logicalCoverPosition === 'end') && (
-          <div data-part="cover">
-            <img
-              data-part="cover-image"
-              src={cover}
-              alt={resolvedCoverAlt}
-              decoding="async"
-            />
-          </div>
-        )}
+        {(logicalCoverPosition === 'bottom' || logicalCoverPosition === 'end') && coverNode}
       </div>
     </>
   );

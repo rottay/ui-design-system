@@ -392,6 +392,10 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                   e.stopPropagation();
                   if (field) handleResizeStart(field, e.clientX);
                 }}
+                // mousedown was stopped but the click that ends the drag still
+                // reached the header, so every column resize also re-sorted
+                // the table.
+                onClick={(e) => e.stopPropagation()}
                 role="separator"
                 aria-label={t('table.resize_column', { column: String(column.title || '') })}
               />
@@ -520,7 +524,9 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
             data-part="row"
             data-selected={isSelected ? 'true' : undefined}
             data-hoverable={rowHoverable ? 'true' : undefined}
-            aria-expanded={hasExpandable ? isExpanded : undefined}
+            // Only a row that CAN expand reports the state: a flat row
+            // announcing "collapsed" advertised an action it does not have.
+            aria-expanded={hasExpandable && canExpand ? isExpanded : undefined}
             {...(onRow?.(record, actualIndex) || {})}
           >
             {/* Expand column */}
@@ -535,8 +541,12 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                     })
                   ) : (
                     <button
+                      // Every table control is `type="button"`: the default is
+                      // `submit`, so expanding a row inside a form submitted it.
+                      type="button"
                       data-part="expand-button"
                       onClick={() => handleToggleExpand(record, actualIndex)}
+                      aria-expanded={isExpanded}
                       aria-label={isExpanded ? t('table.collapse_row') : t('table.expand_row')}
                     >
                       <span data-part="expand-indicator" data-expanded={isExpanded ? 'true' : undefined} aria-hidden="true">
@@ -825,6 +835,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
           <span data-part="pagination-range">{paginationRange}</span>
           <div data-part="pagination-controls">
             <button
+              type="button"
               data-part="pagination-button"
               disabled={currentPage === 1}
               onClick={() => setCurrentPage(currentPage - 1)}
@@ -832,10 +843,23 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
             >
               <NavigationBackIcon decorative size={12} />
             </button>
-            <button data-part="pagination-button" data-current="true" aria-current="page">
+            {/* The current-page marker is a READOUT: the skin already gives it
+                `pointer-events: none`, so its tab stop offered a keyboard
+                activation that could never do anything. It keeps the button box
+                (the skin sizes every control off one rule) and drops out of the
+                tab order instead. */}
+            <button
+              type="button"
+              data-part="pagination-button"
+              data-current="true"
+              aria-current="page"
+              aria-disabled="true"
+              tabIndex={-1}
+            >
               {t('table.page', { current: currentPage })}
             </button>
             <button
+              type="button"
               data-part="pagination-button"
               disabled={currentPage * pageSize >= totalItems}
               onClick={() => setCurrentPage(currentPage + 1)}

@@ -106,6 +106,25 @@ export interface AutoCompleteProps {
   onSelect?: (value: string, option: AutoCompleteOption) => void;
   /** Custom filter function */
   filterOption?: boolean | ((inputValue: string, option: AutoCompleteOption) => boolean);
+  /**
+   * Id for the text input. Required for external labelling: a
+   * `<label htmlFor>` -- including the one FormField mints for its child --
+   * has nothing to resolve without it. Passing it also stands the generated
+   * fallback name down, so the external label is what gets announced.
+   */
+  id?: string;
+  /**
+   * Accessible name for the text input. Takes precedence over the placeholder
+   * and the localized default, which are only a floor for a bare control.
+   */
+  'aria-label'?: string;
+  /**
+   * Id(s) of the visible label(s) naming the input. Wins over `aria-label`
+   * and suppresses the generated floor entirely.
+   */
+  'aria-labelledby'?: string;
+  /** Id(s) of help/error text describing the input. */
+  'aria-describedby'?: string;
   /** Placeholder text */
   placeholder?: string;
   /** Whether disabled */

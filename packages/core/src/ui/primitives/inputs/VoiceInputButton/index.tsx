@@ -34,6 +34,8 @@
  * input has zero domain semantics, only a browser API dependency).
  */
 
+import { useId } from 'react';
+
 import { Box, Tooltip } from '../..';
 import { VisuallyHidden } from '../../foundation/VisuallyHidden';
 import {
@@ -97,6 +99,7 @@ export function VoiceInputButton({
   // The hook-owned error strings resolve through the same guard inside
   // `useVoiceInput` (keys `voiceInput.error.*`). NOTE: this hook call must
   // stay above the `isSupported` early return — hooks are unconditional.
+  const reactId = useId();
   const i18n = useOptionalTranslation('components');
   const voiceLabel = (key: string, fallback: string): string => {
     const translated = i18n?.t(key);
@@ -146,6 +149,11 @@ export function VoiceInputButton({
     ? errorMessage ?? voiceLabel('voiceInput.unavailable', 'Voice input unavailable')
     : '';
 
+  // The live announcement is a one-shot: anyone who reaches the button AFTER it
+  // fired (tabbing in later, or returning to the field) needs the failure as a
+  // standing description, not a passed-over region mutation.
+  const errorMessageId = `${reactId.replace(/:/g, '')}-voice-error`;
+
   return (
     <>
       <Tooltip
@@ -175,6 +183,7 @@ export function VoiceInputButton({
           onClick={handleClick}
           aria-label={resolvedAriaLabel}
           aria-pressed={isActive}
+          aria-describedby={isError ? errorMessageId : undefined}
           title={title}
           style={style}
         >
@@ -191,7 +200,7 @@ export function VoiceInputButton({
       </Tooltip>
       {/* Mounted unconditionally: AT only observes mutations of a live region
           that already existed before the text changed. */}
-      <VisuallyHidden role="status">{liveMessage}</VisuallyHidden>
+      <VisuallyHidden id={errorMessageId} role="status">{liveMessage}</VisuallyHidden>
     </>
   );
 }

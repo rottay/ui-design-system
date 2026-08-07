@@ -107,6 +107,24 @@ export default function ModernRadio(props: RadioProps): React.ReactElement {
     return () => document.removeEventListener('click', syncFromNativeGroup, true);
   }, [selfManaged, name]);
 
+  // A native form reset rewrites the DOM checkedness without any change event,
+  // so the skin's data-checked kept painting the pre-reset selection. The
+  // resync reads the input back after the form has actually been reset (the
+  // `reset` event fires before the algorithm runs and is cancelable).
+  useEffect(() => {
+    if (!selfManaged) return;
+    const form = inputRef.current?.form;
+    if (!form) return;
+    const syncFromReset = () => {
+      queueMicrotask(() => {
+        const self = inputRef.current;
+        if (self) setInternalChecked(self.checked);
+      });
+    };
+    form.addEventListener('reset', syncFromReset);
+    return () => form.removeEventListener('reset', syncFromReset);
+  }, [selfManaged]);
+
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if (groupControlled && group) {
       if (e.target.checked) {

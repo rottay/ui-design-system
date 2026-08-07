@@ -83,6 +83,7 @@ const ModernTextarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   const translation = useOptionalTranslation('common');
   const generatedId = useId();
   const controlId = id || `textarea-modern-${generatedId.replace(/:/g, '')}`;
+  const countId = `${controlId}-count`;
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const forwardedCleanupRef = useRef<(() => void) | undefined>(undefined);
   // The forwarded ref must not be spread in via ...rest: React 19 would
@@ -120,6 +121,10 @@ const ModernTextarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     onChange?.('', { target: { value: '' } } as React.ChangeEvent<HTMLTextAreaElement>);
     textareaRef.current?.focus();
   }, [isControlled, onChange, onClear]);
+
+  const callerDescribedBy = (rest as { 'aria-describedby'?: string })['aria-describedby'];
+  const describedBy =
+    [callerDescribedBy, showCount ? countId : undefined].filter(Boolean).join(' ') || undefined;
 
   const statusKey = status || 'default';
   const isError = statusKey === 'error';
@@ -235,6 +240,12 @@ const ModernTextarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         aria-invalid={isError || undefined}
         aria-required={required || undefined}
         {...rest}
+        // The count is the field's remaining-budget support text. Unlinked, a
+        // screen-reader user reached the limit with no warning: the control
+        // never carried it, and the live region only fires on a change the
+        // user makes AFTER arriving. Merged, not overwritten -- a caller's own
+        // description must survive.
+        aria-describedby={describedBy}
       />
 
       {showClearButton && (
@@ -251,6 +262,7 @@ const ModernTextarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
 
       {showCount && (
         <div
+          id={countId}
           data-part="count"
           data-count-state={countState}
           aria-live="polite"

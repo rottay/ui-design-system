@@ -628,6 +628,7 @@ const FormItem: React.FC<FormItemProps> = (props) => {
     touched,
     validating: validatingMap,
     setValue,
+    setTouched,
     registerField,
     unregisterField,
     layout,
@@ -706,10 +707,15 @@ const FormItem: React.FC<FormItemProps> = (props) => {
         ? target?.checked ?? Boolean(e)
         : target?.value ?? e;
     setValue(fieldName, value);
+    // Nothing ever marked a field touched, so `touched` stayed permanently
+    // empty: the `dependencies` re-validation effect could never fire and the
+    // hasFeedback success posture was unreachable without an explicit
+    // validateStatus.
+    setTouched(fieldName, true);
     if (rules) {
       validateField(fieldName, rules);
     }
-  }, [fieldName, setValue, rules, validateField, valuePropName]);
+  }, [fieldName, setValue, setTouched, rules, validateField, valuePropName]);
 
   if (hidden) return null;
 

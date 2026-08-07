@@ -19,6 +19,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
 import { partAttributes, useInteractionState } from '../../../../../../foundation/behavior';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ContentImageIcon } from '@/graphics/icons/presentation/semantic/generated/roles/content-image';
 import { ActionZoomInIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-zoom-in';
 import type { ImageProps } from '../../contracts';
@@ -51,6 +52,9 @@ function toIntrinsicPixels(value: number | string | undefined): number | undefin
  * @returns A skin-styled container with `<img>`, overlay, and zoom indicator.
  */
 export default function ModernImage(props: ImageProps): React.ReactElement {
+  // Optional provider + English floor: a bare composition (direct engine render
+  // in a test, a lightweight consumer) must not crash on a missing provider.
+  const i18n = useOptionalTranslation('components');
   const {
     src,
     alt,
@@ -93,9 +97,20 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
   // instead of an abrupt pop (P2 continuity fix).
   const { state: interaction, handlers: interactionHandlers } = useInteractionState();
 
+  const imgRef = React.useRef<HTMLImageElement>(null);
+
   // A new src means the image must be re-fetched; reset to loading
   useEffect(() => {
     setStatus('loading');
+  }, [src]);
+
+  // A server-rendered image can finish (or fail) BEFORE hydration attaches the
+  // handlers, so neither `load` nor `error` ever fires and the fallback never
+  // appears. Reconcile against the real element once it exists.
+  useEffect(() => {
+    const img = imgRef.current;
+    if (!img || !img.complete) return;
+    setStatus(img.naturalWidth === 0 ? 'error' : 'loaded');
   }, [src]);
 
   /**
@@ -154,6 +169,14 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
 
   const isInteractive = Boolean(onClick || zoomable);
 
+  // The failed-load panel is the only thing a sighted user still sees, so it
+  // must carry the picture's meaning. Caller `alt` wins; the shared English
+  // floor matches the `Image.Fallback` compound's published name.
+  const fallbackName =
+    alt && alt.trim().length > 0
+      ? alt
+      : (i18n?.tOr('image.failedToLoad', 'Image failed to load') ?? 'Image failed to load');
+
   return (
     <div
       {...rest}
@@ -198,20 +221,32 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
 
       {/* Error Fallback — the governed content.image role replaces the local
           ad-hoc SVG (same 3rem/2xl size, same currentColor ink the skin paints
-          through `--ds-color-text-secondary`; decorative by contract). */}
+          through `--ds-color-text-secondary`; decorative by contract).
+          The panel is the NAMED substitute for the failed picture: the default
+          icon is decorative and a caller `fallback` node may be decorative too,
+          so without an explicit role+name the error state reaches assistive
+          technology as an unlabelled box. It carries the caller's `alt` when
+          there is one, otherwise the same failure string the
+          `Image.Fallback` compound already publishes. */}
       {status === 'error' && (
-        <div data-part="fallback">
+        <div data-part="fallback" role="img" aria-label={fallbackName}>
           {fallback || <ContentImageIcon decorative size="2xl" />}
         </div>
       )}
 
       {/* Main Image — an absent alt floors to "" (decorative): omitting the
           attribute entirely leaves assistive technology announcing the src
-          filename, which is strictly worse than an honest empty name. */}
+          filename, which is strictly worse than an honest empty name.
+          On error the element stays mounted (so a later `src` change can retry)
+          but the skin holds it at opacity 0 and the named fallback above owns
+          the alternative, so it leaves the accessibility tree instead of
+          announcing the same alt twice. */}
       <img
+        ref={imgRef}
         data-part="img"
         src={src}
         alt={alt ?? ''}
+        aria-hidden={status === 'error' ? true : undefined}
         width={intrinsicWidth}
         height={intrinsicHeight}
         loading={lazy ? 'lazy' : 'eager'}

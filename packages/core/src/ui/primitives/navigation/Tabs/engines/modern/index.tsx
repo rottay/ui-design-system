@@ -427,8 +427,9 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
     refreshOverflow();
     const activeTab = currentKey ? tabRefs.current.get(currentKey) : null;
     // Scrollport-local: `scrollIntoView` walks every ancestor and yanked the
-    // document even when the tablist did not overflow — see `runtime/reveal`.
-    if (activeTab) revealTabWithinList(list, activeTab, elementDirection(list));
+    // document even when the tablist did not overflow — see `runtime/reveal`,
+    // which resolves the tablist's own direction for the RTL delta.
+    if (activeTab) revealTabWithinList(list, activeTab);
 
     if (recipe !== 'underline' || indicator === 'none' || !currentKey) {
       setIndicatorPosition(null);
@@ -451,13 +452,22 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
   useEffect(() => {
     const list = tabListRef.current;
     if (!list || typeof ResizeObserver === 'undefined') return;
-    const observer = new ResizeObserver(refreshOverflow);
+    const observer = new ResizeObserver(() => {
+      refreshOverflow();
+      // Geometry can change with NO render at all — a shrinking container, or a
+      // preceding label growing when an async count lands, re-clips the active
+      // tab while the selection never moved. The layout effect above is keyed on
+      // props and cannot see that; only the observer can. Writing `scrollLeft`
+      // changes no element's size, so this cannot re-trigger itself.
+      const activeTab = currentKey ? tabRefs.current.get(currentKey) : null;
+      if (activeTab) revealTabWithinList(list, activeTab);
+    });
     observer.observe(list);
     for (const node of tabRefs.current.values()) {
       if (node) observer.observe(node);
     }
     return () => observer.disconnect();
-  }, [items, refreshOverflow]);
+  }, [currentKey, items, refreshOverflow]);
 
   const scrollRail = (visualDirection: -1 | 1) => {
     const list = tabListRef.current;

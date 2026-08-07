@@ -98,14 +98,32 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
    * Persist slot values and fire onChange/onComplete callbacks.
    * onComplete only fires when every slot is filled, enabling auto-submit flows.
    */
+  const wasCompleteRef = useRef(false);
   const updateValue = useCallback((newValues: string[]) => {
     setInternalValues(newValues);
     const joined = newValues.join('');
     onChange?.(joined);
-    if (joined.length === length && newValues.every((v) => v !== '')) {
+    const complete = joined.length === length && newValues.every((v) => v !== '');
+    // onComplete is an auto-submit edge, not a level: retyping a slot in an
+    // already-full code used to re-fire it on every keystroke, so a verify
+    // flow submitted the code again for each correction.
+    if (complete && !wasCompleteRef.current) {
       onComplete?.(joined);
     }
+    wasCompleteRef.current = complete;
   }, [length, onChange, onComplete]);
+
+  /** Write `chars` from `startIndex` onward and land focus after the last one. */
+  const distribute = useCallback((chars: string[], startIndex: number) => {
+    if (chars.length === 0) return;
+    const newValues = [...values];
+    chars.forEach((char, i) => {
+      const slot = startIndex + i;
+      if (slot < length) newValues[slot] = char;
+    });
+    updateValue(newValues);
+    focusInputAt(inputRefs.current, Math.min(startIndex + chars.length, length - 1));
+  }, [values, length, updateValue]);
 
   /** Write a valid character to the current slot and auto-advance focus to the next. */
   const handleChange = useCallback((index: number, char: string) => {
@@ -164,16 +182,8 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
   const handlePaste = useCallback((e: React.ClipboardEvent) => {
     e.preventDefault();
     const pasted = e.clipboardData.getData('text').trim();
-    const chars = pasted.split('').filter(isValidChar).slice(0, length);
-    if (chars.length === 0) return;
-    const newValues = [...values];
-    chars.forEach((char, i) => {
-      if (i < length) newValues[i] = char;
-    });
-    updateValue(newValues);
-    const focusIndex = Math.min(chars.length, length - 1);
-    focusInputAt(inputRefs.current, focusIndex);
-  }, [values, isValidChar, length, updateValue]);
+    distribute(pasted.split('').filter(isValidChar).slice(0, length), 0);
+  }, [distribute, isValidChar, length]);
 
   return (
     <div className={className} style={style} data-part="field">
@@ -195,8 +205,16 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
             autoFocus={autoFocus && index === 0}
             onFocus={(e) => { e.target.select(); }}
             onChange={(e) => {
-              const char = e.target.value.slice(-1);
-              if (char) handleChange(index, char);
+              // The platform's one-time-code autofill delivers the WHOLE code
+              // into this one slot as an input event -- never a paste -- so
+              // keeping only the last character threw the code away. Anything
+              // longer than one character is distributed like a paste.
+              const incoming = e.target.value;
+              if (incoming.length > 1) {
+                distribute(incoming.split('').filter(isValidChar).slice(0, length - index), index);
+                return;
+              }
+              if (incoming) handleChange(index, incoming);
             }}
             onKeyDown={(e) => handleKeyDown(index, e)}
             onPaste={handlePaste}

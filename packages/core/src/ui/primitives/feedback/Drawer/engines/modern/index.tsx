@@ -311,7 +311,13 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
           style={{
             position: 'fixed',
             inset: 0,
-            zIndex: 'var(--ds-z-overlay)',
+            // The scrim rides THIS layer's band, one tier under its own panel
+            // (the rustic engine's `zIndex` / `zIndex + 1` pair). A fixed
+            // `--ds-z-overlay` sat below every drawer band, so a second drawer's
+            // scrim rendered under the first drawer's panel: the panel below
+            // stayed undimmed and kept swallowing the clicks meant for the
+            // scrim.
+            zIndex: `calc(${overlayLayer.zIndex} - 1)`,
             // maskOpacity rides the same --ds-drawer-overlay-opacity hatch the
             // rustic engine stamps; the modern skin's scrim consumes it with
             // the pre-existing 0.8 fill as its default (unset = unchanged).
@@ -367,7 +373,10 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
                   <span data-part="header-icon" aria-hidden="true">
                     <LayoutSidebarStartIcon decorative size={18} />
                   </span>
-                  <div id={titleId} data-part="title">
+                  {/* The dialog's title is a heading (the rustic engine's
+                      <h3>), carried as a role so no UA heading margin lands
+                      inside the skin-owned header band. */}
+                  <div id={titleId} data-part="title" role="heading" aria-level={2}>
                     {title}
                   </div>
                 </>

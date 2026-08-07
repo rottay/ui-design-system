@@ -210,6 +210,7 @@ export default function ModernAlert(props: AlertProps): React.ReactElement | nul
   }
 
   const needsResponsiveCSS = responsiveEntries.length > 0;
+  const labelId = `alert-label-${reactId.replace(/:/g, '')}`;
   const elementId = needsResponsiveCSS ? `alert-${reactId.replace(/:/g, '')}` : '';
   const responsive = needsResponsiveCSS
     ? generateResponsiveCSS(elementId, responsiveEntries)
@@ -304,7 +305,7 @@ export default function ModernAlert(props: AlertProps): React.ReactElement | nul
 
       {/* Content Section */}
       <div className="rottay-alert-shell__content" data-part="content">
-        <div data-part="label">{message}</div>
+        <div id={labelId} data-part="label">{message}</div>
         {description && <div data-part="description">{description}</div>}
         {/* Compound anatomy (`<Alert.Description>` and other structured
             children) is contract-documented; the modern engine used to drop it
@@ -320,6 +321,9 @@ export default function ModernAlert(props: AlertProps): React.ReactElement | nul
           data-part="action"
           onClick={handleClose}
           aria-label={i18n?.tOr('close', 'Close') ?? 'Close'}
+          // A stack of alerts otherwise exposes N identical "Close" buttons;
+          // the description says which message this one dismisses.
+          aria-describedby={labelId}
         >
           <ActionCloseIcon decorative size={16} />
         </button>

@@ -69,6 +69,7 @@
 
 import React, {
   forwardRef,
+  useId,
   useImperativeHandle,
   useState,
   useEffect,
@@ -160,8 +161,22 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
     // and derive the total count for boundary checks and dot rendering.
     const slides = React.Children.toArray(children);
     const [currentSlide, setCurrentSlide] = useState(initialSlide);
+
+    // A shrinking slide set (late data, a filtered gallery) or an out-of-range
+    // `initialSlide` strands the index past the end: every slide then holds a
+    // negative offset and the track renders blank with no dot selected. The
+    // live index is clamped for this render, and the effect settles the state
+    // so a set that grows back does not jump to the stale index.
+    const lastIndex = Math.max(0, slides.length - 1);
+    const activeSlide = Math.min(currentSlide, lastIndex);
+    useEffect(() => {
+      if (currentSlide > lastIndex) setCurrentSlide(lastIndex);
+    }, [currentSlide, lastIndex]);
+
     const [isPaused, setIsPaused] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
+    // Stable per-instance slide ids so each dot can declare what it controls.
+    const slideIdPrefix = `${useId().replace(/:/g, '')}-slide`;
     // Autoplay timer ref is stored outside state to avoid triggering
     // re-renders when the interval is created or cleared.
     const autoplayRef = useRef<NodeJS.Timeout | null>(null);
@@ -203,26 +218,26 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
           targetSlide = Math.max(0, Math.min(slideNumber, slides.length - 1));
         }
 
-        beforeChange?.(currentSlide, targetSlide);
+        beforeChange?.(activeSlide, targetSlide);
         setCurrentSlide(targetSlide);
         afterChange?.(targetSlide);
       },
-      [currentSlide, slides.length, infinite, beforeChange, afterChange]
+      [activeSlide, slides.length, infinite, beforeChange, afterChange]
     );
 
     /**
      * Navigate to the next slide.
      */
     const next = useCallback(() => {
-      goTo(currentSlide + 1);
-    }, [currentSlide, goTo]);
+      goTo(activeSlide + 1);
+    }, [activeSlide, goTo]);
 
     /**
      * Navigate to the previous slide.
      */
     const prev = useCallback(() => {
-      goTo(currentSlide - 1);
-    }, [currentSlide, goTo]);
+      goTo(activeSlide - 1);
+    }, [activeSlide, goTo]);
 
     // Expose imperative methods to parent components
     useImperativeHandle(ref, () => ({
@@ -239,16 +254,25 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
      */
     const autoRotating = autoplay && !isPaused && !reduceMotion;
 
+    // `next` closes over the live index and the consumer's beforeChange/
+    // afterChange, so it changes identity on every parent render. Holding it
+    // in a ref keeps the timer alive across those renders: as a dependency it
+    // cleared and restarted the interval, and a parent re-rendering faster
+    // than `autoplaySpeed` meant autoplay never advanced a single slide.
+    const nextRef = useRef(next);
     useEffect(() => {
-      if (autoRotating) {
-        autoplayRef.current = setInterval(next, autoplaySpeed);
-      }
+      nextRef.current = next;
+    });
+
+    useEffect(() => {
+      if (!autoRotating) return undefined;
+      const timer = setInterval(() => nextRef.current(), autoplaySpeed);
+      autoplayRef.current = timer;
       return () => {
-        if (autoplayRef.current) {
-          clearInterval(autoplayRef.current);
-        }
+        clearInterval(timer);
+        if (autoplayRef.current === timer) autoplayRef.current = null;
       };
-    }, [autoRotating, autoplaySpeed, next]);
+    }, [autoRotating, autoplaySpeed]);
 
     /**
      * Pause autoplay on mouse hover.
@@ -389,8 +413,8 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
 
     // Boundary law: with `infinite` off, the edge arrow is a dead control —
     // expose the real disabled state instead of a silent no-op click.
-    const prevDisabled = !infinite && currentSlide === 0;
-    const nextDisabled = !infinite && currentSlide === slides.length - 1;
+    const prevDisabled = !infinite && activeSlide === 0;
+    const nextDisabled = !infinite && activeSlide === slides.length - 1;
 
     // The click that lands the final slide is the same click that disables the
     // arrow that delivered it. Focus left on a disabled control is dead focus
@@ -406,6 +430,18 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
         nextArrowRef.current?.focus();
       }
     }, [prevDisabled, nextDisabled]);
+
+    // Roving stop: with one dot in the tab order, focus has to travel with the
+    // selection or the arrow keys strand it on a tabIndex={-1} dot and the next
+    // Tab leaves the carousel entirely.
+    const dotsRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+      const container = dotsRef.current;
+      const active = document.activeElement;
+      if (!container || !(active instanceof HTMLElement) || !container.contains(active)) return;
+      const selected = container.querySelector<HTMLElement>('[data-part="dot"][data-selected="true"]');
+      if (selected && selected !== active) selected.focus();
+    }, [activeSlide]);
 
     // A blank/whitespace-only name is not meaningful: the root stays a plain
     // (non-landmark) div and the naming attribute is dropped. Only a named
@@ -452,8 +488,9 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
           {slides.map((slide, index) => (
             <div
               key={index}
+              id={`${slideIdPrefix}-${index}`}
               data-part="slide"
-              data-selected={index === currentSlide ? 'true' : 'false'}
+              data-selected={index === activeSlide ? 'true' : 'false'}
               style={{
                 // Fade mode: toggle opacity only, no translation needed.
                 // Slide mode: offset each slide by its distance from current,
@@ -465,12 +502,12 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
                 // direction mirrors in RTL. Reduced motion lands in the final
                 // state with NO transition (compositor-safe transform/opacity
                 // either way).
-                opacity: fadeEffect ? (index === currentSlide ? 1 : 0) : 1,
+                opacity: fadeEffect ? (index === activeSlide ? 1 : 0) : 1,
                 '--ds-carousel-slide-transform': fadeEffect
                   ? 'none'
                   : vertical
-                    ? `translateY(${(index - currentSlide) * 100}%)`
-                    : `translateX(calc(${(index - currentSlide) * 100}% * var(--ds-carousel-rtl-factor, 1)))`,
+                    ? `translateY(${(index - activeSlide) * 100}%)`
+                    : `translateX(calc(${(index - activeSlide) * 100}% * var(--ds-carousel-rtl-factor, 1)))`,
                 transition: reduceMotion
                   ? 'none'
                   : `transform ${speed}ms var(--ds-motion-ease-out), opacity ${speed}ms var(--ds-motion-ease-out)`,
@@ -478,8 +515,8 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
               role="group"
               aria-roledescription="slide"
               aria-label={carouselLabel('carousel.slideOf', `Slide ${index + 1} of ${slides.length}`, { index: index + 1, total: slides.length })}
-              aria-hidden={index !== currentSlide}
-              inert={index !== currentSlide ? true : undefined}
+              aria-hidden={index !== activeSlide}
+              inert={index !== activeSlide ? true : undefined}
             >
               {slide}
             </div>
@@ -546,10 +583,13 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
             contract's `dotsClass` rides the container as a caller hook. */}
         {dots && (
           <div
+            ref={dotsRef}
             className={`${dotsPositionClass}${dotsClass ? ` ${dotsClass}` : ''}`}
             data-part="dots"
             data-dots-position={dotPosition}
             role="tablist"
+            // A lateral dot column is a vertical tablist; the row is horizontal.
+            aria-orientation={dotPosition === 'left' || dotPosition === 'right' ? 'vertical' : 'horizontal'}
             aria-label={carouselLabel('carousel.navigation', 'Carousel navigation')}
             onMouseEnter={handleDotsMouseEnter}
             onMouseLeave={handleDotsMouseLeave}
@@ -558,10 +598,17 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
               <button
                 key={index}
                 data-part="dot"
-                data-selected={index === currentSlide ? 'true' : 'false'}
+                data-selected={index === activeSlide ? 'true' : 'false'}
                 onClick={() => goTo(index)}
                 aria-label={carouselLabel('carousel.goToSlide', `Go to slide ${index + 1}`, { index: index + 1 })}
-                aria-selected={index === currentSlide}
+                aria-selected={index === activeSlide}
+                // A `tab` must name the thing it switches to; the slides now
+                // carry the ids that close that relation.
+                aria-controls={`${slideIdPrefix}-${index}`}
+                // Roving stop (APG tablist): one dot in the tab order, arrows
+                // move between them. Ten slides used to mean ten tab stops
+                // between the carousel and the rest of the page.
+                tabIndex={index === activeSlide ? 0 : -1}
                 role="tab"
                 type="button"
               />

@@ -18,7 +18,7 @@
  * @category Inputs
  * @package @rottay/design-system
  */
-import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useId, useMemo } from 'react';
 import { arrayValueAt } from '@/foundation/kernel/collections';
 import type { CascaderProps, CascaderOption, CascaderValue, CascaderFieldNames } from '../../contracts';
 import { CASCADER_DEFAULTS } from '../../contracts';
@@ -169,6 +169,10 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
     const value = (isControlled ? controlledValue : internalValue) as CascaderValue;
     const isOpen = controlledOpen !== undefined ? controlledOpen : internalOpen;
 
+    // Instance-scoped popup id: `aria-expanded` on a combobox is meaningless to
+    // AT without an `aria-controls` pointing at the popup it expanded.
+    const popupId = `cascader-popup-${useId().replace(/:/g, '')}`;
+
     const containerRef = useRef<HTMLDivElement>(null);
     const searchInputRef = useRef<HTMLInputElement>(null);
     const triggerRef = useRef<HTMLDivElement>(null);
@@ -206,24 +210,25 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       });
     }, [options]);
 
-    // Build selected path from value
+    // Build selected path from value. The rebuild is UNCONDITIONAL: guarding on
+    // a non-empty value left the trigger label, its accessible name and the
+    // clear affordance showing a stale path forever once a controlled consumer
+    // reset `value` to [] (form reset, external clear, route change).
     useEffect(() => {
-      if (value.length > 0) {
-        const path: CascaderOption[] = [];
-        let currentOptions = options;
+      const path: CascaderOption[] = [];
+      let currentOptions = options;
 
-        for (const val of value) {
-          const found = currentOptions.find((opt) => getValue(opt, fieldNames) === val);
-          if (found) {
-            path.push(found);
-            const children = getChildren(found, fieldNames);
-            if (children) {
-              currentOptions = children;
-            }
+      for (const val of value) {
+        const found = currentOptions.find((opt) => getValue(opt, fieldNames) === val);
+        if (found) {
+          path.push(found);
+          const children = getChildren(found, fieldNames);
+          if (children) {
+            currentOptions = children;
           }
         }
-        setSelectedPath(path);
       }
+      setSelectedPath(path);
     }, [value, options, fieldNames]);
 
     // ------ Async load helpers ------
@@ -272,6 +277,10 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
         setSelectedPath(newPath);
         onChange?.(newValue, newPath);
         handleOpenChange(false);
+        // Options are real focused buttons here, so dismissing the panel
+        // unmounts the focused element -- without the restore, focus strands
+        // on <body> after every successful selection.
+        triggerRef.current?.focus();
       }
     };
 
@@ -337,6 +346,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       setSelectedPath(fo.path);
       onChange?.(fo.values as CascaderValue, fo.path);
       handleOpenChange(false);
+      triggerRef.current?.focus();
     };
 
     // Focus the first option of a freshly appended column after a
@@ -508,6 +518,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
           data-disabled={disabled || undefined}
           role="combobox"
           aria-expanded={isOpen}
+          aria-controls={isOpen ? popupId : undefined}
           aria-haspopup="listbox"
           aria-label={getTriggerName()}
           aria-disabled={disabled || undefined}
@@ -553,7 +564,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                 role="option" rows. Root `loading` masks the panel content
                 with a loading-state that keeps the empty state's spatial
                 contract (never a spinner floating in a blank panel). */}
-            <div data-part="dropdown" className={popupClassName || undefined} ref={dropdownRef} onKeyDown={handleDropdownKeyDown}>
+            <div id={popupId} data-part="dropdown" className={popupClassName || undefined} ref={dropdownRef} onKeyDown={handleDropdownKeyDown}>
             {loading ? (
               <div data-part="loading-state" role="status">
                 <span data-part="loading-spinner" aria-hidden="true" />

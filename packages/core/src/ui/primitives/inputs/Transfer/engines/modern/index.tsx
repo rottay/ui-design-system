@@ -26,6 +26,7 @@ import { ModernCheckbox } from '../../../../facade';
 import { NavigationBackIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-back';
 import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-forward';
 import { ActionSearchIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-search';
+import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
 import { FeedbackEmptyIcon } from '@/graphics/icons/presentation/semantic/generated/roles/feedback-empty';
 
 /** Catalog lookup with an honest English floor: a bare composition (no
@@ -33,8 +34,8 @@ import { FeedbackEmptyIcon } from '@/graphics/icons/presentation/semantic/genera
  * and a missing catalog key (the provider echoes it back) falls to English. */
 function useTransferTranslation() {
   const i18n = useOptionalTranslation('components');
-  return (key: string, fallback: string): string => {
-    const resolved = i18n?.t(key);
+  return (key: string, fallback: string, params?: Record<string, string | number>): string => {
+    const resolved = i18n?.t(key, params);
     if (!resolved || resolved === key || resolved === `components.${key}`) return fallback;
     return resolved;
   };
@@ -56,6 +57,12 @@ interface TransferListProps {
   locale?: TransferProps['locale'];
   listStyle?: React.CSSProperties;
   pagination?: boolean | { pageSize?: number };
+  /** `false` drops the row/select-all checkboxes: the panel's selection has no
+   *  consumer (the `oneWay` target), so offering it would be inert chrome. */
+  selectable?: boolean;
+  /** Per-row removal, the `oneWay` grammar's replacement for the missing
+   *  bulk left-move button. Absent means rows carry no remove action. */
+  onRemoveItem?: (item: TransferItem) => void;
 }
 
 /** Default number of items shown per page when pagination is enabled without
@@ -83,6 +90,8 @@ const TransferList: React.FC<TransferListProps> = ({
   locale,
   listStyle,
   pagination,
+  selectable = true,
+  onRemoveItem,
 }) => {
   const tOr = useTransferTranslation();
   const [currentPage, setCurrentPage] = useState(1);
@@ -144,7 +153,7 @@ const TransferList: React.FC<TransferListProps> = ({
     >
       {/* Header */}
       <div data-part="panel-header">
-        {showSelectAll && (
+        {showSelectAll && selectable && (
           /* The select-all control composes the Checkbox primitive (never a
              native input). The accessible name rides the primitive's own
              label slot (sr-only copy), and the wrapper keeps the public
@@ -167,8 +176,10 @@ const TransferList: React.FC<TransferListProps> = ({
         <span data-part="panel-title">{title}</span>
         <span data-part="panel-count">
           {/* Count + governed unit (contract locale.itemUnit/itemsUnit,
-              catalog-backed). Tabular numerals ride the skin. */}
-          {selectedKeys.size}/{items.length}{' '}
+              catalog-backed). Tabular numerals ride the skin. A panel with no
+              selection reports its total alone -- a frozen "0/" numerator
+              reads as a broken counter. */}
+          {selectable ? `${selectedKeys.size}/` : ''}{items.length}{' '}
           {items.length === 1
             ? (locale?.itemUnit || tOr('transfer.item_unit', 'item'))
             : (locale?.itemsUnit || tOr('transfer.items_unit', 'items'))}
@@ -199,27 +210,51 @@ const TransferList: React.FC<TransferListProps> = ({
           /* A checkbox GROUP per panel (one real, named Checkbox primitive per
              row): valid APG without the nested-interactive trap a listbox of
              checkbox-bearing options would create. See the family ficha for
-             the listbox conversion contract. */
-          <ul role="group" aria-label={typeof title === 'string' ? title : undefined}>
+             the listbox conversion contract. A non-selectable panel is a plain
+             list -- `group` would promise a control set that is not there. */
+          <ul
+            role={selectable ? 'group' : 'list'}
+            aria-label={typeof title === 'string' ? title : undefined}
+          >
             {paginatedItems.map((item) => (
               <li key={item.key}>
                 <div
                   data-part="panel-item"
-                  data-selected={selectedKeys.has(item.key) || undefined}
+                  data-selectable={selectable ? undefined : 'false'}
+                  data-selected={(selectable && selectedKeys.has(item.key)) || undefined}
                   data-disabled={disabled || item.disabled || undefined}
                 >
-                  <span
-                    data-part="panel-item-checkbox"
-                    data-disabled={disabled || item.disabled || undefined}
-                  >
-                    <ModernCheckbox
-                      size="sm"
-                      label={render ? render(item) : item.title}
-                      checked={selectedKeys.has(item.key)}
-                      onChange={() => handleSelect(item.key)}
+                  {selectable ? (
+                    <span
+                      data-part="panel-item-checkbox"
+                      data-disabled={disabled || item.disabled || undefined}
+                    >
+                      <ModernCheckbox
+                        size="sm"
+                        label={render ? render(item) : item.title}
+                        checked={selectedKeys.has(item.key)}
+                        onChange={() => handleSelect(item.key)}
+                        disabled={disabled || item.disabled}
+                      />
+                    </span>
+                  ) : (
+                    <span data-part="panel-item-label">
+                      {render ? render(item) : item.title}
+                    </span>
+                  )}
+                  {onRemoveItem && (
+                    <button
+                      type="button"
+                      data-part="panel-item-remove"
                       disabled={disabled || item.disabled}
-                    />
-                  </span>
+                      aria-label={tOr('transfer.remove_item', `Remove ${item.title}`, {
+                        item: item.title,
+                      })}
+                      onClick={() => onRemoveItem(item)}
+                    >
+                      <ActionCloseIcon decorative size={12} />
+                    </button>
+                  )}
                 </div>
               </li>
             ))}
@@ -345,13 +380,37 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
       }
       onChange?.(newTargetKeys, direction, keysToMove);
 
-      // Clear selections after move so the user starts fresh
+      // Clear selections after move so the user starts fresh. The consumer is
+      // told: the keys it last received are gone from the panel they named, so
+      // a mirror of `onSelectChange` left holding them would drive its own
+      // enable/disable chrome off a selection the user can no longer see.
       if (direction === 'right') {
         setSourceSelectedKeys(new Set());
+        onSelectChange?.([], Array.from(targetSelectedKeys));
       } else {
         setTargetSelectedKeys(new Set());
+        onSelectChange?.(Array.from(sourceSelectedKeys), []);
       }
-    }, [sourceSelectedKeys, targetSelectedKeys, targetKeysSet, isControlled, onChange]);
+    }, [sourceSelectedKeys, targetSelectedKeys, targetKeysSet, isControlled, onChange, onSelectChange]);
+
+    /**
+     * `oneWay` removal. With the bulk left-move button gone, each target row
+     * carries its own remove action -- otherwise the panel is a one-way trap
+     * and its selection chrome has no consumer at all.
+     */
+    const handleRemoveTargetItem = useCallback((item: TransferItem) => {
+      const newTargetKeys = Array.from(targetKeysSet).filter((key) => key !== item.key);
+      if (!isControlled) {
+        setInternalTargetKeys(new Set(newTargetKeys));
+      }
+      onChange?.(newTargetKeys, 'left', [item.key]);
+      if (targetSelectedKeys.has(item.key)) {
+        const nextSelected = new Set(targetSelectedKeys);
+        nextSelected.delete(item.key);
+        setTargetSelectedKeys(nextSelected);
+        onSelectChange?.(Array.from(sourceSelectedKeys), Array.from(nextSelected));
+      }
+    }, [targetKeysSet, isControlled, onChange, onSelectChange, sourceSelectedKeys, targetSelectedKeys]);
 
     const handleSourceSelectChange = (keys: Set<string>) => {
       setSourceSelectedKeys(keys);
@@ -444,6 +503,11 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
           locale={locale}
           listStyle={listStyle}
           pagination={pagination}
+          /* oneWay: no left-move button exists, so target selection would be
+             inert chrome. The panel drops its checkboxes and each row gets the
+             per-item remove action instead (the antd oneWay grammar). */
+          selectable={!oneWay}
+          onRemoveItem={oneWay ? handleRemoveTargetItem : undefined}
         />
       </div>
     );

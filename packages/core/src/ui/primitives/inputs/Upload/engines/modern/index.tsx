@@ -45,7 +45,7 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import type { UploadProps, DraggerProps, UploadFile, UploadChangeInfo, UploadListType } from '../../contracts';
 import { UPLOAD_DEFAULTS } from '../../contracts';
-import { removeUploadFile, resolveAcceptedUploadFiles } from '../../runtime/upload-behavior';
+import { filterDroppedFiles, removeUploadFile, resolveAcceptedUploadFiles } from '../../runtime/upload-behavior';
 import { Progress } from '../../../../facade';
 import { useTranslation, formatFileSize } from '@/infrastructure/runtime/i18n';
 import { ActionAddIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-add';
@@ -885,7 +885,9 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
       if (disabled) return;
       setIsDragOver(false);
       onDrop?.(e);
-      processFiles(Array.from(e.dataTransfer.files));
+      // The declared accept/multiple constraints are enforced by the native
+      // input on the picker path only; a drop bypasses it entirely.
+      processFiles(filterDroppedFiles(Array.from(e.dataTransfer.files), accept, multiple));
     };
 
     const handleRemove = async (file: UploadFile) => {

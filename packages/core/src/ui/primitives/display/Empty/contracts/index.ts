@@ -62,6 +62,21 @@ export interface EmptyProps extends BaseComponentProps, EngineAwareProps, WithCh
   image?: ReactNode | 'default' | 'simple';
   imageStyle?: React.CSSProperties;
   description?: ReactNode;
+  /**
+   * ARIA role for the placeholder region. Defaults to `status`, which makes the
+   * region an implicit polite live region.
+   *
+   * Declaring it is what lets a caller silence or re-role a placeholder that is
+   * already announced by its container — a table body that renders its own
+   * "no results" summary would otherwise announce twice, with no way to opt out.
+   */
+  role?: string;
+  /**
+   * Live-region politeness. Defaults to `polite` only while `role` is the
+   * default `status`: a caller who re-roles the region owns its announcement
+   * semantics, and pinning `polite` under `role="alert"` would contradict it.
+   */
+  'aria-live'?: 'off' | 'polite' | 'assertive';
 }
 
 // ============================================================================

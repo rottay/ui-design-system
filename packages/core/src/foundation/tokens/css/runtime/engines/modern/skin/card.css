@@ -438,6 +438,13 @@
   object-position: var(--ds-card-cover-object-position);
 }
 
+/* ---- cover that failed to load: the engine drops the dead `img` and keeps the
+        wrapper, so the reserved geometry holds and the gap reads as the same
+        quiet inset material the loading placeholder already uses ---- */
+.ds-card.ds-card--modern[data-part='root'] > [data-part='cover'][data-error='true'] {
+  background-color: var(--ds-surface-inset);
+}
+
 .ds-card.ds-card--modern[data-part='root'][data-cover-position='top'] > [data-part='cover'],
 .ds-card.ds-card--modern[data-part='root'][data-cover-position='bottom'] > [data-part='cover'] {
   aspect-ratio: var(--ds-card-cover-aspect-ratio, var(--ds-card-media-aspect-ratio));

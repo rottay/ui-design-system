@@ -68,6 +68,10 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
       onSearch,
       onSelect,
       filterOption = AUTOCOMPLETE_DEFAULTS.filterOption,
+      id,
+      'aria-label': ariaLabel,
+      'aria-labelledby': ariaLabelledBy,
+      'aria-describedby': ariaDescribedBy,
       placeholder,
       disabled,
       allowClear,
@@ -90,11 +94,21 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
     // English default as the floor.
     const notFoundContent = notFoundContentProp ?? tOr('autocomplete.not_found', 'No results');
     const loadingText = loadingTextProp ?? tOr('autocomplete.loading', 'Loading suggestions...');
-    // Accessible name (axe `label` critical, Mentions K4-D idiom): the
-    // contract exposes no `aria-label` axis, so the visible placeholder is
-    // the floor and a localized default names the bare control. A consumer
-    // composing a visible label should use FormField.
-    const inputLabel = placeholder ?? tOr('autocomplete.input_label', 'Autocomplete');
+    // Accessible name (axe `label` critical, Mentions K4-D idiom). The
+    // generated floor is exactly that -- a floor for a BARE control. It used
+    // to be unconditional, which inverted the precedence every labelling
+    // mechanism relies on: a hard-coded `aria-label` outranks a visible
+    // `<label htmlFor>`, so the pointed-to control announced "Autocomplete"
+    // (or its placeholder) instead of the label the user could read, and the
+    // documented FormField escape hatch could not work at all -- the contract
+    // had no `id` to aim `htmlFor` at either.
+    // An `id` counts as consumer-owned naming: it is the hook an external
+    // `<label htmlFor>` (FormField's included) resolves against, and the
+    // engine cannot see that label from here. Supplying one is the opt-out.
+    const consumerOwnsName = Boolean(ariaLabelledBy || ariaLabel || id);
+    const inputLabel = consumerOwnsName
+      ? ariaLabel
+      : (placeholder ?? tOr('autocomplete.input_label', 'Autocomplete'));
 
     // The skin keys per-size geometry on `data-size` with the canonical
     // 'sm' | 'md' | 'lg' vocabulary; toCanonicalSize resolves either spelling.
@@ -183,6 +197,31 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
       handleOpenChange(false);
       setActiveIndex(-1);
     }, [isControlled, onChange, onSelect, handleOpenChange, setActiveIndex]);
+
+    /**
+     * Commits an option and puts DOM focus back on the input. The pointer path
+     * needs both halves and they fight each other: the option button took
+     * focus on mousedown, so returning it fires a real `focus` event -- and
+     * the input opens the panel on focus. Selecting therefore re-opened the
+     * list it had just closed. The flag is set only around the programmatic
+     * restore (focus() dispatches synchronously), so a genuine user focus is
+     * never swallowed; the guard also skips the call entirely when the input
+     * already holds focus, which is the keyboard-Enter path.
+     */
+    const restoringFocusRef = useRef(false);
+    const selectAndRestoreFocus = useCallback((option: AutoCompleteOption) => {
+      handleSelect(option);
+      const input = inputRef.current;
+      if (!input || document.activeElement === input) return;
+      restoringFocusRef.current = true;
+      input.focus();
+      restoringFocusRef.current = false;
+    }, [handleSelect]);
+
+    const handleInputFocus = useCallback(() => {
+      if (restoringFocusRef.current) return;
+      handleOpenChange(true);
+    }, [handleOpenChange]);
 
     // Dismiss the dropdown when the user clicks outside the component.
     // The listener is only attached while the dropdown is open to avoid
@@ -314,10 +353,11 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
         <div data-part="input-wrapper">
           <input
             ref={inputRef}
+            id={id}
             type="text"
             value={value}
             onChange={(e) => handleChange(e.target.value)}
-            onFocus={() => handleOpenChange(true)}
+            onFocus={handleInputFocus}
             onKeyDown={handleKeyDown}
             placeholder={placeholder}
             disabled={disabled}
@@ -326,6 +366,8 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
             data-open={isOpen || undefined}
             data-disabled={disabled || undefined}
             aria-label={inputLabel}
+            aria-labelledby={ariaLabelledBy}
+            aria-describedby={ariaDescribedBy}
             aria-invalid={status === 'error' || undefined}
             role={inputProps.role}
             aria-haspopup={inputProps['aria-haspopup']}
@@ -406,15 +448,24 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
                 <li key={option.value} role="none">
                   <button
                     type="button"
-                    disabled={option.disabled}
+                    // A disabled combobox has inert options: with a controlled
+                    // `open` the panel still renders, and an ungated row let a
+                    // click fire onChange/onSelect on a disabled control.
+                    disabled={option.disabled || disabled}
                     tabIndex={-1}
-                    onClick={() => handleSelect(option)}
+                    // Selection dismisses the popup, which unmounts the button
+                    // the pointer just focused -- without the restore, focus
+                    // strands on <body> and the next Tab restarts the document.
+                    onClick={() => selectAndRestoreFocus(option)}
                     // Sync keyboard focus index on hover so mouse and keyboard
                     // navigation stay coordinated -- without tripping the
                     // keyboard-only scroll-into-view.
                     onMouseEnter={() => setActiveIndex(index, 'pointer')}
                     data-part="option"
-                    data-disabled={option.disabled || undefined}
+                    // Must track the same condition as `disabled` above: the
+                    // skin paints inertness off this attribute, so gating it on
+                    // the row alone left a disabled control's rows looking live.
+                    data-disabled={option.disabled || disabled || undefined}
                     // Truncated rows keep a full-value affordance (Select idiom).
                     title={typeof option.label === 'string' ? option.label : option.value}
                     role={itemProps.role}

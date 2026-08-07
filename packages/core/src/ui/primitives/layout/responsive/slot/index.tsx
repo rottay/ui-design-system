@@ -134,11 +134,14 @@ function isRenderable(content: React.ReactNode): boolean {
  * - desktop: falls back to tablet, then phone
  */
 function renderDeviceSlots(props: ResponsiveSlotProps): React.ReactElement {
-  const { phone, tablet, desktop } = props;
+  const { phone, tablet, desktop, xs } = props;
 
-  const phoneContent = phone;
-  const tabletContent = tablet ?? phone;
-  const desktopContent = desktop ?? tablet ?? phone;
+  // `xs` is contract-documented as the alias of `phone`. Mixing it with a
+  // device alias (`<ResponsiveSlot xs={…} desktop={…} />`) used to drop it
+  // entirely, because the device branch only ever read phone/tablet/desktop.
+  const phoneContent = phone ?? xs;
+  const tabletContent = tablet ?? phoneContent;
+  const desktopContent = desktop ?? tablet ?? phoneContent;
 
   // Optimization: if all three resolve to the same content, render without
   // any Show wrappers since the content is identical at all sizes.

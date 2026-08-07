@@ -313,7 +313,8 @@ function ToastStackItem({
  * ```
  *
  * @param props - {@link ToastContainerProps}
- * @returns Portal-rendered toast container or null if empty
+ * @returns Portal-rendered toast container (always mounted, so its polite
+ *   live region pre-exists every toast it announces)
  *
  * @see {@link ToastProvider} for context setup
  * @see {@link useToast} for triggering toasts
@@ -325,7 +326,7 @@ export function ToastContainer({
   className = '',
   style,
   renderToast,
-}: ToastContainerProps): React.ReactElement | null {
+}: ToastContainerProps): React.ReactElement {
   const { toasts, config, dispatch } = useToastContext();
   const containerRef = useRef<HTMLDivElement>(null);
   const { prefersReducedMotion } = useBreakpoints();
@@ -431,17 +432,12 @@ export function ToastContainer({
     POSITION_MAP[position].horizontal === 'center' && !Object.prototype.hasOwnProperty.call(style ?? {}, 'transform');
 
   // ========================================================================
-  // Early Return
-  // ========================================================================
-
-  // Don't render if no toasts
-  if (renderedToasts.length === 0) {
-    return null;
-  }
-
-  // ========================================================================
   // Render Content
   // ========================================================================
+
+  // INVARIANT: the polite live region below must already be in the document
+  // when a toast is inserted into it -- a region that mounts already
+  // populated is not announced, so the stack is never unmounted when empty.
 
   const content = (
     <div

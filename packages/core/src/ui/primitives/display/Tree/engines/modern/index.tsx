@@ -685,7 +685,13 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
   // Flatten the tree into a linear list of keys representing the currently
   // visible nodes (respecting which branches are expanded). This powers
   // ArrowUp/ArrowDown keyboard navigation with O(1) index lookups.
-  const visibleKeys = useMemo(() => flattenVisibleKeys(treeData, actualExpandedKeys), [treeData, actualExpandedKeys]);
+  // A search filter culls nodes from the DOM, so the walk is narrowed to the
+  // rendered set: navigating onto a culled key has no element to focus, which
+  // stranded DOM focus while focusedKey silently walked invisible nodes.
+  const visibleKeys = useMemo(() => {
+    const flat = flattenVisibleKeys(treeData, actualExpandedKeys);
+    return filteredKeys ? flat.filter((key) => filteredKeys.has(key)) : flat;
+  }, [treeData, actualExpandedKeys, filteredKeys]);
 
   // The roving tab stop: while no node has been keyboard-focused, the first
   // visible node carries it so a Tab into the tree lands somewhere (WAI-ARIA

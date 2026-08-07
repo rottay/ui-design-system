@@ -143,9 +143,53 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
       onChange?.(newValue);
     }, [isControlled, onChange]);
 
+    /**
+     * `step={null}` is the contract's mark-ladder mode: only the mark values
+     * are legal. The engine used to coerce it to `step || 1` on the native
+     * input and hand back a free continuous slider, so the prop had no effect
+     * at all and the marks were decoration. These stops are that ladder,
+     * ascending and clamped to the scale; `null` means the mode is off (no
+     * `step={null}`, or no usable marks to land on).
+     */
+    const markStops = React.useMemo(() => {
+      if (step !== null || !marks) return null;
+      const stops = Object.keys(marks)
+        .map(Number)
+        .filter((val) => Number.isFinite(val) && val >= min! && val <= max!)
+        .sort((a, b) => a - b);
+      return stops.length > 0 ? stops : null;
+    }, [step, marks, min, max]);
+
+    /** Nearest legal stop; identity when the ladder is off. */
+    const snapToStop = (val: number): number => {
+      if (!markStops) return val;
+      return markStops.reduce(
+        (best, stop) => (Math.abs(stop - val) < Math.abs(best - val) ? stop : best),
+        markStops[0]!,
+      );
+    };
+
+    /**
+     * Keyboard movement along the ladder. Snapping a native +1 step would
+     * bounce straight back to the stop it started on, so value keys walk the
+     * ladder explicitly instead. A stop is the coarsest unit the ladder has,
+     * so PageUp/PageDown move one stop like the arrows; Home/End take the ends.
+     */
+    const stopForKey = (val: number, key: string): number | undefined => {
+      if (!markStops) return undefined;
+      if (key === 'Home') return markStops[0]!;
+      if (key === 'End') return markStops[markStops.length - 1]!;
+      const forward = key === 'ArrowRight' || key === 'ArrowUp' || key === 'PageUp';
+      const backward = key === 'ArrowLeft' || key === 'ArrowDown' || key === 'PageDown';
+      if (!forward && !backward) return undefined;
+      const index = markStops.indexOf(snapToStop(val));
+      const next = Math.min(markStops.length - 1, Math.max(0, index + (forward ? 1 : -1)));
+      return markStops[next]!;
+    };
+
     /** Handler for the single-value slider (non-range mode). */
     const handleSingleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const newValue = Number(e.target.value);
+      const newValue = snapToStop(Number(e.target.value));
       handleChange(newValue);
     };
 
@@ -155,7 +199,7 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
      * handle value is preserved from the current tuple.
      */
     const handleRangeChange = (index: 0 | 1) => (e: React.ChangeEvent<HTMLInputElement>) => {
-      const newPartValue = Number(e.target.value);
+      const newPartValue = snapToStop(Number(e.target.value));
       const current = currentValue as [number, number];
       // Range semantics: the start thumb never passes the end thumb (and vice
       // versa) -- keyboard steps clamp at the opposite value.
@@ -181,11 +225,38 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
 
     /**
      * `keyboard={false}` vetoes value keys only; Tab/activation always pass.
+     * Under the mark ladder the same keys are taken over rather than vetoed:
+     * the native input would move by its own step and the snap would undo it.
+     * `index` names the range handle, or is omitted in single mode.
      */
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (keyboard === false && VALUE_KEYS.has(e.key)) {
+    const makeKeyDownHandler = (index?: 0 | 1) => (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (!VALUE_KEYS.has(e.key)) return;
+      if (keyboard === false) {
         e.preventDefault();
+        return;
       }
+      if (!markStops) return;
+      const current = index === undefined
+        ? (currentValue as number)
+        : (currentValue as [number, number])[index];
+      const next = stopForKey(current, e.key);
+      if (next === undefined || next === current) {
+        // Still swallow it: letting the native step through would move off the
+        // ladder for one frame before the change handler snapped it back.
+        e.preventDefault();
+        return;
+      }
+      e.preventDefault();
+      if (index === undefined) {
+        handleChange(next);
+        return;
+      }
+      const pair = currentValue as [number, number];
+      handleChange(
+        index === 0
+          ? [Math.min(next, pair[1]), pair[1]]
+          : [pair[0], Math.max(next, pair[0])],
+      );
     };
 
     /** Converts an absolute value to a percentage offset along the track. */
@@ -212,6 +283,44 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
       if (vertical) return requested === 'left' || requested === 'right' ? requested : 'right';
       return requested === 'top' || requested === 'bottom' ? requested : 'top';
     })();
+
+    /**
+     * The mark label sitting exactly on a value, when it is plain text. Marks
+     * are the scale the user reads ("Min", "Large", "Q3"); a thumb parked on
+     * one must not announce the bare number the label was there to replace.
+     * Non-finite keys are skipped here for the same reason `renderMarks` skips
+     * them: they name no point on the scale.
+     */
+    const markTextAt = (val: number): string | undefined => {
+      if (!marks) return undefined;
+      for (const [key, mark] of Object.entries(marks)) {
+        const markValue = Number(key);
+        if (!Number.isFinite(markValue) || markValue !== val) continue;
+        const label = typeof mark === 'object' ? mark.label : mark;
+        if (typeof label === 'string') return label;
+        if (typeof label === 'number') return String(label);
+        return undefined;
+      }
+      return undefined;
+    };
+
+    /**
+     * Accessible value text for a thumb. When `tooltip.formatter` rewrites the
+     * readout ("$50", "Large", "12 kg") the native input still announces the
+     * raw number, so AT contradicts the visible bubble. A formatter that
+     * returns a string/number becomes `aria-valuetext`; a ReactNode readout is
+     * left alone rather than stringified into something the user never saw.
+     * A mark label is the same contract by another route, so it fills in when
+     * no formatter claims the value.
+     */
+    const valueTextFor = (val: number): string | undefined => {
+      if (showTooltip && tooltip?.formatter) {
+        const formatted = tooltip.formatter(val);
+        if (typeof formatted === 'string') return formatted;
+        if (typeof formatted === 'number') return String(formatted);
+      }
+      return markTextAt(val);
+    };
 
     /**
      * Renders the value readout anchored at a thumb point. The part is
@@ -278,6 +387,11 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
       if (!marks) return null;
       return Object.entries(marks).map(([key, mark]) => {
         const markValue = Number(key);
+        // A non-numeric key ('auto', a typo, a stringified date) is not a point
+        // on the scale: it used to reach getPercentage and stamp
+        // `inset-inline-start: NaN%`, dropping the declaration and stacking the
+        // label at the track origin on top of the real marks.
+        if (!Number.isFinite(markValue)) return null;
         // Out-of-range marks have no anchor on the scale (antd parity: skip).
         if (markValue < min! || markValue > max!) return null;
         const percent = getPercentage(markValue);
@@ -344,7 +458,9 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
         const raw = min! + ratio * (max! - min!);
         const snapped = step && step > 0 ? Math.round(raw / step) * step : raw;
         // Avoid float dust (0.1-step ladders) drifting the native inputs.
-        const nextValue = Math.min(max!, Math.max(min!, Number(snapped.toFixed(5))));
+        const clamped = Math.min(max!, Math.max(min!, Number(snapped.toFixed(5))));
+        // Under `step={null}` the seek lands on a mark, like the drag does.
+        const nextValue = snapToStop(clamped);
         const moveStart = Math.abs(nextValue - start) <= Math.abs(nextValue - end);
         const newValue: [number, number] = moveStart
           ? [Math.min(nextValue, end), end]
@@ -364,6 +480,12 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
           data-orientation={vertical ? 'vertical' : 'horizontal'}
           style={style}
           onClick={handleTrackClick}
+          /* Two-thumb APG shape: the caller's name belongs to the GROUP, not to
+             either thumb. Without it a "Price" range announced only
+             "Minimum value"/"Maximum value" and lost every trace of what was
+             being ranged. */
+          role={ariaLabel ? 'group' : undefined}
+          aria-label={ariaLabel}
         >
           {/* Track */}
           <div data-part="rail" style={railStyle} />
@@ -413,12 +535,13 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
             onChange={handleRangeChange(0)}
             onMouseUp={handleMouseUp}
             onTouchEnd={handleMouseUp}
-            onKeyDown={handleKeyDown}
+            onKeyDown={makeKeyDownHandler(0)}
             onKeyUp={handleKeyUp}
             disabled={disabled}
             data-part="native-input"
             data-variant="overlay"
             aria-label={tOr('slider.start_value', 'Minimum value')}
+            aria-valuetext={valueTextFor(start)}
             aria-orientation={vertical ? 'vertical' : 'horizontal'}
           />
           <div
@@ -440,12 +563,13 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
             onChange={handleRangeChange(1)}
             onMouseUp={handleMouseUp}
             onTouchEnd={handleMouseUp}
-            onKeyDown={handleKeyDown}
+            onKeyDown={makeKeyDownHandler(1)}
             onKeyUp={handleKeyUp}
             disabled={disabled}
             data-part="native-input"
             data-variant="overlay"
             aria-label={tOr('slider.end_value', 'Maximum value')}
+            aria-valuetext={valueTextFor(end)}
             aria-orientation={vertical ? 'vertical' : 'horizontal'}
           />
           <div
@@ -488,11 +612,12 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
           onChange={handleSingleChange}
           onMouseUp={handleMouseUp}
           onTouchEnd={handleMouseUp}
-          onKeyDown={handleKeyDown}
+          onKeyDown={makeKeyDownHandler()}
           onKeyUp={handleKeyUp}
           disabled={disabled}
           data-part="native-input"
           aria-label={ariaLabel ?? tOr('slider.label', 'Slider')}
+          aria-valuetext={valueTextFor(singleValue)}
           aria-orientation={vertical ? 'vertical' : 'horizontal'}
           /* Runtime fill hatch: the skin's runnable-track gradient reads this
              to paint the primary portion (the only legitimate runtime value,

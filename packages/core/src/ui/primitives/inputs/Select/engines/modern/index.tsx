@@ -94,6 +94,9 @@ const EN_FALLBACK = {
   loading: 'Loading options...',
   clear: 'Clear selection',
   search: 'Search...',
+  /* The placeholder is a hint, not a name: it disappears the moment the user
+     types, so it cannot be the filter input's accessible name. */
+  searchLabel: 'Search options',
   remove: 'Remove',
 } as const;
 
@@ -283,6 +286,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
   });
 
   const containerRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const nativeSelectRef = useRef<HTMLSelectElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -314,6 +318,19 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
    * input there.
    */
   const typeaheadRef = useRef<TypeaheadState>({ buffer: '', lastKeyTime: 0 });
+
+  /**
+   * Returns DOM focus to the trigger. Every dismissal path needs it: the
+   * dropdown is portaled and, in `searchable` mode, owns the focused element,
+   * so closing it unmounts whatever the user was standing on and drops focus
+   * to `<body>` -- the next Tab then restarts from the top of the document.
+   * The shared overlay layer is registered with `restoreFocus: false` (the
+   * select is not a modal and must not fight the layer for the anchor), so
+   * the family owns the restore itself.
+   */
+  const focusTrigger = useCallback(() => {
+    triggerRef.current?.focus();
+  }, []);
 
   const setContainerNode = useCallback((node: HTMLDivElement | null) => {
     containerRef.current = node;
@@ -428,6 +445,13 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     return allOptions.filter((opt) => internalValue.includes(opt.value));
   }, [allOptions, internalValue]);
 
+  /**
+   * True exactly when the portaled filter input exists and therefore owns DOM
+   * focus. It is the pivot for the combobox contract: whichever element the
+   * user is standing on is the one AT reads the relationships from.
+   */
+  const searchOwnsFocus = isOpen && isSearchable;
+
   // Handle selection
   const handleSelect = useCallback(
     (optionValue: string | number, option: SelectOption) => {
@@ -443,6 +467,9 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       } else {
         newValue = [optionValue];
         setIsOpen(false);
+        // Committing closes the panel, which unmounts the option the pointer
+        // clicked and (searchable) the input that had focus.
+        focusTrigger();
       }
 
       setInternalValue(newValue);
@@ -453,7 +480,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
         onChange(multiple ? newValue : newValue[0], multiple ? selectedOpts : selectedOpts[0]);
       }
     },
-    [multiple, internalValue, onChange, allOptions]
+    [multiple, internalValue, onChange, allOptions, focusTrigger]
   );
 
   // Handle clear
@@ -683,6 +710,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
           e.preventDefault();
           setIsOpen(false);
           setFocusedIndex(-1);
+          focusTrigger();
           break;
         }
         default: {
@@ -710,6 +738,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       internalValue,
       allOptions,
       applyTypeahead,
+      focusTrigger,
     ]
   );
 
@@ -765,7 +794,8 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
   const closeDropdown = useCallback(() => {
     setIsOpen(false);
     setFocusedIndex(-1);
-  }, []);
+    focusTrigger();
+  }, [focusTrigger]);
 
   // Shared overlay stack: canonical dropdown z band + single Escape router.
   // Registered as a blocking layer (like Popover/Tooltip, but without scroll
@@ -862,12 +892,17 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
           dropdownRef.current?.contains(target))
       )
         return;
+      // Only reclaim focus when the dropdown still holds it (searchable): the
+      // press is about to move focus somewhere the user chose, and yanking it
+      // back to the trigger would fight them.
+      const focusWasInside = dropdownRef.current?.contains(document.activeElement);
       setIsOpen(false);
+      if (focusWasInside) focusTrigger();
     };
 
     document.addEventListener('pointerdown', onPointerDown, true);
     return () => document.removeEventListener('pointerdown', onPointerDown, true);
-  }, [isOpen, isTopMost]);
+  }, [isOpen, isTopMost, focusTrigger]);
 
   // Display value
   const displayValue = useMemo(() => {
@@ -1058,6 +1093,11 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
         <div
           key={`gh-${idx}`}
           data-part="group-label"
+          /* A bare div is not a legal child of `listbox`: AT that enforces
+             required-children drops the whole list rather than reading a
+             stray group caption. It is a visual divider, so it exits the
+             tree instead of pretending to be an option. */
+          role="presentation"
           data-divider={idx > 0 ? 'true' : undefined}
         >
           {item.groupLabel}
@@ -1072,6 +1112,9 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
         id={`${selectId}-option-${idx}`}
         role="option"
         aria-selected={isSelected}
+        // Keyboard nav already skips these; without the ARIA the row was
+        // still offered to AT as an ordinary, choosable option.
+        aria-disabled={option.disabled || undefined}
         data-part="option"
         data-selected={isSelected || undefined}
         data-active={isFocusedItem || undefined}
@@ -1132,6 +1175,11 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       <div
         {...triggerHtmlProps}
         {...(responsiveCSS ? responsiveCSS.attrs : {})}
+        /* The caller's id must survive the custom path too: it only reached the
+           native <select>, so adding searchable/multiple/virtual silently
+           dangled every <label htmlFor> and aria-labelledby aimed at it --
+           including the one Form.Item mints for its child. */
+        id={id}
         className="rottay-select__trigger"
         data-part="trigger"
         data-variant={variant}
@@ -1146,12 +1194,25 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
             }
           }
         }}
+        ref={triggerRef}
         tabIndex={disabled ? undefined : 0}
-        role="combobox"
+        /* The combobox is whichever element the user is standing on. While a
+           searchable panel is open that is the filter input below, so the
+           trigger hands over the role and the two relationships that only mean
+           anything on the focused node -- `aria-controls` and
+           `aria-activedescendant` were being announced against an element the
+           user had already left, so the active option was never voiced. It
+           stays the combobox on every other path (closed, or non-searchable,
+           where it keeps focus and drives the list itself). */
+        role={searchOwnsFocus ? 'button' : 'combobox'}
         aria-expanded={isOpen}
         aria-haspopup="listbox"
-        aria-controls={isOpen ? listboxId : undefined}
-        aria-activedescendant={isOpen && focusedIndex >= 0 ? `${selectId}-option-${focusedIndex}` : undefined}
+        aria-controls={isOpen && !searchOwnsFocus ? listboxId : undefined}
+        aria-activedescendant={
+          isOpen && !searchOwnsFocus && focusedIndex >= 0
+            ? `${selectId}-option-${focusedIndex}`
+            : undefined
+        }
         aria-required={customRequired ? true : undefined}
         aria-disabled={disabled || undefined}
         aria-invalid={
@@ -1231,6 +1292,19 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                   placeholder={tOr('select.search', EN_FALLBACK.search)}
                   onClick={(e) => e.stopPropagation()}
                   autoFocus
+                  /* This is the focused element, so it carries the combobox
+                     contract: a real accessible name (a placeholder is not
+                     one), the list it drives, the option it has landed on, and
+                     the kind of autocompletion it performs. */
+                  role="combobox"
+                  aria-label={tOr('select.search_label', EN_FALLBACK.searchLabel)}
+                  aria-expanded
+                  aria-haspopup="listbox"
+                  aria-autocomplete="list"
+                  aria-controls={listboxId}
+                  aria-activedescendant={
+                    focusedIndex >= 0 ? `${selectId}-option-${focusedIndex}` : undefined
+                  }
                 />
               </div>
             )}
@@ -1264,12 +1338,17 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                     }}
                   >
                     {virtualPanelState === 'loading' ? (
-                      <div data-part="loading-state" data-virtual="true" role="status">
+                      <div
+                        data-part="loading-state"
+                        data-virtual="true"
+                        role="option"
+                        aria-disabled="true"
+                      >
                         <span data-part="loading-spinner" aria-hidden="true" />
                         <span data-part="loading-state-label">{loadingText}</span>
                       </div>
                     ) : virtualPanelState === 'empty' ? (
-                      <div data-part="empty" data-virtual="true">
+                      <div data-part="empty" data-virtual="true" role="option" aria-disabled="true">
                         {noOptionsText}
                       </div>
                     ) : (
@@ -1280,6 +1359,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                             <div
                               key={`gh-${idx}`}
                               data-part="group-label"
+                              role="presentation"
                               data-virtual="true"
                               data-divider={realIdx > 0 ? 'true' : undefined}
                               style={{
@@ -1301,6 +1381,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                             id={`${selectId}-option-${realIdx}`}
                             role="option"
                             aria-selected={isSelected}
+                            aria-disabled={option.disabled || undefined}
                             data-part="option"
                             data-virtual="true"
                             data-selected={isSelected || undefined}
@@ -1351,13 +1432,19 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
               ) : panelState === 'loading' ? (
                 /* Async posture: while options stream in, the panel keeps
                    the same spatial contract as the empty state (same part
-                   geometry in the skin) instead of lying "no options". */
-                <div data-part="loading-state" role="status">
+                   geometry in the skin) instead of lying "no options".
+                   Both postures are the listbox's ONLY child while they show,
+                   so they must carry the `option` role (aria-required-children,
+                   the AutoComplete/Mentions idiom) and read as disabled -- a
+                   role-less div left the open list announcing nothing at all.
+                   The busy signal already rides the listbox's `aria-busy`, so
+                   no second live region competes with it. */
+                <div data-part="loading-state" role="option" aria-disabled="true">
                   <span data-part="loading-spinner" aria-hidden="true" />
                   <span data-part="loading-state-label">{loadingText}</span>
                 </div>
               ) : panelState === 'empty' ? (
-                <div data-part="empty">
+                <div data-part="empty" role="option" aria-disabled="true">
                   {noOptionsText}
                 </div>
               ) : (
