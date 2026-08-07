@@ -266,6 +266,22 @@
   margin-block-start: var(--ds-workspace-switcher-panel-gap-block, 4px);
 }
 
+/* NARROW POSTURE (viewport, not container: the panel is absolutely positioned
+   and escapes every container). The sidebar panel anchors at the trigger's
+   inline-end, so on a phone an 18rem panel starts past the rail and renders
+   OFF-SCREEN — its create/settings actions become unreachable, and the
+   viewport-bounded width above only shrinks it, it never brings it back. Below
+   30rem the sidebar adopts the topbar's below-trigger posture, which the same
+   bounded width then keeps inside the viewport. */
+@media (max-width: 30rem) {
+  .ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'][data-position='sidebar'] [data-part='panel'] {
+    inset-block-start: 100%;
+    inset-inline-start: 0;
+    margin-inline-start: 0;
+    margin-block-start: var(--ds-workspace-switcher-panel-gap-block, 4px);
+  }
+}
+
 .ds-pattern-workspace-switcher.ds-engine-modern [data-part='header'] {
   padding-block: 6px;
   padding-inline: 12px;

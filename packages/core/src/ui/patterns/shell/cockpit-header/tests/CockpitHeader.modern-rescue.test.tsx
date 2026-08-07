@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
 
 import ModernCockpitHeader from '../engines/modern';
@@ -90,5 +90,58 @@ describe('CockpitHeader modern — skeleton mirrors the requested anatomy', () =
     // so the skin cannot paint a different lead footprint across the swap.
     expect(root).toHaveAttribute('data-has-icon', 'true');
     expect(root).toHaveAttribute('data-has-actions', 'false');
+  });
+});
+
+describe('CockpitHeader modern — the compact posture never drops navigation', () => {
+  const CRUMBS = [{ label: 'Home', href: '/' }, { label: 'Detail' }];
+
+  it('keeps keyboard focus alive when the sticky header goes compact', () => {
+    setScrollY(0);
+    const { container } = render(
+      <ModernCockpitHeader title="Detail" subtitle="Meta" breadcrumbs={CRUMBS} sticky />,
+    );
+
+    const home = screen.getByRole('link', { name: 'Home' });
+    home.focus();
+    expect(document.activeElement).toBe(home);
+
+    act(() => {
+      setScrollY(400);
+      window.dispatchEvent(new Event('scroll'));
+    });
+
+    // Before: `!isCompact` unmounted the whole <nav>, so a scroll — which is
+    // NOT a dismissal — destroyed the focused link and dropped focus to body.
+    expect(container.querySelector('[data-part="root"]')).toHaveAttribute(
+      'data-compact',
+      'true',
+    );
+    expect(document.activeElement).toBe(home);
+  });
+
+  it('keeps the trail reachable while the secondary copy still collapses', () => {
+    setScrollY(400);
+    const { container } = render(
+      <ModernCockpitHeader
+        title="Detail"
+        eyebrow="Workspace"
+        subtitle="Meta"
+        breadcrumbs={CRUMBS}
+        sticky
+      />,
+    );
+
+    // The trail is the header's only navigation affordance: it survives.
+    expect(screen.getByRole('navigation')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Home' })).toBeInTheDocument();
+    expect(container.querySelector('[data-part="crumb"][data-last="true"]')).toHaveAttribute(
+      'aria-current',
+      'page',
+    );
+
+    // Secondary copy still yields the vertical room the compact posture buys.
+    expect(container.querySelector('[data-part="eyebrow"]')).toBeNull();
+    expect(container.querySelector('[data-part="subtitle"]')).toBeNull();
   });
 });

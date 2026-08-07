@@ -355,6 +355,12 @@
   font-size: var(--ds-font-size-lg);
 }
 
+/* Compact keeps the trail MOUNTED (unmounting it dropped keyboard focus to the
+   body mid-scroll); the compact posture comes from its rhythm instead. */
+.ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-compact='true'] [data-part='breadcrumb'] {
+  margin-block-end: calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1));
+}
+
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='subtitle'] {
   margin: 4px 0 0;
   font-size: var(--ds-font-size-sm);

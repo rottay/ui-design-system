@@ -1,4 +1,6 @@
 import React from 'react';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, screen } from '@testing-library/react';
 
@@ -116,5 +118,52 @@ describe('ModernWorkspaceSwitcher — APG virtual focus', () => {
     const list = container.querySelector('[data-part="list"]') as HTMLElement;
     expect(list).not.toHaveAttribute('role');
     expect(screen.getByTestId('workspace-search')).not.toHaveAttribute('aria-controls');
+  });
+});
+
+describe('ModernWorkspaceSwitcher — narrow posture', () => {
+  // Vitest runs with cwd=packages/core; import.meta.url is not a file: URL
+  // under the vite transform pipeline.
+  const MODERN_SKIN_PATH = resolve(
+    process.cwd(),
+    'src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css',
+  );
+
+  function narrowBlock(): string {
+    const skin = readFileSync(MODERN_SKIN_PATH, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+    const start = skin.indexOf('@media (max-width: 30rem)');
+    expect(start).toBeGreaterThan(-1);
+    // The block is one nesting level deep, so the second '}' closes it.
+    const open = skin.indexOf('{', start);
+    const inner = skin.indexOf('}', open);
+    return skin.slice(open, skin.indexOf('}', inner + 1) + 1);
+  }
+
+  it('re-anchors the sidebar panel below the trigger instead of off-screen', () => {
+    // Before: `sidebar` (the DEFAULT position) anchored the panel at
+    // `inset-inline-start: 100%` of the rail with no narrow override, so on a
+    // phone the 18rem panel started past the rail and rendered off the
+    // viewport — create/settings became unreachable. The viewport-bounded
+    // `inline-size` only shrank it; it never brought it back on-screen.
+    const block = narrowBlock();
+
+    expect(block).toContain("[data-position='sidebar'] [data-part='panel']");
+    expect(block).toContain('inset-block-start: 100%');
+    expect(block).toContain('inset-inline-start: 0');
+    // The inline-end offset that pushed it off-screen is explicitly cleared.
+    expect(block).toContain('margin-inline-start: 0');
+    // The below-trigger gap is the topbar posture's own channel, not a literal.
+    expect(block).toContain('margin-block-start: var(--ds-workspace-switcher-panel-gap-block, 4px)');
+  });
+
+  it('states the narrow posture at or above the wide sidebar rule so it wins', () => {
+    const skin = readFileSync(MODERN_SKIN_PATH, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+    const wide = skin.indexOf(
+      "[data-part='root'][data-position='sidebar'] [data-part='panel']",
+    );
+    const narrow = skin.indexOf('@media (max-width: 30rem)');
+    // Equal specificity (0,5,0): the override only lands if it is declared
+    // after the wide rule it replaces.
+    expect(narrow).toBeGreaterThan(wide);
   });
 });

@@ -411,25 +411,15 @@
   user-select: none;
 }
 
-/* ---- back button: borderless ghost, highlighted on hover||focus. No painting
-        border, so no (0,4,0) chain is needed. The wrapper melts into the lead
-        row (drained from the inline display:contents / flexShrink). ---- */
+/* ---- back button: the wrapper melts into the lead row (drained from the
+        inline display:contents / flexShrink). The composed ghost Button owns
+        its ink and its rest/hover/press/focus chrome through the tenant-bound
+        `--ds-button-ghost-*` channels; the shell contributes layout only. ---- */
 .ds-pattern-page-shell.ds-engine-modern [data-part='back'] {
   display: contents;
 }
 .ds-pattern-page-shell.ds-engine-modern [data-part='back'] > .rottay-button {
   flex-shrink: 0;
-  color: var(--ds-color-text-secondary);
-}
-@media (hover: hover) {
-  .ds-pattern-page-shell.ds-engine-modern [data-part='back'] > .rottay-button:hover {
-    background: var(--ds-color-neutral-100);
-    color: var(--ds-color-text-primary);
-  }
-}
-.ds-pattern-page-shell.ds-engine-modern [data-part='back'] > .rottay-button:focus {
-  background: var(--ds-color-neutral-100);
-  color: var(--ds-color-text-primary);
 }
 
 /* ---- tab: base (the root chain buys (0,4,0) for the transparent 2px
@@ -756,6 +746,52 @@
      title alone carries identity and the tile's line is spent on content. */
   .ds-pattern-page-shell.ds-engine-modern [data-part='header-icon'] {
     display: none;
+  }
+
+  /* C2 register seam: the hairline is authored to rule the title column only
+     ("structure, not another box"). Once `titles` dissolves it spans the whole
+     header directly beneath the actions cluster, in the SAME hairline grammar
+     the header uses for its own section seams (`header-content`, `rule`) — a
+     second dominant boundary read against the wrong region. At this width the
+     register keeps its separation through the header-row rhythm. */
+  .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='metadata'] {
+    padding-block-start: 0;
+    border-block-start-width: 0;
+  }
+
+  /* C2 skeleton parity: the loaded header reorders into one column here, so a
+     skeleton that keeps the desktop two-column row reserves the WRONG
+     footprint — the title bar shrinks to a stub beside the action blocks and
+     the reserved actions sit a row above the content that replaces them. The
+     copy wrapper dissolves exactly like `titles` does, so the blocks carry the
+     loaded order: title → supporting → actions → register. */
+  .ds-pattern-page-shell.ds-engine-modern [data-part='skeleton-title-row'] {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .ds-pattern-page-shell.ds-engine-modern [data-part='skeleton-title-copy'] {
+    display: contents;
+  }
+
+  .ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'][data-block='title'] {
+    order: 1;
+  }
+
+  .ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'][data-block='subtitle'] {
+    order: 2;
+  }
+
+  .ds-pattern-page-shell.ds-engine-modern [data-part='skeleton-action-row'] {
+    order: 3;
+  }
+
+  .ds-pattern-page-shell.ds-engine-modern [data-part='skeleton-action-row'] > * {
+    flex: 1 0 auto;
+  }
+
+  .ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'][data-block='metadata'] {
+    order: 4;
   }
 }
 

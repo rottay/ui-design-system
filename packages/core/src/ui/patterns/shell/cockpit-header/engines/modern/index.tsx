@@ -254,8 +254,10 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
       data-has-actions={actions ? 'true' : 'false'}
       style={style}
     >
-      {/* ---- Breadcrumb trail ---- */}
-      {breadcrumbs && breadcrumbs.length > 0 && !isCompact && (
+      {/* ---- Breadcrumb trail. It survives the compact posture: scrolling is
+              not a dismissal, and unmounting the only links in the header
+              dropped keyboard focus to the body mid-scroll. ---- */}
+      {breadcrumbs && breadcrumbs.length > 0 && (
         <nav
           aria-label={breadcrumbLabel}
           data-part="breadcrumb"
