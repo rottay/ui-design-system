@@ -81,6 +81,19 @@ import {
   PatternLocaleSwitcher,
   PatternTimeline,
   PatternKanbanBoard,
+  PresenceBar,
+  PatternBrandStudio,
+  PatternTenantPreview,
+  TokenInspector,
+  PatternColumnSettings,
+  PatternWorkspaceSwitcher,
+  PatternCockpitHeader,
+  PatternPageShell,
+  PatternApprovalInbox,
+  PatternModerationGallery,
+  PatternOperationalLedger,
+  PatternCalendarView,
+  PatternTreeView,
 } from '@rottay/design-system';
 import { AlertIcon } from '@rottay/design-system/icons';
 
@@ -163,7 +176,20 @@ export type R2BehaviorCase =
   | 'stepwizard'
   | 'localeswitcher'
   | 'patterntimeline'
-  | 'patternkanban';
+  | 'patternkanban'
+  | 'e13presence'
+  | 'e13brandstudio'
+  | 'e13tenantpreview'
+  | 'e13tokeninspector'
+  | 'e13columnsettings'
+  | 'e13workspaceswitcher'
+  | 'e13cockpitheader'
+  | 'e13pageshell'
+  | 'e13approvalinbox'
+  | 'e13moderationgallery'
+  | 'e13operationalledger'
+  | 'e13calendarview'
+  | 'e13treeview';
 
 const CRUMB_ITEMS = [
   { key: 'home', label: 'Home', href: '/' },
@@ -1622,6 +1648,208 @@ export function R2BehaviorScene({ only }: { only: R2BehaviorCase }) {
               itemKey={(item: { id: string }) => item.id}
               renderCard={(item: { id: string; title: string }) => <span>{item.title}</span>}
               onItemMove={() => undefined}
+            />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'e13presence' && (
+        <SpecimenRow axis="PRESENCE - composed avatars, initials fallback, overflow badge">
+          <div data-testid="lab-e13presence" style={{ inlineSize: '100%' }}>
+            <PresenceBar
+              users={[
+                { id: 'u1', name: 'Ana Ruiz', color: '#e74c3c' },
+                { id: 'u2', name: 'Bob Nilsson', color: '#3498db' },
+                { id: 'u3', name: 'Cid Okafor' },
+              ]}
+              maxVisible={2}
+            />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'e13tenantpreview' && (
+        <SpecimenRow axis="TENANTPREVIEW - named groups, bdi meta, personality-driven accent">
+          <div data-testid="lab-e13tenantpreview" style={{ inlineSize: '100%' }}>
+            <PatternTenantPreview
+              engine="modern"
+              config={{ slug: 'acme-co', name: 'Acme Co', primaryColor: '#2f6feb', secondaryColor: '#8a5cf6', personality: 'playful' }}
+            />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'e13tokeninspector' && (
+        <SpecimenRow axis="TOKENINSPECTOR - clamped panel, truncation honesty, pinned scroll reach">
+          <div data-testid="lab-e13tokeninspector" style={{ inlineSize: '100%', minBlockSize: 420 }}>
+            <span data-testid="lab-ti-target">Inspect target</span>
+            <TokenInspector />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'e13columnsettings' && (
+        <SpecimenRow axis="COLUMNSETTINGS - explicit move controls replace the inert grip">
+          <div data-testid="lab-e13columnsettings" style={{ inlineSize: '100%' }}>
+            <PatternColumnSettings
+              engine="modern"
+              allColumns={[
+                { key: 'name', header: 'Name' },
+                { key: 'owner', header: 'Owner' },
+                { key: 'updated', header: 'Updated' },
+              ]}
+              visibleColumns={['name', 'owner', 'updated']}
+              lockedColumns={[]}
+              columnOrder={['name', 'owner', 'updated']}
+              pinnedColumns={{ left: [], right: [] }}
+              onToggleVisibility={() => undefined}
+              onReorder={() => undefined}
+              onTogglePin={() => undefined}
+              onReset={() => undefined}
+            />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'e13workspaceswitcher' && (
+        <SpecimenRow axis="WORKSPACESWITCHER - APG combobox, scoped ids, filter reset">
+          <div data-testid="lab-e13workspaceswitcher" style={{ inlineSize: '100%' }}>
+            <PatternWorkspaceSwitcher
+              engine="modern"
+              workspaces={[
+                { id: 'w1', name: 'Acme Co' },
+                { id: 'w2', name: 'Globex' },
+                { id: 'w3', name: 'Initech' },
+              ]}
+              activeWorkspaceId="w1"
+              onSwitch={() => undefined}
+            />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'e13cockpitheader' && (
+        <SpecimenRow axis="COCKPITHEADER - skeleton mirrors requested anatomy">
+          <div data-testid="lab-e13cockpitheader" style={{ display: 'grid', gap: 20, inlineSize: '100%' }}>
+            <div data-testid="lab-ch-full">
+              <PatternCockpitHeader
+                engine="modern"
+                title="Event #1234"
+                subtitle="Summer Music Festival"
+                breadcrumbs={[{ label: 'Events', href: '/e' }, { label: 'Event #1234' }]}
+                actions={<button type="button">Edit</button>}
+              />
+            </div>
+            <div data-testid="lab-ch-bare">
+              <PatternCockpitHeader engine="modern" title="Detail" loading />
+            </div>
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'e13pageshell' && (
+        <SpecimenRow axis="PAGESHELL - numeric maxWidth resolves, tabs and loading mirror">
+          <div data-testid="lab-e13pageshell" style={{ inlineSize: '100%' }}>
+            <PatternPageShell
+              engine="modern"
+              title="Users"
+              subtitle="Directory"
+              maxWidth={1200}
+              tabs={[{ key: 'all', label: 'All', content: <span>All users</span> }, { key: 'admins', label: 'Admins', content: <span>Admins</span> }]}
+              activeTab="all"
+            >
+              <span>Page body</span>
+            </PatternPageShell>
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'e13approvalinbox' && (
+        <SpecimenRow axis="APPROVALINBOX - live selection, mounted announcer, focus policy">
+          <div data-testid="lab-e13approvalinbox" style={{ inlineSize: '100%' }}>
+            <PatternApprovalInbox
+              engine="modern"
+              groups={[
+                {
+                  domain: 'finance',
+                  items: [
+                    { id: 'a1', title: 'Vendor onboarding', submittedAt: '2026-03-15T10:00:00.000Z', risk: 'high' },
+                    { id: 'a2', title: 'Budget increase', submittedAt: '2026-03-15T11:00:00.000Z', risk: 'low' },
+                  ],
+                },
+              ]}
+            />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'e13moderationgallery' && (
+        <SpecimenRow axis="MODERATIONGALLERY - composed Image fallback on a dead thumbnail">
+          <div data-testid="lab-e13moderationgallery" style={{ inlineSize: '100%' }}>
+            <PatternModerationGallery
+              engine="modern"
+              items={[
+                { id: 'm1', thumbnailUrl: '/does-not-exist.png', type: 'image', status: 'pending', uploadedBy: 'Ana', uploadedAt: '2026-03-15T10:00:00.000Z' },
+                { id: 'm2', thumbnailUrl: '', type: 'video', status: 'approved', uploadedBy: 'Bob', uploadedAt: '2026-03-15T11:00:00.000Z' },
+              ]}
+            />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'e13operationalledger' && (
+        <SpecimenRow axis="OPERATIONALLEDGER - narrow fold keeps actor/reason/reference">
+          <div data-testid="lab-e13operationalledger" style={{ inlineSize: '100%' }}>
+            <PatternOperationalLedger
+              engine="modern"
+              entries={[
+                { id: 'l1', timestamp: '2026-03-15T10:00:00.000Z', description: 'Stock intake', quantity: 12, type: 'credit', actor: 'Ana Ruiz' },
+                { id: 'l2', timestamp: '2026-03-15T12:00:00.000Z', description: 'Damage writeoff', quantity: 3, type: 'debit', actor: 'Bob Nilsson' },
+              ]}
+            />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'e13calendarview' && (
+        <SpecimenRow axis="CALENDARVIEW - single grid tab stop, chronological buckets, spans">
+          <div data-testid="lab-e13calendarview" style={{ inlineSize: '100%' }}>
+            <PatternCalendarView
+              engine="modern"
+              events={[
+                { id: 'c1', title: 'Late standup', start: new Date(new Date().getFullYear(), new Date().getMonth(), 16, 18) },
+                { id: 'c2', title: 'Early standup', start: new Date(new Date().getFullYear(), new Date().getMonth(), 16, 6) },
+                { id: 'c3', title: 'Design sprint', start: new Date(new Date().getFullYear(), new Date().getMonth(), 17, 9), end: new Date(new Date().getFullYear(), new Date().getMonth(), 19, 17) },
+              ]}
+              onEventClick={() => undefined}
+            />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'e13treeview' && (
+        <SpecimenRow axis="TREEVIEW - ReactNode labels searchable, match count announced">
+          <div data-testid="lab-e13treeview" style={{ inlineSize: '100%' }}>
+            <PatternTreeView
+              engine="modern"
+              searchable
+              data={[
+                { key: 'root', label: <span>Café Ledger</span>, children: [
+                  { key: 'a', label: <span>Alpha node</span> },
+                  { key: 'b', label: 'Beta node' },
+                ] },
+              ]}
+            />
+          </div>
+        </SpecimenRow>
+      )}
+
+      {only === 'e13brandstudio' && (
+        <SpecimenRow axis="BRANDSTUDIO - editor and preview share one tenant theme">
+          <div data-testid="lab-e13brandstudio" style={{ inlineSize: '100%' }}>
+            <PatternBrandStudio
+              value={{ palette: { primaryColor: '#2f6feb' } }}
+              onChange={() => undefined}
             />
           </div>
         </SpecimenRow>
