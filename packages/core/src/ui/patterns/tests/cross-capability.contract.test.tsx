@@ -370,13 +370,18 @@ describe('token-inspector -- createElement DOM contract (CK-H2)', () => {
 
     fireEvent.keyDown(window, { key: 'T', ctrlKey: true, shiftKey: true });
     const panel = await waitForSelector(container, '.ds-pattern-token-inspector[data-part="panel"][data-pinned="false"]');
-    for (const part of ['header', 'title', 'pinned-badge', 'element-info', 'empty', 'footer']) {
+    for (const part of ['header', 'title', 'pinned-badge', 'empty', 'footer']) {
       expect(q(container, `[data-part="${part}"]`)).toHaveLength(1);
     }
     expect(q(container, '[data-part="pinned-badge"][data-pinned="false"]')).toHaveLength(1);
+    // element-info is hover-derived: before the first hover it must NOT render
+    // an empty bordered strip, and after a hover it must appear populated.
+    expect(q(container, '[data-part="element-info"]')).toHaveLength(0);
 
     const target = getByTestId('token-target');
     fireEvent.mouseMove(target, { clientX: 20, clientY: 20 });
+    await waitFor(() => expect(q(container, '[data-part="element-info"]')).toHaveLength(1));
+    expect(q(container, '[data-part="element-info"]')[0].textContent?.trim()).not.toBe('');
     await waitFor(() => expect(q(container, '[data-part="token-row"]').length).toBeGreaterThanOrEqual(1));
     expect(q(container, '[data-part="token-name"]').length).toBeGreaterThanOrEqual(1);
     expect(q(container, '[data-part="token-value"]').length).toBeGreaterThanOrEqual(1);

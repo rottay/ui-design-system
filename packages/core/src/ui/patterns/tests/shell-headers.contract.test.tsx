@@ -194,16 +194,22 @@ describe('patterns/shell header family -- data-part contract (WO-SKIN-06 CK-B/P)
       });
     });
 
-    it('stamps the loading skeleton branch (six blocks)', async () => {
-      const { container } = renderWithEngine(
-        <PatternCockpitHeader title="Event #1234" loading />,
-        'modern',
-      );
+    it('mirrors the requested anatomy in the loading skeleton', async () => {
+      const { container } = renderFull({ loading: true });
       await partsOf(container);
 
       const root = container.querySelector('[data-part="root"]') as HTMLElement;
       expect(root.getAttribute('data-loading')).toBe('true');
-      expect(partCount(container, 'skeleton')).toBe(6);
+      expect(partCount(container, 'skeleton')).toBe(5);
+
+      // The skeleton mirrors the REQUESTED anatomy: a title-only header must
+      // not reserve chrome the loaded render never shows.
+      const bare = renderWithEngine(
+        <PatternCockpitHeader title="Event #1234" loading />,
+        'modern',
+      );
+      await partsOf(bare.container);
+      expect(partCount(bare.container, 'skeleton')).toBe(1);
     });
   });
 
@@ -281,15 +287,20 @@ describe('patterns/shell header family -- data-part contract (WO-SKIN-06 CK-B/P)
       expect(parts).not.toContain('tabs');
     });
 
-    it('stamps the loading skeleton branch (five blocks)', async () => {
-      const { container } = renderWithEngine(<PageShellChromeOnly title="Users" loading />, 'modern');
+    it('mirrors the requested anatomy in the loading skeleton', async () => {
+      const { container } = renderFull({ loading: true });
       await partsOf(container);
 
       const root = container.querySelector('[data-part="root"]') as HTMLElement;
       expect(root.getAttribute('data-loading')).toBe('true');
       expect(root.className).toContain('ds-pattern-page-shell--loading');
       expect(partCount(container, 'skeleton-group')).toBe(1);
-      expect(partCount(container, 'skeleton')).toBe(5);
+      expect(partCount(container, 'skeleton')).toBe(7);
+
+      // Same mirroring invariant as CockpitHeader.
+      const bare = renderWithEngine(<PageShellChromeOnly title="Users" loading />, 'modern');
+      await partsOf(bare.container);
+      expect(partCount(bare.container, 'skeleton')).toBe(1);
     });
   });
 

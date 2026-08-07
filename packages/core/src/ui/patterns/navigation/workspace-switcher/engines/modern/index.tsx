@@ -33,7 +33,7 @@
  * />
  */
 
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useId } from 'react';
 import type { WorkspaceSwitcherProps } from '../../contracts';
 import { Button } from '../../../../../primitives/inputs/Button';
 import { Badge } from '../../../../../primitives/display/Badge';
@@ -104,6 +104,17 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
     ? workspaces.filter(w => w.name.toLowerCase().includes(normalizedQuery))
     : workspaces;
 
+  // Instance-scoped ids: two switchers on one page must not collide, or the
+  // combobox's aria-activedescendant resolves into the wrong panel.
+  const instanceId = useId();
+  const listboxId = `${instanceId}-listbox`;
+  const optionId = (workspaceId: string) => `${instanceId}-option-${workspaceId}`;
+  const hasOptions = visibleWorkspaces.length > 0;
+  const activeDescendantId =
+    focusIndex >= 0 && visibleWorkspaces[focusIndex]
+      ? optionId(visibleWorkspaces[focusIndex].id)
+      : undefined;
+
   // Click-outside dismissal for the pattern-owned listbox panel.
   const handleClickOutside = useCallback(
     (e: MouseEvent) => {
@@ -160,6 +171,14 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
     setFocusIndex(prev => Math.min(prev, visibleWorkspaces.length - 1));
   }, [visibleWorkspaces.length]);
 
+  // Dismissal discards the transient session: a stale filter must not survive
+  // into the next open (the panel would read as an empty roster).
+  useEffect(() => {
+    if (open) return;
+    setQuery('');
+    setFocusIndex(-1);
+  }, [open]);
+
   /* ---- Loading skeleton (PatternBaseProps.loading): the trigger's exact
           footprint, so the swap never shifts the surrounding chrome. ---- */
   if (loading) {
@@ -199,7 +218,7 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
         data-testid="workspace-trigger"
         aria-label={switchLabel}
         aria-haspopup="listbox"
-        aria-controls="workspace-switcher-panel"
+        aria-controls={open && hasOptions ? listboxId : undefined}
         aria-expanded={open}
       >
         <span data-part="avatar-frame" data-frame="trigger">
@@ -222,31 +241,31 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
       {/* Panel -- positioned contextually in the skin: sidebar opens to the
           inline-end so it doesn't overlap the nav rail; topbar opens below. */}
       {open && (
-        <div
-          data-part="panel"
-          id="workspace-switcher-panel"
-          role="listbox"
-          aria-label={panelLabel}
-          aria-activedescendant={
-            focusIndex >= 0 && visibleWorkspaces[focusIndex]
-              ? `workspace-option-${visibleWorkspaces[focusIndex].id}`
-              : undefined
-          }
-        >
+        <div data-part="panel">
           {/* Header -- typography lives in the skin (the shared inline
               menuSectionTitleStyle object is drained, wave p612b). */}
           <div data-part="header">
             <span data-part="header-title">{panelLabel}</span>
           </div>
 
-          {/* Search: the composed Input filters client-side; arrows typed in
-              the box ride the container's listbox keyboard contract. */}
+          {/* Search: the composed Input filters client-side AND is the APG
+              combobox. It takes DOM focus when the panel opens, so it is the
+              only element on which aria-activedescendant is honoured — the
+              panel never receives focus, where the attribute is inert. */}
           {workspaces.length > 0 && (
             <div data-part="search">
               <ModernInput
                 size="sm"
                 placeholder={searchPlaceholder}
                 aria-label={searchPlaceholder}
+                data-testid="workspace-search"
+                autoFocus
+                role="combobox"
+                aria-haspopup="listbox"
+                aria-expanded={hasOptions}
+                aria-autocomplete="list"
+                aria-controls={hasOptions ? listboxId : undefined}
+                aria-activedescendant={activeDescendantId}
                 value={query}
                 onChange={(v) => {
                   setQuery(String(v ?? ''));
@@ -256,8 +275,15 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
             </div>
           )}
 
-          {/* Workspace list */}
-          <div data-part="list">
+          {/* Workspace list. The listbox role sits HERE, not on the panel:
+              only option/group children are legal inside it, and the panel
+              also carries the header, search, create row and user block. */}
+          <div
+            data-part="list"
+            id={hasOptions ? listboxId : undefined}
+            role={hasOptions ? 'listbox' : undefined}
+            aria-label={hasOptions ? panelLabel : undefined}
+          >
             {visibleWorkspaces.length === 0 ? (
               // Empty (no workspaces at all, or no filter results): the
               // composed Empty primitive owns the quiet hint -- never a mute
@@ -272,7 +298,7 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
               return (
                 <div
                   key={ws.id}
-                  id={`workspace-option-${ws.id}`}
+                  id={optionId(ws.id)}
                   role="option"
                   aria-selected={isActive}
                   data-part="item"

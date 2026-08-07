@@ -48,6 +48,32 @@ import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 const ROOT_CLASS_NAME = 'ds-pattern-tree-view ds-engine-modern';
 
 /**
+ * Flattens a ReactNode label to its readable text. A rich label (badge +
+ * name, formatted spans, fragments) is what a user actually reads, so it is
+ * what the filter has to match; anything non-textual contributes nothing.
+ */
+function nodeText(node: React.ReactNode, depth = 0): string {
+  if (node === null || node === undefined || typeof node === 'boolean') return '';
+  if (typeof node === 'string') return node;
+  if (typeof node === 'number') return String(node);
+  if (depth > 8) return '';
+  if (Array.isArray(node)) return node.map((child) => nodeText(child, depth + 1)).join(' ');
+  if (React.isValidElement(node)) {
+    const { children } = (node.props ?? {}) as { children?: React.ReactNode };
+    return nodeText(children, depth + 1);
+  }
+  return '';
+}
+
+/**
+ * Case- and diacritic-insensitive search key: "cafe" has to reach "Café",
+ * which a bare `toLowerCase()` never did.
+ */
+function searchKey(value: string): string {
+  return value.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase();
+}
+
+/**
  * Adapts the pattern's `label`-shaped nodes to the primitive's `title`
  * shape, resolving `renderNode` with its depth argument during the walk.
  */
@@ -82,10 +108,19 @@ export default function ModernTreeView(props: TreeViewProps) {
   // Optional channel with an English floor: the view renders standalone
   // (no I18nProvider) without crashing, and never echoes a raw key.
   const i18n = useOptionalTranslation('components');
-  const tOr = (key: string, floor: string): string => i18n?.tOr(key, floor) ?? floor;
+  const tOr = (key: string, floor: string, params?: Record<string, string | number>): string => {
+    const resolved = i18n?.tOr(key, floor, params);
+    if (resolved !== undefined) return resolved;
+    return params
+      ? floor.replace(/\{(\w+)\}/g, (match, name: string) =>
+          name in params ? String(params[name]) : match,
+        )
+      : floor;
+  };
   const searchPlaceholder = searchPlaceholderProp ?? tOr('treeView.search_placeholder', 'Search...');
   const emptyDataLabel = tOr('treeView.empty', 'No items');
   const emptyResultsLabel = tOr('treeView.empty_results', 'No results found');
+  const loadingLabel = tOr('treeView.loading', 'Loading tree');
 
   const [searchQuery, setSearchQuery] = useState('');
   const [internalSelected, setInternalSelected] = useState<string[]>([]);
@@ -96,13 +131,16 @@ export default function ModernTreeView(props: TreeViewProps) {
 
   const treeData = useMemo(() => toTreeData(data, renderNode, 0), [data, renderNode]);
 
-  /* The search predicate matches the ORIGINAL string labels (rich ReactNode
-     titles are not text-searchable, same contract as the hand-rolled tree). */
+  /* The search predicate indexes the ORIGINAL labels, flattened to their
+     readable text: a ReactNode label used to index as nothing at all, so
+     `searchable` answered "No results found" to every query a rich-label
+     tree could ask. */
   const labelByKey = useMemo(() => {
     const map = new Map<string, string>();
     const walk = (nodes: TreeNode[]): void => {
       for (const node of nodes) {
-        if (typeof node.label === 'string') map.set(node.key, node.label);
+        const text = nodeText(node.label);
+        if (text) map.set(node.key, searchKey(text));
         if (node.children) walk(node.children);
       }
     };
@@ -113,17 +151,21 @@ export default function ModernTreeView(props: TreeViewProps) {
   const filterTreeNode = useCallback(
     (searchValue: string, node: TreeDataNode): boolean => {
       const label = labelByKey.get(String(node.key)) ?? '';
-      return label.toLowerCase().includes(searchValue.toLowerCase());
+      return label.includes(searchKey(searchValue));
     },
     [labelByKey]
   );
+
+  /* A whitespace-only query is not a query: it used to filter the whole tree
+     away and report "No results found". */
+  const activeQuery = searchQuery.trim();
 
   /* One filter run per query, shared by the empty hook and the controlled
      expansion merge below -- the same `tree-behavior` util the primitive
      runs, so there is still no second motor. */
   const filterResult = useMemo(
-    () => (searchQuery ? filterTree(treeData, filterTreeNode, searchQuery) : null),
-    [searchQuery, treeData, filterTreeNode]
+    () => (activeQuery ? filterTree(treeData, filterTreeNode, activeQuery) : null),
+    [activeQuery, treeData, filterTreeNode]
   );
 
   /* The `data-empty` hook keeps its pre-composition semantics: it flips when
@@ -132,6 +174,12 @@ export default function ModernTreeView(props: TreeViewProps) {
     if (!filterResult) return data.length === 0;
     return filterResult.filteredKeys.size === 0;
   }, [filterResult, data.length]);
+
+  const matchCount = filterResult?.filteredKeys.size ?? 0;
+  const searchStatusLabel =
+    matchCount === 1
+      ? tOr('treeView.search_results_one', '{count} result', { count: matchCount })
+      : tOr('treeView.search_results_other', '{count} results', { count: matchCount });
 
   /* The primitive auto-expands the ancestors of search matches through its
      INTERNAL expansion state, which a controlled `expandedKeys` overrides --
@@ -189,11 +237,30 @@ export default function ModernTreeView(props: TreeViewProps) {
 
   if (loading) {
     return (
-      <div data-part="root" data-loading="true" className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')} style={{ ...panelCardStyle, ...style }}>
-        <div data-part="skeleton-list">
-          {[1, 2, 3, 4, 5].map((i) => (
-            <div data-part="skeleton" className="ds-tree-view-modern__skeleton" key={i} />
-          ))}
+      <div data-part="root" data-loading="true" aria-busy="true" className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')} style={{ ...panelCardStyle, ...style }}>
+        <span className="ds-sr-only" role="status">{loadingLabel}</span>
+        {/* A searchable tree keeps its search row while loading: the field
+            the caller asked for used to appear only after data landed, so
+            every row shifted down on arrival. The body wrapper is the same
+            one the loaded render uses, so the inset matches exactly. */}
+        <div data-part="body">
+          {searchable && (
+            <div data-part="search-row" className="ds-tree-view-modern__search-row">
+              <Input
+                size="sm"
+                value=""
+                onChange={() => undefined}
+                placeholder={searchPlaceholder}
+                aria-label={searchPlaceholder}
+                disabled
+              />
+            </div>
+          )}
+          <div data-part="skeleton-list" aria-hidden="true">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <div data-part="skeleton" className="ds-tree-view-modern__skeleton" key={i} />
+            ))}
+          </div>
         </div>
       </div>
     );
@@ -218,7 +285,23 @@ export default function ModernTreeView(props: TreeViewProps) {
               aria-label={searchPlaceholder}
               clearable
               onClear={() => setSearchQuery('')}
+              /* Escape is the standard escape hatch out of a filtered view;
+                 it used to be inert, so the tree stayed filtered. */
+              onKeyDown={(e) => {
+                if (e.key === 'Escape' && searchQuery) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setSearchQuery('');
+                }
+              }}
             />
+          </div>
+        )}
+        {/* Filtering silently rewrote the tree under the caret; the match
+            count now reaches assistive technology. */}
+        {searchable && (
+          <div data-part="search-status" role="status" aria-live="polite" className="ds-sr-only">
+            {activeQuery ? searchStatusLabel : ''}
           </div>
         )}
         {isEmpty ? (
@@ -228,7 +311,7 @@ export default function ModernTreeView(props: TreeViewProps) {
              can be cleared. */
           <div data-part="empty">
             <ModernEmpty
-              description={searchQuery ? emptyResultsLabel : emptyDataLabel}
+              description={activeQuery ? emptyResultsLabel : emptyDataLabel}
             />
           </div>
         ) : (
@@ -243,8 +326,8 @@ export default function ModernTreeView(props: TreeViewProps) {
           blockNode
           draggable={draggable}
           multiple={multiple}
-          searchValue={searchQuery || undefined}
-          filterTreeNode={searchQuery ? filterTreeNode : undefined}
+          searchValue={activeQuery || undefined}
+          filterTreeNode={activeQuery ? filterTreeNode : undefined}
           onExpand={(keys) => onExpand?.(keys.map(String))}
           onSelect={handleSelect}
           onCheck={handleCheck}

@@ -113,6 +113,24 @@ function toDateKey(d: Date | string): string {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 }
 
+/** Milliseconds a calendar day spans, used to walk a multi-day range. */
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+/** Sort key for an event: the numeric instant of its start. */
+function startTime(d: Date | string): number {
+  const dateOnly = typeof d === 'string' ? DATE_ONLY_ISO.exec(d) : null;
+  if (dateOnly) {
+    return new Date(
+      Number(dateOnly[1]),
+      Number(dateOnly[2]) - 1,
+      Number(dateOnly[3]),
+    ).getTime();
+  }
+  const value = typeof d === 'string' ? new Date(d) : d;
+  const time = value.getTime();
+  return Number.isNaN(time) ? 0 : time;
+}
+
 /** Reading-direction probe (Tree primitive idiom): the nearest explicit
     `dir` wins; otherwise the document direction applies. */
 function isRtlContext(el: HTMLElement): boolean {
@@ -133,8 +151,17 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
   // locale drives weekday/month names; without a provider it floors to the
   // browser default locale (the engine's historical behaviour).
   const i18n = useOptionalTranslation('components');
-  const tOr = (key: string, floor: string, params?: Record<string, string | number>): string =>
-    i18n?.tOr(key, floor, params) ?? floor;
+  const tOr = (key: string, floor: string, params?: Record<string, string | number>): string => {
+    const resolved = i18n?.tOr(key, floor, params);
+    if (resolved !== undefined) return resolved;
+    // No provider: the English floor still has to read as copy, never as a
+    // raw `{count}` placeholder.
+    return params
+      ? floor.replace(/\{(\w+)\}/g, (match, name: string) =>
+          name in params ? String(params[name]) : match,
+        )
+      : floor;
+  };
   const locale = i18n?.locale ?? 'default';
 
   const {
@@ -160,6 +187,7 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
     viewMonth: tOr('calendarView.viewMonth', 'Month'),
     viewWeek: tOr('calendarView.viewWeek', 'Week'),
     viewDay: tOr('calendarView.viewDay', 'Day'),
+    viewMode: tOr('calendarView.viewMode', 'Calendar view mode'),
   };
 
   const monthLabel = currentDate.toLocaleString(locale, { month: 'long', year: 'numeric' });
@@ -168,18 +196,50 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
   const cells = useMemo(() => getMonthGrid(currentDate, weekStart), [currentDate, weekStart]);
   const dayNames = useMemo(() => weekdayNames(locale, weekStart), [locale, weekStart]);
 
-  // Index events by date string for O(1) lookup per cell during render.
-  // Only keyed by start date -- multi-day events appear on their start day only.
+  // Index events by date string for O(1) lookup per cell during render. An
+  // event carrying an `end` occupies EVERY day it spans, not just its start
+  // day -- a three-day trip that vanished after day one was reading as three
+  // separate calendars. The walk is clamped to the days this grid renders, so
+  // an open-ended range never expands past the visible month.
   const eventsByDate = useMemo(() => {
+    const visible = new Set<string>();
+    for (const c of cells) if (c) visible.add(toDateKey(c));
+
     const map = new Map<string, CalendarEvent<T>[]>();
-    for (const ev of events) {
-      const key = toDateKey(ev.start);
+    const push = (key: string, ev: CalendarEvent<T>) => {
       const bucket = map.get(key);
       if (bucket) bucket.push(ev);
       else map.set(key, [ev]);
+    };
+
+    for (const ev of events) {
+      const startKey = toDateKey(ev.start);
+      push(startKey, ev);
+      if (ev.end === undefined) continue;
+      const endKey = toDateKey(ev.end);
+      if (endKey === startKey) continue;
+      // Walk calendar days (local midnight), never raw instants: DST shifts
+      // must not drop or duplicate a day.
+      const cursor = new Date(startTime(ev.start));
+      cursor.setHours(12, 0, 0, 0);
+      const endStamp = startTime(ev.end);
+      for (let guard = 0; guard < 400; guard += 1) {
+        cursor.setTime(cursor.getTime() + DAY_MS);
+        const key = toDateKey(cursor);
+        if (cursor.getTime() > endStamp + DAY_MS) break;
+        if (visible.has(key)) push(key, ev);
+        if (key === endKey) break;
+      }
+    }
+
+    // Within a day the chips read chronologically, so the three that survive
+    // the overflow cap are the earliest -- not whatever order the caller's
+    // array happened to arrive in.
+    for (const bucket of map.values()) {
+      bucket.sort((a, b) => startTime(a.start) - startTime(b.start));
     }
     return map;
-  }, [events]);
+  }, [events, cells]);
 
   // Navigate forward or backward by one month. Creates a new Date to
   // avoid mutating the controlled currentDate prop. The day is clamped to
@@ -236,10 +296,52 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
     cellRefs.current.get(key)?.focus();
   };
 
+  /* APG in-cell interaction mode. The chips are widgets inside a gridcell, so
+     they must not each own a tab stop (a busy month put ~90 of them in the
+     page tab order). F2 enters the cell and focuses the first chip; Escape
+     returns to the cell; Up/Down walk the stack. Enter/Space stay bound to
+     `onDateClick` on EVERY cell, so the documented callback is untouched. */
+  const enterCell = (cellNode: HTMLElement): boolean => {
+    const firstChip = cellNode.querySelector<HTMLElement>('[data-part="event"]');
+    if (!firstChip) return false;
+    firstChip.focus();
+    return true;
+  };
+
+  const handleChipKeyDown = (e: React.KeyboardEvent<HTMLDivElement>, ev: CalendarEvent<T>) => {
+    const chip = e.currentTarget;
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      e.stopPropagation();
+      onEventClick?.(ev);
+      return;
+    }
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      e.stopPropagation();
+      chip.closest<HTMLElement>('[data-part="day-cell"]')?.focus();
+      return;
+    }
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      // Inside interaction mode the day grid must not move underfoot: the
+      // stack edges absorb the key instead of jumping a week.
+      e.preventDefault();
+      e.stopPropagation();
+      const sibling =
+        e.key === 'ArrowDown' ? chip.nextElementSibling : chip.previousElementSibling;
+      if (sibling instanceof HTMLElement && sibling.dataset.part === 'event') sibling.focus();
+    }
+  };
+
   const handleCellKeyDown = (e: React.KeyboardEvent<HTMLDivElement>, cell: Date) => {
     // Inline arrows mirror under RTL: ArrowLeft always moves visually left,
     // which is the NEXT day in an RTL grid (Tree primitive idiom).
     const rtl = isRtlContext(e.currentTarget);
+    if (e.key === 'F2') {
+      if (!eventsInteractive) return;
+      if (enterCell(e.currentTarget)) e.preventDefault();
+      return;
+    }
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       onDateClick?.(cell);
@@ -260,6 +362,7 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
     <div
       data-part="root"
       data-loading={loading}
+      aria-busy={loading || undefined}
       data-view-mode={view}
       className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')}
       style={style}
@@ -311,6 +414,7 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
             <span data-part="view-select">
               <ModernSelect
                 size="sm"
+                aria-label={copy.viewMode}
                 value={view}
                 onChange={(val) => onViewChange?.(val as 'month' | 'week' | 'day')}
                 options={[
@@ -372,14 +476,30 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
                        roving tabindex; padding cells are presentational. */
                     role={cell ? 'gridcell' : 'presentation'}
                     aria-selected={cell ? Boolean(isSelected) : undefined}
+                    /* The cell name carries its agenda weight: a screen-reader
+                       user arrowing the month hears which days hold work
+                       before deciding to enter one. */
                     aria-label={
                       cell
-                        ? cell.toLocaleDateString(locale, {
-                            weekday: 'long',
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                          })
+                        ? [
+                            cell.toLocaleDateString(locale, {
+                              weekday: 'long',
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric',
+                            }),
+                            dayEvents.length > 0
+                              ? tOr(
+                                  dayEvents.length === 1
+                                    ? 'calendarView.eventCountOne'
+                                    : 'calendarView.eventCountOther',
+                                  dayEvents.length === 1 ? '{count} event' : '{count} events',
+                                  { count: dayEvents.length },
+                                )
+                              : null,
+                          ]
+                            .filter(Boolean)
+                            .join(', ')
                         : undefined
                     }
                     tabIndex={cell ? (cellKey === activeFocusKey ? 0 : -1) : undefined}
@@ -412,22 +532,20 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
                                button role and a tab stop would sell an inert
                                control (and add a tab stop per chip). */
                             role={eventsInteractive ? 'button' : undefined}
-                            tabIndex={eventsInteractive ? 0 : undefined}
+                            /* APG grid: a widget inside a cell is reached
+                               through the cell (F2), never through its own
+                               tab stop. */
+                            tabIndex={eventsInteractive ? -1 : undefined}
+                            /* A `renderEvent` chip can be pure iconography;
+                               the event title is the control's name floor. */
+                            aria-label={eventsInteractive && renderEvent ? ev.title : undefined}
                             onClick={
                               eventsInteractive
                                 ? (e) => { e.stopPropagation(); onEventClick?.(ev); }
                                 : undefined
                             }
                             onKeyDown={
-                              eventsInteractive
-                                ? (e) => {
-                                    if (e.key === 'Enter' || e.key === ' ') {
-                                      e.preventDefault();
-                                      e.stopPropagation();
-                                      onEventClick?.(ev);
-                                    }
-                                  }
-                                : undefined
+                              eventsInteractive ? (e) => handleChipKeyDown(e, ev) : undefined
                             }
                             /* Per-event color is consumer config data: it rides the
                                accent hatch (quoted key) and the skin owns the fill. */
