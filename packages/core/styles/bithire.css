@@ -35470,6 +35470,23 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   border: 0;
 }
 
+/* coarse pointers: physical 44px floor on BOTH axes (checkbox.css idiom).
+   The root's only guaranteed child is the track, so a label-less switch was
+   as wide as `--ds-switch-{size}-width` -- the block floor held, the inline
+   floor did not exist. The touch law is two-dimensional, and physical: the
+   fluid root drops to 15px at narrow widths, so a rem floor erodes below
+   44px exactly where it matters. */
+@media (pointer: coarse) {
+  .ds-switch.ds-switch--modern[data-part='root'] {
+    min-block-size: var(--ds-switch-touch-target-min, var(--ds-touch-target-min, 44px));
+  }
+  .ds-switch.ds-switch--modern[data-part='root'][data-standalone='true'] {
+    min-block-size: var(--ds-switch-touch-target-min, var(--ds-touch-target-min, 44px));
+    min-inline-size: var(--ds-switch-touch-target-min, var(--ds-touch-target-min, 44px));
+    justify-content: center;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .ds-switch.ds-switch--modern [data-part='track'],
   .ds-switch.ds-switch--modern [data-part='thumb'] {
@@ -68852,6 +68869,44 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
   padding: var(--ds-descriptions-grid-padding, 0.75rem);
 }
 
+/* ---- authored per-breakpoint track counts. A `ResponsiveColumn` declares up
+        to six tiers; an inline count would outrank every media query, so the
+        engine publishes the tiers as channels for the responsive posture and
+        writes no inline count at all. Mobile-first, each undeclared tier
+        already carries the nearest smaller one forward, so every query reads
+        exactly one channel. These write the SAME count variable the base rule
+        above reads, so the narrow-container blocks at the end of the file --
+        which set `grid-template-columns` outright -- still win wherever the
+        family's own box is the binding constraint. ---- */
+.rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] {
+  --ds-descriptions-column-count: var(--_ds-descriptions-columns-xs, 1);
+}
+@media (min-width: 640px) {
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] {
+    --ds-descriptions-column-count: var(--_ds-descriptions-columns-sm, 1);
+  }
+}
+@media (min-width: 768px) {
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] {
+    --ds-descriptions-column-count: var(--_ds-descriptions-columns-md, 1);
+  }
+}
+@media (min-width: 1024px) {
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] {
+    --ds-descriptions-column-count: var(--_ds-descriptions-columns-lg, 1);
+  }
+}
+@media (min-width: 1280px) {
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] {
+    --ds-descriptions-column-count: var(--_ds-descriptions-columns-xl, 1);
+  }
+}
+@media (min-width: 1536px) {
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] {
+    --ds-descriptions-column-count: var(--_ds-descriptions-columns-xxl, 1);
+  }
+}
+
 .rottay-descriptions.rottay-descriptions--modern[data-part='root'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] {
   min-inline-size: 0;
   grid-column: span var(--ds-descriptions-item-span, 1);
@@ -70768,6 +70823,13 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
 .rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-row'] {
   padding-block: var(--ds-list-skeleton-row-padding-block, 12px);
 }
+/* A grid list must reserve its real tracks while loading, or the skeleton
+   reflows from a stack into N columns the moment data lands. The single-count
+   projection stays inline (as on the loaded `<ul>`); the per-breakpoint tiers
+   are read by the responsive-grid block further down, which this part joins. */
+.rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] > [data-part='skeleton'][data-grid] {
+  display: grid;
+}
 .rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-row-inner'] {
   display: flex;
   align-items: center;
@@ -70858,32 +70920,38 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
    reads exactly one property with no fallback chain. Widths are the shared
    scale in foundation/contracts/kernel/responsive/breakpoints (the contract's
    `xxl` is that scale's `2xl`); `xs` is the 0px baseline and needs no query. */
-.rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'] {
+.rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'],
+.rottay-list.rottay-list--modern[data-part='root'] > [data-part='skeleton'][data-grid='responsive'] {
   display: grid;
   grid-template-columns: repeat(var(--_ds-list-grid-columns-xs, 1), minmax(0, 1fr));
 }
 @media (min-width: 640px) {
-  .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'] {
+  .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'],
+.rottay-list.rottay-list--modern[data-part='root'] > [data-part='skeleton'][data-grid='responsive'] {
     grid-template-columns: repeat(var(--_ds-list-grid-columns-sm, 1), minmax(0, 1fr));
   }
 }
 @media (min-width: 768px) {
-  .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'] {
+  .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'],
+.rottay-list.rottay-list--modern[data-part='root'] > [data-part='skeleton'][data-grid='responsive'] {
     grid-template-columns: repeat(var(--_ds-list-grid-columns-md, 1), minmax(0, 1fr));
   }
 }
 @media (min-width: 1024px) {
-  .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'] {
+  .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'],
+.rottay-list.rottay-list--modern[data-part='root'] > [data-part='skeleton'][data-grid='responsive'] {
     grid-template-columns: repeat(var(--_ds-list-grid-columns-lg, 1), minmax(0, 1fr));
   }
 }
 @media (min-width: 1280px) {
-  .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'] {
+  .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'],
+.rottay-list.rottay-list--modern[data-part='root'] > [data-part='skeleton'][data-grid='responsive'] {
     grid-template-columns: repeat(var(--_ds-list-grid-columns-xl, 1), minmax(0, 1fr));
   }
 }
 @media (min-width: 1536px) {
-  .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'] {
+  .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'],
+.rottay-list.rottay-list--modern[data-part='root'] > [data-part='skeleton'][data-grid='responsive'] {
     grid-template-columns: repeat(var(--_ds-list-grid-columns-xxl, 1), minmax(0, 1fr));
   }
 }
@@ -72660,6 +72728,9 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
   display: flex;
   flex-direction: column;
   position: relative;
+  /* The two-sided fold below measures the timeline's own box, not the
+     viewport: a timeline in a 320px rail must fold even on a desktop. */
+  container-type: inline-size;
   /* The skin is the single paint owner: it cannot lean on framework preflight
      for the list reset (stepper.css precedent). */
   margin: 0;
@@ -72726,6 +72797,37 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
 .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'] > [data-part='content'][data-side='end'] {
   grid-area: 1 / 3 / 4 / 4;
   place-self: center flex-start;
+}
+
+/* ---- occupied-track collapse. `1fr | dot | 1fr` is the ALTERNATE geometry;
+        a single-sided timeline (the `left` default, and `right`) left the
+        opposite `1fr` empty, so the rail sat mid-container and every row's
+        copy wrapped inside half the measure it owned. The engine stamps which
+        sides the resolved rows actually occupy (`position` overrides and the
+        pending row included), so the dead track collapses to zero and the rail
+        settles on the real edge. `data-sides='both'` keeps the full grid. ---- */
+.rottay-timeline.rottay-timeline--modern[data-part='root'][data-sides='start'] > [data-part='item'] {
+  grid-template-columns: minmax(0, 1fr) auto 0;
+}
+.rottay-timeline.rottay-timeline--modern[data-part='root'][data-sides='end'] > [data-part='item'] {
+  grid-template-columns: 0 auto minmax(0, 1fr);
+}
+
+/* ---- narrow container: two ~1fr columns become two unreadable measures long
+        before the viewport is a phone (a 30rem rail leaves ~14rem a side). The
+        alternating timeline folds to one side, keeping the rail at the
+        inline-start edge and giving every row the full measure -- the
+        intentional simplified posture, not a squeeze. Alignment flips with it
+        so the folded rows read away from the rail like the `end` side does. ---- */
+@container (max-width: 30rem) {
+  .rottay-timeline.rottay-timeline--modern[data-part='root'][data-sides='both'] > [data-part='item'] {
+    grid-template-columns: 0 auto minmax(0, 1fr);
+  }
+  .rottay-timeline.rottay-timeline--modern[data-part='root'][data-sides='both'] > [data-part='item'] > [data-part='content'][data-side='start'] {
+    grid-area: 1 / 3 / 4 / 4;
+    place-self: center flex-start;
+    text-align: start;
+  }
 }
 
 /* ---- dot: middle track, same text color takeover as the content ---- */

@@ -103,11 +103,21 @@ export default function ModernToggle(props: ToggleProps): React.ReactElement {
   const displayLabel = label || children;
   const stateLabel = isChecked ? checkedLabel : uncheckedLabel;
   const hasText = Boolean(displayLabel || description || stateLabel);
-  const describedBy = [
-    description ? descriptionId : undefined,
-    error && errorMessage ? errorId : undefined,
-    !error && helperText ? helperId : undefined,
-  ].filter(Boolean).join(' ') || undefined;
+  // Merge, never replace: `{...rest}` lands after these attributes, so a
+  // caller's `aria-describedby` would otherwise void the switch's own.
+  const describedBy = Array.from(
+    new Set(
+      [
+        description ? descriptionId : undefined,
+        error && errorMessage ? errorId : undefined,
+        !error && helperText ? helperId : undefined,
+        (rest as Record<string, unknown>)['aria-describedby'] as string | undefined,
+      ]
+        .filter((token): token is string => Boolean(token))
+        .flatMap((token) => token.split(/\s+/))
+        .filter(Boolean),
+    ),
+  ).join(' ') || undefined;
   // Description and state label live inside the <label>; without an explicit
   // name source the name absorbs them and mutates on every toggle.
   // A caller-supplied name wins: aria-labelledby outranks aria-label, so
@@ -150,9 +160,11 @@ export default function ModernToggle(props: ToggleProps): React.ReactElement {
           aria-invalid={error || undefined}
           aria-required={required || undefined}
           aria-busy={loading || undefined}
-          aria-describedby={describedBy}
           aria-labelledby={labelledBy}
           {...rest}
+          /* Merged above from the caller's token plus the switch's own ids, so
+             it must land AFTER the spread that would otherwise replace it. */
+          aria-describedby={describedBy}
         />
         <span data-part="track" aria-hidden="true">
           <span data-part="thumb">

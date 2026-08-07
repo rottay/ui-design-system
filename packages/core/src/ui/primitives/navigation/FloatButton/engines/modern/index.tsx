@@ -315,6 +315,8 @@ export const Group = React.forwardRef<HTMLDivElement, FloatButtonGroupProps>(
     // the trigger; ArrowUp/ArrowDown cycle focus across the panel's buttons.
     const panelRef = React.useRef<HTMLDivElement>(null);
     const triggerRef = React.useRef<HTMLButtonElement>(null);
+    /** The disclosure relation needs a real target id, not just a state flag. */
+    const panelId = `float-button-panel-${React.useId().replace(/:/g, '')}`;
     const closeAndFocusTrigger = () => {
       if (controlledOpen === undefined) {
         setInternalOpen(false);
@@ -372,7 +374,9 @@ export const Group = React.forwardRef<HTMLDivElement, FloatButtonGroupProps>(
           title={typeof tooltip === 'string' ? tooltip : undefined}
           aria-label={triggerAriaLabel}
           aria-expanded={isOpen}
-          aria-haspopup="true"
+          // Disclosure, not a menu: the panel is a `role="group"`, so
+          // `aria-haspopup` would promise menu semantics that never arrive.
+          aria-controls={panelId}
         >
           {isOpen ? (closeIcon ?? <ActionCloseIcon decorative size={16} />) : icon}
         </button>
@@ -385,6 +389,7 @@ export const Group = React.forwardRef<HTMLDivElement, FloatButtonGroupProps>(
             state for assistive technology. */}
         <div
           ref={panelRef}
+          id={panelId}
           data-part="panel"
           data-open={isOpen}
           role="group"
@@ -397,6 +402,51 @@ export const Group = React.forwardRef<HTMLDivElement, FloatButtonGroupProps>(
   }
 );
 Group.displayName = 'FloatButton.Group.Modern';
+
+// ===== Scroll journey (bounded duplication of BackTop's helper; no owner yet) =====
+
+/** Reads the scroll offset of either scroll source uniformly. */
+function readScrollTop(source: Window | HTMLElement): number {
+  return source === window
+    ? window.scrollY
+    : (source as HTMLElement).scrollTop;
+}
+
+/** Writes the scroll offset of either scroll source uniformly. */
+function writeScrollTop(source: Window | HTMLElement, top: number): void {
+  if (source === window) {
+    window.scrollTo({ top, behavior: 'instant' as ScrollBehavior });
+  } else {
+    (source as HTMLElement).scrollTop = top;
+  }
+}
+
+// `behavior: 'smooth'` runs at a UA-fixed cadence, so honouring the contract's
+// `duration` needs a driven journey; it aborts if the reader takes the scroll back.
+function animateScrollToTop(source: Window | HTMLElement, duration: number): void {
+  const start = readScrollTop(source);
+  if (start <= 0) return;
+
+  if (duration <= 0 || typeof requestAnimationFrame !== 'function') {
+    writeScrollTop(source, 0);
+    return;
+  }
+
+  const startedAt = typeof performance !== 'undefined' ? performance.now() : Date.now();
+  let lastObserved = start;
+
+  const step = (): void => {
+    if (readScrollTop(source) !== lastObserved) return;
+    const now = typeof performance !== 'undefined' ? performance.now() : Date.now();
+    const progress = Math.min(1, (now - startedAt) / duration);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    writeScrollTop(source, Math.round(start * (1 - eased)));
+    lastObserved = readScrollTop(source);
+    if (progress < 1) requestAnimationFrame(step);
+  };
+
+  requestAnimationFrame(step);
+}
 
 // ============================================================================
 // BackTop Modern Implementation
@@ -425,6 +475,7 @@ export const BackTop = React.forwardRef<HTMLButtonElement, FloatButtonBackTopPro
   (props, ref) => {
     const {
       visibilityHeight = FLOAT_BUTTON_DEFAULTS.visibilityHeight,
+      duration = FLOAT_BUTTON_DEFAULTS.duration,
       target,
       onClick,
       icon,
@@ -495,7 +546,6 @@ export const BackTop = React.forwardRef<HTMLButtonElement, FloatButtonBackTopPro
         typeof window !== 'undefined' &&
         typeof window.matchMedia === 'function' &&
         window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const behavior: ScrollBehavior = prefersReducedMotion ? 'instant' : 'smooth';
       if (
         typeof document !== 'undefined' &&
         buttonRef.current !== null &&
@@ -518,10 +568,12 @@ export const BackTop = React.forwardRef<HTMLButtonElement, FloatButtonBackTopPro
         );
         focusTarget.focus({ preventScroll: true });
       }
-      if (container === window) {
-        window.scrollTo({ top: 0, behavior });
+      // Reduced motion settles instantly; otherwise the journey runs over the
+      // contract's own `duration` instead of the UA's fixed smooth cadence.
+      if (prefersReducedMotion) {
+        writeScrollTop(container, 0);
       } else {
-        (container as HTMLElement).scrollTo({ top: 0, behavior });
+        animateScrollToTop(container, duration);
       }
       onClick?.();
     };

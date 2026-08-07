@@ -88,6 +88,14 @@ import React, { useState, useCallback } from 'react';
 import type { StepperProps, StepItem, StepStatus } from '../../contracts';
 import { STEPPER_DEFAULTS } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { VisuallyHidden } from '@/ui/primitives/foundation/VisuallyHidden';
+
+// Only the statuses drawn purely in paint need a text equivalent: `process` is
+// already carried by `aria-current`, and `wait` is the absence of both.
+const STATUS_ANNOUNCEMENT: Partial<Record<StepStatus, { key: string; floor: string }>> = {
+  finish: { key: 'stepper.status.finish', floor: 'Completed' },
+  error: { key: 'stepper.status.error', floor: 'Error' },
+};
 
 // ============================================================================
 // Utility Functions
@@ -126,17 +134,24 @@ function renderModernSteps(
   clickable: boolean,
   onChange?: (current: number) => void,
   globalStatus?: StepStatus,
-  progressDot?: StepperProps['progressDot']
+  progressDot?: StepperProps['progressDot'],
+  resolveStatusName?: (status: StepStatus) => string | undefined
 ): React.ReactNode {
   return items.map((item, index) => {
     // Priority: explicit item status > global status (only on current step) > positional computation.
     // This lets consumers override specific steps while inheriting defaults elsewhere.
     const status = item.status || (globalStatus && index === current ? globalStatus : computeStatus(index, current));
     const isClickable = clickable && !item.disabled;
+    const statusName = resolveStatusName?.(status);
 
     const text = (
       <>
         <span data-part="label">{item.title}</span>
+        {/* Status must not be color-and-glyph only: the name rides with the
+            step title, clipped from paint and out of flow. */}
+        {statusName ? (
+          <VisuallyHidden data-part="status-name">{statusName}</VisuallyHidden>
+        ) : null}
         {item.subTitle && <span data-part="subtitle">{item.subTitle}</span>}
         {item.description && <span data-part="description">{item.description}</span>}
       </>
@@ -236,6 +251,14 @@ export default function ModernStepper(props: StepperProps): React.ReactElement {
   /** Use controlled or uncontrolled state */
   const current = controlledCurrent ?? internalCurrent;
 
+  // A ref, not state: it is read during the same render that advances, so it
+  // must never schedule one of its own.
+  const previousCurrentRef = React.useRef(current);
+  const renderedPreviousCurrent = previousCurrentRef.current;
+  if (renderedPreviousCurrent !== current) {
+    previousCurrentRef.current = current;
+  }
+
   // ============================================================================
   // Event Handlers
   // ============================================================================
@@ -261,12 +284,27 @@ export default function ModernStepper(props: StepperProps): React.ReactElement {
   // Content Rendering
   // ============================================================================
 
+  /** Localized status name with the documented English floor. */
+  const resolveStatusName = useCallback(
+    (stepStatus: StepStatus): string | undefined => {
+      const announcement = STATUS_ANNOUNCEMENT[stepStatus];
+      if (!announcement) return undefined;
+      return translation?.tOr(announcement.key, announcement.floor) ?? announcement.floor;
+    },
+    [translation]
+  );
+
   /** Process items or children into step content */
   let stepsContent: React.ReactNode = null;
+  // Child `Stepper.Content` panels must be collected here: their
+  // `currentStep`/`previousStep` are internal props only the parent can inject.
+  const contentPanels: React.ReactNode[] = [];
 
   if (items) {
     // Render from items prop
-    stepsContent = renderModernSteps(items, current, clickable, handleChange, status, progressDot);
+    stepsContent = renderModernSteps(
+      items, current, clickable, handleChange, status, progressDot, resolveStatusName
+    );
   } else if (children) {
     // Convert children to items for rendering
     const childItems: StepItem[] = [];
@@ -289,8 +327,24 @@ export default function ModernStepper(props: StepperProps): React.ReactElement {
     });
 
     if (childItems.length > 0) {
-      stepsContent = renderModernSteps(childItems, current, clickable, handleChange, status, progressDot);
+      stepsContent = renderModernSteps(
+        childItems, current, clickable, handleChange, status, progressDot, resolveStatusName
+      );
     }
+  }
+
+  if (children) {
+    React.Children.forEach(children, (child, childIndex) => {
+      if (!React.isValidElement(child)) return;
+      if ((child.type as any)?.displayName !== 'Stepper.Content') return;
+      contentPanels.push(
+        React.cloneElement(child as React.ReactElement<Record<string, unknown>>, {
+          key: child.key ?? `stepper-content-${childIndex}`,
+          currentStep: current,
+          previousStep: renderedPreviousCurrent,
+        })
+      );
+    });
   }
 
   // ============================================================================
@@ -310,7 +364,7 @@ export default function ModernStepper(props: StepperProps): React.ReactElement {
       ? translatedLabel
       : 'Progress steps';
 
-  return (
+  const track = (
     <nav
       {...rest}
       aria-label={callerAriaLabel ?? navigationLabel}
@@ -329,6 +383,17 @@ export default function ModernStepper(props: StepperProps): React.ReactElement {
         {stepsContent}
       </ul>
     </nav>
+  );
+
+  // The panels are the step BODY, so they stay OUTSIDE the navigation
+  // landmark; without them the tree is byte-identical to the track alone.
+  if (contentPanels.length === 0) return track;
+
+  return (
+    <>
+      {track}
+      {contentPanels}
+    </>
   );
 }
 

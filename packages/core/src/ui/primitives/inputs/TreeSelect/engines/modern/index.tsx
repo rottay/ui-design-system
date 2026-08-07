@@ -84,6 +84,19 @@ function normalizeNodes(
   });
 }
 
+/** Resolve a node's title by value, depth-first. Module level so the change
+ *  handler can build a label list without depending on a per-render closure. */
+function findTitleByValue(nodes: TreeSelectNode[], value: string | number): ReactNode {
+  for (const node of nodes) {
+    if (node.value === value) return node.title;
+    if (node.children) {
+      const found = findTitleByValue(node.children, value);
+      if (found) return found;
+    }
+  }
+  return null;
+}
+
 /** Collect all node keys in a tree */
 function collectAllKeys(nodes: TreeSelectNode[]): Set<string | number> {
   const keys = new Set<string | number>();
@@ -482,10 +495,12 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
       return new Set(treeDefaultExpandedKeys || []);
     };
 
+    // `''` is this component's own reset-to-empty payload from the clear
+    // affordance, so empty/nullish keys are never selections in either direction.
     const normalizeValue = (val: TreeSelectValue | undefined): Set<string | number> => {
-      if (val === undefined) return new Set();
-      if (Array.isArray(val)) return new Set(val);
-      return new Set([val]);
+      if (val === undefined || val === null) return new Set();
+      const list = Array.isArray(val) ? val : [val];
+      return new Set(list.filter((entry) => entry !== '' && entry !== null && entry !== undefined));
     };
 
     const [internalValue, setInternalValue] = useState<Set<string | number>>(
@@ -566,11 +581,34 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
     // fixed delay (P0 law: no const-ms timers), not mount synchronization,
     // and it could fire after the dropdown had already closed (the ref read
     // silently no-oped). Focus lands on open, never on an animation frame.
+    /** Set when the trigger opened via ArrowDown on a tree with no search box:
+     *  APG says that key lands focus on an option, not on the closed trigger. */
+    const focusTreeAfterOpenRef = useRef(false);
+
+    /** The row Tab/arrows should land on: the roving tab stop, else the first
+     *  enabled row. Read from the DOM so it stays true after a re-filter. */
+    const focusEntryRow = useCallback(() => {
+      const panel = dropdownRef.current;
+      if (!panel) return;
+      const roving = panel.querySelector<HTMLElement>('[data-part="option"][tabindex="0"]');
+      const fallback = panel.querySelector<HTMLElement>('[data-part="option"]:not([data-disabled="true"])');
+      (roving ?? fallback)?.focus();
+    }, []);
+
     useEffect(() => {
-      if (isOpen && showSearch) {
-        searchInputRef.current?.focus();
+      if (!isOpen) {
+        focusTreeAfterOpenRef.current = false;
+        return;
       }
-    }, [isOpen, showSearch]);
+      if (showSearch) {
+        searchInputRef.current?.focus();
+        return;
+      }
+      if (focusTreeAfterOpenRef.current) {
+        focusTreeAfterOpenRef.current = false;
+        focusEntryRow();
+      }
+    }, [isOpen, showSearch, focusEntryRow]);
 
     const handleToggle = useCallback((key: string | number) => {
       const next = new Set(expandedKeys);
@@ -679,10 +717,25 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
       }
       const target = e.target as HTMLElement;
       const row = target.closest?.('[data-part="option"]') as HTMLElement | null;
-      if (!row) return;
       const rows = Array.from(
         dropdownRef.current?.querySelectorAll<HTMLElement>('[data-part="option"]:not([data-disabled="true"])') ?? [],
       );
+
+      // Entry from OUTSIDE a row -- the search input, which owns focus for the
+      // whole life of an open searchable tree (APG combobox contract).
+      if (!row) {
+        if (e.key === 'ArrowDown' || e.key === 'Home') {
+          if (rows.length === 0) return;
+          e.preventDefault();
+          rows[0].focus();
+        } else if (e.key === 'ArrowUp' || e.key === 'End') {
+          if (rows.length === 0) return;
+          e.preventDefault();
+          rows[rows.length - 1].focus();
+        }
+        return;
+      }
+
       const currentIndex = rows.indexOf(row);
 
       if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
@@ -790,19 +843,8 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
       return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [isOpen, handleOpenChange]);
 
-    const findTitle = (nodes: TreeSelectNode[], value: string | number): ReactNode => {
-      for (const node of nodes) {
-        if (node.value === value) return node.title;
-        if (node.children) {
-          const found = findTitle(node.children, value);
-          if (found) return found;
-        }
-      }
-      return null;
-    };
-
     const selectedTitles = Array.from(selectedKeys)
-      .map((v) => findTitle(treeData, v))
+      .map((v) => findTitleByValue(treeData, v))
       .filter(Boolean)
       .map((t) => String(t));
 
@@ -850,7 +892,14 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
             if (disabled) return;
             if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown') {
               e.preventDefault();
-              if (!isOpen) handleOpenChange(true);
+              if (!isOpen) {
+                // ArrowDown is the APG "open AND move to an option" key; with a
+                // search box the panel's own effect claims focus instead.
+                focusTreeAfterOpenRef.current = e.key === 'ArrowDown' && !showSearch;
+                handleOpenChange(true);
+              } else if (e.key === 'ArrowDown' && !showSearch) {
+                focusEntryRow();
+              }
             } else if (e.key === 'Escape' && isOpen) {
               e.preventDefault();
               handleOpenChange(false);

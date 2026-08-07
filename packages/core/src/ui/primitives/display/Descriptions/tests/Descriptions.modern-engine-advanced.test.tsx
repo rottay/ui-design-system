@@ -43,10 +43,15 @@ describe('Descriptions modern advanced coverage', () => {
     expect(root).toHaveAttribute('data-bordered', 'true');
     expect(root).toHaveAttribute('data-size', 'small');
     const grid = container.querySelector('[data-part="rows"]') as HTMLDivElement;
-    expect(root).toHaveAttribute('data-column-count', '2');
+    // Retargeted, not weakened: the widest declared count governs the span clamp, both tiers
+    // reach the skin, and the responsive posture writes no inline count.
+    expect(root).toHaveAttribute('data-columns', 'responsive');
+    expect(root).toHaveAttribute('data-column-count', '4');
     expect(root).toHaveAttribute('data-item-count', '2');
     expect(root).toHaveAttribute('data-has-header', 'true');
-    expect(root.style.getPropertyValue('--ds-descriptions-column-count')).toBe('2');
+    expect(root.style.getPropertyValue('--ds-descriptions-column-count')).toBe('');
+    expect(root.style.getPropertyValue('--_ds-descriptions-columns-md')).toBe('2');
+    expect(root.style.getPropertyValue('--_ds-descriptions-columns-lg')).toBe('4');
     expect(grid).toHaveAttribute('role', 'list');
     expect(grid.querySelector('[data-part="row"]')).toHaveAttribute('data-span', '2');
     expect(screen.getByText('Name:')).toHaveStyle({ color: 'rgb(255, 0, 0)', fontStyle: 'italic' });

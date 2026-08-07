@@ -192,6 +192,23 @@
   border: 0;
 }
 
+/* coarse pointers: physical 44px floor on BOTH axes (checkbox.css idiom).
+   The root's only guaranteed child is the track, so a label-less switch was
+   as wide as `--ds-switch-{size}-width` -- the block floor held, the inline
+   floor did not exist. The touch law is two-dimensional, and physical: the
+   fluid root drops to 15px at narrow widths, so a rem floor erodes below
+   44px exactly where it matters. */
+@media (pointer: coarse) {
+  .ds-switch.ds-switch--modern[data-part='root'] {
+    min-block-size: var(--ds-switch-touch-target-min, var(--ds-touch-target-min, 44px));
+  }
+  .ds-switch.ds-switch--modern[data-part='root'][data-standalone='true'] {
+    min-block-size: var(--ds-switch-touch-target-min, var(--ds-touch-target-min, 44px));
+    min-inline-size: var(--ds-switch-touch-target-min, var(--ds-touch-target-min, 44px));
+    justify-content: center;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .ds-switch.ds-switch--modern [data-part='track'],
   .ds-switch.ds-switch--modern [data-part='thumb'] {

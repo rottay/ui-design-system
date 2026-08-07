@@ -131,6 +131,12 @@ export default function ModernPasswordInput(props: PasswordInputProps): React.Re
     'data-testid': dataTestId,
   } = props;
 
+  /* FormField clones `aria-describedby` onto its control child, and the shared
+   * contract cannot declare it (owner-frozen), so the engine widens it here. */
+  const { 'aria-describedby': ariaDescribedByProp } = props as PasswordInputProps & {
+    'aria-describedby'?: string;
+  };
+
   const { tCommon, tComponents } = usePasswordInputTranslation();
   const generatedId = useId();
   const inputId = providedId || `password-modern-${generatedId.replace(/:/g, '')}`;
@@ -158,9 +164,16 @@ export default function ModernPasswordInput(props: PasswordInputProps): React.Re
   // affordance, so the ring follows any real focus, pointer or keyboard.
   const { state: interaction, handlers: interactionHandlers } = useInteractionState({ disabled });
 
+  // `data-filled` is a content state the skin paints from, so it must mirror
+  // what is actually in the field, not `value ?? defaultValue`.
+  const isControlled = value !== undefined;
+  const [uncontrolledValue, setUncontrolledValue] = useState(String(defaultValue ?? ''));
+  const currentValue = isControlled ? value : uncontrolledValue;
+
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!isControlled) setUncontrolledValue(e.target.value);
     onChange?.(e.target.value, e);
-  }, [onChange]);
+  }, [isControlled, onChange]);
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
     onKeyDown?.(e);
@@ -198,8 +211,18 @@ export default function ModernPasswordInput(props: PasswordInputProps): React.Re
     if (event.detail > 0) inputRef.current?.focus();
   }, []);
 
-  const isFilled = String(value ?? defaultValue ?? '').length > 0;
-  const describedBy = error && errorMessage ? errorMessageId : undefined;
+  const isFilled = String(currentValue ?? '').length > 0;
+  // Merge, never replace: a form-level description arriving from FormField
+  // must not silence this field's own error message, and vice versa.
+  const describedBy =
+    Array.from(
+      new Set(
+        [error && errorMessage ? errorMessageId : undefined, ariaDescribedByProp]
+          .filter((token): token is string => Boolean(token))
+          .flatMap((token) => token.split(/\s+/))
+          .filter(Boolean),
+      ),
+    ).join(' ') || undefined;
   // The error state always wins the message zone: a caps-lock hint next to
   // an error border would contradict "the error is what needs attention".
   const showCapsLockHint = capsLockHint && capsLockOn && !error;
@@ -234,8 +257,10 @@ export default function ModernPasswordInput(props: PasswordInputProps): React.Re
           data-part="control"
           type={visible ? 'text' : 'password'}
           placeholder={placeholder}
-          value={value}
-          defaultValue={defaultValue}
+          // One mode or the other, never both: React ignores `defaultValue`
+          // when `value` is also present and warns in development.
+          value={isControlled ? value : undefined}
+          defaultValue={isControlled ? undefined : defaultValue}
           disabled={disabled}
           readOnly={readOnly}
           required={required}

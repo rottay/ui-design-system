@@ -56,6 +56,7 @@ import React, {
   useCallback,
   useState,
   useEffect,
+  useLayoutEffect,
   useRef,
   ReactNode,
 } from 'react';
@@ -150,12 +151,50 @@ export const MessageProvider: React.FC<MessageProviderProps> = ({
 }) => {
   const [messages, setMessages] = useState<InternalMessage[]>([]);
 
+  const stackRef = useRef<HTMLDivElement>(null);
+  /** Where focus came from when it first entered the stack from outside. */
+  const returnFocusRef = useRef<HTMLElement | null>(null);
+  /** Set when the card that just left the stack was the one holding focus. */
+  const pendingFocusHandoffRef = useRef(false);
+
   /**
    * Removes a message from state by ID.
    */
   const removeMessage = useCallback((id: string) => {
+    // Must be detected BEFORE the node leaves the tree; the layout effect below
+    // performs the handoff once the removal has committed.
+    const stack = stackRef.current;
+    const active = stack?.ownerDocument.activeElement as HTMLElement | null;
+    if (stack && active) {
+      // Attribute-value lookup rather than a selector string: a caller-supplied
+      // `key` becomes the id verbatim and may contain selector metacharacters.
+      const card = Array.from(stack.querySelectorAll<HTMLElement>('[data-message-id]'))
+        .find((node) => node.dataset.messageId === id);
+      if (card?.contains(active)) pendingFocusHandoffRef.current = true;
+    }
     setMessages((prev) => prev.filter((m) => m.id !== id));
   }, []);
+
+  /** Focus enters the stack: remember the outside element to hand back to. */
+  const handleStackFocus = useCallback((event: React.FocusEvent<HTMLDivElement>) => {
+    const from = event.relatedTarget as HTMLElement | null;
+    if (from && !event.currentTarget.contains(from)) returnFocusRef.current = from;
+  }, []);
+
+  useLayoutEffect(() => {
+    if (!pendingFocusHandoffRef.current) return;
+    pendingFocusHandoffRef.current = false;
+    // Prefer the next surviving dismiss control -- the user is still working
+    // the stack. Only an emptied stack hands focus back where it came from.
+    const nextControl = stackRef.current?.querySelector<HTMLElement>('[data-part="close-button"]');
+    if (nextControl) {
+      nextControl.focus();
+      return;
+    }
+    const back = returnFocusRef.current;
+    returnFocusRef.current = null;
+    if (back?.isConnected) back.focus();
+  }, [messages]);
 
   /**
    * Adds a new message to state, respecting maxCount and key updates.
@@ -278,10 +317,12 @@ export const MessageProvider: React.FC<MessageProviderProps> = ({
           technologies announce arriving messages without interrupting the
           user's current task. The items themselves keep role="alert". */}
       <div
+        ref={stackRef}
         data-part="stack-container"
         data-placement={placement}
         className="rottay-message-stack--modern"
         style={stackOffset}
+        onFocus={handleStackFocus}
         role="log"
         aria-live="polite"
       >
@@ -538,6 +579,9 @@ export const MessageItem: React.FC<MessageItemProps> = ({
     <div
       ref={cardRef}
       data-part="root"
+      /* Identity the stack owner reads to tell whether the card leaving the
+         tree is the one currently holding focus. */
+      data-message-id={id}
       data-tone={type}
       data-state={exiting ? 'exit' : 'enter'}
       data-closable={closable ? 'true' : 'false'}

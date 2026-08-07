@@ -103,6 +103,10 @@ function handleMenuLevelKeyDown(event: React.KeyboardEvent<HTMLUListElement>): v
   }
 }
 
+/** First enabled row of ONE menu level (never a nested submenu's rows). */
+const LEVEL_ITEM_SELECTOR =
+  ':scope > [data-part="item-shell"] > [data-part="item"]:not(:disabled)';
+
 /** Renders a single menu row: standard item, divider, group title, or a
  *  parent item with an inline-expanding submenu (Dropdown's grammar). */
 const MenuItem: React.FC<{
@@ -110,6 +114,23 @@ const MenuItem: React.FC<{
   onClick?: (key: string) => void;
 }> = ({ item, onClick }) => {
   const [submenuOpen, setSubmenuOpen] = useState(false);
+  const itemRef = useRef<HTMLButtonElement | null>(null);
+  const submenuRef = useRef<HTMLUListElement | null>(null);
+  // A keyboard expansion must land on the submenu's first row (APG); a hover
+  // expansion must NOT move focus away from wherever the user is typing.
+  const keyboardExpandRef = useRef(false);
+
+  useEffect(() => {
+    if (!submenuOpen || !keyboardExpandRef.current) return;
+    keyboardExpandRef.current = false;
+    submenuRef.current?.querySelector<HTMLElement>(LEVEL_ITEM_SELECTOR)?.focus();
+  }, [submenuOpen]);
+
+  /** Collapse this level's submenu and take focus back to its disclosure. */
+  const collapseToParent = useCallback(() => {
+    setSubmenuOpen(false);
+    itemRef.current?.focus();
+  }, []);
 
   // All row geometry (divider thickness/margins, group-label chrome, item
   // layout) is skin-owned -- context-menu.css keys on data-part. No utility
@@ -150,9 +171,16 @@ const MenuItem: React.FC<{
       data-has-children={hasChildren ? 'true' : undefined}
       data-submenu-open={submenuOpen ? 'true' : undefined}
       onMouseEnter={() => hasChildren && setSubmenuOpen(true)}
-      onMouseLeave={() => hasChildren && setSubmenuOpen(false)}
+      onMouseLeave={(event) => {
+        // A pointer leaving must not collapse a level the keyboard is inside:
+        // that removes the focused row and strands focus on <body>.
+        if (!hasChildren) return;
+        if (event.currentTarget.contains(document.activeElement)) return;
+        setSubmenuOpen(false);
+      }}
     >
       <button
+        ref={itemRef}
         type="button"
         role="menuitem"
         data-part="item"
@@ -175,6 +203,9 @@ const MenuItem: React.FC<{
           const backwardKey = isRtl ? 'ArrowRight' : 'ArrowLeft';
           if (event.key === forwardKey && hasChildren) {
             event.preventDefault();
+            // Expanding without moving focus leaves children unreachable: the
+            // level handler only walks `:scope >` rows.
+            keyboardExpandRef.current = true;
             setSubmenuOpen(true);
           }
           if (event.key === backwardKey && hasChildren) {
@@ -200,7 +231,32 @@ const MenuItem: React.FC<{
       </button>
 
       {hasChildren && submenuOpen ? (
-        <ul role="menu" data-part="submenu" aria-orientation="vertical" onKeyDown={handleMenuLevelKeyDown}>
+        <ul
+          ref={submenuRef}
+          role="menu"
+          data-part="submenu"
+          aria-orientation="vertical"
+          onKeyDown={(event) => {
+            // Only the top layer dismisses: Escape collapses this level instead of
+            // bubbling to the root <ul>. Guarded on ownership for deeper levels.
+            if (event.target instanceof HTMLElement &&
+                event.target.closest('[role="menu"]') !== event.currentTarget) {
+              handleMenuLevelKeyDown(event);
+              return;
+            }
+            const isRtl =
+              event.currentTarget.closest<HTMLElement>('[dir]')?.dir === 'rtl' ||
+              window.getComputedStyle(event.currentTarget).direction === 'rtl';
+            const backwardKey = isRtl ? 'ArrowRight' : 'ArrowLeft';
+            if (event.key === 'Escape' || event.key === backwardKey) {
+              event.preventDefault();
+              event.stopPropagation();
+              collapseToParent();
+              return;
+            }
+            handleMenuLevelKeyDown(event);
+          }}
+        >
           {item.children?.map((child) => (
             <MenuItem key={child.key} item={child} onClick={onClick} />
           ))}
@@ -333,13 +389,36 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
   // APG menu keyboard contract: on open the first enabled item takes focus.
   // Arrows/Home/End/typeahead live in the shared level handler below; Escape
   // closes and returns focus to the context trigger.
+  // Keyed on the panel ELEMENT: presence mounts the <ul> a commit after `isOpen`,
+  // so an `[isOpen]`-only effect reads a null ref. Must precede the focus pass.
+  const menuHeldFocusRef = useRef(false);
   useEffect(() => {
-    if (isOpen) {
-      menuRef.current
-        ?.querySelector<HTMLElement>('[role="menuitem"]:not(:disabled)')
-        ?.focus();
-    }
-  }, [isOpen]);
+    if (!menuEl) return;
+    const onFocusIn = () => {
+      menuHeldFocusRef.current = true;
+    };
+    menuEl.addEventListener('focusin', onFocusIn);
+    return () => menuEl.removeEventListener('focusin', onFocusIn);
+  }, [menuEl]);
+
+  useEffect(() => {
+    if (!isOpen || !menuEl) return;
+    if (menuEl.contains(document.activeElement)) return;
+    menuEl.querySelector<HTMLElement>(LEVEL_ITEM_SELECTOR)?.focus();
+  }, [isOpen, menuEl]);
+
+  useEffect(() => {
+    if (isOpen) return;
+    const active = document.activeElement;
+    // Either the panel still holds the focused row through its exit animation,
+    // or it is gone and focus fell to <body>. Either way the trigger takes it back.
+    const stranded =
+      Boolean(menuEl && active && menuEl.contains(active)) ||
+      (menuHeldFocusRef.current && (!active || active === document.body));
+    menuHeldFocusRef.current = false;
+    if (!stranded) return;
+    triggerRef.current?.focus();
+  }, [isOpen, menuEl]);
 
   const handleMenuKeyDown = useCallback((e: React.KeyboardEvent<HTMLUListElement>) => {
     if (e.key === 'Escape') {
@@ -365,7 +444,9 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
             'aria-haspopup'?: 'menu';
           }>,
           {
-            'aria-controls': surfaceId,
+            // Only reference a surface that exists: while closed no panel is
+            // mounted, so a permanent aria-controls pointed at nothing.
+            'aria-controls': shouldRender ? surfaceId : undefined,
             'aria-expanded': isOpen,
             'aria-haspopup': 'menu',
           },

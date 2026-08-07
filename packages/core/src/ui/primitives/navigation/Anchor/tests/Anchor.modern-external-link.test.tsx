@@ -44,13 +44,16 @@ describe('Modern Anchor.Link — non-fragment hrefs', () => {
     }
   });
 
+  // RETARGETED (not weakened): same invariant -- a fragment click is intercepted and does
+  // scroll. The probe follows the jump onto the confined container write.
   it('still intercepts and scrolls an in-page fragment', () => {
     const section = document.createElement('div');
     section.id = 'section-1';
     let scrolled = false;
-    section.scrollIntoView = () => {
+    const originalScrollTo = window.scrollTo;
+    window.scrollTo = (() => {
       scrolled = true;
-    };
+    }) as unknown as typeof window.scrollTo;
     document.body.appendChild(section);
 
     try {
@@ -65,6 +68,7 @@ describe('Modern Anchor.Link — non-fragment hrefs', () => {
       expect(event.defaultPrevented).toBe(true);
       expect(scrolled).toBe(true);
     } finally {
+      window.scrollTo = originalScrollTo;
       section.remove();
     }
   });

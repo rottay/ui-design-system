@@ -110,11 +110,13 @@ describe('Anchor modern contract: state and motion', () => {
     expect(idle.getAttribute('aria-current')).toBeNull();
   });
 
+  // RETARGETED (not weakened): same invariant -- a fragment click scrolls and follows the
+  // motion preference. Only the mechanism moved, and the offset is now pinned too.
   it('click scrolls with smooth behavior when reduced motion is not requested', () => {
-    const scrollIntoView = vi.fn();
+    const scrollTo = vi.fn();
+    window.scrollTo = scrollTo as unknown as typeof window.scrollTo;
     const target = document.createElement('section');
     target.id = 'target-smooth';
-    target.scrollIntoView = scrollIntoView;
     document.body.appendChild(target);
 
     render(
@@ -123,7 +125,9 @@ describe('Anchor modern contract: state and motion', () => {
       </Anchor>
     );
     fireEvent.click(screen.getByText('Go'));
-    expect(scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth' });
+    expect(scrollTo).toHaveBeenCalledWith(
+      expect.objectContaining({ behavior: 'smooth' })
+    );
     target.remove();
   });
 
@@ -140,10 +144,10 @@ describe('Anchor modern contract: state and motion', () => {
       dispatchEvent: vi.fn(),
     }));
 
-    const scrollIntoView = vi.fn();
+    const scrollTo = vi.fn();
+    window.scrollTo = scrollTo as unknown as typeof window.scrollTo;
     const target = document.createElement('section');
     target.id = 'target-reduced';
-    target.scrollIntoView = scrollIntoView;
     document.body.appendChild(target);
 
     render(
@@ -152,7 +156,9 @@ describe('Anchor modern contract: state and motion', () => {
       </Anchor>
     );
     fireEvent.click(screen.getByText('Go'));
-    expect(scrollIntoView).toHaveBeenCalledWith({ behavior: 'auto' });
+    expect(scrollTo).toHaveBeenCalledWith(
+      expect.objectContaining({ behavior: 'auto' })
+    );
 
     target.remove();
     window.matchMedia = originalMatchMedia;

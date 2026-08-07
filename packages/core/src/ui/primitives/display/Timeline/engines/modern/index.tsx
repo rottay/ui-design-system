@@ -120,6 +120,28 @@ function ModernTimeline(props: TimelineProps): React.ReactElement {
     return index % 2 === 0 ? 'start' : 'end';
   };
 
+  const resolvedItems = orderedItems.map((item, index) => {
+    const isElement = React.isValidElement(item);
+    const itemProps: TimelineItemProps = isElement
+      ? (item.props as TimelineItemProps)
+      : (item as TimelineItemProps);
+    // Per-item position override takes precedence over the mode-based default
+    const side = itemProps.position
+      ? itemProps.position === 'left' ? 'start' : 'end'
+      : getSide(index);
+    return { itemProps, side };
+  });
+
+  // The pending row continues the sequence, so it takes the mode's NEXT side
+  // rather than a fixed one (it must not break `alternate`).
+  const pendingSide = pending ? getSide(resolvedItems.length) : undefined;
+
+  // The skin collapses the unoccupied track from this stamp. Derived from the
+  // RESOLVED sides, never `mode`: one `position` override makes both live.
+  const occupiedSides = new Set<'start' | 'end'>(resolvedItems.map((entry) => entry.side));
+  if (pendingSide) occupiedSides.add(pendingSide);
+  const sides = occupiedSides.size === 1 ? [...occupiedSides][0] : 'both';
+
   return (
     /* A timeline is a chronological sequence: the list is ORDERED (ol), not
        ul. The skin resets list styling, so the change is purely semantic. */
@@ -128,21 +150,10 @@ function ModernTimeline(props: TimelineProps): React.ReactElement {
       className={`${SCOPE_CLASSES}${className ? ` ${className}` : ''}`}
       data-part={dataPart ?? 'root'}
       data-mode={mode}
+      data-sides={sides}
       style={style}
     >
-      {orderedItems.map((item, index) => {
-        // Items can arrive as React elements (JSX children) or plain objects
-        // (items prop). Extract props uniformly for consistent rendering.
-        const isElement = React.isValidElement(item);
-        const itemProps: TimelineItemProps = isElement
-          ? (item.props as TimelineItemProps)
-          : (item as TimelineItemProps);
-
-        // Per-item position override takes precedence over the mode-based default
-        const side = itemProps.position
-          ? itemProps.position === 'left' ? 'start' : 'end'
-          : getSide(index);
-
+      {resolvedItems.map(({ itemProps, side }, index) => {
         const { tone, style: toneStyle } = resolveTone(itemProps.color);
 
         return (
@@ -166,7 +177,9 @@ function ModernTimeline(props: TimelineProps): React.ReactElement {
                 <div data-part="dot-marker" />
               )}
             </div>
-            {index < orderedItems.length - 1 && <hr aria-hidden="true" data-part="connector" data-edge="trailing" />}
+            {(index < resolvedItems.length - 1 || Boolean(pending)) && (
+              <hr aria-hidden="true" data-part="connector" data-edge="trailing" />
+            )}
           </li>
         );
       })}
@@ -178,9 +191,9 @@ function ModernTimeline(props: TimelineProps): React.ReactElement {
           the pulsing marker when provided. `aria-busy` marks the row as the
           live edge of the sequence. */}
       {pending && (
-        <li data-part="item" data-side="start" data-pending="true" aria-busy="true">
+        <li data-part="item" data-side={pendingSide} data-pending="true" aria-busy="true">
           <hr aria-hidden="true" data-part="connector" data-edge="leading" />
-          <div data-part="content" data-side="start">
+          <div data-part="content" data-side={pendingSide}>
             <LoadingIndicator size="sm" data-part="spinner" />
             {pending}
           </div>

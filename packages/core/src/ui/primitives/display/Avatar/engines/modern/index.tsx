@@ -105,11 +105,26 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
   // a chance to load. An image that finished loading BEFORE this commit (cache
   // hit, SSR hydration) never re-fires `load` -- `complete` + naturalWidth is
   // the only observable left for that case.
+  // Callback refs so the reconcile below reads the LATEST handlers without
+  // re-running (and re-firing) on every parent render.
+  const onLoadRef = useRef(onLoad);
+  const onErrorRef = useRef(onError);
+  onLoadRef.current = onLoad;
+  onErrorRef.current = onError;
+
   useEffect(() => {
     setImageError(false);
     setLoaded(false);
-    if (imgRef.current?.complete && imgRef.current.naturalWidth > 0) {
+    const img = imgRef.current;
+    if (!img?.complete) return;
+    // An image that settled before this commit (cache hit, SSR hydration) fires
+    // neither `load` nor `error`, so BOTH outcomes must be reconciled here.
+    if (img.naturalWidth > 0) {
       setLoaded(true);
+      onLoadRef.current?.();
+    } else {
+      setImageError(true);
+      onErrorRef.current?.(new Error("Failed to load image"));
     }
   }, [src]);
 

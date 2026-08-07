@@ -26,13 +26,22 @@
  * </Popconfirm>
  * ```
  */
-import React, { useState, useCallback, useEffect, useId } from 'react';
+import React, {
+  cloneElement,
+  isValidElement,
+  useCallback,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from 'react';
 import type { PopconfirmProps } from '../../contracts';
 import { POPCONFIRM_DEFAULTS, POPCONFIRM_TO_OVERLAY_PLACEMENT } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { StatusWarningIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-warning';
 import { ModernButton as Button } from '../../../../facade';
 import { useOverlayPosition } from '../../../../runtime/overlay/positioning';
+import { useOverlayLayer } from '../../../../runtime/overlay/layer-stack';
 
 /**
  * Popconfirm implementation that stamps the panel anatomy; card and button
@@ -132,38 +141,57 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
       };
     }, [isOpen, anchorEl, handleOpenChange]);
 
-    // Escape closes while open (same contract as the click-outside dismissal).
+    // Escape only when this panel is the top-most blocking layer; the shared
+    // stack is the single Escape router the rest of the overlay family joins.
+    const { isTopMost, layerProps } = useOverlayLayer({
+      kind: 'popover',
+      active: isOpen,
+      modal: true,
+      lockScroll: false,
+      restoreFocus: false,
+    });
+
     useEffect(() => {
       if (!isOpen) return;
       const onKey = (event: KeyboardEvent) => {
-        if (event.key === 'Escape') handleOpenChange(false);
+        if (event.key === 'Escape' && isTopMost()) handleOpenChange(false);
       };
       document.addEventListener('keydown', onKey);
       return () => document.removeEventListener('keydown', onKey);
-    }, [isOpen, handleOpenChange]);
+    }, [isOpen, isTopMost, handleOpenChange]);
 
     // Focus contract: on open, the dialog's initial focus goes to the confirm
     // action -- or to CANCEL when the confirm is destructive (okType danger),
     // so the safer choice is the default focus target. On close, focus
     // returns to the element that was focused before the panel opened (the
     // trigger), unless the consumer moved it elsewhere first.
+    // Keyed on the OPEN SESSION, not the effect's inputs: an `okType` change
+    // must not re-run the cleanup and yank focus back while the panel is open.
+    const previousFocusRef = useRef<HTMLElement | null>(null);
     useEffect(() => {
       if (!isOpen || !surfaceEl) return;
-      const previousFocus = document.activeElement as HTMLElement | null;
+      previousFocusRef.current = document.activeElement as HTMLElement | null;
       const initialTarget = okType === 'danger'
         ? surfaceEl.querySelector<HTMLElement>('[data-action="cancel"]')
         : surfaceEl.querySelector<HTMLElement>('[data-action="confirm"]');
       initialTarget?.focus();
-      return () => {
-        if (previousFocus && document.contains(previousFocus)) {
-          previousFocus.focus();
-        }
-      };
-    }, [isOpen, okType, surfaceEl]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps -- initial focus is a per-session pass; okType only selects the target.
+    }, [isOpen, surfaceEl]);
+
+    useEffect(() => {
+      if (isOpen) return;
+      const previousFocus = previousFocusRef.current;
+      previousFocusRef.current = null;
+      if (previousFocus && document.contains(previousFocus)) {
+        previousFocus.focus();
+      }
+    }, [isOpen]);
 
     const handleTriggerClick = () => {
       if (disabled) return;
-      handleOpenChange(true);
+      // Must toggle: the outside-click guard treats the trigger as inside the
+      // anchor, so a re-press would otherwise never close the panel.
+      handleOpenChange(!isOpen);
     };
 
     // Async-aware: wraps onConfirm in try/finally to track loading state
@@ -212,6 +240,25 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
     const dialogTextId = useId();
     const titleId = `${dialogTextId}-title`;
     const descriptionId = description ? `${dialogTextId}-description` : undefined;
+    const surfaceId = `${dialogTextId}-surface`;
+
+    // Disclosure semantics ride the consumer's trigger ELEMENT, never the
+    // role-less wrapper (axe aria-allowed-attr); non-elements get no host.
+    const describedTrigger =
+      isValidElement(children) && children.type !== React.Fragment
+        ? cloneElement(
+            children as React.ReactElement<{
+              'aria-controls'?: string;
+              'aria-expanded'?: boolean;
+              'aria-haspopup'?: 'dialog';
+            }>,
+            {
+              'aria-controls': isOpen && mounted ? surfaceId : undefined,
+              'aria-expanded': isOpen,
+              'aria-haspopup': 'dialog',
+            },
+          )
+        : children;
 
     // Tone icon: a consumer `icon` wins; the governed semantic warning glyph
     // is the default; `icon={null}` explicitly opts out. The skin tints the
@@ -233,11 +280,13 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
         style={style}
         {...anchorAttrs}
       >
-        <div data-part="trigger-content" onClick={handleTriggerClick}>{children}</div>
+        <div data-part="trigger-content" onClick={handleTriggerClick}>{describedTrigger}</div>
 
         {isOpen && mounted && (
           <div
             ref={setSurfaceEl}
+            {...layerProps}
+            id={surfaceId}
             data-part="surface"
             data-open="true"
             data-ok-type={okType}

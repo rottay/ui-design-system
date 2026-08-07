@@ -70,18 +70,27 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
     const isDisabled = disabled || loading;
 
     const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+      // The click handler's preventDefault reverts the DOM but cannot suppress
+      // this synthesised callback, so the busy gate must hold on both paths.
+      if (loading) return;
       const newChecked = e.target.checked;
       if (!isControlled) {
         setInternalChecked(newChecked);
       }
       onChange?.(newChecked);
-    }, [isControlled, onChange]);
+    }, [isControlled, loading, onChange]);
 
     // Pre-click activation already flipped the input, so currentTarget.checked
     // is this activation's value; the render closure still holds the previous.
     const handleClick = useCallback((e: React.MouseEvent<HTMLInputElement>) => {
+      // Busy is not `disabled`: that would drop the tab stop mid-activation.
+      // Reverting the pre-click flip keeps the stop and commits no value.
+      if (loading) {
+        e.preventDefault();
+        return;
+      }
       onClick?.(e.currentTarget.checked, e as unknown as React.MouseEvent);
-    }, [onClick]);
+    }, [loading, onClick]);
 
     const sizeKey = toCanonicalSize(size) ?? 'md';
 
@@ -97,6 +106,9 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
         data-checked={isChecked ? 'true' : 'false'}
         data-disabled={isDisabled ? 'true' : 'false'}
         data-loading={loading ? 'true' : 'false'}
+        // Checkbox's contract: an indicator-only row carries no text of its
+        // own, so the coarse-pointer floor has to hold on the INLINE axis too.
+        data-standalone={stateLabel ? 'false' : 'true'}
         style={style}
       >
         {/* Visually hidden native input: accessibility + form participation.
@@ -105,7 +117,7 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
           ref={ref}
           type="checkbox"
           checked={isChecked}
-          disabled={isDisabled}
+          disabled={disabled}
           onChange={handleChange}
           onClick={handleClick}
           autoFocus={autoFocus}
@@ -115,6 +127,7 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
           role="switch"
           aria-checked={isChecked}
           aria-busy={loading || undefined}
+          aria-disabled={loading || undefined}
           aria-label={ariaLabel}
         />
 
@@ -123,9 +136,15 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
           <span data-part="thumb" />
         </span>
 
-        {/* Active state label (stable slot after the track) */}
+        {/* Active state label (stable slot after the track). Hidden from the
+            accessibility tree: it lives inside the wrapping <label>, so it
+            would BE the input's accessible name -- a name that swaps on every
+            activation. The state it renders is already carried by
+            aria-checked, so sighted users lose nothing (Checkbox/Toggle keep
+            the same line with `labelledBy`; Switch has no label prop to point
+            at). */}
         {stateLabel && (
-          <span data-part="label">{stateLabel}</span>
+          <span data-part="label" aria-hidden="true">{stateLabel}</span>
         )}
 
         {/* Loading state composes the canonical Spinner primitive (its

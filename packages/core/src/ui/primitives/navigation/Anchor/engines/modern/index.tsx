@@ -49,10 +49,12 @@
 
 'use client';
 
-import React, { useState, useEffect, createContext, useContext, useCallback, Children, isValidElement } from 'react';
+import React, { useState, useEffect, createContext, useContext, useCallback, useRef, Children, isValidElement } from 'react';
 import type { AnchorProps, AnchorLinkProps } from '../../contracts';
 import { ANCHOR_DEFAULTS } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { revealInlineWithinScroller } from '../../../../foundation/scroll-reveal';
+import { resolveReadingDirectionIsRtl } from '@/ui/primitives/runtime/collection/roving-focus';
 
 // ============================================================================
 // Context
@@ -70,6 +72,8 @@ interface AnchorContextValue {
   onClick?: (e: React.MouseEvent, link: { title: React.ReactNode; href: string }) => void;
   /** Navigation direction */
   direction: 'vertical' | 'horizontal';
+  /** In-page jump; only the Anchor knows the scroll container and `offsetTop`. */
+  scrollToSection: (href: string) => void;
 }
 
 /**
@@ -99,6 +103,26 @@ function isFragmentHref(href: string): boolean {
 // getElementById, not querySelector: an id need not be a valid CSS ident.
 function resolveSection(href: string): HTMLElement | null {
   return isFragmentHref(href) ? document.getElementById(href.slice(1)) : null;
+}
+
+// Block-axis jump confined to the caller's container, landing `offsetTop` below
+// its edge. Not `scrollIntoView`: that walks every ancestor and drops the offset.
+function scrollSectionIntoContainer(
+  section: HTMLElement,
+  container: Window | HTMLElement,
+  offsetTop: number,
+  behavior: ScrollBehavior
+): void {
+  const sectionTop = section.getBoundingClientRect().top;
+
+  if (container === window) {
+    window.scrollTo({ top: sectionTop + window.scrollY - offsetTop, behavior });
+    return;
+  }
+
+  const element = container as HTMLElement;
+  const delta = sectionTop - element.getBoundingClientRect().top - offsetTop;
+  element.scrollTo({ top: element.scrollTop + delta, behavior });
 }
 
 // ============================================================================
@@ -146,7 +170,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, AnchorLinkProps>(
       // Only an in-page fragment is ours to intercept; anything else navigates.
       if (!e.defaultPrevented && isFragmentHref(href)) {
         e.preventDefault();
-        resolveSection(href)?.scrollIntoView({ behavior: scrollBehavior() });
+        context?.scrollToSection(href);
       }
     };
 
@@ -237,6 +261,24 @@ export const Anchor = React.forwardRef<HTMLDivElement, AnchorProps>(
     const [internalActiveKey, setInternalActiveKey] = useState('');
     const activeKey = controlledActiveKey ?? internalActiveKey;
 
+    /** The root is its own scrollport when `direction='horizontal'`. */
+    const rootRef = useRef<HTMLDivElement | null>(null);
+
+    /** Confined to `getContainer` so the landed section clears an affixed bar. */
+    const scrollToSection = useCallback(
+      (href: string) => {
+        const section = resolveSection(href);
+        if (!section) return;
+        scrollSectionIntoContainer(
+          section,
+          getContainer?.() ?? window,
+          offsetTop,
+          scrollBehavior()
+        );
+      },
+      [getContainer, offsetTop]
+    );
+
     // Landmark name: catalog-first with the documented English floor (the
     // `anchor.navigation` key lands with the locale JSONs; the echo guard
     // falls back until then). Bare compositions never crash on a missing
@@ -313,12 +355,35 @@ export const Anchor = React.forwardRef<HTMLDivElement, AnchorProps>(
       };
 
       container.addEventListener('scroll', handleScroll);
+      // Section geometry is viewport-dependent: a rotation or a column change
+      // reflows every threshold without emitting a single scroll event.
+      window.addEventListener('resize', handleScroll, { passive: true });
       handleScroll(); // Initial check
 
       return () => {
         container.removeEventListener('scroll', handleScroll);
+        window.removeEventListener('resize', handleScroll);
       };
     }, [getContainer, getAnchors, offsetTop, bounds, onChange, internalActiveKey]);
+
+    // ------------------------------- Scrollport Reveal -------------------------
+
+    // A horizontal root is an `overflow-x: auto` scrollport, so the selected link
+    // can sit outside it. Scrollport-local by construction, never `scrollIntoView`.
+    const revealItem = useCallback((item: HTMLElement | null) => {
+      const root = rootRef.current;
+      if (!root || !item) return;
+      if (root.dataset.direction !== 'horizontal') return;
+      revealInlineWithinScroller(root, item);
+    }, []);
+
+    useEffect(() => {
+      const root = rootRef.current;
+      if (!root) return;
+      revealItem(
+        root.querySelector<HTMLElement>("[data-part='item'][data-selected='true']")
+      );
+    }, [activeKey, direction, revealItem]);
 
     // ---------------------------------------------------------------------------
     // Keyboard Navigation (B9 pass 2)
@@ -335,19 +400,26 @@ export const Anchor = React.forwardRef<HTMLDivElement, AnchorProps>(
     const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
       const { key } = event;
       const vertical = direction !== 'horizontal';
-      const rtl =
-        typeof window !== 'undefined' &&
-        typeof window.getComputedStyle === 'function' &&
-        window.getComputedStyle(event.currentTarget).direction === 'rtl';
+      // `dir` on an ancestor is the authoritative declaration of direction and
+      // is read first; computed style stays the CSS-only fallback.
+      const rtl = resolveReadingDirectionIsRtl(event.currentTarget);
 
       const links = Array.from(
         event.currentTarget.querySelectorAll<HTMLElement>("[data-part='item']")
       );
       if (links.length === 0) return;
 
+      // Focus alone is not enough inside a scrollport: the link the arrows
+      // reach must also be brought into the visible window.
+      const focusLink = (link: HTMLElement | undefined) => {
+        if (!link) return;
+        link.focus();
+        revealItem(link);
+      };
+
       if (key === 'Home' || key === 'End') {
         event.preventDefault();
-        links[key === 'Home' ? 0 : links.length - 1]?.focus();
+        focusLink(links[key === 'Home' ? 0 : links.length - 1]);
         return;
       }
 
@@ -364,7 +436,7 @@ export const Anchor = React.forwardRef<HTMLDivElement, AnchorProps>(
       const currentIndex = links.indexOf(document.activeElement as HTMLElement);
       if (currentIndex < 0) return;
       event.preventDefault();
-      links[(currentIndex + delta + links.length) % links.length]?.focus();
+      focusLink(links[(currentIndex + delta + links.length) % links.length]);
     };
 
     // ---------------------------------------------------------------------------
@@ -372,9 +444,16 @@ export const Anchor = React.forwardRef<HTMLDivElement, AnchorProps>(
     // ---------------------------------------------------------------------------
 
     return (
-      <AnchorContext.Provider value={{ activeKey, onClick, direction }}>
+      <AnchorContext.Provider value={{ activeKey, onClick, direction, scrollToSection }}>
         <div
-          ref={ref}
+          ref={(node) => {
+            rootRef.current = node;
+            if (typeof ref === 'function') {
+              ref(node);
+            } else if (ref) {
+              ref.current = node;
+            }
+          }}
           className={`rottay-anchor rottay-anchor--modern ${className}`}
           style={{ top: affix ? offsetTop : undefined, ...style }}
           onKeyDown={handleKeyDown}

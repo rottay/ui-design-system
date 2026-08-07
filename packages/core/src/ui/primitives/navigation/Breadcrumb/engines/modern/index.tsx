@@ -13,6 +13,7 @@ import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/ge
 // Cross-family composition goes through the primitives facade tier — never a
 // sibling-direct import (Button.Icon's ModernTooltip precedent).
 import { Dropdown, type DropdownMenuItem } from '../../../../facade';
+import { resolveReadingDirectionIsRtl } from '@/ui/primitives/runtime/collection/roving-focus';
 
 /**
  * Shape shared by a collapsed `BreadcrumbItem` (hidden behind the overflow
@@ -146,6 +147,21 @@ export default function ModernBreadcrumb(props: BreadcrumbProps): React.ReactEle
   // correct even if a caller sets `keepLast: 0`).
   const lastItemKey = items[items.length - 1]?.key;
 
+  // The TRAIL's identity, not the props'. `items` and `overflow` are built
+  // inline at the call site, so keying on them re-ran the pin below on every
+  // parent render.
+  const trailIdentity = items.map((item) => item.key).join('\0');
+  const overflowIdentity = overflow
+    ? `${overflow.maxVisible}:${keepFirst}:${keepLast}`
+    : '';
+
+  // Whether the trail is still parked at the current location. Cleared as soon
+  // as the reader scrolls away from it, so no later re-pin can drag them back.
+  const parkedAtCurrentRef = React.useRef(true);
+  React.useEffect(() => {
+    parkedAtCurrentRef.current = true;
+  }, [trailIdentity, overflowIdentity, maxItems]);
+
   // Overflow safety (P2): when the trail clips horizontally (no maxItems, a
   // narrow viewport, or long labels under the per-label cap), the CURRENT
   // location must be the visible edge on first paint -- it is always the
@@ -153,11 +169,37 @@ export default function ModernBreadcrumb(props: BreadcrumbProps): React.ReactEle
   // from the computed style (RTL follows the negative scrollLeft model).
   React.useEffect(() => {
     const root = rootRef.current;
-    if (!root || root.scrollWidth <= root.clientWidth) return;
-    const maxScroll = root.scrollWidth - root.clientWidth;
-    root.scrollLeft =
-      window.getComputedStyle(root).direction === 'rtl' ? -maxScroll : maxScroll;
-  }, [items, maxItems, overflow]);
+    if (!root) return;
+
+    const park = () => {
+      if (!parkedAtCurrentRef.current) return;
+      if (root.scrollWidth <= root.clientWidth) return;
+      const maxScroll = root.scrollWidth - root.clientWidth;
+      root.scrollLeft = resolveReadingDirectionIsRtl(root) ? -maxScroll : maxScroll;
+    };
+
+    // `scrollLeft` runs negative under RTL, so distance-from-the-end is read
+    // through the magnitude and stays direction-neutral.
+    const trackReaderIntent = () => {
+      const maxScroll = root.scrollWidth - root.clientWidth;
+      parkedAtCurrentRef.current =
+        maxScroll <= 0 || Math.abs(Math.abs(root.scrollLeft) - maxScroll) <= 1;
+    };
+
+    park();
+    root.addEventListener('scroll', trackReaderIntent, { passive: true });
+
+    // The trail can start clipping at a width the mount never saw (rotation, a
+    // collapsing sider, a late-loading label), and no scroll event announces it.
+    const observer =
+      typeof ResizeObserver !== 'undefined' ? new ResizeObserver(park) : null;
+    observer?.observe(root);
+
+    return () => {
+      root.removeEventListener('scroll', trackReaderIntent);
+      observer?.disconnect();
+    };
+  }, [trailIdentity, overflowIdentity, maxItems]);
 
   return (
     <nav

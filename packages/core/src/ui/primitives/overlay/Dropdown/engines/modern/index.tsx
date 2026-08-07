@@ -23,6 +23,7 @@ import type { DropdownProps, DropdownMenuItem, DropdownPlacement } from '../../c
 import { Portal } from '../../../../runtime/overlay/portal';
 import { PortalScope, usePortalScope } from '../../../../runtime/overlay/portal-scope';
 import { resolveTypeaheadPrefix } from '../../../../runtime/collection/typeahead';
+import { useOverlayLayer } from '../../../../runtime/overlay/layer-stack';
 import { DROPDOWN_DEFAULTS } from '../../contracts';
 import { usePresence } from '@/graphics/motion/react/runtime';
 import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-forward';
@@ -179,6 +180,15 @@ function itemsHaveSubmenu(items: DropdownMenuItem[] | undefined): boolean {
   );
 }
 
+// Escape is routed by the shared stack's capture-phase handler, so a submenu's
+// own bubble handler never sees it; submenus publish closers here, deepest last.
+interface DropdownDismissChain {
+  register: (close: () => void) => () => void;
+  dismissInnermost: () => boolean;
+}
+
+const DropdownDismissChainContext = React.createContext<DropdownDismissChain | null>(null);
+
 const MenuItem: React.FC<{
   item: DropdownMenuItem;
   selectedKeys: string[];
@@ -187,6 +197,12 @@ const MenuItem: React.FC<{
   depth?: number;
 }> = ({ item, selectedKeys, selectable, onClick, depth = 0 }) => {
   const [submenuOpen, setSubmenuOpen] = useState(false);
+  const dismissChain = React.useContext(DropdownDismissChainContext);
+
+  useEffect(() => {
+    if (!submenuOpen || !dismissChain) return undefined;
+    return dismissChain.register(() => setSubmenuOpen(false));
+  }, [submenuOpen, dismissChain]);
 
   if (item.type === 'divider') {
     return <li role="separator" data-part="divider" data-depth={depth} />;
@@ -255,10 +271,6 @@ const MenuItem: React.FC<{
           }
           if (event.key === backwardKey && hasChildren) {
             event.preventDefault();
-            setSubmenuOpen(false);
-          }
-          if (event.key === 'Escape' && hasChildren) {
-            event.stopPropagation();
             setSubmenuOpen(false);
           }
         }}
@@ -482,37 +494,75 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>((props, 
     };
   }, [portalHost, shouldRender, surfaceEl, updatePortalPosition]);
 
+  // Deepest registration wins: a nested submenu only mounts after its parent
+  // has opened and registered.
+  const submenuClosersRef = useRef<Array<() => void>>([]);
+  const dismissChain = React.useMemo<DropdownDismissChain>(
+    () => ({
+      register: (close) => {
+        submenuClosersRef.current = [...submenuClosersRef.current, close];
+        return () => {
+          submenuClosersRef.current = submenuClosersRef.current.filter((entry) => entry !== close);
+        };
+      },
+      dismissInnermost: () => {
+        const innermost = submenuClosersRef.current.at(-1);
+        if (!innermost) return false;
+        submenuClosersRef.current = submenuClosersRef.current.slice(0, -1);
+        innermost();
+        return true;
+      },
+    }),
+    [],
+  );
+
+  const handleEscapeDismiss = useCallback(() => {
+    // One Escape, one layer: an open submenu is dismissed before the menu.
+    if (dismissChain.dismissInnermost()) return;
+    handleOpenChange(false);
+    // Premium bar: Escape returns focus to the trigger. The natural host is
+    // the first focusable descendant of the trigger CONTENT (never a menu
+    // item -- the in-tree surface also lives inside this container and is
+    // about to unmount); the container itself is the programmatic fallback
+    // (tabIndex -1 keeps it out of the tab order).
+    const container = containerRef.current;
+    const triggerContent = container?.querySelector<HTMLElement>('[data-part="trigger-content"]');
+    const focusTarget =
+      triggerContent?.querySelector<HTMLElement>(
+        'button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+      ) ?? container;
+    focusTarget?.focus();
+  }, [dismissChain, handleOpenChange]);
+
+  // Joining the shared stack makes the open menu top-most, so Escape dismisses it
+  // and not an enclosing dialog. `layerProps` is unspread: FAB-17 owns z-index.
+  const { isTopMost } = useOverlayLayer({
+    kind: 'dropdown',
+    active: Boolean(isOpen),
+    // Blocking for ESCAPE ROUTING only (Popover's precedent): a nested menu
+    // must stop lower dialogs claiming the same key press.
+    modal: true,
+    lockScroll: false,
+    restoreFocus: false,
+    onEscape: handleEscapeDismiss,
+  });
+
   useEffect(() => {
     if (!isOpen) return undefined;
     const handlePointerDown = (event: MouseEvent) => {
+      // Only the top-most layer light-dismisses (Popover's precedent): a
+      // pointer landing in an overlay stacked above this menu is not "outside".
+      if (!isTopMost()) return;
       const target = event.target as Node;
       if (!containerRef.current?.contains(target) && !surfaceRef.current?.contains(target)) {
         handleOpenChange(false);
       }
     };
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key !== 'Escape') return;
-      handleOpenChange(false);
-      // Premium bar: Escape returns focus to the trigger. The natural host is
-      // the first focusable descendant of the trigger CONTENT (never a menu
-      // item -- the in-tree surface also lives inside this container and is
-      // about to unmount); the container itself is the programmatic fallback
-      // (tabIndex -1 keeps it out of the tab order).
-      const container = containerRef.current;
-      const triggerContent = container?.querySelector<HTMLElement>('[data-part="trigger-content"]');
-      const focusTarget =
-        triggerContent?.querySelector<HTMLElement>(
-          'button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-        ) ?? container;
-      focusTarget?.focus();
-    };
     document.addEventListener('mousedown', handlePointerDown);
-    document.addEventListener('keydown', handleEscape);
     return () => {
       document.removeEventListener('mousedown', handlePointerDown);
-      document.removeEventListener('keydown', handleEscape);
     };
-  }, [handleOpenChange, isOpen]);
+  }, [handleOpenChange, isOpen, isTopMost]);
 
   const handleItemClick = (key: string) => {
     menu?.onClick?.({ key });
@@ -623,17 +673,20 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>((props, 
       onMouseLeave={() => triggers.includes('hover') && scheduleHoverClose()}
     >
       {arrow ? <span data-part="arrow" aria-hidden="true" /> : null}
-      <ul role="menu" data-part="menu" aria-orientation="vertical" onKeyDown={handleMenuKeyDown}>
-        {menu?.items?.map((item) => (
-          <MenuItem
-            key={item.key}
-            item={item}
-            selectedKeys={menu.selectedKeys ?? []}
-            selectable={Boolean(menu.selectable)}
-            onClick={handleItemClick}
-          />
-        ))}
-      </ul>
+      {/* Chain lets one Escape peel one layer (see handleEscapeDismiss). */}
+      <DropdownDismissChainContext.Provider value={dismissChain}>
+        <ul role="menu" data-part="menu" aria-orientation="vertical" onKeyDown={handleMenuKeyDown}>
+          {menu?.items?.map((item) => (
+            <MenuItem
+              key={item.key}
+              item={item}
+              selectedKeys={menu.selectedKeys ?? []}
+              selectable={Boolean(menu.selectable)}
+              onClick={handleItemClick}
+            />
+          ))}
+        </ul>
+      </DropdownDismissChainContext.Provider>
     </div>
   ) : null;
 

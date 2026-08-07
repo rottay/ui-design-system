@@ -49,6 +49,55 @@ import { BACKTOP_DEFAULTS } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { NavigationUpIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-up';
 
+// ================================ Scroll journey ============================
+
+/** Reads the scroll offset of either scroll source uniformly. */
+function readScrollTop(source: Window | HTMLElement): number {
+  return source === window
+    ? document.documentElement.scrollTop || document.body.scrollTop
+    : (source as HTMLElement).scrollTop;
+}
+
+/** Writes the scroll offset of either scroll source uniformly. */
+function writeScrollTop(source: Window | HTMLElement, top: number): void {
+  if (source === window) {
+    window.scrollTo({ top, behavior: 'instant' as ScrollBehavior });
+  } else {
+    (source as HTMLElement).scrollTop = top;
+  }
+}
+
+// `behavior: 'smooth'` runs at a UA-fixed cadence, so honouring the contract's
+// `duration` needs a driven journey; it aborts if the reader takes the scroll back.
+function animateScrollToTop(source: Window | HTMLElement, duration: number): void {
+  const start = readScrollTop(source);
+  if (start <= 0) return;
+
+  if (duration <= 0 || typeof requestAnimationFrame !== 'function') {
+    writeScrollTop(source, 0);
+    return;
+  }
+
+  const startedAt = typeof performance !== 'undefined' ? performance.now() : Date.now();
+  // Observed-to-observed: comparing the previous write's *reported* offset keeps a
+  // clamped or rubber-banded scroll from reading as the reader taking over.
+  let lastObserved = start;
+
+  const step = (): void => {
+    // The reader reclaimed the scroll mid-journey: stop competing with them.
+    if (readScrollTop(source) !== lastObserved) return;
+    const now = typeof performance !== 'undefined' ? performance.now() : Date.now();
+    const progress = Math.min(1, (now - startedAt) / duration);
+    // Canonical ease-out (matches --ds-motion-ease-out's decelerating shape).
+    const eased = 1 - Math.pow(1 - progress, 3);
+    writeScrollTop(source, Math.round(start * (1 - eased)));
+    lastObserved = readScrollTop(source);
+    if (progress < 1) requestAnimationFrame(step);
+  };
+
+  requestAnimationFrame(step);
+}
+
 // ============================================================================
 // Component
 // ============================================================================
@@ -89,6 +138,7 @@ export const BackTop = React.forwardRef<HTMLButtonElement, BackTopProps>(
     const {
       target,
       visibilityHeight = BACKTOP_DEFAULTS.visibilityHeight!,
+      duration = BACKTOP_DEFAULTS.duration!,
       onClick,
       children,
       className = '',
@@ -178,7 +228,6 @@ export const BackTop = React.forwardRef<HTMLButtonElement, BackTopProps>(
         typeof window !== 'undefined' &&
         typeof window.matchMedia === 'function' &&
         window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const behavior: ScrollBehavior = prefersReducedMotion ? 'instant' : 'smooth';
 
       // Focus return (P2-20): the trigger UNMOUNTS itself as soon as the
       // scroll crosses back below the threshold, so a focused activation
@@ -208,10 +257,12 @@ export const BackTop = React.forwardRef<HTMLButtonElement, BackTopProps>(
         focusTarget.focus({ preventScroll: true });
       }
 
-      if (t === window) {
-        window.scrollTo({ top: 0, behavior });
+      // Reduced motion settles instantly; otherwise the journey runs over the
+      // contract's own `duration` instead of the UA's fixed smooth cadence.
+      if (prefersReducedMotion) {
+        writeScrollTop(t, 0);
       } else {
-        (t as HTMLElement).scrollTo({ top: 0, behavior });
+        animateScrollToTop(t, duration);
       }
       onClick?.(e);
     };

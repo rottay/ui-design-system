@@ -36,7 +36,7 @@
  * @category Layout
  * @package @rottay/design-system
  */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useId, useState } from 'react';
 import type {
   LayoutProps,
   LayoutHeaderProps,
@@ -209,9 +209,13 @@ export const Sider = React.forwardRef<HTMLElement, LayoutSiderProps>(
     // and the trigger chrome are skin-owned (`layout.css`).
     const collapseLabel = translation?.tOr('layout.collapse_sidebar', 'Collapse sidebar') ?? 'Collapse sidebar';
     const expandLabel = translation?.tOr('layout.expand_sidebar', 'Expand sidebar') ?? 'Expand sidebar';
+    // `aria-expanded` needs `aria-controls` to name a target, and the trigger
+    // points at the sider it resizes, so the id is minted here, not by callers.
+    const siderId = `layout-sider-${useId().replace(/:/g, '')}`;
     return (
       <aside
         ref={ref}
+        id={siderId}
         className={`rottay-layout-sider rottay-layout-sider--modern ${className}`}
         style={{
           width: typeof currentWidth === 'number' ? `${currentWidth}px` : currentWidth,
@@ -230,6 +234,7 @@ export const Sider = React.forwardRef<HTMLElement, LayoutSiderProps>(
             data-collapsed={isCollapsed ? 'true' : 'false'}
             aria-label={isCollapsed ? expandLabel : collapseLabel}
             aria-expanded={!isCollapsed}
+            aria-controls={siderId}
           >
             {trigger ?? (
               /* Governed semantic icons (pre-flag 11: no unicode glyphs). Both

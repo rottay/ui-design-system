@@ -85,6 +85,13 @@
 .rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-row'] {
   padding-block: var(--ds-list-skeleton-row-padding-block, 12px);
 }
+/* A grid list must reserve its real tracks while loading, or the skeleton
+   reflows from a stack into N columns the moment data lands. The single-count
+   projection stays inline (as on the loaded `<ul>`); the per-breakpoint tiers
+   are read by the responsive-grid block further down, which this part joins. */
+.rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] > [data-part='skeleton'][data-grid] {
+  display: grid;
+}
 .rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-row-inner'] {
   display: flex;
   align-items: center;
@@ -175,32 +182,38 @@
    reads exactly one property with no fallback chain. Widths are the shared
    scale in foundation/contracts/kernel/responsive/breakpoints (the contract's
    `xxl` is that scale's `2xl`); `xs` is the 0px baseline and needs no query. */
-.rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'] {
+.rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'],
+.rottay-list.rottay-list--modern[data-part='root'] > [data-part='skeleton'][data-grid='responsive'] {
   display: grid;
   grid-template-columns: repeat(var(--_ds-list-grid-columns-xs, 1), minmax(0, 1fr));
 }
 @media (min-width: 640px) {
-  .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'] {
+  .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'],
+.rottay-list.rottay-list--modern[data-part='root'] > [data-part='skeleton'][data-grid='responsive'] {
     grid-template-columns: repeat(var(--_ds-list-grid-columns-sm, 1), minmax(0, 1fr));
   }
 }
 @media (min-width: 768px) {
-  .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'] {
+  .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'],
+.rottay-list.rottay-list--modern[data-part='root'] > [data-part='skeleton'][data-grid='responsive'] {
     grid-template-columns: repeat(var(--_ds-list-grid-columns-md, 1), minmax(0, 1fr));
   }
 }
 @media (min-width: 1024px) {
-  .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'] {
+  .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'],
+.rottay-list.rottay-list--modern[data-part='root'] > [data-part='skeleton'][data-grid='responsive'] {
     grid-template-columns: repeat(var(--_ds-list-grid-columns-lg, 1), minmax(0, 1fr));
   }
 }
 @media (min-width: 1280px) {
-  .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'] {
+  .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'],
+.rottay-list.rottay-list--modern[data-part='root'] > [data-part='skeleton'][data-grid='responsive'] {
     grid-template-columns: repeat(var(--_ds-list-grid-columns-xl, 1), minmax(0, 1fr));
   }
 }
 @media (min-width: 1536px) {
-  .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'] {
+  .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'],
+.rottay-list.rottay-list--modern[data-part='root'] > [data-part='skeleton'][data-grid='responsive'] {
     grid-template-columns: repeat(var(--_ds-list-grid-columns-xxl, 1), minmax(0, 1fr));
   }
 }

@@ -146,6 +146,20 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
   const titleId = `${id || generatedLabelId}-title`;
   const descriptionId = `${id || generatedLabelId}-description`;
   const backdropClosable = closeOnBackdropClick ?? closeOnOverlayClick ?? true;
+  // A custom `header` replaces the description block too, so describedby must
+  // not point at an id nothing renders.
+  const rendersDescription = Boolean(description) && !header;
+  // Merge, never replace: a caller's form-level description must not silence
+  // the modal's own (the Checkbox describedby-merge contract).
+  const describedBy =
+    Array.from(
+      new Set(
+        [rendersDescription ? descriptionId : undefined, ariaDescribedBy]
+          .filter((token): token is string => Boolean(token))
+          .flatMap((token) => token.split(/\s+/))
+          .filter(Boolean),
+      ),
+    ).join(' ') || undefined;
   const effectivePlacement = placement === 'center' && !centered ? 'top' : placement;
   const resolvedOkText = okText ?? i18nCommon?.tOr('ok', 'OK') ?? 'OK';
   const resolvedCancelText = cancelText ?? i18nCommon?.tOr('cancel', 'Cancel') ?? 'Cancel';
@@ -185,10 +199,16 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
   // on. `dialogRef` stays as the imperative handle for callbacks that read
   // the element outside render (usePresence's onExitComplete).
   const [dialogEl, setDialogEl] = useState<HTMLDialogElement | null>(null);
+  // React nulls `dialogRef` before passive cleanups run, so the teardown cannot
+  // read it; `lastDialogRef` records only a real node and survives detachment.
+  const lastDialogRef = useRef<HTMLDialogElement | null>(null);
   const attachDialog = useCallback((node: HTMLDialogElement | null) => {
     dialogRef.current = node;
+    if (node) lastDialogRef.current = node;
     setDialogEl(node);
   }, []);
+  /** The element that was focused when this modal was promoted to the top layer. */
+  const restoreTargetRef = useRef<HTMLElement | null>(null);
 
   // Presence: `open` flipping false keeps the dialog mounted and open in the
   // native top layer until the PANEL's own exit animation (ref'd below)
@@ -231,6 +251,9 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
     const dialog = dialogEl;
     if (!dialog) return;
     if (open && !dialog.open) {
+      // Native <dialog> restores focus on close() only, so record the invoker
+      // for an unmount that skips close().
+      restoreTargetRef.current = document.activeElement as HTMLElement | null;
       dialog.showModal();
       // Lifecycle parity with the shared contract: the promotion is the one
       // moment the modal becomes visible, so `onOpen` fires exactly once per
@@ -239,6 +262,18 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
       onOpen?.();
     }
   }, [open, dialogEl, onOpen]);
+
+  // Unmounting an open dialog skips the close steps, so the browser never
+  // restores focus. Guarded on `dialog.open` so it cannot fight a real close().
+  useEffect(() => () => {
+    const dialog = lastDialogRef.current;
+    const target = restoreTargetRef.current;
+    restoreTargetRef.current = null;
+    if (!dialog?.open || !target?.isConnected) return;
+    const active = document.activeElement as HTMLElement | null;
+    const stranded = !active || active === document.body || dialog.contains(active);
+    if (stranded) target.focus();
+  }, []);
 
   // `showModal()` promotes this dialog into the browser TOP LAYER, which
   // paints above every normal-flow node regardless of z-index. A descendant
@@ -384,7 +419,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
         aria-label={ariaLabel}
         /* A custom `header` replaces the built-in title, so the heading group carries the name. */
         aria-labelledby={!ariaLabel && (header || title) ? titleId : undefined}
-        aria-describedby={ariaDescribedBy || (description ? descriptionId : undefined)}
+        aria-describedby={describedBy}
         {...overlayMotion.attributes}
         style={{
           // Re-stamped lineage `--ds-*` overrides first; the engine's own

@@ -32,12 +32,15 @@ describe('Modern Switch public anatomy', () => {
     expect(input).not.toBeDisabled();
   });
 
-  it('disables interaction while loading and announces busy', () => {
+  it('blocks interaction while loading and announces busy without leaving the tab order', () => {
     const handleChange = vi.fn();
     const { container } = render(<ModernSwitch loading onChange={handleChange} />);
     const input = container.querySelector('input[role="switch"]') as HTMLInputElement;
 
-    expect(input).toBeDisabled();
+    // Busy is not disabled: the block is expressed by aria-disabled plus a refused
+    // activation, so the tab stop survives.
+    expect(input).not.toBeDisabled();
+    expect(input).toHaveAttribute('aria-disabled', 'true');
     expect(input).toHaveAttribute('aria-busy', 'true');
     expect(container.querySelector('[data-part="loading-indicator"]')).toBeInTheDocument();
     expect(container.querySelector('[data-part="root"]')).toHaveAttribute('data-loading', 'true');

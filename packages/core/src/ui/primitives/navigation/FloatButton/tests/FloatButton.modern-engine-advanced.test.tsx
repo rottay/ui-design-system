@@ -227,7 +227,9 @@ describe('FloatButton modern advanced engine coverage', () => {
     const button = screen.getByRole('button', { name: /back to top/i });
     fireEvent.click(button);
 
-    expect(target.scrollTo).toHaveBeenCalledWith({ top: 0, behavior: 'smooth' });
+    // Retargeted (R2 lane E): the destination is the contract's own `duration`, not the user
+    // agent's `behavior: 'smooth'` cadence, which it could never honor.
+    await vi.waitFor(() => expect(target.scrollTop).toBe(0));
     expect(handleClick).toHaveBeenCalledTimes(1);
     expect(button).toHaveClass('rottay-float-button', 'rottay-float-button--modern');
     for (const cls of DAISY_CLASSES) {

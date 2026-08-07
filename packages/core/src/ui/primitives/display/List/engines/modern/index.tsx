@@ -197,6 +197,12 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
       ? dataSource.map((item, index) => renderItem(item, index))
       : children;
 
+    // Empty data-driven list: the contract's emptyText/locale.emptyText render
+    // through the composed public Empty primitive (single paint owner), never
+    // a hand-rolled empty box.
+    const isDataDrivenEmpty = dataSource && renderItem && dataSource.length === 0;
+    const gridProjection = grid ? projectGrid(grid) : undefined;
+
     // Three-row skeleton with avatar circle + two text bars to match typical list layouts
     if (loading) {
       return (
@@ -209,29 +215,46 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
           className={`rottay-list rottay-list--modern animate-pulse ${className}`}
           data-part={dataPart ?? 'root'}
           data-loading="true"
+          // The loading posture is the SAME list: the stamps below must stay
+          // exactly the loaded root's, or the shell jumps on every load.
+          data-bordered={bordered ? 'true' : 'false'}
+          data-size={size}
+          data-item-layout={itemLayout}
           aria-busy="true"
           style={style}
         >
-          {[1, 2, 3].map((i) => (
-            <div key={i} data-part="skeleton-row">
-              <div data-part="skeleton-row-inner">
-                <div data-part="skeleton-avatar" />
-                <div data-part="skeleton-lines">
-                  <div data-part="skeleton-line" />
-                  <div data-part="skeleton-line" />
+          {header && (
+            <div data-part="header">
+              {header}
+            </div>
+          )}
+          {/* Grid lists reserve their real tracks while loading, so the
+              skeleton does not reflow from a stack into N columns on resolve. */}
+          <div
+            data-part="skeleton"
+            data-grid={gridProjection?.mode}
+            style={gridProjection?.style}
+          >
+            {[1, 2, 3].map((i) => (
+              <div key={i} data-part="skeleton-row">
+                <div data-part="skeleton-row-inner">
+                  <div data-part="skeleton-avatar" />
+                  <div data-part="skeleton-lines">
+                    <div data-part="skeleton-line" />
+                    <div data-part="skeleton-line" />
+                  </div>
                 </div>
               </div>
+            ))}
+          </div>
+          {footer && (
+            <div data-part="footer">
+              {footer}
             </div>
-          ))}
+          )}
         </div>
       );
     }
-
-    // Empty data-driven list: the contract's emptyText/locale.emptyText render
-    // through the composed public Empty primitive (single paint owner), never
-    // a hand-rolled empty box.
-    const isDataDrivenEmpty = dataSource && renderItem && dataSource.length === 0;
-    const gridProjection = grid ? projectGrid(grid) : undefined;
 
     return (
       <div

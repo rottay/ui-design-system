@@ -112,6 +112,23 @@ function getTargetRect(target: Window | HTMLElement): DOMRect {
   return (target as HTMLElement).getBoundingClientRect();
 }
 
+/** The measured channels the two style objects above can ever carry. */
+const GEOMETRY_KEYS = [
+  'position',
+  'top',
+  'bottom',
+  'left',
+  'width',
+  'blockSize',
+] as const satisfies readonly (keyof React.CSSProperties)[];
+
+/** Equality over the measured geometry only. @internal */
+function sameGeometry(a?: React.CSSProperties, b?: React.CSSProperties): boolean {
+  if (a === b) return true;
+  if (!a || !b) return false;
+  return GEOMETRY_KEYS.every((key) => a[key] === b[key]);
+}
+
 // ============================================================================
 // Modern Engine Component
 // ============================================================================
@@ -201,10 +218,24 @@ export const ModernAffix = forwardRef<HTMLDivElement, AffixProps>(
 
       const targetRect = getTargetRect(targetContainer);
       const placeholderRect = placeholderRef.current.getBoundingClientRect();
+      // Reservation is measured from the AFFIXED CHILD: the placeholder
+      // carries the reservation, so reading it back would be self-referential.
+      const contentRect =
+        affixRef.current?.getBoundingClientRect() ?? placeholderRect;
+
+      // `position: fixed` resolves against the VIEWPORT even for an element
+      // scroll source, so the container's bottom edge needs re-expressing too.
+      const viewportHeight = typeof window !== 'undefined' ? window.innerHeight : 0;
+      const bottomInset =
+        targetContainer === window ? 0 : Math.max(viewportHeight - targetRect.bottom, 0);
 
       let affixed = false;
       let fixedStyle: React.CSSProperties | undefined;
       let placeholderStyle: React.CSSProperties | undefined;
+
+      // BLOCK AXIS ONLY: vacating the flow costs the document the element's
+      // block size, nothing else — an inline freeze never re-widths on resize.
+      const reservation: React.CSSProperties = { blockSize: contentRect.height };
 
       if (offsetBottom !== undefined) {
         // Bottom affix mode
@@ -213,14 +244,11 @@ export const ModernAffix = forwardRef<HTMLDivElement, AffixProps>(
           affixed = true;
           fixedStyle = {
             position: 'fixed',
-            bottom: offsetBottom,
+            bottom: offsetBottom + bottomInset,
             left: placeholderRect.left,
             width: placeholderRect.width,
           };
-          placeholderStyle = {
-            width: placeholderRect.width,
-            height: placeholderRect.height,
-          };
+          placeholderStyle = reservation;
         }
       } else {
         // Top affix mode
@@ -233,10 +261,7 @@ export const ModernAffix = forwardRef<HTMLDivElement, AffixProps>(
             left: placeholderRect.left,
             width: placeholderRect.width,
           };
-          placeholderStyle = {
-            width: placeholderRect.width,
-            height: placeholderRect.height,
-          };
+          placeholderStyle = reservation;
         }
       }
 
@@ -246,7 +271,15 @@ export const ModernAffix = forwardRef<HTMLDivElement, AffixProps>(
         onChange?.(affixed);
       }
 
-      setState({ affixed, fixedStyle, placeholderStyle });
+      // Idempotent: the size observers below watch elements this function
+      // resizes, so an unchanged measurement must keep the same state object.
+      setState((current) =>
+        current.affixed === affixed &&
+        sameGeometry(current.fixedStyle, fixedStyle) &&
+        sameGeometry(current.placeholderStyle, placeholderStyle)
+          ? current
+          : { affixed, fixedStyle, placeholderStyle }
+      );
     }, [offsetTop, offsetBottom, target, onChange, resolvedZIndex]);
 
     // ========================================================================
@@ -302,6 +335,16 @@ export const ModernAffix = forwardRef<HTMLDivElement, AffixProps>(
       const next = getTargetContainer(target);
       setScrollSource((current) => (current === next ? current : next));
     });
+
+    // `resize` only reports the WINDOW, but sider collapse, splitter drag and
+    // reflow move the column too, so both measured boxes are observed directly.
+    useEffect(() => {
+      if (!onChange || typeof ResizeObserver === 'undefined') return;
+      const observer = new ResizeObserver(() => measure());
+      if (placeholderRef.current) observer.observe(placeholderRef.current);
+      if (affixRef.current) observer.observe(affixRef.current);
+      return () => observer.disconnect();
+    }, [measure, onChange]);
 
     // ========================================================================
     // Render - Simple Sticky Mode

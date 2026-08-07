@@ -147,6 +147,10 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
     const [internalValue, setInternalValue] = useState<number | string | null>(defaultValue ?? null);
     const currentValue = isControlled ? value : internalValue;
 
+    /* Raw in-flight text; `formatValue` is a COMMITTED-value formatter, so
+     * applying it per keystroke would rewrite the caret. `null` = no edit. */
+    const [draft, setDraft] = useState<string | null>(null);
+
     /* The forwarded ref may be null (a consumer that never passes one), so
      * the bounds-flash machinery reads its own merged ref: `ref.current`
      * would throw a TypeError mid-keydown and kill the interaction. */
@@ -207,6 +211,7 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setDraft(e.target.value);
       const newValue = parseNumber(e.target.value);
       if (!isControlled) {
         setInternalValue(newValue);
@@ -223,6 +228,9 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
      * users never see the steppers' disabled posture.
      */
     const handleStep = useCallback((direction: 'up' | 'down', multiplier = 1) => {
+      // A step COMMITS: whatever half-typed text was in flight is superseded
+      // by the formatted stepped value.
+      setDraft(null);
       const rawCurrent = typeof currentValue === 'string' ? parseFloat(currentValue) : (currentValue ?? 0);
       /* An empty or half-typed field ('' / '-') parses to NaN: stepping from
        * it must start at the neutral base instead of emitting NaN through
@@ -259,6 +267,7 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
 
     /** Jump directly to a configured bound (Home → min, End → max). */
     const handleSetBound = useCallback((direction: 'up' | 'down', bound: number) => {
+      setDraft(null);
       const current = typeof currentValue === 'string' ? parseFloat(currentValue) : (currentValue ?? 0);
       let newValue = bound;
       if (precision !== undefined) {
@@ -287,6 +296,9 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
         onPressEnter?.(e);
       }
       if (!keyboard) return;
+      // A read-only field hides its steppers but stays focusable, so the APG
+      // key set still reaches handleStep and must be refused here.
+      if (readOnly || disabled) return;
       if (e.key === 'ArrowUp') {
         e.preventDefault();
         handleStep('up');
@@ -317,6 +329,9 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
      *  clamps into [min, max] and re-applies precision (contract: "Input will
      *  not exceed this"). No-op when the value is empty or already in range. */
     const handleBlur = () => {
+      // Entry is over: the committed value owns the rendered text again, so
+      // precision/clamping become visible exactly here.
+      setDraft(null);
       const numeric =
         typeof currentValue === 'number'
           ? currentValue
@@ -343,6 +358,13 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
     // stamps `data-has-prefix` / `data-has-trailing` so the skin can reserve
     // logical padding that flips correctly under RTL (the old inline padding
     // shorthand silently beat the pl-8/pr-16 utilities and overlapped affixes).
+    /* The draft only holds while it still parses to the committed value, so a
+     * controlled parent swapping `value` mid-entry wins instead of being shadowed. */
+    const committedNumeric =
+      typeof currentValue === 'string' ? parseNumber(currentValue) : currentValue ?? null;
+    const draftDescribesValue = draft !== null && parseNumber(draft) === committedNumeric;
+    const renderedValue = draftDescribesValue ? draft : formatValue(currentValue);
+
     const sizeKey = toCanonicalSize(size) ?? 'md';
     const hasTrailing = Boolean(suffix) || (controls && !disabled && !readOnly);
 
@@ -373,7 +395,7 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
             data-has-prefix={prefix ? 'true' : undefined}
             data-has-trailing={hasTrailing ? 'true' : undefined}
             data-bounds-hit={boundsHit ?? undefined}
-            value={formatValue(currentValue)}
+            value={renderedValue}
             min={min}
             max={max}
             step={step}

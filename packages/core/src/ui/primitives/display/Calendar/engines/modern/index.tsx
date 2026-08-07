@@ -178,7 +178,11 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
   // state tracks the selection.
   const isControlled = value !== undefined;
   const [internalValue, setInternalValue] = useState<Date>(() => parseDate(defaultValue));
-  const [mode, setMode] = useState<CalendarMode>(modeProp || defaultMode);
+  // `mode` is controlled like `value`: the prop wins on every render, and
+  // internal state only backs the uncontrolled contract.
+  const isModeControlled = modeProp !== undefined;
+  const [internalMode, setInternalMode] = useState<CalendarMode>(modeProp ?? defaultMode);
+  const mode = modeProp ?? internalMode;
 
   const currentDate = isControlled ? parseDate(value) : internalValue;
   const today = new Date();
@@ -188,6 +192,18 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
   // changing the selection.
   const [viewYear, setViewYear] = useState(currentDate.getFullYear());
   const [viewMonth, setViewMonth] = useState(currentDate.getMonth());
+
+  // Only a VALUE-driven month change re-pages; header and keyboard browsing
+  // move the page without touching the value, so they are never fought.
+  const valuePage = Number.isNaN(currentDate.getTime())
+    ? null
+    : currentDate.getFullYear() * 12 + currentDate.getMonth();
+  const [syncedValuePage, setSyncedValuePage] = useState(valuePage);
+  if (valuePage !== null && valuePage !== syncedValuePage) {
+    setSyncedValuePage(valuePage);
+    setViewYear(currentDate.getFullYear());
+    setViewMonth(currentDate.getMonth());
+  }
 
   // Day 0 of the *next* month gives the last day of the current month.
   // This is a standard JS Date trick to get the count of days.
@@ -233,6 +249,15 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
     onSelect?.(date, { source: 'date' });
   }, [viewYear, viewMonth, isControlled, onChange, onSelect, isDateDisabled]);
 
+  // Every page move funnels through here: `onPanelChange` is the contract's
+  // only signal that the visible window changed.
+  const goToPanel = useCallback((year: number, month: number) => {
+    if (year === viewYear && month === viewMonth) return;
+    setViewYear(year);
+    setViewMonth(month);
+    onPanelChange?.(new Date(year, month, 1), mode);
+  }, [mode, onPanelChange, viewMonth, viewYear]);
+
   // Selecting a month in year view both selects the date AND switches back to
   // month view, so the user can drill down from year -> month -> day in sequence.
   const handleMonthClick = useCallback((month: number) => {
@@ -244,35 +269,27 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
     }
     onChange?.(date);
     onSelect?.(date, { source: 'month' });
-    setMode('month');
+    if (!isModeControlled) setInternalMode('month');
     onPanelChange?.(date, 'month');
-  }, [viewYear, isControlled, onChange, onSelect, onPanelChange]);
+  }, [viewYear, isControlled, isModeControlled, onChange, onSelect, onPanelChange]);
 
   // Month navigation wraps around the year boundary: going before January
   // decrements the year and sets month to December, and vice versa.
   const handlePrevMonth = () => {
-    if (viewMonth === 0) {
-      setViewYear((y) => y - 1);
-      setViewMonth(11);
-    } else {
-      setViewMonth((m) => m - 1);
-    }
+    if (viewMonth === 0) goToPanel(viewYear - 1, 11);
+    else goToPanel(viewYear, viewMonth - 1);
   };
 
   const handleNextMonth = () => {
-    if (viewMonth === 11) {
-      setViewYear((y) => y + 1);
-      setViewMonth(0);
-    } else {
-      setViewMonth((m) => m + 1);
-    }
+    if (viewMonth === 11) goToPanel(viewYear + 1, 0);
+    else goToPanel(viewYear, viewMonth + 1);
   };
 
-  const handlePrevYear = () => setViewYear((y) => y - 1);
-  const handleNextYear = () => setViewYear((y) => y + 1);
+  const handlePrevYear = () => goToPanel(viewYear - 1, viewMonth);
+  const handleNextYear = () => goToPanel(viewYear + 1, viewMonth);
 
   const handleModeChange = (newMode: CalendarMode) => {
-    setMode(newMode);
+    if (!isModeControlled) setInternalMode(newMode);
     onPanelChange?.(currentDate, newMode);
   };
 
@@ -364,11 +381,10 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
       }
       setFocusedDate(target);
       if (target.getFullYear() !== viewYear || target.getMonth() !== viewMonth) {
-        setViewYear(target.getFullYear());
-        setViewMonth(target.getMonth());
+        goToPanel(target.getFullYear(), target.getMonth());
       }
     },
-    [anchorDate, viewYear, viewMonth, isDateDisabled],
+    [anchorDate, goToPanel, viewYear, viewMonth, isDateDisabled],
   );
 
   const handleYearGridKeyDown = useCallback(

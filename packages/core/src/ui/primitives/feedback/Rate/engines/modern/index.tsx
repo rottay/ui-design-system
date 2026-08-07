@@ -370,6 +370,12 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
                 e.stopPropagation();
                 handleHover(starIndex - 0.5);
               }}
+              // mouseenter/mouseleave do not bubble, so leaving the half zone
+              // for the full zone of the SAME star needs this handler to fire.
+              onMouseLeave={(e) => {
+                e.stopPropagation();
+                handleHover(starIndex);
+              }}
               onClick={(e) => {
                 e.stopPropagation();
                 handleClick(starIndex - 0.5);

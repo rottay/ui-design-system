@@ -24,17 +24,63 @@ import type { DescriptionsProps, DescriptionsItemProps } from '../../contracts';
 import { DESCRIPTIONS_DEFAULTS } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
-/**
- * Resolves column count from column configuration.
- *
- * @param column - Column configuration (number or responsive object)
- * @returns Resolved column count as a number
- */
-function resolveColumnCount(column: DescriptionsProps['column']): number {
-  const raw = typeof column === 'number' ? column : (column?.md ?? column?.lg ?? 3);
-  // A zero/negative/fractional track count produces an invalid `repeat()`, so
-  // anything outside the usable range falls back to the contract default.
-  return Number.isFinite(raw) && raw >= 1 ? Math.floor(raw) : 3;
+/** Smallest first. `xxl` is the contract's spelling of the scale's `2xl` tier. */
+const COLUMN_BREAKPOINTS = ['xs', 'sm', 'md', 'lg', 'xl', 'xxl'] as const;
+
+/** A zero/negative/fractional count makes `repeat()` invalid, so it falls back. */
+function normalizeColumnCount<T>(raw: number | undefined, fallback: T): number | T {
+  return typeof raw === 'number' && Number.isFinite(raw) && raw >= 1 ? Math.floor(raw) : fallback;
+}
+
+interface ColumnProjection {
+  /** `fixed` keeps the single inline count; `responsive` hands the tiers to the skin. */
+  mode: 'fixed' | 'responsive';
+  /** Widest authored count: the span clamp and the narrow-container hooks key on it. */
+  count: number;
+  style: React.CSSProperties;
+}
+
+// A scalar stays an inline count; a `ResponsiveColumn` publishes one channel per
+// tier and writes NO inline count, which would outrank the skin's media queries.
+function projectColumns(column: DescriptionsProps['column']): ColumnProjection {
+  const fixed = (count: number): ColumnProjection => ({
+    mode: 'fixed',
+    count,
+    style: { '--ds-descriptions-column-count': count } as React.CSSProperties,
+  });
+
+  if (typeof column === 'number' || column == null) {
+    return fixed(normalizeColumnCount(column as number | undefined, 3));
+  }
+
+  // An object that declares no usable tier is the contract default, not a
+  // one-column list.
+  const declaresATier = COLUMN_BREAKPOINTS.some(
+    (tier) => normalizeColumnCount(column[tier], null) !== null
+  );
+  if (!declaresATier) return fixed(3);
+
+  // Static channel keys, never a computed `style[key] = …`: that is an
+  // unresolvable paint site to the inline-paint census, whose counter only falls.
+  let carried = 1;
+  const counts = COLUMN_BREAKPOINTS.map((tier) => {
+    carried = normalizeColumnCount(column[tier], carried);
+    return carried;
+  });
+  const [xs, sm, md, lg, xl, xxl] = counts;
+
+  return {
+    mode: 'responsive',
+    count: Math.max(...counts),
+    style: {
+      '--_ds-descriptions-columns-xs': xs,
+      '--_ds-descriptions-columns-sm': sm,
+      '--_ds-descriptions-columns-md': md,
+      '--_ds-descriptions-columns-lg': lg,
+      '--_ds-descriptions-columns-xl': xl,
+      '--_ds-descriptions-columns-xxl': xxl,
+    } as React.CSSProperties,
+  };
 }
 
 /**
@@ -94,8 +140,10 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
         ? translatedRegion
         : 'Description list';
 
-    // Resolve responsive column config to a concrete number for CSS grid
-    const columnCount = resolveColumnCount(column);
+    // Resolve the column config onto the grid: a scalar count inline, or the
+    // declared per-breakpoint tiers as channels the skin's queries read.
+    const columns = projectColumns(column);
+    const columnCount = columns.count;
     const itemElements = React.Children.toArray(children).filter(React.isValidElement);
     const hasHeader = !!(title || extra);
 
@@ -105,7 +153,7 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
         ref={ref}
         className={`rottay-descriptions rottay-descriptions--modern${layout === 'vertical' ? ' rottay-descriptions-vertical' : ''}${!bordered ? ' rottay-descriptions-borderless' : ''} ${className}`}
         style={{
-          '--ds-descriptions-column-count': columnCount,
+          ...columns.style,
           ...style,
         } as React.CSSProperties}
         data-part={dataPart ?? 'root'}
@@ -113,6 +161,7 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
         data-layout={layout}
         data-bordered={bordered ? 'true' : 'false'}
         data-size={size}
+        data-columns={columns.mode}
         data-column-count={columnCount}
         data-item-count={itemElements.length}
         data-has-header={hasHeader}

@@ -58,7 +58,7 @@
 
 'use client';
 
-import React, { useState, useCallback, useRef, useEffect } from 'react';
+import React, { useState, useCallback, useRef, useEffect, useId } from 'react';
 import type { CSSProperties } from 'react';
 import type { MenuProps, MenuItem as MenuItemInterface, MenuEntry as MenuEntryInterface, MenuSelectInfo, MenuClickInfo } from '../../contracts';
 import { MENU_DEFAULTS } from '../../contracts';
@@ -256,6 +256,9 @@ function SubmenuRow({
   const { onSubmenuToggle, selectedKeys, inlineIndent, expandIcon, roving, disclosureAxis } = context;
   const rovingProps = roving.getItemProps(item.key);
   const hadSelectedDescendantRef = useRef(false);
+  // Wired only while the panel is mounted: a dangling `aria-controls` reference
+  // is worse than none (the Collapse panel idiom).
+  const panelId = `menu-panel-${useId().replace(/:/g, '')}`;
 
   const hasSelectedDescendant =
     item.children?.some(function hasSelected(child) {
@@ -287,6 +290,7 @@ function SubmenuRow({
         onFocus={rovingProps.onFocus}
         aria-disabled={item.disabled || undefined}
         aria-expanded={isOpen}
+        aria-controls={isOpen ? panelId : undefined}
         data-open={isOpen ? 'true' : undefined}
         data-selected-descendant={hasSelectedDescendant ? 'true' : undefined}
         onKeyDown={(e) => {
@@ -355,6 +359,7 @@ function SubmenuRow({
         // never paint — the getLevelStyleVars idiom). Group panels stay
         // unstamped: a section is not a tree.
         <ul
+          id={panelId}
           role="group"
           data-part="panel"
           data-disclosure-panel="true"

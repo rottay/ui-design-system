@@ -62,6 +62,15 @@
 import React, { useMemo, useState } from 'react';
 import type { StepsProps, StepStatus, ProgressDotInfo } from '../../contracts';
 import { STEPS_DEFAULTS } from '../../contracts';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { VisuallyHidden } from '@/ui/primitives/foundation/VisuallyHidden';
+
+// Only the statuses drawn purely in paint need a text equivalent: `process` is
+// already carried by `aria-current`, and `wait` is the absence of both.
+const STATUS_ANNOUNCEMENT: Partial<Record<StepStatus, { key: string; floor: string }>> = {
+  finish: { key: 'steps.status.finish', floor: 'Completed' },
+  error: { key: 'steps.status.error', floor: 'Error' },
+};
 
 // ============================================================================
 // Helper Functions
@@ -128,6 +137,10 @@ export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(
       style,
     } = props;
 
+    /* Localized status names with the documented English floor (the Layout /
+       Sheet tOr idiom); the catalog keys are a pending coordinator request. */
+    const translation = useOptionalTranslation('components');
+
     // ========================================================================
     // State Management
     // ========================================================================
@@ -192,9 +205,19 @@ export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(
         {computedSteps.map((step, index) => {
           const isClickable = !step.disabled && Boolean(onChange);
 
+          const announcement = STATUS_ANNOUNCEMENT[step.effectiveStatus];
+          const statusName = announcement
+            ? translation?.tOr(announcement.key, announcement.floor) ?? announcement.floor
+            : undefined;
+
           const text = (
             <>
               <span data-part="label">{step.title}</span>
+              {/* Status must not be color-and-glyph only: the name rides with
+                  the step title, clipped from paint and out of flow. */}
+              {statusName ? (
+                <VisuallyHidden data-part="status-name">{statusName}</VisuallyHidden>
+              ) : null}
               {step.subTitle && <span data-part="subtitle">{step.subTitle}</span>}
               {step.description && <span data-part="description">{step.description}</span>}
             </>

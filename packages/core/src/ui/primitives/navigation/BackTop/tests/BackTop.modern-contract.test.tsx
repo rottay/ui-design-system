@@ -88,15 +88,21 @@ describe('BackTop modern contract: anatomy', () => {
     expect(screen.getByText('Top')).toBeInTheDocument();
   });
 
-  it('scrolls the window to top on click and reports onClick', () => {
+  it('scrolls the window to top on click and reports onClick', async () => {
     const scrollTo = vi.fn();
     Object.defineProperty(window, 'scrollTo', { configurable: true, writable: true, value: scrollTo });
     const handleClick = vi.fn();
+    scrollWindowTo(600);
     render(<BackTop visibilityHeight={0} onClick={handleClick} />);
 
     fireEvent.click(screen.getByRole('button', { name: 'Back to top' }));
-    expect(scrollTo).toHaveBeenCalledWith({ top: 0, behavior: 'smooth' });
     expect(handleClick).toHaveBeenCalledTimes(1);
+    // Retargeted (R2 lane E): the destination is the contract's own `duration`, not the user
+    // agent's `behavior: 'smooth'` cadence, which it could never honor.
+    await vi.waitFor(() => {
+      expect(scrollTo).toHaveBeenCalled();
+      expect(scrollTo.mock.calls.at(-1)?.[0]?.top).toBe(0);
+    });
   });
 
   it('consumer inline style still merges', () => {
