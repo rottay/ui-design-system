@@ -364,6 +364,10 @@ export default function ModernPageShell(props: PageShellProps) {
   const activeTabKey = activeTab ?? tabs?.[0]?.key;
 
   const hasTabs = Boolean(tabs && tabs.length > 0);
+  /* The tablist lives inside the header, so `hideHeader` removes it. Without
+     this guard the content area still claimed `role="tabpanel"` and pointed
+     `aria-labelledby` at tab ids that were never rendered. */
+  const tabsRendered = hasTabs && !hideHeader;
   const tabDomId = (key: string) => `${shellId}-tab-${key}`;
   const panelDomId = `${shellId}-panel`;
 
@@ -549,9 +553,9 @@ export default function ModernPageShell(props: PageShellProps) {
       {/* ---- Content area: the single APG tabpanel when tabs drive it ---- */}
       <div
         data-part="content"
-        role={hasTabs ? 'tabpanel' : undefined}
-        id={hasTabs ? panelDomId : undefined}
-        aria-labelledby={hasTabs && activeTabKey ? tabDomId(activeTabKey) : undefined}
+        role={tabsRendered ? 'tabpanel' : undefined}
+        id={tabsRendered ? panelDomId : undefined}
+        aria-labelledby={tabsRendered && activeTabKey ? tabDomId(activeTabKey) : undefined}
       >
         {tabs && tabs.length > 0
           ? tabs.find((t) => t.key === activeTabKey)?.content

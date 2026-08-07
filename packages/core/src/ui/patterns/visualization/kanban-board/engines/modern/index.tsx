@@ -62,11 +62,24 @@ import ModernButton from '../../../../../primitives/inputs/Button/engines/modern
 import ModernBadge from '../../../../../primitives/display/Badge/engines/modern';
 import ModernEmpty from '../../../../../primitives/display/Empty/engines/modern';
 import { ActionAddIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-add';
+import { NavigationUpIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-up';
+import { NavigationDownIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-down';
+import { NavigationBackIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-back';
+import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-forward';
+import { useMediaQuery } from '@/infrastructure/runtime/responsive';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { useFlipLayout } from '@/graphics/motion/react/runtime';
 import { interpolateTranslation } from '@/foundation/i18n/runtime/resolution/translation';
 
 const ROOT_CLASS_NAME = 'ds-pattern-kanban-board ds-engine-modern';
+
+/** A single card move expressed on the logical axes, so the pointer and the
+    keyboard entrypoints share one protocol. */
+type KanbanMoveIntent = 'prev-item' | 'next-item' | 'prev-column' | 'next-column';
+
+/** Coarse pointers get no HTML5 drag events and no arrow keys, so the move
+    protocol needs visible controls there (fine pointers keep drag + keys). */
+const TOUCH_POINTER_QUERY = '(hover: none) and (pointer: coarse)';
 
 /** Normalizes a consumer number|string layout value to a CSS length. */
 function toCssLength(value: number | string): string {
@@ -142,6 +155,11 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
   const boardRef = useRef<HTMLDivElement | null>(null);
   const [scrollEdges, setScrollEdges] = useState({ start: false, end: false });
 
+  /* Touch move rail: HTML5 drag never fires on a coarse pointer and the arrow
+     protocol needs a keyboard, so without these the board is read-only there. */
+  const isCoarsePointer = useMediaQuery(TOUCH_POINTER_QUERY);
+  const [boardIsRtl, setBoardIsRtl] = useState(false);
+
   // FLIP layout motion for card moves: a card moving to a different column
   // re-parents in the DOM (React unmounts it from the old column's subtree
   // and mounts a new instance in the new one -- no shared fiber to
@@ -199,31 +217,18 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
   /* Keyboard move protocol (see the module docblock). Reuses the controlled
      onItemMove contract — the parent stays the source of truth — and the
      FLIP measure, so a keyboard move animates exactly like a drag move. */
-  const handleCardKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLElement>, item: T, columnIndex: number, index: number) => {
-      // renderCard is a consumer slot: a key pressed on a control INSIDE the
-      // card belongs to that control, never to the move protocol.
-      if (e.target !== e.currentTarget) return;
+  const applyMove = useCallback(
+    (intent: KanbanMoveIntent, item: T, columnIndex: number, index: number) => {
       const column = columns[columnIndex];
       const id = itemKey(item);
+      const crossesColumn = intent === 'prev-column' || intent === 'next-column';
+      const toColumnIndex = crossesColumn
+        ? columnIndex + (intent === 'prev-column' ? -1 : 1)
+        : columnIndex;
+      const toPosition = crossesColumn
+        ? index
+        : index + (intent === 'prev-item' ? -1 : 1);
 
-      if ((e.key === 'Enter' || e.key === ' ') && onItemClick) {
-        e.preventDefault();
-        onItemClick(item, column.id);
-        return;
-      }
-
-      const rtl = isRtlContext(e.currentTarget);
-      let toColumnIndex = columnIndex;
-      let toPosition = index;
-      if (e.key === 'ArrowUp') toPosition = index - 1;
-      else if (e.key === 'ArrowDown') toPosition = index + 1;
-      else if (e.key === 'ArrowLeft') toColumnIndex = columnIndex + (rtl ? 1 : -1);
-      else if (e.key === 'ArrowRight') toColumnIndex = columnIndex + (rtl ? -1 : 1);
-      else return;
-      e.preventDefault();
-
-      const crossesColumn = toColumnIndex !== columnIndex;
       const blocked =
         toColumnIndex < 0 ||
         toColumnIndex >= columns.length ||
@@ -253,7 +258,32 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
             })
       );
     },
-    [columns, itemKey, onItemClick, onItemMove, measure, tOr]
+    [columns, itemKey, onItemMove, measure, tOr]
+  );
+
+  const handleCardKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLElement>, item: T, columnIndex: number, index: number) => {
+      // renderCard is a consumer slot: a key pressed on a control INSIDE the
+      // card belongs to that control, never to the move protocol.
+      if (e.target !== e.currentTarget) return;
+
+      if ((e.key === 'Enter' || e.key === ' ') && onItemClick) {
+        e.preventDefault();
+        onItemClick(item, columns[columnIndex].id);
+        return;
+      }
+
+      const rtl = isRtlContext(e.currentTarget);
+      let intent: KanbanMoveIntent;
+      if (e.key === 'ArrowUp') intent = 'prev-item';
+      else if (e.key === 'ArrowDown') intent = 'next-item';
+      else if (e.key === 'ArrowLeft') intent = rtl ? 'next-column' : 'prev-column';
+      else if (e.key === 'ArrowRight') intent = rtl ? 'prev-column' : 'next-column';
+      else return;
+      e.preventDefault();
+      applyMove(intent, item, columnIndex, index);
+    },
+    [columns, onItemClick, applyMove]
   );
 
   /* Return focus to a keyboard-moved card once the parent's reorder has
@@ -267,6 +297,13 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
       setPendingFocusId(null);
     }
   }, [columns, pendingFocusId]);
+
+  /* The rail's inline arrows are glyphs, so their direction has to be read
+     from the live tree (the same probe the arrow keys use). */
+  useEffect(() => {
+    const el = boardRef.current;
+    if (el) setBoardIsRtl(isRtlContext(el));
+  }, [isCoarsePointer, columns.length]);
 
   /* Keep the board's scroll-edge posture current: scroll listener for
      position, ResizeObserver for content/container size changes. */
@@ -291,6 +328,43 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
       observer?.disconnect();
     };
   }, [loading, columns.length]);
+
+  /* Touch move rail descriptors: the intent stays logical, only the inline
+     glyph mirrors so the arrow points where the card will actually go. */
+  const moveControls: ReadonlyArray<{
+    intent: KanbanMoveIntent;
+    label: string;
+    icon: React.ReactNode;
+  }> = [
+    {
+      intent: 'prev-item',
+      label: tOr('kanbanBoard.move_up', 'Move up'),
+      icon: <NavigationUpIcon decorative size={14} />,
+    },
+    {
+      intent: 'next-item',
+      label: tOr('kanbanBoard.move_down', 'Move down'),
+      icon: <NavigationDownIcon decorative size={14} />,
+    },
+    {
+      intent: 'prev-column',
+      label: tOr('kanbanBoard.move_prev_column', 'Move to previous column'),
+      icon: boardIsRtl ? (
+        <NavigationForwardIcon decorative size={14} />
+      ) : (
+        <NavigationBackIcon decorative size={14} />
+      ),
+    },
+    {
+      intent: 'next-column',
+      label: tOr('kanbanBoard.move_next_column', 'Move to next column'),
+      icon: boardIsRtl ? (
+        <NavigationBackIcon decorative size={14} />
+      ) : (
+        <NavigationForwardIcon decorative size={14} />
+      ),
+    },
+  ];
 
   if (loading) {
     /* Skeleton board with the real footprint (ghost columns + cards); the
@@ -459,6 +533,35 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
                           <div data-part="card-content">
                             {renderCard(item, column.id)}
                           </div>
+                          {/* Coarse-pointer move rail: the same controlled
+                              protocol the arrow keys drive, on real Buttons. */}
+                          {isCoarsePointer && (
+                            <div
+                              data-part="card-move"
+                              style={{
+                                display: 'flex',
+                                justifyContent: 'flex-end',
+                                gap: 'var(--ds-spacing-1, 4px)',
+                                marginBlockStart: 'var(--ds-spacing-1, 4px)',
+                              }}
+                            >
+                              {moveControls.map((control) => (
+                                <ModernButton
+                                  key={control.intent}
+                                  variant="text"
+                                  size="sm"
+                                  data-part="card-move-button"
+                                  data-move-intent={control.intent}
+                                  aria-label={control.label}
+                                  icon={control.icon}
+                                  onClick={(event) => {
+                                    event.stopPropagation();
+                                    applyMove(control.intent, item, columnIndex, index);
+                                  }}
+                                />
+                              ))}
+                            </div>
+                          )}
                         </div>
                       ))}
                     </div>

@@ -118,14 +118,30 @@ export default function ModernTreeView(props: TreeViewProps) {
     [labelByKey]
   );
 
+  /* One filter run per query, shared by the empty hook and the controlled
+     expansion merge below -- the same `tree-behavior` util the primitive
+     runs, so there is still no second motor. */
+  const filterResult = useMemo(
+    () => (searchQuery ? filterTree(treeData, filterTreeNode, searchQuery) : null),
+    [searchQuery, treeData, filterTreeNode]
+  );
+
   /* The `data-empty` hook keeps its pre-composition semantics: it flips when
-     the tree has no data at all OR when a search matches nothing. The shared
-     `tree-behavior` util (the same one the primitive runs) computes the
-     match count -- one filter implementation, no second motor. */
+     the tree has no data at all OR when a search matches nothing. */
   const isEmpty = useMemo(() => {
-    if (!searchQuery) return data.length === 0;
-    return filterTree(treeData, filterTreeNode, searchQuery).filteredKeys.size === 0;
-  }, [searchQuery, data.length, treeData, filterTreeNode]);
+    if (!filterResult) return data.length === 0;
+    return filterResult.filteredKeys.size === 0;
+  }, [filterResult, data.length]);
+
+  /* The primitive auto-expands the ancestors of search matches through its
+     INTERNAL expansion state, which a controlled `expandedKeys` overrides --
+     so a match inside a collapsed branch stayed invisible while the pattern
+     reported results. Merge the ancestor keys the filter already produced. */
+  const resolvedExpanded = useMemo(() => {
+    if (!controlledExpanded) return undefined;
+    if (!filterResult || filterResult.expandKeys.length === 0) return controlledExpanded;
+    return Array.from(new Set([...controlledExpanded, ...filterResult.expandKeys.map(String)]));
+  }, [controlledExpanded, filterResult]);
 
   /* Preserve the pattern's public selection contract: additive sets when
      `multiple`, single key otherwise — the primitive reports the toggled
@@ -219,7 +235,7 @@ export default function ModernTreeView(props: TreeViewProps) {
         <ModernTree
           treeData={treeData}
           checkable={checkable}
-          expandedKeys={controlledExpanded}
+          expandedKeys={resolvedExpanded}
           defaultExpandedKeys={defaultExpandedKeys}
           selectedKeys={resolvedSelected}
           checkedKeys={resolvedChecked}

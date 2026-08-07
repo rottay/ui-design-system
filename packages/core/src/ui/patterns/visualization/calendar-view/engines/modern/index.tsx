@@ -97,8 +97,18 @@ function getMonthGrid(date: Date, weekStart: number) {
   return cells;
 }
 
+/** A bare `YYYY-MM-DD` payload: a calendar date, not an instant. */
+const DATE_ONLY_ISO = /^(\d{4})-(\d{2})-(\d{2})$/;
+
 /** Normalize a Date or ISO string into a YYYY-MM-DD key for event lookup. */
 function toDateKey(d: Date | string): string {
+  if (typeof d === 'string') {
+    // `new Date('2026-03-05')` is UTC midnight, so `getDate()` reports the
+    // previous day everywhere west of UTC. A date-only payload names a
+    // calendar day: keep its own digits instead of re-projecting it.
+    const dateOnly = DATE_ONLY_ISO.exec(d);
+    if (dateOnly) return `${dateOnly[1]}-${dateOnly[2]}-${dateOnly[3]}`;
+  }
   const date = typeof d === 'string' ? new Date(d) : d;
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 }
@@ -152,6 +162,8 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
     viewDay: tOr('calendarView.viewDay', 'Day'),
   };
 
+  const monthLabel = currentDate.toLocaleString(locale, { month: 'long', year: 'numeric' });
+
   const weekStart = useMemo(() => weekStartDay(locale), [locale]);
   const cells = useMemo(() => getMonthGrid(currentDate, weekStart), [currentDate, weekStart]);
   const dayNames = useMemo(() => weekdayNames(locale, weekStart), [locale, weekStart]);
@@ -170,15 +182,21 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
   }, [events]);
 
   // Navigate forward or backward by one month. Creates a new Date to
-  // avoid mutating the controlled currentDate prop.
+  // avoid mutating the controlled currentDate prop. The day is clamped to
+  // the target month's length first: a bare `setMonth` on Jan 31 overflows
+  // into March and skips February entirely.
   const navigateMonth = (delta: number) => {
+    const targetMonth = currentDate.getMonth() + delta;
+    const daysInTarget = new Date(currentDate.getFullYear(), targetMonth + 1, 0).getDate();
     const next = new Date(currentDate);
-    next.setMonth(next.getMonth() + delta);
+    next.setDate(Math.min(next.getDate(), daysInTarget));
+    next.setMonth(targetMonth);
     onDateChange?.(next);
   };
 
   const today = toDateKey(new Date());
   const currentKey = toDateKey(currentDate);
+  const eventsInteractive = Boolean(onEventClick);
 
   /* APG grid state: the grid's accessible name comes from the month title
      (aria-labelledby); the title itself is aria-live so month changes are
@@ -265,7 +283,7 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
             {/* The title doubles as the grid's accessible name and a polite
                 live region: navigating months announces the new range. */}
             <h3 data-part="month-title" id={titleId} aria-live="polite">
-              {currentDate.toLocaleString(locale, { month: 'long', year: 'numeric' })}
+              {monthLabel}
             </h3>
             <ModernButton
               variant="ghost"
@@ -316,7 +334,15 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
         /* Grid geometry and frame are skin-owned through the public anatomy.
            APG: role=grid labelled by the month title; week rows are
            layout-transparent wrappers (the skin sets display: contents). */
-        <div data-part="grid" role="grid" aria-labelledby={titleId}>
+        <div
+          data-part="grid"
+          role="grid"
+          /* A caller-supplied toolbar replaces the default month title, so
+             the id reference would dangle and leave the grid unnamed: fall
+             back to the same localized month string as a direct label. */
+          aria-labelledby={toolbar ? undefined : titleId}
+          aria-label={toolbar ? monthLabel : undefined}
+        >
           <div data-part="weekday-row" role="row">
             {dayNames.map((d) => (
               <div data-part="weekday" role="columnheader" key={d}>
@@ -380,19 +406,29 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
                           <div
                             data-part="event"
                             key={ev.id}
-                            /* Event chips are the primary interactive content, so
-                               they are real keyboard targets (Enter/Space fire the
-                               same callback as click). */
-                            role="button"
-                            tabIndex={0}
-                            onClick={(e) => { e.stopPropagation(); onEventClick?.(ev); }}
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter' || e.key === ' ') {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                onEventClick?.(ev);
-                              }
-                            }}
+                            /* Button semantics only when the chip actually
+                               activates something. Without `onEventClick` the
+                               chip is read-only content, so advertising a
+                               button role and a tab stop would sell an inert
+                               control (and add a tab stop per chip). */
+                            role={eventsInteractive ? 'button' : undefined}
+                            tabIndex={eventsInteractive ? 0 : undefined}
+                            onClick={
+                              eventsInteractive
+                                ? (e) => { e.stopPropagation(); onEventClick?.(ev); }
+                                : undefined
+                            }
+                            onKeyDown={
+                              eventsInteractive
+                                ? (e) => {
+                                    if (e.key === 'Enter' || e.key === ' ') {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      onEventClick?.(ev);
+                                    }
+                                  }
+                                : undefined
+                            }
                             /* Per-event color is consumer config data: it rides the
                                accent hatch (quoted key) and the skin owns the fill. */
                             style={{ '--ds-calendar-event-accent': ev.color } as React.CSSProperties}

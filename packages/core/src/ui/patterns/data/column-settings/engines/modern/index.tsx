@@ -115,6 +115,10 @@ function ColumnRow({
       data-visible={isVisible ? 'true' : 'false'}
       data-pinned={pinSide ?? undefined}
       role="listitem"
+      /* Reordering is the row's whole purpose, so its rank has to be
+         programmatically available -- the list exposed no position at all. */
+      aria-posinset={index + 1}
+      aria-setsize={count}
     >
       {/* Visibility toggle (certified Checkbox primitive) — named after the
           column it governs so the row reads as one control to AT. */}

@@ -105,7 +105,11 @@ export default function ModernMapView<T>(props: MapViewProps<T>) {
       style={style}
     >
       {sidebar && (
-        <div data-part="sidebar" style={{ width: sidebarWidth }}>{sidebar}</div>
+        /* The skin pins the sidebar (`flex-shrink: 0`), so the bare default
+           width overflowed any container narrower than itself. */
+        <div data-part="sidebar" style={{ width: sidebarWidth, maxWidth: '100%' }}>
+          {sidebar}
+        </div>
       )}
       <div data-part="content">
         {toolbar}
