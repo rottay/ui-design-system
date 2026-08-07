@@ -24190,6 +24190,13 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   object-position: var(--ds-card-cover-object-position);
 }
 
+/* ---- cover that failed to load: the engine drops the dead `img` and keeps the
+        wrapper, so the reserved geometry holds and the gap reads as the same
+        quiet inset material the loading placeholder already uses ---- */
+.ds-card.ds-card--modern[data-part='root'] > [data-part='cover'][data-error='true'] {
+  background-color: var(--ds-surface-inset);
+}
+
 .ds-card.ds-card--modern[data-part='root'][data-cover-position='top'] > [data-part='cover'],
 .ds-card.ds-card--modern[data-part='root'][data-cover-position='bottom'] > [data-part='cover'] {
   aspect-ratio: var(--ds-card-cover-aspect-ratio, var(--ds-card-media-aspect-ratio));
@@ -41368,6 +41375,54 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   min-inline-size: 0;
 }
 
+/* ---- oneWay target rows: label + per-item remove ------------------------ */
+/* A row with no checkbox is not a control: the pointer must not be told it
+   is clickable, and the hover/press washes above are gated off it. */
+.rottay-transfer.rottay-transfer--modern [data-part='panel-item'][data-selectable='false'] {
+  cursor: default;
+}
+/* The label takes the flex slot the checkbox wrapper held, so the remove
+   button parks at the row's inline end under both writing directions. */
+.rottay-transfer.rottay-transfer--modern [data-part='panel-item-label'] {
+  display: inline-flex;
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+/* Ghost icon button, same grammar as move/pagination (transparent surface,
+   governed ink, tenant tint on hover). */
+.rottay-transfer.rottay-transfer--modern [data-part='panel-item-remove'] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  inline-size: var(--ds-transfer-item-remove-size, var(--ds-spacing-5));
+  block-size: var(--ds-transfer-item-remove-size, var(--ds-spacing-5));
+  padding: 0;
+  border: none;
+  border-radius: var(--ds-transfer-item-radius, var(--ds-radius-md));
+  background: transparent;
+  color: var(--ds-transfer-item-remove-color, var(--ds-color-text-tertiary));
+  cursor: pointer;
+  transition: background-color var(--ds-motion-fast), color var(--ds-motion-fast);
+}
+@media (hover: hover) {
+  .rottay-transfer.rottay-transfer--modern [data-part='panel-item-remove']:not(:disabled):hover {
+    background: var(--ds-transfer-button-bg-hover, var(--ds-button-ghost-bg-hover, var(--ds-surface-inset)));
+    color: var(--ds-transfer-item-remove-color-hover, var(--ds-color-text-primary));
+  }
+}
+.rottay-transfer.rottay-transfer--modern [data-part='panel-item-remove']:not(:disabled):active {
+  background: var(--ds-transfer-control-bg-active, var(--ds-surface-highlight));
+}
+.rottay-transfer.rottay-transfer--modern [data-part='panel-item-remove']:focus-visible {
+  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset);
+}
+.rottay-transfer.rottay-transfer--modern [data-part='panel-item-remove']:disabled {
+  cursor: var(--ds-transfer-button-disabled-cursor, var(--ds-button-disabled-cursor, not-allowed));
+  opacity: var(--ds-transfer-button-disabled-opacity, var(--ds-button-disabled-opacity, 0.6));
+}
+
 .rottay-transfer.rottay-transfer--modern [data-part='panel-empty'] {
   padding: var(--ds-spacing-4);
   text-align: center;
@@ -41499,11 +41554,16 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
     min-inline-size: var(--ds-input-touch-target-min, var(--ds-touch-target-min, 44px));
     min-block-size: var(--ds-input-touch-target-min, var(--ds-touch-target-min, 44px));
   }
+  .rottay-transfer.rottay-transfer--modern [data-part='panel-item-remove'] {
+    min-inline-size: var(--ds-input-touch-target-min, var(--ds-touch-target-min, 44px));
+    min-block-size: var(--ds-input-touch-target-min, var(--ds-touch-target-min, 44px));
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .rottay-transfer.rottay-transfer--modern [data-part='move-button'],
   .rottay-transfer.rottay-transfer--modern [data-part='pagination-button'],
+  .rottay-transfer.rottay-transfer--modern [data-part='panel-item-remove'],
   .rottay-transfer.rottay-transfer--modern [data-part='panel-item'] {
     transition-duration: 0.01ms;
   }
@@ -41540,9 +41600,17 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
     color: GrayText;
   }
   .rottay-transfer.rottay-transfer--modern [data-part='move-button']:focus-visible,
-  .rottay-transfer.rottay-transfer--modern [data-part='pagination-button']:focus-visible {
+  .rottay-transfer.rottay-transfer--modern [data-part='pagination-button']:focus-visible,
+  .rottay-transfer.rottay-transfer--modern [data-part='panel-item-remove']:focus-visible {
     outline: 2px solid Highlight;
     outline-offset: 1px;
+  }
+  .rottay-transfer.rottay-transfer--modern [data-part='panel-item-remove'] {
+    color: ButtonText;
+  }
+  .rottay-transfer.rottay-transfer--modern [data-part='panel-item-remove']:disabled {
+    color: GrayText;
+    opacity: 1;
   }
   .rottay-transfer.rottay-transfer--modern [data-part='panel-search-icon'],
   .rottay-transfer.rottay-transfer--modern [data-part='panel-empty-icon'] {
