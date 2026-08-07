@@ -146,4 +146,43 @@ describe('PatternNotificationCenter', () => {
       expect(triggerRule).toContain('padding: 0');
     });
   });
+
+  describe('modern announces the unread total instead of repainting it silently', () => {
+    it('describes the trigger with a live unread region that survives the count change', () => {
+      const { rerender } = renderWithEngine(
+        <ModernNotificationCenter {...createProps({ unreadCount: 1 })} />,
+        'modern',
+      );
+
+      const trigger = screen.getByTestId('notification-trigger');
+      const describedBy = trigger.getAttribute('aria-describedby');
+      expect(describedBy).toBeTruthy();
+
+      const region = document.getElementById(describedBy!);
+      expect(region).not.toBeNull();
+      expect(region).toHaveAttribute('role', 'status');
+      expect(region).toHaveAttribute('aria-live', 'polite');
+      const before = region!.textContent;
+      expect(before).toMatch(/1/);
+
+      // The count changes in the SAME region node: a region that unmounted or
+      // was minted with the new value would never be announced.
+      rerender(<ModernNotificationCenter {...createProps({ unreadCount: 4 })} />);
+      expect(document.getElementById(describedBy!)).toBe(region);
+      expect(region!.textContent).not.toBe(before);
+      expect(region!.textContent).toMatch(/4/);
+    });
+
+    it('empties the region rather than announcing a zero state', () => {
+      renderWithEngine(
+        <ModernNotificationCenter {...createProps({ unreadCount: 0 })} />,
+        'modern',
+      );
+
+      const describedBy = screen
+        .getByTestId('notification-trigger')
+        .getAttribute('aria-describedby');
+      expect(document.getElementById(describedBy!)!.textContent).toBe('');
+    });
+  });
 });

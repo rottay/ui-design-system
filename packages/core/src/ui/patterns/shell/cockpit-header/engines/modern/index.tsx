@@ -177,6 +177,9 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
     const handleScroll = () => {
       setIsCompact(window.scrollY > 60);
     };
+    /* Mounting into an already-scrolled document must not paint the resting
+       posture until the next scroll event (page-shell idiom). */
+    handleScroll();
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);

@@ -103,4 +103,31 @@ describe('PatternActivityLog', () => {
       expect(screen.getByText(/closed/)).toBeInTheDocument();
     },
   );
+
+  describe('modern names the feed and its filters', () => {
+    it('gives each filter control an accessible name a placeholder cannot provide', async () => {
+      renderWithEngine(
+        <ModernActivityLog
+          {...createProps({
+            onFilterChange: vi.fn(),
+            actionTypes: ['created', 'updated'],
+            users: [{ id: 'u1', name: 'Alice' }],
+          })}
+        />,
+        'modern',
+      );
+
+      // A placeholder disappears the moment a value is picked, so it is not a
+      // name: both combobox filters were previously anonymous to AT.
+      // The Select primitive resolves lazily through Suspense.
+      expect(await screen.findByRole('combobox', { name: 'Filter by action' })).toBeInTheDocument();
+      expect(screen.getByRole('combobox', { name: 'Filter by user' })).toBeInTheDocument();
+    });
+
+    it('labels the composed timeline so the feed is not an anonymous list', () => {
+      renderWithEngine(<ModernActivityLog {...createProps()} />, 'modern');
+
+      expect(screen.getByRole('list', { name: 'Activity feed' })).toBeInTheDocument();
+    });
+  });
 });

@@ -204,6 +204,12 @@ export default function ModernActivityLog(props: ActivityLogProps) {
     allActions: tOr('activityLog.filter.allActions', 'All actions'),
     allUsers: tOr('activityLog.filter.allUsers', 'All users'),
     empty: tOr('activityLog.empty', 'No activity recorded'),
+    // A placeholder is not an accessible name: the two filters and the feed
+    // itself need names that survive an open listbox and a screen-reader
+    // landmark/control listing.
+    filterByAction: tOr('activityLog.filter.byAction', 'Filter by action'),
+    filterByUser: tOr('activityLog.filter.byUser', 'Filter by user'),
+    feed: tOr('activityLog.feedLabel', 'Activity feed'),
   };
   const emptyMessage = emptyMessageProp ?? copy.empty;
 
@@ -253,6 +259,7 @@ export default function ModernActivityLog(props: ActivityLogProps) {
           {actionTypes && actionTypes.length > 0 && (
             <Select
               size="sm"
+              aria-label={copy.filterByAction}
               placeholder={copy.allActions}
               value={filters?.type?.[0] || ''}
               options={[
@@ -269,6 +276,7 @@ export default function ModernActivityLog(props: ActivityLogProps) {
           {users && users.length > 0 && (
             <Select
               size="sm"
+              aria-label={copy.filterByUser}
               placeholder={copy.allUsers}
               value={filters?.user?.[0] || ''}
               options={[
@@ -291,6 +299,7 @@ export default function ModernActivityLog(props: ActivityLogProps) {
         </div>
       ) : (
         <ModernTimeline
+          aria-label={copy.feed}
           items={activities.map((activity) => {
             const category = classifyAction(activity.action);
             const CategoryIcon = ICON_BY_CATEGORY[category];

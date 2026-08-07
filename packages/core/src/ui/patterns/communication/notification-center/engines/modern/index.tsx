@@ -25,7 +25,7 @@
  * />
  */
 
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useId } from 'react';
 import Button from '../../../../../primitives/inputs/Button/engines/modern';
 import ModernBadge from '../../../../../primitives/display/Badge/engines/modern';
 import ModernEmpty from '../../../../../primitives/display/Empty/engines/modern';
@@ -147,6 +147,7 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
     groupToday: tOr('notificationCenter.groupToday', 'Today'),
     groupEarlier: tOr('notificationCenter.groupEarlier', 'Earlier'),
   };
+  const unreadStatusId = useId();
   const emptyMessage = emptyMessageProp ?? copy.empty;
 
   // Controlled/uncontrolled open state pattern -- see Classic engine for the
@@ -214,6 +215,19 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
       className={`ds-pattern-notification-center ds-engine-modern ${className ?? ''}`}
       style={style}
     >
+      {/* Unread total as TEXT, in a region that lives for as long as the
+          center itself: the Badge repaints silently and the trigger's
+          aria-label cannot expose it (a name overrides the button's
+          contents), so a change in the count is otherwise invisible to AT.
+          The region pre-exists every count change, which is what makes the
+          polite announcement fire; it also describes the trigger, so the
+          total is reachable on focus without mutating the pinned name. */}
+      <VisuallyHidden id={unreadStatusId} role="status" aria-live="polite">
+        {displayCount > 0
+          ? tOr('notificationCenter.unreadCount', '{count} unread', { count: displayCount })
+          : ''}
+      </VisuallyHidden>
+
       {/* Trigger: semantic bell icon with a composed unread-count Badge.
           A custom trigger replaces the entire button contents when provided.
           The 40x40 icon-button geometry is skin-owned (drained from the
@@ -230,6 +244,7 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
         onClick={() => handleOpenChange(!isOpen)}
         data-testid="notification-trigger"
         aria-label={copy.title}
+        aria-describedby={unreadStatusId}
         aria-haspopup="dialog"
         aria-expanded={isOpen}
       >

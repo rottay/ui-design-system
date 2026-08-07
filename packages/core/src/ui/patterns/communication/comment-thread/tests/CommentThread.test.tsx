@@ -216,4 +216,31 @@ describe('PatternCommentThread', () => {
       expect(screen.getByText('This looks great!')).toBeInTheDocument();
     },
   );
+
+  describe('modern names every composer, not just the edit form', () => {
+    it('names the top-level composer group', () => {
+      renderWithEngine(
+        <ModernCommentThread
+          {...createProps({ onAdd: vi.fn(), currentUser: { name: 'Bob' } })}
+        />,
+        'modern',
+      );
+
+      // TextareaProps carries no aria passthrough, so the accessible name has
+      // to ride the group -- a placeholder alone never names an input, and it
+      // vanishes as soon as the user types.
+      expect(screen.getByRole('group', { name: 'Comment' })).toBeInTheDocument();
+    });
+
+    it('names the reply composer when it opens', () => {
+      renderWithEngine(
+        <ModernCommentThread {...createProps({ onReply: vi.fn() })} />,
+        'modern',
+      );
+
+      expect(screen.queryByRole('group', { name: 'Reply' })).not.toBeInTheDocument();
+      fireEvent.click(screen.getAllByText('Reply')[0]);
+      expect(screen.getByRole('group', { name: 'Reply' })).toBeInTheDocument();
+    });
+  });
 });

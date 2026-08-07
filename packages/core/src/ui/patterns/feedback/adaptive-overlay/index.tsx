@@ -50,7 +50,7 @@
  * @package @rottay/design-system
  */
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useResponsive } from '../../../../infrastructure/runtime/responsive';
 import { useOptionalDirection } from '@/infrastructure/runtime/i18n';
 import { Modal } from '@/ui/primitives/feedback/Modal';
@@ -138,6 +138,12 @@ export function AdaptiveOverlay({
   const resolvedMode = useResolvedMode(mode);
   const { isPhone } = useResponsive();
   const direction = useOptionalDirection();
+  // Read after mount so SSR and hydration agree; the document direction can
+  // only be observed in the browser.
+  const [documentIsRtl, setDocumentIsRtl] = useState(false);
+  useEffect(() => {
+    setDocumentIsRtl(document.documentElement.dir === 'rtl');
+  }, [open]);
 
   const testId = dataTestId ?? 'adaptive-overlay';
   const resolvedSurfaceClassName = [className, surfaceClassName]
@@ -153,8 +159,11 @@ export function AdaptiveOverlay({
   // rescue a forced side drawer on a phone: the desktop measure would overflow.
   const drawerWidth = isPhone ? '100vw' : width;
   // The Drawer contract's placement is a physical screen side, so the trailing
-  // side panel has to be mirrored by hand for RTL reading order.
-  const drawerPlacement = direction === 'rtl' ? 'left' : 'right';
+  // side panel has to be mirrored by hand for RTL reading order. The i18n
+  // provider is OPTIONAL and reports 'ltr' when absent, so the document
+  // direction is the floor — otherwise a `dir="rtl"` page with no provider
+  // opens the panel on the physically wrong side.
+  const drawerPlacement = direction === 'rtl' || documentIsRtl ? 'left' : 'right';
   // Modal/Drawer footers are flex action rails owned by the engine skin; a
   // wrapper turns every action into one flex item, so it exists only to carry
   // a caller hook.

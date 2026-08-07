@@ -204,7 +204,14 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
 
           {/* Reply composer */}
           {replyVisible && (
-            <div data-part="reply-form">
+            // Same registered contract gap as `edit-form`: TextareaProps has
+            // no aria passthrough, so the accessible name rides the named
+            // group -- a placeholder alone never names an input.
+            <div
+              data-part="reply-form"
+              role="group"
+              aria-label={tOr('comment_thread.reply', 'Reply')}
+            >
               <ModernTextarea
                 value={replyText}
                 onChange={(v) => setReplyText(v)}
@@ -324,7 +331,11 @@ export default function ModernCommentThread(props: CommentThreadProps) {
           <div data-part="avatar-col">
             <ModernAvatar data-part="avatar" size="sm" src={currentUser.avatar} name={currentUser.name} />
           </div>
-          <div data-part="composer-main">
+          <div
+            data-part="composer-main"
+            role="group"
+            aria-label={tOr('comment_thread.submit', 'Comment')}
+          >
             <ModernTextarea
               value={newComment}
               onChange={(v) => setNewComment(v)}

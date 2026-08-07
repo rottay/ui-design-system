@@ -147,6 +147,42 @@ function toolStatusToTone(
   }
 }
 
+/** Visible label for a tool execution status. The union member is a machine
+    identifier, never user copy: it resolves through the `components` catalog
+    with an English floor so ES/AR never surface the raw enum. */
+function toolStatusLabel(status: AssistantToolStatus, t: FloorTranslator): string {
+  switch (status) {
+    case 'running':
+      return t('assistant.tool.status.running', 'Running');
+    case 'complete':
+      return t('assistant.tool.status.complete', 'Complete');
+    case 'error':
+      return t('assistant.tool.status.error', 'Error');
+    default:
+      return t('assistant.tool.status.pending', 'Pending');
+  }
+}
+
+/** Visible label for a delivery lifecycle status -- same rule as
+    {@link toolStatusLabel}: the enum is machine state, the badge shows copy. */
+function deliveryStatusLabel(
+  status: AssistantDeliveryStatus,
+  t: FloorTranslator
+): string {
+  switch (status) {
+    case 'sending':
+      return t('assistant.delivery.sending', 'Sending');
+    case 'streaming':
+      return t('assistant.delivery.streaming', 'Streaming');
+    case 'sent':
+      return t('assistant.delivery.sent', 'Sent');
+    case 'error':
+      return t('assistant.delivery.error', 'Error');
+    default:
+      return t('assistant.delivery.pending', 'Pending');
+  }
+}
+
 /**
  * Resolves an agent activity status to its liveness and default label. Live
  * states (thinking/streaming/acting) animate; idle/error hold static. The
@@ -227,7 +263,11 @@ export function StreamingText({
     as === 'markdown' ? 'var(--ds-font-family-mono)' : undefined;
 
   return (
-    <Box className="ds-assistant-streaming-text" data-part="root">
+    // `aria-busy` is the machine-readable streaming contract: the block
+    // announces itself as still being written and flips to `false` on the
+    // last chunk, so AT gets a completion signal the decorative caret and
+    // shimmer cannot carry.
+    <Box className="ds-assistant-streaming-text" data-part="root" aria-busy={streaming}>
       {streaming && !reduceMotion ? (
         <ShimmerText text={text} style={fontFamily ? { fontFamily } : undefined} />
       ) : (
@@ -327,7 +367,7 @@ export function ToolCallCard({
         <Stack spacing="sm">
           <Stack direction="horizontal" justify="space-between" align="center">
             <Text weight="bold">{name}</Text>
-            <AssistantStatusBadge label={status} tone={tone} />
+            <AssistantStatusBadge label={toolStatusLabel(status, t)} tone={tone} />
           </Stack>
           {terminal ? (
             summary || duration ? (
@@ -696,7 +736,7 @@ export function MessageBubble({
               </Stack>
               {deliveryStatus ? (
                 <AssistantStatusBadge
-                  label={deliveryStatus}
+                  label={deliveryStatusLabel(deliveryStatus, t)}
                   tone={deliveryStatusToTone(deliveryStatus)}
                 />
               ) : null}

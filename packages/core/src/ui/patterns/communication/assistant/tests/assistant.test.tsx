@@ -76,7 +76,11 @@ describe('assistant patterns', () => {
     );
 
     expect(await screen.findByText('I found two matching records.')).toBeInTheDocument();
-    expect(screen.getAllByText('streaming')).toHaveLength(2);
+    // A caller-supplied badge label is opaque copy and stays verbatim; the
+    // `deliveryStatus` union is a machine identifier and reaches the surface
+    // as localized copy, so only ONE raw "streaming" is rendered now.
+    expect(screen.getAllByText('streaming')).toHaveLength(1);
+    expect(screen.getByText('Streaming')).toBeInTheDocument();
     expect(screen.getByText('create_quote')).toBeInTheDocument();
     expect(screen.getByText('Preparing a quote')).toBeInTheDocument();
     expect(screen.getByText('Copilot')).toBeInTheDocument();
@@ -109,7 +113,10 @@ describe('assistant patterns', () => {
 
     expect(await screen.findByText('queued')).toBeInTheDocument();
     expect(screen.getByText('Tool')).toBeInTheDocument();
-    expect(screen.getByText('error')).toBeInTheDocument();
+    // `deliveryStatus` is a machine union: the badge shows localized copy and
+    // the raw identifier never reaches the surface.
+    expect(screen.getByText('Error')).toBeInTheDocument();
+    expect(screen.queryByText('error')).not.toBeInTheDocument();
     expect(screen.getByText('Rendered attachment')).toBeInTheDocument();
   });
 
@@ -316,5 +323,46 @@ describe('assistant patterns', () => {
     expect(screen.getByText('Acting')).toBeInTheDocument();
     expect(screen.getByText('Error')).toBeInTheDocument();
     expect(screen.getByText('Custom streaming label')).toBeInTheDocument();
+  });
+
+  it('renders lifecycle unions as copy, never as the raw machine identifier', async () => {
+    renderSurface(
+      <div>
+        <ToolCallCard name="run_query" status="running" />
+        <MessageBubble
+          author="Copilot"
+          deliveryStatus="sending"
+          parts={[{ type: 'text', content: 'Working on it' }]}
+        />
+      </div>
+    );
+
+    expect(await screen.findByText('Running')).toBeInTheDocument();
+    expect(screen.getByText('Sending')).toBeInTheDocument();
+    // The untranslated enum must not survive anywhere in the tree: it would
+    // ship as English into every locale.
+    expect(screen.queryByText('running')).not.toBeInTheDocument();
+    expect(screen.queryByText('sending')).not.toBeInTheDocument();
+  });
+
+  it('exposes a machine-readable streaming/completion signal on the text block', async () => {
+    const streamingView = renderSurface(
+      <StreamingText text="Generating summary" streaming reducedMotion />
+    );
+    expect(await screen.findByText('Generating summary')).toBeInTheDocument();
+    const streamingRoot = streamingView.container.querySelector(
+      '.ds-assistant-streaming-text[data-part="root"]'
+    );
+    expect(streamingRoot).toHaveAttribute('aria-busy', 'true');
+    streamingView.unmount();
+
+    // The last chunk must flip the flag, not merely drop the caret: the
+    // caret is aria-hidden, so its removal is not a completion signal.
+    const settledView = renderSurface(<StreamingText text="Generating summary" />);
+    expect(await screen.findByText('Generating summary')).toBeInTheDocument();
+    const settledRoot = settledView.container.querySelector(
+      '.ds-assistant-streaming-text[data-part="root"]'
+    );
+    expect(settledRoot).toHaveAttribute('aria-busy', 'false');
   });
 });

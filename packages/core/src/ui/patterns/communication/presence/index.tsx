@@ -159,6 +159,10 @@ export function PresenceBar({
             key={user.id}
             data-part="avatar"
             role="listitem"
+            // The name is IDENTITY, not a hover affordance: `showNames`
+            // governs the visual tooltip only, so the roster stays fully
+            // named for AT (initials alone never identify a person).
+            aria-label={user.name}
             title={showNames ? user.name : undefined}
             style={{
               // Runtime-only inline: size-variant pixel geometry, the
