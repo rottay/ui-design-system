@@ -101,4 +101,43 @@ describe('TagInput real engines', () => {
     // a prop even when chips collapse the rendered placeholder attribute).
     expect(await screen.findByRole('textbox', { name: 'Add frameworks' })).toBeInTheDocument();
   });
+  it('modern engine commits a separator paste as ONE batched change (no per-part overwrite)', async () => {
+    const onChange = vi.fn();
+    renderWithEngine(<ModernTagInput value={['one']} onChange={onChange} separator="," />, 'modern');
+
+    const input = await screen.findByRole('textbox');
+    // A three-part paste: each part used to rebuild from the same stale value
+    // prop, so only the LAST part survived and the field lost two tags.
+    fireEvent.change(input, { target: { value: 'two,three,four' } });
+
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenCalledWith(['one', 'two', 'three', 'four']);
+  });
+
+  it('modern engine enforces maxTags across a batched paste, not per stale part', async () => {
+    const onChange = vi.fn();
+    renderWithEngine(
+      <ModernTagInput value={['one']} onChange={onChange} separator="," maxTags={3} />,
+      'modern'
+    );
+
+    const input = await screen.findByRole('textbox');
+    fireEvent.change(input, { target: { value: 'two,three,four' } });
+
+    // The running accumulator stops at the cap; the overflow part is refused
+    // and announced instead of silently landing.
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenCalledWith(['one', 'two', 'three']);
+    expect(await screen.findByRole('status')).toHaveTextContent(/four/);
+  });
+
+  it('modern engine de-duplicates WITHIN a single batched paste', async () => {
+    const onChange = vi.fn();
+    renderWithEngine(<ModernTagInput value={[]} onChange={onChange} separator="," />, 'modern');
+
+    const input = await screen.findByRole('textbox');
+    fireEvent.change(input, { target: { value: 'red,red,blue' } });
+
+    expect(onChange).toHaveBeenCalledWith(['red', 'blue']);
+  });
 });

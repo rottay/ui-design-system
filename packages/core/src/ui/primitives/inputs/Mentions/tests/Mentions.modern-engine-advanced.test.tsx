@@ -49,7 +49,7 @@ describe('Mentions modern advanced coverage', () => {
     expect(list.className).toContain('rottay-mentions__popup--top');
     expect(list.className).toContain('mentions-popup');
 
-    const optionButtons = within(list).getAllByRole('button');
+    const optionButtons = within(list).getAllByRole('option');
     expect(optionButtons[1]).toBeDisabled();
 
     fireEvent.keyDown(input, { key: 'ArrowDown' });
@@ -110,7 +110,7 @@ describe('Mentions modern advanced coverage', () => {
     Object.defineProperty(input, 'selectionStart', { configurable: true, writable: true, value: 3 });
     fireEvent.change(input, { target: { value: '@zz' } });
 
-    const allButtons = await screen.findAllByRole('button');
+    const allButtons = await screen.findAllByRole('option');
     expect(allButtons.map((button) => button.textContent)).toEqual(
       expect.arrayContaining(['Alice', 'Archer', 'Backend'])
     );

@@ -3,13 +3,15 @@ import { describe, expect, it } from 'vitest';
 import { computeRevealDelta } from '../index';
 
 /**
- * Pure geometry of the Segmented reveal.
+ * Pure geometry of the shared scrollport reveal.
  *
  * These assertions are exhaustive precisely BECAUSE they are pure: the delta is
  * the one part of the reveal that can be decided without a layout engine, so it
  * is worth deciding here rather than inside a DOM test that has to simulate one.
- * The DOM wiring is covered in `engines/modern/tests/reveal.test.tsx`; real
- * browser layout is covered by the capture harness, not by jsdom.
+ * The DOM wiring is covered per consumer
+ * (`navigation/Segmented/engines/modern/tests/reveal.test.tsx`,
+ * `navigation/Pagination/tests/Pagination.modern-controls-reveal.test.tsx`);
+ * real browser layout is covered by the capture harness, not by jsdom.
  */
 describe('computeRevealDelta', () => {
   const view = { viewStart: 0, viewEnd: 240 };
