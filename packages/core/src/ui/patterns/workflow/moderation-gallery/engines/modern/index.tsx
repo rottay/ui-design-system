@@ -33,12 +33,13 @@
  * />
  */
 
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { ModerationGalleryProps, ModerationItem, ModerationBulkAction } from '../../contracts';
 import ModernButton from '../../../../../primitives/inputs/Button/engines/modern';
 import ModernCheckbox from '../../../../../primitives/inputs/Checkbox/engines/modern';
 import ModernBadge from '../../../../../primitives/display/Badge/engines/modern';
 import ModernAvatar from '../../../../../primitives/display/Avatar/engines/modern';
+import ModernImage from '../../../../../primitives/display/Image/engines/modern';
 import ModernConfirmDialog from '../../../../../primitives/overlay/ConfirmDialog/engines/modern';
 import { ModernEmptyState } from '../../../../facade';
 import { VisuallyHidden } from '../../../../../primitives/foundation/VisuallyHidden';
@@ -91,6 +92,7 @@ function ModerationCard({
   onToggle,
   onApprove,
   onReject,
+  registerAction,
   t,
 }: {
   item: ModerationItem;
@@ -101,6 +103,7 @@ function ModerationCard({
   onToggle: (id: string) => void;
   onApprove?: (id: string) => void;
   onReject?: (id: string) => void;
+  registerAction: (id: string, node: HTMLButtonElement | HTMLAnchorElement | null) => void;
   t: (key: string, floor: string, params?: Record<string, string | number>) => string;
 }) {
   const uploaded = (() => {
@@ -124,12 +127,18 @@ function ModerationCard({
       role="listitem"
     >
       <div data-part="card-media">
-        <img
-          data-part="card-thumbnail"
-          src={item.thumbnailUrl}
-          alt={t('moderationGallery.mediaAlt', `Media by ${item.uploadedBy}`, { uploader: item.uploadedBy })}
-          loading="lazy"
-        />
+        {/* Governed media frame: a dead `thumbnailUrl` used to surface the
+            browser's broken-image glyph. The Image primitive owns the
+            loading placeholder and the error fallback. */}
+        <span data-part="card-thumbnail">
+          <ModernImage
+            src={item.thumbnailUrl}
+            alt={t('moderationGallery.mediaAlt', `Media by ${item.uploadedBy}`, { uploader: item.uploadedBy })}
+            width="100%"
+            height="100%"
+            objectFit="cover"
+          />
+        </span>
 
         {/* Media type indicator: governed icon + sr label (never chrome-only). */}
         {item.type === 'video' && (
@@ -168,6 +177,9 @@ function ModerationCard({
           <div data-part="card-actions">
             {onApprove && item.status !== 'approved' && (
               <ModernButton
+                ref={(node) => {
+                  registerAction(item.id, node);
+                }}
                 variant="ghost"
                 size="sm"
                 data-part="card-action-button"
@@ -267,17 +279,52 @@ export default function ModernModerationGallery(props: ModerationGalleryProps) {
     [selectedIds, liveIds]
   );
 
+  /* FOCUS POLICY: triaging a card can unmount it, dropping focus to <body>
+     and restarting a keyboard user at the top of the document. The action
+     arms a pending restore; the effect hands focus to the nearest surviving
+     card, or to the grid root once the gallery empties. */
+  const cardActionRefs = useRef(new Map<string, HTMLButtonElement | HTMLAnchorElement>());
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const pendingFocusRestore = useRef<{ id: string; order: string[] } | null>(null);
+
+  const registerAction = useCallback(
+    (id: string, node: HTMLButtonElement | HTMLAnchorElement | null) => {
+      if (node) cardActionRefs.current.set(id, node);
+      else cardActionRefs.current.delete(id);
+    },
+    []
+  );
+
+  const orderedIds = useMemo(() => items.map((item) => item.id), [items]);
+
+  useEffect(() => {
+    const pending = pendingFocusRestore.current;
+    if (!pending || liveIds.has(pending.id)) return;
+    pendingFocusRestore.current = null;
+    const removedAt = pending.order.indexOf(pending.id);
+    const successor = pending.order.slice(removedAt + 1).find((id) => liveIds.has(id));
+    const predecessor = pending.order
+      .slice(0, Math.max(removedAt, 0))
+      .reverse()
+      .find((id) => liveIds.has(id));
+    const target = successor ?? predecessor;
+    const node = target ? cardActionRefs.current.get(target) : undefined;
+    if (node) node.focus();
+    else rootRef.current?.focus();
+  }, [liveIds]);
+
   /** Runs a card action, holding the governed busy state while it settles. */
   const runItemAction = useCallback(
     (id: string, action: 'approve' | 'reject', callback: ((id: string) => void) | undefined) => {
       if (!callback || pendingItem) return;
+      pendingFocusRestore.current = { id, order: orderedIds };
       const result: unknown = callback(id);
       if (isThenable(result)) {
         setPendingItem({ id, action });
         Promise.resolve(result).finally(() => setPendingItem(null));
       }
     },
-    [pendingItem]
+    [pendingItem, orderedIds]
   );
 
   /** Runs a bulk action, clearing the selection once it settles. */
@@ -331,7 +378,14 @@ export default function ModernModerationGallery(props: ModerationGalleryProps) {
 
   if (items.length === 0) {
     return (
-      <div className={rootClassName} data-part="root" data-loading="false" style={style}>
+      <div
+        ref={rootRef}
+        tabIndex={-1}
+        className={rootClassName}
+        data-part="root"
+        data-loading="false"
+        style={style}
+      >
         <div data-part="empty">
           <ModernEmptyState
             title={emptyMessage ?? t('moderationGallery.empty', 'No media items to review')}
@@ -342,7 +396,25 @@ export default function ModernModerationGallery(props: ModerationGalleryProps) {
   }
 
   return (
-    <div className={rootClassName} data-part="root" data-loading="false" style={style}>
+    <div
+      ref={rootRef}
+      tabIndex={-1}
+      className={rootClassName}
+      data-part="root"
+      data-loading="false"
+      style={style}
+    >
+      {/* Selection announcer: a live region must be MOUNTED before its text
+          changes; the bulk count below arrives with its content already set
+          and therefore never announces the first selection. */}
+      <VisuallyHidden data-part="selection-announcer" aria-live="polite">
+        {activeSelection.length > 0
+          ? t('moderationGallery.selectedCount', `${activeSelection.length} selected`, {
+              count: activeSelection.length,
+            })
+          : ''}
+      </VisuallyHidden>
+
       {/* Bulk toolbar appears only while a selection exists. Reject is the
           destructive path: it arms the composed ConfirmDialog instead of
           firing the callback directly. */}
@@ -352,7 +424,7 @@ export default function ModernModerationGallery(props: ModerationGalleryProps) {
           role="region"
           aria-label={t('moderationGallery.bulkRegion', 'Bulk actions')}
         >
-          <span data-part="bulk-count" aria-live="polite">
+          <span data-part="bulk-count">
             {t('moderationGallery.selectedCount', `${activeSelection.length} selected`, {
               count: activeSelection.length,
             })}
@@ -403,6 +475,7 @@ export default function ModernModerationGallery(props: ModerationGalleryProps) {
             onToggle={toggleSelection}
             onApprove={onApprove ? (id) => runItemAction(id, 'approve', onApprove) : undefined}
             onReject={onReject ? (id) => runItemAction(id, 'reject', onReject) : undefined}
+            registerAction={registerAction}
             t={t}
           />
         ))}

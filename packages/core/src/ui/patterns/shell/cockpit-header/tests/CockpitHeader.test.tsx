@@ -249,7 +249,14 @@ describe('PatternCockpitHeader (modern engine)', () => {
 
   it('renders the loading skeleton with skin-owned geometry hooks', async () => {
     const { container } = renderSurface(
-      <PatternCockpitHeader title="Detail" loading />,
+      <PatternCockpitHeader
+        title="Detail"
+        subtitle="Meta"
+        icon={<span />}
+        breadcrumbs={[{ label: 'Home' }]}
+        actions={<button type="button">Save</button>}
+        loading
+      />,
       { engine: 'modern' },
     );
 

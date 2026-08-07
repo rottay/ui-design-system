@@ -185,44 +185,57 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [sticky]);
 
-  /* ---- Loading skeleton ---- */
+  /* ---- Loading skeleton: mirrors the anatomy the caller actually requested
+          (page-shell idiom), so a title-only header does not reserve a
+          breadcrumb/icon/subtitle/action footprint it will never fill and then
+          collapse on hydrate. ---- */
   if (loading) {
     return (
       <div
         className={`ds-pattern-cockpit-header ds-engine-modern ${className ?? ''}`}
         data-part="root"
         data-loading="true"
+        data-has-icon={icon ? 'true' : 'false'}
+        data-has-actions={actions ? 'true' : 'false'}
+        aria-busy="true"
         style={style}
       >
         <div data-part="skeleton-stack">
           {/* Breadcrumb skeleton */}
-          <div data-part="skeleton" data-size="crumb" />
+          {breadcrumbs && breadcrumbs.length > 0 ? (
+            <div data-part="skeleton" data-size="crumb" />
+          ) : null}
           {/* Title row skeleton */}
           <div data-part="skeleton-row">
             <div data-part="skeleton-lead">
-              <div
-                data-part="skeleton"
-                data-size="icon"
-                style={{ '--ds-cockpit-header-skeleton-radius': 'var(--ds-radius-md)' } as React.CSSProperties}
-              />
+              {icon ? (
+                <div
+                  data-part="skeleton"
+                  data-size="icon"
+                  style={{ '--ds-cockpit-header-skeleton-radius': 'var(--ds-radius-md)' } as React.CSSProperties}
+                />
+              ) : null}
               <div data-part="skeleton-column">
+                {eyebrow ? <div data-part="skeleton" data-size="crumb" /> : null}
                 <div data-part="skeleton" data-size="title" />
-                <div data-part="skeleton" data-size="subtitle" />
+                {subtitle ? <div data-part="skeleton" data-size="subtitle" /> : null}
               </div>
             </div>
             {/* Action skeleton */}
-            <div data-part="skeleton-actions">
-              <div
-                data-part="skeleton"
-                data-size="action"
-                style={{ '--ds-cockpit-header-skeleton-radius': 'var(--ds-radius-md)' } as React.CSSProperties}
-              />
-              <div
-                data-part="skeleton"
-                data-size="action"
-                style={{ '--ds-cockpit-header-skeleton-radius': 'var(--ds-radius-md)' } as React.CSSProperties}
-              />
-            </div>
+            {actions ? (
+              <div data-part="skeleton-actions">
+                <div
+                  data-part="skeleton"
+                  data-size="action"
+                  style={{ '--ds-cockpit-header-skeleton-radius': 'var(--ds-radius-md)' } as React.CSSProperties}
+                />
+                <div
+                  data-part="skeleton"
+                  data-size="action"
+                  style={{ '--ds-cockpit-header-skeleton-radius': 'var(--ds-radius-md)' } as React.CSSProperties}
+                />
+              </div>
+            ) : null}
           </div>
         </div>
       </div>

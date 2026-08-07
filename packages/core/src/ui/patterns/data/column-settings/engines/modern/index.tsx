@@ -23,7 +23,7 @@
  * @package @rottay/design-system
  */
 
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 
 import {
   Button,
@@ -32,13 +32,15 @@ import {
   Input,
   Tooltip,
 } from '../../../../../primitives';
+import { VisuallyHidden } from '../../../../../primitives/foundation/VisuallyHidden';
 import {
-  GripVerticalIcon as GripVertical,
   PinIcon as Pin,
   PinOffIcon as PinOff,
   RotateCcwIcon as RotateCcw,
   SearchIcon as Search,
 } from '../../../../../../graphics/icons';
+import { NavigationUpIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-up';
+import { NavigationDownIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-down';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 import type { ColumnSettingsProps, ColumnSettingItem } from '../../contracts';
@@ -60,6 +62,7 @@ function ColumnRow({
   onToggleVisibility,
   onTogglePin,
   onMove,
+  registerMoveButton,
   labels,
 }: {
   column: ColumnSettingItem;
@@ -73,6 +76,11 @@ function ColumnRow({
   onToggleVisibility: (key: string) => void;
   onTogglePin: (key: string, side: 'left' | 'right' | null) => void;
   onMove: (fromIndex: number, toIndex: number) => void;
+  registerMoveButton: (
+    key: string,
+    direction: 'up' | 'down',
+    node: HTMLButtonElement | HTMLAnchorElement | null,
+  ) => void;
   labels: Record<string, string>;
 }) {
   const pinSide = isPinnedLeft ? 'left' : isPinnedRight ? 'right' : null;
@@ -130,17 +138,39 @@ function ColumnRow({
         aria-label={`${labels.toggleVisibility}: ${columnName}`}
       />
 
-      {/* Keyboard-sortable grip: composed from the public Button primitive,
-          never a decorative or locally reconstructed control. */}
+      {/* Reorder pair: explicit move-up / move-down Buttons. The former single
+          grip carried a drag icon but no pointer or drag handler at all, so
+          pointer and touch users could not reorder. Two real buttons serve
+          every input class; the arrow/Home/End keyboard contract rides on. */}
       <Button
+        ref={(node) => {
+          registerMoveButton(column.key, 'up', node);
+        }}
         variant="ghost"
         size="sm"
         data-part="grip"
-        disabled={reorderDisabled}
-        aria-label={`${labels.reorder} ${columnName}`}
+        data-direction="up"
+        disabled={reorderDisabled || index === 0}
+        aria-label={`${labels.moveUp}: ${columnName}`}
+        onClick={() => onMove(index, index - 1)}
         onKeyDown={handleGripKeyDown}
       >
-        <GripVertical size={14} />
+        <NavigationUpIcon decorative size={14} />
+      </Button>
+      <Button
+        ref={(node) => {
+          registerMoveButton(column.key, 'down', node);
+        }}
+        variant="ghost"
+        size="sm"
+        data-part="grip"
+        data-direction="down"
+        disabled={reorderDisabled || index === count - 1}
+        aria-label={`${labels.moveDown}: ${columnName}`}
+        onClick={() => onMove(index, index + 1)}
+        onKeyDown={handleGripKeyDown}
+      >
+        <NavigationDownIcon decorative size={14} />
       </Button>
 
       {/* Column name (ellipsis truncation keeps the native tooltip reveal) */}
@@ -212,7 +242,8 @@ export default function ModernColumnSettingsDropdown({
     searchPlaceholder: tOr('columnSettings.searchPlaceholder', 'Find column...'),
     emptySearch: tOr('columnSettings.emptySearch', 'No columns match your search'),
     reset: tOr('columnSettings.reset', 'Reset Layout'),
-    reorder: tOr('columnSettings.reorder', 'Reorder column'),
+    moveUp: tOr('columnSettings.moveUp', 'Move column up'),
+    moveDown: tOr('columnSettings.moveDown', 'Move column down'),
     toggleVisibility: tOr('columnSettings.toggleVisibility', 'Toggle visibility'),
     pinLeft: tOr('columnSettings.pinLeft', 'Pin left'),
     pinRight: tOr('columnSettings.pinRight', 'Pin right'),
@@ -249,15 +280,66 @@ export default function ModernColumnSettingsDropdown({
   const totalCount = allColumns.length;
   const reorderEnabled = !searchQuery.trim();
 
-  /** Apply a keyboard move to the current ordered keys and emit the new order. */
+  /* A move used to be silent: nothing told a screen-reader user where the
+     column landed. The announcer stays mounted (and empty) so its first
+     change is spoken, and a boundary move hands focus to the surviving
+     direction instead of dropping it on a newly disabled button. */
+  const [moveAnnouncement, setMoveAnnouncement] = useState('');
+  const moveButtonRefs = useRef(
+    new Map<string, HTMLButtonElement | HTMLAnchorElement>(),
+  );
+  const pendingMoveFocus = useRef<{ key: string; direction: 'up' | 'down' } | null>(null);
+
+  const registerMoveButton = useCallback(
+    (
+      key: string,
+      direction: 'up' | 'down',
+      node: HTMLButtonElement | HTMLAnchorElement | null,
+    ) => {
+      const id = `${key}|${direction}`;
+      if (node) moveButtonRefs.current.set(id, node);
+      else moveButtonRefs.current.delete(id);
+    },
+    [],
+  );
+
+  useEffect(() => {
+    const pending = pendingMoveFocus.current;
+    if (!pending) return;
+    pendingMoveFocus.current = null;
+    const opposite = pending.direction === 'up' ? 'down' : 'up';
+    const primary = moveButtonRefs.current.get(`${pending.key}|${pending.direction}`);
+    const target =
+      primary && !(primary as HTMLButtonElement).disabled
+        ? primary
+        : moveButtonRefs.current.get(`${pending.key}|${opposite}`);
+    target?.focus();
+  }, [columnOrder]);
+
+  /** Apply a move to the current ordered keys, emit it, and announce it. */
   const handleMove = useCallback(
     (fromIndex: number, toIndex: number) => {
+      if (toIndex < 0 || toIndex >= sortedColumns.length || toIndex === fromIndex) return;
       const keys = sortedColumns.map((col) => col.key);
       const [moved] = keys.splice(fromIndex, 1);
       keys.splice(toIndex, 0, moved);
+      const movedColumn = sortedColumns[fromIndex];
+      const movedName =
+        typeof movedColumn.header === 'string' ? movedColumn.header : movedColumn.key;
+      pendingMoveFocus.current = {
+        key: moved,
+        direction: toIndex < fromIndex ? 'up' : 'down',
+      };
+      setMoveAnnouncement(
+        i18n?.tOr(
+          'columnSettings.movedAnnouncement',
+          `${movedName} moved to position ${toIndex + 1} of ${keys.length}`,
+          { column: movedName, position: toIndex + 1, total: keys.length },
+        ) ?? `${movedName} moved to position ${toIndex + 1} of ${keys.length}`,
+      );
       onReorder(keys);
     },
-    [sortedColumns, onReorder],
+    [sortedColumns, onReorder, i18n],
   );
 
   return (
@@ -266,6 +348,12 @@ export default function ModernColumnSettingsDropdown({
       data-part="root"
       style={style}
     >
+      {/* Reorder announcer: mounted (and empty) before any move so the first
+          announcement is not swallowed by the region's own arrival. */}
+      <VisuallyHidden data-part="move-announcer" aria-live="polite">
+        {moveAnnouncement}
+      </VisuallyHidden>
+
       {/* Header: title + visible counter (tabular-nums owned by the skin) */}
       <div data-part="header">
         <span data-part="title">
@@ -308,6 +396,7 @@ export default function ModernColumnSettingsDropdown({
               onToggleVisibility={onToggleVisibility}
               onTogglePin={onTogglePin}
               onMove={handleMove}
+              registerMoveButton={registerMoveButton}
               labels={labels}
             />
           ))

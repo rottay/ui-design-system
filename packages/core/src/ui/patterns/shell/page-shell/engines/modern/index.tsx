@@ -54,6 +54,22 @@ function readDirectionAt(node: Element): 'ltr' | 'rtl' {
 }
 
 /* ------------------------------------------------------------------ */
+/* maxWidth channel                                                     */
+/* ------------------------------------------------------------------ */
+
+/**
+ * React never appends a unit to a custom-property value, so a numeric
+ * `maxWidth` reached the skin as the unitless `max-width: 1200` the browser
+ * drops. Finite numbers gain the CSS pixel unit; strings pass through.
+ */
+function resolveMaxWidth(maxWidth: number | string | undefined): string | undefined {
+  if (typeof maxWidth === 'number') {
+    return Number.isFinite(maxWidth) ? `${maxWidth}px` : undefined;
+  }
+  return maxWidth;
+}
+
+/* ------------------------------------------------------------------ */
 /* BreadcrumbLink                                                      */
 /* ------------------------------------------------------------------ */
 
@@ -178,7 +194,7 @@ function BackButton({
         onClick={onClick}
         aria-label={ariaLabel ?? label ?? fallbackLabel}
         icon={(
-          <NavigationBackIcon size={15} decorative />
+          <NavigationBackIcon size="sm" decorative />
         )}
       >
         {label ?? <span className="ds-sr-only">{ariaLabel ?? fallbackLabel}</span>}
@@ -286,6 +302,8 @@ export default function ModernPageShell(props: PageShellProps) {
   const backFallbackLabel = i18nCommon?.tOr('back', 'Back') ?? 'Back';
   const pageTabsLabel =
     i18nComponents?.tOr('pageShell.tabs.label', 'Page tabs') ?? 'Page tabs';
+  const loadingLabel =
+    i18nComponents?.tOr('pageShell.loading', 'Loading page') ?? 'Loading page';
 
   /* APG tab/tabpanel pairing: stable per-instance ids (useId), so concurrent
      shells never collide. The shell renders ONE tabpanel whose labelledby
@@ -308,11 +326,23 @@ export default function ModernPageShell(props: PageShellProps) {
         data-loading="true"
         aria-busy="true"
         style={{
-          '--ds-page-shell-max-width': maxWidth,
+          '--ds-page-shell-max-width': resolveMaxWidth(maxWidth),
           ...style,
         } as React.CSSProperties}
       >
-        <div className="ds-pattern-page-shell__loading-skeleton" data-part="skeleton-group">
+        {/* The skeleton blocks are pure geometry; AT gets a spoken status
+            instead of a wander through decorative divs. */}
+        <span className="ds-sr-only" role="status">{loadingLabel}</span>
+        <div
+          className="ds-pattern-page-shell__loading-skeleton"
+          data-part="skeleton-group"
+          data-hide-header={hideHeader ? 'true' : 'false'}
+          aria-hidden="true"
+        >
+          {/* `hideHeader` means the loaded render has no header at all, so
+              painting header chrome here guarantees a jump on hydrate. */}
+          {hideHeader ? null : (
+          <>
           {/* Breadcrumb skeleton */}
           {breadcrumbs && breadcrumbs.length > 0 && (
             <div data-part="skeleton" data-block="breadcrumb" />
@@ -346,22 +376,28 @@ export default function ModernPageShell(props: PageShellProps) {
               </div>
             ) : null}
           </div>
-          {/* Tab strip skeleton: one block per declared tab (capped at four)
-              reserves the strip's final width and row height. */}
+          {/* Tab strip skeleton: one block per declared tab reserves the
+              strip's final width and row height. */}
           {tabs && tabs.length > 0 && (
             <div data-part="skeleton-tabs-row">
-              {tabs.slice(0, 4).map((tab) => (
+              {tabs.map((tab) => (
                 <div key={`skeleton-tab-${tab.key}`} data-part="skeleton" data-block="tab" />
               ))}
             </div>
+          )}
+          </>
           )}
         </div>
       </div>
     );
   }
 
-  /* Default to the first tab when no activeTab is explicitly set */
-  const activeTabKey = activeTab ?? tabs?.[0]?.key;
+  /* Default to the first tab when no activeTab is explicitly set. An
+     activeTab naming a tab that does not exist used to render an empty
+     content area and point aria-labelledby at an id nothing owns. */
+  const activeTabKey =
+    (activeTab && tabs?.some((tab) => tab.key === activeTab) ? activeTab : undefined) ??
+    tabs?.[0]?.key;
 
   const hasTabs = Boolean(tabs && tabs.length > 0);
   /* The tablist lives inside the header, so `hideHeader` removes it. Without
@@ -409,7 +445,7 @@ export default function ModernPageShell(props: PageShellProps) {
         /* The caller's max-width rides a quoted custom-property channel; the
            skin applies it (with margin-inline: auto), so the engine carries
            no layout inline. */
-        '--ds-page-shell-max-width': maxWidth,
+        '--ds-page-shell-max-width': resolveMaxWidth(maxWidth),
         ...style,
       } as React.CSSProperties}
     >
@@ -441,7 +477,7 @@ export default function ModernPageShell(props: PageShellProps) {
                       data-part="separator"
                       aria-hidden="true"
                     >
-                      <NavigationForwardIcon size={11} decorative />
+                      <NavigationForwardIcon size="xs" decorative />
                     </span>
                   )}
                   <BreadcrumbItem

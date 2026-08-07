@@ -20,19 +20,22 @@ function items(uploaders: string[]): ModerationItem[] {
 
 describe('Modern ModerationGallery — selection against live data', () => {
   it('drops a selected card from the count once the consumer removes it', () => {
-    const { rerender } = render(
+    const { container, rerender } = render(
       <ModernModerationGallery items={items(['ada', 'bob'])} selectable onBulkAction={vi.fn()} />,
     );
+    // Scoped to the VISIBLE count: the always-mounted polite announcer carries
+    // the same string, so an unscoped text query now matches both.
+    const visibleCount = () => container.querySelector('[data-part="bulk-count"]');
 
     fireEvent.click(screen.getByRole('checkbox', { name: 'Select media by ada' }));
     fireEvent.click(screen.getByRole('checkbox', { name: 'Select media by bob' }));
-    expect(screen.getByText('2 selected')).toBeInTheDocument();
+    expect(visibleCount()).toHaveTextContent('2 selected');
 
     rerender(
       <ModernModerationGallery items={items(['bob'])} selectable onBulkAction={vi.fn()} />,
     );
 
-    expect(screen.getByText('1 selected')).toBeInTheDocument();
+    expect(visibleCount()).toHaveTextContent('1 selected');
   });
 
   it('never bulk-submits an id that left the data', () => {

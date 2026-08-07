@@ -31,11 +31,12 @@
  * />
  */
 
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { ApprovalInboxProps, ApprovalItem, ApprovalGroup } from '../../contracts';
 import ModernButton from '../../../../../primitives/inputs/Button/engines/modern';
 import ModernCheckbox from '../../../../../primitives/inputs/Checkbox/engines/modern';
 import ModernBadge from '../../../../../primitives/display/Badge/engines/modern';
+import { VisuallyHidden } from '../../../../../primitives/foundation/VisuallyHidden';
 import { ModernEmptyState } from '../../../../facade';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ActionConfirmIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-confirm';
@@ -102,6 +103,7 @@ function InboxItemRow({
   onToggle,
   onApprove,
   onReject,
+  registerAction,
   t,
 }: {
   item: ApprovalItem;
@@ -112,6 +114,7 @@ function InboxItemRow({
   onToggle: (id: string) => void;
   onApprove?: (id: string) => void;
   onReject?: (id: string) => void;
+  registerAction: (id: string, node: HTMLButtonElement | HTMLAnchorElement | null) => void;
   t: (key: string, floor: string, params?: Record<string, string | number>) => string;
 }) {
   const slaUrgency = getSlaUrgency(item.slaDeadline);
@@ -199,6 +202,9 @@ function InboxItemRow({
         <div data-part="item-actions">
           {onApprove && (
             <ModernButton
+              ref={(node) => {
+                registerAction(item.id, node);
+              }}
               variant="ghost"
               size="sm"
               data-part="item-action-button"
@@ -215,6 +221,13 @@ function InboxItemRow({
           )}
           {onReject && (
             <ModernButton
+              ref={
+                onApprove
+                  ? undefined
+                  : (node) => {
+                      registerAction(item.id, node);
+                    }
+              }
               variant="ghost"
               size="sm"
               data-part="item-action-button"
@@ -282,17 +295,56 @@ export default function ModernApprovalInbox(props: ApprovalInboxProps) {
     [selectedIds, liveIds]
   );
 
+  /* FOCUS POLICY: acting on a row can unmount it, which drops focus to
+     <body> and restarts a keyboard user at the top of the document. The
+     action arms a pending restore; an effect hands focus to the nearest
+     surviving row once the consumer's tree settles, or to the list root when
+     the inbox empties. */
+  const rowActionRefs = useRef(new Map<string, HTMLButtonElement | HTMLAnchorElement>());
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const pendingFocusRestore = useRef<{ id: string; order: string[] } | null>(null);
+
+  const registerAction = useCallback(
+    (id: string, node: HTMLButtonElement | HTMLAnchorElement | null) => {
+      if (node) rowActionRefs.current.set(id, node);
+      else rowActionRefs.current.delete(id);
+    },
+    []
+  );
+
+  const orderedIds = useMemo(
+    () => groups.flatMap((group: ApprovalGroup) => group.items.map((item) => item.id)),
+    [groups]
+  );
+
+  useEffect(() => {
+    const pending = pendingFocusRestore.current;
+    if (!pending || liveIds.has(pending.id)) return;
+    pendingFocusRestore.current = null;
+    const removedAt = pending.order.indexOf(pending.id);
+    const successor = pending.order.slice(removedAt + 1).find((id) => liveIds.has(id));
+    const predecessor = pending.order
+      .slice(0, Math.max(removedAt, 0))
+      .reverse()
+      .find((id) => liveIds.has(id));
+    const target = successor ?? predecessor;
+    const node = target ? rowActionRefs.current.get(target) : undefined;
+    if (node) node.focus();
+    else rootRef.current?.focus();
+  }, [liveIds]);
+
   /** Runs an item action, holding the governed busy state while it settles. */
   const runItemAction = useCallback(
     (id: string, action: 'approve' | 'reject', callback: ((id: string) => void) | undefined) => {
       if (!callback || pendingItem) return;
+      pendingFocusRestore.current = { id, order: orderedIds };
       const result: unknown = callback(id);
       if (isThenable(result)) {
         setPendingItem({ id, action });
         Promise.resolve(result).finally(() => setPendingItem(null));
       }
     },
-    [pendingItem]
+    [pendingItem, orderedIds]
   );
 
   /** Runs the batch approve, clearing the selection once it settles. */
@@ -352,7 +404,14 @@ export default function ModernApprovalInbox(props: ApprovalInboxProps) {
 
   if (totalItems === 0) {
     return (
-      <div className={rootClassName} data-part="root" data-loading="false" style={style}>
+      <div
+        ref={rootRef}
+        tabIndex={-1}
+        className={rootClassName}
+        data-part="root"
+        data-loading="false"
+        style={style}
+      >
         <div data-part="empty">
           <ModernEmptyState
             title={emptyMessage ?? t('approvalInbox.empty', 'No pending approvals')}
@@ -363,7 +422,26 @@ export default function ModernApprovalInbox(props: ApprovalInboxProps) {
   }
 
   return (
-    <div className={rootClassName} data-part="root" data-loading="false" style={style}>
+    <div
+      ref={rootRef}
+      tabIndex={-1}
+      className={rootClassName}
+      data-part="root"
+      data-loading="false"
+      style={style}
+    >
+      {/* Selection announcer: a live region has to be MOUNTED before its text
+          changes, so it stays in the tree and empties at zero — the toolbar
+          below mounts with its content and can never announce the first
+          selection on its own. */}
+      <VisuallyHidden data-part="selection-announcer" aria-live="polite">
+        {activeSelection.length > 0
+          ? t('approvalInbox.selectedCount', `${activeSelection.length} selected`, {
+              count: activeSelection.length,
+            })
+          : ''}
+      </VisuallyHidden>
+
       {/* Batch toolbar appears only while a selection exists. */}
       {onBatchApprove && activeSelection.length > 0 && (
         <div
@@ -371,7 +449,7 @@ export default function ModernApprovalInbox(props: ApprovalInboxProps) {
           role="region"
           aria-label={t('approvalInbox.batchRegion', 'Batch actions')}
         >
-          <span data-part="batch-count" aria-live="polite">
+          <span data-part="batch-count">
             {t('approvalInbox.selectedCount', `${activeSelection.length} selected`, {
               count: activeSelection.length,
             })}
@@ -429,6 +507,7 @@ export default function ModernApprovalInbox(props: ApprovalInboxProps) {
                   onToggle={toggleSelection}
                   onApprove={onApprove ? (id) => runItemAction(id, 'approve', onApprove) : undefined}
                   onReject={onReject ? (id) => runItemAction(id, 'reject', onReject) : undefined}
+                  registerAction={registerAction}
                   t={t}
                 />
               ))}

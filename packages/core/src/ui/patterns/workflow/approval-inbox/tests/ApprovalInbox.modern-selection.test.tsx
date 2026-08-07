@@ -22,18 +22,21 @@ function groups(ids: string[]): ApprovalGroup[] {
 
 describe('Modern ApprovalInbox — selection against live data', () => {
   it('drops a selected row from the count once the consumer removes it', () => {
-    const { rerender } = render(
+    const { container, rerender } = render(
       <ModernApprovalInbox groups={groups(['a', 'b'])} onBatchApprove={vi.fn()} />,
     );
+    // Scoped to the VISIBLE count: the always-mounted polite announcer carries
+    // the same string, so an unscoped text query now matches both.
+    const visibleCount = () => container.querySelector('[data-part="batch-count"]');
 
     fireEvent.click(screen.getByRole('checkbox', { name: 'Select Invoice A' }));
     fireEvent.click(screen.getByRole('checkbox', { name: 'Select Invoice B' }));
-    expect(screen.getByText('2 selected')).toBeInTheDocument();
+    expect(visibleCount()).toHaveTextContent('2 selected');
 
     // The approved row leaves the data; the toolbar must stop counting it.
     rerender(<ModernApprovalInbox groups={groups(['b'])} onBatchApprove={vi.fn()} />);
 
-    expect(screen.getByText('1 selected')).toBeInTheDocument();
+    expect(visibleCount()).toHaveTextContent('1 selected');
   });
 
   it('never batch-submits an id that left the data', () => {
