@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { screen } from '@testing-library/react';
 
 import { renderWithEngine } from '../../../../../tooling/testing/helpers/engine';
-import { PresenceBar } from '..';
+import { PresenceBar, PresenceTypingIndicator } from '..';
 
 const USERS = [
   { id: 'u1', name: 'Alice Moreau', avatar: '/alice.jpg' },
@@ -55,5 +55,40 @@ describe('PresenceBar composes the Avatar primitive', () => {
     const badge = container.querySelector('[data-part="overflow-badge"]') as HTMLElement;
     expect(badge.style.inlineSize).toBe('calc(var(--ds-avatar-md-size) + 4px)');
     expect(badge.style.marginInlineStart).toBe('calc(var(--ds-avatar-md-size) * -0.3)');
+  });
+});
+
+describe('PresenceTypingIndicator keeps its live region mounted', () => {
+  it('exposes an empty polite region while nobody is typing', async () => {
+    const { container } = renderWithEngine(<PresenceTypingIndicator users={[]} />, 'modern');
+
+    // Before: the component returned null at zero users, so the role=status
+    // region was inserted in the SAME tick as its first content — the
+    // announcement AT relies on is dropped when the region is not pre-existing.
+    const region = await screen.findByRole('status');
+    expect(region).toHaveAttribute('aria-live', 'polite');
+    expect(region.textContent).toBe('');
+
+    // Idle means idle: no dots loop and no orphaned label behind the region.
+    expect(container.querySelector('[data-part="typing-dot"]')).toBeNull();
+    expect(container.querySelector('[data-part="label"]')).toBeNull();
+  });
+
+  it('mutates the SAME region node when typing starts and stops', async () => {
+    const { container, rerender } = renderWithEngine(
+      <PresenceTypingIndicator users={[]} />,
+      'modern',
+    );
+    const region = await screen.findByRole('status');
+
+    rerender(<PresenceTypingIndicator users={[{ name: 'Alice Moreau' }]} />);
+    // Node identity is the contract: a re-created region announces nothing.
+    expect(screen.getByRole('status')).toBe(region);
+    expect(region.textContent).toContain('Alice Moreau');
+    expect(container.querySelectorAll('[data-part="typing-dot"]')).toHaveLength(3);
+
+    rerender(<PresenceTypingIndicator users={[]} />);
+    expect(screen.getByRole('status')).toBe(region);
+    expect(region.textContent).toBe('');
   });
 });

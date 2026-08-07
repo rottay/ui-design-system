@@ -271,15 +271,14 @@ export function PresenceBar({
 export function PresenceTypingIndicator({
   users,
   maxNames = 2,
-}: PresenceTypingIndicatorProps): React.ReactElement | null {
+}: PresenceTypingIndicatorProps): React.ReactElement {
   // Optional channel with an English floor: renders standalone (no provider)
   // without crashing and never echoes a raw key.
   const i18n = useOptionalTranslation('components');
-  if (users.length === 0) return null;
+  const isTyping = users.length > 0;
 
-  const label = buildTypingLabel(users, maxNames, (key, floor, params) =>
-    i18n?.tOr(key, floor, params) ?? floor, i18n?.locale);
-
+  // The live region OUTLIVES the idle gaps: a role=status inserted in the same
+  // tick as its first content is not announced, so unmounting at 0 users lost it.
   return (
     <Box
       className="ds-presence-typing-indicator"
@@ -287,16 +286,23 @@ export function PresenceTypingIndicator({
       role="status"
       aria-live="polite"
     >
-      {/* Geometry + motion are skin-owned: the dots bounce on the
-          private `--_ds-presence-dot-duration` channel with an
-          nth-child stagger and hold static under `prefers-reduced-motion`
-          (the role=status label keeps the state comprehensible). */}
-      <Box data-part="dots" aria-hidden="true">
-        {[0, 1, 2].map((index) => (
-          <Box key={index} data-part="typing-dot" />
-        ))}
-      </Box>
-      <Text data-part="label">{label}</Text>
+      {isTyping && (
+        <>
+          {/* Geometry + motion are skin-owned: the dots bounce on the
+              private `--_ds-presence-dot-duration` channel with an
+              nth-child stagger and hold static under `prefers-reduced-motion`
+              (the role=status label keeps the state comprehensible). */}
+          <Box data-part="dots" aria-hidden="true">
+            {[0, 1, 2].map((index) => (
+              <Box key={index} data-part="typing-dot" />
+            ))}
+          </Box>
+          <Text data-part="label">
+            {buildTypingLabel(users, maxNames, (key, floor, params) =>
+              i18n?.tOr(key, floor, params) ?? floor, i18n?.locale)}
+          </Text>
+        </>
+      )}
     </Box>
   );
 }

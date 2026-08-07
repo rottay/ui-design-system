@@ -524,13 +524,24 @@ function SelectField<T extends string>({
 }
 
 function EditorSection({ title, children }: { title: string; children: React.ReactNode }): React.ReactElement {
+  // The section title was decorative text: assistive tech read fifteen bare
+  // color fields with no owning group.
+  const titleId = `${useId().replace(/:/g, '')}-title`;
   return (
     <Box
       className="ds-pattern-brand-studio__section"
       data-part="section"
+      role="group"
+      aria-labelledby={titleId}
     >
       <Stack spacing="sm">
-        <Text className="ds-pattern-brand-studio__section-title" data-part="section-title" size="sm" weight="semibold">
+        <Text
+          className="ds-pattern-brand-studio__section-title"
+          data-part="section-title"
+          id={titleId}
+          size="sm"
+          weight="semibold"
+        >
           {title}
         </Text>
         <Box className="ds-pattern-brand-studio__editor-grid" data-part="editor-grid">{children}</Box>
@@ -817,6 +828,40 @@ function draftControls(draft: BrandTheme): BrandControlsChrome {
   const controls = chrome.controls ?? {};
   chrome.controls = controls;
   return controls;
+}
+
+/**
+ * Contract-required leaves: they stay present (as the cleared string) instead
+ * of being dropped, so a cleared control never emits a structurally invalid
+ * theme.
+ */
+const REQUIRED_BRAND_THEME_KEYS: ReadonlySet<string> = new Set(['id', 'name', 'primaryColor']);
+
+/**
+ * Drop cleared leaves — and the groups that become empty because of them —
+ * from an edited draft.
+ *
+ * Every control writes into a cloned draft, so clearing a field used to leave
+ * `''` behind (and an empty `{ input: {} }` group above it). The BrandTheme
+ * compiler skips falsy values, so the preview looked restored while the emitted
+ * document had permanently diverged from the untouched default: it could no
+ * longer deep-equal it, and `brandThemeToTenantAppearanceAdvanced` projects
+ * `chrome` verbatim, carrying the empty string into the DB-bound appearance.
+ * Pruning makes clearing the exact inverse of setting on both paths.
+ */
+function pruneClearedFields(node: object): void {
+  const entries: Array<[string, unknown]> = Object.entries(node);
+  for (const [key, value] of entries) {
+    if (typeof value === 'string') {
+      if (value.trim() === '' && !REQUIRED_BRAND_THEME_KEYS.has(key)) {
+        Reflect.deleteProperty(node, key);
+      }
+      continue;
+    }
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) continue;
+    pruneClearedFields(value);
+    if (Object.keys(value).length === 0) Reflect.deleteProperty(node, key);
+  }
 }
 
 function BrandThemeEditor({
@@ -1371,6 +1416,7 @@ export function PatternBrandStudio({
     (mutate: (draft: BrandTheme) => void) => {
       const draft = cloneBrandTheme(theme);
       mutate(draft);
+      pruneClearedFields(draft);
       onChange?.(draft);
     },
     [theme, onChange]
@@ -1487,8 +1533,15 @@ export function PatternBrandStudio({
                   {t('brandStudio.hostile.run', 'Run check')}
                 </Button>
               </Flex>
+              {/* On-demand result: announced, or a keyboard user who pressed
+                  the button never learns the check produced anything. */}
               {hostileReports ? (
-                <Stack spacing="sm">
+                <Stack
+                  className="ds-pattern-brand-studio__action-result"
+                  data-part="action-result"
+                  role="status"
+                  spacing="sm"
+                >
                   {hostileReports.map((report) => (
                     <ContrastReportView key={report.surface} report={report} />
                   ))}

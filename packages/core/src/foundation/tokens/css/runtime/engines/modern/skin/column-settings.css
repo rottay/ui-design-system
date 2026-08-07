@@ -22,6 +22,7 @@
 
 /* ---- root ---- */
 .ds-column-settings.ds-column-settings--modern[data-part='root'] {
+  container: ds-column-settings / inline-size;
   inline-size: 100%;
   min-inline-size: 0;
   color: var(--ds-color-text-primary);
@@ -94,7 +95,9 @@
   );
 }
 
-/* ---- grip: persistent affordance (visible at rest), keyboard-sortable ---- */
+/* ---- grip: persistent affordance (visible at rest), keyboard-sortable.
+        The cursor is `pointer`: these are move-up/move-down buttons, and no
+        drag gesture exists to justify a grab/grabbing hand. ---- */
 .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip'] {
   display: inline-flex;
   flex: 0 0 auto;
@@ -105,7 +108,7 @@
   border-radius: var(--ds-radius-sm);
   background: transparent;
   color: var(--ds-color-text-muted);
-  cursor: grab;
+  cursor: pointer;
   opacity: 0.5;
   transition:
     color var(--ds-column-settings-motion-duration, var(--ds-motion-fast))
@@ -120,7 +123,6 @@
   }
 }
 .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip']:active:not(:disabled) {
-  cursor: grabbing;
   color: var(--ds-color-text-primary);
   opacity: 1;
 }
@@ -202,6 +204,21 @@
   .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip'] {
     min-inline-size: 44px;
     min-block-size: 44px;
+  }
+}
+
+/* ---- narrow container: five controls plus the name cannot share one line in a
+        narrow panel (each control holds the 44px floor under a coarse pointer),
+        so the column name takes its own full-width line instead of being
+        ellipsed down to a couple of characters. ---- */
+@container ds-column-settings (max-width: 20rem) {
+  .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='row'] {
+    flex-wrap: wrap;
+  }
+
+  .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='label'] {
+    order: 1;
+    flex-basis: 100%;
   }
 }
 
