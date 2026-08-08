@@ -31,9 +31,10 @@
  * />
  */
 
-import React, { useCallback, useId, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useId, useRef, useState } from 'react';
 import type { FileManagerProps, FileItem, FileSystemItem } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { formatDate as formatDateIntl, formatFileSize } from '@/foundation/i18n/runtime/formatting';
 import { LayoutGridIcon } from '@/graphics/icons/presentation/semantic/generated/roles/layout-grid';
 import { LayoutListIcon } from '@/graphics/icons/presentation/semantic/generated/roles/layout-list';
 import { ContentFolderIcon } from '@/graphics/icons/presentation/semantic/generated/roles/content-folder';
@@ -44,19 +45,27 @@ import ModernSpinner from '../../../../../primitives/feedback/Spinner/engines/mo
 import ModernEmpty from '../../../../../primitives/display/Empty/engines/modern';
 import ModernBreadcrumb from '../../../../../primitives/navigation/Breadcrumb/engines/modern';
 
+/** Without a provider `tOr` returns the fallback verbatim, so `{name}`
+    would otherwise reach accessible names as literal braces. */
+function fillPlaceholders(template: string, params?: Record<string, string | number>): string {
+  if (!params) return template;
+  return template.replace(/\{(\w+)\}/g, (match, name: string) =>
+    Object.prototype.hasOwnProperty.call(params, name) ? String(params[name]) : match
+  );
+}
+
 /** Converts raw byte count to a human-friendly size string (B/KB/MB/GB). */
-function formatSize(bytes?: number): string {
-  if (bytes == null) return '--';
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  if (bytes < 1024 * 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-  return `${(bytes / (1024 * 1024 * 1024)).toFixed(1)} GB`;
+function formatSize(bytes: number | undefined, locale: string): string {
+  if (bytes == null || !Number.isFinite(bytes) || bytes < 0) return '--';
+  return formatFileSize(bytes, locale, bytes < 1024 ? 0 : 1);
 }
 
 /** Formats an ISO date string to a short locale-aware date (e.g. "Mar 15, 2026"). */
-function formatDate(date?: string): string {
+function formatDate(date: string | undefined, locale: string): string {
   if (!date) return '--';
-  return new Date(date).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+  const parsed = new Date(date);
+  if (Number.isNaN(parsed.getTime())) return '--';
+  return formatDateIntl(parsed, locale, { year: 'numeric', month: 'short', day: 'numeric' });
 }
 
 /** Resolves the semantic kind channel the skin paints icons and rows with. */
@@ -88,7 +97,8 @@ export default function ModernFileManager(props: FileManagerProps) {
   // (no I18nProvider) without crashing, and never echoes a raw key.
   const i18n = useOptionalTranslation('components');
   const tOr = (key: string, floor: string, params?: Record<string, string | number>): string =>
-    i18n?.tOr(key, floor, params) ?? floor;
+    i18n?.tOr(key, floor, params) ?? fillPlaceholders(floor, params);
+  const localeTag = i18n?.locale ?? 'en-US';
 
   const {
     files,
@@ -177,13 +187,49 @@ export default function ModernFileManager(props: FileManagerProps) {
     setIsDragOver(false);
   }, []);
 
-  // Grid cards are action surfaces: Enter/Space mirrors the click contract so
-  // keyboard users can navigate folders and toggle selection.
-  const handleGridCardKeyDown = useCallback((event: React.KeyboardEvent, item: FileSystemItem) => {
-    if (event.key !== 'Enter' && event.key !== ' ') return;
+  // The grid holds ONE roving tab stop; arrows walk the cards so a large
+  // folder costs a single Tab press.
+  const [activeCardIndex, setActiveCardIndex] = useState(0);
+  const gridCardRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const pendingCardFocus = useRef<number | null>(null);
+
+  useEffect(() => {
+    const pending = pendingCardFocus.current;
+    if (pending == null) return;
+    pendingCardFocus.current = null;
+    gridCardRefs.current[pending]?.focus();
+  }, [activeCardIndex]);
+
+  // Enter/Space mirrors the click contract; inline arrows follow the writing
+  // direction so the mirrored grid stays keyboard-honest under RTL.
+  const handleGridCardKeyDown = useCallback((
+    event: React.KeyboardEvent<HTMLDivElement>,
+    item: FileSystemItem,
+    index: number,
+    count: number,
+  ) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      if (item.type === 'folder') onNavigate?.(item.id);
+      else handleSelect(item.id);
+      return;
+    }
+
+    const isRtl = typeof window !== 'undefined'
+      && window.getComputedStyle(event.currentTarget).direction === 'rtl';
+    const forward = isRtl ? 'ArrowLeft' : 'ArrowRight';
+    const backward = isRtl ? 'ArrowRight' : 'ArrowLeft';
+
+    let next: number | undefined;
+    if (event.key === forward || event.key === 'ArrowDown') next = Math.min(count - 1, index + 1);
+    else if (event.key === backward || event.key === 'ArrowUp') next = Math.max(0, index - 1);
+    else if (event.key === 'Home') next = 0;
+    else if (event.key === 'End') next = count - 1;
+
+    if (next === undefined || next === index) return;
     event.preventDefault();
-    if (item.type === 'folder') onNavigate?.(item.id);
-    else handleSelect(item.id);
+    pendingCardFocus.current = next;
+    setActiveCardIndex(next);
   }, [handleSelect, onNavigate]);
 
   // Loading state renders the composed Spinner primitive (ring, cadence and
@@ -208,7 +254,7 @@ export default function ModernFileManager(props: FileManagerProps) {
       data-part="root"
       data-loading={false}
       data-view-mode={viewMode}
-      style={{ ...style, background: 'var(--ds-surface-card)', borderRadius: 'var(--ds-radius-lg)', boxShadow: 'var(--ds-elevation-1)' }}
+      style={style}
     >
       <div data-part="body">
         {/* Toolbar */}
@@ -331,10 +377,13 @@ export default function ModernFileManager(props: FileManagerProps) {
                       <td>
                         {/* Slot keeps the historical data-part; the composed
                             Checkbox (standalone indicator) owns the control. */}
+                        {/* Without onSelectionChange the toggle can never change anything, so it
+                           reads as disabled rather than swallowing clicks. */}
                         <span data-part="checkbox">
                           <ModernCheckbox
                             size="sm"
                             checked={selectedItems.includes(item.id)}
+                            disabled={!onSelectionChange}
                             onChange={() => handleSelect(item.id)}
                             aria-label={tOr('fileManager.selectItem', 'Select {name}', { name: item.name })}
                           />
@@ -382,8 +431,8 @@ export default function ModernFileManager(props: FileManagerProps) {
                           )}
                         </div>
                       </td>
-                      <td data-part="size-cell">{item.type === 'file' ? formatSize((item as FileItem).size) : '--'}</td>
-                      <td data-part="date-cell">{formatDate(item.modifiedAt)}</td>
+                      <td data-part="size-cell">{item.type === 'file' ? formatSize((item as FileItem).size, localeTag) : '--'}</td>
+                      <td data-part="date-cell">{formatDate(item.modifiedAt, localeTag)}</td>
                       <td>
                         <div data-part="item-actions">
                           {onRename && (
@@ -425,19 +474,23 @@ export default function ModernFileManager(props: FileManagerProps) {
           ) : (
             /* Grid view: columns come from the skin's container queries on the
                root (the composition defines the cut, not viewport breakpoints). */
-            <div data-part="grid">
-              {items.map(item => (
+            /* A roving tab stop needs a container to rove within: the grid
+               carries the same name the list table does. */
+            <div data-part="grid" role="group" aria-label={tOr('fileManager.listLabel', 'Files and folders')}>
+              {items.map((item, index) => (
                 <div
                   key={item.id}
+                  ref={(node) => { gridCardRefs.current[index] = node; }}
                   data-part="grid-card"
                   data-selected={selectedItems.includes(item.id)}
                   data-file-kind={fileKindOf(item)}
                   className="ds-file-manager__grid-card"
                   role="button"
-                  tabIndex={0}
+                  tabIndex={index === Math.min(activeCardIndex, items.length - 1) ? 0 : -1}
                   aria-pressed={item.type === 'file' ? selectedItems.includes(item.id) : undefined}
                   onClick={() => item.type === 'folder' ? onNavigate?.(item.id) : handleSelect(item.id)}
-                  onKeyDown={(event) => handleGridCardKeyDown(event, item)}
+                  onFocus={() => setActiveCardIndex(index)}
+                  onKeyDown={(event) => handleGridCardKeyDown(event, item, index, items.length)}
                 >
                   <div data-part="grid-card-body">
                     {item.type === 'folder' ? (

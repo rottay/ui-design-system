@@ -167,6 +167,9 @@
   border-radius: var(--ds-radius-md);
   background: transparent;
   color: var(--ds-color-text-primary);
+  /* The row is an inert activedescendant option, not a button, so the family
+     face has to be declared: there is no UA button font to inherit from. */
+  font-family: inherit;
   font-size: var(--ds-font-size-sm, 14px);
   text-align: start;
   cursor: pointer;

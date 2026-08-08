@@ -261,6 +261,30 @@
   line-height: var(--ds-line-height-body);
 }
 
+/* The APG ordered list owns the row rhythm; the per-item gap holds 8px
+   between chevron and crumb. */
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb-list'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2, 8px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb-item'] {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-spacing-2, 8px);
+}
+
+/* The trail is a tab stop now (scrollable region), so it needs the governed
+   ring — a focusable element with no indicator is worse than no tab stop. */
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='breadcrumb']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+}
+
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'] {
   font-weight: 500;
 }

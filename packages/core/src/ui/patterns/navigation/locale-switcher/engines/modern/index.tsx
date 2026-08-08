@@ -298,16 +298,22 @@ export default function ModernLocaleSwitcher(props: LocaleSwitcherProps) {
           data-placement={placement}
           aria-label={tOr('locale_switcher.panel_aria', 'Languages')}
           data-testid="locale-switcher-menu"
+          /* Pointer selection must not blur the trigger: it owns DOM focus for
+             the whole widget, and a mousedown default would drop it to body. */
+          onMouseDown={(e) => e.preventDefault()}
         >
           {locales.map((loc, idx) => {
             const isActive = loc.code === locale;
             const isFocused = idx === focusIndex;
 
             return (
+              /* A native control, but never a tab stop: the trigger owns DOM
+                 focus and activedescendant marks the active row. */
               <button
                 key={loc.code}
                 id={optionId(loc.code)}
                 type="button"
+                tabIndex={-1}
                 role="option"
                 aria-selected={isActive}
                 data-part="option"

@@ -38,6 +38,16 @@ import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 import type { PricingTableProps } from '../../contracts';
 
+/** Footprint the skeleton falls back to before any plan or feature arrives. */
+const SKELETON_PLAN_KEYS = ['skeleton-plan-1', 'skeleton-plan-2', 'skeleton-plan-3'];
+const SKELETON_ROW_KEYS = [
+  'skeleton-row-1',
+  'skeleton-row-2',
+  'skeleton-row-3',
+  'skeleton-row-4',
+  'skeleton-row-5',
+];
+
 /**
  * Tri-state feature indicator. Included/excluded are governed icons read by
  * shape (check vs cross) with ink as reinforcement -- never hue alone -- and
@@ -128,6 +138,7 @@ export default function ModernPricingTable(props: PricingTableProps) {
     excluded: tOr('pricingTable.excluded', 'Not included'),
     empty: tOr('pricingTable.empty', 'No plans available'),
     yearlyBilling: tOr('pricingTable.yearlyBilling', 'Yearly billing'),
+    comparison: tOr('pricingTable.comparison', 'Plan comparison'),
   };
 
   const rootClass = `ds-pattern-pricing-table ds-engine-modern ${className ?? ''}`;
@@ -141,6 +152,12 @@ export default function ModernPricingTable(props: PricingTableProps) {
      test pin); the skin hides it visually while the skeleton carries the
      loading cue. Skeleton geometry is chrome, so it is `aria-hidden`. */
   if (loading) {
+    // First load is exactly the case with no plans and no features yet, so
+    // mirroring those arrays produced an empty box that reflowed on arrival.
+    const skeletonPlanKeys =
+      plans.length > 0 ? plans.map((plan) => plan.id) : SKELETON_PLAN_KEYS;
+    const skeletonRowKeys =
+      features.length > 0 ? features.map((feature) => feature.key) : SKELETON_ROW_KEYS;
     return (
       <div
         className={rootClass}
@@ -167,9 +184,9 @@ export default function ModernPricingTable(props: PricingTableProps) {
           className="ds-pricing-table__skeleton-plans"
           aria-hidden="true"
         >
-          {plans.map((plan) => (
+          {skeletonPlanKeys.map((key) => (
             <div
-              key={plan.id}
+              key={key}
               data-part="skeleton-plan"
               className="ds-pricing-table__skeleton-plan"
             />
@@ -180,9 +197,9 @@ export default function ModernPricingTable(props: PricingTableProps) {
           className="ds-pricing-table__skeleton-rows"
           aria-hidden="true"
         >
-          {features.map((feature) => (
+          {skeletonRowKeys.map((key) => (
             <div
-              key={feature.key}
+              key={key}
               data-part="skeleton-row"
               className="ds-pricing-table__skeleton-row"
             />
@@ -266,11 +283,15 @@ export default function ModernPricingTable(props: PricingTableProps) {
       {/* Comparison grid: semantic table, caller data only. */}
       <div data-part="scroll" className="ds-pricing-table__scroll">
         <table className="ds-pricing-table__table">
+          {/* The grid had no accessible name at all; the caption is the
+              table-native one and stays visually silent. */}
+          <caption className="ds-sr-only">{labels.comparison}</caption>
           <thead>
             <tr>
               <th
                 data-part="features-head"
                 className="ds-pricing-table__features-head"
+                scope="col"
               >
                 {labels.features}
               </th>
@@ -281,6 +302,7 @@ export default function ModernPricingTable(props: PricingTableProps) {
                     key={plan.id}
                     data-part="plan-head"
                     className="ds-pricing-table__plan-head"
+                    scope="col"
                   >
                     {/* renderPlanHeader lets consumers fully replace the card
                         content (and with it the recommended-plan badge). */}
@@ -386,22 +408,24 @@ export default function ModernPricingTable(props: PricingTableProps) {
                 <React.Fragment key={feature.key}>
                   {isCategory && (
                     <tr>
-                      <td
+                      <th
                         data-part="category-header"
                         className="ds-pricing-table__category-header"
                         colSpan={plans.length + 1}
+                        scope="colgroup"
                       >
                         {feature.category}
-                      </td>
+                      </th>
                     </tr>
                   )}
                   <tr
                     data-part="feature-row"
                     className="ds-pricing-table__feature-row"
                   >
-                    <td
+                    <th
                       data-part="feature-cell"
                       className="ds-pricing-table__feature-cell"
+                      scope="row"
                     >
                       {/* Feature description: certified Tooltip, focusable
                           trigger so keyboard users reach it. */}
@@ -418,7 +442,7 @@ export default function ModernPricingTable(props: PricingTableProps) {
                       ) : (
                         feature.label
                       )}
-                    </td>
+                    </th>
                     {plans.map((plan) => (
                       <td
                         key={plan.id}

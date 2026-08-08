@@ -25,7 +25,7 @@
  * @package @rottay/design-system
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import type { CockpitHeaderProps, CockpitStatus } from '../../contracts';
 import Button from '../../../../../primitives/inputs/Button/engines/modern';
 import { NavigationBackIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-back';
@@ -40,6 +40,11 @@ const BACK_LABEL_KEY = 'cockpitHeader.back';
 const BACK_LABEL_FALLBACK = 'Go back';
 const BREADCRUMB_LABEL_KEY = 'cockpitHeader.breadcrumb';
 const BREADCRUMB_LABEL_FALLBACK = 'Breadcrumb';
+
+/* Hysteresis band for the compact posture: a single threshold flipped the
+   whole title block on and off around one scroll pixel. */
+const COMPACT_ENTER_OFFSET = 60;
+const COMPACT_EXIT_OFFSET = 40;
 
 /* ------------------------------------------------------------------ */
 /* BreadcrumbLink                                                      */
@@ -65,7 +70,9 @@ function BreadcrumbLink({
         data-interactive="true"
         data-last="false"
       >
-        {label}
+        {/* Caller labels are bidi-isolated: a Hebrew crumb must not reorder
+            the chevrons or the Latin crumbs around it. */}
+        <bdi>{label}</bdi>
       </a>
     );
   }
@@ -78,7 +85,7 @@ function BreadcrumbLink({
       /* The terminal crumb is the current page: announce it (APG breadcrumb). */
       aria-current={isLast ? 'page' : undefined}
     >
-      {label}
+      <bdi>{label}</bdi>
     </span>
   );
 }
@@ -123,7 +130,7 @@ function StatusPill({ status }: { status: CockpitStatus }) {
       data-part="status"
       data-variant={status.variant}
     >
-      {status.label}
+      <bdi>{status.label}</bdi>
     </span>
   );
 }
@@ -160,7 +167,6 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
   } = props;
 
   const [isCompact, setIsCompact] = useState(false);
-  const headerRef = useRef<HTMLDivElement>(null);
 
   // Optional i18n: without an I18nProvider the hook returns null and the
   // English floors render, byte-identical to the pre-i18n contract. Explicit
@@ -175,7 +181,11 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
     if (!sticky) return;
 
     const handleScroll = () => {
-      setIsCompact(window.scrollY > 60);
+      /* Asymmetric thresholds: once compact the header holds that posture to a
+   lower offset, so a boundary scroll cannot thrash the swap. */
+      setIsCompact((current) =>
+        window.scrollY > (current ? COMPACT_EXIT_OFFSET : COMPACT_ENTER_OFFSET),
+      );
     };
     /* Mounting into an already-scrolled document must not paint the resting
        posture until the next scroll event (page-shell idiom). */
@@ -195,6 +205,10 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
         className={`ds-pattern-cockpit-header ds-engine-modern ${className ?? ''}`}
         data-part="root"
         data-loading="true"
+        /* The position posture is part of the anatomy: without these the sticky
+           header un-stuck itself while loading and jumped when the content arrived. */
+        data-sticky={sticky ? 'true' : 'false'}
+        data-compact={isCompact ? 'true' : 'false'}
         data-has-icon={icon ? 'true' : 'false'}
         data-has-actions={actions ? 'true' : 'false'}
         aria-busy="true"
@@ -244,7 +258,6 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
 
   return (
     <div
-      ref={headerRef}
       className={`ds-pattern-cockpit-header ds-engine-modern ${className ?? ''}`}
       data-part="root"
       data-loading="false"
@@ -261,27 +274,34 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
         <nav
           aria-label={breadcrumbLabel}
           data-part="breadcrumb"
+          /* The trail is a horizontally scrollable region with a hidden scrollbar:
+             without a tab stop its overflowed tail (the terminal crumb is not a link) */
+          tabIndex={0}
         >
-          {breadcrumbs.map((crumb, idx) => {
-            const isLast = idx === breadcrumbs.length - 1;
-            return (
-              <React.Fragment key={`crumb-${idx}`}>
-                {idx > 0 && (
-                  <span
-                    data-part="separator"
-                    aria-hidden="true"
-                  >
-                    <NavigationForwardIcon size={11} decorative />
-                  </span>
-                )}
-                <BreadcrumbLink
-                  label={crumb.label}
-                  href={crumb.href}
-                  isLast={isLast}
-                />
-              </React.Fragment>
-            );
-          })}
+          {/* APG breadcrumb is an ordered list; the explicit role survives the
+              `list-style: none` that strips list semantics in WebKit. */}
+          <ol data-part="crumb-list" role="list">
+            {breadcrumbs.map((crumb, idx) => {
+              const isLast = idx === breadcrumbs.length - 1;
+              return (
+                <li data-part="crumb-item" key={`crumb-${idx}`}>
+                  {idx > 0 && (
+                    <span
+                      data-part="separator"
+                      aria-hidden="true"
+                    >
+                      <NavigationForwardIcon size={11} decorative />
+                    </span>
+                  )}
+                  <BreadcrumbLink
+                    label={crumb.label}
+                    href={crumb.href}
+                    isLast={isLast}
+                  />
+                </li>
+              );
+            })}
+          </ol>
         </nav>
       )}
 
@@ -308,7 +328,7 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
                 data-part="title"
                 title={typeof title === 'string' ? title : undefined}
               >
-                {title}
+                <bdi>{title}</bdi>
               </h2>
 
               {/* Status pills */}
@@ -324,7 +344,7 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
             {/* Subtitle / metadata row */}
             {subtitle && !isCompact && (
               <p data-part="subtitle">
-                {subtitle}
+                <bdi>{subtitle}</bdi>
               </p>
             )}
           </div>

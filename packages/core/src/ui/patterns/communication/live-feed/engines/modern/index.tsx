@@ -33,11 +33,12 @@
  * @package @rottay/design-system
  */
 
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import type { LiveFeedProps, FeedItem } from '../../contracts';
 import { useInfiniteScroll } from '../../../../runtime/virtualization/infinite-scroll';
 import { Button } from '../../../../../primitives/inputs/Button';
 import { Empty } from '../../../../../primitives/display/Empty';
+import { VisuallyHidden } from '../../../../../primitives/foundation';
 import ModernSpinner from '../../../../../primitives/feedback/Spinner/engines/modern';
 import { ActionRefreshIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-refresh';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
@@ -78,16 +79,20 @@ export default function ModernLiveFeed<T extends FeedItem>(props: LiveFeedProps<
   const refreshLabel = translation?.tOr('liveFeed.refresh', 'Refresh') ?? 'Refresh';
   const loadMoreLabel = translation?.tOr('liveFeed.loadMore', 'Load more') ?? 'Load more';
   const emptyLabel = translation?.tOr('liveFeed.empty', 'No items') ?? 'No items';
-
-  // Interval ref persists across renders so the useEffect cleanup can
-  // clear the correct timer when dependencies change or the component unmounts.
-  const intervalRef = useRef<ReturnType<typeof setInterval>>(undefined);
+  const feedLabel = translation?.tOr('liveFeed.feedLabel', 'Feed') ?? 'Feed';
 
   // Callers pass an inline arrow far more often than a memoized handler, so
   // onRefresh identity cannot gate the timer: the tick reads the latest ref.
   const onRefreshRef = useRef(onRefresh);
   useEffect(() => {
     onRefreshRef.current = onRefresh;
+  });
+
+  // A tick that fires while the previous fetch is still in flight stacks
+  // duplicate requests on exactly the slow feeds polling is meant to serve.
+  const loadingRef = useRef(loading);
+  useEffect(() => {
+    loadingRef.current = loading;
   });
 
   // Auto-refresh polls at the given interval (ms). Setting autoRefresh to 0
@@ -97,8 +102,10 @@ export default function ModernLiveFeed<T extends FeedItem>(props: LiveFeedProps<
   const hasRefresh = Boolean(onRefresh);
   useEffect(() => {
     if (autoRefresh && autoRefresh > 0 && hasRefresh) {
-      const id = setInterval(() => onRefreshRef.current?.(), autoRefresh);
-      intervalRef.current = id;
+      const id = setInterval(() => {
+        if (loadingRef.current) return;
+        onRefreshRef.current?.();
+      }, autoRefresh);
       return () => clearInterval(id);
     }
   }, [autoRefresh, hasRefresh]);
@@ -118,43 +125,73 @@ export default function ModernLiveFeed<T extends FeedItem>(props: LiveFeedProps<
     root: maxHeight ? scrollContainerRef : null,
   });
 
-  // Skeleton loading state: only shown when there are zero items and loading is true.
-  // Subsequent refreshes keep existing items visible (no flicker). The
-  // `animate-pulse` class is a test pin (see header); the skin owns the real
-  // channeled shimmer, so the class is only the query hook.
+  // Merging buffered items unmounts the banner that was holding focus, which
+  // strands the caret on <body>; the feed region is the semantic successor.
+  const handleShowNewItems = useCallback(() => {
+    onShowNewItems?.();
+    scrollContainerRef.current?.focus();
+  }, [onShowNewItems]);
+
+  /* Skeleton loading state: only shown when there are zero items and loading
+     is true. Subsequent refreshes keep existing items visible (no flicker). */
+  const headerRow = (header || onRefresh) && (
+    <div data-part="header-row">
+      <div data-part="header-content">{header}</div>
+      {onRefresh && (
+        <Button
+          engine="modern"
+          variant="ghost"
+          size="sm"
+          data-part="refresh"
+          icon={loading ? <ModernSpinner size="sm" data-part="spinner" /> : <ActionRefreshIcon size={14} decorative />}
+          aria-label={refreshLabel}
+          onClick={onRefresh}
+        />
+      )}
+    </div>
+  );
+
   if (loading && items.length === 0) {
     return (
-      <div data-part="root" className={`ds-pattern-live-feed ds-engine-modern ${className ?? ''}`} style={style}>
-        <div data-part="skeleton-list" className="animate-pulse">
-          <div data-part="skeleton" data-skeleton="title" />
-          {[1, 2, 3].map((i) => (
-            <div key={i} data-part="skeleton" data-skeleton="row" />
-          ))}
+      <div
+        data-part="root"
+        aria-busy={true}
+        className={`ds-pattern-live-feed ds-engine-modern ${className ?? ''}`}
+        style={style}
+      >
+        <div data-part="body">
+          {headerRow}
+          <div data-part="skeleton-list" className="animate-pulse">
+            <div data-part="skeleton" data-skeleton="title" />
+            {[1, 2, 3].map((i) => (
+              <div key={i} data-part="skeleton" data-skeleton="row" />
+            ))}
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div data-part="root" className={`ds-pattern-live-feed ds-engine-modern ${className ?? ''}`} style={style}>
+    <div
+      data-part="root"
+      aria-busy={Boolean(loading)}
+      className={`ds-pattern-live-feed ds-engine-modern ${className ?? ''}`}
+      style={style}
+    >
       <div data-part="body">
         {/* Header */}
-        {(header || onRefresh) && (
-          <div data-part="header-row">
-            <div data-part="header-content">{header}</div>
-            {onRefresh && (
-              <Button
-                engine="modern"
-                variant="ghost"
-                size="sm"
-                data-part="refresh"
-                icon={loading ? <ModernSpinner size="sm" data-part="spinner" /> : <ActionRefreshIcon size={14} decorative />}
-                aria-label={refreshLabel}
-                onClick={onRefresh}
-              />
-            )}
-          </div>
-        )}
+        {headerRow}
+
+        {/* Buffered arrivals never enter the list, so the polite list region
+            cannot announce them -- this status is their only AT channel. */}
+        <VisuallyHidden role="status" aria-live="polite">
+          {newItemsCount != null && newItemsCount > 0
+            ? translation?.tOr('liveFeed.newItemsAnnouncement', '{count} pending updates', {
+                count: newItemsCount,
+              }) ?? `${newItemsCount} pending updates`
+            : ''}
+        </VisuallyHidden>
 
         {/* New items indicator -- full-width info button so it is impossible to miss.
             Clicking merges buffered items into the visible list (handled by parent). */}
@@ -164,7 +201,7 @@ export default function ModernLiveFeed<T extends FeedItem>(props: LiveFeedProps<
             variant="ghost"
             size="sm"
             data-part="banner"
-            onClick={onShowNewItems}
+            onClick={handleShowNewItems}
           >
             <span data-part="badge">{newItemsCount}</span>
             {newItemsCount === 1
@@ -176,7 +213,16 @@ export default function ModernLiveFeed<T extends FeedItem>(props: LiveFeedProps<
         {/* Feed -- maxHeight enables vertical scrolling for bounded-height containers.
             When omitted, the feed grows unbounded. maxHeight/overflow stay inline:
             they are runtime-measured values (the ScrollArea precedent), not paint. */}
-        <div ref={scrollContainerRef} style={{ maxHeight: maxHeight ?? undefined, overflow: maxHeight ? 'auto' : undefined }}>
+        {/* A bounded scroller must be tab-reachable or keyboard-only users can
+            never scroll it (WCAG 2.1.1); unbounded it stays programmatic-only. */}
+        <div
+          ref={scrollContainerRef}
+          data-part="viewport"
+          tabIndex={maxHeight ? 0 : -1}
+          role={maxHeight ? 'region' : undefined}
+          aria-label={maxHeight ? feedLabel : undefined}
+          style={{ maxHeight: maxHeight ?? undefined, overflow: maxHeight ? 'auto' : undefined }}
+        >
           {displayItems.length === 0
             ? emptyState ?? (
                 <div data-part="empty">

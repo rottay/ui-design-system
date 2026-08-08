@@ -20,32 +20,27 @@ function createProps(overrides: Partial<WorkspaceSwitcherProps> = {}): Workspace
   };
 }
 
-describe('ModernWorkspaceSwitcher — APG virtual focus', () => {
-  it('carries aria-activedescendant on the element that actually holds DOM focus', () => {
+describe('ModernWorkspaceSwitcher — APG roving focus', () => {
+  it('hands REAL DOM focus from the search field to the first row', () => {
     renderWithEngine(<ModernWorkspaceSwitcher {...createProps()} />, 'modern');
     fireEvent.click(screen.getByTestId('workspace-trigger'));
 
-    const combobox = screen.getByTestId('workspace-search') as HTMLInputElement;
-    // The search field is the combobox and takes focus when the panel opens,
-    // so the attribute is honoured rather than inert on an unfocused panel.
-    expect(combobox).toHaveAttribute('role', 'combobox');
-    expect(document.activeElement).toBe(combobox);
+    const search = screen.getByTestId('workspace-search') as HTMLInputElement;
+    // A textbox may not own a `menu` popup: the combobox role went with the
+    // listbox, so the search is a plain searchbox that hands focus onward.
+    expect(search).toHaveAttribute('role', 'searchbox');
+    expect(document.activeElement).toBe(search);
 
-    fireEvent.keyDown(combobox, { key: 'ArrowDown' });
+    fireEvent.keyDown(search, { key: 'ArrowDown' });
+    // Real focus is strictly stronger than virtual focus: an
+    // aria-activedescendant can be inert, a focused element cannot.
+    expect(document.activeElement).toBe(screen.getByTestId('workspace-item-ws-1'));
 
-    const active = combobox.getAttribute('aria-activedescendant');
-    expect(active).toBeTruthy();
-    expect(document.getElementById(active as string)).toBe(
-      screen.getByTestId('workspace-item-ws-1'),
-    );
-
-    fireEvent.keyDown(combobox, { key: 'ArrowDown' });
-    expect(
-      document.getElementById(combobox.getAttribute('aria-activedescendant') as string),
-    ).toBe(screen.getByTestId('workspace-item-ws-2'));
+    fireEvent.keyDown(screen.getByTestId('workspace-item-ws-1'), { key: 'ArrowDown' });
+    expect(document.activeElement).toBe(screen.getByTestId('workspace-item-ws-2'));
   });
 
-  it('never leaves aria-activedescendant on the unfocused panel', () => {
+  it('never leaves aria-activedescendant anywhere in the panel', () => {
     const { container } = renderWithEngine(
       <ModernWorkspaceSwitcher {...createProps()} />,
       'modern',
@@ -53,17 +48,20 @@ describe('ModernWorkspaceSwitcher — APG virtual focus', () => {
     fireEvent.click(screen.getByTestId('workspace-trigger'));
 
     const panel = container.querySelector('[data-part="panel"]') as HTMLElement;
-    expect(panel).not.toHaveAttribute('aria-activedescendant');
-    // Only option/group children are legal inside a listbox, so the role sits
-    // on the option list, not on the panel that also holds search/create/user.
+    // RETARGETED (was: the listbox role + option children). Virtual focus is
+    // gone entirely, so the attribute must not survive on ANY element.
+    expect(container.querySelectorAll('[aria-activedescendant]').length).toBe(0);
+    // Only menuitem/group/separator may sit inside a menu, so the role goes on
+    // the item list, not the panel that also holds search/create/user.
     expect(panel).not.toHaveAttribute('role');
 
     const list = container.querySelector('[data-part="list"]') as HTMLElement;
-    expect(list).toHaveAttribute('role', 'listbox');
-    expect(list.querySelectorAll('[role="option"]').length).toBe(2);
+    expect(list).toHaveAttribute('role', 'menu');
+    expect(list.querySelectorAll('[role="menuitemradio"]').length).toBe(2);
+    expect(list.querySelectorAll('[role="option"]').length).toBe(0);
   });
 
-  it('scopes option and listbox ids per instance so two switchers cannot collide', () => {
+  it('scopes item and menu ids per instance so two switchers cannot collide', () => {
     const { container } = renderWithEngine(
       <div>
         <ModernWorkspaceSwitcher {...createProps()} />
@@ -76,13 +74,13 @@ describe('ModernWorkspaceSwitcher — APG virtual focus', () => {
     fireEvent.click(triggers[0]);
     fireEvent.click(triggers[1]);
 
-    const optionIds = Array.from(container.querySelectorAll('[role="option"]')).map(
+    const itemIds = Array.from(container.querySelectorAll('[role="menuitemradio"]')).map(
       (el) => el.id,
     );
-    expect(optionIds.length).toBe(4);
-    expect(new Set(optionIds).size).toBe(4);
+    expect(itemIds.length).toBe(4);
+    expect(new Set(itemIds).size).toBe(4);
 
-    const listIds = Array.from(container.querySelectorAll('[role="listbox"]')).map(
+    const listIds = Array.from(container.querySelectorAll('[role="menu"]')).map(
       (el) => el.id,
     );
     expect(new Set(listIds).size).toBe(2);
@@ -105,7 +103,7 @@ describe('ModernWorkspaceSwitcher — APG virtual focus', () => {
     expect(screen.getByTestId('workspace-item-ws-1')).toBeInTheDocument();
   });
 
-  it('drops the listbox role when the filter leaves no options', () => {
+  it('drops the menu role when the filter leaves no options', () => {
     const { container } = renderWithEngine(
       <ModernWorkspaceSwitcher {...createProps()} />,
       'modern',

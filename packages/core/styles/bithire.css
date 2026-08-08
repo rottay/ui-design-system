@@ -14222,6 +14222,107 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   }
 }
 
+/* Every selector carries `.ds-engine-modern`, so classic and rustic keep the
+   shared paint byte-for-byte. */
+
+/* The shared reduced-motion exit is (0,2,0) and loses the cascade tie to the
+   (0,3,0) entrance, so it must be re-declared at equal weight here. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-decision-comparison.ds-engine-modern[data-part="root"][data-loading] {
+    animation: none;
+  }
+}
+
+/* The wrap contract reaches ELEMENT children only, so a plain-string title
+   needs it declared directly or the identity line is silently clipped. */
+.ds-pattern-decision-comparison.ds-engine-modern .ds-decision-comparison__title {
+  overflow-wrap: anywhere;
+  text-overflow: clip;
+  white-space: normal;
+}
+
+/* Subtitle and score label were single-line ellipsis at every width above
+   the 47.9375rem query, which silently drops role and provenance copy; */
+.ds-pattern-decision-comparison.ds-engine-modern .ds-decision-comparison__subtitle,
+.ds-pattern-decision-comparison.ds-engine-modern .ds-decision-comparison__score-label {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow-wrap: anywhere;
+  text-overflow: clip;
+  white-space: normal;
+}
+
+/* `justify-items: end` / `text-align: end` are already writing-mode aware, so
+   a shared `:dir(rtl)` flip to `start` would double-correct. */
+.ds-pattern-decision-comparison.ds-engine-modern:dir(rtl)
+  .ds-decision-comparison__fact-value {
+  justify-items: end;
+  text-align: end;
+}
+
+/* `data-density` moves padding and row height only, so literal chrome floors
+   must be declared per density or a compact board keeps the roomy ones. */
+.ds-pattern-decision-comparison.ds-engine-modern .ds-decision-comparison__toolbar {
+  min-height: calc(
+    var(--ds-decision-comparison-toolbar-min-height) *
+      var(--ds-density-effective-scale, 1)
+  );
+}
+
+.ds-pattern-decision-comparison.ds-engine-modern .ds-decision-comparison__identity {
+  min-height: calc(
+    var(--ds-decision-comparison-identity-min-height) *
+      var(--ds-density-effective-scale, 1)
+  );
+}
+
+.ds-pattern-decision-comparison.ds-engine-modern .ds-decision-comparison__badges {
+  min-height: calc(
+    var(--ds-decision-comparison-badges-min-height) *
+      var(--ds-density-effective-scale, 1)
+  );
+}
+
+.ds-pattern-decision-comparison.ds-engine-modern .ds-decision-comparison__visual {
+  min-height: calc(
+    var(--ds-decision-comparison-visual-min-height) *
+      var(--ds-density-effective-scale, 1)
+  );
+}
+
+/* The subject's third track carries the same reserved visual height, so it has
+   to scale with it or the unscaled track floor would swallow the reduction. */
+.ds-pattern-decision-comparison.ds-engine-modern .ds-decision-comparison__subject {
+  grid-template-rows: auto auto minmax(
+      calc(
+        var(--ds-decision-comparison-visual-min-height) *
+          var(--ds-density-effective-scale, 1)
+      ),
+      auto
+    ) 1fr auto;
+}
+
+@media (forced-colors: active) {
+  /* The tone dot is the "never hue alone" marker, and forced colors replaces a
+   `currentColor` background, so the redundancy needs its own carrier. */
+  .ds-pattern-decision-comparison.ds-engine-modern
+    .ds-decision-comparison__fact[data-tone]
+    .ds-decision-comparison__fact-value
+    > span:first-child::before {
+    background: CanvasText;
+  }
+
+  /* The empty state is painted by a radial gradient alone and carries no
+     border, so forced colors left an unmarked void inside the card frame. */
+  .ds-pattern-decision-comparison.ds-engine-modern .ds-decision-comparison__empty {
+    outline: 1px solid CanvasText;
+    outline-offset: -1px;
+  }
+}
+
 }
 @layer rottay-components {
 /**
@@ -27951,13 +28052,22 @@ input.rottay-input.rottay-input--modern[data-part='root'][type='number'] {
   overflow: hidden;
   max-block-size: var(--ds-filter-panel-content-max-height, 125rem);
   opacity: 1;
+  visibility: visible;
   transition:
     max-block-size var(--ds-motion-normal) var(--ds-motion-ease-out),
-    opacity var(--ds-motion-normal) var(--ds-motion-ease-out);
+    opacity var(--ds-motion-normal) var(--ds-motion-ease-out),
+    visibility 0s linear 0s;
 }
+/* `visibility` is delayed to the end of the collapse so the region leaves the
+   AT tree even where `inert` is unsupported, without clipping the transition. */
 .ds-pattern-filter-panel.ds-engine-modern [data-part='content'][data-collapsed='true'] {
   max-block-size: 0;
   opacity: 0;
+  visibility: hidden;
+  transition:
+    max-block-size var(--ds-motion-normal) var(--ds-motion-ease-out),
+    opacity var(--ds-motion-normal) var(--ds-motion-ease-out),
+    visibility 0s linear var(--ds-motion-normal);
 }
 
 /* ---- actions row (Apply) ---- */
@@ -27987,6 +28097,7 @@ input.rottay-input.rottay-input--modern[data-part='root'][type='number'] {
 
 @media (prefers-reduced-motion: reduce) {
   .ds-pattern-filter-panel.ds-engine-modern [data-part='content'],
+  .ds-pattern-filter-panel.ds-engine-modern [data-part='content'][data-collapsed='true'],
   .ds-pattern-filter-panel.ds-engine-modern [data-part='collapse-toggle'] [data-part='icon'] {
     transition: none;
   }
@@ -28945,8 +29056,13 @@ input.rottay-input.rottay-input--modern[data-part='root'][type='number'] {
   padding: 2px 10px;
   border: 1px solid var(--ds-color-border-secondary);
   border-radius: var(--ds-radius-full);
-  background: color-mix(in srgb, var(--ds-color-bg-secondary) 92%, transparent);
-  color: var(--ds-color-text-secondary);
+  /* The engine stamps the pair only when the consumer supplies status.color;
+     the governed fallback keeps the untinted pill byte-identical. */
+  background: var(
+    --ds-detail-panel-status-bg,
+    color-mix(in srgb, var(--ds-color-bg-secondary) 92%, transparent)
+  );
+  color: var(--ds-detail-panel-status-fg, var(--ds-color-text-secondary));
   font-size: var(--ds-font-size-xs);
   font-weight: var(--ds-font-weight-semibold);
   line-height: var(--ds-line-height-body);
@@ -79022,6 +79138,30 @@ html[data-ds-motion="reduced"]
   line-height: var(--ds-line-height-body);
 }
 
+/* The APG ordered list owns the row rhythm; the per-item gap holds 8px
+   between chevron and crumb. */
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb-list'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2, 8px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb-item'] {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-spacing-2, 8px);
+}
+
+/* The trail is a tab stop now (scrollable region), so it needs the governed
+   ring — a focusable element with no indicator is worse than no tab stop. */
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='breadcrumb']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+}
+
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'] {
   font-weight: 500;
 }
@@ -80635,6 +80775,13 @@ html[data-ds-motion="reduced"]
   height: 40px;
 }
 
+/* The eyebrow reserve matches the mono/uppercase strip above the title, so a
+   header that uses one does not gain a line on hydrate. */
+.ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton'][data-size='eyebrow'] {
+  width: 96px;
+  height: 10px;
+}
+
 .ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton'][data-size='title'] {
   width: 200px;
   height: 22px;
@@ -81180,6 +81327,12 @@ html[data-ds-motion="reduced"]
   inset-inline-start: 0;
   z-index: var(--ds-z-dropdown);
   min-inline-size: var(--ds-environment-toggle-panel-min-width, 11.25rem);
+  /* The panel needs an inline ceiling and a measured placement flip, or a
+   trigger past the viewport midpoint pushes it off the inline edge. */
+  max-inline-size: calc(100vw - var(--ds-spacing-4, 1rem));
+  max-block-size: 60vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   padding: var(--ds-spacing-1, 0.25rem);
   background-color: var(--ds-surface-card);
   background-image: linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3));
@@ -81453,13 +81606,15 @@ html[data-ds-motion="reduced"]
    gone — chromatic side rails are forbidden, and a physical left border was
    wrong in RTL anyway. The inset shadow adds zero layout shift, so the old
    transparent-border compensation is gone too. */
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='item'][data-active='true'] {
+/* The surface is the ROW FRAME, not the row control: the settings gear is now
+   a sibling menuitem, so a tint on the control alone would stop short of it. */
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-row'][data-active='true'] {
   background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
   box-shadow: inset 0 0 0 1px
     var(--ds-workspace-switcher-item-frame-active, color-mix(in srgb, var(--ds-color-primary) 34%, transparent));
 }
 
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='item'][data-focused='true'] {
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-row'][data-focused='true'] {
   background: var(--ds-surface-inset);
 }
 
@@ -81658,31 +81813,51 @@ html[data-ds-motion="reduced"]
   overflow-y: auto;
 }
 
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-row'] {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-inline: 12px;
+  transition: background var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+
 .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item'] {
   display: flex;
+  flex: 1 1 auto;
+  min-inline-size: 0;
   align-items: center;
   gap: var(--ds-workspace-switcher-item-gap, 12px);
   padding-block: 8px;
-  padding-inline: 12px;
   cursor: pointer;
-  transition: background var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
 /* Hover reveals only where hovering is a real input mode (hover law); touch
    gets the persistent gear via the (hover: none) block below. The keyboard
    reveals (virtual focus + own focus ring) are NEVER hover-gated. */
 @media (hover: hover) {
-  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item']:hover:not([data-active='true']) {
-    background: var(--ds-workspace-switcher-item-bg-hover, var(--ds-surface-highlight));
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-row']:hover:not([data-active='true']) {
+    /* Same hazard as the trigger: the tenant hook stays, its FALLBACK stops
+       resolving to the near-black `--ds-surface-highlight` under dark ink. */
+    background: var(
+      --ds-workspace-switcher-item-bg-hover,
+      color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-card-bg, var(--ds-color-bg-secondary)))
+    );
   }
 
-  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item']:hover [data-part='settings'] {
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-row']:hover [data-part='settings'] {
     opacity: 1;
   }
 
   .ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger']:hover,
   .ds-pattern-workspace-switcher.ds-engine-modern [data-part='create']:hover {
-    background: var(--ds-surface-highlight);
+    /* `--ds-surface-highlight` is #18181C under BOTH first-party themes, so the
+       bare token painted near-black under dark ink (measured 1.18:1). */
+    background: color-mix(
+      in srgb,
+      var(--ds-color-primary) 7%,
+      var(--ds-card-bg, var(--ds-color-bg-secondary))
+    );
+    color: var(--ds-color-text-primary);
   }
 
   .ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings']:hover {
@@ -81841,10 +82016,18 @@ html[data-ds-motion="reduced"]
   outline-offset: var(--ds-focus-ring-offset, 2px);
 }
 
+/* The row control now takes REAL focus. Its ring draws INSIDE the box: the
+   list scrolls and the panel clips, so an outset ring would be shaved off. */
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='item']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: calc(-1 * var(--ds-focus-ring-width, 2px));
+}
+
 /* ---- coarse pointers: 44px floors; the gear grows a transparent hit area
         (and is always visible on touch, where there is no hover). ---- */
 @media (hover: none), (pointer: coarse) {
   .ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger'],
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-row'],
   .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item'],
   .ds-pattern-workspace-switcher.ds-engine-modern [data-part='create'] {
     min-block-size: var(--ds-workspace-switcher-touch-target-min, var(--ds-touch-target-min, 44px));
@@ -81863,7 +82046,7 @@ html[data-ds-motion="reduced"]
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item'],
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-row'],
   .ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger'],
   .ds-pattern-workspace-switcher.ds-engine-modern [data-part='create'],
   .ds-pattern-workspace-switcher.ds-engine-modern [data-part='chevron'],
@@ -81897,13 +82080,13 @@ html[data-ds-motion="reduced"]
   .ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] [data-part='divider'] {
     border-color: ButtonText;
   }
-  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item'][data-active='true'] {
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-row'][data-active='true'] {
     outline: 2px solid Highlight;
     outline-offset: -2px;
     background: Canvas;
     box-shadow: none;
   }
-  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item'][data-focused='true'] {
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-row'][data-focused='true'] {
     outline: 1px solid ButtonText;
     outline-offset: -1px;
     background: Canvas;
@@ -82310,6 +82493,9 @@ html[data-ds-motion="reduced"]
   border-radius: var(--ds-radius-md);
   background: transparent;
   color: var(--ds-color-text-primary);
+  /* The row is an inert activedescendant option, not a button, so the family
+     face has to be declared: there is no UA button font to inherit from. */
+  font-family: inherit;
   font-size: var(--ds-font-size-sm, 14px);
   text-align: start;
   cursor: pointer;
@@ -82529,10 +82715,23 @@ html[data-ds-motion="reduced"]
     var(--ds-comment-thread-rail-color, var(--ds-color-border));
 }
 
+/* ---- depth-cap notice: sits on the rail the hidden replies would occupy, in
+   the muted metadata voice ---- */
+.ds-pattern-comment-thread.ds-engine-modern [data-part='replies-truncated'] {
+  margin-inline-start: var(--ds-comment-thread-rail-offset, var(--ds-spacing-2, 8px));
+  margin-block-start: var(--ds-spacing-2, 8px);
+  padding-inline-start: var(--ds-comment-thread-rail-padding, var(--ds-spacing-3, 12px));
+  font-size: var(--ds-font-size-xs, 12px);
+  line-height: var(--ds-line-height-snug, 1.375);
+  color: var(--ds-color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
 /* ---- narrow composition cut: the rail indent collapses first (it is the
         only fixed-ish indent in the pattern); the head row already wraps. ---- */
 @container ds-comment-thread (inline-size < 28rem) {
-  .ds-pattern-comment-thread.ds-engine-modern [data-part='nested-line'] {
+  .ds-pattern-comment-thread.ds-engine-modern [data-part='nested-line'],
+  .ds-pattern-comment-thread.ds-engine-modern [data-part='replies-truncated'] {
     margin-inline-start: 0;
     padding-inline-start: var(--ds-spacing-2, 8px);
   }
@@ -82662,6 +82861,14 @@ html[data-ds-motion="reduced"]
   border: 1px solid var(--ds-color-border-subtle);
 }
 
+/* ---- placement flip: `data-placement='start'` outranks the base anchor rule
+   at equal class weight ---- */
+.ds-pattern-notification-center.ds-engine-modern
+  [data-part='panel'][data-placement='start'] {
+  inset-inline-start: 0;
+  inset-inline-end: auto;
+}
+
 /* ---- header: title row + bottom rule (was the `border-b` utility) ---- */
 .ds-pattern-notification-center.ds-engine-modern [data-part='header'] {
   display: flex;
@@ -82710,6 +82917,18 @@ html[data-ds-motion="reduced"]
 }
 .ds-pattern-notification-center.ds-engine-modern [data-part='group'] + [data-part='group'] [data-part='group-label'] {
   padding-block-start: var(--ds-spacing-3);
+}
+
+/* ---- overflow note: the capped remainder in the muted metadata voice; it
+   closes the list, so it reads centred rather than as a group head ---- */
+.ds-pattern-notification-center.ds-engine-modern [data-part='overflow-note'] {
+  padding-block: var(--ds-spacing-2);
+  padding-inline: var(--ds-spacing-3);
+  border-block-start: 1px solid var(--ds-color-border-subtle);
+  color: var(--ds-color-text-muted);
+  font-size: var(--ds-font-size-2xs, 0.6875rem);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
 }
 
 /* ---- empty state: the composed Empty primitive owns visual + copy paint ---- */
@@ -83359,6 +83578,14 @@ html[data-ds-motion="reduced"]
   outline-offset: var(--ds-focus-ring-offset, 2px);
 }
 
+/* The bounded viewport is a tab stop, so it carries its own visible ring and
+   the offset is inset to keep overflow from clipping it. */
+.ds-pattern-live-feed.ds-engine-modern [data-part='viewport']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: calc(-1 * var(--ds-focus-ring-width, 2px));
+  border-radius: var(--ds-radius-md);
+}
+
 /* coarse pointers: the three controls meet the physical 44px floor on BOTH
    axes — the icon-only refresh button is authored 32x32, so its inline axis
    needs the floor as much as its block axis (the full-width banner already
@@ -83406,7 +83633,8 @@ html[data-ds-motion="reduced"]
 
   .ds-pattern-live-feed.ds-engine-modern [data-part='refresh']:focus-visible,
   .ds-pattern-live-feed.ds-engine-modern [data-part='banner']:focus-visible,
-  .ds-pattern-live-feed.ds-engine-modern [data-part='load-more']:focus-visible {
+  .ds-pattern-live-feed.ds-engine-modern [data-part='load-more']:focus-visible,
+  .ds-pattern-live-feed.ds-engine-modern [data-part='viewport']:focus-visible {
     outline-color: Highlight;
   }
 }
@@ -100511,6 +100739,14 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   container: ds-file-manager / inline-size;
 }
 
+/* ---- loaded root surface: owned here, not inline, so the caller's `style`
+   prop and the forced-colors block both outrank it ---- */
+.ds-pattern-file-manager.ds-engine-modern[data-part='root'][data-loading='false'] {
+  background: var(--ds-surface-card);
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-elevation-1);
+}
+
 /* ---- loading root: centered Spinner frame (Spinner owns ring + cadence) ---- */
 .ds-pattern-file-manager.ds-engine-modern[data-part='root'][data-loading='true'] {
   display: flex;
@@ -100880,7 +101116,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    (Button, Checkbox, Breadcrumb, Empty, Spinner) own their own forced-colors
    contracts. */
 @media (forced-colors: active) {
-  .ds-pattern-file-manager.ds-engine-modern[data-part='root'] {
+  /* `[data-loading]` matches the loaded-root rule's weight so source order
+     decides; at (0,3,0) the system colours lost to the surface token. */
+  .ds-pattern-file-manager.ds-engine-modern[data-part='root'][data-loading] {
     border: 1px solid ButtonText;
     background: Canvas;
   }
@@ -101077,6 +101315,15 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     --ds-shadow-focus-ring,
     0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
   );
+}
+
+/* ---- pressed: hover-only feedback left the press unanswered on touch and
+   on keyboard activation. The full card settles back one elevation rung; */
+.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-variant='full'][data-interactive='true']:active {
+  box-shadow: var(--ds-elevation-1);
+}
+.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-variant='compact'][data-interactive='true']:active {
+  background: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-inset));
 }
 
 @media (hover: none), (pointer: coarse) {
@@ -101394,6 +101641,14 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     border: 1px solid ButtonText;
   }
 
+  /* Both focus rings above are box-shadows, which the OS drops here: without
+     these the card and its actions focus invisibly in high contrast. */
+  .ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-interactive='true']:focus-visible,
+  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button']:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+
   .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__presence-dot[data-part='presence-dot'] {
     border-color: Canvas;
   }
@@ -101664,6 +101919,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 /* ---- scroll frame: horizontal overflow with the feature column pinned ---- */
 .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__scroll {
+  /* `overflow-inline` ships only in Firefox, so the frame declares an explicit
+   axis or Chromium/WebKit gets no scroll at all. */
+  overflow-x: auto;
   overflow-inline: auto;
   scrollbar-color: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border)) transparent;
   scrollbar-width: thin;
@@ -101781,6 +102039,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__feature-cell {
   color: var(--ds-color-text-primary);
+  /* The cell is a real row header now; the UA's bold `th` default would
+     otherwise re-weight every feature label against the value columns. */
+  font-weight: var(--ds-font-weight-regular, 400);
   text-align: start;
 }
 .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__value-cell {
@@ -102126,10 +102387,12 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   block-size: var(--ds-empty-state-lg-visual-size, 6.25rem);
 }
 
+/* An empty-state illustration is content, not a portrait: `cover` cropped
+   every non-square asset the caller handed the well. */
 .ds-pattern-empty-state.ds-engine-modern[data-part='root'] .ds-empty-state__visual[data-part='visual'] > [data-part='image'] {
   inline-size: 100%;
   block-size: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .ds-pattern-empty-state.ds-engine-modern[data-part='root'] .ds-empty-state__visual[data-part='visual'] > [data-part='icon'] {
@@ -103056,6 +103319,134 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     background: none;
     animation: none;
   }
+}
+
+/* Same contract as above: `.ds-engine-modern` is stamped only by the modern
+   wrapper, so classic and rustic paint stay untouched. */
+
+/* The section description must survive the narrow breakpoint: it is the one
+   line that says what the record section IS. */
+@container (max-width: 560px) {
+  .ds-pattern-record-facts.ds-engine-modern .ds-record-facts__description {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
+}
+
+/* The label is single-line ellipsis, so a narrow span needs a wrap contract
+   or the only descriptor its value has is silently truncated. */
+.ds-pattern-record-facts.ds-engine-modern .ds-record-facts__label {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow-wrap: anywhere;
+  text-overflow: clip;
+  white-space: normal;
+}
+
+/* Density: `data-density` reached the fact rows only, and the tenant density
+   plane reached nothing at all. */
+.ds-pattern-record-facts.ds-engine-modern .ds-record-facts__header {
+  min-height: calc(
+    var(--ds-record-facts-header-height, 66px) *
+      var(--ds-density-effective-scale, 1)
+  );
+}
+
+.ds-pattern-record-facts.ds-engine-modern
+  .ds-record-facts__fact:not([data-emphasis="narrative"]) {
+  min-height: calc(
+    var(--ds-record-facts-item-height, 82px) *
+      var(--ds-density-effective-scale, 1)
+  );
+}
+
+.ds-pattern-record-facts.ds-engine-modern[data-density="compact"]
+  .ds-record-facts__fact:not([data-emphasis="narrative"]) {
+  min-height: calc(
+    var(--ds-record-facts-compact-item-height, 70px) *
+      var(--ds-density-effective-scale, 1)
+  );
+}
+
+/* The skeleton reserved the COMPACT floor while a comfortable board renders
+   82px rows, so the first load of every default board settled downward. */
+.ds-pattern-record-facts.ds-engine-modern .ds-record-facts__skeleton {
+  min-height: calc(
+    var(--ds-record-facts-item-height, 82px) *
+      var(--ds-density-effective-scale, 1)
+  );
+}
+
+.ds-pattern-record-facts.ds-engine-modern[data-density="compact"]
+  .ds-record-facts__skeleton {
+  min-height: calc(
+    var(--ds-record-facts-compact-item-height, 70px) *
+      var(--ds-density-effective-scale, 1)
+  );
+}
+
+/* The narrow query owns its own floor for both parts; mirrored here so the
+   engine layer does not out-rank it, now density-aware like the rest. */
+@container (max-width: 560px) {
+  .ds-pattern-record-facts.ds-engine-modern
+    .ds-record-facts__fact:not([data-emphasis="narrative"]),
+  .ds-pattern-record-facts.ds-engine-modern[data-density="compact"]
+    .ds-record-facts__fact:not([data-emphasis="narrative"]),
+  .ds-pattern-record-facts.ds-engine-modern .ds-record-facts__skeleton,
+  .ds-pattern-record-facts.ds-engine-modern[data-density="compact"]
+    .ds-record-facts__skeleton {
+    min-height: calc(68px * var(--ds-density-effective-scale, 1));
+  }
+}
+
+/* The header wash and fact tint resolve through tenant channels, so a
+   monochrome or technical tenant can retune them. */
+.ds-pattern-record-facts.ds-engine-modern .ds-record-facts__header {
+  --_ds-record-facts-header-origin: 10% 0%;
+  background: radial-gradient(
+      circle at var(--_ds-record-facts-header-origin),
+      color-mix(
+        in srgb,
+        var(--ds-color-primary) var(--_ds-record-facts-header-tint, 8%),
+        transparent
+      ),
+      transparent 40%
+    ),
+    linear-gradient(
+      110deg,
+      color-mix(
+        in srgb,
+        var(--ds-color-primary) var(--_ds-record-facts-header-wash, 5%),
+        var(--ds-surface-panel-bg, var(--ds-color-bg-secondary))
+      ),
+      color-mix(
+          in srgb,
+          var(--ds-surface-card-bg, var(--ds-color-bg-elevated)) 94%,
+          var(--ds-surface-panel-bg, var(--ds-color-bg-secondary))
+        )
+        70%
+    );
+}
+
+/* The header's light source sat at 10% from the LEFT in both directions, so
+   the section read as lit from the wrong edge under RTL. */
+[dir="rtl"] .ds-pattern-record-facts.ds-engine-modern .ds-record-facts__header {
+  --_ds-record-facts-header-origin: 90% 0%;
+}
+
+.ds-pattern-record-facts.ds-engine-modern
+  .ds-record-facts__fact:not([data-state="empty"], [data-emphasis="narrative"]) {
+  background: color-mix(
+    in srgb,
+    var(--ds-surface-card-bg, var(--ds-color-bg-elevated))
+      var(--_ds-record-facts-fact-bg-share, 96%),
+    var(--ds-color-primary)
+  );
 }
 
 }
@@ -111782,6 +112173,12 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* ---- sample table (display fixture) ---- */
 .ds-pattern-tenant-preview.ds-engine-modern [data-part="table-scroll"] {
   overflow-x: auto;
+}
+/* The fixture is a tab stop now (scrollable region), so it needs the governed
+   ring — a focusable element with no indicator is worse than no tab stop. */
+.ds-pattern-tenant-preview.ds-engine-modern [data-part="table-scroll"]:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
 }
 .ds-pattern-tenant-preview.ds-engine-modern [data-part="sample-table"] {
   inline-size: 100%;

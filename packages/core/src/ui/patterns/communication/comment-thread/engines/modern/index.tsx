@@ -20,7 +20,7 @@
  * />
  */
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import type { CommentThreadProps, Comment } from '../../contracts';
 import ModernAvatar from '../../../../../primitives/display/Avatar/engines/modern';
 import ModernButton from '../../../../../primitives/inputs/Button/engines/modern';
@@ -29,6 +29,7 @@ import ModernTextarea from '../../../../../primitives/inputs/Textarea/engines/mo
 import { VisuallyHidden } from '../../../../../primitives/foundation';
 import { ModernEmptyState } from '../../../../facade';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { interpolateTranslation } from '@/foundation/i18n/runtime/resolution/translation';
 
 /** Shared i18n helper shape for the thread's localized copy. */
 type Translate = (key: string, fallback: string, params?: Record<string, string | number>) => string;
@@ -57,11 +58,10 @@ function formatTimestamp(ts: string, tOr: Translate, locale?: string): string {
 /** Hook-local `tOr`: catalogue value with an English floor, never a raw key. */
 function useThreadTranslation(): { tOr: Translate; locale?: string } {
   const i18n = useOptionalTranslation('components');
-  const tOr: Translate = (key, fallback, params) => {
-    const resolved = i18n?.t(key, params);
-    if (!resolved || resolved === key || resolved === `components.${key}`) return fallback;
-    return resolved;
-  };
+  // The floor carries the same `{count}` placeholders as catalog copy, so it
+  // has to be interpolated too -- returning it raw prints the template.
+  const tOr: Translate = (key, fallback, params) =>
+    i18n?.tOr(key, fallback, params) ?? interpolateTranslation(fallback, params);
   return { tOr, locale: i18n?.locale };
 }
 
@@ -89,10 +89,44 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
   const [editing, setEditing] = useState(false);
   const [editText, setEditText] = useState(comment.content);
 
+  const replyButtonRef = useRef<HTMLButtonElement | HTMLAnchorElement>(null);
+  const editButtonRef = useRef<HTMLButtonElement | HTMLAnchorElement>(null);
+  const replyTextareaRef = useRef<HTMLTextAreaElement>(null);
+  const editTextareaRef = useRef<HTMLTextAreaElement>(null);
+
   // Only the comment author can edit or delete their own comments.
   // Identity is matched by name since the Comment type only exposes
   // author.name at this level (no user ID available).
   const isOwner = currentUser?.name === comment.author.name;
+
+  // A revealed composer that leaves focus on the trigger makes the keyboard
+  // user tab blindly forward to find the field the click just opened.
+  useEffect(() => {
+    if (replyVisible) replyTextareaRef.current?.focus();
+  }, [replyVisible]);
+
+  useEffect(() => {
+    if (editing) editTextareaRef.current?.focus();
+  }, [editing]);
+
+  // Every close path destroys the focused node, so the trigger that opened the
+  // composer is the only stable place to hand focus back to.
+  const closeReply = useCallback(() => {
+    setReplyVisible(false);
+    replyButtonRef.current?.focus();
+  }, []);
+
+  const closeEdit = useCallback(() => {
+    setEditing(false);
+    editButtonRef.current?.focus();
+  }, []);
+
+  // Seeding from the live prop (not the mount-time value) keeps the editor
+  // honest when the comment was updated elsewhere since this node mounted.
+  const openEdit = useCallback(() => {
+    setEditText(comment.content);
+    setEditing(true);
+  }, [comment.content]);
 
   // Submit the reply text to the parent handler and reset local state.
   // Whitespace-only text is rejected to prevent empty replies.
@@ -100,18 +134,18 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
     if (replyText.trim() && onReply) {
       onReply(comment.id, replyText.trim());
       setReplyText('');
-      setReplyVisible(false);
+      closeReply();
     }
-  }, [replyText, onReply, comment.id]);
+  }, [replyText, onReply, comment.id, closeReply]);
 
   // Submit the edited content and exit edit mode. The trim() guard
   // prevents saving a comment that contains only whitespace.
   const handleEdit = useCallback(() => {
     if (editText.trim() && onEdit) {
       onEdit(comment.id, editText.trim());
-      setEditing(false);
+      closeEdit();
     }
-  }, [editText, onEdit, comment.id]);
+  }, [editText, onEdit, comment.id, closeEdit]);
 
   return (
     <div data-part="comment">
@@ -138,6 +172,7 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
             // same registered gap as the Switch contract in filter-builder.
             <div data-part="edit-form" role="group" aria-label={tOr('comment_thread.edit', 'Edit')}>
               <ModernTextarea
+                ref={editTextareaRef}
                 value={editText}
                 onChange={(v) => setEditText(v)}
                 rows={2}
@@ -150,7 +185,7 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
                   data-part="cancel"
                   variant="ghost"
                   size="xs"
-                  onClick={() => { setEditing(false); setEditText(comment.content); }}
+                  onClick={() => { setEditText(comment.content); closeEdit(); }}
                 >
                   {tOr('comment_thread.cancel', 'Cancel')}
                 </ModernButton>
@@ -186,12 +221,26 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
               Edit and delete are restricted to the comment owner. */}
           <div data-part="comment-actions">
             {depth < maxDepth && onReply && (
-              <ModernButton data-part="reply" variant="ghost" size="xs" onClick={() => setReplyVisible(!replyVisible)}>
+              <ModernButton
+                ref={replyButtonRef}
+                data-part="reply"
+                variant="ghost"
+                size="xs"
+                aria-expanded={replyVisible}
+                onClick={() => (replyVisible ? closeReply() : setReplyVisible(true))}
+              >
                 {tOr('comment_thread.reply', 'Reply')}
               </ModernButton>
             )}
             {isOwner && onEdit && (
-              <ModernButton data-part="edit" variant="ghost" size="xs" onClick={() => setEditing(true)}>
+              <ModernButton
+                ref={editButtonRef}
+                data-part="edit"
+                variant="ghost"
+                size="xs"
+                aria-expanded={editing}
+                onClick={openEdit}
+              >
                 {tOr('comment_thread.edit', 'Edit')}
               </ModernButton>
             )}
@@ -213,6 +262,7 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
               aria-label={tOr('comment_thread.reply', 'Reply')}
             >
               <ModernTextarea
+                ref={replyTextareaRef}
                 value={replyText}
                 onChange={(v) => setReplyText(v)}
                 rows={2}
@@ -222,7 +272,7 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
                 <ModernButton data-part="reply-submit" variant="primary" size="xs" onClick={handleReply} disabled={!replyText.trim()}>
                   {tOr('comment_thread.reply', 'Reply')}
                 </ModernButton>
-                <ModernButton data-part="reply-cancel" variant="ghost" size="xs" onClick={() => setReplyVisible(false)}>
+                <ModernButton data-part="reply-cancel" variant="ghost" size="xs" onClick={closeReply}>
                   {tOr('comment_thread.cancel', 'Cancel')}
                 </ModernButton>
               </div>
@@ -248,6 +298,18 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
               onReaction={onReaction}
             />
           ))}
+        </div>
+      )}
+
+      {/* Capped replies must still report a count: the thread continues
+          below the fold. */}
+      {comment.replies && comment.replies.length > 0 && depth >= maxDepth && (
+        <div data-part="replies-truncated">
+          {comment.replies.length === 1
+            ? tOr('comment_thread.hidden_reply', '1 more reply not shown')
+            : tOr('comment_thread.hidden_replies', '{count} more replies not shown', {
+                count: comment.replies.length,
+              })}
         </div>
       )}
     </div>

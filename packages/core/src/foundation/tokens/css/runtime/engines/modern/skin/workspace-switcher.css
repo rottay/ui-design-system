@@ -89,13 +89,15 @@
    gone — chromatic side rails are forbidden, and a physical left border was
    wrong in RTL anyway. The inset shadow adds zero layout shift, so the old
    transparent-border compensation is gone too. */
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='item'][data-active='true'] {
+/* The surface is the ROW FRAME, not the row control: the settings gear is now
+   a sibling menuitem, so a tint on the control alone would stop short of it. */
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-row'][data-active='true'] {
   background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
   box-shadow: inset 0 0 0 1px
     var(--ds-workspace-switcher-item-frame-active, color-mix(in srgb, var(--ds-color-primary) 34%, transparent));
 }
 
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='item'][data-focused='true'] {
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-row'][data-focused='true'] {
   background: var(--ds-surface-inset);
 }
 
@@ -294,31 +296,51 @@
   overflow-y: auto;
 }
 
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-row'] {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-inline: 12px;
+  transition: background var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+
 .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item'] {
   display: flex;
+  flex: 1 1 auto;
+  min-inline-size: 0;
   align-items: center;
   gap: var(--ds-workspace-switcher-item-gap, 12px);
   padding-block: 8px;
-  padding-inline: 12px;
   cursor: pointer;
-  transition: background var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
 /* Hover reveals only where hovering is a real input mode (hover law); touch
    gets the persistent gear via the (hover: none) block below. The keyboard
    reveals (virtual focus + own focus ring) are NEVER hover-gated. */
 @media (hover: hover) {
-  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item']:hover:not([data-active='true']) {
-    background: var(--ds-workspace-switcher-item-bg-hover, var(--ds-surface-highlight));
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-row']:hover:not([data-active='true']) {
+    /* Same hazard as the trigger: the tenant hook stays, its FALLBACK stops
+       resolving to the near-black `--ds-surface-highlight` under dark ink. */
+    background: var(
+      --ds-workspace-switcher-item-bg-hover,
+      color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-card-bg, var(--ds-color-bg-secondary)))
+    );
   }
 
-  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item']:hover [data-part='settings'] {
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-row']:hover [data-part='settings'] {
     opacity: 1;
   }
 
   .ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger']:hover,
   .ds-pattern-workspace-switcher.ds-engine-modern [data-part='create']:hover {
-    background: var(--ds-surface-highlight);
+    /* `--ds-surface-highlight` is #18181C under BOTH first-party themes, so the
+       bare token painted near-black under dark ink (measured 1.18:1). */
+    background: color-mix(
+      in srgb,
+      var(--ds-color-primary) 7%,
+      var(--ds-card-bg, var(--ds-color-bg-secondary))
+    );
+    color: var(--ds-color-text-primary);
   }
 
   .ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings']:hover {
@@ -477,10 +499,18 @@
   outline-offset: var(--ds-focus-ring-offset, 2px);
 }
 
+/* The row control now takes REAL focus. Its ring draws INSIDE the box: the
+   list scrolls and the panel clips, so an outset ring would be shaved off. */
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='item']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: calc(-1 * var(--ds-focus-ring-width, 2px));
+}
+
 /* ---- coarse pointers: 44px floors; the gear grows a transparent hit area
         (and is always visible on touch, where there is no hover). ---- */
 @media (hover: none), (pointer: coarse) {
   .ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger'],
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-row'],
   .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item'],
   .ds-pattern-workspace-switcher.ds-engine-modern [data-part='create'] {
     min-block-size: var(--ds-workspace-switcher-touch-target-min, var(--ds-touch-target-min, 44px));
@@ -499,7 +529,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item'],
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-row'],
   .ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger'],
   .ds-pattern-workspace-switcher.ds-engine-modern [data-part='create'],
   .ds-pattern-workspace-switcher.ds-engine-modern [data-part='chevron'],
@@ -533,13 +563,13 @@
   .ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] [data-part='divider'] {
     border-color: ButtonText;
   }
-  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item'][data-active='true'] {
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-row'][data-active='true'] {
     outline: 2px solid Highlight;
     outline-offset: -2px;
     background: Canvas;
     box-shadow: none;
   }
-  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item'][data-focused='true'] {
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-row'][data-focused='true'] {
     outline: 1px solid ButtonText;
     outline-offset: -1px;
     background: Canvas;

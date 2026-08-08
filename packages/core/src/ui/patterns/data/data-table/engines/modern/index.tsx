@@ -50,6 +50,7 @@ import {
   XIcon as X,
 } from "../../../../../../graphics/icons";
 import { arrayValueAt } from "@/foundation/kernel/collections";
+import { useOptionalTranslation } from "@/infrastructure/runtime/i18n";
 import type { DataTablePatternProps } from "../../contracts";
 import { resolveAccessor, resolveRowKey } from "../../runtime/row-resolution";
 import ModernCheckbox from "../../../../../primitives/inputs/Checkbox/engines/modern";
@@ -225,6 +226,12 @@ export default function ModernDataTable<T extends object>(
   const resolvedRecipe =
     recipe ?? (bordered ? "grid" : striped ? "zebra" : "minimal");
   const rowsAreStriped = resolvedRecipe === "zebra";
+
+  /* Copy stays consumer-owned via `messages`; this channel supplies only the
+     active locale so the built-in range floor groups digits like the catalog. */
+  const rangeLocale = useOptionalTranslation("components")?.locale;
+  const formatCount = (value: number): string =>
+    value.toLocaleString(rangeLocale);
 
   // ---------------------------------------------------------------------------
   // Internal state
@@ -2538,14 +2545,16 @@ export default function ModernDataTable<T extends object>(
                     ),
                     pagination.total
                   ) ??
-                    `${
+                    `${formatCount(
                       pagination.total === 0
                         ? 0
                         : (pagination.current - 1) * pagination.pageSize + 1
-                    } \u2013 ${Math.min(
-                      pagination.current * pagination.pageSize,
-                      pagination.total
-                    )} of ${pagination.total.toLocaleString()}`}
+                    )} \u2013 ${formatCount(
+                      Math.min(
+                        pagination.current * pagination.pageSize,
+                        pagination.total
+                      )
+                    )} of ${formatCount(pagination.total)}`}
                 </span>
                 <div data-part="pagination-controls">
                   {/* Previous */}

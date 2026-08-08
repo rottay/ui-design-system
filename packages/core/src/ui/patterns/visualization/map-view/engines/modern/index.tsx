@@ -41,7 +41,7 @@
  * />
  */
 
-import React from 'react';
+import React, { useId } from 'react';
 import type { MapViewProps, MapMarker } from '../../contracts';
 import ModernButton from '../../../../../primitives/inputs/Button/engines/modern';
 import ModernSpinner from '../../../../../primitives/feedback/Spinner/engines/modern';
@@ -63,6 +63,7 @@ export default function ModernMapView<T>(props: MapViewProps<T>) {
   const i18n = useOptionalTranslation('components');
   const tOr = (key: string, floor: string, params?: Record<string, string | number>): string =>
     i18n?.tOr(key, floor, params) ?? interpolateTranslation(floor, params);
+  const popupIdPrefix = useId();
 
   const {
     markers,
@@ -158,53 +159,55 @@ export default function ModernMapView<T>(props: MapViewProps<T>) {
               <div data-part="marker-list">
                 {markers.map((marker, i) => {
                   const isSelected = marker.id === selectedMarkerId;
+                  const popupId = `${popupIdPrefix}-popup-${marker.id}`;
                   return (
-                    /* Public Button: keyboard selection (focus + Enter/Space)
-                        and focus semantics come from the primitive. Selection
-                        is a persistent toggle state (aria-pressed); a row
-                        with popup content discloses it (aria-expanded). */
-                    <ModernButton
-                      variant="ghost"
-                      size="sm"
-                      data-part="marker-row"
-                      data-selected={isSelected}
-                      data-last={i === markers.length - 1}
-                      key={marker.id}
-                      aria-pressed={isSelected}
-                      aria-expanded={renderPopup ? isSelected : undefined}
-                      onClick={() => onMarkerClick?.(marker)}
-                    >
-                      {/* Custom renderer takes priority; default shows icon,
-                          color dot (consumer DATA, stays inline), label,
-                          coords. */}
-                      {renderMarker ? (
-                        renderMarker(marker)
-                      ) : (
-                        <span data-part="marker-row-main">
-                          {marker.icon}
-                          {marker.color && (
-                            <span
-                              data-part="marker-color"
-                              style={{ background: marker.color }}
-                            />
-                          )}
-                          <span data-part="marker-text">
-                            <span data-part="marker-label">
-                              {marker.label ?? marker.id}
-                            </span>
-                            <span data-part="coordinates">
-                              {marker.lat.toFixed(4)}, {marker.lng.toFixed(4)}
+                    <React.Fragment key={marker.id}>
+                      {/* Selection is a persistent toggle (aria-pressed); a row with popup content
+                         discloses it (aria-expanded). */}
+                      <ModernButton
+                        variant="ghost"
+                        size="sm"
+                        data-part="marker-row"
+                        data-selected={isSelected}
+                        data-last={i === markers.length - 1}
+                        aria-pressed={isSelected}
+                        aria-expanded={renderPopup ? isSelected : undefined}
+                        aria-controls={isSelected && renderPopup ? popupId : undefined}
+                        onClick={() => onMarkerClick?.(marker)}
+                      >
+                        {/* Custom renderer takes priority; the default shows icon, colour dot
+                           (consumer data, stays inline), label and coords. */}
+                        {renderMarker ? (
+                          renderMarker(marker)
+                        ) : (
+                          <span data-part="marker-row-main">
+                            {marker.icon}
+                            {marker.color && (
+                              <span
+                                data-part="marker-color"
+                                style={{ background: marker.color }}
+                              />
+                            )}
+                            <span data-part="marker-text">
+                              <span data-part="marker-label">
+                                {marker.label ?? marker.id}
+                              </span>
+                              <span data-part="coordinates">
+                                {marker.lat.toFixed(4)}, {marker.lng.toFixed(4)}
+                              </span>
                             </span>
                           </span>
-                        </span>
-                      )}
+                        )}
+                      </ModernButton>
                       {/* Popup content expands below the selected row -- a
                           list-inline disclosure, not an overlay (Popover
                           does not apply; focus stays on the row). */}
+                      {/* Sibling of the row, never its child: popup content is
+                          consumer-supplied and a button may not contain it. */}
                       {isSelected && renderPopup && (
-                        <span data-part="popup">{renderPopup(marker)}</span>
+                        <div data-part="popup" id={popupId}>{renderPopup(marker)}</div>
                       )}
-                    </ModernButton>
+                    </React.Fragment>
                   );
                 })}
               </div>

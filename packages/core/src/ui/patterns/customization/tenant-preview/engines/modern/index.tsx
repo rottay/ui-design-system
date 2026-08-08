@@ -45,7 +45,7 @@ const ALL_COMPONENTS: PreviewComponent[] = ['button', 'card', 'input', 'badge', 
 /** Parses hex color to RGB; handles shorthand (#abc) and full (#aabbcc) */
 function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
   const normalized = hex.length === 4 ? `#${hex[1]}${hex[1]}${hex[2]}${hex[2]}${hex[3]}${hex[3]}` : hex;
-  const match = /^#([0-9a-fA-F]{6})$/.exec(normalized);
+  const match = /^#([0-9a-fA-F]{6})(?:[0-9a-fA-F]{2})?$/.exec(normalized);
   if (!match) return null;
   const parsed = Number.parseInt(match[1], 16);
   return { r: (parsed >> 16) & 255, g: (parsed >> 8) & 255, b: parsed & 255 };
@@ -66,6 +66,9 @@ function mixColor(base: string, target: string, ratio: number): string {
  *  The mix endpoints are universal tint/shade anchors for the fixture
  *  computation, not brand values. */
 function buildPaletteSteps(base: string): { step: number; color: string }[] {
+  /* An unmixable brand color cannot produce a ramp: emitting ten identical
+     swatches labelled 50-900 claimed a gradation that does not exist. */
+  if (!hexToRgb(base)) return [{ step: 500, color: base }];
   return [
     { step: 50, color: mixColor(base, '#ffffff', 0.92) },
     { step: 100, color: mixColor(base, '#ffffff', 0.82) },
@@ -192,6 +195,9 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
   }, [tenantConfig.slug]);
 
   const primaryFg = getContrastColor(creationConfig.primaryColor);
+  /* The in-swatch step label is only safe to paint when the base color can be
+     measured; over an unparseable value the ink is a guess. */
+  const primaryIsMeasurable = hexToRgb(creationConfig.primaryColor) !== null;
 
   const sectionId = useId();
   const paletteLabelId = `${sectionId}-palette`;
@@ -242,9 +248,11 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
         <div data-part="header">
           {creationConfig.logo && !logoFailed && (
             <div data-part="logo">
+              {/* The tenant name is rendered adjacent as the heading, so the
+                  mark is decorative: a copied alt announced it twice. */}
               <img
                 src={creationConfig.logo}
-                alt={creationConfig.name}
+                alt=""
                 onError={() => setLogoFailed(true)}
               />
             </div>
@@ -295,7 +303,7 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                          swatch color stays inline (the preview's purpose). */
                       style={{ backgroundColor: color }}
                     >
-                      {step === 500 && (
+                      {step === 500 && primaryIsMeasurable && (
                         <span
                           data-part="swatch-label"
                           data-palette="primary"
@@ -414,7 +422,9 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
               {components.includes('table') && (
                 <div>
                   <div data-part="sub-label">{copy.table}</div>
-                  <div data-part="table-scroll">
+                  {/* The fixture overflows on narrow previews; a scroll
+                      region with no tab stop is unreachable by keyboard. */}
+                  <div data-part="table-scroll" role="group" aria-label={copy.table} tabIndex={0}>
                     <table data-part="sample-table">
                       <thead>
                         <tr data-part="table-head">

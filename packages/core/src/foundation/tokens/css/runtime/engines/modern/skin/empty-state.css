@@ -104,10 +104,12 @@
   block-size: var(--ds-empty-state-lg-visual-size, 6.25rem);
 }
 
+/* An empty-state illustration is content, not a portrait: `cover` cropped
+   every non-square asset the caller handed the well. */
 .ds-pattern-empty-state.ds-engine-modern[data-part='root'] .ds-empty-state__visual[data-part='visual'] > [data-part='image'] {
   inline-size: 100%;
   block-size: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .ds-pattern-empty-state.ds-engine-modern[data-part='root'] .ds-empty-state__visual[data-part='visual'] > [data-part='icon'] {

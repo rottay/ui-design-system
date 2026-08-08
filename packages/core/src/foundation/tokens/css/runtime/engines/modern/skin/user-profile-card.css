@@ -54,6 +54,15 @@
   );
 }
 
+/* ---- pressed: hover-only feedback left the press unanswered on touch and
+   on keyboard activation. The full card settles back one elevation rung; */
+.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-variant='full'][data-interactive='true']:active {
+  box-shadow: var(--ds-elevation-1);
+}
+.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-variant='compact'][data-interactive='true']:active {
+  background: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-inset));
+}
+
 @media (hover: none), (pointer: coarse) {
   .ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-interactive='true'] {
     min-block-size: var(--ds-touch-target-min, 44px);
@@ -367,6 +376,14 @@
 @media (forced-colors: active) {
   .ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-variant='full'] {
     border: 1px solid ButtonText;
+  }
+
+  /* Both focus rings above are box-shadows, which the OS drops here: without
+     these the card and its actions focus invisibly in high contrast. */
+  .ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-interactive='true']:focus-visible,
+  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button']:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
   }
 
   .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__presence-dot[data-part='presence-dot'] {

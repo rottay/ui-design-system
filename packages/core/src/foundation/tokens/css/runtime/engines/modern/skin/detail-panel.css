@@ -456,8 +456,13 @@
   padding: 2px 10px;
   border: 1px solid var(--ds-color-border-secondary);
   border-radius: var(--ds-radius-full);
-  background: color-mix(in srgb, var(--ds-color-bg-secondary) 92%, transparent);
-  color: var(--ds-color-text-secondary);
+  /* The engine stamps the pair only when the consumer supplies status.color;
+     the governed fallback keeps the untinted pill byte-identical. */
+  background: var(
+    --ds-detail-panel-status-bg,
+    color-mix(in srgb, var(--ds-color-bg-secondary) 92%, transparent)
+  );
+  color: var(--ds-detail-panel-status-fg, var(--ds-color-text-secondary));
   font-size: var(--ds-font-size-xs);
   font-weight: var(--ds-font-weight-semibold);
   line-height: var(--ds-line-height-body);

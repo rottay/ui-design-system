@@ -38,7 +38,9 @@
 import React from 'react';
 import type { ActivityLogProps } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { interpolateTranslation } from '@/foundation/i18n/runtime/resolution/translation';
 import { Select } from '../../../../../primitives/inputs/Select';
+import { VisuallyHidden } from '../../../../../primitives/foundation';
 import type { SelectOption as SelectOptionDef } from '../../../../../primitives/inputs/Select/contracts';
 import ModernTimeline from '../../../../../primitives/display/Timeline/engines/modern';
 import ModernAvatar from '../../../../../primitives/display/Avatar/engines/modern';
@@ -104,15 +106,68 @@ const TAG_VARIANT_BY_CATEGORY = {
  * --------------------------------------------------------------------------- */
 
 /** Returns a full absolute timestamp string for title/tooltip. */
-function formatAbsoluteTime(ts: string): string {
+function formatAbsoluteTime(ts: string, locale?: string): string {
   const date = new Date(ts);
-  return date.toLocaleString(undefined, {
+  return date.toLocaleString(locale, {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
   });
+}
+
+const DIFF_MAX_SUBROWS = 6;
+const DIFF_MAX_ARRAY_ITEMS = 4;
+
+type DiffCopy = {
+  diffFrom: string;
+  diffTo: string;
+  diffEmpty: string;
+  diffOpaque: string;
+  locale?: string;
+  listMore: (count: number) => string;
+  itemCount: (count: number) => string;
+  valueCount: (count: number) => string;
+  moreChanges: (count: number) => string;
+};
+
+/** Plain data object (literal or null-prototype). A Map, Set, class instance or
+    function is opaque to a generic diff and is never walked. */
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  if (typeof value !== 'object' || value === null) return false;
+  const proto = Object.getPrototypeOf(value);
+  return proto === Object.prototype || proto === null;
+}
+
+/** Union of both sides' keys, minus the ones that did not move. */
+function changedDiffKeys(from: unknown, to: unknown): string[] {
+  const a = isPlainObject(from) ? from : {};
+  const b = isPlainObject(to) ? to : {};
+  return [...new Set([...Object.keys(a), ...Object.keys(b)])].filter(
+    (key) => !Object.is(a[key], b[key]),
+  );
+}
+
+/** One diff value as text. A structured value never reaches a JS coercion
+    ("[object Object]") nor a serialization dump (which throws on cycles). */
+function formatDiffValue(value: unknown, copy: DiffCopy): string {
+  if (value === null || value === undefined || value === '') return copy.diffEmpty;
+  if (value instanceof Date) return formatAbsoluteTime(value.toISOString(), copy.locale);
+  if (Array.isArray(value)) {
+    if (!value.every((item) => item === null || typeof item !== 'object')) {
+      return copy.itemCount(value.length);
+    }
+    const head = value
+      .slice(0, DIFF_MAX_ARRAY_ITEMS)
+      .map((item) => formatDiffValue(item, copy))
+      .join(', ');
+    const rest = value.length - DIFF_MAX_ARRAY_ITEMS;
+    return rest > 0 ? `${head}, ${copy.listMore(rest)}` : head;
+  }
+  if (isPlainObject(value)) return copy.valueCount(Object.keys(value).length);
+  if (typeof value === 'object' || typeof value === 'function') return copy.diffOpaque;
+  return String(value);
 }
 
 /* ---------------------------------------------------------------------------
@@ -122,25 +177,84 @@ function formatAbsoluteTime(ts: string): string {
 /** Renders a field-level diff showing old values with strikethrough and new
     values emphasized. The from-to connector is the governed auto-mirroring
     forward icon (flips in RTL), never a Unicode arrow. */
-function DiffView({ diff }: { diff: Record<string, { from: unknown; to: unknown }> }) {
+function DiffRow({
+  label,
+  from,
+  to,
+  copy,
+  depth,
+}: {
+  label: string;
+  from: unknown;
+  to: unknown;
+  copy: DiffCopy;
+  depth: 0 | 1;
+}) {
+  return (
+    <div data-part="diff-row" data-diff-depth={depth}>
+      <span data-part="diff-cell" data-diff-role="label">
+        {label}:
+      </span>
+      {/* Strikethrough and the muted tint are the only visual marks of the
+          old value, and neither reaches a screen reader -- this text does. */}
+      <span data-part="diff-cell" data-diff-role="from">
+        <VisuallyHidden>{copy.diffFrom}</VisuallyHidden>
+        {formatDiffValue(from, copy)}
+      </span>
+      <span data-part="diff-cell" data-diff-role="arrow" aria-hidden="true">
+        <NavigationForwardIcon decorative size={12} />
+      </span>
+      <span data-part="diff-cell" data-diff-role="to">
+        <VisuallyHidden>{copy.diffTo}</VisuallyHidden>
+        {formatDiffValue(to, copy)}
+      </span>
+    </div>
+  );
+}
+
+function DiffView({
+  diff,
+  copy,
+}: {
+  diff: Record<string, { from: unknown; to: unknown }>;
+  copy: DiffCopy;
+}) {
   return (
     <div data-part="diff">
-      {Object.entries(diff).map(([field, { from, to }]) => (
-        <div key={field} data-part="diff-row">
-          <span data-part="diff-cell" data-diff-role="label">
-            {field}:
-          </span>
-          <span data-part="diff-cell" data-diff-role="from">
-            {String(from)}
-          </span>
-          <span data-part="diff-cell" data-diff-role="arrow" aria-hidden="true">
-            <NavigationForwardIcon decorative size={12} />
-          </span>
-          <span data-part="diff-cell" data-diff-role="to">
-            {String(to)}
-          </span>
-        </div>
-      ))}
+      {Object.entries(diff).map(([field, { from, to }]) => {
+        const structural = isPlainObject(from) || isPlainObject(to);
+        const keys = structural ? changedDiffKeys(from, to) : [];
+        // A serialized blob buries the delta in unchanged noise, so a struct
+        // field expands into one sub-row per key that actually moved.
+        if (!structural || keys.length === 0) {
+          return <DiffRow key={field} label={field} from={from} to={to} copy={copy} depth={0} />;
+        }
+        const shown = keys.slice(0, DIFF_MAX_SUBROWS);
+        const a = isPlainObject(from) ? from : {};
+        const b = isPlainObject(to) ? to : {};
+        return (
+          <React.Fragment key={field}>
+            {shown.map((key) => (
+              <DiffRow
+                key={`${field}.${key}`}
+                label={`${field}.${key}`}
+                from={a[key]}
+                to={b[key]}
+                copy={copy}
+                depth={1}
+              />
+            ))}
+            {/* A capped list that leaves no trace reads as the complete set. */}
+            {keys.length > shown.length && (
+              <div data-part="diff-row" data-diff-overflow="true">
+                <span data-part="diff-cell" data-diff-role="label">
+                  {copy.moreChanges(keys.length - shown.length)}
+                </span>
+              </div>
+            )}
+          </React.Fragment>
+        );
+      })}
     </div>
   );
 }
@@ -183,8 +297,11 @@ export default function ModernActivityLog(props: ActivityLogProps) {
   // Optional channel with an English floor: the log renders standalone
   // (no I18nProvider) without crashing, and never echoes a raw key.
   const i18n = useOptionalTranslation('components');
+  // Standalone (no provider) the floor is all there is, and it carries the same
+  // `{count}` placeholders as catalog copy -- raw, it prints the template.
   const tOr = (key: string, floor: string, params?: Record<string, string | number>): string =>
-    i18n?.tOr(key, floor, params) ?? floor;
+    i18n?.tOr(key, floor, params) ?? interpolateTranslation(floor, params);
+  const locale = i18n?.locale;
 
   const {
     activities,
@@ -210,6 +327,17 @@ export default function ModernActivityLog(props: ActivityLogProps) {
     filterByAction: tOr('activityLog.filter.byAction', 'Filter by action'),
     filterByUser: tOr('activityLog.filter.byUser', 'Filter by user'),
     feed: tOr('activityLog.feedLabel', 'Activity feed'),
+    diffFrom: tOr('activityLog.diff.from', 'from'),
+    diffTo: tOr('activityLog.diff.to', 'to'),
+    diffEmpty: tOr('activityLog.diff.empty', 'empty'),
+    // Structured values get bounded parametric floors, never a JSON dump.
+    diffOpaque: tOr('activityLog.diff.opaque', 'changed'),
+    locale,
+    listMore: (count: number) => tOr('activityLog.diff.listMore', '+{count} more', { count }),
+    itemCount: (count: number) => tOr('activityLog.diff.itemCount', '{count} items', { count }),
+    valueCount: (count: number) => tOr('activityLog.diff.valueCount', '{count} values', { count }),
+    moreChanges: (count: number) =>
+      tOr('activityLog.diff.moreChanges', '+{count} more changes', { count }),
   };
   const emptyMessage = emptyMessageProp ?? copy.empty;
 
@@ -226,34 +354,14 @@ export default function ModernActivityLog(props: ActivityLogProps) {
     if (diffHr < 24) return tOr('activityLog.time.hoursAgo', '{count}h ago', { count: diffHr });
     const diffDay = Math.floor(diffHr / 24);
     if (diffDay < 7) return tOr('activityLog.time.daysAgo', '{count}d ago', { count: diffDay });
-    return date.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+    return date.toLocaleDateString(locale, { year: 'numeric', month: 'short', day: 'numeric' });
   };
 
   /* Loading state: the composed Skeleton primitives own the placeholder
      anatomy; the skin owns the list frame. */
-  if (loading) {
-    return (
-      <div
-        data-part="root"
-        className={`ds-pattern-activity-log ds-engine-modern ${className ?? ''}`}
-        data-loading="true"
-        style={style}
-      >
-        <LoadingSkeleton />
-      </div>
-    );
-  }
-
-  return (
-    <div
-      data-part="root"
-      className={`ds-pattern-activity-log ds-engine-modern ${className ?? ''}`}
-      data-loading="false"
-      style={style}
-    >
-      {/* Filter bar: composed Select primitives (never recreated pills --
-          status-filter-pills is another pattern's anatomy). */}
-      {onFilterChange && (
+  // Filters outlive the skeleton: a refetch that unmounts them drops the
+  // user's own controls out of the page and re-flows what is left.
+  const filterBar = onFilterChange && (
         <div data-part="filters">
           {/* Action type filter */}
           {actionTypes && actionTypes.length > 0 && (
@@ -290,7 +398,32 @@ export default function ModernActivityLog(props: ActivityLogProps) {
             />
           )}
         </div>
-      )}
+      );
+
+  if (loading) {
+    return (
+      <div
+        data-part="root"
+        className={`ds-pattern-activity-log ds-engine-modern ${className ?? ''}`}
+        data-loading="true"
+        aria-busy={true}
+        style={style}
+      >
+        {filterBar}
+        <LoadingSkeleton />
+      </div>
+    );
+  }
+
+  return (
+    <div
+      data-part="root"
+      className={`ds-pattern-activity-log ds-engine-modern ${className ?? ''}`}
+      data-loading="false"
+      aria-busy={false}
+      style={style}
+    >
+      {filterBar}
 
       {/* Feed on the composed Timeline axis, or the composed Empty state */}
       {activities.length === 0 ? (
@@ -370,13 +503,13 @@ export default function ModernActivityLog(props: ActivityLogProps) {
                       {/* Timestamp: relative (i18n floor) with absolute tooltip */}
                       <div
                         data-part="timestamp"
-                        title={formatAbsoluteTime(activity.timestamp)}
+                        title={formatAbsoluteTime(activity.timestamp, locale)}
                       >
                         {formatRelativeTime(activity.timestamp)}
                       </div>
 
                       {/* Diff view */}
-                      {activity.diff && <DiffView diff={activity.diff} />}
+                      {activity.diff && <DiffView diff={activity.diff} copy={copy} />}
                     </>
                   )}
                 </div>

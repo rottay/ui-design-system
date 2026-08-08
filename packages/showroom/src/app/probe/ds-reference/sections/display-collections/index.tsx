@@ -96,7 +96,10 @@ export function DisplayCollectionsScene() {
           <List
             dataSource={REVIEWERS}
             bordered
-            renderItem={(user) => (
+            renderItem={(row) => {
+              // `List` is not generic, so renderItem hands back `unknown`.
+              const user = row as (typeof REVIEWERS)[number];
+              return (
               <List.Item actions={[<Button key="edit" variant="ghost">Edit</Button>]}>
                 <List.Item.Meta
                   avatar={<Avatar name={user.name} tone="primary" />}
@@ -104,7 +107,8 @@ export function DisplayCollectionsScene() {
                   description={user.email}
                 />
               </List.Item>
-            )}
+              );
+            }}
             pagination={{ pageSize: 10 }}
           />
         </div>

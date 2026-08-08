@@ -394,6 +394,13 @@
   height: 40px;
 }
 
+/* The eyebrow reserve matches the mono/uppercase strip above the title, so a
+   header that uses one does not gain a line on hydrate. */
+.ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton'][data-size='eyebrow'] {
+  width: 96px;
+  height: 10px;
+}
+
 .ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton'][data-size='title'] {
   width: 200px;
   height: 22px;

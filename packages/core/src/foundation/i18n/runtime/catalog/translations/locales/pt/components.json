@@ -865,7 +865,9 @@
     "minutes_ago": "há {count}min",
     "hours_ago": "há {count}h",
     "days_ago": "há {count}d",
-    "loading": "Carregando"
+    "loading": "Carregando",
+    "hidden_reply": "mais 1 resposta não exibida",
+    "hidden_replies": "mais {count} respostas não exibidas"
   },
   "selectionPreviewRail": {
     "closePreview": "Fechar prévia",
@@ -898,7 +900,9 @@
     "columnSize": "Tamanho",
     "columnModified": "Modificado",
     "columnActions": "Ações",
-    "columnSelect": "Selecionar"
+    "columnSelect": "Selecionar",
+    "listLabel": "Arquivos e pastas",
+    "selectItem": "Selecionar {name}"
   },
   "voiceInput": {
     "speak": "Falar",
@@ -965,7 +969,10 @@
     "groupToday": "Hoje",
     "groupEarlier": "Anteriores",
     "unread": "Não lida",
-    "unreadCount": "{count} não lidas"
+    "unreadCount": "{count} não lidas",
+    "markItemAsRead": "{action}: {title}",
+    "dismissItem": "{action}: {title}",
+    "moreNotShown": "mais {count} não exibidas"
   },
   "columnSettings": {
     "title": "Colunas",
@@ -997,7 +1004,17 @@
     },
     "onEntity": "em {entity}",
     "onEntityWithId": "em {entity} #{id}",
-    "feedLabel": "Feed de atividade"
+    "feedLabel": "Feed de atividade",
+    "diff": {
+      "from": "de",
+      "to": "para",
+      "empty": "vazio",
+      "opaque": "alterado",
+      "listMore": "+{count} mais",
+      "itemCount": "{count} itens",
+      "valueCount": "{count} valores",
+      "moreChanges": "+{count} outras alterações"
+    }
   },
   "approvalWorkflow": {
     "status": {
@@ -1034,7 +1051,9 @@
     "loading": "Carregando",
     "included": "Incluído",
     "excluded": "Não incluído",
-    "empty": "Nenhum plano disponível"
+    "empty": "Nenhum plano disponível",
+    "savings": "Economize 20%",
+    "comparison": "Comparação de planos"
   },
   "filterPanel": {
     "apply": "Aplicar",
@@ -1164,7 +1183,10 @@
     "range_to": "até",
     "min": "Mín",
     "max": "Máx",
-    "select_placeholder": "Selecionar…"
+    "select_placeholder": "Selecionar…",
+    "range_start": "De",
+    "range_end": "Até",
+    "active_count": "Filtros ativos"
   },
   "workbenchHeader": {
     "exceptions": "{count} exceções"
@@ -1518,5 +1540,15 @@
       "success": "Sucesso",
       "warning": "Aviso"
     }
+  },
+  "liveFeed": {
+    "feedLabel": "Feed ao vivo",
+    "newItemsAnnouncement": "{count} atualizações pendentes"
+  },
+  "detailPanel": {
+    "loading": "Carregando detalhes…"
+  },
+  "locale_switcher": {
+    "panel_aria": "Idiomas"
   }
 }

@@ -188,6 +188,14 @@
   outline-offset: var(--ds-focus-ring-offset, 2px);
 }
 
+/* The bounded viewport is a tab stop, so it carries its own visible ring and
+   the offset is inset to keep overflow from clipping it. */
+.ds-pattern-live-feed.ds-engine-modern [data-part='viewport']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: calc(-1 * var(--ds-focus-ring-width, 2px));
+  border-radius: var(--ds-radius-md);
+}
+
 /* coarse pointers: the three controls meet the physical 44px floor on BOTH
    axes — the icon-only refresh button is authored 32x32, so its inline axis
    needs the floor as much as its block axis (the full-width banner already
@@ -235,7 +243,8 @@
 
   .ds-pattern-live-feed.ds-engine-modern [data-part='refresh']:focus-visible,
   .ds-pattern-live-feed.ds-engine-modern [data-part='banner']:focus-visible,
-  .ds-pattern-live-feed.ds-engine-modern [data-part='load-more']:focus-visible {
+  .ds-pattern-live-feed.ds-engine-modern [data-part='load-more']:focus-visible,
+  .ds-pattern-live-feed.ds-engine-modern [data-part='viewport']:focus-visible {
     outline-color: Highlight;
   }
 }

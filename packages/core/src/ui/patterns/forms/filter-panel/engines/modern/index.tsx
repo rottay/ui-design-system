@@ -37,7 +37,7 @@
  * />
  */
 
-import React, { useState } from 'react';
+import React, { useId, useState } from 'react';
 import type { FilterPanelProps } from '../../contracts';
 import type { FilterDef } from '../../../../../../foundation/contracts/runtime/components/patterns/core';
 /* Option-icon heuristics route through the governed semantic-icon facade
@@ -82,6 +82,8 @@ interface FilterPanelCopy {
   collapse: string;
   expand: string;
   rangeTo: string;
+  rangeStart: string;
+  rangeEnd: string;
   min: string;
   max: string;
   selectPlaceholder: string;
@@ -262,6 +264,8 @@ function renderFilterControl(
     case 'date-range': {
       const range = (value as [string, string]) ?? ['', ''];
       return (
+        /* The group carries the field name; each bound carries its own
+           standalone label — two unnamed date inputs were indistinguishable. */
         <div data-part="range-group" role="group" aria-label={filter.label}>
           <div data-part="input">
             <ModernInput
@@ -269,6 +273,7 @@ function renderFilterControl(
               type="date"
               value={range[0] ?? ''}
               onChange={(val) => onChange(filter.key, [val, range[1]])}
+              aria-label={copy.rangeStart}
             />
           </div>
           <span data-part="range-separator">{copy.rangeTo}</span>
@@ -278,6 +283,7 @@ function renderFilterControl(
               type="date"
               value={range[1] ?? ''}
               onChange={(val) => onChange(filter.key, [range[0], val])}
+              aria-label={copy.rangeEnd}
             />
           </div>
         </div>
@@ -312,7 +318,9 @@ function renderFilterControl(
               aria-label={copy.min}
             />
           </div>
-          <span data-part="range-separator">-</span>
+          {/* The separator is read aloud between the bounds, so it rides the
+              i18n channel like the date range's — never a bare hyphen. */}
+          <span data-part="range-separator">{copy.rangeTo}</span>
           <div data-part="input">
             <ModernInputNumber
               size="sm"
@@ -360,6 +368,8 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
     collapse: tOr('filter_panel.collapse', 'Collapse filters'),
     expand: tOr('filter_panel.expand', 'Expand filters'),
     rangeTo: tOr('filter_panel.range_to', 'to'),
+    rangeStart: tOr('filter_panel.range_start', 'From'),
+    rangeEnd: tOr('filter_panel.range_end', 'To'),
     min: tOr('filter_panel.min', 'Min'),
     max: tOr('filter_panel.max', 'Max'),
     selectPlaceholder: tOr('filter_panel.select_placeholder', 'Select...'),
@@ -384,6 +394,7 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
   } = props;
 
   const [collapsed, setCollapsed] = useState(defaultCollapsed);
+  const contentId = `${useId()}content`;
 
   const handleChange = (key: string, val: unknown) => {
     onChange({ ...values, [key]: val });
@@ -392,6 +403,10 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
   const isInline = layout === 'inline';
   const isSidebar = layout === 'sidebar';
   const isCollapsed = collapsible && collapsed;
+  // `showReset`/`showApply` only paint when their handler exists; a
+  // handler-less control would swallow every click.
+  const canReset = showReset && !!onReset;
+  const canApply = showApply && !!onApply;
 
   /* -- Filter content area (geometry is skin-owned, keyed on data-layout) -- */
   const filterContent = (
@@ -429,7 +444,7 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
       style={style}
     >
       {/* Header: title, collapse toggle, active count badge, clear all */}
-      {(title || collapsible || (activeCount != null && activeCount > 0) || showReset) && (
+      {(title || collapsible || (activeCount != null && activeCount > 0) || canReset) && (
         <div
           data-part="header"
           data-collapsed={isCollapsed ? 'true' : 'false'}
@@ -444,6 +459,7 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
                 icon={<NavigationDownIcon decorative size={14} />}
                 onClick={() => setCollapsed(!collapsed)}
                 aria-expanded={!collapsed}
+                aria-controls={contentId}
                 aria-label={collapsed ? copy.expand : copy.collapse}
               />
             )}
@@ -451,17 +467,20 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
               <span data-part="title">{title}</span>
             )}
             {activeCount != null && activeCount > 0 && (
+              /* A bare numeral announced as "6" with no subject; the count
+                 needs its own name to mean anything out of visual context. */
               <ModernBadge
                 count={activeCount}
                 variant="primary"
                 size="xs"
                 data-part="active-count-badge"
+                aria-label={tOr('filter_panel.active_count', 'Active filters')}
               />
             )}
           </div>
 
           {/* Clear all -- ghost button, right-aligned in header */}
-          {showReset && !isCollapsed && (
+          {canReset && !isCollapsed && (
             <ModernButton
               variant="ghost"
               size="sm"
@@ -477,14 +496,19 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
 
       {/* Collapsible content area: the skin owns the max-block-size/opacity
           transition keyed on data-collapsed. */}
+      {/* A zero-height clip is paint only: every collapsed filter stayed in the
+          tab order and in the AT tree. `inert` removes both at the source. */}
       <div
+        id={contentId}
         data-part="content"
         data-collapsed={isCollapsed ? 'true' : 'false'}
+        inert={isCollapsed}
+        aria-hidden={isCollapsed ? 'true' : undefined}
       >
         {filterContent}
 
         {/* Action buttons: Apply */}
-        {showApply && (
+        {canApply && (
           <div data-part="actions">
             <ModernButton
               variant="primary"

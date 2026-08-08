@@ -272,7 +272,8 @@
   "detailPanel": {
     "back": "Volver",
     "breadcrumb": "Ruta de navegación",
-    "tabs": "Pestañas del panel de detalle"
+    "tabs": "Pestañas del panel de detalle",
+    "loading": "Cargando detalles…"
   },
   "columnSettings": {
     "title": "Columnas",
@@ -297,7 +298,9 @@
     "loading": "Cargando",
     "included": "Incluido",
     "excluded": "No incluido",
-    "empty": "No hay planes disponibles"
+    "empty": "No hay planes disponibles",
+    "savings": "Ahorra un 20%",
+    "comparison": "Comparación de planes"
   },
   "activityLog": {
     "filter": {
@@ -315,7 +318,17 @@
     },
     "onEntity": "en {entity}",
     "onEntityWithId": "en {entity} #{id}",
-    "feedLabel": "Feed de actividad"
+    "feedLabel": "Feed de actividad",
+    "diff": {
+      "from": "de",
+      "to": "a",
+      "empty": "vacío",
+      "opaque": "modificado",
+      "listMore": "+{count} más",
+      "itemCount": "{count} elementos",
+      "valueCount": "{count} valores",
+      "moreChanges": "+{count} cambios más"
+    }
   },
   "transfer": {
     "source_title": "Origen",
@@ -881,7 +894,9 @@
     "minutes_ago": "hace {count} min",
     "hours_ago": "hace {count} h",
     "days_ago": "hace {count} d",
-    "loading": "Cargando"
+    "loading": "Cargando",
+    "hidden_reply": "1 respuesta más sin mostrar",
+    "hidden_replies": "{count} respuestas más sin mostrar"
   },
   "confirmDialog": {
     "confirm": "Confirmar",
@@ -901,7 +916,8 @@
     "recent": "Recientes"
   },
   "locale_switcher": {
-    "trigger_aria": "Idioma: {locale}"
+    "trigger_aria": "Idioma: {locale}",
+    "panel_aria": "Idiomas"
   },
   "kanbanBoard": {
     "add_item": "Agregar item",
@@ -936,7 +952,9 @@
     "columnSize": "Tamaño",
     "columnModified": "Modificado",
     "columnActions": "Acciones",
-    "columnSelect": "Seleccionar"
+    "columnSelect": "Seleccionar",
+    "listLabel": "Archivos y carpetas",
+    "selectItem": "Seleccionar {name}"
   },
   "filterPanel": {
     "apply": "Aplicar",
@@ -1033,7 +1051,9 @@
     "loadMore": "Cargar más",
     "newItem": "elemento nuevo",
     "newItems": "elementos nuevos",
-    "empty": "Sin elementos"
+    "empty": "Sin elementos",
+    "feedLabel": "Feed en vivo",
+    "newItemsAnnouncement": "{count} actualizaciones pendientes"
   },
   "notificationCenter": {
     "title": "Notificaciones",
@@ -1049,7 +1069,10 @@
     "groupToday": "Hoy",
     "groupEarlier": "Anteriores",
     "unread": "No leída",
-    "unreadCount": "{count} sin leer"
+    "unreadCount": "{count} sin leer",
+    "markItemAsRead": "{action}: {title}",
+    "dismissItem": "{action}: {title}",
+    "moreNotShown": "{count} más sin mostrar"
   },
   "popconfirm": {
     "ok": "Sí",
@@ -1377,7 +1400,10 @@
     "range_to": "a",
     "min": "Mín",
     "max": "Máx",
-    "select_placeholder": "Seleccionar…"
+    "select_placeholder": "Seleccionar…",
+    "range_start": "Desde",
+    "range_end": "Hasta",
+    "active_count": "Filtros activos"
   },
   "workbenchHeader": {
     "exceptions": "{count} excepciones"

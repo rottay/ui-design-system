@@ -786,3 +786,104 @@
     animation: none;
   }
 }
+
+/* Every selector carries `.ds-engine-modern`, so classic and rustic keep the
+   shared paint byte-for-byte. */
+
+/* The shared reduced-motion exit is (0,2,0) and loses the cascade tie to the
+   (0,3,0) entrance, so it must be re-declared at equal weight here. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-decision-comparison.ds-engine-modern[data-part="root"][data-loading] {
+    animation: none;
+  }
+}
+
+/* The wrap contract reaches ELEMENT children only, so a plain-string title
+   needs it declared directly or the identity line is silently clipped. */
+.ds-pattern-decision-comparison.ds-engine-modern .ds-decision-comparison__title {
+  overflow-wrap: anywhere;
+  text-overflow: clip;
+  white-space: normal;
+}
+
+/* Subtitle and score label were single-line ellipsis at every width above
+   the 47.9375rem query, which silently drops role and provenance copy; */
+.ds-pattern-decision-comparison.ds-engine-modern .ds-decision-comparison__subtitle,
+.ds-pattern-decision-comparison.ds-engine-modern .ds-decision-comparison__score-label {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow-wrap: anywhere;
+  text-overflow: clip;
+  white-space: normal;
+}
+
+/* `justify-items: end` / `text-align: end` are already writing-mode aware, so
+   a shared `:dir(rtl)` flip to `start` would double-correct. */
+.ds-pattern-decision-comparison.ds-engine-modern:dir(rtl)
+  .ds-decision-comparison__fact-value {
+  justify-items: end;
+  text-align: end;
+}
+
+/* `data-density` moves padding and row height only, so literal chrome floors
+   must be declared per density or a compact board keeps the roomy ones. */
+.ds-pattern-decision-comparison.ds-engine-modern .ds-decision-comparison__toolbar {
+  min-height: calc(
+    var(--ds-decision-comparison-toolbar-min-height) *
+      var(--ds-density-effective-scale, 1)
+  );
+}
+
+.ds-pattern-decision-comparison.ds-engine-modern .ds-decision-comparison__identity {
+  min-height: calc(
+    var(--ds-decision-comparison-identity-min-height) *
+      var(--ds-density-effective-scale, 1)
+  );
+}
+
+.ds-pattern-decision-comparison.ds-engine-modern .ds-decision-comparison__badges {
+  min-height: calc(
+    var(--ds-decision-comparison-badges-min-height) *
+      var(--ds-density-effective-scale, 1)
+  );
+}
+
+.ds-pattern-decision-comparison.ds-engine-modern .ds-decision-comparison__visual {
+  min-height: calc(
+    var(--ds-decision-comparison-visual-min-height) *
+      var(--ds-density-effective-scale, 1)
+  );
+}
+
+/* The subject's third track carries the same reserved visual height, so it has
+   to scale with it or the unscaled track floor would swallow the reduction. */
+.ds-pattern-decision-comparison.ds-engine-modern .ds-decision-comparison__subject {
+  grid-template-rows: auto auto minmax(
+      calc(
+        var(--ds-decision-comparison-visual-min-height) *
+          var(--ds-density-effective-scale, 1)
+      ),
+      auto
+    ) 1fr auto;
+}
+
+@media (forced-colors: active) {
+  /* The tone dot is the "never hue alone" marker, and forced colors replaces a
+   `currentColor` background, so the redundancy needs its own carrier. */
+  .ds-pattern-decision-comparison.ds-engine-modern
+    .ds-decision-comparison__fact[data-tone]
+    .ds-decision-comparison__fact-value
+    > span:first-child::before {
+    background: CanvasText;
+  }
+
+  /* The empty state is painted by a radial gradient alone and carries no
+     border, so forced colors left an unmarked void inside the card frame. */
+  .ds-pattern-decision-comparison.ds-engine-modern .ds-decision-comparison__empty {
+    outline: 1px solid CanvasText;
+    outline-offset: -1px;
+  }
+}

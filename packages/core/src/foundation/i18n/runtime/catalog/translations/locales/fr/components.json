@@ -829,7 +829,9 @@
     "minutes_ago": "il y a {count} min",
     "hours_ago": "il y a {count} h",
     "days_ago": "il y a {count} j",
-    "loading": "Chargement"
+    "loading": "Chargement",
+    "hidden_reply": "1 réponse de plus non affichée",
+    "hidden_replies": "{count} réponses de plus non affichées"
   },
   "selectionPreviewRail": {
     "closePreview": "Fermer l’aperçu",
@@ -862,7 +864,9 @@
     "columnSize": "Taille",
     "columnModified": "Modification",
     "columnActions": "Actions",
-    "columnSelect": "Sélectionner"
+    "columnSelect": "Sélectionner",
+    "listLabel": "Fichiers et dossiers",
+    "selectItem": "Sélectionner {name}"
   },
   "voiceInput": {
     "speak": "Parler",
@@ -929,7 +933,10 @@
     "groupToday": "Aujourd'hui",
     "groupEarlier": "Précédentes",
     "unread": "Non lue",
-    "unreadCount": "{count} non lues"
+    "unreadCount": "{count} non lues",
+    "markItemAsRead": "{action}: {title}",
+    "dismissItem": "{action}: {title}",
+    "moreNotShown": "{count} de plus non affichées"
   },
   "activityLog": {
     "filter": {
@@ -947,7 +954,17 @@
     },
     "onEntity": "sur {entity}",
     "onEntityWithId": "sur {entity} n° {id}",
-    "feedLabel": "Flux d'activité"
+    "feedLabel": "Flux d'activité",
+    "diff": {
+      "from": "de",
+      "to": "à",
+      "empty": "vide",
+      "opaque": "modifié",
+      "listMore": "+{count} autres",
+      "itemCount": "{count} éléments",
+      "valueCount": "{count} valeurs",
+      "moreChanges": "+{count} autres modifications"
+    }
   },
   "approvalWorkflow": {
     "status": {
@@ -984,7 +1001,9 @@
     "loading": "Chargement",
     "included": "Inclus",
     "excluded": "Non inclus",
-    "empty": "Aucun forfait disponible"
+    "empty": "Aucun forfait disponible",
+    "savings": "Économisez 20 %",
+    "comparison": "Comparatif des forfaits"
   },
   "filterPanel": {
     "apply": "Appliquer",
@@ -1055,7 +1074,9 @@
     "loadMore": "Charger plus",
     "newItem": "nouvel élément",
     "newItems": "nouveaux éléments",
-    "empty": "Aucun élément"
+    "empty": "Aucun élément",
+    "feedLabel": "Flux en direct",
+    "newItemsAnnouncement": "{count} mises à jour en attente"
   },
   "map_view": {
     "placeholder": "Emplacement de la carte",
@@ -1189,7 +1210,10 @@
     "range_to": "à",
     "min": "Min",
     "max": "Max",
-    "select_placeholder": "Sélectionner…"
+    "select_placeholder": "Sélectionner…",
+    "range_start": "De",
+    "range_end": "À",
+    "active_count": "Filtres actifs"
   },
   "workbenchHeader": {
     "exceptions": "{count} exceptions"
@@ -1534,5 +1558,11 @@
       "success": "Succès",
       "warning": "Avertissement"
     }
+  },
+  "detailPanel": {
+    "loading": "Chargement des détails…"
+  },
+  "locale_switcher": {
+    "panel_aria": "Langues"
   }
 }

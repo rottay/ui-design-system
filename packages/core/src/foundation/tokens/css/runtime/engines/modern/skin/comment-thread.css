@@ -163,10 +163,23 @@
     var(--ds-comment-thread-rail-color, var(--ds-color-border));
 }
 
+/* ---- depth-cap notice: sits on the rail the hidden replies would occupy, in
+   the muted metadata voice ---- */
+.ds-pattern-comment-thread.ds-engine-modern [data-part='replies-truncated'] {
+  margin-inline-start: var(--ds-comment-thread-rail-offset, var(--ds-spacing-2, 8px));
+  margin-block-start: var(--ds-spacing-2, 8px);
+  padding-inline-start: var(--ds-comment-thread-rail-padding, var(--ds-spacing-3, 12px));
+  font-size: var(--ds-font-size-xs, 12px);
+  line-height: var(--ds-line-height-snug, 1.375);
+  color: var(--ds-color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
 /* ---- narrow composition cut: the rail indent collapses first (it is the
         only fixed-ish indent in the pattern); the head row already wraps. ---- */
 @container ds-comment-thread (inline-size < 28rem) {
-  .ds-pattern-comment-thread.ds-engine-modern [data-part='nested-line'] {
+  .ds-pattern-comment-thread.ds-engine-modern [data-part='nested-line'],
+  .ds-pattern-comment-thread.ds-engine-modern [data-part='replies-truncated'] {
     margin-inline-start: 0;
     padding-inline-start: var(--ds-spacing-2, 8px);
   }

@@ -130,6 +130,9 @@
 
 /* ---- scroll frame: horizontal overflow with the feature column pinned ---- */
 .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__scroll {
+  /* `overflow-inline` ships only in Firefox, so the frame declares an explicit
+   axis or Chromium/WebKit gets no scroll at all. */
+  overflow-x: auto;
   overflow-inline: auto;
   scrollbar-color: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border)) transparent;
   scrollbar-width: thin;
@@ -247,6 +250,9 @@
 }
 .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__feature-cell {
   color: var(--ds-color-text-primary);
+  /* The cell is a real row header now; the UA's bold `th` default would
+     otherwise re-weight every feature label against the value columns. */
+  font-weight: var(--ds-font-weight-regular, 400);
   text-align: start;
 }
 .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__value-cell {

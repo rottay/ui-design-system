@@ -280,7 +280,8 @@
   "detailPanel": {
     "back": "رجوع",
     "breadcrumb": "مسار التنقل",
-    "tabs": "علامات تبويب لوحة التفاصيل"
+    "tabs": "علامات تبويب لوحة التفاصيل",
+    "loading": "جارٍ تحميل التفاصيل…"
   },
   "columnSettings": {
     "title": "الأعمدة",
@@ -305,7 +306,9 @@
     "loading": "جارٍ التحميل",
     "included": "مشمول",
     "excluded": "غير مشمول",
-    "empty": "لا توجد خطط متاحة"
+    "empty": "لا توجد خطط متاحة",
+    "savings": "وفّر 20%",
+    "comparison": "مقارنة الخطط"
   },
   "activityLog": {
     "filter": {
@@ -323,7 +326,17 @@
     },
     "onEntity": "على {entity}",
     "onEntityWithId": "على {entity} #{id}",
-    "feedLabel": "موجز النشاط"
+    "feedLabel": "موجز النشاط",
+    "diff": {
+      "from": "من",
+      "to": "إلى",
+      "empty": "فارغ",
+      "opaque": "تم التغيير",
+      "listMore": "و{count} أخرى",
+      "itemCount": "{count} عنصر",
+      "valueCount": "{count} قيمة",
+      "moreChanges": "و{count} تغيير آخر"
+    }
   },
   "transfer": {
     "source_title": "المصدر",
@@ -881,7 +894,9 @@
     "minutes_ago": "منذ {count} د",
     "hours_ago": "منذ {count} س",
     "days_ago": "منذ {count} ي",
-    "loading": "جارٍ التحميل"
+    "loading": "جارٍ التحميل",
+    "hidden_reply": "رد واحد إضافي غير معروض",
+    "hidden_replies": "{count} رد إضافي غير معروض"
   },
   "confirmDialog": {
     "confirm": "تأكيد",
@@ -901,7 +916,8 @@
     "recent": "حديثة"
   },
   "locale_switcher": {
-    "trigger_aria": "اللغة: {locale}"
+    "trigger_aria": "اللغة: {locale}",
+    "panel_aria": "اللغات"
   },
   "kanbanBoard": {
     "add_item": "إضافة عنصر",
@@ -936,7 +952,9 @@
     "columnSize": "الحجم",
     "columnModified": "آخر تعديل",
     "columnActions": "إجراءات",
-    "columnSelect": "تحديد"
+    "columnSelect": "تحديد",
+    "listLabel": "الملفات والمجلدات",
+    "selectItem": "تحديد {name}"
   },
   "filterPanel": {
     "apply": "تطبيق",
@@ -1033,7 +1051,9 @@
     "loadMore": "تحميل المزيد",
     "newItem": "عنصر جديد",
     "newItems": "عناصر جديدة",
-    "empty": "لا توجد عناصر"
+    "empty": "لا توجد عناصر",
+    "feedLabel": "البث المباشر",
+    "newItemsAnnouncement": "{count} تحديث معلّق"
   },
   "notificationCenter": {
     "title": "الإشعارات",
@@ -1049,7 +1069,10 @@
     "groupToday": "اليوم",
     "groupEarlier": "سابقًا",
     "unread": "غير مقروءة",
-    "unreadCount": "{count} غير مقروءة"
+    "unreadCount": "{count} غير مقروءة",
+    "markItemAsRead": "{action}: {title}",
+    "dismissItem": "{action}: {title}",
+    "moreNotShown": "{count} إضافي غير معروض"
   },
   "popconfirm": {
     "ok": "نعم",
@@ -1377,7 +1400,10 @@
     "range_to": "إلى",
     "min": "الحد الأدنى",
     "max": "الحد الأقصى",
-    "select_placeholder": "اختر…"
+    "select_placeholder": "اختر…",
+    "range_start": "من",
+    "range_end": "إلى",
+    "active_count": "عوامل التصفية النشطة"
   },
   "workbenchHeader": {
     "exceptions": "{count} استثناءات"

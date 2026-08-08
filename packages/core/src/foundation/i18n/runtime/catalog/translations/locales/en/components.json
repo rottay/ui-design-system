@@ -272,7 +272,8 @@
   "detailPanel": {
     "back": "Go back",
     "breadcrumb": "Breadcrumb",
-    "tabs": "Detail panel tabs"
+    "tabs": "Detail panel tabs",
+    "loading": "Loading details…"
   },
   "columnSettings": {
     "title": "Columns",
@@ -297,7 +298,9 @@
     "loading": "Loading",
     "included": "Included",
     "excluded": "Not included",
-    "empty": "No plans available"
+    "empty": "No plans available",
+    "savings": "Save 20%",
+    "comparison": "Plan comparison"
   },
   "activityLog": {
     "filter": {
@@ -315,7 +318,17 @@
     },
     "onEntity": "on {entity}",
     "onEntityWithId": "on {entity} #{id}",
-    "feedLabel": "Activity feed"
+    "feedLabel": "Activity feed",
+    "diff": {
+      "from": "from",
+      "to": "to",
+      "empty": "empty",
+      "opaque": "changed",
+      "listMore": "+{count} more",
+      "itemCount": "{count} items",
+      "valueCount": "{count} values",
+      "moreChanges": "+{count} more changes"
+    }
   },
   "transfer": {
     "source_title": "Source",
@@ -881,7 +894,9 @@
     "minutes_ago": "{count}m ago",
     "hours_ago": "{count}h ago",
     "days_ago": "{count}d ago",
-    "loading": "Loading"
+    "loading": "Loading",
+    "hidden_reply": "1 more reply not shown",
+    "hidden_replies": "{count} more replies not shown"
   },
   "confirmDialog": {
     "confirm": "Confirm",
@@ -901,7 +916,8 @@
     "recent": "Recent"
   },
   "locale_switcher": {
-    "trigger_aria": "Language: {locale}"
+    "trigger_aria": "Language: {locale}",
+    "panel_aria": "Languages"
   },
   "kanbanBoard": {
     "add_item": "Add item",
@@ -944,7 +960,9 @@
     "columnSize": "Size",
     "columnModified": "Modified",
     "columnActions": "Actions",
-    "columnSelect": "Select"
+    "columnSelect": "Select",
+    "listLabel": "Files and folders",
+    "selectItem": "Select {name}"
   },
   "filterPanel": {
     "apply": "Apply",
@@ -1041,7 +1059,9 @@
     "loadMore": "Load more",
     "newItem": "new item",
     "newItems": "new items",
-    "empty": "No items"
+    "empty": "No items",
+    "feedLabel": "Feed",
+    "newItemsAnnouncement": "{count} pending updates"
   },
   "notificationCenter": {
     "title": "Notifications",
@@ -1057,7 +1077,10 @@
     "groupToday": "Today",
     "groupEarlier": "Earlier",
     "unread": "Unread",
-    "unreadCount": "{count} unread"
+    "unreadCount": "{count} unread",
+    "markItemAsRead": "{action}: {title}",
+    "dismissItem": "{action}: {title}",
+    "moreNotShown": "{count} more not shown"
   },
   "popconfirm": {
     "ok": "Yes",
@@ -1377,7 +1400,10 @@
     "range_to": "to",
     "min": "Min",
     "max": "Max",
-    "select_placeholder": "Select…"
+    "select_placeholder": "Select…",
+    "range_start": "From",
+    "range_end": "To",
+    "active_count": "Active filters"
   },
   "workbenchHeader": {
     "exceptions": "{count} exceptions"

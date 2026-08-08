@@ -165,6 +165,12 @@
 .ds-pattern-tenant-preview.ds-engine-modern [data-part="table-scroll"] {
   overflow-x: auto;
 }
+/* The fixture is a tab stop now (scrollable region), so it needs the governed
+   ring — a focusable element with no indicator is worse than no tab stop. */
+.ds-pattern-tenant-preview.ds-engine-modern [data-part="table-scroll"]:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+}
 .ds-pattern-tenant-preview.ds-engine-modern [data-part="sample-table"] {
   inline-size: 100%;
   border-collapse: collapse;

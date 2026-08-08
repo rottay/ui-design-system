@@ -34,12 +34,25 @@ import ModernScrollArea from '../../../../../primitives/layout/ScrollArea/engine
 import { VisuallyHidden } from '../../../../../primitives/foundation';
 import type { NotificationCenterProps, Notification } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { interpolateTranslation } from '@/foundation/i18n/runtime/resolution/translation';
 import { CommunicationNotificationIcon } from '@/graphics/icons/presentation/semantic/generated/roles/communication-notification';
 import { StatusInfoIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-info';
 import { StatusSuccessIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-success';
 import { StatusWarningIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-warning';
 import { StatusErrorIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-error';
 import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
+
+// Measure before paint so the panel never shows in the overflowing placement.
+const useIsomorphicLayoutEffect =
+  typeof window !== 'undefined' ? React.useLayoutEffect : React.useEffect;
+
+/** Reading-direction probe (house idiom): nearest explicit `dir` wins,
+    otherwise the document direction applies. */
+function isRtlContext(el: HTMLElement): boolean {
+  const scoped = el.closest('[dir]');
+  if (scoped) return scoped.getAttribute('dir') === 'rtl';
+  return document.documentElement.dir === 'rtl';
+}
 
 /** Semantic per-type iconography (the skin owns the per-type accent color). */
 const TYPE_ICON: Record<Notification['type'], React.ReactNode> = {
@@ -86,7 +99,7 @@ function groupByDay(items: Notification[]): { bucket: DayBucket; items: Notifica
  * Keeps recent notifications scannable while older ones stay unambiguous.
  * Relative units resolve through the i18n copy channel (English floor).
  */
-function formatTimestamp(ts: string, tOr: (key: string, floor: string, params?: Record<string, string | number>) => string): string {
+function formatTimestamp(ts: string, tOr: (key: string, floor: string, params?: Record<string, string | number>) => string, locale?: string): string {
   const date = new Date(ts);
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
@@ -97,7 +110,7 @@ function formatTimestamp(ts: string, tOr: (key: string, floor: string, params?: 
   if (diffHr < 24) return tOr('notificationCenter.hoursAgo', '{count}h ago', { count: diffHr });
   const diffDay = Math.floor(diffHr / 24);
   if (diffDay < 7) return tOr('notificationCenter.daysAgo', '{count}d ago', { count: diffDay });
-  return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+  return date.toLocaleDateString(locale, { month: 'short', day: 'numeric' });
 }
 
 /**
@@ -116,8 +129,11 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
   // Optional channel with an English floor: the center renders standalone
   // (no I18nProvider) without crashing, and never echoes a raw key.
   const i18n = useOptionalTranslation('components');
+  // Standalone (no provider) the floor is all there is, and it carries the same
+  // `{count}` placeholders as catalog copy -- raw, it prints the template.
   const tOr = (key: string, floor: string, params?: Record<string, string | number>): string =>
-    i18n?.tOr(key, floor, params) ?? floor;
+    i18n?.tOr(key, floor, params) ?? interpolateTranslation(floor, params);
+  const locale = i18n?.locale;
 
   const {
     notifications,
@@ -157,10 +173,20 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
   const dropdownRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement | HTMLAnchorElement>(null);
 
+  const panelRef = useRef<HTMLDivElement>(null);
+  const [placement, setPlacement] = useState<'start' | 'end'>('end');
+
   const handleOpenChange = useCallback((newOpen: boolean) => {
     if (controlledOpen === undefined) setInternalOpen(newOpen);
     onOpenChange?.(newOpen);
   }, [controlledOpen, onOpenChange]);
+
+  // Dismissing destroys the button that held focus. Landing on <body> would
+  // drop the user out of the panel entirely; the panel itself is the anchor.
+  const handleClear = useCallback((id: string) => {
+    onClear?.(id);
+    panelRef.current?.focus();
+  }, [onClear]);
 
   // Manual click-outside detection because the dropdown toggle does not
   // support controlled open state. Only attached while open to avoid
@@ -187,21 +213,96 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
     };
   }, [isOpen, handleOpenChange]);
 
+  // The panel hangs off the anchor's reading-END edge, which pushed it past
+  // the inline-START edge whenever the bell sat near it (locale-switcher idiom).
+  useIsomorphicLayoutEffect(() => {
+    if (!isOpen) {
+      setPlacement('end');
+      return;
+    }
+    const anchorEl = dropdownRef.current;
+    const panel = panelRef.current;
+    if (!anchorEl || !panel) return;
+
+    const resolve = () => {
+      const viewport = window.innerWidth || document.documentElement.clientWidth;
+      const anchor = anchorEl.getBoundingClientRect();
+      const panelWidth = panel.getBoundingClientRect().width;
+      if (!viewport || panelWidth <= 0) return;
+      const rtl = isRtlContext(anchorEl);
+      const roomFromEndAnchor = rtl ? viewport - anchor.left : anchor.right;
+      const roomFromStartAnchor = rtl ? anchor.right : viewport - anchor.left;
+      setPlacement(
+        panelWidth > roomFromEndAnchor && roomFromStartAnchor > roomFromEndAnchor
+          ? 'start'
+          : 'end',
+      );
+    };
+
+    resolve();
+    window.addEventListener('resize', resolve);
+    return () => window.removeEventListener('resize', resolve);
+  }, [isOpen, notifications.length]);
+
   // Prefer server-authoritative count; fall back to client-side filter.
   const displayCount = unreadCount ?? notifications.filter(n => !n.read).length;
   // Cap the rendered list to `maxVisible` items for performance.
   const visibleNotifications = notifications.slice(0, maxVisible);
 
-  // Loading state: the composed Spinner primitive owns ring and cadence; the
-  // skin owns the centering frame.
+  /* Unread total as TEXT in a long-lived region: a Badge repaints silently and
+   the trigger's aria-label cannot expose the count. */
+  const unreadStatus = (
+    <VisuallyHidden id={unreadStatusId} role="status" aria-live="polite">
+      {displayCount > 0
+        ? tOr('notificationCenter.unreadCount', '{count} unread', { count: displayCount })
+        : ''}
+    </VisuallyHidden>
+  );
+
+  /* Trigger: semantic bell icon with a composed unread-count Badge. A custom
+     trigger replaces the entire button contents when provided. */
+  const triggerButton = (
+    <Button
+      ref={triggerRef}
+      variant="ghost"
+      htmlType="button"
+      data-part="trigger"
+      onClick={() => handleOpenChange(!isOpen)}
+      data-testid="notification-trigger"
+      aria-label={copy.title}
+      aria-describedby={unreadStatusId}
+      aria-haspopup="dialog"
+      aria-expanded={isOpen}
+    >
+      {trigger || (
+        <div data-part="trigger-icon">
+          <CommunicationNotificationIcon decorative size={20} />
+          {displayCount > 0 && (
+            <ModernBadge
+              count={displayCount}
+              variant="primary"
+              size="xs"
+              data-part="badge"
+            />
+          )}
+        </div>
+      )}
+    </Button>
+  );
+
+  /* Loading state: the composed Spinner primitive owns ring and cadence; the
+     skin owns the centering frame. */
   if (loading) {
     return (
       <div
         data-part="root"
         data-loading="true"
+        aria-busy={true}
         className={`ds-pattern-notification-center ds-engine-modern ${className ?? ''}`}
         style={style}
       >
+        {unreadStatus}
+        {triggerButton}
         <ModernSpinner size="md" data-part="loading-spinner" />
       </div>
     );
@@ -212,62 +313,25 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
       ref={dropdownRef}
       data-part="root"
       data-loading="false"
+      aria-busy={false}
       className={`ds-pattern-notification-center ds-engine-modern ${className ?? ''}`}
       style={style}
     >
-      {/* Unread total as TEXT, in a region that lives for as long as the
-          center itself: the Badge repaints silently and the trigger's
-          aria-label cannot expose it (a name overrides the button's
-          contents), so a change in the count is otherwise invisible to AT.
-          The region pre-exists every count change, which is what makes the
-          polite announcement fire; it also describes the trigger, so the
-          total is reachable on focus without mutating the pinned name. */}
-      <VisuallyHidden id={unreadStatusId} role="status" aria-live="polite">
-        {displayCount > 0
-          ? tOr('notificationCenter.unreadCount', '{count} unread', { count: displayCount })
-          : ''}
-      </VisuallyHidden>
-
-      {/* Trigger: semantic bell icon with a composed unread-count Badge.
-          A custom trigger replaces the entire button contents when provided.
-          The 40x40 icon-button geometry is skin-owned (drained from the
-          former inline style with the values the public test contract
-          renders, verbatim); the coarse-pointer floor lifts it to the
-          canonical touch target. The popover contract: aria-expanded, and
-          aria-haspopup="dialog" -- the panel is a labelled region with
-          actions, not a menu. */}
-      <Button
-        ref={triggerRef}
-        variant="ghost"
-        htmlType="button"
-        data-part="trigger"
-        onClick={() => handleOpenChange(!isOpen)}
-        data-testid="notification-trigger"
-        aria-label={copy.title}
-        aria-describedby={unreadStatusId}
-        aria-haspopup="dialog"
-        aria-expanded={isOpen}
-      >
-        {trigger || (
-          <div data-part="trigger-icon">
-            <CommunicationNotificationIcon decorative size={20} />
-            {displayCount > 0 && (
-              <ModernBadge
-                count={displayCount}
-                variant="primary"
-                size="xs"
-                data-part="badge"
-              />
-            )}
-          </div>
-        )}
-      </Button>
+      {unreadStatus}
+      {triggerButton}
 
       {/* Dropdown panel (position and chrome are skin-owned). Labelled
           region: matches the trigger's aria-haspopup="dialog" and gives the
           popover an accessible name without stealing focus on open. */}
       {isOpen && (
-        <div data-part="panel" role="region" aria-label={copy.title}>
+        <div
+          ref={panelRef}
+          tabIndex={-1}
+          data-part="panel"
+          data-placement={placement}
+          role="region"
+          aria-label={copy.title}
+        >
           {/* Header */}
           <div data-part="header">
             <span data-part="title">{copy.title}</span>
@@ -342,7 +406,7 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
                             data-part="row-timestamp"
                             title={new Date(item.timestamp).toLocaleString(undefined, { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                           >
-                            {formatTimestamp(item.timestamp, tOr)}
+                            {formatTimestamp(item.timestamp, tOr, locale)}
                           </span>
                           {/* stopPropagation prevents the action click from also
                               firing the row-level onRead handler */}
@@ -364,13 +428,18 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
                           for keyboard users, with a governed icon + i18n
                           label). stopPropagation keeps it from double-firing
                           the row handler. */}
+                      {/* A panel of five rows otherwise offers five buttons all
+                          named "Dismiss" -- the title is what tells them apart. */}
                       {onRead && !item.read && (
                         <Button
                           variant="ghost"
                           size="xs"
                           data-part="mark-read"
                           icon={<StatusSuccessIcon decorative size={12} />}
-                          aria-label={copy.markAsRead}
+                          aria-label={tOr('notificationCenter.markItemAsRead', '{action}: {title}', {
+                            action: copy.markAsRead,
+                            title: item.title,
+                          })}
                           onClick={(e: React.MouseEvent) => { e.stopPropagation(); onRead(item.id); }}
                         />
                       )}
@@ -381,8 +450,11 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
                           size="xs"
                           data-part="dismiss"
                           icon={<ActionCloseIcon decorative size={12} />}
-                          aria-label={copy.dismiss}
-                          onClick={(e: React.MouseEvent) => { e.stopPropagation(); onClear(item.id); }}
+                          aria-label={tOr('notificationCenter.dismissItem', '{action}: {title}', {
+                            action: copy.dismiss,
+                            title: item.title,
+                          })}
+                          onClick={(e: React.MouseEvent) => { e.stopPropagation(); handleClear(item.id); }}
                         />
                       )}
                     </div>
@@ -391,6 +463,15 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
                   </ul>
                 </div>
               ))
+            )}
+            {/* A capped panel must report its remainder, never reading as the
+                complete set of notifications. */}
+            {notifications.length > visibleNotifications.length && (
+              <div data-part="overflow-note">
+                {tOr('notificationCenter.moreNotShown', '{count} more not shown', {
+                  count: notifications.length - visibleNotifications.length,
+                })}
+              </div>
             )}
           </ModernScrollArea>
         </div>

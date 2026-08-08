@@ -52,7 +52,7 @@ export function OverlayEdgeScene({ only }: { only: OverlayEdgeCase }) {
 
       {only === 'sheet' && (
         <div data-testid="lab-sheet">
-          <Sheet open placement="right" title="Reviewer detail">
+          <Sheet open onOpenChange={() => {}} side="right" title="Reviewer detail">
             Four open assignments.
           </Sheet>
         </div>

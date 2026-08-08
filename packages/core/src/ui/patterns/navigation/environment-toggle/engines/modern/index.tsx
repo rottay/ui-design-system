@@ -31,7 +31,7 @@
  * />
  */
 
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useId } from 'react';
 import type { EnvironmentToggleProps } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { NavigationExpandIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-expand';
@@ -74,6 +74,10 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
   /* Tracks which environment needs production confirmation (null = no pending confirmation) */
   const [confirmEnv, setConfirmEnv] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
+  // Instance-scoped panel id: a hard-coded one makes two toggles on a page
+  // emit duplicate DOM ids, and both triggers then control the FIRST panel.
+  const panelId = `${useId()}-panel`;
 
   const activeEnv = environments.find(e => e.id === activeEnvironment);
   const isProduction = activeEnvironment === productionId;
@@ -113,8 +117,15 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
 
   /** Returns focus to the composed trigger Button (the facade does not
       guarantee ref forwarding, so the target is queried by its caller part). */
-  const focusTrigger = useCallback(() => {
-    dropdownRef.current?.querySelector<HTMLElement>('[data-part="trigger"]')?.focus();
+  // The pills/toggle variants have no trigger at all, so the invoker there is
+  // the radiogroup's roving tab stop — otherwise focus falls to <body>.
+  const focusInvoker = useCallback(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const target =
+      root.querySelector<HTMLElement>('[data-part="trigger"]') ??
+      root.querySelector<HTMLElement>('[role="radio"][tabindex="0"]');
+    target?.focus();
   }, []);
 
   /* Escape dismisses the dropdown and returns focus to the trigger. */
@@ -124,11 +135,34 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
       if (event.key !== 'Escape') return;
       event.stopPropagation();
       setDropdownOpen(false);
-      focusTrigger();
+      focusInvoker();
     };
     document.addEventListener('keydown', onKeyDown);
     return () => document.removeEventListener('keydown', onKeyDown);
-  }, [dropdownOpen, focusTrigger]);
+  }, [dropdownOpen, focusInvoker]);
+
+  /* Opening the menu moves focus into it, landing on the checked environment
+     so the keyboard cursor starts where the eye does. */
+  useEffect(() => {
+    if (!dropdownOpen) return;
+    const panel = dropdownRef.current?.querySelector<HTMLElement>('[data-part="panel"]');
+    if (!panel) return;
+    const checked = panel.querySelector<HTMLElement>('[role="menuitemradio"][aria-checked="true"]');
+    (checked ?? panel.querySelector<HTMLElement>('[role="menuitemradio"]'))?.focus();
+  }, [dropdownOpen]);
+
+  /* The blocking gate borrowed focus from a control that may no longer exist
+     when it closes (the menu row unmounts with the panel); hand it back. */
+  const confirmWasOpen = useRef(false);
+  useEffect(() => {
+    if (confirmEnv) {
+      confirmWasOpen.current = true;
+      return;
+    }
+    if (!confirmWasOpen.current) return;
+    confirmWasOpen.current = false;
+    focusInvoker();
+  }, [confirmEnv, focusInvoker]);
 
   /**
    * Handles environment switching with production safety gate.
@@ -140,13 +174,42 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
       if (envId === activeEnvironment) return;
       if (envId === productionId && confirmProductionSwitch) {
         /* Show confirmation dialog instead of switching immediately */
+        // The gate must be the only live layer: leaving the menu mounted put a
+        // popup behind the scrim and let one Escape dismiss two layers at once.
         setConfirmEnv(envId);
+        setDropdownOpen(false);
       } else {
         onChange(envId);
         setDropdownOpen(false);
       }
     },
     [loading, activeEnvironment, productionId, confirmProductionSwitch, onChange],
+  );
+
+  /* APG menu keyboard contract for the dropdown panel. */
+  const handleMenuKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLDivElement>) => {
+      if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) return;
+      const panel = event.currentTarget;
+      const options = Array.from(
+        panel.querySelectorAll<HTMLElement>('[role="menuitemradio"]'),
+      );
+      if (options.length === 0) return;
+      event.preventDefault();
+      const currentIndex = options.findIndex(o => o === panel.ownerDocument.activeElement);
+      let nextIndex: number;
+      if (event.key === 'Home') nextIndex = 0;
+      else if (event.key === 'End') nextIndex = options.length - 1;
+      else {
+        const delta = event.key === 'ArrowDown' ? 1 : -1;
+        nextIndex =
+          currentIndex === -1
+            ? (delta === 1 ? 0 : options.length - 1)
+            : (currentIndex + delta + options.length) % options.length;
+      }
+      options[nextIndex]?.focus();
+    },
+    [],
   );
 
   /** APG radiogroup keyboard contract for the segmented/pills variants:
@@ -188,8 +251,10 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
             onClick={() => setDropdownOpen(!dropdownOpen)}
             data-testid="env-toggle-trigger"
             disabled={loading}
-            aria-haspopup="true"
-            aria-controls="env-toggle-panel"
+            aria-haspopup="menu"
+            /* aria-controls may only reference an element that exists: while
+               closed the panel is unmounted, so the reference is dropped. */
+            aria-controls={dropdownOpen ? panelId : undefined}
             aria-expanded={dropdownOpen}
           >
             <span
@@ -209,7 +274,13 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
           </ModernButton>
 
           {dropdownOpen && (
-            <div data-part="panel" id="env-toggle-panel">
+            <div
+              data-part="panel"
+              id={panelId}
+              role="menu"
+              aria-label={copy.groupLabel}
+              onKeyDown={handleMenuKeyDown}
+            >
               {environments.map(env => (
                 <ModernButton
                   key={env.id}
@@ -217,6 +288,11 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
                   size="sm"
                   data-part="option"
                   data-active={env.id === activeEnvironment}
+                  /* The check glyph is decorative, so without aria-checked the
+                     active environment reached assistive tech as nothing. */
+                  role="menuitemradio"
+                  aria-checked={env.id === activeEnvironment}
+                  tabIndex={env.id === tabStopId ? 0 : -1}
                   disabled={loading}
                   onClick={() => handleSwitch(env.id)}
                   data-testid={`env-option-${env.id}`}
@@ -317,6 +393,7 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
 
   return (
     <div
+      ref={rootRef}
       className={`ds-pattern-environment-toggle ds-engine-modern ${className ?? ''}`}
       data-part="root"
       data-loading={loading ? 'true' : 'false'}

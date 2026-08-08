@@ -65,6 +65,15 @@ export default function ModernEmptyState(props: EmptyStateProps) {
   const loadingLabel =
     i18n?.tOr('empty_state.loading', 'Loading…') ?? 'Loading…';
 
+  /* A caller-owned illustration URL can 404. Falling back to the semantic
+     glyph keeps the well filled instead of framing a broken-image icon. */
+  const [imageFailed, setImageFailed] = React.useState(false);
+  React.useEffect(() => {
+    setImageFailed(false);
+  }, [image]);
+  const showImage = Boolean(image) && !imageFailed;
+  const visual = showImage ? 'image' : icon ? 'custom-icon' : 'semantic-icon';
+
   if (loading) {
     return (
       <div
@@ -72,7 +81,11 @@ export default function ModernEmptyState(props: EmptyStateProps) {
         data-part="root"
         data-loading={true}
         data-size={size}
-        data-has-action={false}
+        /* The skeleton carries the same anatomy stamps the settled root does, so the
+   skin reserves one footprint across the swap. */
+        data-visual={visual}
+        data-has-description={Boolean(description)}
+        data-has-action={Boolean(action || secondaryAction)}
         style={style}
         role="status"
         aria-live="polite"
@@ -91,7 +104,7 @@ export default function ModernEmptyState(props: EmptyStateProps) {
       data-part="root"
       data-loading={false}
       data-size={size}
-      data-visual={image ? 'image' : icon ? 'custom-icon' : 'semantic-icon'}
+      data-visual={visual}
       data-has-description={Boolean(description)}
       data-has-action={Boolean(action || secondaryAction)}
       style={style}
@@ -100,8 +113,8 @@ export default function ModernEmptyState(props: EmptyStateProps) {
     >
       <div className="ds-empty-state__content" data-part="content">
         <div className="ds-empty-state__visual" data-part="visual">
-          {image ? (
-            <img data-part="image" src={image} alt="" />
+          {showImage ? (
+            <img data-part="image" src={image} alt="" onError={() => setImageFailed(true)} />
           ) : icon ? (
             <span data-part="icon">{icon}</span>
           ) : (
@@ -114,20 +127,25 @@ export default function ModernEmptyState(props: EmptyStateProps) {
         </div>
 
         <div className="ds-empty-state__copy" data-part="copy">
-          <h2 data-part="title">{title}</h2>
-          {description && <p data-part="description">{description}</p>}
+          {/* Caller copy is bidi-isolated: a Hebrew title must not drag the
+              Latin description's punctuation to the wrong edge. */}
+          <h2 data-part="title"><bdi>{title}</bdi></h2>
+          {description && <p data-part="description"><bdi>{description}</bdi></p>}
         </div>
 
         {(action || secondaryAction) && (
-          <div className="ds-empty-state__actions" data-part="actions">
+          /* The root is a polite live region so the empty result announces itself; */
+          <div className="ds-empty-state__actions" data-part="actions" aria-live="off">
             {action && (
               <Button
                 engine="modern"
                 htmlType="button"
-                variant={action.variant ?? 'default'}
+                /* The single call to action is the path out of the empty state, so it
+                   defaults to primary and outranks the secondary beside it. */
+                variant={action.variant ?? 'primary'}
                 className="ds-empty-state__action"
                 data-part="action"
-                data-variant={action.variant ?? 'default'}
+                data-variant={action.variant ?? 'primary'}
                 onClick={action.onClick}
               >
                 {action.label}

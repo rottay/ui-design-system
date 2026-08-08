@@ -211,13 +211,22 @@
   overflow: hidden;
   max-block-size: var(--ds-filter-panel-content-max-height, 125rem);
   opacity: 1;
+  visibility: visible;
   transition:
     max-block-size var(--ds-motion-normal) var(--ds-motion-ease-out),
-    opacity var(--ds-motion-normal) var(--ds-motion-ease-out);
+    opacity var(--ds-motion-normal) var(--ds-motion-ease-out),
+    visibility 0s linear 0s;
 }
+/* `visibility` is delayed to the end of the collapse so the region leaves the
+   AT tree even where `inert` is unsupported, without clipping the transition. */
 .ds-pattern-filter-panel.ds-engine-modern [data-part='content'][data-collapsed='true'] {
   max-block-size: 0;
   opacity: 0;
+  visibility: hidden;
+  transition:
+    max-block-size var(--ds-motion-normal) var(--ds-motion-ease-out),
+    opacity var(--ds-motion-normal) var(--ds-motion-ease-out),
+    visibility 0s linear var(--ds-motion-normal);
 }
 
 /* ---- actions row (Apply) ---- */
@@ -247,6 +256,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .ds-pattern-filter-panel.ds-engine-modern [data-part='content'],
+  .ds-pattern-filter-panel.ds-engine-modern [data-part='content'][data-collapsed='true'],
   .ds-pattern-filter-panel.ds-engine-modern [data-part='collapse-toggle'] [data-part='icon'] {
     transition: none;
   }

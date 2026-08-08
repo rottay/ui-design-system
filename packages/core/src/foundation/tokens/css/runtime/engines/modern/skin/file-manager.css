@@ -37,6 +37,14 @@
   container: ds-file-manager / inline-size;
 }
 
+/* ---- loaded root surface: owned here, not inline, so the caller's `style`
+   prop and the forced-colors block both outrank it ---- */
+.ds-pattern-file-manager.ds-engine-modern[data-part='root'][data-loading='false'] {
+  background: var(--ds-surface-card);
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-elevation-1);
+}
+
 /* ---- loading root: centered Spinner frame (Spinner owns ring + cadence) ---- */
 .ds-pattern-file-manager.ds-engine-modern[data-part='root'][data-loading='true'] {
   display: flex;
@@ -406,7 +414,9 @@
    (Button, Checkbox, Breadcrumb, Empty, Spinner) own their own forced-colors
    contracts. */
 @media (forced-colors: active) {
-  .ds-pattern-file-manager.ds-engine-modern[data-part='root'] {
+  /* `[data-loading]` matches the loaded-root rule's weight so source order
+     decides; at (0,3,0) the system colours lost to the surface token. */
+  .ds-pattern-file-manager.ds-engine-modern[data-part='root'][data-loading] {
     border: 1px solid ButtonText;
     background: Canvas;
   }

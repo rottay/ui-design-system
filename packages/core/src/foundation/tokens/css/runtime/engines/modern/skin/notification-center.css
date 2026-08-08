@@ -94,6 +94,14 @@
   border: 1px solid var(--ds-color-border-subtle);
 }
 
+/* ---- placement flip: `data-placement='start'` outranks the base anchor rule
+   at equal class weight ---- */
+.ds-pattern-notification-center.ds-engine-modern
+  [data-part='panel'][data-placement='start'] {
+  inset-inline-start: 0;
+  inset-inline-end: auto;
+}
+
 /* ---- header: title row + bottom rule (was the `border-b` utility) ---- */
 .ds-pattern-notification-center.ds-engine-modern [data-part='header'] {
   display: flex;
@@ -142,6 +150,18 @@
 }
 .ds-pattern-notification-center.ds-engine-modern [data-part='group'] + [data-part='group'] [data-part='group-label'] {
   padding-block-start: var(--ds-spacing-3);
+}
+
+/* ---- overflow note: the capped remainder in the muted metadata voice; it
+   closes the list, so it reads centred rather than as a group head ---- */
+.ds-pattern-notification-center.ds-engine-modern [data-part='overflow-note'] {
+  padding-block: var(--ds-spacing-2);
+  padding-inline: var(--ds-spacing-3);
+  border-block-start: 1px solid var(--ds-color-border-subtle);
+  color: var(--ds-color-text-muted);
+  font-size: var(--ds-font-size-2xs, 0.6875rem);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
 }
 
 /* ---- empty state: the composed Empty primitive owns visual + copy paint ---- */

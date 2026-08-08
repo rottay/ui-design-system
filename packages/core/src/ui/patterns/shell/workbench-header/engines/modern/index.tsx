@@ -95,7 +95,7 @@ function SavedViewTab({
 }: {
   label: string;
   isActive: boolean;
-  onClick: () => void;
+  onClick?: () => void;
 }) {
   return (
     <button
@@ -107,7 +107,7 @@ function SavedViewTab({
       data-part="tab"
       data-active={isActive ? 'true' : 'false'}
     >
-      {label}
+      <bdi>{label}</bdi>
     </button>
   );
 }
@@ -177,6 +177,10 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
   // a translated fragment concatenated with the count (i18n law).
   const exceptionsLabelFor = (count: number) =>
     i18n?.tOr(EXCEPTIONS_LABEL_KEY, EXCEPTIONS_LABEL_FALLBACK, { count }) ?? `${count} exceptions`;
+  /* The visible count is a number, not a string: grouping separators and
+     native digits belong to the active locale, not to the host default. */
+  const formattedExceptionCount = (count: number) =>
+    new Intl.NumberFormat(i18n?.locale).format(count);
 
   /* ---- APG tabs keyboard contract for the saved-views strip: roving focus
           with automatic activation (page-shell idiom). Arrow keys are logical
@@ -208,6 +212,10 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
     if (targetId && targetId !== activeViewId) onViewChange?.(targetId);
   };
 
+  const hasIcon = Boolean(icon);
+  const hasActions = Boolean(quickActions && quickActions.length > 0);
+  const hasTabs = Boolean(savedViews && savedViews.length > 0);
+
   /* ---- Loading skeleton ---- */
   if (loading) {
     return (
@@ -215,32 +223,39 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
         className={`ds-pattern-workbench-header ds-engine-modern ${className ?? ''}`}
         data-part="root"
         data-loading="true"
+        data-has-icon={hasIcon ? 'true' : 'false'}
+        data-has-actions={hasActions ? 'true' : 'false'}
+        data-has-tabs={hasTabs ? 'true' : 'false'}
+        aria-busy="true"
         style={style}
       >
         <div data-part="skeleton-row">
           <div data-part="skeleton-lead">
-            {/* Avatar skeleton */}
-            <SkeletonBlock
-              size="avatar"
-              style={{ '--ds-workbench-header-skeleton-radius': 'var(--ds-radius-full)' } as React.CSSProperties}
-            />
+            {hasIcon ? (
+              <SkeletonBlock
+                size="avatar"
+                style={{ '--ds-workbench-header-skeleton-radius': 'var(--ds-radius-full)' } as React.CSSProperties}
+              />
+            ) : null}
             <div data-part="skeleton-column">
+              {eyebrow ? <SkeletonBlock size="eyebrow" /> : null}
               <SkeletonBlock size="title" />
-              <SkeletonBlock size="subtitle" />
+              {subtitle ? <SkeletonBlock size="subtitle" /> : null}
             </div>
           </div>
-          <div data-part="skeleton-actions">
-            <SkeletonBlock
-              size="action"
-              style={{ '--ds-workbench-header-skeleton-radius': 'var(--ds-radius-md)' } as React.CSSProperties}
-            />
-            <SkeletonBlock
-              size="action"
-              style={{ '--ds-workbench-header-skeleton-radius': 'var(--ds-radius-md)' } as React.CSSProperties}
-            />
-          </div>
+          {hasActions ? (
+            <div data-part="skeleton-actions">
+              {quickActions?.map((_, idx) => (
+                <SkeletonBlock
+                  key={`qa-skeleton-${idx}`}
+                  size="action"
+                  style={{ '--ds-workbench-header-skeleton-radius': 'var(--ds-radius-md)' } as React.CSSProperties}
+                />
+              ))}
+            </div>
+          ) : null}
         </div>
-        <SkeletonBlock size="tabs" />
+        {hasTabs ? <SkeletonBlock size="tabs" /> : null}
       </div>
     );
   }
@@ -251,9 +266,9 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
       className={`ds-pattern-workbench-header ds-engine-modern ${className ?? ''}`}
       data-part="root"
       data-loading="false"
-      data-has-icon={icon ? 'true' : 'false'}
-      data-has-actions={quickActions && quickActions.length > 0 ? 'true' : 'false'}
-      data-has-tabs={savedViews && savedViews.length > 0 ? 'true' : 'false'}
+      data-has-icon={hasIcon ? 'true' : 'false'}
+      data-has-actions={hasActions ? 'true' : 'false'}
+      data-has-tabs={hasTabs ? 'true' : 'false'}
       style={style}
     >
       {/* ---- Header row: back + title + badge | quick actions ---- */}
@@ -274,7 +289,9 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
                   34ch measure + balanced wrap can still clip long names in
                   narrow containers (cockpit-header idiom). */}
               <h2 data-part="title" title={title}>
-                {title}
+                {/* Caller-owned strings are bidi-isolated so a mixed-script
+                    title cannot reorder the badge beside it. */}
+                <bdi>{title}</bdi>
               </h2>
 
               {/* Exception count badge: the bare count is meaningless out of
@@ -288,7 +305,7 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
                   aria-label={exceptionsLabelFor(exceptionCount)}
                 >
                   <StatusWarningIcon size={12} decorative />
-                  {exceptionCount}
+                  {formattedExceptionCount(exceptionCount)}
                 </span>
               )}
             </div>
@@ -296,7 +313,7 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
             {/* Subtitle */}
             {subtitle && (
               <p data-part="subtitle">
-                {subtitle}
+                <bdi>{subtitle}</bdi>
               </p>
             )}
           </div>
@@ -313,7 +330,7 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
       </div>
 
       {/* ---- Saved views tab strip ---- */}
-      {savedViews && savedViews.length > 0 && onViewChange && (
+      {savedViews && savedViews.length > 0 && (
         <div
           role="tablist"
           aria-label={savedViewsLabel}
@@ -327,7 +344,7 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
                 key={view.id}
                 label={view.label}
                 isActive={isActive}
-                onClick={() => onViewChange(view.id)}
+                onClick={onViewChange ? () => onViewChange(view.id) : undefined}
               />
             );
           })}

@@ -2,7 +2,7 @@
 
 /**
  * @fileoverview Modern (token-driven) engine for the WorkspaceSwitcher pattern.
- * Renders a workspace picker: a Button trigger and a listbox panel with rich
+ * Renders a workspace picker: a Button trigger and a menu panel with rich
  * rows (avatar, name + active check, metadata, unread Badge, settings gear).
  *
  * COMPOSITION LAW (Lote 2; PT28 uplift): the trigger, the per-row settings
@@ -16,11 +16,10 @@
  * the panel search is the public Input primitive and the empty states the
  * public Empty primitive. The raw `<button>` elements are gone and their
  * inline geometry moved to the skin. The panel stays a pattern-owned
- * `role="listbox"`: its rows carry avatar + metadata + badge + settings,
+ * `role="menu"`: its rows carry avatar + metadata + badge + settings,
  * which the Dropdown primitive's label+icon menu items cannot express —
- * the keyboard contract (ArrowUp/Down virtual focus with
- * aria-activedescendant, Enter selects, Escape dismisses and returns focus
- * to the trigger) and the click-outside dismissal are preserved. The
+ * Escape dismisses, focus returns to the trigger and click-outside
+ * dismissal is preserved. The
  * active row's former LEFT ACCENT (`border-l-[3px]`) is replaced by the
  * skin's framed-surface treatment (product law).
  *
@@ -46,9 +45,17 @@ import { NavigationSettingsIcon } from '@/graphics/icons/presentation/semantic/g
 import { StatusVerifiedIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-verified';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
+/** Reading-direction probe (house idiom): nearest explicit `dir` wins,
+    otherwise the document direction applies. */
+function isRtlContext(el: HTMLElement): boolean {
+  const scoped = el.closest('[dir]');
+  if (scoped) return scoped.getAttribute('dir') === 'rtl';
+  return document.documentElement.dir === 'rtl';
+}
+
 /**
  * Modern engine workspace switcher composed on DS primitives (see the module
- * docblock). Uses a pattern-owned listbox panel for the rich workspace rows.
+ * docblock). Uses a pattern-owned menu panel for the rich workspace rows.
  *
  * @param props - {@link WorkspaceSwitcherProps}
  * @returns A button trigger that toggles an absolutely-positioned workspace list.
@@ -89,6 +96,7 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
   // Client-side filter query for the panel search (composed Input).
   const [query, setQuery] = useState('');
   const containerRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
 
   /** Returns focus to the composed trigger Button (facade ref forwarding is
       not guaranteed, so the focus target is queried by its caller part). */
@@ -105,24 +113,62 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
     : workspaces;
 
   // Instance-scoped ids: two switchers on one page must not collide, or the
-  // combobox's aria-activedescendant resolves into the wrong panel.
+  // trigger's aria-controls resolves into the wrong panel.
   const instanceId = useId();
-  const listboxId = `${instanceId}-listbox`;
-  const optionId = (workspaceId: string) => `${instanceId}-option-${workspaceId}`;
+  const menuId = `${instanceId}-menu`;
+  const itemId = (workspaceId: string) => `${instanceId}-item-${workspaceId}`;
   const hasOptions = visibleWorkspaces.length > 0;
-  const activeDescendantId =
-    focusIndex >= 0 && visibleWorkspaces[focusIndex]
-      ? optionId(visibleWorkspaces[focusIndex].id)
-      : undefined;
 
-  // Click-outside dismissal for the pattern-owned listbox panel.
+  /** The menu's two columns in DOM order -- the row controls and their gears.
+      Queried by part for the same reason `focusTrigger` is. */
+  const columnNodes = useCallback(
+    (part: 'item' | 'settings'): HTMLElement[] =>
+      Array.from(
+        containerRef.current?.querySelectorAll<HTMLElement>(`[data-part="${part}"]`) ?? [],
+      ),
+    [],
+  );
+
+  /** Moves REAL focus within one column, wrapping at both ends, and keeps the
+      roving index (and with it the row reveal state) in step. */
+  const focusInColumn = useCallback(
+    (part: 'item' | 'settings', index: number) => {
+      const nodes = columnNodes(part);
+      if (nodes.length === 0) return;
+      const wrapped = ((index % nodes.length) + nodes.length) % nodes.length;
+      setFocusIndex(wrapped);
+      nodes[wrapped]?.focus();
+    },
+    [columnNodes],
+  );
+
+  /** The single dismissal primitive: the panel closes and the trigger takes
+      focus back, so no path can strand focus on `<body>`. */
+  const dismiss = useCallback(() => {
+    setOpen(false);
+    focusTrigger();
+  }, [focusTrigger]);
+
+  const selectWorkspace = useCallback(
+    (workspaceId: string) => {
+      onSwitch(workspaceId);
+      dismiss();
+    },
+    [onSwitch, dismiss],
+  );
+
+  // Focus returns to the trigger only when it still sits inside the panel, so
+  // a pointer landing on another control is not robbed of it.
   const handleClickOutside = useCallback(
     (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+      const root = containerRef.current;
+      if (root && !root.contains(e.target as Node)) {
+        const focusWasInside = root.contains(document.activeElement);
         setOpen(false);
+        if (focusWasInside) focusTrigger();
       }
     },
-    [],
+    [focusTrigger],
   );
 
   useEffect(() => {
@@ -130,40 +176,125 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [open, handleClickOutside]);
 
-  // Full keyboard navigation for the dropdown. ArrowDown/ArrowUp move the
-  // virtual focus index within the VISIBLE workspace list. Enter selects the
-  // focused item and closes the dropdown. Escape dismisses without
-  // selecting. Both close paths return focus to the trigger (popover law).
+  // Root-level keys only: Escape dismisses from anywhere in the panel and
+  // ArrowDown/ArrowUp open the closed trigger (APG menu-button).
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
-      if (!open) return;
+      if (!open) {
+        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+          e.preventDefault();
+          setOpen(true);
+        }
+        return;
+      }
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        dismiss();
+      }
+    },
+    [open, dismiss],
+  );
+
+  // The search holds DOM focus on open: ArrowDown/ArrowUp hand focus to the
+  // first/last row, Enter takes the highlighted row (the first if none is).
+  const handleSearchKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (visibleWorkspaces.length === 0) return;
       switch (e.key) {
         case 'ArrowDown':
           e.preventDefault();
-          // Clamp to last item to prevent overflowing the list.
-          setFocusIndex(prev => Math.min(prev + 1, visibleWorkspaces.length - 1));
+          focusInColumn('item', 0);
           break;
         case 'ArrowUp':
           e.preventDefault();
-          // Clamp to 0 so the focus never goes negative.
-          setFocusIndex(prev => Math.max(prev - 1, 0));
+          focusInColumn('item', -1);
           break;
-        case 'Enter':
+        case 'Enter': {
           e.preventDefault();
-          if (focusIndex >= 0 && focusIndex < visibleWorkspaces.length) {
-            onSwitch(visibleWorkspaces[focusIndex].id);
-            setOpen(false);
-            focusTrigger();
-          }
+          const target =
+            focusIndex >= 0 ? visibleWorkspaces[focusIndex] : visibleWorkspaces[0];
+          if (target) selectWorkspace(target.id);
           break;
-        case 'Escape':
-          e.preventDefault();
-          setOpen(false);
-          focusTrigger();
-          break;
+        }
       }
     },
-    [open, focusIndex, visibleWorkspaces, onSwitch, focusTrigger],
+    [visibleWorkspaces, focusIndex, focusInColumn, selectWorkspace],
+  );
+
+  // Row column: Up/Down and Home/End rove real focus over the rows; the
+  // inline-END arrow crosses to that row's own gear (mirrored under RTL).
+  const handleItemKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLDivElement>, index: number, workspaceId: string) => {
+      const toTrailing = isRtlContext(e.currentTarget) ? 'ArrowLeft' : 'ArrowRight';
+      switch (e.key) {
+        case 'ArrowDown':
+          e.preventDefault();
+          focusInColumn('item', index + 1);
+          return;
+        case 'ArrowUp':
+          e.preventDefault();
+          focusInColumn('item', index - 1);
+          return;
+        case 'Home':
+          e.preventDefault();
+          focusInColumn('item', 0);
+          return;
+        case 'End':
+          e.preventDefault();
+          focusInColumn('item', -1);
+          return;
+        case 'Enter':
+        case ' ':
+          e.preventDefault();
+          selectWorkspace(workspaceId);
+          return;
+      }
+      if (e.key === toTrailing) {
+        e.preventDefault();
+        focusInColumn('settings', index);
+        return;
+      }
+      // Type-ahead belongs to the filter: this menu's only text surface is the
+      // search, so a printable key hands focus back to it and lands there.
+      if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        e.preventDefault();
+        setQuery(prev => prev + e.key);
+        setFocusIndex(-1);
+        searchRef.current?.focus();
+      }
+    },
+    [focusInColumn, selectWorkspace],
+  );
+
+  // Gear column: Up/Down and Home/End stay in the trailing column; the
+  // inline-START arrow returns to the gear's own row (mirrored under RTL).
+  const handleSettingsKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLButtonElement>, index: number) => {
+      const toLeading = isRtlContext(e.currentTarget) ? 'ArrowRight' : 'ArrowLeft';
+      switch (e.key) {
+        case 'ArrowDown':
+          e.preventDefault();
+          focusInColumn('settings', index + 1);
+          return;
+        case 'ArrowUp':
+          e.preventDefault();
+          focusInColumn('settings', index - 1);
+          return;
+        case 'Home':
+          e.preventDefault();
+          focusInColumn('settings', 0);
+          return;
+        case 'End':
+          e.preventDefault();
+          focusInColumn('settings', -1);
+          return;
+      }
+      if (e.key === toLeading) {
+        e.preventDefault();
+        focusInColumn('item', index);
+      }
+    },
+    [focusInColumn],
   );
 
   // Filtering can shrink the list under the virtual focus; clamp it.
@@ -178,6 +309,11 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
     setQuery('');
     setFocusIndex(-1);
   }, [open]);
+
+  // The menu is ONE tab stop: exactly one row and its gear stay in the tab
+  // sequence, and the arrow keys reach every other item.
+  const rovingIndex =
+    focusIndex >= 0 && focusIndex < visibleWorkspaces.length ? focusIndex : 0;
 
   /* ---- Loading skeleton (PatternBaseProps.loading): the trigger's exact
           footprint, so the swap never shifts the surrounding chrome. ---- */
@@ -207,7 +343,7 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
       style={style}
       onKeyDown={handleKeyDown}
     >
-      {/* Trigger: APG listbox-popup disclosure (locale-switcher precedent) --
+      {/* Trigger: APG menu-button disclosure (locale-switcher precedent) --
           aria-controls resolves once the panel mounts. */}
       <Button
         engine="modern"
@@ -217,8 +353,8 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
         onClick={() => setOpen(!open)}
         data-testid="workspace-trigger"
         aria-label={switchLabel}
-        aria-haspopup="listbox"
-        aria-controls={open && hasOptions ? listboxId : undefined}
+        aria-haspopup="menu"
+        aria-controls={open && hasOptions ? menuId : undefined}
         aria-expanded={open}
       >
         <span data-part="avatar-frame" data-frame="trigger">
@@ -248,25 +384,21 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
             <span data-part="header-title">{panelLabel}</span>
           </div>
 
-          {/* Search: the composed Input filters client-side AND is the APG
-              combobox. It takes DOM focus when the panel opens, so it is the
-              only element on which aria-activedescendant is honoured — the
-              panel never receives focus, where the attribute is inert. */}
+          {/* A textbox may not own a menu popup, so the search is a plain searchbox
+             that hands focus on to the rows with the arrow keys. */}
           {workspaces.length > 0 && (
             <div data-part="search">
               <ModernInput
+                ref={searchRef}
                 size="sm"
                 placeholder={searchPlaceholder}
                 aria-label={searchPlaceholder}
                 data-testid="workspace-search"
                 autoFocus
-                role="combobox"
-                aria-haspopup="listbox"
-                aria-expanded={hasOptions}
-                aria-autocomplete="list"
-                aria-controls={hasOptions ? listboxId : undefined}
-                aria-activedescendant={activeDescendantId}
+                role="searchbox"
+                aria-controls={hasOptions ? menuId : undefined}
                 value={query}
+                onKeyDown={handleSearchKeyDown}
                 onChange={(v) => {
                   setQuery(String(v ?? ''));
                   setFocusIndex(-1);
@@ -275,13 +407,12 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
             </div>
           )}
 
-          {/* Workspace list. The listbox role sits HERE, not on the panel:
-              only option/group children are legal inside it, and the panel
-              also carries the header, search, create row and user block. */}
+          {/* The menu role sits HERE, not on the panel: only menuitem/group/separator
+             children are legal inside it. */}
           <div
             data-part="list"
-            id={hasOptions ? listboxId : undefined}
-            role={hasOptions ? 'listbox' : undefined}
+            id={hasOptions ? menuId : undefined}
+            role={hasOptions ? 'menu' : undefined}
             aria-label={hasOptions ? panelLabel : undefined}
           >
             {visibleWorkspaces.length === 0 ? (
@@ -296,77 +427,87 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
               const isActive = ws.id === activeWorkspaceId;
               const isFocused = idx === focusIndex;
               return (
+                // Presentational row frame (APG `li role="none"` idiom): it owns
+                // the row SURFACE so the tint spans the sibling gear too.
                 <div
                   key={ws.id}
-                  id={optionId(ws.id)}
-                  role="option"
-                  aria-selected={isActive}
-                  data-part="item"
+                  data-part="item-row"
+                  role="none"
                   data-active={isActive}
                   data-focused={isFocused}
-                  data-testid={`workspace-item-${ws.id}`}
-                  onClick={() => {
-                    onSwitch(ws.id);
-                    setOpen(false);
-                  }}
-                  onMouseEnter={() => setFocusIndex(idx)}
                 >
-                  <span data-part="avatar-frame" data-frame="item">
-                    <ModernAvatar name={ws.name} src={ws.logo} size="md" />
-                  </span>
-                  {/* Workspace name + metadata row. */}
-                  <span data-part="item-copy">
-                    <span data-part="item-title-row">
-                      {/* The name truncates in the skin; the title attribute
-                          is the long-workspace-name affordance. */}
-                      <span data-part="item-name" data-active={isActive} title={ws.name}>{ws.name}</span>
-                      {/* Checkmark confirms which workspace is currently active. */}
-                      {isActive && (
-                        <StatusVerifiedIcon decorative size={12} data-part="check" />
+                  <div
+                    id={itemId(ws.id)}
+                    role="menuitemradio"
+                    aria-checked={isActive}
+                    tabIndex={idx === rovingIndex ? 0 : -1}
+                    data-part="item"
+                    data-active={isActive}
+                    data-focused={isFocused}
+                    data-testid={`workspace-item-${ws.id}`}
+                    onClick={() => selectWorkspace(ws.id)}
+                    onMouseEnter={() => setFocusIndex(idx)}
+                    onFocus={() => setFocusIndex(idx)}
+                    onKeyDown={(e) => handleItemKeyDown(e, idx, ws.id)}
+                  >
+                    <span data-part="avatar-frame" data-frame="item">
+                      <ModernAvatar name={ws.name} src={ws.logo} size="md" />
+                    </span>
+                    {/* Workspace name + metadata row. */}
+                    <span data-part="item-copy">
+                      <span data-part="item-title-row">
+                        {/* The name truncates in the skin; the title attribute
+                            is the long-workspace-name affordance. */}
+                        <span data-part="item-name" data-active={isActive} title={ws.name}>{ws.name}</span>
+                        {/* Checkmark confirms which workspace is currently active. */}
+                        {isActive && (
+                          <StatusVerifiedIcon decorative size={12} data-part="check" />
+                        )}
+                      </span>
+                      {/* Secondary metadata line: role, billing plan, and online count. */}
+                      <span data-part="item-meta">
+                        {ws.role && <span>{ws.role}</span>}
+                        {ws.plan && <span data-part="item-plan">{ws.plan}</span>}
+                        {typeof ws.online === 'number' && (
+                          <span data-part="item-online">
+                            {/* Dot marks active members; the count carries the info. */}
+                            <span data-part="online-dot" />
+                            {ws.online}
+                          </span>
+                        )}
+                      </span>
+                    </span>
+                    {/* Trailing controls: unread badge. */}
+                    <span data-part="item-controls">
+                      {typeof ws.unreadCount === 'number' && ws.unreadCount > 0 && (
+                        <Badge
+                          engine="modern"
+                          size="sm"
+                          tone="primary"
+                          data-part="badge"
+                          count={ws.unreadCount}
+                        />
                       )}
                     </span>
-                    {/* Secondary metadata line: role, billing plan, and online count. */}
-                    <span data-part="item-meta">
-                      {ws.role && <span>{ws.role}</span>}
-                      {ws.plan && <span data-part="item-plan">{ws.plan}</span>}
-                      {typeof ws.online === 'number' && (
-                        <span data-part="item-online">
-                          {/* Dot marks active members; the count carries the info. */}
-                          <span data-part="online-dot" />
-                          {ws.online}
-                        </span>
-                      )}
-                    </span>
-                  </span>
-                  {/* Trailing controls: unread badge + settings gear.
-                      Settings is revealed on row hover/focus (skin-owned). */}
-                  <span data-part="item-controls">
-                    {typeof ws.unreadCount === 'number' && ws.unreadCount > 0 && (
-                      <Badge
-                        engine="modern"
-                        size="sm"
-                        tone="primary"
-                        data-part="badge"
-                        count={ws.unreadCount}
-                      />
-                    )}
-                    {onSettings && (
-                      <Button
-                        engine="modern"
-                        variant="ghost"
-                        size="xs"
-                        data-part="settings"
-                        data-focused={isFocused}
-                        icon={<NavigationSettingsIcon decorative size={14} />}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onSettings(ws.id);
-                        }}
-                        data-testid={`workspace-settings-${ws.id}`}
-                        aria-label={settingsLabelFor(ws.name)}
-                      />
-                    )}
-                  </span>
+                  </div>
+                  {/* Settings is revealed on row hover/focus (skin-owned). */}
+                  {onSettings && (
+                    <Button
+                      engine="modern"
+                      variant="ghost"
+                      size="xs"
+                      role="menuitem"
+                      tabIndex={idx === rovingIndex ? 0 : -1}
+                      data-part="settings"
+                      data-focused={isFocused}
+                      icon={<NavigationSettingsIcon decorative size={14} />}
+                      onClick={() => onSettings(ws.id)}
+                      onFocus={() => setFocusIndex(idx)}
+                      onKeyDown={(e) => handleSettingsKeyDown(e, idx)}
+                      data-testid={`workspace-settings-${ws.id}`}
+                      aria-label={settingsLabelFor(ws.name)}
+                    />
+                  )}
                 </div>
               );
               })
@@ -386,7 +527,7 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                   icon={<ActionAddIcon decorative size={14} />}
                   onClick={() => {
                     onCreate();
-                    setOpen(false);
+                    dismiss();
                   }}
                   data-testid="workspace-create"
                 >

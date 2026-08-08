@@ -284,7 +284,17 @@ describe('PatternWorkbenchHeader (modern engine)', () => {
 
   it('renders the loading skeleton with skin-owned geometry hooks', async () => {
     const { container } = renderSurface(
-      <PatternWorkbenchHeader title="Modern Hub" loading />,
+      <PatternWorkbenchHeader
+        title="Modern Hub"
+        subtitle="Briefing"
+        icon={<span />}
+        quickActions={[
+          { label: 'New', onClick: () => {} },
+          { label: 'Export', onClick: () => {} },
+        ]}
+        savedViews={[{ id: 'v1', label: 'Overview' }]}
+        loading
+      />,
       { engine: 'modern' },
     );
 
@@ -292,7 +302,9 @@ describe('PatternWorkbenchHeader (modern engine)', () => {
     expect(root).toHaveAttribute('data-loading', 'true');
 
     const skeletons = container.querySelectorAll('[data-part="skeleton"]');
-    expect(skeletons.length).toBeGreaterThanOrEqual(5);
+    // The skeleton must mirror the header that asked for it: pinning >= 5
+    // blocks on a title-only header is the fixed-footprint defect itself.
+    expect(skeletons.length).toBe(6);
     for (const el of skeletons) {
       expect((el as HTMLElement).getAttribute('data-size')).toBeTruthy();
       // Only the sanctioned custom-property data channel may be inline.

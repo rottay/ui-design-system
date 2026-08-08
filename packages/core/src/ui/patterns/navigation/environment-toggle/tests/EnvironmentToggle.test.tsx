@@ -191,11 +191,15 @@ describe('PatternEnvironmentToggle - modern lifecycle and dropdown dismissal', (
     );
 
     const trigger = await screen.findByTestId('env-toggle-trigger');
-    expect(trigger).toHaveAttribute('aria-controls', 'env-toggle-panel');
+    // The panel id is instance-scoped, so the reference is asserted
+    // relationally: it must resolve to a real element, and only while mounted.
+    expect(trigger).not.toHaveAttribute('aria-controls');
 
     fireEvent.click(trigger);
     expect(await screen.findByTestId('env-option-live')).toBeInTheDocument();
-    expect(document.getElementById('env-toggle-panel')).not.toBeNull();
+    const panelId = trigger.getAttribute('aria-controls');
+    expect(panelId).toBeTruthy();
+    expect(document.getElementById(panelId as string)).not.toBeNull();
 
     fireEvent.keyDown(document, { key: 'Escape' });
 

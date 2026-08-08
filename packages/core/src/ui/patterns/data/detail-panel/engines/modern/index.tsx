@@ -20,10 +20,11 @@
  * @package @rottay/design-system
  */
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import type { DetailPanelProps, DetailAction } from '../../contracts';
 import Button from '../../../../../primitives/inputs/Button/engines/modern';
 import Skeleton from '../../../../../primitives/feedback/Skeleton/engines/modern';
+import { VisuallyHidden } from '../../../../../primitives/foundation/VisuallyHidden';
 import { NavigationBackIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-back';
 import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-forward';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
@@ -149,6 +150,7 @@ function TabButton({
   isActive,
   disabled,
   onClick,
+  buttonRef,
 }: {
   tabKey: string;
   label: string;
@@ -157,17 +159,21 @@ function TabButton({
   isActive: boolean;
   disabled?: boolean;
   onClick: () => void;
+  buttonRef: (node: HTMLButtonElement | null) => void;
 }) {
   return (
     <button
       type="button"
       role="tab"
       id={`tab-${tabKey}`}
+      ref={buttonRef}
       data-part="tab-button"
       data-active={isActive ? 'true' : 'false'}
       data-disabled={disabled ? 'true' : 'false'}
       aria-selected={isActive}
-      aria-controls={`panel-${tabKey}`}
+      /* Only the active panel is rendered, so an inactive tab's aria-controls
+         pointed at an id that was not in the document. */
+      aria-controls={isActive ? `panel-${tabKey}` : undefined}
       tabIndex={isActive ? 0 : -1}
       disabled={disabled}
       onClick={onClick}
@@ -315,9 +321,18 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
   // The uncontrolled seed is captured on the first render only, so tabs that
   // arrive later would leave it naming no tab and the body empty.
   const seedNamesATab = tabs?.some((t) => t.key === internalActiveTab) ?? true;
+  // A disabled tab cannot hold a tab stop, so seeding onto one left the whole
+  // tablist unreachable from the keyboard.
+  const firstSelectableKey = (tabs?.find((t) => !t.disabled) ?? tabs?.[0])?.key;
+  const seedKey = seedNamesATab ? internalActiveTab : firstSelectableKey ?? internalActiveTab;
+  const seedIsDisabled = tabs?.some((t) => t.key === seedKey && t.disabled) ?? false;
   const activeTab =
     controlledActiveTab ??
-    (seedNamesATab ? internalActiveTab : tabs?.[0]?.key ?? internalActiveTab);
+    (seedIsDisabled ? firstSelectableKey ?? seedKey : seedKey);
+
+  // Instance-scoped tab refs: `document.getElementById` returns the FIRST
+  // match in the document, so a second panel's arrows stole focus to the first.
+  const tabRefs = useRef(new Map<string, HTMLButtonElement>());
 
   // Chrome copy: catalogued when an I18nProvider is mounted, the documented
   // English floor otherwise (a missing key echoes the full key back, which
@@ -331,6 +346,7 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
     back: tOr('detailPanel.back', 'Go back'),
     breadcrumb: tOr('detailPanel.breadcrumb', 'Breadcrumb'),
     tabs: tOr('detailPanel.tabs', 'Detail panel tabs'),
+    loading: tOr('detailPanel.loading', 'Loading details…'),
   };
 
   // Only update internal state when uncontrolled. Always fire onTabChange
@@ -354,6 +370,9 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
         style={style}
       >
         <div data-part="panel-inner">
+          {/* aria-busy alone has nothing to announce: the skeletons carry no
+              text, so the pending state needs real prose (EmptyState law). */}
+          <VisuallyHidden>{labels.loading}</VisuallyHidden>
           {/* Breadcrumb skeleton */}
           <SkeletonBlock part="skeleton-breadcrumb" width={180} height={12} />
 
@@ -466,6 +485,14 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
                 {status && (
                   <span
                     data-part="status-badge"
+                    style={
+                      status.color
+                        ? ({
+                            '--ds-detail-panel-status-bg': status.color,
+                            '--ds-detail-panel-status-fg': 'var(--ds-color-text-on-primary)',
+                          } as React.CSSProperties)
+                        : undefined
+                    }
                   >
                     {status.label}
                   </span>
@@ -534,8 +561,7 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
                       const nextTab = enabledTabs[nextIdx];
                       handleTabChange(nextTab.key);
                       // Move focus to the newly activated tab button
-                      const tabEl = document.getElementById(`tab-${nextTab.key}`);
-                      tabEl?.focus();
+                      tabRefs.current.get(nextTab.key)?.focus();
                     }
                   }}
                 >
@@ -549,14 +575,21 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
                       isActive={activeTab === tab.key}
                       disabled={tab.disabled}
                       onClick={() => !tab.disabled && handleTabChange(tab.key)}
+                      buttonRef={(node) => {
+                        if (node) tabRefs.current.set(tab.key, node);
+                        else tabRefs.current.delete(tab.key);
+                      }}
                     />
                   ))}
                 </div>
+                {/* A panel whose content has no focusable descendant is
+                    otherwise unreachable by keyboard (APG tabpanel rule). */}
                 <div
                   role="tabpanel"
                   id={`panel-${activeTab}`}
                   aria-labelledby={`tab-${activeTab}`}
                   data-part="tab-panel"
+                  tabIndex={0}
                 >
                   {activeTabObj?.content}
                 </div>

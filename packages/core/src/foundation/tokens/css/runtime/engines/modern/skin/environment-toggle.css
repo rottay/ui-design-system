@@ -86,6 +86,12 @@
   inset-inline-start: 0;
   z-index: var(--ds-z-dropdown);
   min-inline-size: var(--ds-environment-toggle-panel-min-width, 11.25rem);
+  /* The panel needs an inline ceiling and a measured placement flip, or a
+   trigger past the viewport midpoint pushes it off the inline edge. */
+  max-inline-size: calc(100vw - var(--ds-spacing-4, 1rem));
+  max-block-size: 60vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   padding: var(--ds-spacing-1, 0.25rem);
   background-color: var(--ds-surface-card);
   background-image: linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3));

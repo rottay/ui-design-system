@@ -71,3 +71,131 @@
     animation: none;
   }
 }
+
+/* Same contract as above: `.ds-engine-modern` is stamped only by the modern
+   wrapper, so classic and rustic paint stay untouched. */
+
+/* The section description must survive the narrow breakpoint: it is the one
+   line that says what the record section IS. */
+@container (max-width: 560px) {
+  .ds-pattern-record-facts.ds-engine-modern .ds-record-facts__description {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
+}
+
+/* The label is single-line ellipsis, so a narrow span needs a wrap contract
+   or the only descriptor its value has is silently truncated. */
+.ds-pattern-record-facts.ds-engine-modern .ds-record-facts__label {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow-wrap: anywhere;
+  text-overflow: clip;
+  white-space: normal;
+}
+
+/* Density: `data-density` reached the fact rows only, and the tenant density
+   plane reached nothing at all. */
+.ds-pattern-record-facts.ds-engine-modern .ds-record-facts__header {
+  min-height: calc(
+    var(--ds-record-facts-header-height, 66px) *
+      var(--ds-density-effective-scale, 1)
+  );
+}
+
+.ds-pattern-record-facts.ds-engine-modern
+  .ds-record-facts__fact:not([data-emphasis="narrative"]) {
+  min-height: calc(
+    var(--ds-record-facts-item-height, 82px) *
+      var(--ds-density-effective-scale, 1)
+  );
+}
+
+.ds-pattern-record-facts.ds-engine-modern[data-density="compact"]
+  .ds-record-facts__fact:not([data-emphasis="narrative"]) {
+  min-height: calc(
+    var(--ds-record-facts-compact-item-height, 70px) *
+      var(--ds-density-effective-scale, 1)
+  );
+}
+
+/* The skeleton reserved the COMPACT floor while a comfortable board renders
+   82px rows, so the first load of every default board settled downward. */
+.ds-pattern-record-facts.ds-engine-modern .ds-record-facts__skeleton {
+  min-height: calc(
+    var(--ds-record-facts-item-height, 82px) *
+      var(--ds-density-effective-scale, 1)
+  );
+}
+
+.ds-pattern-record-facts.ds-engine-modern[data-density="compact"]
+  .ds-record-facts__skeleton {
+  min-height: calc(
+    var(--ds-record-facts-compact-item-height, 70px) *
+      var(--ds-density-effective-scale, 1)
+  );
+}
+
+/* The narrow query owns its own floor for both parts; mirrored here so the
+   engine layer does not out-rank it, now density-aware like the rest. */
+@container (max-width: 560px) {
+  .ds-pattern-record-facts.ds-engine-modern
+    .ds-record-facts__fact:not([data-emphasis="narrative"]),
+  .ds-pattern-record-facts.ds-engine-modern[data-density="compact"]
+    .ds-record-facts__fact:not([data-emphasis="narrative"]),
+  .ds-pattern-record-facts.ds-engine-modern .ds-record-facts__skeleton,
+  .ds-pattern-record-facts.ds-engine-modern[data-density="compact"]
+    .ds-record-facts__skeleton {
+    min-height: calc(68px * var(--ds-density-effective-scale, 1));
+  }
+}
+
+/* The header wash and fact tint resolve through tenant channels, so a
+   monochrome or technical tenant can retune them. */
+.ds-pattern-record-facts.ds-engine-modern .ds-record-facts__header {
+  --_ds-record-facts-header-origin: 10% 0%;
+  background: radial-gradient(
+      circle at var(--_ds-record-facts-header-origin),
+      color-mix(
+        in srgb,
+        var(--ds-color-primary) var(--_ds-record-facts-header-tint, 8%),
+        transparent
+      ),
+      transparent 40%
+    ),
+    linear-gradient(
+      110deg,
+      color-mix(
+        in srgb,
+        var(--ds-color-primary) var(--_ds-record-facts-header-wash, 5%),
+        var(--ds-surface-panel-bg, var(--ds-color-bg-secondary))
+      ),
+      color-mix(
+          in srgb,
+          var(--ds-surface-card-bg, var(--ds-color-bg-elevated)) 94%,
+          var(--ds-surface-panel-bg, var(--ds-color-bg-secondary))
+        )
+        70%
+    );
+}
+
+/* The header's light source sat at 10% from the LEFT in both directions, so
+   the section read as lit from the wrong edge under RTL. */
+[dir="rtl"] .ds-pattern-record-facts.ds-engine-modern .ds-record-facts__header {
+  --_ds-record-facts-header-origin: 90% 0%;
+}
+
+.ds-pattern-record-facts.ds-engine-modern
+  .ds-record-facts__fact:not([data-state="empty"], [data-emphasis="narrative"]) {
+  background: color-mix(
+    in srgb,
+    var(--ds-surface-card-bg, var(--ds-color-bg-elevated))
+      var(--_ds-record-facts-fact-bg-share, 96%),
+    var(--ds-color-primary)
+  );
+}

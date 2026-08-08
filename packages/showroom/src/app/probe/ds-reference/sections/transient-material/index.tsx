@@ -41,7 +41,7 @@ function TransientGroup({ variant }: { variant: 'override' | 'control' }) {
             bare item never matches it. */}
         <div data-testid={`lab-message-${variant}`}>
           <div className="rottay-message-stack rottay-message-stack--modern" data-part="stack-container">
-            <MessageItem content="Roster synchronised" type="success" />
+            <MessageItem id="lab-message" content="Roster synchronised" type="success" />
           </div>
         </div>
 
@@ -51,6 +51,7 @@ function TransientGroup({ variant }: { variant: 'override' | 'control' }) {
             data-part="stack-container"
           >
             <NotificationItem
+              id="lab-notification"
               message="Reconciliation complete"
               description="Four reviewers were updated in this run."
               type="info"
