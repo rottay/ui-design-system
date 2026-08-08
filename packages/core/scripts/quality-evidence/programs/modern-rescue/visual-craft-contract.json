@@ -410,7 +410,7 @@
     ],
     "r0LabExit": "The canonical reference lab contains zero generic TagIcon placeholders, zero functional unicode/emoji/span glyphs and zero accidental compatibility-catalog roles; every fixture uses a meaningful semantic role or an explicitly allowlisted non-semantic vector class.",
     "familyRoundExit": "Every accepted family has zero new compatibility-catalog imports, functional local SVGs or unicode glyphs and proves semantic role, optional absence, accessible name and both tenant profile treatments.",
-    "fullProgramExit": "R5/R6 census the full Modern-reachable productive UI plus active reference fixtures/stories and drive unowned compatibility paths to zero or an itemized time-bounded external compatibility exception."
+    "fullProgramExit": "R5/R6 census the full Modern-reachable productive UI plus active reference fixtures/stories and drive unowned compatibility paths to zero or an itemized time-bounded external compatibility exception; R7 repeats the full census after customization-depth changes and permits no new compatibility remainder."
   },
   "checkpointPolicy": {
     "calibrationFamilyCount": 3,
@@ -448,6 +448,24 @@
         ["charts-18"]
       ],
       "R4": [
+        ["structure-headers-6", "structure-workspace-12"],
+        ["structure-record-3", "structure-dashboard-3", "structure-feedback-1", "structure-shell-2"],
+        ["surface-admin-8", "surface-data-7"],
+        ["surface-experience-9", "surface-forms-4"],
+        ["surface-operations-4", "surface-workspace-4", "surface-composition-4"],
+        ["commercial-11"]
+      ],
+      "R7": [
+        ["foundation-visual-5", "primitive-layout-responsive-16"],
+        ["primitive-display-21"],
+        ["primitive-inputs-25"],
+        ["primitive-navigation-12"],
+        ["primitive-feedback-11", "primitive-overlay-10"],
+        ["pattern-data-18"],
+        ["pattern-forms-5", "pattern-visualization-non-chart-5", "pattern-commerce-1", "pattern-feedback-2", "pattern-identity-1"],
+        ["pattern-communication-6", "pattern-workflow-5", "pattern-navigation-5"],
+        ["pattern-customization-4", "pattern-shell-4"],
+        ["charts-18"],
         ["structure-headers-6", "structure-workspace-12"],
         ["structure-record-3", "structure-dashboard-3", "structure-feedback-1", "structure-shell-2"],
         ["surface-admin-8", "surface-data-7"],

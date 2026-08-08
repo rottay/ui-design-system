@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "principle": "Parallelize independent ownership, not the number twenty.",
   "coordinator": {
-    "model": "most-capable-Claude-available",
+    "model": "Opus or the strongest coordinator-capable Claude available",
     "responsibilities": [
       "read selected round and current worktree",
       "construct conflict graph",
@@ -17,12 +17,21 @@
   "modelRouting": {
     "law": "Route by cognitive need, actual availability and measured output quality. Model names are preferred roles, not a reason to wait, duplicate work or force a weak topology.",
     "programCoordinatorAndArchitectureControl": {
-      "preferred": "Fable or the strongest coordinator-capable Claude available",
+      "preferred": "Opus or the strongest coordinator-capable Claude available",
       "work": [
         "round control and conflict graph",
         "architecture and single-authority decisions",
         "cross-family composition review",
         "proposal adjudication and final diff rejection"
+      ]
+    },
+    "advisoryReadOnly": {
+      "preferred": "Fable or the strongest independent review model available",
+      "work": [
+        "read-only architecture challenge",
+        "behavioral and accessibility parity review",
+        "visual coherence review",
+        "vacuous-evidence and canon-gap detection"
       ]
     },
     "creativePremiumFamilyWork": {
@@ -229,6 +238,37 @@
     "return already-reference-grade only with concrete evidence",
     "replace a failed agent with the same ownership instead of abandoning the round"
   ],
+  "r7Execution": {
+    "main": "one Opus coordinator owning conflict graph architecture canon and integration",
+    "advisor": "at most one Fable read-only lane for architecture behavioral parity and visual coherence",
+    "mechanicalWriters": {
+      "maximum": 2,
+      "model": "Sonnet",
+      "allowedWork": [
+        "disjoint family anatomy mappings",
+        "control and recipe ledgers",
+        "exact repetitive wiring",
+        "i18n parity",
+        "structured source-bound evidence"
+      ]
+    },
+    "singletonSharedAuthorities": [
+      "theme contracts",
+      "compiler",
+      "shared recipes and profiles",
+      "generated CSS",
+      "shared i18n merge",
+      "browser harness",
+      "canon and public API adjudication"
+    ],
+    "machineBudget": {
+      "heavyBuildOrTest": 1,
+      "server": 1,
+      "chromium": 1
+    },
+    "longIterationLaw": "MAIN works through the complete current checkpoint without asking for reversible choices resolved by the contracts. Each lane writes durable JSON receipts and releases ownership before the next integration batch.",
+    "telemetryLaw": "Codex uses compact periodic telemetry and interrupts only at a checkpoint verified stall duplicate writer or hard external blocker."
+  },
   "stopConditions": [
     "head-or-worktree-ownership-cannot-be-reconciled",
     "two-writers-touched-the-same-file",

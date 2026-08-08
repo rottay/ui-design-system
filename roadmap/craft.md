@@ -644,13 +644,13 @@ mount/unmount/context lifecycle, keyboard/AT equivalence and long-task/frame/mem
 ### WO-CRA-23 Claude multi-agent DS normalization and world-class family elevation
 - **Source IDs / phase** — Owner-authorized standalone `modern-rescue` program; not a shadow status for the locked DS-improvements phases.
 - **Depends on** — WO-GAT-05, WO-GAT-06.
-- **Outcome** — Elevate the complete 252-family visible UI universe through one governed composition system so BitHire becomes a BitHire-original Professional Network Hiring OS and The Management becomes a monochrome, square, editorial/rustic Executive Ledger on the same component tree, without creating a second DS.
-- **Steps** — Execute R0–R6 from the governed Modern-rescue pack one owner-authorized round at a time: truth/instrumentation and profile migration plan; twelve reference canaries against the binding tenant art direction in the isolated hardcoded `/probe/ds-reference` showroom lab; primitives; patterns/charts; structures/surfaces/commercial; canon closure; independent Codex certification. The lab renders the same DS tree under BitHire's static BrandTheme and The Management's published DB document, with zero product-app imports, styles, routes, APIs or fixtures; Candidates is a later adoption consumer, never the R1 visual authority. Every round includes dynamic conflict-graph delegation, implementation, canon reconciliation, tests, i18n, documentation, hashed evidence and a Codex stop/go boundary. Kimi may add temporary proposal-only files under `KIMI-ANNOTATIONS/inbox`; Codex reproduces useful observations, incorporates accepted amendments into the canon and deletes the raw submission before Claude receives the reconciled program.
-- **Acceptance gate** — 252 families classified with fresh evidence; all applicable binary contracts green; zero hard vetoes; every family above its layer threshold (90–95) and every critical dimension at least 4/5; resilient viewport/container/density/rhythm/type-scale behavior; same-tree BitHire/TMM divergence in at least eight observable axes and six non-color axes, recognizable within three seconds in grayscale and after primary-hue neutralization; coverage/resilience/canonClosure/pathParity equal 1 in round scope; zero targeted unknown impacts, parallel authorities, raw advisory implementations or unadjudicated capacity; Codex serial and sighted matrix green.
+- **Outcome** — Elevate the complete 252-family visible UI universe through one governed composition system so BitHire becomes a BitHire-original Professional Network Hiring OS and The Management becomes a monochrome, square, editorial/rustic Executive Ledger on the same component tree, then prove post-certification that the same Modern system has complete customization depth, five coherent art-direction postures and catalog parity without creating a second DS.
+- **Steps** — Execute R0–R7 from the governed Modern-rescue pack one owner-authorized round at a time: truth/instrumentation and profile migration plan; twelve reference canaries against the binding tenant art direction in the isolated hardcoded `/probe/ds-reference` showroom lab; primitives; patterns/charts; structures/surfaces/commercial; canon closure; independent R6 Codex certification; then R7 customization depth, token/CSS liveness, 252-family anatomy dispositions, recipe expansion, art-direction postures, product-editor ergonomics and capability-level public-system benchmarking. The lab renders the same DS tree under BitHire's static BrandTheme and The Management's published DB document, with zero product-app imports, styles, routes, APIs or fixtures; Candidates is a later adoption consumer, never the R1 visual authority. Every round includes dynamic conflict-graph delegation, implementation, canon reconciliation, tests, i18n, documentation, hashed evidence and a Codex stop/go boundary. Kimi may add temporary proposal-only files under `KIMI-ANNOTATIONS/inbox`; Codex reproduces useful observations, incorporates accepted amendments into the canon and deletes the raw submission before Claude receives the reconciled program.
+- **Acceptance gate** — R6 first certifies 252 families with fresh evidence, all applicable binary contracts green, zero hard vetoes, every family above its layer threshold (90–95), every critical dimension at least 4/5, resilient viewport/container/density/rhythm/type-scale behavior and same-tree BitHire/TMM divergence in at least eight observable axes and six non-color axes. R7 then requires 252/252 customization/anatomy dispositions, 14/14 productive recipe groups, five coherent reference postures and all ten pairwise comparisons, zero dead/unowned CSS or dormant public channels, static/DB exact-restore parity, explicit catalog-gap dispositions, no R6 regression, coverage/resilience/canonClosure/pathParity equal 1 and unknown targeted impact equal 0. Both rounds require Codex serial and sighted acceptance; R7 may not rewrite R0-R6 history.
 - **Execution control** — Rollback: revert only the exact family lane or integrator batch that violates the reference grammar. Disable: keep a family on its pre-wave implementation until its disjoint replacement passes Codex review. Telemetry: family-status denominator, prototype ledger decisions, tenant divergence axes, responsive defects, gate counters and source/artifact freshness. Stop if ownership cannot be proven, shared-file writers overlap, static/DB parity would be broken, or an existing Kimi capability lacks successor/death proof.
 - **Do NOT** — Do not treat file visitation as quality; do not add public `--ds-*` from visual lanes; do not create tenant selectors, product branches, a second icon provider or a parallel theming/compiler path; do not edit app-bithire, Classic/Rustic, tests, baselines, generated styles/dist or shared contracts outside the integrator; edit-only, no commits, never mutate stashes or use destructive git.
 - **Size** — XL, multi-wave.
-- **Delegation prompt** — Use `packages/core/scripts/quality-evidence/programs/modern-rescue/CLAUDE-PROMPT.md`. The binding tenant direction is `tenant-art-direction.json`; no Kimi audit is active after final reconciliation. Claude top-tier is coordinator and calculates the safe agent count from a file/conflict graph; only writers in the current independent set edit. Claude never reads the Kimi inbox. Codex owns any future advisory reconciliation and deletion, every round gate, final validation, screenshots, commit and push.
+- **Delegation prompt** — Use `packages/core/scripts/quality-evidence/programs/modern-rescue/CLAUDE-PROMPT.md`. The binding tenant direction is `tenant-art-direction.json`; no Kimi audit is active after final reconciliation. Claude top-tier is coordinator and calculates the safe agent count from a file/conflict graph; only writers in the current independent set edit. Claude never reads the Kimi inbox. Codex owns any future advisory reconciliation and deletion, every round gate, final validation, screenshots and audited local commits. This program never pushes.
 
 #### 0. Authority and relationship to existing documentation
 
@@ -681,12 +681,13 @@ The archived audit is the central **program ledger**, but it does not override a
 No agent may create another competing roadmap, token catalog, design doctrine, or status dashboard.
 
 Execution spends premium-model context on judgment instead of deterministic
-repetition. The preferred adaptive route is Fable/strongest Claude for
-coordination and architecture, Opus/strongest product-design model for creative
-family elevation, and Sonnet/efficient reliable model for censuses, wiring,
-i18n and evidence. Availability and measured output may change the route; the
-conflict graph and exact ownership remain authoritative. Per-agent narratives
-are rejected in favor of bounded family packets and structured receipts.
+repetition. The preferred adaptive route is Opus/strongest coordinator-capable
+Claude as MAIN for coordination, architecture, integration and creative family
+elevation; Fable/strongest independent reviewer as read-only advisor; and
+Sonnet/efficient reliable model for censuses, wiring, i18n and evidence.
+Availability and measured output may change the route; the conflict graph and
+exact ownership remain authoritative. Per-agent narratives are rejected in
+favor of bounded family packets and structured receipts.
 
 The execution pack at
 `packages/core/scripts/quality-evidence/programs/modern-rescue/` is a
@@ -1054,7 +1055,8 @@ always superseded, mirrors without consumers or generated rules without live
 source. Every retirement needs attribution, reachability/consumer proof,
 successor adjudication when visual capacity exists and source/artifact
 reconciliation. R5/R6 apply this census to the complete productive Modern CSS,
-not merely the files touched by the program.
+not merely the files touched by the program; R7 repeats it after
+customization-depth changes.
 
 #### 7. Universal 10/10 product-quality contract
 
@@ -1118,8 +1120,9 @@ Importing from `@rottay/design-system/icons` is not itself proof of compliance:
 the historical named catalog is compatibility-only. R0 must replace generic
 `TagIcon` reuse and functional unicode/span stand-ins in the reference lab with
 the supplier-independent semantic `Icon` facade or a focused generated semantic
-pack. R2–R4 repeat that drain per family and R5/R6 close the full Modern-
-reachable corpus. A universal square icon well, arbitrary local SVG, emoji,
+pack. R2–R4 repeat that drain per family, R5/R6 close the full
+Modern-reachable corpus and R7 replays closure after its changes. A universal
+square icon well, arbitrary local SVG, emoji,
 external provider or hardcoded optical treatment is a veto; allowed vector
 geometry is limited to charts/data, QR/barcode/progress/rating, governed marks,
 user media and proven non-functional structure. In charts this exception covers
@@ -1331,7 +1334,7 @@ silently truncated; label quality-evidence v1 historical; reconcile stale icon
 profile comments and generated lifecycle/read-count wording; and measure the
 reach of the existing edge/material/motif/icon/motion vocabulary before any
 new public concept can be proposed. The current registry explicitly records
-WO-CRA-23 as an owner-authorized standalone program, so this gated R0-R6
+WO-CRA-23 as an owner-authorized standalone program, so this gated R0-R7
 program is the narrow authorized exception to the earlier inventory-wide
 freeze; normal roadmap claim semantics still apply.
 
@@ -1548,7 +1551,8 @@ never weakened to preserve a regression.
 
 Claude runs bounded round-level source checks and produces hashed evidence. The
 full serial, bundle regeneration, app build, browser matrix, screenshots,
-acceptance, commit and push belong to Codex at every stop/go boundary.
+acceptance and audited local commit belong to Codex at every stop/go boundary.
+This program never pushes.
 
 #### 17. Round R6 — Codex audit matrix
 
@@ -1568,7 +1572,66 @@ Claude's handoff must leave enough evidence for Codex to run:
 - grayscale three-second differentiation test;
 - no per-character headers, overlap, clipping, inaccessible truncation or dead grid space.
 
-#### 18. Required round and final handoffs from Claude
+#### 18. Round R7 — customization depth, tenant distinctiveness and catalog parity
+
+R7 is an owner-authorized post-certification extension. It starts only from a
+Codex-accepted frozen R6 tree and may not weaken or silently reclassify any
+R0-R6 outcome. Its detailed executable contract is
+`packages/core/scripts/quality-evidence/programs/modern-rescue/R7-CUSTOMIZATION-10-10.md`.
+
+R7 uses public systems as non-normative references: Spectrum CSS for
+base/theme/context and modifier-fallback ideas; PatternFly for naming
+discipline; Material Web for reference/system/component layering; React Aria
+and Base UI for accessible behavior, parts, slots, focus and state edges; DTCG
+for typed interchange. Existing Rottay names and authorities win whenever they
+already represent the same semantic decision. R7 never copies wholesale CSS,
+markup, components, names, visual identity or trade dress.
+
+The round executes eight gated waves:
+
+1. freeze and reproduce R6, regenerate the live census and disposition every
+   benchmark idea against the local 252-family catalog;
+2. close the complete Modern token/CSS writer-reader graph, including dead,
+   unowned, disconnected, generated-only and dormant public channels;
+3. record all 252 family roots/parts/states/property groups, eligible and
+   invariant axes, fallbacks, restore digests, static/DB probes, responsive,
+   i18n, accessibility and SSR/portal obligations;
+4. reconcile the six current recipe families into all fourteen target
+   semantic groups, requiring two productive families and two plausible tenant
+   postures per admitted group;
+5. prove five coherent non-product reference postures and all ten pairwise
+   comparisons on at least eight observable and six non-color axes, including
+   grayscale and neutralized-primary review;
+6. productize Standard, Pro and Expert authoring without growing raw control
+   authority for editor convenience;
+7. disposition external catalog gaps as already equivalent, improve existing,
+   propose capability, propose separately owned new-family follow-on or reject;
+8. repeat independent frozen-tree machine, browser, posture, parity, restore,
+   accessibility, responsive and performance certification.
+
+The fixed 252 denominator remains unchanged during R7. A genuinely missing
+family requires a separate owner-approved work order after the gap census.
+Existing families are improved in place. Standard stays at 13 unless an
+independently admitted control remains under the owner maximum of 15; Pro stays
+at seven capability IDs with 20-30 grouped editor fields; Expert remains the
+exact bounded searchable vocabulary rather than hundreds of sliders.
+
+R7 runs with one Opus MAIN, at most one read-only Fable advisor and at most two
+disjoint Sonnet mechanical writers. Shared contracts, compiler, recipes,
+generated CSS, i18n merge, harness and canon retain one writer. There is one
+heavy build/test, one server and one Chromium. MAIN works in long
+checkpoint-sized iterations and lanes return durable JSON receipts before
+releasing ownership.
+
+R7 exit requires: 252/252 complete customization dispositions; 14/14 productive
+recipe groups; coverage, resilience, canonClosure, pathParity and static/DB
+exact restore equal 1; unknown targeted impact, dead/unowned Modern CSS and
+dormant public channels equal 0; five posture and ten pairwise matrices green;
+no BitHire/TMM or R6 regression; zero hard vetoes; fresh source-bound evidence;
+and Codex sighted approval. R7 produces local audited commits only and never
+pushes.
+
+#### 19. Required round and final handoffs from Claude
 
 One consolidated coordinator report is required per round; raw agent narratives
 are not copied into the roadmap. The report uses
@@ -1593,9 +1656,10 @@ accumulates the accepted round evidence. Every report must contain:
 15. unresolved architecture and product decisions;
 16. declared non-goals and untouched areas;
 17. scoped checks actually run with real exits;
-18. explicit confirmation: no commit, push, publish, tag, stash mutation or destructive git operation.
+18. explicit confirmation: no push, publish, tag, stash mutation or destructive
+    git operation; local commits belong only to Codex after acceptance.
 
-#### 19. Stop conditions
+#### 20. Stop conditions
 
 Stop and report rather than improvise when:
 
@@ -1611,7 +1675,7 @@ Stop and report rather than improvise when:
 
 Do not stop for ordinary type errors, hard implementation work or the size of the inventory. Repair in scope, reassign a failed lane and continue through the current batch.
 
-#### 20. Launch prompt for the Claude coordinator
+#### 21. Launch prompt for the Claude coordinator
 
 The canonical bootstrap prompt is:
 
@@ -1621,6 +1685,7 @@ The prompt, `program.json`, `family-inventory.json`,
 `quality-rubric.json`, `customization-model.json`, `rounds.json`,
 `agent-orchestration.json` and `evidence-contract.json` are one binding
 execution packet. Claude must run the program contract and its negative drills,
-claim WO-CRA-23, and execute only the owner-authorized round. The initial
-authorized round is R0. No coordinator may cross a round boundary without the
-preceding Codex audit and explicit owner GO.
+claim WO-CRA-23, and execute only the owner-authorized round supplied in the
+launch instruction. The bootstrap contains no default write-authorized round.
+No coordinator may cross a round boundary without the preceding Codex audit
+and explicit owner GO; R7 additionally requires the accepted frozen R6 entry.

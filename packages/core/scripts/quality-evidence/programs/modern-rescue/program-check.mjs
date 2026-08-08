@@ -93,6 +93,7 @@ export function validateModernRescueContracts(contracts) {
   for (const contractPath of [
     program?.artDirectionContract,
     program?.visualCraftContract,
+    program?.r7CustomizationContract,
     program?.creativeProposalInbox,
     program?.referenceLab?.page,
     program?.referenceLab?.substrate
@@ -130,7 +131,14 @@ export function validateModernRescueContracts(contracts) {
   const sceneRegistrySource = sceneRegistryPath && fs.existsSync(path.join(REPOSITORY_ROOT, sceneRegistryPath))
     ? fs.readFileSync(path.join(REPOSITORY_ROOT, sceneRegistryPath), "utf8")
     : "";
-  const referenceLabSource = `${referenceLabPageSource}\n${sceneRegistrySource}`;
+  const substratePath = program?.referenceLab?.substrate;
+  if (!substratePath || !fs.existsSync(path.join(REPOSITORY_ROOT, substratePath))) {
+    errors.push("R1 reference lab must declare an existing substrate");
+  }
+  const substrateSource = substratePath && fs.existsSync(path.join(REPOSITORY_ROOT, substratePath))
+    ? fs.readFileSync(path.join(REPOSITORY_ROOT, substratePath), "utf8")
+    : "";
+  const referenceLabSource = `${referenceLabPageSource}\n${sceneRegistrySource}\n${substrateSource}`;
   for (const forbidden of ["app-bithire", "src/features/candidates", "src/app/(dashboard)"]) {
     if (referenceLabSource.includes(forbidden)) {
       errors.push(`R1 reference lab contains forbidden product dependency ${forbidden}`);
@@ -345,8 +353,11 @@ export function validateModernRescueContracts(contracts) {
   if (!cssOwnership?.roundScopeExit?.includes("zero dead")) {
     errors.push("accepted round scope must require zero dead CSS");
   }
-  if (!cssOwnership?.fullProgramExit?.includes("R5/R6")) {
-    errors.push("R5/R6 must audit the full productive Modern CSS corpus");
+  if (
+    !cssOwnership?.fullProgramExit?.includes("R5/R6") ||
+    !cssOwnership?.fullProgramExit?.includes("R7")
+  ) {
+    errors.push("R5/R6 must establish and R7 must replay the full productive Modern CSS audit");
   }
   if (
     !cssOwnership?.tenantAuthorityLaw?.includes("static BrandTheme and DB TenantTheme")
@@ -384,6 +395,54 @@ export function validateModernRescueContracts(contracts) {
   }
   if (customization?.kpis?.unknownTargetedImpact?.roundExit !== 0) {
     errors.push("unknown targeted impact must exit at zero");
+  }
+  const r7Customization = customization?.r7Execution;
+  if (r7Customization?.familyDispositionDenominator !== 252) {
+    errors.push("R7 customization model must disposition 252 families");
+  }
+  if (r7Customization?.targetRecipeGroups !== 14) {
+    errors.push("R7 customization model must target fourteen recipe groups");
+  }
+  if (!r7Customization?.benchmarkLaw?.includes("no wholesale")) {
+    errors.push("R7 customization benchmark must prohibit wholesale copying");
+  }
+  if ((r7Customization?.familyAnatomyDispositionRequiredFields?.length ?? 0) < 18) {
+    errors.push("R7 family anatomy disposition contract is incomplete");
+  }
+  if (
+    r7Customization?.referencePostures?.count !== 5 ||
+    r7Customization?.referencePostures?.pairCount !== 10 ||
+    r7Customization?.referencePostures?.minimumNonColorAxesPerPair !== 6
+  ) {
+    errors.push("R7 must retain five postures, ten pairs and six non-color axes");
+  }
+  for (const [metric, expected] of Object.entries({
+    deadOrUnownedModernCss: 0,
+    dormantPublicChannels: 0,
+    unknownTargetedImpact: 0,
+    coverage: 1,
+    resilience: 1,
+    canonClosure: 1,
+    pathParity: 1,
+    staticDbAndExactRestore: 1
+  })) {
+    if (r7Customization?.exit?.[metric] !== expected) {
+      errors.push(`R7 customization exit ${metric} must equal ${expected}`);
+    }
+  }
+  for (const binary of [
+    "r7-252-family-anatomy-disposition-complete",
+    "r7-reference-parity-without-copy",
+    "r7-fourteen-recipe-groups-productive",
+    "r7-zero-dormant-public-customization-channels",
+    "r7-five-posture-pairwise-distinctiveness"
+  ]) {
+    if (!rubric?.binaryContracts?.includes(binary)) {
+      errors.push(`R7 binary contract missing: ${binary}`);
+    }
+  }
+  if (!rubric?.tenantDivergenceAxes?.includes("navigation-chrome")) {
+    errors.push("tenant divergence axes must include navigation chrome");
   }
 
   const directionIds = artDirection?.targets?.map((target) => target.tenantId) ?? [];
@@ -530,8 +589,11 @@ export function validateModernRescueContracts(contracts) {
   ) {
     errors.push("R0 must drain generic and unicode icon fixtures before visual evidence");
   }
-  if (!iconGovernance?.fullProgramExit?.includes("full Modern-reachable")) {
-    errors.push("R5/R6 must close icon governance across Modern and active fixtures");
+  if (
+    !iconGovernance?.fullProgramExit?.includes("full Modern-reachable") ||
+    !iconGovernance?.fullProgramExit?.includes("R7")
+  ) {
+    errors.push("R5/R6 must close and R7 must replay icon governance across Modern and active fixtures");
   }
   const checkpointPolicy = visualCraft?.checkpointPolicy;
   if (checkpointPolicy?.calibrationFamilyCount !== 3) {
@@ -546,7 +608,7 @@ export function validateModernRescueContracts(contracts) {
   if (!checkpointPolicy?.restartLaw?.includes("restarts")) {
     errors.push("shared grammar changes must restart dependent checkpoints");
   }
-  const expectedCheckpointTotals = { R1: 12, R2: 100, R3: 74, R4: 78 };
+  const expectedCheckpointTotals = { R1: 12, R2: 100, R3: 74, R4: 78, R7: 252 };
   for (const [roundId, expectedTotal] of Object.entries(expectedCheckpointTotals)) {
     const cohorts = checkpointPolicy?.roundCohorts?.[roundId] ?? [];
     let total = 0;
@@ -564,15 +626,30 @@ export function validateModernRescueContracts(contracts) {
       errors.push(`${roundId} checkpoint denominator ${total} != ${expectedTotal}`);
     }
   }
+  const r7CohortLabels = (checkpointPolicy?.roundCohorts?.R7 ?? []).flat();
+  const certifiedFamilyCohortLabels = ["R2", "R3", "R4"].flatMap(
+    (roundId) => (checkpointPolicy?.roundCohorts?.[roundId] ?? []).flat()
+  );
+  if (new Set(r7CohortLabels).size !== r7CohortLabels.length) {
+    errors.push("R7 checkpoint cohorts must be unique");
+  }
+  if (
+    [...r7CohortLabels].sort().join(",") !==
+    [...certifiedFamilyCohortLabels].sort().join(",")
+  ) {
+    errors.push("R7 checkpoint cohorts must replay the exact R2-R4 family cohort catalog");
+  }
 
   const roundIds = rounds?.rounds?.map((round) => round.id) ?? [];
-  if (roundIds.join(",") !== "R0,R1,R2,R3,R4,R5,R6") {
-    errors.push("round contracts must be exactly R0..R6 in order");
+  if (roundIds.join(",") !== "R0,R1,R2,R3,R4,R5,R6,R7") {
+    errors.push("round contracts must be exactly R0..R7 in order");
   }
   const r2 = rounds?.rounds?.find((round) => round.id === "R2");
   const r1 = rounds?.rounds?.find((round) => round.id === "R1");
   const r3 = rounds?.rounds?.find((round) => round.id === "R3");
   const r4 = rounds?.rounds?.find((round) => round.id === "R4");
+  const r6 = rounds?.rounds?.find((round) => round.id === "R6");
+  const r7 = rounds?.rounds?.find((round) => round.id === "R7");
   if (r2?.scope?.primitives !== 100) errors.push("R2 must cover 100 primitives");
   if (r1?.scope?.referenceLab !== "/probe/ds-reference") {
     errors.push("R1 must execute through the canonical DS reference lab");
@@ -598,6 +675,61 @@ export function validateModernRescueContracts(contracts) {
   ) {
     errors.push("R4 must cover 78 structure/surface/commercial families");
   }
+  if (r7?.scope?.families !== 252) {
+    errors.push("R7 must disposition all 252 certified families");
+  }
+  if (r7?.scope?.recipeGroups?.current !== 6 || r7?.scope?.recipeGroups?.target !== 14) {
+    errors.push("R7 must expand the six current recipe families into fourteen target groups");
+  }
+  if (
+    !r7?.entry?.some((entry) => entry.includes("R6") && entry.includes("Codex-accepted"))
+  ) {
+    errors.push("R7 entry must require a Codex-accepted R6 frozen baseline");
+  }
+  if (!r7?.benchmarkPolicy?.authorityLaw?.includes("existing Rottay")) {
+    errors.push("R7 references must preserve existing Rottay semantic authority");
+  }
+  if (!r7?.benchmarkPolicy?.codeReuseLaw?.includes("no wholesale")) {
+    errors.push("R7 benchmark policy must prohibit wholesale external copying");
+  }
+  if ((r7?.benchmarkPolicy?.references?.length ?? 0) < 6) {
+    errors.push("R7 must benchmark the complete named reference cohort");
+  }
+  if (r7?.scope?.referencePostures !== 5) {
+    errors.push("R7 must prove five coherent reference postures");
+  }
+  if (
+    !r7?.objectives?.some((entry) => entry.includes("six non-color axes")) ||
+    !r7?.exit?.some((entry) => entry.includes("six-non-color-axis"))
+  ) {
+    errors.push("R7 pairwise tenant posture evidence must retain six non-color axes");
+  }
+  if (
+    !r7?.objectives?.some((entry) => entry.includes("static BrandTheme") && entry.includes("DB TenantTheme")) ||
+    !r7?.exit?.some((entry) => entry.includes("static DB") && entry.includes("exact-restore"))
+  ) {
+    errors.push("R7 must require static DB parity and exact restore");
+  }
+  if (!r7?.exit?.some((entry) => entry.includes("14-of-14"))) {
+    errors.push("R7 exit must require fourteen productive recipe groups");
+  }
+  if (!r7?.exit?.some((entry) => entry.includes("dormant public") && entry.includes("0"))) {
+    errors.push("R7 exit must drive dormant public customization channels to zero");
+  }
+  if (
+    !r7?.objectives?.some(
+      (entry) => entry.includes("evidence sealer") && entry.includes("R0 constants")
+    )
+  ) {
+    errors.push("R7 must generalize the R0-only evidence sealer before certification");
+  }
+  if (r6?.exit?.some((entry) => entry.includes("push")) &&
+      !r6.exit.some((entry) => entry.includes("never pushes"))) {
+    errors.push("R6 must preserve the program-wide never-push law");
+  }
+  if (!program?.invariants?.some((entry) => entry.includes("never pushes"))) {
+    errors.push("the Modern rescue program must never push");
+  }
 
   if (typeof orchestration?.graph?.agentCount === "number") {
     errors.push("agent count must be dynamic, never a fixed number");
@@ -608,8 +740,9 @@ export function validateModernRescueContracts(contracts) {
   const modelRouting = orchestration?.modelRouting;
   if (
     !modelRouting?.programCoordinatorAndArchitectureControl?.preferred?.includes(
-      "Fable"
+      "Opus"
     ) ||
+    !modelRouting?.advisoryReadOnly?.preferred?.includes("Fable") ||
     !modelRouting?.creativePremiumFamilyWork?.preferred?.includes("Opus") ||
     !modelRouting?.mechanicalDeterministicWork?.preferred?.includes("Sonnet")
   ) {
@@ -634,6 +767,22 @@ export function validateModernRescueContracts(contracts) {
   }
   if ((orchestration?.reservedPaths?.length ?? 0) < 10) {
     errors.push("reserved shared ownership paths are incomplete");
+  }
+  if (
+    orchestration?.r7Execution?.mechanicalWriters?.maximum !== 2 ||
+    orchestration?.r7Execution?.mechanicalWriters?.model !== "Sonnet"
+  ) {
+    errors.push("R7 mechanical parallelism must remain bounded to two Sonnet writers");
+  }
+  if (
+    orchestration?.r7Execution?.machineBudget?.heavyBuildOrTest !== 1 ||
+    orchestration?.r7Execution?.machineBudget?.server !== 1 ||
+    orchestration?.r7Execution?.machineBudget?.chromium !== 1
+  ) {
+    errors.push("R7 must retain one heavy process, one server and one Chromium");
+  }
+  if (!orchestration?.r7Execution?.longIterationLaw?.includes("complete current checkpoint")) {
+    errors.push("R7 MAIN must run long checkpoint-sized iterations");
   }
   if (orchestration?.workOrderAdmission?.requiredBeforeWrite !== true) {
     errors.push("complete lane work orders must block writes rather than advise them");
@@ -678,8 +827,8 @@ export function validateModernRescueContracts(contracts) {
   const evidenceRounds = Object.keys(
     evidence?.minimumReliableEvidenceByRound ?? {}
   ).join(",");
-  if (evidenceRounds !== "R0,R1,R2,R3,R4,R5,R6") {
-    errors.push("minimum reliable evidence must be declared for every round R0..R6");
+  if (evidenceRounds !== "R0,R1,R2,R3,R4,R5,R6,R7") {
+    errors.push("minimum reliable evidence must be declared for every round R0..R7");
   }
   if (!evidence?.minimumReliableEvidenceByRound?.R0?.includes("no captures")) {
     errors.push("R0 evidence must remain capture-free");
@@ -697,7 +846,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     process.exitCode = 1;
   } else {
     console.log(
-      "modern-rescue program contract OK — 252 families, 100 rubric points, two deep tenant directions, R0..R6"
+      "modern-rescue program contract OK — 252 families, 100 rubric points, two deep tenant directions, R0..R7"
     );
   }
 }

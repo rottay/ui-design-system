@@ -1,7 +1,7 @@
 # Visual craft contract — integrated, subtle, adaptive, configurable
 
 This contract exists because mechanical correctness and token coverage can
-still produce an ordinary or visibly broken product. It is binding for R1–R6
+still produce an ordinary or visibly broken product. It is binding for R1–R7
 and is machine mirrored in `visual-craft-contract.json`.
 
 ## The standard
@@ -85,7 +85,8 @@ evidence. The reference torture probe reuses the historical compatibility
 `TagIcon` dozens of times for unrelated metrics/actions and includes unicode or
 span stand-ins even though the generated semantic corpus contains hundreds of
 role-specific icons. R0 must drain the lab before R1. R2–R4 drain each family;
-R5/R6 close the entire Modern-reachable UI and active reference fixtures.
+R5/R6 establish closure over the entire Modern-reachable UI and active
+reference fixtures; R7 repeats that closure after customization-depth changes.
 
 Use the supplier-independent semantic `Icon` role facade or a focused generated
 semantic pack. A functional glyph may not be a local SVG, emoji, unicode

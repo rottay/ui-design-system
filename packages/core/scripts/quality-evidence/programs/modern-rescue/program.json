@@ -8,6 +8,7 @@
   "evidenceRoot": "packages/core/test-artifacts/quality-evidence/wo-cra-23",
   "artDirectionContract": "packages/core/scripts/quality-evidence/programs/modern-rescue/tenant-art-direction.json",
   "visualCraftContract": "packages/core/scripts/quality-evidence/programs/modern-rescue/visual-craft-contract.json",
+  "r7CustomizationContract": "packages/core/scripts/quality-evidence/programs/modern-rescue/R7-CUSTOMIZATION-10-10.md",
   "creativeProposalInbox": "packages/core/scripts/quality-evidence/programs/modern-rescue/KIMI-ANNOTATIONS/inbox",
   "referenceLab": {
     "route": "/probe/ds-reference",
@@ -83,13 +84,14 @@
     "raw Kimi annotations are temporary non-canonical input and are deleted after Codex incorporates accepted observations",
     "no public token creation by family writers",
     "every productive CSS rule has one family or foundation-runtime owner",
-    "zero dead orphaned or causally disconnected CSS at accepted round scope and full Modern corpus closure in R5/R6",
+    "zero dead orphaned or causally disconnected CSS at accepted round scope, full Modern corpus closure in R5/R6 and complete replay after R7 customization changes",
     "every tenant-variable CSS decision resolves directly or derivationally through the canonical static BrandTheme and DB TenantTheme chain",
     "all creative proposals adjudicated within their round",
     "tests do not award visual quality points",
     "only Codex may accept sighted quality",
     "new layer grammars stop after three calibration families and every cohort stops after at most twenty-five families for Codex review",
     "each round stops before the next owner-authorized round",
-    "no commit or push before Codex acceptance"
+    "no commit before Codex acceptance",
+    "this program never pushes publishes or tags"
   ]
 }

@@ -19,6 +19,7 @@ WORK ORDER Y PROGRAMA VINCULANTE:
 - packages/core/scripts/quality-evidence/programs/modern-rescue/tenant-art-direction.json
 - packages/core/scripts/quality-evidence/programs/modern-rescue/VISUAL-CRAFT-CONTRACT.md
 - packages/core/scripts/quality-evidence/programs/modern-rescue/visual-craft-contract.json
+- packages/core/scripts/quality-evidence/programs/modern-rescue/R7-CUSTOMIZATION-10-10.md
 
 Leé todo antes de delegar. Ejecutá:
 
@@ -30,11 +31,15 @@ Si el WO ya está in-progress por este programa, no reclames otra vez. Si el
 contract check falla o el WO no puede reclamarse, diagnosticá y reportá: no
 inventes estado, plan o dashboard paralelo.
 
-ROUND AUTORIZADO: R0
+ROUND AUTORIZADO: <SUMINISTRADO EXPLÍCITAMENTE POR CODEX/OWNER>
 
 Ejecutá solamente el round autorizado de rounds.json. No cruces al siguiente
 round aunque tengas agentes o contexto disponibles. Cada round termina en
 IMPLEMENTED_PENDING_CODEX_AUDIT y espera GO explícito de Codex/owner.
+Si la instrucción de lanzamiento no reemplaza el placeholder con un round
+concreto, detenete sin escribir. R7 está owner-authorized como contrato, pero
+su entry sigue exigiendo un R6 aceptado y congelado por Codex; su existencia no
+autoriza saltear R4, R5 o R6.
 
 DIRECCIÓN DE PRODUCTO VINCULANTE:
 
@@ -129,14 +134,13 @@ primero el grafo de conflictos definido en agent-orchestration.json:
 ROUTING DE MODELOS Y ECONOMÍA DE CONTEXTO:
 
 Usá `agent-orchestration.json#modelRouting` como preferencia adaptable, no como
-dogma. Si están disponibles, Fable —o el Claude más fuerte como coordinador—
-controla arquitectura, conflicto, canon y aceptación de diffs; Opus —o el
-modelo con mejor criterio de producto— ejecuta las familias que requieren
-composición premium, creatividad, responsive y art direction; Sonnet —o el
-modelo eficiente más confiable— hace censos, wiring repetitivo, i18n, barrels,
-contratos focales y evidencia estructurada. Escalá una lane si aparece juicio
-de producto o autoridad; no uses al cerebro coordinador para repetición
-mecánica ni dejes a una lane mecánica inventar arquitectura.
+dogma. En este programa Opus es MAIN y controla arquitectura, conflicto, canon,
+integración y trabajo de producto; Fable puede asesorar sólo read-only sobre
+paridad, coherencia y decisiones difíciles; Sonnet —o el modelo eficiente más
+confiable— hace censos, wiring repetitivo, i18n, barrels, contratos focales y
+evidencia estructurada. Escalá una lane si aparece juicio de producto o
+autoridad; no uses a MAIN para repetición mecánica ni dejes a una lane mecánica
+inventar arquitectura.
 
 Maximizá output productivo por contexto. Entregá a cada agente sólo su family
 packet, dependencias inmediatas, rubric y ownership. No hagas que veinte agentes
@@ -147,6 +151,24 @@ restricción a11y, un algoritmo o una condición de retiro. Prohibidos comments
 que repiten el código, dicen “premium”, narran la migración, copian el prompt o
 guardan razonamiento del agente. Priorizá código productivo y documentación
 canónica útil; no journals, dashboards paralelos ni progreso en prosa.
+
+En R7, MAIN trabaja en iteraciones largas hasta el checkpoint vigente. Puede
+usar como máximo dos Sonnet writers disjuntos para manifests, ledgers, wiring,
+i18n y evidencia, y una Fable read-only. Compiler, shared contracts, recipes,
+generated CSS, i18n merge, harness y canon conservan un único writer. Existe
+un solo build/test pesado, un solo server y un solo Chromium. Cada lane entrega
+JSON durable y libera ownership; no pidas decisiones reversibles ya resueltas
+por el contrato.
+
+REFERENCIAS EXTERNAS EN R7:
+
+Spectrum CSS, PatternFly, Material Web, React Aria, Base UI y DTCG son
+benchmarks de ideas, comportamiento, anatomía, estados y governance. Los
+nombres y autoridades Rottay existentes ganan cuando ya representan la misma
+decisión. Prohibido copiar wholesale CSS, markup, componentes, nombres o trade
+dress. Una dependencia o familia nueva requiere gap real, licencia, bundle,
+SSR, a11y, dos consumidores plausibles y un work order separado; R7 no cambia
+silenciosamente el denominador 252.
 
 OBJETIVO DE CALIDAD:
 
@@ -254,7 +276,8 @@ histórico de nombres es compatibility-only. Codex reprodujo que el torture lab
 usa `TagIcon` 34 veces para conceptos no relacionados, al menos siete stand-ins
 unicode/span, mientras existen 282 role files semánticos generados. R0 re-censa
 y drena el lab a `Icon name=<semantic-role>` o packs semánticos focales antes de
-usar sus screenshots. R2–R4 drenan por familia; R5/R6 cierran todo Modern y las
+usar sus screenshots. R2–R4 drenan por familia; R5/R6 cierran todo Modern, R7
+repite la clausura después de sus cambios, y las
 fixtures/stories activas. Cero icono funcional local SVG/emoji/unicode, cero
 external provider, cero fallback genérico y cero icon well universal. Las únicas
 excepciones son geometría de charts/data, QR/barcode/progress/rating, marks por
@@ -302,7 +325,8 @@ no como customización ficticia.
 En cada round, el scope aceptable termina con cero stylesheets no importados,
 selectores sin anatomy/estado alcanzable, writers sin reader, reads sin emitter/
 fallback/owner, reglas siempre anuladas, mirrors sin consumer y output generado
-sin source. R5/R6 repiten el censo sobre todo Modern. Retirá únicamente con
+sin source. R5/R6 establecen el censo sobre todo Modern y R7 lo repite después
+de sus cambios. Retirá únicamente con
 owner, census, successor cuando conserva capacidad y reconciliación source→
 generated; “dead” jamás autoriza borrar por sí solo.
 
@@ -353,10 +377,12 @@ cerrar el cohort, el quality integrator actualiza:
 - documentación activa y catálogo generado cuando corresponda.
 
 No corras full build/suite/browser por agente. Ejecutá solamente checks focales
-del round y deja la serial completa, bundles, captures finales, commit y push a
-Codex. Respetá el mínimo progresivo de `evidence-contract.json`: R0 sin
+del round y dejá la serial completa, bundles, captures finales y commit local a
+Codex; este programa nunca hace push. Respetá el mínimo progresivo de
+`evidence-contract.json`: R0 sin
 captures, R1 completo para 12 canarios, R2-R4 una captura representativa por
-lane más scorecard por familia, y matriz completa en R5/R6. No edites
+lane más scorecard por familia, matriz completa en R5/R6 y replay completo en
+R7. No edites
 manualmente styles/dist. No uses git reset/restore/checkout,
 no limpies untracked, no alteres stashes y no hagas commit/push/publish/tag.
 

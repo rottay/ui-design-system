@@ -102,6 +102,29 @@ blocked and Codex-accepted. Never report files touched as completion.
 - Confirmation: zero unowned, orphaned or causally disconnected CSS in the
   accepted round scope:
 
+## 5B. R7 customization-depth closure
+
+R7 only:
+
+- R6 accepted baseline HEAD and reproduction receipt:
+- External benchmark sources, versions/dates and license notes:
+- Reference-parity dispositions by capability; confirmation of zero copied
+  naming, markup, styling or trade dress:
+- Family anatomy manifest: rows present / 252, missing roots/parts/states,
+  justified invariant families:
+- Channel liveness: writers, reads, dead/unowned, dormant public channels and
+  unknown targeted impacts:
+- Recipe groups productive / 14, two-family/two-posture proof and propagation
+  coverage by group:
+- Five reference postures and all ten pairwise results, including observable
+  and non-color axes, grayscale and neutralized-primary receipts:
+- Standard/Pro/Expert editor fields, metadata, bounds, impact preview,
+  invalid-value rejection and round-trip:
+- Catalog capability gaps: improve-existing / capability proposal /
+  new-family follow-on / rejected exact dispositions:
+- Static/DB normalized-output and exact-restore matrix:
+- R6 bundle/compiler/runtime/first-paint comparison:
+
 ## 6. Tests and documentation
 
 - Observable contracts added/updated:
@@ -140,7 +163,8 @@ blocked and Codex-accepted. Never report files touched as completion.
 - Visual-craft hard vetoes and mechanical-floor result:
 - Checkpoint artifacts and next-write boundary:
 - End HEAD/porcelain:
-- Confirmation: no commit/push/publish/tag/stash mutation/destructive git.
+- Confirmation: no push/publish/tag/stash mutation/destructive git; any local
+  commit is created only by Codex after acceptance.
 
 Required final line:
 

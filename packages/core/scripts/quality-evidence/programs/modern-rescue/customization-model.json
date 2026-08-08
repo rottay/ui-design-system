@@ -39,6 +39,66 @@
     "migrationLaw": "Published profile ids keep their meaning. A new art direction either composes existing axes without semantic mutation or adds a reviewed versioned registry entry through the same static and DB lowering path.",
     "advisorLaw": "Kimi may propose in KIMI-ANNOTATIONS; only Codex-adjudicated ideas enter this model or an owning canonical contract."
   },
+  "r7Execution": {
+    "contract": "R7-CUSTOMIZATION-10-10.md",
+    "entryLaw": "R7 begins only from a Codex-accepted R6 frozen baseline and cannot silently reclassify R0-R6 history.",
+    "familyDispositionDenominator": 252,
+    "benchmarkLaw": "External systems provide ideas, edge cases and capability comparisons only. Existing Rottay semantic names and authorities win; no wholesale source, styling, markup, naming or trade-dress copy.",
+    "benchmarkDispositions": [
+      "ALREADY_EQUIVALENT",
+      "ADOPT_IDEA_IN_EXISTING_AUTHORITY",
+      "IMPROVE_EXISTING_FAMILY",
+      "PROPOSE_NEW_CAPABILITY",
+      "PROPOSE_NEW_FAMILY_FOLLOW_ON",
+      "REJECT_INCOMPATIBLE"
+    ],
+    "familyAnatomyDispositionRequiredFields": [
+      "familyId",
+      "layer",
+      "sourceOwner",
+      "publicExports",
+      "rootAndStableParts",
+      "states",
+      "propertyGroups",
+      "eligibleAxes",
+      "invariantAxesWithReasons",
+      "inputChannels",
+      "fallbackChain",
+      "restoreDigest",
+      "staticDbCausalProbes",
+      "responsiveAndMobile",
+      "i18nRtl",
+      "a11yAndInput",
+      "ssrHydrationPortal",
+      "benchmarkDisposition"
+    ],
+    "targetRecipeGroups": 14,
+    "referencePostures": {
+      "count": 5,
+      "descriptiveFixturesNotRequiredPublicIds": [
+        "operational-technical",
+        "editorial-premium",
+        "consumer-soft",
+        "institutional-dense",
+        "expressive-event"
+      ],
+      "pairCount": 10,
+      "minimumObservableAxesPerPair": 8,
+      "minimumNonColorAxesPerPair": 6,
+      "grayscaleAndNeutralizedPrimaryRequired": true
+    },
+    "catalogLaw": "The certified 252-family denominator remains fixed during R7. A genuine missing-family proposal requires a separate owner-approved follow-on.",
+    "exit": {
+      "deadOrUnownedModernCss": 0,
+      "dormantPublicChannels": 0,
+      "unknownTargetedImpact": 0,
+      "coverage": 1,
+      "resilience": 1,
+      "canonClosure": 1,
+      "pathParity": 1,
+      "staticDbAndExactRestore": 1
+    }
+  },
   "standard": {
     "maximumActiveControlsWithoutOwnerDecision": 15,
     "current": [

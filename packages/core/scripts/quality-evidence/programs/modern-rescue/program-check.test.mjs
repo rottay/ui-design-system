@@ -123,6 +123,18 @@ test("dead CSS and disconnected tenant customization fail closed", () => {
 test("model routing stays adaptive and context-efficient", () => {
   assert.ok(
     mutated((copy) => {
+      copy.orchestration.modelRouting.programCoordinatorAndArchitectureControl.preferred =
+        "Sonnet only";
+    }).some((error) => error.includes("coordinator/creative/mechanical"))
+  );
+  assert.ok(
+    mutated((copy) => {
+      copy.orchestration.modelRouting.advisoryReadOnly.preferred =
+        "writing reviewer";
+    }).some((error) => error.includes("coordinator/creative/mechanical"))
+  );
+  assert.ok(
+    mutated((copy) => {
       copy.orchestration.modelRouting.creativePremiumFamilyWork.preferred =
         "cheapest available model";
     }).some((error) => error.includes("coordinator/creative/mechanical"))
@@ -214,7 +226,7 @@ test("public control baselines and closure floors fail closed", () => {
 test("round omission and a fixed agent count fail closed", () => {
   assert.ok(
     mutated((copy) => copy.rounds.rounds.splice(3, 1)).some((error) =>
-      error.includes("R0..R6")
+      error.includes("R0..R7")
     )
   );
   assert.ok(
@@ -230,7 +242,88 @@ test("round omission and a fixed agent count fail closed", () => {
   assert.ok(
     mutated((copy) => {
       delete copy.evidence.minimumReliableEvidenceByRound.R0;
-    }).some((error) => error.includes("every round R0..R6"))
+    }).some((error) => error.includes("every round R0..R7"))
+  );
+});
+
+test("R7 customization depth and benchmark policy fail closed", () => {
+  assert.ok(
+    mutated((copy) => {
+      copy.rounds.rounds.pop();
+    }).some((error) => error.includes("R0..R7"))
+  );
+  assert.ok(
+    mutated((copy) => {
+      copy.rounds.rounds.find((round) => round.id === "R7").scope.recipeGroups.target = 13;
+    }).some((error) => error.includes("fourteen target groups"))
+  );
+  assert.ok(
+    mutated((copy) => {
+      copy.rounds.rounds.find((round) => round.id === "R7").benchmarkPolicy.codeReuseLaw =
+        "copy public systems wholesale";
+    }).some((error) => error.includes("wholesale external copying"))
+  );
+  assert.ok(
+    mutated((copy) => {
+      copy.rounds.rounds.find((round) => round.id === "R7").scope.referencePostures = 3;
+    }).some((error) => error.includes("five coherent reference postures"))
+  );
+  assert.ok(
+    mutated((copy) => {
+      const r7 = copy.rounds.rounds.find((round) => round.id === "R7");
+      r7.exit = r7.exit.filter((entry) => !entry.includes("dormant public"));
+    }).some((error) => error.includes("dormant public customization channels"))
+  );
+  assert.ok(
+    mutated((copy) => {
+      const r7 = copy.rounds.rounds.find((round) => round.id === "R7");
+      r7.objectives = r7.objectives.filter((entry) => !entry.includes("evidence sealer"));
+    }).some((error) => error.includes("R0-only evidence sealer"))
+  );
+  assert.ok(
+    mutated((copy) => {
+      delete copy.evidence.minimumReliableEvidenceByRound.R7;
+    }).some((error) => error.includes("every round R0..R7"))
+  );
+  assert.ok(
+    mutated((copy) => {
+      copy.customization.r7Execution.familyAnatomyDispositionRequiredFields.pop();
+      copy.customization.r7Execution.familyAnatomyDispositionRequiredFields.pop();
+    }).some((error) => error.includes("family anatomy disposition contract"))
+  );
+  assert.ok(
+    mutated((copy) => {
+      copy.customization.r7Execution.referencePostures.minimumNonColorAxesPerPair = 3;
+    }).some((error) => error.includes("six non-color axes"))
+  );
+  assert.ok(
+    mutated((copy) => {
+      copy.rubric.binaryContracts = copy.rubric.binaryContracts.filter(
+        (entry) => entry !== "r7-reference-parity-without-copy"
+      );
+    }).some((error) => error.includes("r7-reference-parity-without-copy"))
+  );
+  assert.ok(
+    mutated((copy) => {
+      copy.visualCraft.checkpointPolicy.roundCohorts.R7[0].push("duplicate-overflow-10");
+    }).some((error) => error.includes("exceeds twenty-five"))
+  );
+  assert.ok(
+    mutated((copy) => {
+      copy.visualCraft.checkpointPolicy.roundCohorts.R7[1].push(
+        "foundation-visual-5"
+      );
+    }).some((error) => error.includes("must be unique"))
+  );
+  assert.ok(
+    mutated((copy) => {
+      copy.orchestration.r7Execution.mechanicalWriters.maximum = 5;
+    }).some((error) => error.includes("two Sonnet writers"))
+  );
+  assert.ok(
+    mutated((copy) => {
+      copy.orchestration.r7Execution.machineBudget.chromium = 3;
+    }).some((error) => error.includes("one heavy process"))
   );
 });
 

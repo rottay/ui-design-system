@@ -420,7 +420,126 @@
         "all family layer thresholds pass",
         "zero hard vetoes",
         "Codex sighted approval",
-        "commit and push only after acceptance"
+        "Codex may create an audited local commit after acceptance; this program never pushes"
+      ]
+    },
+    {
+      "id": "R7",
+      "name": "Customization depth, tenant distinctiveness and catalog parity",
+      "contract": "R7-CUSTOMIZATION-10-10.md",
+      "entry": [
+        "R6 has a local Codex-accepted frozen-tree result",
+        "the 252-family R6 baseline remains immutable and source-bound",
+        "the owner has explicitly authorized R7",
+        "the live customization census is regenerated at R7 entry rather than copied from a prior report",
+        "all R7 external references are non-normative benchmarks rather than naming visual or architectural authorities"
+      ],
+      "scope": {
+        "families": 252,
+        "standardControlsBaseline": 13,
+        "proCapabilitiesBaseline": 7,
+        "expertExactAllowlistBaseline": 294,
+        "recipeGroups": {
+          "current": 6,
+          "target": 14
+        },
+        "referencePostures": 5,
+        "writes": "existing Modern authorities and family source only when an observed customization, behavior, accessibility or resilience defect requires it; no silent inventory growth"
+      },
+      "benchmarkPolicy": {
+        "authorityLaw": "public systems supply ideas and edge cases only; existing Rottay semantic names and authorities win when they already own the same decision",
+        "codeReuseLaw": "no wholesale source or styling copy; any proposed external dependency or source reuse requires a capability gap, license review, bundle and SSR analysis, accessibility evidence and a separate owner decision",
+        "references": [
+          {
+            "id": "spectrum-css",
+            "role": "base theme context separation and component modifier fallback"
+          },
+          {
+            "id": "patternfly-design-tokens",
+            "role": "semantic component property concept variant and state naming audit"
+          },
+          {
+            "id": "material-web",
+            "role": "reference system and component alias-layer audit"
+          },
+          {
+            "id": "react-aria-components",
+            "role": "accessible behavior parts slots and state-hook audit"
+          },
+          {
+            "id": "base-ui",
+            "role": "headless composition focus keyboard and capability-gap audit"
+          },
+          {
+            "id": "dtcg-2025-10",
+            "role": "typed token interchange alias and composite-value audit"
+          }
+        ]
+      },
+      "executionWaves": [
+        "R7.0-frozen-baseline-and-benchmark-matrix",
+        "R7.1-token-and-css-ownership-closure",
+        "R7.2-family-anatomy-and-state-contracts",
+        "R7.3-recipe-group-expansion-six-to-fourteen",
+        "R7.4-coherent-art-direction-postures",
+        "R7.5-product-editor-and-authoring-ergonomics",
+        "R7.6-catalog-breadth-disposition",
+        "R7.7-independent-closure"
+      ],
+      "objectives": [
+        "generalize the evidence sealer so R7 summaries derive family outcomes KPIs and capture counts from fresh round artifacts rather than R0 constants",
+        "map all 252 families to stable parts states property groups eligible customization axes invariant axes and exact fallbacks",
+        "adjudicate the complete Modern-reachable writer and reader graph without dead unowned disconnected or generated-only CSS",
+        "expand the six current recipe families into all fourteen target semantic groups without duplicate authority",
+        "prove each admitted recipe group has at least two productive families and two plausible tenant postures",
+        "produce five coherent non-product reference postures through the existing profile and recipe pipeline",
+        "prove every posture pair differs on at least eight observable axes and six non-color axes while preserving semantics accessibility and task completion",
+        "keep Standard small and high-leverage Pro curated and Expert exact bounded searchable and restorable",
+        "prove static BrandTheme and DB TenantTheme normalized-output parity and exact default restore for every active control in scope",
+        "compare catalog capability behavior and anatomy against public reference systems without copying their names styling or component trees",
+        "improve existing families in place and route genuine missing-family proposals to a separate owner-approved follow-on",
+        "maintain or improve R6 bundle compiler runtime first-paint accessibility RTL responsive and resilience results",
+        "give every control and family touched complete coverage resilience canon closure and path parity with zero unknown targeted impact"
+      ],
+      "parallelization": {
+        "main": "one Opus coordinator and architecture integrator",
+        "advisor": "at most one Fable read-only lane",
+        "mechanical": "up to two disjoint Sonnet lanes for family maps ledgers exact wiring i18n and evidence",
+        "sharedWriterLaw": "compiler contracts generated CSS shared i18n harness and canon each have one writer at a time",
+        "machineLaw": "at most one heavy build or test one server and one Chromium",
+        "iterationLaw": "MAIN runs checkpoint-sized long iterations and does not stop for reversible choices already resolved by the contract"
+      },
+      "exit": [
+        "252-of-252 family customization dispositions are fresh source-bound and complete",
+        "14-of-14 target semantic recipe groups are productive",
+        "coverage equals 1",
+        "resilience equals 1",
+        "canonClosure equals 1",
+        "pathParity equals 1",
+        "unknownTargetedImpact equals 0",
+        "dead or unowned Modern-reachable CSS equals 0",
+        "dormant public customization channels equal 0",
+        "static DB and exact-restore matrix equals 1",
+        "five reference postures and all ten pairwise comparisons pass the six-non-color-axis floor",
+        "BitHire and The Management R6 art-direction evidence does not regress",
+        "catalog benchmark has one explicit disposition per compared capability and zero silent inventory additions",
+        "all applicable binary contracts and family layer floors remain green",
+        "zero hard vetoes",
+        "Codex sighted approval",
+        "Codex may create audited local commits; this program never pushes"
+      ],
+      "rollback": [
+        "revert the smallest R7 recipe profile contract or family cohort while preserving the accepted R6 baseline",
+        "restore the exact pre-R7 default through the recorded restore digest",
+        "retain a proposal as component-private or follow-on instead of publishing an under-proven channel"
+      ],
+      "stopConditions": [
+        "R6 accepted baseline cannot be reproduced",
+        "a proposed change requires tenant selectors tenant-conditional TSX a second compiler or a second engine",
+        "a new public channel lacks productive consumers bounds static-DB parity or exact restore",
+        "a new family would silently change the 252 denominator",
+        "shared-file ownership overlaps or more than one heavy browser or build process is active",
+        "a cohort cannot pass without weakening tests baselines accessibility or resilience floors"
       ]
     }
   ]

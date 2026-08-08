@@ -106,7 +106,7 @@
   },
   "cssOwnershipContract": {
     "roundScopeExit": "Every CSS rule, custom-property writer and custom-property read changed or owned by the round is classified; zero dead, orphaned, unowned or causally disconnected CSS may be handed off as complete.",
-    "fullProgramExit": "R5/R6 repeat the classification over the productive Modern corpus, not only touched files.",
+    "fullProgramExit": "R5/R6 establish classification over the productive Modern corpus, not only touched files; R7 repeats the full classification after customization-depth changes.",
     "allowedClassifications": [
       "FAMILY_STRUCTURAL_INVARIANT",
       "FOUNDATION_OR_RUNTIME_INVARIANT",
@@ -260,7 +260,12 @@
     "customizable-css-has-static-db-canonical-authority",
     "visual-craft-contract-mechanical-floors",
     "codex-calibration-and-cohort-checkpoints",
-    "semantic-role-icon-facade-without-compatibility-placeholders"
+    "semantic-role-icon-facade-without-compatibility-placeholders",
+    "r7-252-family-anatomy-disposition-complete",
+    "r7-reference-parity-without-copy",
+    "r7-fourteen-recipe-groups-productive",
+    "r7-zero-dormant-public-customization-channels",
+    "r7-five-posture-pairwise-distinctiveness"
   ],
   "hardVetoes": [
     "invalid-dom-or-hydration-mismatch",
@@ -357,6 +362,7 @@
     "icon",
     "motion",
     "motif",
+    "navigation-chrome",
     "responsive-composition",
     "recipe-anatomy"
   ],

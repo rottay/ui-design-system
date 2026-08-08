@@ -15,6 +15,13 @@
     "checkpoint.json",
     "i18n-rtl.json",
     "prototype-decisions.json",
+    "reference-parity-matrix.json",
+    "family-anatomy-manifest.json",
+    "recipe-group-coverage.json",
+    "art-direction-profile-matrix.json",
+    "public-api-adjudication.json",
+    "channel-liveness.json",
+    "performance-regression.json",
     "scorecards/",
     "receipts/",
     "captures/",
@@ -24,7 +31,7 @@
     "SUMMARY.md"
   ],
   "roundLayoutLaw": "roundLayout is the union of allowed evidence artifacts, not a requirement to materialize every entry in every round",
-  "checkpointEvidenceLaw": "Every R1-R4 calibration and cohort checkpoint materializes checkpoint.json, visual-craft.json, paired before/after captures for three representative families in both tenants, one narrow/mobile capture per representative family, CSS ownership/causality receipts and an explicit Codex GO or correction receipt before further writes.",
+  "checkpointEvidenceLaw": "Every R1-R4 and R7 calibration and cohort checkpoint materializes checkpoint.json, visual-craft.json, paired before/after captures for three representative families in both tenants, one narrow/mobile capture per representative family, CSS ownership/causality receipts and an explicit Codex GO or correction receipt before further writes.",
   "checkpointRequiredFields": [
     "roundId",
     "checkpointId",
@@ -46,7 +53,8 @@
     "R3": "fresh scorecard per pattern/chart, one representative capture set per ownership lane and drills for every touched veto",
     "R4": "fresh scorecard per structure/surface/commercial family, one representative capture set per ownership lane and drills for every touched veto",
     "R5": "complete canon, parity, propagation, prototype and source-to-artifact evidence for all touched scope",
-    "R6": "complete frozen-tree machine serial, sighted matrix, captures, recordings and requirement-by-requirement certification"
+    "R6": "complete frozen-tree machine serial, sighted matrix, captures, recordings and requirement-by-requirement certification",
+    "R7": "complete 252-family customization disposition and anatomy matrix, live token and CSS ownership census, fourteen-group recipe propagation and restore matrix, benchmark capability dispositions, Standard Pro Expert editor evidence, five-posture ten-pair divergence evidence, R6 regression comparison and frozen-tree independent certification"
   },
   "receiptRequiredFields": [
     "schemaVersion",
@@ -79,9 +87,12 @@
     "SUMMARY.json",
     "SUMMARY.md",
     "family-quality-matrix.json",
+    "family-anatomy-manifest.json",
+    "recipe-group-coverage.json",
+    "channel-liveness.json",
     "SHA256SUMS"
   ],
-  "regenerationLaw": "The single R5 integrator regeneration changes ownership digests, forces conflict-graph recalculation and invalidates any receipt whose source digest no longer matches. Any additional regeneration requires re-emitting affected receipts.",
+  "regenerationLaw": "The single R5 integrator regeneration changes ownership digests, forces conflict-graph recalculation and invalidates any receipt whose source digest no longer matches. R7 may perform one additional governed regeneration after its own source freeze; it has the same digest invalidation law. Any other regeneration requires re-emitting affected receipts.",
   "statusLaw": "Evidence files may describe results, but only roadmap/registry.json owns WO status.",
   "roundProgressCommand": "pnpm roadmap:status progress WO-CRA-23 --note <concise evidence pointer> --by claude-modern-rescue",
   "roundMaximumClaim": "IMPLEMENTED_PENDING_CODEX_AUDIT"

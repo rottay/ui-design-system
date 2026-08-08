@@ -74,6 +74,14 @@ Mobile is a product posture:
 Both remain the same public React tree. Differences come only from the
 governed tenant/profile chain.
 
+R7 adds five non-product reference postures to test the breadth of that chain.
+They are deterministic fixtures owned by `customization-model.json`, not fake
+tenants, copied brands or required public profile IDs. BitHire and The
+Management remain the binding first-party targets. The posture matrix exists
+only to prove that the same canonical components can express multiple coherent
+directions beyond color without changing semantics, accessibility or task
+completion.
+
 Integrated craft is governed by `VISUAL-CRAFT-CONTRACT.md` and its JSON mirror.
 One semantic region owns one dominant boundary; connectors and motifs never
 cross content; accidental native desktop controls, tiny generic typography,

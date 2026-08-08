@@ -30,7 +30,8 @@ claim.
 | `TENANT-ART-DIRECTION.md` | Human-readable product direction and current profile contradictions |
 | `visual-craft-contract.json` | Hard visual vetoes, mechanical floors, reference incidents and Codex checkpoint cohorts |
 | `VISUAL-CRAFT-CONTRACT.md` | Human-readable integrated/subtle/adaptive craft standard |
-| `rounds.json` | R0–R6 entry, scope, exits and Codex stop/go boundaries |
+| `rounds.json` | R0–R7 entry, scope, exits and Codex stop/go boundaries |
+| `R7-CUSTOMIZATION-10-10.md` | Post-R6 customization depth, tenant distinctiveness, external benchmark and catalog-parity execution contract |
 | `agent-orchestration.json` | Dynamic conflict-graph parallelization and reserved ownership |
 | `evidence-contract.json` | Required manifests, receipts, hashes and reports |
 | `ROUND-REPORT-TEMPLATE.md` | Consolidated coordinator report per round |
@@ -91,6 +92,23 @@ one design system:
 8. Useful Kimi capacity is preserved and connected, derived or promoted. A
    dead-writer census is never deletion permission.
 
+## Owner-authorized R7 extension
+
+R0-R6 establish and independently certify the quality of the fixed 252-family
+Modern inventory. R7 begins only after that accepted frozen-tree baseline and
+deepens the same system: complete family anatomy/control dispositions, full
+token and CSS ownership closure, expansion from six current recipe families to
+the fourteen target semantic groups, five coherent non-product art-direction
+postures, product-editor ergonomics and a capability-level catalog comparison.
+
+External systems are benchmark inputs, not implementation or naming
+authorities. Existing Rottay names win when they already own the same semantic
+decision. R7 does not copy visual identity or whole components, add a second
+compiler/engine, or silently grow the 252 denominator. Genuine missing-family
+proposals leave R7 as separately owner-approved follow-ons. The binding detail,
+waves, parallelization budget and exit equation are in
+`R7-CUSTOMIZATION-10-10.md` and the machine-readable R7 entry in `rounds.json`.
+
 ## Inventory sources Claude must use
 
 The execution pack records stable denominators; it does not copy thousands of
@@ -142,12 +160,13 @@ round at a time.
    the next round or sends the same round back with corrections.
 
 Model routing is economical rather than ceremonial. When the aliases exist,
-Fable (or the strongest coordinator-capable Claude) owns architecture and
-control, Opus (or the strongest product-design model) owns ambiguous premium
-composition, and Sonnet (or the most efficient reliable model) owns
-deterministic census, wiring, i18n and evidence work. The coordinator may adapt
-that routing to availability and observed quality. Agents receive bounded
-family packets and return structured receipts, never long progress narratives.
+Opus (or the strongest coordinator-capable Claude) is MAIN and owns
+architecture, control, integration and ambiguous product composition; Fable
+may challenge architecture, parity and visual coherence read-only; Sonnet (or
+the most efficient reliable model) owns deterministic census, wiring, i18n and
+evidence work. MAIN may adapt that routing to availability and observed
+quality. Agents receive bounded family packets and return structured receipts,
+never long progress narratives.
 
 For R1, every family lane targets the canonical reference-lab tree. Do not use
 Candidates, another BitHire feature, copied app markup or app CSS as the visual
@@ -255,8 +274,9 @@ identity or pretend to be customizable.
 
 Unimported sheets, unreachable selectors/states, unread writers, unresolved
 reads, rules always superseded, unreachable engine mirrors and generated-only
-remnants are dead CSS. Accepted round scope has zero; R5/R6 repeat the census
-over the full productive Modern corpus. Retirement requires ownership,
+remnants are dead CSS. Accepted round scope has zero; R5/R6 establish the
+census over the full productive Modern corpus and R7 repeats it after its
+changes. Retirement requires ownership,
 consumer evidence, preservation/successor adjudication and source/generated
 reconciliation.
 
@@ -303,7 +323,9 @@ Evidence is progressive rather than multiplied mechanically: R0 produces
 manifests, impact baselines and drills without captures; R1 produces complete
 evidence for the twelve canaries; R2-R4 retain fresh family scorecards but use
 one representative capture set per ownership lane; R5/R6 carry the complete
-canon and sighted matrices. `evidence-contract.json` is the exact authority.
+canon and sighted matrices; R7 replays the complete customization, posture,
+ownership and sighted matrices only after its post-certification changes.
+`evidence-contract.json` is the exact authority.
 
 ## Creativity contract
 
@@ -352,4 +374,5 @@ submission. The reconciled parent program is the only input to Claude.
 - No direct device haptics in core; the DS may expose semantic intent for an
   app-owned bridge.
 - No visual acceptance by the writer or Claude coordinator.
-- No commit, push, publish or tag before Codex accepts the round.
+- No commit before Codex accepts the round. This program never pushes,
+  publishes or tags.

@@ -3,7 +3,7 @@
   "contractId": "wo-cra-23-tenant-art-direction",
   "authority": {
     "workOrder": "WO-CRA-23",
-    "purpose": "Binding product-art-direction input for R1-R6; it does not create a second theming system or own program progress.",
+    "purpose": "Binding product-art-direction input for R1-R7; it does not create a second theming system or own program progress. R7 reference postures are non-product fixtures owned by customization-model.json and do not become tenant targets here.",
     "adjudicator": "Codex",
     "executor": "Claude after an explicitly authorized round",
     "creativeAdvisor": "Kimi through KIMI-ANNOTATIONS only",
