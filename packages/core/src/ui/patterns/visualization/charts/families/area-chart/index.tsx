@@ -264,7 +264,9 @@ export const AreaChart = memo(function AreaChart({
           curve={resolvedCurve}
           stacked={stacked}
           opacity={resolvedOpacity}
-          showDots={false}
+          // Personality-resolved, not hardcoded: a tenant profile that asks
+          // for dots-on-line must get them here as LineChart already does.
+          showDots={chartPersonality.showDots}
           xLabel={xAxisLabel}
           yLabel={yAxisLabel}
         />

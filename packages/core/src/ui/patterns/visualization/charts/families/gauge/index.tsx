@@ -356,8 +356,8 @@ export const GaugeChart = memo(function GaugeChart({
           innerRadius={innerRadius}
           showNeedle={showNeedle}
           needleColor={needleColor}
-          trackCornerRadius={2}
-          segmentCornerRadius={1}
+          // Corner radius stays unset so the renderer derives it from tenant
+          // grammar; a literal would pin every gauge to one posture.
           showSegmentTitles={chartPersonality.tooltip}
           {...(interaction === undefined ? {} : { interaction })}
         />

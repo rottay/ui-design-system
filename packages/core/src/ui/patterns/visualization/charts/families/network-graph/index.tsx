@@ -487,6 +487,10 @@ export const NetworkGraph = memo(function NetworkGraph(props: NetworkGraphProps)
     </div>
   ) : null;
 
+  // Mirrors the SankeyChart sibling's INVALID-DATA/empty fallback contract: a
+  // caller-declared `emptyLabel` must win over the family's default copy.
+  const resolvedEmptyLabel = emptyLabel ?? 'No network data to display.';
+
   const fallbackNode = !validation.ok ? (
     <div
       role="status"
@@ -505,7 +509,7 @@ export const NetworkGraph = memo(function NetworkGraph(props: NetworkGraphProps)
       data-state="empty"
       style={{ padding: 16, textAlign: 'center' }}
     >
-      No network data to display.
+      {resolvedEmptyLabel}
     </div>
   ) : null;
 

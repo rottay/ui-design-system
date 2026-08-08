@@ -155,17 +155,28 @@ export const CalendarHeatMap = memo(function CalendarHeatMap({
     ? Math.max(0, Math.round((endDate.getTime() - startDate.getTime()) / MS_PER_DAY) + 1)
     : 0;
 
-  const summary = useMemo(() => {
-    const recorded = [...values.entries()]
+  // Single source for recorded days inside the visible range, so out-of-range
+  // data cannot read as populated while the grid is blank.
+  const inRangeEntries = useMemo(() => (
+    [...values.entries()]
       .filter(([key]) => key >= startKey && key <= endKey)
       .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
-      .slice(0, 50);
+  ), [values, startKey, endKey]);
+
+  const summary = useMemo(() => {
+    const SUMMARY_ROW_CAP = 50;
+    const baseCaption = title ? `${title} data summary` : 'Calendar heatmap data summary';
+    // A capped table that stays silent about the cap misreports itself as
+    // complete to screen-reader users, so a truncated table says so.
+    const caption = inRangeEntries.length > SUMMARY_ROW_CAP
+      ? `${baseCaption} (showing first ${SUMMARY_ROW_CAP} of ${inRangeEntries.length} recorded days)`
+      : baseCaption;
     return {
-      caption: title ? `${title} data summary` : 'Calendar heatmap data summary',
+      caption,
       headers: ['Date', 'Value'],
-      rows: recorded.map(([date, value]) => [date, value]),
+      rows: inRangeEntries.slice(0, SUMMARY_ROW_CAP).map(([date, value]) => [date, value]),
     };
-  }, [values, startKey, endKey, title]);
+  }, [inRangeEntries, title]);
 
   const rendererTooltip = useMemo(
     () => (formatTooltip
@@ -183,7 +194,7 @@ export const CalendarHeatMap = memo(function CalendarHeatMap({
   const resolvedState = resolveChartScaffoldState({
     state,
     loading,
-    dataCount: values.size,
+    dataCount: inRangeEntries.length,
     emptyLabel,
   });
 
