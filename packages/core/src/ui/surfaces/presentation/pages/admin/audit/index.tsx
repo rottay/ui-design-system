@@ -24,7 +24,7 @@ import { ContentFileIcon } from '@/graphics/icons/presentation/semantic/generate
 import React from 'react';
 import { Button, Card, Flex, Stack, Text } from '../../../../../primitives';
 import { PatternDataTable, PatternFilterPanel } from '../../../../../patterns';
-import { countActiveFilters } from '../../../../runtime/helpers';
+import { countActiveFilters, hasSurfaceError } from '../../../../runtime/helpers';
 import type { AuditSurfaceConfig, AuditEntry } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../composition/layout/page-shell';
 import {
@@ -134,7 +134,7 @@ export function AuditSurface({
 
   // Error short-circuits the whole body: the shell keeps the page chrome and
   // actions so retry never loses context (ListSurface precedent).
-  if (error) {
+  if (hasSurfaceError(error)) {
     return (
       <PageShellSurface
         chrome={config.presentation.chrome}

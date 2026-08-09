@@ -24,7 +24,7 @@ import { ActionPlayIcon } from '@/graphics/icons/presentation/semantic/generated
 import { ConnectivityWebIcon } from '@/graphics/icons/presentation/semantic/generated/roles/connectivity-web';
 import { WorkflowWebhookIcon } from '@/graphics/icons/presentation/semantic/generated/roles/workflow-webhook';
 import React from 'react';
-import { Button, Card, Flex, Stack, Tabs, Tag, Text } from '../../../../../primitives';
+import { Button, Card, Flex, Heading, Stack, Tabs, Tag, Text } from '../../../../../primitives';
 import type {
   IntegrationApiKey,
   IntegrationConnectedApp,
@@ -33,6 +33,7 @@ import type {
 } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../composition/layout/page-shell';
 import { SurfaceActionBar } from '../../../../runtime/helpers/rendering';
+import { hasSurfaceError } from '../../../../runtime/helpers';
 import {
   SurfaceEmptyState,
   SurfaceErrorState,
@@ -70,9 +71,10 @@ function SectionHeader({
   return (
     <Flex gap={8} align="center">
       {icon}
-      <Text size="md" weight="semibold">
+      {/* h2: nests under PatternPageShell's own page <h1> (profile precedent). */}
+      <Heading level="h2" size="xs" weight="semibold">
         {title}
-      </Text>
+      </Heading>
     </Flex>
   );
 }
@@ -465,7 +467,7 @@ export function IntegrationSurface({
 
   // Error short-circuits the whole body: the shell keeps the page chrome so
   // retry never loses context (ListSurface precedent).
-  if (error) {
+  if (hasSurfaceError(error)) {
     return (
       <PageShellSurface
         chrome={{ ...config.presentation.chrome, maxWidth: config.visual.maxWidth }}

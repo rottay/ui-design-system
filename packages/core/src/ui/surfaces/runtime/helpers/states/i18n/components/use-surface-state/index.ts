@@ -41,6 +41,7 @@
  */
 
 import { type ReactNode, useMemo, useSyncExternalStore } from 'react';
+import { hasSurfaceError } from '../../../../index';
 import React from 'react';
 import {
   SurfaceLoadingSkeleton,
@@ -162,7 +163,7 @@ function deriveState<T>(
   }
 
   // Error state (only when there is no data to fall back to).
-  if (error && (!data || data.length === 0)) {
+  if (hasSurfaceError(error) && (!data || data.length === 0)) {
     return 'error';
   }
 

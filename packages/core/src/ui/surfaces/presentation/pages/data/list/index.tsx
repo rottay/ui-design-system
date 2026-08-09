@@ -39,6 +39,7 @@ import {
   resolveColumnValue,
   resolveSurfaceButtonVariant,
   stringifySurfaceValue,
+  hasSurfaceError,
 } from "../../../../runtime/helpers";
 import type {
   EntityAdapter,
@@ -438,7 +439,7 @@ export function ListSurface<TRaw, TView extends object>({
     profileDefaults.sectionSpacing
   );
 
-  if (error) {
+  if (hasSurfaceError(error)) {
     return (
       <PageShellSurface
         chrome={config.presentation.chrome}

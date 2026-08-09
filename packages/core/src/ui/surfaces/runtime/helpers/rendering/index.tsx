@@ -10,7 +10,7 @@
  */
 
 import type { MouseEvent, ReactNode } from 'react';
-import { Button, Card, Flex, Stack, Text } from '../../../../primitives';
+import { Button, Card, Flex, Heading, Stack, Text } from '../../../../primitives';
 import type { CardProps } from '../../../../primitives/display/Card/contracts';
 import { defineRecipe } from '@/infrastructure/runtime/foundation/recipes/engine';
 import { SECTION_CARD_RECIPE_DEFINITION } from '@/infrastructure/runtime/foundation/recipes/contracts/families';
@@ -99,6 +99,8 @@ export interface SurfaceSectionCardProps {
   /** Optional semantic illustration for the section header. */
   icon?: ReactNode;
   title?: ReactNode;
+  /** Semantic heading level exposed for the `title` slot. */
+  titleHeadingLevel?: 2 | 3 | 4 | 5 | 6;
   description?: ReactNode;
   actions?: ReactNode;
   children: ReactNode;
@@ -110,11 +112,24 @@ export interface SurfaceSectionCardProps {
 /** Governed section-card anatomy exposed through the public recipe manifest. */
 export const surfaceSectionCardRecipe = defineRecipe(SECTION_CARD_RECIPE_DEFINITION);
 
+// Typography stamps its size scale inline, outranking the skin, so the tenant
+// chain the skin declares only stays causal if it is restated here.
+const SECTION_CARD_HEADER_TYPE = {
+  eyebrow: { fontSize: 'var(--ds-text-eyebrow-size, var(--ds-font-size-xs))' },
+  title: {
+    fontSize: 'var(--ds-card-title-font-size, var(--ds-font-size-lg, 16px))',
+    letterSpacing: 'var(--ds-card-title-letter-spacing, var(--ds-letter-spacing-heading))',
+    lineHeight: 1.25,
+  },
+  description: { fontSize: 'var(--ds-font-size-xs, 12px)' },
+} as const;
+
 /** Shared card wrapper for sectioned surfaces with optional title, copy, and actions. */
 export function SurfaceSectionCard({
   eyebrow,
   icon,
   title,
+  titleHeadingLevel = 2,
   description,
   actions,
   children,
@@ -158,13 +173,21 @@ export function SurfaceSectionCard({
                 {icon && <span data-part="header-icon">{icon}</span>}
                 <Stack data-part="header-copy" spacing="xs">
                   {eyebrow && (
-                    <Text className="ds-section-card__eyebrow">{eyebrow}</Text>
+                    <Text className="ds-section-card__eyebrow" style={SECTION_CARD_HEADER_TYPE.eyebrow}>
+                      {eyebrow}
+                    </Text>
                   )}
                   {title && (
-                    <Text className="ds-section-card__title">{title}</Text>
+                    <Heading
+                      level={`h${titleHeadingLevel}`}
+                      className="ds-section-card__title"
+                      style={SECTION_CARD_HEADER_TYPE.title}
+                    >
+                      {title}
+                    </Heading>
                   )}
                   {description && (
-                    <Text className="ds-section-card__description">
+                    <Text className="ds-section-card__description" style={SECTION_CARD_HEADER_TYPE.description}>
                       {description}
                     </Text>
                   )}

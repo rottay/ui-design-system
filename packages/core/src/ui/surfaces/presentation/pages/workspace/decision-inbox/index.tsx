@@ -13,7 +13,8 @@ import type { ColumnDef } from '../../../../../../foundation/contracts/runtime/c
 import type { CollectionWorkspaceConfig } from '../../../../foundation/contracts/adaptive/collection';
 import { useCollectionWorkspace } from '../../../../runtime/collection-workspace';
 import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
-import { SurfaceEmptyState } from '../../../../runtime/helpers/states';
+import { hasSurfaceError } from '../../../../runtime/helpers';
+import { SurfaceEmptyState, SurfaceErrorState } from '../../../../runtime/helpers/states';
 import { PatternDataTable } from '../../../../../patterns/data/data-table';
 import { PatternFilterPanel } from '../../../../../patterns/forms/filter-panel';
 import { CommunicationInboxIcon } from '@/graphics/icons/presentation/semantic/generated/roles/communication-inbox';
@@ -360,7 +361,9 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
   const showReviewRail = reviewRail && selectedItem;
   const isLoading = workspaceConfig.loading;
   const errorContent = workspaceConfig.error;
-  const isEmpty = !isLoading && !errorContent && (!workspaceConfig.data || workspaceConfig.data.length === 0);
+  // `unknown && <JSX/>` is itself unknown, so the guard has to be a real boolean.
+  const hasError = hasSurfaceError(errorContent);
+  const isEmpty = !isLoading && !hasError && (!workspaceConfig.data || workspaceConfig.data.length === 0);
 
   // Show full-page skeleton on initial load when no data at all
   if (isLoading && (!workspaceConfig.data || workspaceConfig.data.length === 0)) {
@@ -490,9 +493,18 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
       )}
 
       {/* Error state (app-owned node from the collection contract) */}
-      {errorContent && (
-        <Box className="ds-decision-inbox__error" data-part="error">
-          {errorContent}
+      {/* Only element chrome needs this wrapper's announcement; the kit has its own Alert role. */}
+      {hasError && (
+        <Box
+          className="ds-decision-inbox__error"
+          data-part="error"
+          aria-live={React.isValidElement(errorContent) ? 'polite' : undefined}
+        >
+          {React.isValidElement(errorContent) ? (
+            errorContent
+          ) : (
+            <SurfaceErrorState error={errorContent} onRetry={workspaceConfig.onRetry} />
+          )}
         </Box>
       )}
 
@@ -511,7 +523,7 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
       )}
 
       {/* Main content */}
-      {!isEmpty && !errorContent && (
+      {!isEmpty && !hasError && (
         <Flex
           className="ds-decision-inbox__content"
           data-part="content"

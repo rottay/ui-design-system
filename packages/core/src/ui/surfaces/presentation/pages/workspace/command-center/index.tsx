@@ -29,7 +29,8 @@ import { StatusInfoIcon } from '@/graphics/icons/presentation/semantic/generated
 import { StatusWarningIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-warning';
 import { StatusSuccessIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-success';
 import { StatusErrorIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-error';
-import { SurfaceEmptyState } from '../../../../runtime/helpers/states';
+import { hasSurfaceError } from '../../../../runtime/helpers';
+import { SurfaceEmptyState, SurfaceErrorState } from '../../../../runtime/helpers/states';
 import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
 
 // ---------------------------------------------------------------------------
@@ -102,6 +103,10 @@ export interface CommandCenterSurfaceProps {
   footerSlot?: ReactNode;
   /** Loading state. */
   loading?: boolean;
+  /** Load failure of the dashboard payload; replaces the work area, identity header stays visible. */
+  error?: unknown;
+  /** Retry handler wired to the error state's retry action. */
+  onRetry?: () => void | Promise<void>;
 }
 
 // ---------------------------------------------------------------------------
@@ -126,7 +131,8 @@ function mapStatsToStatDefs(stats: StatItem[]): StatDef[] {
     changeType: stat.change
       ? mapChangeDirection(stat.change.direction)
       : undefined,
-    suffix: stat.change ? '%' : undefined,
+    // `suffix` decorates the VALUE; deriving it from `change` made an 18-ticket
+    // stat read "18 %". The trend chip already carries its own unit.
   }));
 }
 
@@ -333,6 +339,8 @@ export function CommandCenterSurface(props: CommandCenterSurfaceProps) {
     headerSlot,
     footerSlot,
     loading,
+    error,
+    onRetry,
   } = props;
 
   const { tSurfaceOr } = useSurfaceTranslations();
@@ -404,6 +412,12 @@ export function CommandCenterSurface(props: CommandCenterSurfaceProps) {
         )}
       </Box>
 
+      {/* Load failure replaces the work area only; the identity header above
+          stays visible (record-workbench precedent -- chrome stays live). */}
+      {hasSurfaceError(error) && !loading ? (
+        <SurfaceErrorState error={error} onRetry={onRetry} />
+      ) : (
+        <>
       {/* Insights/alerts */}
       {loading && (!insights || insights.length === 0) && (
         <Stack spacing="sm">
@@ -579,6 +593,8 @@ export function CommandCenterSurface(props: CommandCenterSurfaceProps) {
             />
           </Card.Body>
         </Card>
+      )}
+        </>
       )}
 
       {footerSlot}

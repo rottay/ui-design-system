@@ -23,6 +23,7 @@ import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/prof
 import { resolveStackSpacing } from '../../../../runtime/profile-defaults/personality';
 import { useSurfaceResponsiveLayout } from '../../../../runtime/responsive';
 import { SurfaceActionBar } from '../../../../runtime/helpers/rendering';
+import { hasSurfaceError } from '../../../../runtime/helpers';
 import { SurfaceEmptyState, SurfaceErrorState } from '../../../../runtime/helpers/states';
 import { FadeIn, StaggerChildren } from '@/graphics/motion';
 import { formatTime } from '@/foundation/i18n/runtime/formatting';
@@ -163,7 +164,7 @@ export function SchedulerSurface({
 
   // Error state renders full page chrome so header actions stay available
   // even when the data load failed (report/operational precedent).
-  if (error) {
+  if (hasSurfaceError(error)) {
     return (
       <PageShellSurface chrome={chrome} actions={actionsNode} loading={false}>
         <SurfaceErrorState error={error} onRetry={onRetry} />

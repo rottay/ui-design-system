@@ -19,7 +19,7 @@ import { Box, Button, Card, Flex, Stack, Text } from '../../../../../primitives'
 import { PatternKanbanBoard, PatternFilterPanel } from '../../../../../patterns';
 import type { KanbanColumnDef } from '../../../../../patterns';
 import type { KanbanSurfaceConfig, KanbanSurfaceCard } from '../../../../foundation/contracts';
-import { countActiveFilters } from '../../../../runtime/helpers';
+import { countActiveFilters, hasSurfaceError } from '../../../../runtime/helpers';
 import { PageShellSurface } from '../../../../composition/layout/page-shell';
 import { SurfaceActionBar } from '../../../../runtime/helpers/rendering';
 import { SurfaceEmptyState, SurfaceErrorState } from '../../../../runtime/helpers/states';
@@ -131,7 +131,7 @@ export function KanbanSurface({
 
   // Error state renders full page chrome so header actions stay available
   // even when the data load failed (report/scheduler precedent).
-  if (error) {
+  if (hasSurfaceError(error)) {
     return (
       <PageShellSurface chrome={chrome} actions={actionsNode} loading={false}>
         <SurfaceErrorState error={error} onRetry={onRetry} />

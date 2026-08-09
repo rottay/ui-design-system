@@ -31,6 +31,7 @@ import { Button } from '../../../../../primitives/inputs/Button';
 import { Skeleton } from '../../../../../primitives/feedback/Skeleton';
 import { ContentDocumentIcon } from '@/graphics/icons/presentation/semantic/generated/roles/content-document';
 import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
+import { hasSurfaceError } from '../../../../runtime/helpers';
 import {
   SurfaceEmptyState,
   SurfaceErrorState,
@@ -220,7 +221,7 @@ export function RecordWorkbenchSurface(props: RecordWorkbenchSurfaceProps) {
   // The active tab's rendered content; a nullish render (or a missing tab)
   // resolves to the per-tab empty slot or the shared empty-state kit. The
   // consumer render only runs for the settled (non-loading, non-error) view.
-  const isSettled = !loading && (error === undefined || error === null);
+  const isSettled = !loading && !hasSurfaceError(error);
   const renderedTabContent = isSettled ? activeTabContent?.render() : undefined;
   const tabPanelBody =
     renderedTabContent ??
@@ -326,7 +327,7 @@ export function RecordWorkbenchSurface(props: RecordWorkbenchSurfaceProps) {
       </Flex>
 
       {/* Error state replaces the work area; the record identity stays visible. */}
-      {error !== undefined && error !== null && !loading ? (
+      {hasSurfaceError(error) && !loading ? (
         <SurfaceErrorState error={error} onRetry={onRetry} />
       ) : (
         <>

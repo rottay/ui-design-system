@@ -59,6 +59,7 @@ import { useAdaptivePosture } from '../../../../runtime/adaptive-posture';
 import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
 import {
   resolveSurfacePermission,
+  hasSurfaceError,
 } from '../../../../runtime/helpers';
 import { PatternDataTable } from '../../../../../patterns/data/data-table';
 import type { DataTablePatternProps } from '../../../../../patterns/data/data-table';
@@ -505,11 +506,11 @@ function buildDefaultHeaderMetaItems<T extends object>({
   data?: T[];
   controls?: CollectionWorkspaceConfig<T>['controls'];
   loading?: boolean;
-  error?: ReactNode;
+  error?: unknown;
   t: SurfaceTranslator;
   locale?: string;
 }): CollectionHeaderMetaItem[] {
-  if (error) {
+  if (hasSurfaceError(error)) {
     return [{
       key: 'state-error',
       label: t('collection_workspace.meta_needs_attention', 'Needs attention'),
@@ -816,6 +817,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
     data,
     loading,
     error,
+    onRetry,
     emptyState,
     adaptive,
     access,
@@ -2053,6 +2055,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
               rowKey={rowKey}
               loading={loading}
               error={error}
+              onRetry={onRetry}
               access={surfaceAccess}
               capabilityRegistry={capabilityRegistry}
               emptyState={emptyState}
@@ -2607,6 +2610,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
               loading={loading}
               emptyState={emptyState}
               error={error}
+              onRetry={onRetry}
               access={surfaceAccess}
               capabilityRegistry={capabilityRegistry}
               actions={actions}

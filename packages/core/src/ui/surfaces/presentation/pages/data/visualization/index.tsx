@@ -15,7 +15,7 @@ import React from 'react';
 import { Box, Card, Flex, Grid, Stack, Tabs, Text } from '../../../../../primitives';
 import type { GridColumns } from '../../../../../primitives/layout/Grid/contracts';
 import { PatternStatsGrid } from '../../../../../patterns';
-import { filterSurfaceTabbedViews } from '../../../../runtime/helpers';
+import { filterSurfaceTabbedViews, hasSurfaceError } from '../../../../runtime/helpers';
 import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
 import type { VisualizationSurfaceConfig } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../composition/layout/page-shell';
@@ -143,7 +143,7 @@ export function VisualizationSurface({
 
   // Error state renders full page chrome so header actions (e.g. refresh)
   // stay available even when the data load failed.
-  if (error) {
+  if (hasSurfaceError(error)) {
     return (
       <PageShellSurface chrome={chrome} actions={actionsNode} loading={false}>
         <SurfaceErrorState error={error} onRetry={onRetry} />

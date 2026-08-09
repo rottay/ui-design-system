@@ -53,6 +53,7 @@ import type {
   NotificationSurfaceConfig,
 } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../composition/layout/page-shell';
+import { hasSurfaceError } from '../../../../runtime/helpers';
 import { SurfaceEmptyState, SurfaceErrorState } from '../../../../runtime/helpers/states';
 import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
 import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
@@ -388,7 +389,7 @@ export function NotificationSurface({
 
   // Error state renders under the live page chrome so header actions stay
   // usable, mirroring the dashboard/chat idiom.
-  if (error) {
+  if (hasSurfaceError(error)) {
     return (
       <PageShellSurface chrome={config.presentation.chrome} actions={actionsNode} loading={false}>
         <SurfaceErrorState error={error} onRetry={onRetry} />

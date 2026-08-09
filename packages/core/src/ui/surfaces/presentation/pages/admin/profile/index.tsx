@@ -26,6 +26,7 @@ import { Button, Card, Flex, Grid, Heading, Input, Stack, Text, Textarea } from 
 import type { ProfileSection, ProfileSurfaceConfig } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../composition/layout/page-shell';
 import { useSurfaceResponsiveLayout } from '../../../../runtime/responsive';
+import { hasSurfaceError } from '../../../../runtime/helpers';
 import {
   SurfaceEmptyState,
   SurfaceErrorState,
@@ -292,7 +293,7 @@ export function ProfileSurface({
 
   // Error short-circuits the whole body: the shell keeps the page chrome and
   // actions so retry never loses context (ListSurface precedent).
-  if (error) {
+  if (hasSurfaceError(error)) {
     return (
       <PageShellSurface
         chrome={config.presentation.chrome}

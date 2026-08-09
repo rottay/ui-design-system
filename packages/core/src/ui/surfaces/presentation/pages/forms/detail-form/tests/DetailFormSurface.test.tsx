@@ -55,4 +55,66 @@ describe('DetailFormSurface', () => {
 
     expect(await screen.findByText('Workspace summary')).toBeInTheDocument();
   });
+
+  it('protects an explicit cancel while dirty and allows it after confirmation', async () => {
+    const confirmDiscard = vi.fn(() => false);
+    const onCancel = vi.fn();
+    const base = buildConfig();
+
+    renderSurface(
+      <DetailFormSurface
+        config={{
+          ...base,
+          behavior: {
+            ...base.behavior,
+            dirtyState: {
+              isDirty: true,
+              confirmDiscard,
+            },
+            cancelAction: {
+              id: 'cancel-edit',
+              label: 'Cancel',
+              onClick: onCancel,
+            },
+          },
+        }}
+      />,
+      { tenantOverrides: { locale: 'fr' } }
+    );
+
+    const cancel = await screen.findByRole('button', { name: 'Cancel' });
+    fireEvent.click(cancel);
+
+    expect(confirmDiscard).toHaveBeenCalledWith('Ignorer les modifications non enregistrées du formulaire ?', 'cancel');
+    expect(onCancel).not.toHaveBeenCalled();
+
+    confirmDiscard.mockReturnValue(true);
+    fireEvent.click(cancel);
+    expect(onCancel).toHaveBeenCalledTimes(1);
+  });
+
+  it('passes cancel straight through when no dirty state is declared', async () => {
+    const onCancel = vi.fn();
+    const base = buildConfig();
+
+    renderSurface(
+      <DetailFormSurface
+        config={{
+          ...base,
+          behavior: {
+            ...base.behavior,
+            cancelAction: {
+              id: 'cancel-edit',
+              label: 'Cancel',
+              onClick: onCancel,
+            },
+          },
+        }}
+      />
+    );
+
+    fireEvent.click(await screen.findByRole('button', { name: 'Cancel' }));
+
+    expect(onCancel).toHaveBeenCalledTimes(1);
+  });
 });

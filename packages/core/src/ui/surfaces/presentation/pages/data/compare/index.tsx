@@ -8,7 +8,7 @@
  */
 
 import React from "react";
-import { Box, Card, Stack, Table, Text } from "../../../../../primitives";
+import { Box, Card, Heading, Stack, Table, Text } from "../../../../../primitives";
 import type {
   CompareSurfaceConfig,
   CompareSurfaceRow,
@@ -19,11 +19,16 @@ import { PageShellSurface } from "../../../../composition/layout/page-shell";
 import { useSurfaceProfileDefaultsWithOverrides } from "../../../../runtime/profile-defaults/overrides";
 import { useSurfaceResponsiveLayout } from "../../../../runtime/responsive";
 import { SurfaceActionBar } from "../../../../runtime/helpers/rendering";
-import { SurfaceEmptyState } from "../../../../runtime/helpers/states";
+import { hasSurfaceError } from "../../../../runtime/helpers";
+import { SurfaceEmptyState, SurfaceErrorState } from "../../../../runtime/helpers/states";
 
 export interface CompareSurfaceProps {
   config: CompareSurfaceConfig;
   loading?: boolean;
+  /** Load/render failure surfaced as an error state (ListSurface prop precedent). */
+  error?: unknown;
+  /** Retry handler rendered inside the error state when provided. */
+  onRetry?: () => void | Promise<void>;
 }
 
 /** Loading placeholder that mirrors the comparison's geometry: every section
@@ -50,6 +55,8 @@ function CompareSkeleton({
 export function CompareSurface({
   config,
   loading = false,
+  error,
+  onRetry,
 }: CompareSurfaceProps): React.ReactElement {
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(
     config.visual?.profileOverrides
@@ -68,6 +75,23 @@ export function CompareSurface({
     config.behavior.subjects.length > 0 &&
     config.behavior.sections.some((section) => section.rows.length > 0);
   const compact = config.visual.compact ?? profileDefaults.compareCompact;
+  const chrome = {
+    ...config.presentation.chrome,
+    maxWidth: config.visual.maxWidth ?? config.presentation.chrome.maxWidth,
+  };
+  const actionsNode = (
+    <SurfaceActionBar actions={config.behavior.actions} access={config.access} />
+  );
+
+  // Error short-circuits the whole body: the shell keeps the page chrome so
+  // retry never loses context (ListSurface precedent).
+  if (hasSurfaceError(error)) {
+    return (
+      <PageShellSurface chrome={chrome} actions={actionsNode} loading={false}>
+        <SurfaceErrorState error={error} onRetry={onRetry} />
+      </PageShellSurface>
+    );
+  }
 
   // The criteria column is synthesized here rather than coming from config
   // because every comparison table needs it, and its rendering logic is
@@ -128,16 +152,8 @@ export function CompareSurface({
        is intentionally not engaged (fleet pattern shared with the other
        data surfaces). */
     <PageShellSurface
-      chrome={{
-        ...config.presentation.chrome,
-        maxWidth: config.visual.maxWidth ?? config.presentation.chrome.maxWidth,
-      }}
-      actions={
-        <SurfaceActionBar
-          actions={config.behavior.actions}
-          access={config.access}
-        />
-      }
+      chrome={chrome}
+      actions={actionsNode}
       loading={false}
     >
       {loading || hasData ? (
@@ -162,10 +178,17 @@ export function CompareSurface({
               {(section.title || section.description) && (
                 <Box className="ds-compare__section-heading">
                   <Stack spacing="xs">
+                    {/* size="xs" is the heading step whose token equals the
+                        prior Text md, so only the semantics change here. */}
                     {section.title && (
-                      <Text className="ds-compare__section-title" data-part="section-title">
+                      <Heading
+                        level="h2"
+                        size="xs"
+                        className="ds-compare__section-title"
+                        data-part="section-title"
+                      >
                         {section.title}
-                      </Text>
+                      </Heading>
                     )}
                     {section.description && (
                       <Text className="ds-compare__muted-text" data-part="muted-text">

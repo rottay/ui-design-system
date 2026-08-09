@@ -544,7 +544,11 @@ export interface CollectionWorkspaceConfig<T> {
   columns?: ColumnDef<T>[];
   rowKey?: keyof T | ((row: T) => string);
   loading?: boolean;
-  error?: ReactNode;
+  /** A caught value. A valid React ELEMENT renders verbatim as custom chrome;
+   *  every other value (including strings and arrays) is normalized. */
+  error?: unknown;
+  /** Retry affordance shown with the normalized error state. */
+  onRetry?: () => void | Promise<void>;
   emptyState?: ReactNode;
   /** Per-mode render configuration. Table mode needs no config (uses columns). */
   viewModes?: CollectionViewModeConfigs<T>;

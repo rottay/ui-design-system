@@ -12,7 +12,7 @@
  */
 
 import React from 'react';
-import { Box, Button, Card, Flex, Grid, Stack, Text } from '../../../../../primitives';
+import { Box, Button, Card, Flex, Grid, Heading, Stack, Text } from '../../../../../primitives';
 import {
   PatternDataTable,
   PatternFilterPanel,
@@ -25,7 +25,7 @@ import type {
 } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../composition/layout/page-shell';
 import { useSurfaceResponsiveLayout } from '../../../../runtime/responsive';
-import { countActiveFilters } from '../../../../runtime/helpers';
+import { countActiveFilters, hasSurfaceError } from '../../../../runtime/helpers';
 import {
   SurfaceEmptyState,
   SurfaceErrorState,
@@ -57,9 +57,10 @@ function resolveStatsGridVariant(
  *  sorts in a later layer, so a surface-local font-weight would be inert. */
 function SectionTitle({ children }: { children: React.ReactNode }): React.ReactElement {
   return (
-    <Text textStyle="sectionTitle" data-part="section-title">
+    // h2: nests under PatternPageShell's own page <h1> (profile precedent).
+    <Heading level="h2" textStyle="sectionTitle" data-part="section-title">
       {children}
-    </Text>
+    </Heading>
   );
 }
 
@@ -285,7 +286,9 @@ function ReportResults({
                       label: tSurfaceOr('report.generate', 'Generate'),
                       variant: 'primary',
                       onClick: () => {
-                        void onGenerate();
+                        // onGenerate is contract-typed as Promise<ReportData>; caught
+                        // here only so a rejection never surfaces as unhandled.
+                        void onGenerate()?.catch(() => undefined);
                       },
                     }
                   : undefined
@@ -479,7 +482,7 @@ export function ReportSurface({
           variant="primary"
           size="sm"
           onClick={() => {
-            void config.behavior.onGenerate?.();
+            void config.behavior.onGenerate?.()?.catch(() => undefined);
           }}
           loading={config.behavior.generating}
           icon={<ActionPlayIcon decorative size={15} />}
@@ -516,7 +519,7 @@ export function ReportSurface({
 
   // Error state renders full page chrome so header actions stay available
   // even when the report load failed.
-  if (error) {
+  if (hasSurfaceError(error)) {
     return (
       <PageShellSurface chrome={chrome} actions={actionsNode} loading={false}>
         <SurfaceErrorState error={error} onRetry={onRetry} />

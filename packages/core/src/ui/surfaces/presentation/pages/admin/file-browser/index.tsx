@@ -29,6 +29,7 @@ import { useTokens } from '@/infrastructure/runtime/theming/composition/react/to
 import type { FileBrowserSurfaceConfig } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../composition/layout/page-shell';
 import { SurfaceActionBar } from '../../../../runtime/helpers/rendering';
+import { hasSurfaceError } from '../../../../runtime/helpers';
 import { SurfaceErrorState } from '../../../../runtime/helpers/states';
 import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
 import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
@@ -189,7 +190,7 @@ export function FileBrowserSurface({
 
   // Error posture (idiom data/list): the page chrome and header actions stay
   // mounted; the body becomes the shared error kit with optional retry.
-  if (error) {
+  if (hasSurfaceError(error)) {
     return (
       <PageShellSurface chrome={chrome} actions={actionsNode} loading={false}>
         <SurfaceErrorState error={error} onRetry={onRetry} />

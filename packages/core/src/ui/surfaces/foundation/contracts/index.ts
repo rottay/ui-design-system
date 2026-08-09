@@ -1139,6 +1139,8 @@ export interface DetailFormSurfaceBehaviorConfig {
   readOnly?: boolean;
   showLabels?: boolean;
   showRequired?: boolean;
+  /** Protect browser unload and explicit cancel while form values are dirty. */
+  dirtyState?: SurfaceDirtyStateConfig;
 }
 
 /**

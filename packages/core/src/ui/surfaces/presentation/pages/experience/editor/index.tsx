@@ -42,6 +42,7 @@ import {
 import { PageShellSurface } from '../../../../composition/layout/page-shell';
 import { useSurfaceResponsiveLayout } from '../../../../runtime/responsive';
 import { SurfaceActionBar, SurfaceSectionCard } from '../../../../runtime/helpers/rendering';
+import { hasSurfaceError } from '../../../../runtime/helpers';
 import { SurfaceErrorState } from '../../../../runtime/helpers/states';
 
 export interface EditorSurfaceProps {
@@ -141,7 +142,7 @@ export function EditorSurface({
   // Error state renders under the live page chrome so the header stays
   // usable (dashboard idiom). Only the cancel action survives here: save and
   // publish act on the document value, which never loaded.
-  if (error) {
+  if (hasSurfaceError(error)) {
     return (
       <PageShellSurface
         chrome={{

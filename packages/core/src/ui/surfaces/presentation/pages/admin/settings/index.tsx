@@ -20,7 +20,7 @@ import { Card, Grid, Stack, Tabs, Text } from '../../../../../primitives';
 import { FadeIn } from '@/graphics/motion';
 import { NavigationSettingsIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-settings';
 import { densityScopeAttributes } from '@/infrastructure/runtime/foundation/density';
-import { filterSurfaceTabbedViews } from '../../../../runtime/helpers';
+import { filterSurfaceTabbedViews, hasSurfaceError } from '../../../../runtime/helpers';
 import type { SettingsSurfaceConfig } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../composition/layout/page-shell';
 import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
@@ -98,7 +98,7 @@ export function SettingsSurface({
   // Error keeps the real page chrome and action bar so a retry never loses
   // context (ListSurface precedent). The shared contract stays untouched:
   // error/onRetry arrive as component props, like ListSurface/AuditSurface.
-  if (error) {
+  if (hasSurfaceError(error)) {
     return (
       <PageShellSurface chrome={chrome} actions={actionsNode} loading={false}>
         <SurfaceErrorState error={error} onRetry={onRetry} />

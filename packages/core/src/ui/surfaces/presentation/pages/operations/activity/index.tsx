@@ -32,6 +32,7 @@ import type { Activity } from '../../../../../patterns';
 import type { ActivitySurfaceConfig } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../composition/layout/page-shell';
 import { SurfaceActionBar } from '../../../../runtime/helpers/rendering';
+import { hasSurfaceError } from '../../../../runtime/helpers';
 import { SurfaceErrorState } from '../../../../runtime/helpers/states';
 import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
 import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
@@ -77,7 +78,7 @@ export function ActivitySurface({
 
   // Error state renders the full page chrome so header actions stay available
   // even when the data load failed (scheduler/operational precedent).
-  if (error) {
+  if (hasSurfaceError(error)) {
     return (
       <PageShellSurface chrome={chrome} actions={actionsNode} loading={false}>
         <SurfaceErrorState error={error} onRetry={onRetry} />

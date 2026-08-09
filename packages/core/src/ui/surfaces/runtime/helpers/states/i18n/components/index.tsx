@@ -14,6 +14,7 @@
  */
 
 import type { ReactNode } from 'react';
+import { normalizeSurfaceError } from '../../../index';
 import { Alert, Button, Card, Flex, Skeleton, Stack, Text } from '../../../../../../primitives';
 import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
 import { useTokens } from '@/infrastructure/runtime/theming/composition/react/tokens';
@@ -177,8 +178,7 @@ export function SurfaceErrorStateCard({
   const { tSurface } = useSurfaceTranslations();
 
   const errorMessage =
-    description ??
-    (error instanceof Error ? error.message : typeof error === 'string' ? error : tSurface('states.error_description'));
+    description ?? normalizeSurfaceError(error, tSurface('states.error_description')).message;
 
   return (
     <Card className="ds-surface ds-error-state-card" variant="outlined">

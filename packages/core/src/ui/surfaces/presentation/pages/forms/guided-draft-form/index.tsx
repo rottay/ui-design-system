@@ -27,7 +27,7 @@ import type { ReactNode } from 'react';
 import { Box } from '../../../../../primitives/layout/Box';
 import { Stack } from '../../../../../primitives/layout/Stack';
 import { Flex } from '../../../../../primitives/layout/Flex';
-import { Text } from '../../../../../primitives/display/Typography';
+import { Heading, Text } from '../../../../../primitives/display/Typography';
 import { Button } from '../../../../../primitives/inputs/Button';
 import { Select } from '../../../../../primitives/inputs/Select';
 import { Card } from '../../../../../primitives/display/Card';
@@ -53,6 +53,7 @@ import {
   SurfaceAccentBarWrapper,
 } from '../../../../runtime/profile-defaults/personality';
 import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
+import { hasSurfaceError } from '../../../../runtime/helpers';
 import {
   SurfaceEmptyState,
   SurfaceErrorState,
@@ -480,14 +481,17 @@ function GuidedDraftFormSectionCard({
                   {section.icon}
                 </Box>
               )}
-              <Text
+              {/* One level below the page's own h1 (profile precedent: PatternPageShell/
+                 this surface's own title owns h1, nested section titles take h2). */}
+              <Heading
                 data-part="section-card-title"
-                size="md"
+                level="h2"
+                size="xs"
                 weight="semibold"
                 style={{ fontWeight: headingWeight }}
               >
                 {section.title}
-              </Text>
+              </Heading>
               {section.isComplete && (
                 <Flex data-part="section-card-complete" align="center" gap={1}>
                   <StatusSuccessIcon decorative size={14} />
@@ -689,7 +693,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
     submitLabel ?? tSurfaceOr('guided_draft_form.submit', 'Submit');
   const submittingLabel = tSurfaceOr('guided_draft_form.submitting', 'Submitting…');
 
-  const hasError = error !== undefined && error !== null;
+  const hasError = hasSurfaceError(error);
   const isEmpty = sections.length === 0;
   // Full chrome (recovery, progress, draft status, templates, validation,
   // submit bar) only renders once the form itself is present.
@@ -1022,15 +1026,17 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
         wrap={isTablet ? 'wrap' : undefined}
       >
         <Box data-part="title-copy">
-          <Text
+          {/* No PageShellSurface wraps this surface (no `chrome` contract), so
+             this title IS the page h1, matching command-center/decision-inbox/record-workbench. */}
+          <Heading
             data-part="title"
-            size="xl"
+            level="h1"
+            size="md"
             weight="semibold"
-            as="p"
             style={{ fontWeight: headingWeight }}
           >
             {title}
-          </Text>
+          </Heading>
           {subtitle && !compactHeader && (
             <Text data-part="subtitle" size="sm" color="muted" as="p">
               {subtitle}

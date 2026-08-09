@@ -450,6 +450,11 @@ export function stringifySurfaceValue(value: unknown): string {
   return JSON.stringify(value);
 }
 
+/** Presence for the `error?: unknown` contract: 0 and '' are caught values, not absence. */
+export function hasSurfaceError(error: unknown): boolean {
+  return error !== undefined && error !== null;
+}
+
 /** Normalize arbitrary surface errors into user-facing message + description pairs. */
 export function normalizeSurfaceError(
   error: unknown,
@@ -465,6 +470,14 @@ export function normalizeSurfaceError(
   if (typeof error === 'string' && error.trim().length > 0) {
     return {
       message: error,
+    };
+  }
+
+  // A numeric code is a renderable value callers already pass; without this it
+  // would be swallowed into the generic fallback. NaN/Infinity carry no meaning.
+  if (typeof error === 'number' && Number.isFinite(error)) {
+    return {
+      message: String(error),
     };
   }
 

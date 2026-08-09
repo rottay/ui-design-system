@@ -46,6 +46,7 @@ import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/
 import type { PricingSurfaceConfig } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../composition/layout/page-shell';
 import { SurfaceActionBar } from '../../../../runtime/helpers/rendering';
+import { hasSurfaceError } from '../../../../runtime/helpers';
 import { SurfaceErrorState } from '../../../../runtime/helpers/states';
 import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
 import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
@@ -75,7 +76,7 @@ export function PricingSurface({
   const sectionSpacing = resolveStackSpacing(profileDefaults.sectionSpacing);
   // In error the payload never resolved, so no skeleton runs under it
   // (marketing idiom: error wins over loading).
-  const showSkeleton = loading && !error;
+  const showSkeleton = loading && !hasSurfaceError(error);
 
   const actionsNode = <SurfaceActionBar actions={config.behavior.actions} access={config.access} />;
 
@@ -147,7 +148,7 @@ export function PricingSurface({
           as="section"
           aria-label={tSurfaceOr('pricing.table_region_label', 'Plan comparison')}
         >
-          {error ? (
+          {hasSurfaceError(error) ? (
             <SurfaceErrorState error={error} onRetry={onRetry} />
           ) : showSkeleton ? (
             /* Mirror skeleton: the opt-in billing toggle as a centered pill

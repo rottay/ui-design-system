@@ -26,6 +26,7 @@ import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/prof
 import { resolveStackSpacing } from '../../../../runtime/profile-defaults/personality';
 import { resolveResponsiveColumnCount, useSurfaceResponsiveLayout } from '../../../../runtime/responsive';
 import { SurfaceActionBar, SurfaceSectionCard } from '../../../../runtime/helpers/rendering';
+import { hasSurfaceError } from '../../../../runtime/helpers';
 import { SurfaceEmptyState, SurfaceErrorState } from '../../../../runtime/helpers/states';
 import { FadeIn, StaggerChildren } from '@/graphics/motion';
 
@@ -218,12 +219,15 @@ export function OperationalSurface<TFeed extends FeedItem = FeedItem>({
   // Content check is broad because operational dashboards may have any
   // combination of panels, feeds, queues, and sections. An entirely empty
   // config should show the empty state rather than a blank shell.
+  // Stats are an independently-optional bucket, so a stats-only config counts
+  // as content rather than falling through to the empty state.
   const hasContent =
     !!config.presentation.primaryPanel ||
     !!config.presentation.secondaryPanel ||
     !!config.presentation.queue ||
     !!config.behavior.feed ||
-    (config.presentation.sections?.length ?? 0) > 0;
+    (config.presentation.sections?.length ?? 0) > 0 ||
+    (config.behavior.stats?.length ?? 0) > 0;
 
   // The refresh action is merged into the standard actions array so it
   // renders alongside other header buttons without special-casing in the
@@ -287,7 +291,7 @@ export function OperationalSurface<TFeed extends FeedItem = FeedItem>({
 
   // Error state renders full page chrome so header actions (e.g. refresh)
   // stay available even when the data load failed.
-  if (error) {
+  if (hasSurfaceError(error)) {
     return (
       <PageShellSurface chrome={chrome} actions={actionsNode} loading={false}>
         <SurfaceErrorState error={error} onRetry={onRetry} />

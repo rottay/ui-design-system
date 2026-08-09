@@ -46,6 +46,7 @@ import { FadeIn } from '@/graphics/motion';
 import { useSurfaceResponsiveLayout } from '../../../../runtime/responsive';
 import type { AuthSurfaceConfig } from '../../../../foundation/contracts';
 import { SurfaceActionBar } from '../../../../runtime/helpers/rendering';
+import { hasSurfaceError } from '../../../../runtime/helpers';
 import { SurfaceErrorState } from '../../../../runtime/helpers/states';
 import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
 import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
@@ -88,7 +89,7 @@ export function AuthSurface({
       : config.presentation.hero;
   // In error the payload never resolved, so no skeleton runs under it
   // (marketing idiom: error wins over loading).
-  const showSkeleton = loading && !error;
+  const showSkeleton = loading && !hasSurfaceError(error);
 
   const formPanel = (
     /* The form panel is a labeled region: the visible h1 doubles as the
@@ -185,7 +186,7 @@ export function AuthSurface({
 
   // In error only the form column swaps to the shared error kit: the brand
   // hero is chrome (not payload) and the split/centered geometry holds.
-  const formColumn = error ? (
+  const formColumn = hasSurfaceError(error) ? (
     <SurfaceErrorState error={error} onRetry={onRetry} />
   ) : (
     formPanel

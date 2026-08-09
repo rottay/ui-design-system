@@ -32,8 +32,9 @@ import type {
 import {
   isAllSurfaceAccess,
   resolveSurfaceCapabilityRegistry,
+  hasSurfaceError,
 } from '../../../../../runtime/helpers';
-import { SurfaceCapabilityAnatomy, SurfaceEmptyState } from '../../../../../runtime/helpers/states';
+import { SurfaceCapabilityAnatomy, SurfaceEmptyState, SurfaceErrorState } from '../../../../../runtime/helpers/states';
 import { useSurfaceTranslations } from '../../../../../runtime/helpers/states/i18n';
 import type { DensityKey } from '../../../../../../patterns/data/list-toolbar/contracts';
 import type { BulkAction } from '../../../../../../../foundation/contracts/runtime/components/patterns/core';
@@ -67,7 +68,9 @@ export interface CollectionRenderDispatchProps<T extends object> {
   rowKey: keyof T | ((row: T) => string);
   loading?: boolean;
   emptyState?: ReactNode;
-  error?: ReactNode;
+  /** A caught value; a valid React ELEMENT is custom chrome, anything else is normalized. */
+  error?: unknown;
+  onRetry?: () => void | Promise<void>;
   access?: SurfaceAccessInput;
   capabilityRegistry?: ReadonlyArray<SurfaceCapabilityRegistration>;
 
@@ -158,10 +161,11 @@ function CollectionErrorAnatomy<T extends object>({
   capabilityRegistry,
   columns,
   error,
+  onRetry,
   viewMode,
 }: Pick<
   CollectionRenderDispatchProps<T>,
-  'access' | 'actions' | 'capabilityRegistry' | 'columns' | 'error' | 'viewMode'
+  'access' | 'actions' | 'capabilityRegistry' | 'columns' | 'error' | 'onRetry' | 'viewMode'
 >): React.ReactElement {
   const { tSurfaceOr } = useSurfaceTranslations();
   const registeredColumns = isAllSurfaceAccess(access)
@@ -197,8 +201,17 @@ function CollectionErrorAnatomy<T extends object>({
       data-capability-count={capabilities.length}
       padding="lg"
     >
-      <Box data-part="error-state" aria-live="polite">
-        {error}
+      {/* Only the element branch needs the wrapper's announcement: the kit
+          announces via the Alert's role="alert", and nesting live regions double-reads. */}
+      <Box
+        data-part="error-state"
+        aria-live={React.isValidElement(error) ? 'polite' : undefined}
+      >
+        {React.isValidElement(error) ? (
+          error
+        ) : (
+          <SurfaceErrorState error={error} onRetry={onRetry} />
+        )}
       </Box>
 
       <SurfaceCapabilityAnatomy
@@ -214,6 +227,7 @@ function getColumnValue<T extends object>(
   column: ColumnDef<T>,
   index: number,
   t: SurfaceTranslator,
+  locale: string | undefined,
 ): ReactNode {
   const rawValue = column.accessorFn
     ? column.accessorFn(row)
@@ -228,7 +242,9 @@ function getColumnValue<T extends object>(
   if (rawValue == null || rawValue === '') {
     return t('collection_workspace.not_set', 'Not set');
   }
-  if (rawValue instanceof Date) return rawValue.toLocaleDateString();
+  // Locale-aware: the fallback card is the ONLY place this dispatch formats a
+  // raw Date itself (the table view delegates cell rendering to the pattern).
+  if (rawValue instanceof Date) return rawValue.toLocaleDateString(locale);
   if (typeof rawValue === 'boolean') {
     return rawValue
       ? t('collection_workspace.boolean_yes', 'Yes')
@@ -275,6 +291,7 @@ function renderFallbackCard<T extends object>({
   activationLabel,
   onActivate,
   t,
+  locale,
 }: {
   row: T;
   index: number;
@@ -284,13 +301,14 @@ function renderFallbackCard<T extends object>({
   activationLabel: string;
   onActivate?: () => void;
   t: SurfaceTranslator;
+  locale: string | undefined;
 }): ReactNode {
   const visibleColumns = columns
     .filter((column) => column.visible !== false)
     .slice(0, 6);
   const [primaryColumn, ...detailColumns] = visibleColumns;
   const primaryValue = primaryColumn
-    ? getColumnValue(row, primaryColumn, index, t)
+    ? getColumnValue(row, primaryColumn, index, t, locale)
     : t('collection_workspace.record_number', 'Record {index}', { index: index + 1 });
   const actionContent = actions?.(row, index);
 
@@ -336,7 +354,7 @@ function renderFallbackCard<T extends object>({
               data-part="fallback-value"
               size="sm"
             >
-              {getColumnValue(row, column, index, t)}
+              {getColumnValue(row, column, index, t, locale)}
             </Text>
           </Box>
         ))}
@@ -596,7 +614,7 @@ function resolveCardsGridTemplateColumns(
 export function CollectionRenderDispatch<T extends object>(
   props: CollectionRenderDispatchProps<T>,
 ): React.ReactElement {
-  const { tSurfaceOr } = useSurfaceTranslations();
+  const { tSurfaceOr, locale } = useSurfaceTranslations();
   const {
     viewMode,
     viewModes,
@@ -606,6 +624,7 @@ export function CollectionRenderDispatch<T extends object>(
     loading,
     emptyState,
     error,
+    onRetry,
     access,
     capabilityRegistry,
     mobileCard,
@@ -653,7 +672,7 @@ export function CollectionRenderDispatch<T extends object>(
   };
 
   // Error state
-  if (error) {
+  if (hasSurfaceError(error)) {
     return (
       <CollectionErrorAnatomy
         access={access}
@@ -661,6 +680,7 @@ export function CollectionRenderDispatch<T extends object>(
         capabilityRegistry={capabilityRegistry}
         columns={columns}
         error={error}
+        onRetry={onRetry}
         viewMode={viewMode}
       />
     );
@@ -937,6 +957,7 @@ export function CollectionRenderDispatch<T extends object>(
                     activationLabel,
                     onActivate: onRowClick ? () => onRowClick(item, i) : undefined,
                     t: tSurfaceOr,
+                    locale,
                   })}
             </Box>
             );

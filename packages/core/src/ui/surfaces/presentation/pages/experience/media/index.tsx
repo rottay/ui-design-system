@@ -37,7 +37,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Box, Card, Grid, Image, Stack, Text } from '../../../../../primitives';
 import { FadeIn, recordTransitionName } from '@/graphics/motion';
 import { useCollectionStagger } from '../../../../../patterns/foundation/motion';
-import { filterSurfaceActions } from '../../../../runtime/helpers';
+import { filterSurfaceActions, hasSurfaceError } from '../../../../runtime/helpers';
 import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
 import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
 import {
@@ -280,7 +280,7 @@ export function MediaSurface({
 
   // Error state renders under the live page chrome so header actions (e.g.
   // upload) stay usable, mirroring the dashboard/chat surface idiom.
-  if (error) {
+  if (hasSurfaceError(error)) {
     return (
       <PageShellSurface
         chrome={{
@@ -359,6 +359,29 @@ export function MediaSurface({
                     data-selected={selected ? 'true' : 'false'}
                     data-clickable={customItem !== undefined ? 'true' : undefined}
                     onClick={customItem !== undefined ? () => setSelectedItem(item) : undefined}
+                    /* The wrapper is the only keyboard path for custom items; the
+                       target check stops a nested control double-firing. */
+                    onKeyDown={
+                      customItem !== undefined
+                        ? (event) => {
+                            if (event.target !== event.currentTarget) return;
+                            if (event.key === 'Enter' || event.key === ' ') {
+                              event.preventDefault();
+                              setSelectedItem(item);
+                            }
+                          }
+                        : undefined
+                    }
+                    role={customItem !== undefined ? 'button' : undefined}
+                    tabIndex={customItem !== undefined ? 0 : undefined}
+                    aria-pressed={customItem !== undefined ? selected : undefined}
+                    aria-label={
+                      customItem !== undefined
+                        ? typeof item.title === 'string'
+                          ? item.title
+                          : item.alt ?? tSurfaceOr('media.untitled_item', 'Untitled media item')
+                        : undefined
+                    }
                     data-ds-stagger-item={applyStagger ? '' : undefined}
                     style={
                       {

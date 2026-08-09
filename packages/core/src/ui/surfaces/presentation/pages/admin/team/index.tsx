@@ -32,6 +32,7 @@ import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/prof
 import { resolveStackSpacing } from '../../../../runtime/profile-defaults/personality';
 import { useSurfaceResponsiveLayout } from '../../../../runtime/responsive';
 import { SurfaceActionBar } from '../../../../runtime/helpers/rendering';
+import { hasSurfaceError } from '../../../../runtime/helpers';
 import {
   SurfaceEmptyState,
   SurfaceErrorState,
@@ -318,7 +319,7 @@ export function TeamSurface({
   // Error keeps the real page chrome and action bar so a retry never loses
   // context (ListSurface precedent). The shared contract stays untouched:
   // error/onRetry arrive as component props, like ListSurface/AuditSurface.
-  if (error) {
+  if (hasSurfaceError(error)) {
     return (
       <PageShellSurface chrome={chrome} actions={actionsNode} loading={false}>
         <SurfaceErrorState error={error} onRetry={onRetry} />

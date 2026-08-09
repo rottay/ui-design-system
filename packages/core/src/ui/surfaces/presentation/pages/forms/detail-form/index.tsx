@@ -17,7 +17,13 @@
 import { Box, Button, Card, Grid, Stack } from '../../../../../primitives';
 import { PatternFormBuilder } from '../../../../../patterns';
 import { FadeIn } from '@/graphics/motion';
-import { filterSurfaceFields, resolveSurfaceAction, resolveSurfaceButtonVariant } from '../../../../runtime/helpers';
+import { useUnsavedChangesGuard } from '../../../../../../infrastructure/runtime/application/forms';
+import {
+  filterSurfaceFields,
+  resolveSurfaceAction,
+  resolveSurfaceButtonVariant,
+  hasSurfaceError,
+} from '../../../../runtime/helpers';
 import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
 import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
 import { resolveStackSpacing, SurfaceAccentBarWrapper } from '../../../../runtime/profile-defaults/personality';
@@ -47,11 +53,20 @@ export function DetailFormSurface({
   // Stamped state attributes follow the resolved viewport so SSR/first-paint
   // markup never claims a mobile posture the media query has not confirmed.
   const resolvedMobile = hasResolvedViewport && isMobile;
+  const dirtyState = config.behavior.dirtyState;
+  const { requestDiscard } = useUnsavedChangesGuard({
+    isDirty: dirtyState?.isDirty ?? false,
+    message: dirtyState?.message ?? tSurfaceOr('form.discard_changes', 'Discard unsaved form changes?'),
+    confirmDiscard: dirtyState?.confirmDiscard,
+    onDiscard: dirtyState?.onDiscard,
+    onBlocked: dirtyState?.onBlocked,
+  });
   const sectionSpacing = resolveStackSpacing(profileDefaults.sectionSpacing);
   // Permission-aware field filtering removes fields the current user cannot
   // see before they reach the form builder, avoiding empty-field placeholders.
   const visibleFields = filterSurfaceFields(config.behavior.fields, config.access);
   const submitAction = resolveSurfaceAction(config.behavior.submitAction, config.access);
+  const cancelAction = config.behavior.cancelAction;
   // Surface maxWidth overrides chrome maxWidth so individual surfaces can
   // constrain form width without altering the shared chrome config.
   const chrome = {
@@ -59,7 +74,7 @@ export function DetailFormSurface({
     maxWidth: config.visual.maxWidth ?? config.presentation.chrome.maxWidth,
   };
 
-  if (error) {
+  if (hasSurfaceError(error)) {
     return (
       <PageShellSurface chrome={chrome} loading={false}>
         <SurfaceErrorState error={error} onRetry={onRetry} />
@@ -77,10 +92,15 @@ export function DetailFormSurface({
     <SurfaceActionBar
       actions={[
         ...(config.behavior.secondaryActions ?? []),
-        ...(config.behavior.cancelAction
+        ...(cancelAction
           ? [{
-              ...config.behavior.cancelAction,
-              disabled: config.behavior.cancelAction.disabled || submitAction?.loading,
+              ...cancelAction,
+              disabled: cancelAction.disabled || submitAction?.loading,
+              // Discard protection wraps the contract callback: a refused
+              // confirmation must never reach the app's cancel handler.
+              onClick: () => {
+                if (requestDiscard('cancel')) cancelAction.onClick?.(undefined as void);
+              },
             }]
           : []),
       ]}

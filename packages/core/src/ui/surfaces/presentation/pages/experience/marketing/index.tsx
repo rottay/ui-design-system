@@ -42,6 +42,7 @@ import {
 } from '../../../../../primitives';
 import { FadeIn } from '@/graphics/motion';
 import { SurfaceActionBar } from '../../../../runtime/helpers/rendering';
+import { hasSurfaceError } from '../../../../runtime/helpers';
 import { SurfaceErrorState } from '../../../../runtime/helpers/states';
 import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
 import { resolveStackSpacing } from '../../../../runtime/profile-defaults/personality';
@@ -208,7 +209,7 @@ export function MarketingSurface({
       : null
     : heroNode;
 
-  const mainNode = error ? (
+  const mainNode = hasSurfaceError(error) ? (
     <SurfaceErrorState error={error} onRetry={onRetry} />
   ) : (
     <>

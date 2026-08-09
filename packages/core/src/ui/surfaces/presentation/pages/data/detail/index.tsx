@@ -26,6 +26,7 @@ import {
   isAllSurfaceAccess,
   resolveSurfaceCapabilityRegistry,
   resolveSurfaceDetailActionVariant,
+  hasSurfaceError,
 } from "../../../../runtime/helpers";
 import { useSurfaceTranslations } from "../../../../runtime/helpers/states/i18n";
 import { useSurfaceProfileDefaultsWithOverrides } from "../../../../runtime/profile-defaults/overrides";
@@ -96,7 +97,7 @@ export function DetailSurface<TRaw, TView>({
   );
   const { isMobile } = useBreakpoints();
 
-  if (error) {
+  if (hasSurfaceError(error)) {
     const capabilities = resolveDetailErrorCapabilities(adapter, config);
     return (
       <Box

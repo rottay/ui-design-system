@@ -17,7 +17,12 @@ import { ActionDock } from '../../../../../structures/workspace/action-dock';
 import { PatternFormBuilder } from '../../../../../patterns';
 import { FadeIn } from '@/graphics/motion';
 import { useUnsavedChangesGuard } from '../../../../../../infrastructure/runtime/application/forms';
-import { filterSurfaceFields, resolveSurfaceAction, resolveSurfaceButtonVariant } from '../../../../runtime/helpers';
+import {
+  filterSurfaceFields,
+  resolveSurfaceAction,
+  resolveSurfaceButtonVariant,
+  hasSurfaceError,
+} from '../../../../runtime/helpers';
 import type { FormSurfaceConfig } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../composition/layout/page-shell';
 import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
@@ -66,7 +71,7 @@ export function FormSurface({ config, loading = false, error, onRetry }: FormSur
   const resolvedLayout = shouldStack && config.visual.layout === 'horizontal' ? 'vertical' : config.visual.layout;
   const resolvedColumns = shouldStack ? 1 : config.visual.columns;
 
-  if (error) {
+  if (hasSurfaceError(error)) {
     return (
       <PageShellSurface chrome={chrome} loading={false}>
         <SurfaceErrorState error={error} onRetry={onRetry} />

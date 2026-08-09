@@ -13,6 +13,8 @@ const skinPath = join(
   '../../../foundation/tokens/css/presentation/components/skin/surface-section-card.css',
 );
 
+const helperPath = join(__dirname, '../runtime/helpers/rendering/index.tsx');
+
 afterEach(cleanup);
 
 async function renderProfile(
@@ -48,6 +50,55 @@ describe('SurfaceSectionCard recipe profile', () => {
     expect(
       await renderProfile('rottay/technical-sharp@1', 'ghost'),
     ).toHaveAttribute('data-variant', 'ghost');
+  });
+
+  it('gives the section title a real heading element at a caller-chosen level', async () => {
+    const base = renderWithEngine(
+      <SurfaceSectionCard title="Section">Content</SurfaceSectionCard>,
+      'modern',
+    );
+    await waitFor(() => expect(base.container.querySelector('.ds-section-card__title')).not.toBeNull());
+    // The page shell owns the h1, so a page-level section card sits at h2 and
+    // never skips a level; nested callers pass an explicit deeper level.
+    expect(base.container.querySelector('.ds-section-card__title')?.tagName).toBe('H2');
+    cleanup();
+
+    const nested = renderWithEngine(
+      <SurfaceSectionCard title="Section" titleHeadingLevel={4}>
+        Content
+      </SurfaceSectionCard>,
+      'modern',
+    );
+    await waitFor(() => expect(nested.container.querySelector('.ds-section-card__title')).not.toBeNull());
+    expect(nested.container.querySelector('.ds-section-card__title')?.tagName).toBe('H4');
+  });
+
+  it('holds the section-card header type on the skin, not on the primitive default', async () => {
+    const { container } = renderWithEngine(
+      <SurfaceSectionCard eyebrow="Context" title="Section" description="Supporting copy">
+        Content
+      </SurfaceSectionCard>,
+      'modern',
+    );
+    await waitFor(() => expect(container.querySelector('.ds-section-card__title')).not.toBeNull());
+
+    const title = container.querySelector('.ds-section-card__title') as HTMLElement;
+    expect(container.querySelector('.ds-section-card__eyebrow')).not.toBeNull();
+    expect(container.querySelector('.ds-section-card__description')).not.toBeNull();
+    // jsdom's CSSOM drops `var()` from font-size/letter-spacing, so the value
+    // chain itself is proven in the browser instrument; line-height survives.
+    expect(title.style.lineHeight).toBe('1.25');
+
+    const skin = readFileSync(skinPath, 'utf-8');
+    const helper = readFileSync(helperPath, 'utf-8');
+    for (const channel of [
+      '--ds-card-title-font-size',
+      '--ds-card-title-letter-spacing',
+      '--ds-text-eyebrow-size',
+    ]) {
+      expect(skin).toContain(channel);
+      expect(helper).toContain(channel);
+    }
   });
 
   it('keeps the quiet-premium, RTL-safe contract in the skin', () => {

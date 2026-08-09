@@ -51,6 +51,7 @@ import {
 import type { ChatSurfaceConfig, ChatSurfaceMessage } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../composition/layout/page-shell';
 import { SurfaceActionBar, SurfaceSectionCard } from '../../../../runtime/helpers/rendering';
+import { hasSurfaceError } from '../../../../runtime/helpers';
 import { SurfaceEmptyState, SurfaceErrorState } from '../../../../runtime/helpers/states';
 import { useResponsive } from '@/infrastructure/runtime/responsive';
 
@@ -217,10 +218,14 @@ export function ChatSurface({
       return;
     }
 
-    await config.behavior.onSend(draft);
-
-    if (config.behavior.draft === undefined) {
-      setInternalDraft('');
+    try {
+      await config.behavior.onSend(draft);
+      if (config.behavior.draft === undefined) {
+        setInternalDraft('');
+      }
+    } catch {
+      // Caught only to avoid an unhandled rejection; onSend owns its own
+      // error surfacing (the contract declares no surface-level error slot).
     }
   };
 
@@ -237,7 +242,7 @@ export function ChatSurface({
 
   // Error state renders under the live page chrome so header actions (e.g.
   // refresh) stay usable, mirroring the dashboard surface idiom.
-  if (error) {
+  if (hasSurfaceError(error)) {
     return (
       <PageShellSurface
         chrome={{

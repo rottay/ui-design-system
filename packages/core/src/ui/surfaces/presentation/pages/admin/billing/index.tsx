@@ -24,9 +24,10 @@ import { BillingInvoiceIcon } from '@/graphics/icons/presentation/semantic/gener
 import { BillingSubscriptionIcon } from '@/graphics/icons/presentation/semantic/generated/roles/billing-subscription';
 import { DataChartIcon } from '@/graphics/icons/presentation/semantic/generated/roles/data-chart';
 import React from 'react';
-import { Button, Card, Flex, Progress, Stack, Tabs, Tag, Text } from '../../../../../primitives';
+import { Button, Card, Flex, Heading, Progress, Stack, Tabs, Tag, Text } from '../../../../../primitives';
 import type { BillingSurfaceConfig, BillingInvoice } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../composition/layout/page-shell';
+import { hasSurfaceError } from '../../../../runtime/helpers';
 import {
   SurfaceErrorState,
   SurfaceLoadingSkeleton,
@@ -63,9 +64,10 @@ function SectionHeader({
   return (
     <Flex gap={8} align="center">
       {icon}
-      <Text size="md" weight="semibold">
+      {/* h2: nests under PatternPageShell's own page <h1> (profile precedent). */}
+      <Heading level="h2" size="xs" weight="semibold">
         {title}
-      </Text>
+      </Heading>
     </Flex>
   );
 }
@@ -383,7 +385,7 @@ export function BillingSurface({
 
   // Error short-circuits the whole body: the shell keeps the page chrome so
   // retry never loses context (ListSurface precedent).
-  if (error) {
+  if (hasSurfaceError(error)) {
     return (
       <PageShellSurface chrome={config.presentation.chrome} loading={false}>
         <SurfaceErrorState error={error} onRetry={onRetry} />

@@ -15,7 +15,7 @@ import { Box, Card, Flex, Grid, Input, Stack, Text } from '../../../../../primit
 import { PatternFilterPanel } from '../../../../../patterns';
 import { FadeIn } from '@/graphics/motion';
 import { useCollectionStagger } from '../../../../../patterns/foundation/motion';
-import { countActiveFilters, filterSurfaceActions } from '../../../../runtime/helpers';
+import { countActiveFilters, filterSurfaceActions, hasSurfaceError } from '../../../../runtime/helpers';
 import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
 import type {
   SearchSurfaceConfig,
@@ -236,7 +236,7 @@ export function SearchSurface({
 
   // Error state renders full page chrome so header actions stay available
   // even when the search load failed.
-  if (error) {
+  if (hasSurfaceError(error)) {
     return (
       <PageShellSurface chrome={chrome} actions={actionsNode} loading={false}>
         <SurfaceErrorState error={error} onRetry={onRetry} />

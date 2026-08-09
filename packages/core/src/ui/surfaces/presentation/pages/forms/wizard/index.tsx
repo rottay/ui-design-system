@@ -12,7 +12,12 @@ import { Box, Button, Card, Flex, Grid, Stack, Text } from '../../../../../primi
 import { PatternFormBuilder, PatternStepWizard } from '../../../../../patterns';
 import { FadeIn, SlideIn } from '@/graphics/motion';
 import { useUnsavedChangesGuard } from '../../../../../../infrastructure/runtime/application/forms';
-import { filterSurfaceFields, resolveSurfaceAction, resolveSurfaceButtonVariant } from '../../../../runtime/helpers';
+import {
+  filterSurfaceFields,
+  resolveSurfaceAction,
+  resolveSurfaceButtonVariant,
+  hasSurfaceError,
+} from '../../../../runtime/helpers';
 import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
 import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
 import { resolveStackSpacing, SurfaceAccentBarWrapper } from '../../../../runtime/profile-defaults/personality';
@@ -283,7 +288,7 @@ export function WizardSurface({ config, loading = false, error, onRetry }: Wizar
     maxWidth: config.visual.maxWidth ?? config.presentation.chrome.maxWidth,
   };
 
-  if (error) {
+  if (hasSurfaceError(error)) {
     return (
       <PageShellSurface chrome={chrome} loading={false}>
         <SurfaceErrorState error={error} onRetry={onRetry} />

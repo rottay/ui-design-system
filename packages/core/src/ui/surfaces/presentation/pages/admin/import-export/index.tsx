@@ -33,6 +33,7 @@ import {
   Checkbox,
   Flex,
   Grid,
+  Heading,
   NavLink,
   Segmented,
   Spinner,
@@ -48,6 +49,7 @@ import type {
   ImportResult,
 } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../composition/layout/page-shell';
+import { hasSurfaceError } from '../../../../runtime/helpers';
 import {
   SurfaceEmptyState,
   SurfaceErrorState,
@@ -95,9 +97,10 @@ function PanelHeader({
     <Flex gap={12} align="center">
       {icon}
       <Stack spacing="xs">
-        <Text size="lg" weight="semibold">
+        {/* h2: nests under PatternPageShell's own page <h1> (profile precedent). */}
+        <Heading level="h2" size="sm" weight="semibold">
           {title}
-        </Text>
+        </Heading>
         {description && (
           <Text size="sm" color="muted" className="ds-import-export__muted-text">
             {description}
@@ -624,7 +627,7 @@ export function ImportExportSurface({
 
   // Error short-circuits the whole body: the shell keeps the page chrome so
   // retry never loses context (ListSurface/AuditSurface precedent).
-  if (error) {
+  if (hasSurfaceError(error)) {
     return (
       <PageShellSurface chrome={chrome} loading={false}>
         <SurfaceErrorState error={error} onRetry={onRetry} />

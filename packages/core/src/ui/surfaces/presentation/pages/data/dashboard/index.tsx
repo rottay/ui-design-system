@@ -16,6 +16,7 @@ import {
   Button,
   Card,
   Grid,
+  Heading,
   Stack,
   Text,
   Flex,
@@ -27,6 +28,7 @@ import { FadeIn, StaggerChildren } from "@/graphics/motion";
 import {
   filterSurfaceActions,
   resolveSurfaceButtonVariant,
+  hasSurfaceError,
 } from "../../../../runtime/helpers";
 import type {
   DashboardSurfaceConfig,
@@ -331,7 +333,7 @@ export function DashboardSurface({
 
   // Error state renders full page chrome so the user can still use header
   // actions (e.g. refresh) even when the data load failed.
-  if (error) {
+  if (hasSurfaceError(error)) {
     return (
       <PageShellSurface
         chrome={config.presentation.chrome}
@@ -410,13 +412,15 @@ export function DashboardSurface({
                             <Flex justify="between" align="start" gap={12}>
                               <Stack spacing="xs">
                                 {section.title && (
-                                  <Text
+                                  // h2: nests under PatternPageShell's own page <h1> (profile precedent).
+                                  <Heading
+                                    level="h2"
                                     className="ds-dashboard__section-title"
                                     data-part="section-title"
                                     textStyle="sectionTitle"
                                   >
                                     {section.title}
-                                  </Text>
+                                  </Heading>
                                 )}
                                 {section.description && (
                                   <Text
