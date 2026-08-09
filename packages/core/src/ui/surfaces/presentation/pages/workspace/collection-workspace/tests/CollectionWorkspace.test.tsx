@@ -1723,6 +1723,94 @@ describe('CollectionWorkspaceSurface', () => {
     }
   });
 
+  it('resolves adaptive posture from a narrow collection inside a wide viewport', async () => {
+    vi.stubGlobal('matchMedia', vi.fn().mockReturnValue({
+      matches: false,
+      media: '(max-width: 768px)',
+      onchange: null,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    }));
+
+    let resizeCallback: ResizeObserverCallback | undefined;
+    const resizeObserver = {
+      observe: vi.fn(),
+      unobserve: vi.fn(),
+      disconnect: vi.fn(),
+      takeRecords: vi.fn(() => []),
+    };
+
+    class ControlledResizeObserver {
+      constructor(callback: ResizeObserverCallback) {
+        resizeCallback = callback;
+      }
+
+      observe = resizeObserver.observe;
+      unobserve = resizeObserver.unobserve;
+      disconnect = resizeObserver.disconnect;
+      takeRecords = resizeObserver.takeRecords;
+    }
+
+    vi.stubGlobal(
+      'ResizeObserver',
+      ControlledResizeObserver as unknown as typeof ResizeObserver,
+    );
+
+    try {
+      const { container } = renderSurface(
+        <ResponsiveContext.Provider value={DESKTOP_RESPONSIVE_CONTEXT}>
+          <CollectionWorkspaceSurface
+            {...buildProps({
+              adaptive: {
+                desktop: { collection: 'table' },
+                phone: { collection: 'cards', compactHeader: true },
+              },
+              mobileCard: (row) => (
+                <div data-testid={`container-card-${row.id}`}>{row.name}</div>
+              ),
+            })}
+          />
+        </ResponsiveContext.Provider>,
+      );
+
+      await screen.findByText('Test Collection');
+      const root = container.querySelector('[data-component="collection-workspace"]');
+      const collection = container.querySelector<HTMLElement>('[data-part="collection"]');
+      expect(root).toHaveAttribute('data-view-mode', 'table');
+      expect(container.querySelector('table')).toBeInTheDocument();
+      expect(resizeObserver.observe).toHaveBeenCalledWith(collection);
+
+      act(() => {
+        resizeCallback?.(
+          [{ contentRect: { width: 520 } } as ResizeObserverEntry],
+          resizeObserver as unknown as ResizeObserver,
+        );
+      });
+
+      await waitFor(() => {
+        expect(root).toHaveAttribute('data-view-mode', 'cards');
+        expect(screen.getByTestId('container-card-1')).toBeInTheDocument();
+      });
+
+      act(() => {
+        resizeCallback?.(
+          [{ contentRect: { width: 1200 } } as ResizeObserverEntry],
+          resizeObserver as unknown as ResizeObserver,
+        );
+      });
+
+      await waitFor(() => {
+        expect(root).toHaveAttribute('data-view-mode', 'table');
+        expect(container.querySelector('table')).toBeInTheDocument();
+      });
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
+
   it('switches to cards view and renders card content', async () => {
     const onViewChange = vi.fn();
 

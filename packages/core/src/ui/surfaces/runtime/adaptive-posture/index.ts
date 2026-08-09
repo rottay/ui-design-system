@@ -34,14 +34,15 @@ export interface UseAdaptivePostureResult extends SurfacePosture {
 }
 
 /**
- * Resolves adaptive surface config for the current viewport breakpoint.
+ * Resolves adaptive surface config for an owning container or the viewport.
  */
 export function useAdaptivePosture(
   config?: AdaptiveConfig,
+  breakpointOverride?: Breakpoint,
 ): UseAdaptivePostureResult {
-  const { isMobile, isTablet, isDesktop } = useBreakpoints();
+  const viewport = useBreakpoints();
 
-  const breakpoint = toBreakpoint({ isMobile, isTablet });
+  const breakpoint = breakpointOverride ?? toBreakpoint(viewport);
 
   const posture = useMemo(
     () => resolvePosture(config, breakpoint),
@@ -51,8 +52,8 @@ export function useAdaptivePosture(
   return {
     ...posture,
     breakpoint,
-    isPhone: isMobile,
-    isTablet,
-    isDesktop,
+    isPhone: breakpoint === 'phone',
+    isTablet: breakpoint === 'tablet',
+    isDesktop: breakpoint === 'desktop',
   };
 }

@@ -890,7 +890,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
   );
   const columnsResizable = presentation?.resizable ?? !!controls?.columnSettings?.onColumnResize;
 
-  const posture = useAdaptivePosture(adaptive);
+  const posture = useAdaptivePosture(adaptive, workspace.containerBreakpoint);
   // Effective density: a runtime `controls.density` switcher value wins; else
   // the declarative `density` prop baseline (default 'comfortable'). The
   // resolved density CSS variables (design-language §3) are emitted on the
@@ -2039,6 +2039,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
         )}
         <Flex className="ds-collection-workspace__content" data-part="content" gap={4}>
           <Box
+            ref={workspace.collectionRef}
             className="ds-collection-workspace__collection"
             data-part="collection"
             style={{
@@ -2593,6 +2594,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
       >
         <Flex className="ds-collection-workspace__body-content" data-part="body-content" gap={4}>
           <Box
+            ref={workspace.collectionRef}
             className="ds-collection-workspace__collection"
             data-part="collection"
             style={{

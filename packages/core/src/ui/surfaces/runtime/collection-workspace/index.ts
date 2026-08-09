@@ -9,12 +9,15 @@
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { RefCallback } from 'react';
+import { RESPONSIVE_BREAKPOINTS } from '@/foundation/contracts/kernel/responsive/breakpoints';
 import type {
   CollectionWorkspaceConfig,
   CollectionViewMode,
   WorkspaceControlsConfig,
   CollectionBehaviorConfig,
 } from '../../foundation/contracts/adaptive/collection';
+import type { Breakpoint } from '../../foundation/contracts/adaptive';
 
 interface UseCollectionWorkspaceOptions<T> {
   config: CollectionWorkspaceConfig<T>;
@@ -58,8 +61,18 @@ interface UseCollectionWorkspaceReturn<T> {
   /** Activate a saved view. */
   activateSavedView: (viewId: string) => void;
 
-  /** Whether the viewport is in mobile mode. */
+  /** Ref for the collection box that owns responsive posture. */
+  collectionRef: RefCallback<HTMLElement>;
+  /** Measured container breakpoint; undefined keeps the viewport fallback. */
+  containerBreakpoint: Breakpoint | undefined;
+  /** Whether the collection container is in mobile mode. */
   isMobile: boolean;
+}
+
+function breakpointForContainerWidth(width: number): Breakpoint {
+  if (width < RESPONSIVE_BREAKPOINTS.sm) return 'phone';
+  if (width < RESPONSIVE_BREAKPOINTS.lg) return 'tablet';
+  return 'desktop';
 }
 
 /** Whether a filter value carries a meaningful constraint. */
@@ -152,7 +165,12 @@ export function useCollectionWorkspace<T>(
   // -------------------------------------------------------------------------
   // Responsive
   // -------------------------------------------------------------------------
-  const [isMobile, setIsMobile] = useState(() => {
+  const [collectionNode, setCollectionNode] = useState<HTMLElement | null>(null);
+  const collectionRef = useCallback((node: HTMLElement | null) => {
+    setCollectionNode(node);
+  }, []);
+  const [containerWidth, setContainerWidth] = useState<number | null>(null);
+  const [viewportIsMobile, setViewportIsMobile] = useState(() => {
     if (typeof window === 'undefined') return false;
     return window.matchMedia(`(max-width: ${resolvedBreakpoint}px)`).matches;
   });
@@ -160,11 +178,39 @@ export function useCollectionWorkspace<T>(
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const mql = window.matchMedia(`(max-width: ${resolvedBreakpoint}px)`);
-    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    const handler = (e: MediaQueryListEvent) => setViewportIsMobile(e.matches);
     mql.addEventListener('change', handler);
-    setIsMobile(mql.matches);
+    setViewportIsMobile(mql.matches);
     return () => mql.removeEventListener('change', handler);
   }, [resolvedBreakpoint]);
+
+  useEffect(() => {
+    const node = collectionNode;
+    if (!node) return;
+
+    const update = (width: number) => {
+      setContainerWidth(width > 0 ? width : null);
+    };
+    update(node.getBoundingClientRect().width);
+
+    if (typeof ResizeObserver === 'undefined') return;
+    const observer = new ResizeObserver((entries) => {
+      const entry = entries[0];
+      if (entry) update(entry.contentRect.width);
+    });
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [collectionNode]);
+
+  const containerBreakpoint = useMemo(
+    () => containerWidth === null
+      ? undefined
+      : breakpointForContainerWidth(containerWidth),
+    [containerWidth],
+  );
+  const isMobile = containerWidth === null
+    ? viewportIsMobile
+    : containerWidth <= resolvedBreakpoint;
 
   const activeViewMode = useMemo(() => {
     const configured = controls?.viewMode?.value ?? internalViewMode;
@@ -263,6 +309,8 @@ export function useCollectionWorkspace<T>(
     hasSelection,
     activeSavedViewId,
     activateSavedView,
+    collectionRef,
+    containerBreakpoint,
     isMobile,
   };
 }
