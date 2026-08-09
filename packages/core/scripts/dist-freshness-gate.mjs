@@ -23,7 +23,10 @@ import { existsSync, readFileSync } from 'node:fs';
 import { dirname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { computeBuildInputHash } from './lib/build-input-hash.mjs';
+import {
+  computeBuildInputHash,
+  fingerprintBuildInputManifest,
+} from './lib/build-input-hash.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const packageRootDefault = resolve(scriptDir, '..');
@@ -68,6 +71,24 @@ export function assertDistFresh({ packageRoot, stampPath }) {
     return { ok: false, failures };
   }
 
+  if (typeof stamp.buildInputFingerprint !== 'string' || stamp.buildInputFingerprint.length === 0) {
+    failures.push(
+      `build stamp has no buildInputFingerprint (${rel(stampPath)}). Rebuild: ${BUILD_COMMAND}`,
+    );
+    return { ok: false, failures };
+  }
+  if (!stamp.buildInputManifest || typeof stamp.buildInputManifest !== 'object') {
+    failures.push(`build stamp has no buildInputManifest (${rel(stampPath)}). Rebuild: ${BUILD_COMMAND}`);
+    return { ok: false, failures };
+  }
+  const embeddedFingerprint = fingerprintBuildInputManifest(stamp.buildInputManifest);
+  if (embeddedFingerprint !== stamp.buildInputFingerprint) {
+    failures.push(
+      `build stamp manifest fingerprint is inconsistent (${rel(stampPath)}). Rebuild: ${BUILD_COMMAND}`,
+    );
+    return { ok: false, failures };
+  }
+
   const pkg = JSON.parse(readFileSync(resolve(packageRoot, 'package.json'), 'utf8'));
   if (stamp.producerVersion !== pkg.version) {
     failures.push(
@@ -76,11 +97,19 @@ export function assertDistFresh({ packageRoot, stampPath }) {
     );
   }
 
-  const { sourceHash } = computeBuildInputHash(packageRoot);
+  const { sourceHash, buildInputFingerprint } = computeBuildInputHash(packageRoot);
   if (sourceHash !== stamp.sourceHash) {
     failures.push(
       'dist is STALE: design-system source changed since the last build ' +
       `(stamp ${stamp.sourceHash.slice(0, 12)}, source now ${sourceHash.slice(0, 12)}). ` +
+      `Rebuild before packing/publishing: ${BUILD_COMMAND}`,
+    );
+  }
+  if (buildInputFingerprint !== stamp.buildInputFingerprint) {
+    failures.push(
+      'dist is STALE: build inputs changed since the last build ' +
+      `(stamp ${stamp.buildInputFingerprint.slice(0, 12)}, inputs now ${buildInputFingerprint.slice(0, 12)}). ` +
+      `This includes the workspace lockfile, package/config, and producer scripts. ` +
       `Rebuild before packing/publishing: ${BUILD_COMMAND}`,
     );
   }
@@ -97,5 +126,5 @@ if (invokedDirectly) {
     for (const failure of failures) console.error(`  - ${failure}`);
     process.exit(1);
   }
-  console.log('dist-freshness-gate: OK -- dist/ matches the current source (build stamp verified)');
+  console.log('dist-freshness-gate: OK -- dist/ matches current source and build inputs (stamp verified)');
 }

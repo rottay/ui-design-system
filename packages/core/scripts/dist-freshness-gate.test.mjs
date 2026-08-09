@@ -7,7 +7,7 @@
 // missing/corrupt stamp, unbuilt dist).
 
 import assert from 'node:assert/strict';
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import test from 'node:test';
@@ -25,6 +25,12 @@ function scaffold({ version = '2.19.34', withDist = true } = {}) {
     return full;
   };
   write('package.json', JSON.stringify({ name: '@rottay/design-system', version, scripts: { build: 'tsc' } }));
+  write('pnpm-lock.yaml', "lockfileVersion: '9.0'\n");
+  write('vite.config.ts', 'export default {};\n');
+  write('tsconfig.json', '{}\n');
+  write('postcss.config.mjs', 'export default {};\n');
+  write('scripts/lib/build-input-hash.mjs', '// fingerprint producer\n');
+  write('scripts/write-build-stamp.mjs', '// stamp producer\n');
   write('src/index.ts', 'export const answer = 42;\n');
   write('src/ui/button/index.tsx', 'export const Button = () => null;\n');
   // Non-shipping inputs that must NOT influence the hash.
@@ -131,7 +137,70 @@ test('the build-input hash is stable across repeated computation', () => {
     const a = computeBuildInputHash(f.root);
     const b = computeBuildInputHash(f.root);
     assert.equal(a.sourceHash, b.sourceHash);
+    assert.equal(a.buildInputFingerprint, b.buildInputFingerprint);
+    assert.deepEqual(a.buildInputManifest, b.buildInputManifest);
     assert.equal(a.fileCount, 2, 'only src/index.ts and src/ui/button/index.tsx are shippable inputs');
+  } finally {
+    f.cleanup();
+  }
+});
+
+test('editing pnpm-lock.yaml invalidates build inputs without changing sourceHash', () => {
+  const f = scaffold();
+  try {
+    const before = computeBuildInputHash(f.root);
+    writeBuildStamp({ packageRoot: f.root, dist: join(f.root, 'dist') });
+    f.write('pnpm-lock.yaml', "lockfileVersion: '9.0'\n# dependency drift\n");
+    const after = computeBuildInputHash(f.root);
+    assert.equal(after.sourceHash, before.sourceHash);
+    assert.notEqual(after.buildInputFingerprint, before.buildInputFingerprint);
+    const { ok, failures } = assertDistFresh({ packageRoot: f.root, stampPath: f.stampPath });
+    assert.equal(ok, false);
+    assert.match(failures.join('\n'), /build inputs changed/);
+  } finally {
+    f.cleanup();
+  }
+});
+
+test('editing a producer script invalidates the build-input fingerprint', () => {
+  const f = scaffold();
+  try {
+    writeBuildStamp({ packageRoot: f.root, dist: join(f.root, 'dist') });
+    f.write('scripts/write-build-stamp.mjs', '// changed stamp producer\n');
+    const { ok, failures } = assertDistFresh({ packageRoot: f.root, stampPath: f.stampPath });
+    assert.equal(ok, false);
+    assert.match(failures.join('\n'), /build inputs changed/);
+  } finally {
+    f.cleanup();
+  }
+});
+
+test('a legacy stamp without the build-input attestation fails closed', () => {
+  const f = scaffold();
+  try {
+    writeBuildStamp({ packageRoot: f.root, dist: join(f.root, 'dist') });
+    const stamp = JSON.parse(readFileSync(f.stampPath, 'utf8'));
+    delete stamp.buildInputFingerprint;
+    delete stamp.buildInputManifest;
+    writeFileSync(f.stampPath, `${JSON.stringify(stamp)}\n`);
+    const { ok, failures } = assertDistFresh({ packageRoot: f.root, stampPath: f.stampPath });
+    assert.equal(ok, false);
+    assert.match(failures.join('\n'), /no buildInputFingerprint/);
+  } finally {
+    f.cleanup();
+  }
+});
+
+test('a stamp whose embedded manifest was altered fails closed', () => {
+  const f = scaffold();
+  try {
+    writeBuildStamp({ packageRoot: f.root, dist: join(f.root, 'dist') });
+    const stamp = JSON.parse(readFileSync(f.stampPath, 'utf8'));
+    stamp.buildInputManifest.package.sha256 = 'tampered';
+    writeFileSync(f.stampPath, `${JSON.stringify(stamp)}\n`);
+    const { ok, failures } = assertDistFresh({ packageRoot: f.root, stampPath: f.stampPath });
+    assert.equal(ok, false);
+    assert.match(failures.join('\n'), /manifest fingerprint is inconsistent/);
   } finally {
     f.cleanup();
   }

@@ -55,13 +55,31 @@ export function writeBuildStamp({ packageRoot, dist }) {
     };
   }
   const pkg = JSON.parse(readFileSync(resolve(packageRoot, 'package.json'), 'utf8'));
-  const { sourceHash, fileCount } = computeBuildInputHash(packageRoot);
+  const {
+    sourceHash,
+    fileCount,
+    buildInputFingerprint,
+    buildInputManifest,
+  } = computeBuildInputHash(packageRoot);
+  const lockfile = buildInputManifest.workspace.find(
+    (entry) => entry.id === 'workspace:pnpm-lock.yaml',
+  );
+  if (!lockfile || lockfile.sha256 === '<absent>') {
+    return {
+      ok: false,
+      message:
+        'write-build-stamp: refusing to stamp without a pnpm-lock.yaml build input. ' +
+        'Run the build from a complete workspace checkout.',
+    };
+  }
   const stamp = {
-    schemaVersion: 1,
+    schemaVersion: 2,
     producer: '@rottay/design-system',
     producerVersion: pkg.version,
     sourceHash,
     sourceFileCount: fileCount,
+    buildInputFingerprint,
+    buildInputManifest,
     // No wall-clock time on purpose: the stamp is content-addressed and must be
     // reproducible for a given source state.
     generatedAtOmitted: true,
@@ -84,6 +102,7 @@ if (invokedDirectly) {
   }
   console.log(
     `write-build-stamp: OK -- dist/build-stamp.json for ${result.stamp.producer}@${result.stamp.producerVersion} ` +
-    `(${result.stamp.sourceFileCount} source inputs, sourceHash ${result.stamp.sourceHash.slice(0, 12)})`,
+    `(${result.stamp.sourceFileCount} source inputs, sourceHash ${result.stamp.sourceHash.slice(0, 12)}, ` +
+    `buildInputFingerprint ${result.stamp.buildInputFingerprint.slice(0, 12)})`,
   );
 }

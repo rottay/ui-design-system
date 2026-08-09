@@ -23,8 +23,8 @@
 // was going to happen before publish anyway), never a false "fresh".
 
 import { createHash } from 'node:crypto';
-import { readFileSync, readdirSync, existsSync } from 'node:fs';
-import { resolve, relative, sep } from 'node:path';
+import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
+import { dirname, resolve, relative, sep } from 'node:path';
 
 // Non-shipping source inputs. Mirrors the production tsconfig `exclude` intent:
 // these files are not compiled into `dist/`, so a change to one cannot make
@@ -42,6 +42,11 @@ const EXCLUDED_SEGMENT = new Set(['__tests__', 'tests', 'testing']);
 
 // Build-config files (relative to the package root) that steer `dist/` output.
 const BUILD_CONFIG_FILES = ['vite.config.ts', 'tsconfig.json', 'postcss.config.mjs'];
+const BUILD_INPUT_MANIFEST_SCHEMA_VERSION = 1;
+const STAMP_PRODUCER_FILES = [
+  'scripts/lib/build-input-hash.mjs',
+  'scripts/write-build-stamp.mjs',
+];
 
 function portable(path) {
   return path.split(sep).join('/');
@@ -86,6 +91,145 @@ function sha256(buffer) {
   return createHash('sha256').update(buffer).digest('hex');
 }
 
+function isFile(path) {
+  try {
+    return statSync(path).isFile();
+  } catch {
+    return false;
+  }
+}
+
+function findWorkspaceLock(packageRoot) {
+  let cursor = resolve(packageRoot);
+  while (true) {
+    const lockfile = resolve(cursor, 'pnpm-lock.yaml');
+    if (isFile(lockfile)) return { lockfile, workspaceRoot: cursor };
+    const parent = dirname(cursor);
+    if (parent === cursor) return { lockfile: null, workspaceRoot: resolve(packageRoot) };
+    cursor = parent;
+  }
+}
+
+function fileRecord(id, path) {
+  return {
+    id,
+    sha256: isFile(path) ? sha256(readFileSync(path)) : '<absent>',
+  };
+}
+
+function resolveLocalImport(fromFile, specifier) {
+  if (!specifier.startsWith('.')) return null;
+  const base = resolve(dirname(fromFile), specifier);
+  const candidates = [
+    base,
+    `${base}.mjs`,
+    `${base}.js`,
+    `${base}.cjs`,
+    `${base}.ts`,
+    `${base}.tsx`,
+    resolve(base, 'index.mjs'),
+    resolve(base, 'index.js'),
+    resolve(base, 'index.ts'),
+    resolve(base, 'index.tsx'),
+  ];
+  return candidates.find(isFile) ?? null;
+}
+
+function readLocalImports(path) {
+  const source = readFileSync(path, 'utf8');
+  const specifiers = [];
+  const patterns = [
+    /\b(?:import|export)\s+(?:[^'"]*?\s+from\s+)?['"]([^'"]+)['"]/gu,
+    /\bimport\(\s*['"]([^'"]+)['"]\s*\)/gu,
+  ];
+  for (const pattern of patterns) {
+    let match;
+    while ((match = pattern.exec(source)) !== null) specifiers.push(match[1]);
+  }
+  return specifiers;
+}
+
+function collectProducerFiles(packageRoot, pkg) {
+  const entries = new Set(
+    STAMP_PRODUCER_FILES.map((path) => resolve(packageRoot, path)),
+  );
+  const buildCommands = Object.entries(pkg.scripts ?? {})
+    .filter(([key]) => key === 'build' || key.startsWith('build:'))
+    .map(([, command]) => String(command));
+  const scriptPattern = /(?:^|[\s'"=])((?:\.\/)?scripts\/[\w./-]+\.(?:mjs|cjs|js|ts))/gu;
+  for (const command of buildCommands) {
+    let match;
+    while ((match = scriptPattern.exec(command)) !== null) {
+      entries.add(resolve(packageRoot, match[1]));
+    }
+  }
+
+  const visited = new Set();
+  const pending = [...entries];
+  const sourceRoot = resolve(packageRoot, 'src');
+  const distRoot = resolve(packageRoot, 'dist');
+  const isInside = (path, root) => {
+    const rel = portable(relative(root, path));
+    return rel === '' || (!rel.startsWith('../') && rel !== '..');
+  };
+  while (pending.length > 0) {
+    const path = pending.pop();
+    if (!path || visited.has(path)) continue;
+    visited.add(path);
+    if (!isFile(path)) continue;
+    for (const specifier of readLocalImports(path)) {
+      const dependency = resolveLocalImport(path, specifier);
+      if (
+        dependency
+        && !isInside(dependency, sourceRoot)
+        && !isInside(dependency, distRoot)
+        && !visited.has(dependency)
+      ) {
+        pending.push(dependency);
+      }
+    }
+  }
+  return [...visited].sort((a, b) => a.localeCompare(b));
+}
+
+function producerRecordId(packageRoot, workspaceRoot, path) {
+  const packageRelative = portable(relative(packageRoot, path));
+  if (!packageRelative.startsWith('../')) return `producer:${packageRelative}`;
+  return `workspace-producer:${portable(relative(workspaceRoot, path))}`;
+}
+
+function buildInputManifest(packageRoot, sourceHash, sourceFileCount, pkg) {
+  const { lockfile, workspaceRoot } = findWorkspaceLock(packageRoot);
+  const workspacePackage = resolve(workspaceRoot, 'package.json');
+  const packageManifest = resolve(packageRoot, 'package.json');
+  const configFiles = BUILD_CONFIG_FILES.map((name) =>
+    fileRecord(`config:${name}`, resolve(packageRoot, name)),
+  );
+  const producerFiles = collectProducerFiles(packageRoot, pkg).map((path) =>
+    fileRecord(producerRecordId(packageRoot, workspaceRoot, path), path),
+  );
+  const workspaceFiles = [
+    fileRecord('workspace:pnpm-lock.yaml', lockfile ?? resolve(workspaceRoot, 'pnpm-lock.yaml')),
+    fileRecord('workspace:pnpm-workspace.yaml', resolve(workspaceRoot, 'pnpm-workspace.yaml')),
+  ];
+  if (resolve(workspacePackage) !== resolve(packageManifest)) {
+    workspaceFiles.push(fileRecord('workspace:package.json', workspacePackage));
+  }
+
+  return {
+    schemaVersion: BUILD_INPUT_MANIFEST_SCHEMA_VERSION,
+    source: { sha256: sourceHash, fileCount: sourceFileCount },
+    package: fileRecord('package:package.json', packageManifest),
+    workspace: workspaceFiles,
+    configs: configFiles,
+    producers: producerFiles,
+  };
+}
+
+export function fingerprintBuildInputManifest(manifest) {
+  return sha256(JSON.stringify(manifest));
+}
+
 /**
  * Compute the deterministic build-input hash for the package at `packageRoot`.
  * Returns `{ sourceHash, fileCount }`. Reads file bytes (not text) so binary
@@ -114,8 +258,18 @@ export function computeBuildInputHash(packageRoot) {
   lines.push(`pkg:version\0${pkg.version ?? ''}`);
   lines.push(`pkg:buildScripts\0${JSON.stringify(buildScripts)}`);
 
+  const sourceHash = sha256(lines.join('\n'));
+  const buildInputManifestValue = buildInputManifest(
+    packageRoot,
+    sourceHash,
+    files.length,
+    pkg,
+  );
+
   return {
-    sourceHash: sha256(lines.join('\n')),
+    sourceHash,
     fileCount: files.length,
+    buildInputFingerprint: fingerprintBuildInputManifest(buildInputManifestValue),
+    buildInputManifest: buildInputManifestValue,
   };
 }
