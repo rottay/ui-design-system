@@ -4,6 +4,7 @@ import type { WidgetBoardProps } from './contracts';
 export type {
   WidgetBoardItem,
   WidgetBoardCatalogEntry,
+  WidgetBoardHeader,
   WidgetBoardLabels,
   WidgetBoardProps,
   WidgetBoardSize,
