@@ -54,9 +54,12 @@
     var(--_ds-sidebar-aside-inline-size, 320px);
 }
 
+/* `align-items: start` above is a GRID row alignment; in this flex column it
+   becomes cross-axis (inline) and collapses every child to content width. */
 .ds-surface.ds-sidebar[data-part='root'][data-stacked='true'] {
   display: flex;
   flex-direction: column;
+  align-items: stretch;
 }
 
 .ds-surface.ds-sidebar[data-part='root'] > .ds-sidebar__panel[data-part='root'] {

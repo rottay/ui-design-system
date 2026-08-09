@@ -10,7 +10,7 @@
     "start": "next start --port 7001",
     "typecheck": "tsc --noEmit",
     "typecheck:tests": "node ../core/scripts/typecheck-tests-ratchet.mjs --label showroom --project tsconfig.tests.json --baseline tsconfig.tests.baseline.json",
-    "test:diagnostics": "node --test e2e/diagnostics/skin-rule-coverage.unit.test.mjs e2e/diagnostics/r6-probe-determinism.unit.test.mjs e2e/diagnostics/r6-probe-roster.unit.test.mjs e2e/diagnostics/r6-probe-fixture-integrity.unit.test.mjs",
+    "test:diagnostics": "node --test e2e/diagnostics/skin-rule-coverage.unit.test.mjs e2e/diagnostics/r6-probe-determinism.unit.test.mjs e2e/diagnostics/r6-probe-roster.unit.test.mjs e2e/diagnostics/r6-probe-fixture-integrity.unit.test.mjs e2e/diagnostics/compositions-roster.unit.test.mjs",
     "test:first-paint": "node --experimental-strip-types --no-warnings scripts/assert-first-paint-authority.mjs",
     "lint": "eslint . --max-warnings=0",
     "test:visual": "playwright test e2e/visual --config playwright.visual.config.ts",

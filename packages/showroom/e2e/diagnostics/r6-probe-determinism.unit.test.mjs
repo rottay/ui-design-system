@@ -7,6 +7,8 @@ import { fileURLToPath } from 'node:url';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const SHOWROOM_ROOT = path.resolve(HERE, '../..');
 const DS_REFERENCE = path.join(SHOWROOM_ROOT, 'src/app/probe/ds-reference');
+/** Every probe tree whose fixtures back a capture batch. */
+const PROBE_SECTIONS = ['r6-surfaces', 'compositions'];
 
 /** One clock or entropy read in this tree makes every shot of that family
  *  irreproducible; the rejected round proved it. */
@@ -91,17 +93,19 @@ function probeSourceFiles() {
   const files = [];
   for (const tenant of readdirSync(DS_REFERENCE, { withFileTypes: true })) {
     if (!tenant.isDirectory()) continue;
-    const r6 = path.join(DS_REFERENCE, tenant.name, 'r6-surfaces');
-    let entries;
-    try {
-      entries = readdirSync(r6, { withFileTypes: true, recursive: true });
-    } catch {
-      continue;
-    }
-    for (const entry of entries) {
-      if (!entry.isFile()) continue;
-      if (!/\.(ts|tsx)$/.test(entry.name)) continue;
-      files.push(path.join(entry.parentPath ?? r6, entry.name));
+    for (const section of PROBE_SECTIONS) {
+      const root = path.join(DS_REFERENCE, tenant.name, section);
+      let entries;
+      try {
+        entries = readdirSync(root, { withFileTypes: true, recursive: true });
+      } catch {
+        continue;
+      }
+      for (const entry of entries) {
+        if (!entry.isFile()) continue;
+        if (!/\.(ts|tsx)$/.test(entry.name)) continue;
+        files.push(path.join(entry.parentPath ?? root, entry.name));
+      }
     }
   }
   return files.sort();

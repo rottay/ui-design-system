@@ -101,7 +101,7 @@ export function SidebarSurface({ config }: SidebarSurfaceProps): React.ReactElem
               </Button>
             )}
 
-            <Box id={navigationId} className="ds-sidebar__navigation" data-part="navigation">{config.presentation.sidebar}</Box>
+            <Box as="nav" id={navigationId} className="ds-sidebar__navigation" data-part="navigation">{config.presentation.sidebar}</Box>
             <SurfaceActionBar
               actions={config.behavior.actions}
               access={config.access}

@@ -50,13 +50,21 @@ export function HeaderSurface({
   // actionsStart allows apps to inject custom UI (e.g. search or status
   // indicators) before the standard action buttons. Both slots live inside
   // a Stack so they share consistent spacing.
-  const actionsNode = (
-    <Stack spacing="sm">
-      {!(resolvedMobile && config.visual.hideSecondaryActionsOnMobile) &&
-        config.presentation.actionsStart}
-      <SurfaceActionBar actions={renderedActions} />
-    </Stack>
-  );
+  const actionsStart = config.presentation.actionsStart;
+  // React paints nothing for null/undefined/booleans, but 0 and '' are real nodes.
+  const actionsStartRenderable =
+    actionsStart !== undefined && actionsStart !== null && typeof actionsStart !== 'boolean';
+  const showActionsStart =
+    !(resolvedMobile && config.visual.hideSecondaryActionsOnMobile) && actionsStartRenderable;
+  // `undefined` (not an always-present empty Stack) keeps data-has-actions
+  // honest on the pattern header when there is nothing to show.
+  const actionsNode =
+    showActionsStart || renderedActions.length > 0 ? (
+      <Stack spacing="sm">
+        {showActionsStart && config.presentation.actionsStart}
+        <SurfaceActionBar actions={renderedActions} />
+      </Stack>
+    ) : undefined;
 
   return (
     <PageShellSurface
