@@ -71031,15 +71031,15 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
   border-top: var(--ds-list-border-width) solid var(--ds-list-border-color, var(--ds-color-border));
 }
 
-/* Empty region: the composed Empty primitive owns its own frame/padding; the
-   slot only insets it and resolves the NESTED RADIUS relationship — inside a
-   bordered list the inner empty frame derives from the list's own radius
-   channel instead of reading as an unrelated larger rounded rectangle. The
-   declared --ds-list-empty-padding (32px, pre-composition era) is deliberately
-   NOT consumed: stacked on Empty's own padding it doubled the dead air. */
+/* Empty region: the slot insets the composed Empty primitive and lowers its
+   floor, and it publishes NO radius. Empty's skin paints no ground of its own
+   — no fill, no border, no clip — so there is no inner frame whose corners
+   could be related to the list's, and a radius handed down here would resolve
+   against nothing. Nesting is expressed by the inset alone. The declared
+   --ds-list-empty-padding (32px, pre-composition era) is deliberately NOT
+   consumed: stacked on Empty's own padding it doubled the dead air. */
 .rottay-list.rottay-list--modern[data-part='root'] > [data-part='empty'] {
   padding: var(--ds-spacing-3);
-  --ds-empty-radius: var(--ds-list-border-radius, var(--ds-radius-lg));
   --ds-empty-min-height: var(--ds-empty-simple-min-height, 8rem);
 }
 

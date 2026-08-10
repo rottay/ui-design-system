@@ -115,6 +115,14 @@ const TOOLTIP_CHROME_VARIABLES = chromeVariableMap<BrandTooltipChrome>(
   ] as const
 );
 
+/**
+ * The popover table has no per-recipe `*Highlight`, unlike the tooltip table
+ * directly above it. The popover skin carries a single top-light — the
+ * intensity-governed zenith keyline it declares as a literal — and the family
+ * sheen a highlight channel used to feed was struck by OVL-PV-01. Emitting the
+ * four names anyway published a dial with no reader: `*Texture` is the
+ * per-recipe decoration axis a popover tenant actually owns.
+ */
 const POPOVER_CHROME_VARIABLES = chromeVariableMap<BrandPopoverChrome>(
   "--ds-popover-",
   [
@@ -125,7 +133,6 @@ const POPOVER_CHROME_VARIABLES = chromeVariableMap<BrandPopoverChrome>(
     "borderedBorderWidth",
     "borderedShadow",
     "borderedTexture",
-    "borderedHighlight",
     "borderedRadius",
     "borderedMaxWidth",
     "borderedPaddingBlock",
@@ -138,7 +145,6 @@ const POPOVER_CHROME_VARIABLES = chromeVariableMap<BrandPopoverChrome>(
     "minimalBorderWidth",
     "minimalShadow",
     "minimalTexture",
-    "minimalHighlight",
     "minimalRadius",
     "minimalMaxWidth",
     "minimalPaddingBlock",
@@ -149,7 +155,6 @@ const POPOVER_CHROME_VARIABLES = chromeVariableMap<BrandPopoverChrome>(
     "inverseBorder",
     "inverseShadow",
     "inverseTexture",
-    "inverseHighlight",
     "inverseRadius",
     "richBackground",
     "richForeground",
@@ -157,7 +162,6 @@ const POPOVER_CHROME_VARIABLES = chromeVariableMap<BrandPopoverChrome>(
     "richBorder",
     "richShadow",
     "richTexture",
-    "richHighlight",
     "richRadius",
     "richMaxWidth",
     "richPaddingBlock",

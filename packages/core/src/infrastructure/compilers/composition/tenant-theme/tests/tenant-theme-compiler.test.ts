@@ -227,6 +227,24 @@ describe("TenantThemeConfig v1 server contract", () => {
   });
 
   it("publishes immutable schema/document drift sentinels", () => {
+    // OVL-PV-01-RETIRE re-anchor: both digests moved exactly once because the
+    // popover document schema STOPPED publishing four fields —
+    // `borderedHighlight`, `minimalHighlight`, `inverseHighlight` and
+    // `richHighlight`. This is a NARROWING, the rare direction for these
+    // sentinels, and it is the point of the change rather than a side effect:
+    // the popover skin's readers for those channels were deleted by OVL-PV-01
+    // (the family sheen was a SECOND top-light beside the surface's own
+    // intensity-governed zenith keyline), leaving the compiler emitting four
+    // `--ds-popover-*-highlight` variables that nothing read. A channel a
+    // tenant can set and no surface consumes is a promise the product does not
+    // keep, so the emission, the DB schema field and the typed contract field
+    // were withdrawn together. The per-recipe decoration axis popover DOES
+    // expose is `*Texture`, consumed by all four recipes; the tooltip contract
+    // keeps its own `*Highlight` because the tooltip skin still reads it.
+    // The move is confined to these two sentinels: no fixture or first-party
+    // document authors popover chrome, so every PINNED artifact digest is
+    // unchanged (verified by probe before re-anchoring).
+    //
     // E2 re-anchor: both digests moved exactly once because `advanced` gained
     // the RESPONSIVE POSTURE axis (closed enum over the published ladder
     // registry — the container-width thresholds the adaptive runtime resolves
@@ -262,10 +280,10 @@ describe("TenantThemeConfig v1 server contract", () => {
     // copied merely to turn the suite green. The new id is permanent per the
     // registry's supersede-never-reuse law.
     expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
-      "sha256-914da80b38a4fd234b098cc44fcea1bda56795ba8c3689b853006116ce409a01"
+      "sha256-b87848042c7f2bb089c239710cafd9c3e0f9fec6e4d21eb3f0e16690679a85bf"
     );
     expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
-      "sha256-d7747980de3ba651e12af91763bb43284c41051d8c8333293a9b72f82cc4f835"
+      "sha256-55850bdc392f5f1fb12192613839fc45f49088cbdc290438e1ba83c386e1596e"
     );
     expect(Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA)).toBe(true);
     expect(Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA.documents.simple)).toBe(

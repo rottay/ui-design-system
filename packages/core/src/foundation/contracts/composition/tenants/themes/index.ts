@@ -1481,6 +1481,16 @@ export interface BrandTooltipChrome {
 /**
  * Popover visual contract. It deliberately excludes positioning, focus and
  * dismissal behavior: those remain engine-owned and consistent per tenant.
+ *
+ * It also excludes a per-recipe `*Highlight`, which the tooltip contract does
+ * expose. A popover surface carries exactly one top-light — the
+ * intensity-governed zenith keyline the skin declares as a literal — and
+ * OVL-PV-01 struck the family sheen that a highlight channel used to feed,
+ * because a second gradient on the same surface is the stacked-decoration
+ * smell both tenant directions forbid. The per-recipe decoration axis a tenant
+ * does own here is `*Texture`, which drives the motif slot on all four
+ * recipes; a highlight would be a redundant second one. Retuning the top-light
+ * is a change to the keyline, not a new channel.
  */
 export interface BrandPopoverChrome {
   borderedBackground?: string;
@@ -1490,7 +1500,6 @@ export interface BrandPopoverChrome {
   borderedBorderWidth?: string;
   borderedShadow?: string;
   borderedTexture?: string;
-  borderedHighlight?: string;
   borderedRadius?: string;
   borderedMaxWidth?: string;
   borderedPaddingBlock?: string;
@@ -1503,7 +1512,6 @@ export interface BrandPopoverChrome {
   minimalBorderWidth?: string;
   minimalShadow?: string;
   minimalTexture?: string;
-  minimalHighlight?: string;
   minimalRadius?: string;
   minimalMaxWidth?: string;
   minimalPaddingBlock?: string;
@@ -1514,7 +1522,6 @@ export interface BrandPopoverChrome {
   inverseBorder?: string;
   inverseShadow?: string;
   inverseTexture?: string;
-  inverseHighlight?: string;
   inverseRadius?: string;
   richBackground?: string;
   richForeground?: string;
@@ -1522,7 +1529,6 @@ export interface BrandPopoverChrome {
   richBorder?: string;
   richShadow?: string;
   richTexture?: string;
-  richHighlight?: string;
   richRadius?: string;
   richMaxWidth?: string;
   richPaddingBlock?: string;
