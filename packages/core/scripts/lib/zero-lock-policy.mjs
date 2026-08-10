@@ -166,6 +166,15 @@ export function evaluateBaselineTightening({ baseline, candidate, exact = {}, mi
   const minimumValues = entryMap(inspected.minimum);
 
   for (const [key, count] of candidateValues) {
+    /*
+     * A key under a MINIMUM floor is ratcheted the other way round: more consumers of the effect
+     * canon, or more files reaching the scanner, is the outcome the floor exists to protect. Held
+     * to the decrease-only rule as well, such a key can never be re-recorded once it legitimately
+     * rises -- which froze this baseline entirely, so its three aggregate totals drifted away from
+     * their own per-file sums with no sanctioned way back. The floor below still binds: the key
+     * may rise freely and may never fall under its required value.
+     */
+    if (minimumValues.has(key)) continue;
     const previous = baselineValues.get(key);
     if (count > previous) errors.push(`baseline update would absorb an increase: ${key} ${previous} -> ${count}`);
   }

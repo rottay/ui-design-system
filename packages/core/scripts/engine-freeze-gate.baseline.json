@@ -110,8 +110,8 @@
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/ui/patterns/data/list-toolbar/engines/classic/index.tsx": {
-      "blob": "9fc96fd62d3bb7442dd4fc1b2dc71c46e0ce6c2e42492e9e301fe4fc45ef9353",
-      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
+      "blob": "d780d64d5b13b76fd9857079e37254e4db51bc0b62f24e46705b78f24cc676ad",
+      "reason": "Re-authorized after the governed direct-entrypoint migration (fa0efd3b6) rewrote its barrel import into per-family deep imports. Mechanical import-path change plus a header comment; no classic behaviour, markup or paint was altered.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/ui/patterns/data/record-facts/engines/classic/index.tsx": {
@@ -142,6 +142,16 @@
     "packages/core/src/ui/patterns/data/widget-board/engines/rustic/index.tsx": {
       "blob": "dd352ed8becfffe1c993cfef044d4610e9c6be450f13dec5afb39f7e622e2771",
       "reason": "Relocalización estructural necesaria para cerrar flat-authored-module y missing-folder-index. En cada archivo congelado cambia únicamente una línea de import, de `../shared` a `../foundation`; cero líneas funcionales, cero cambio de render, comportamiento o API.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/ui/patterns/forms/invoice-template/engines/classic/index.tsx": {
+      "blob": "724fb01f3b940e75b88c53a2a7b710dca81cf572ddd1217c3c53b30b711ca04b",
+      "reason": "Shared data contract: invoice.taxRate is a fraction, so the label needed *100 to read as a percent. Correcting it only in modern would leave classic rendering a hundred-fold wrong number from the same prop.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/ui/patterns/forms/invoice-template/engines/rustic/index.tsx": {
+      "blob": "05156c3cd5d65bc222fa7fd329be850cacfe8e77a342f419c3486b34dadda119",
+      "reason": "Shared data contract: invoice.taxRate is a fraction, so the label needed *100 to read as a percent. Correcting it only in modern would leave rustic rendering a hundred-fold wrong number from the same prop.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/ui/patterns/shell/feature-workspace-frame/engines/classic/index.tsx": {
@@ -207,6 +217,16 @@
     "packages/core/src/ui/primitives/feedback/Progress/engines/rustic/index.tsx": {
       "blob": "62997f563ec81bcb6fd1ba147f4f43646282a6092e2e28b49f4dcf7f82ba8583",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/ui/primitives/inputs/Mentions/engines/classic/index.tsx": {
+      "blob": "58f81e2da73a10c16b0b591782d5babe1033f9929ad59a351d5a218839827121",
+      "reason": "Shared props contract: id and aria-labelledby were added to MentionsProps. An engine that accepts the prop and drops it loses the accessible name, so the passthrough belongs in every engine, not only modern.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/ui/primitives/inputs/Mentions/engines/rustic/index.tsx": {
+      "blob": "6990ba07dd99694896f657635e8ea9b2ccc57340a8b79c7e70a37c84e7b6dd4b",
+      "reason": "Shared props contract: id and aria-labelledby were added to MentionsProps. An engine that accepts the prop and drops it loses the accessible name, so the passthrough belongs in every engine, not only modern.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/ui/primitives/inputs/TreeSelect/engines/rustic/index.tsx": {

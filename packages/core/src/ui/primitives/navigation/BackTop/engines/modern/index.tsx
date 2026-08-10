@@ -176,7 +176,10 @@ export const BackTop = React.forwardRef<HTMLButtonElement, BackTopProps>(
 
     /** Bound scroll source. A memoized `target` reading a ref that is still
      *  empty on the first commit must not pin the listener to `window`. */
-    const [scrollSource, setScrollSource] = useState<HTMLElement | null | undefined>(undefined);
+    /* `target` is declared as `() => HTMLElement | Window`, and the scroll helpers above already
+       branch on `source === window`, so Window is a value this state is meant to hold.
+       `undefined` still means "not resolved yet" and `null` means "resolved to no target". */
+    const [scrollSource, setScrollSource] = useState<HTMLElement | Window | null | undefined>(undefined);
 
     /**
      * Handles scroll events to update button visibility.

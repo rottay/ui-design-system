@@ -22,7 +22,6 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
 const CORE = join(__dirname, "../../..");
-const CSS_ROOT = join(__dirname, "../css");
 
 function walk(dir: string, exts: string[], acc: string[] = []): string[] {
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
@@ -39,15 +38,24 @@ function walk(dir: string, exts: string[], acc: string[] = []): string[] {
 const blankComments = (src: string): string =>
   src.replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, " "));
 
-const CSS_FILES = walk(CSS_ROOT, [".css"]);
+/* Walked from the package source root, not from the token tree: the commercial kit keeps its CSS
+ * co-located beside each component under `src/ui/patterns/commercial/**`, outside
+ * `foundation/tokens/css` entirely. Rooting this at the token tree made eleven families invisible
+ * to a drill whose own comment claimed to cover them. */
+const CSS_FILES = walk(CORE, [".css"]);
 const TS_FILES = walk(CORE, [".ts", ".tsx"]);
 
-/* Classic and Rustic are read-only for this programme. The scope is Modern skin PLUS the shared
- * presentation skin, which is engine-agnostic and where structures, charts and the commercial kit
- * keep their CSS -- scanning only the engine tree would miss 146 files that Modern also renders. */
+/* Classic and Rustic are read-only for this programme. The scope is Modern skin, the shared
+ * engine-agnostic presentation skin where structures and charts live, and the commercial kit's
+ * co-located files. */
 const IN_SCOPE = CSS_FILES.filter(
-  (f) => f.includes("/engines/modern/") || f.includes("/presentation/components/"),
+  (f) =>
+    f.includes("/engines/modern/") ||
+    f.includes("/presentation/components/") ||
+    f.includes("/ui/patterns/commercial/"),
 );
+
+const display = (file: string): string => file.slice(CORE.length + 1);
 
 /** A property is declared by CSS *or* by a component stamping it at runtime. */
 function declaredNames(): Set<string> {
@@ -233,7 +241,7 @@ describe("Modern state channels resolve to something other than rest", () => {
         // deliberately -- holding the border steady there is a decision, not a dead
         // chain. Only a rule with nothing left alive is a defect.
         if (dead.length > 0 && !live) {
-          offenders.push(`${file.slice(CSS_ROOT.length + 1)} -> ${rule.selector} { ${dead.join("; ")} }`);
+          offenders.push(`${display(file)} -> ${rule.selector} { ${dead.join("; ")} }`);
         }
       }
     }

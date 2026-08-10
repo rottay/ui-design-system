@@ -122,6 +122,35 @@ test('zero-lock policy rejects slack, laundering, deletion and exact/floor drift
     }).ok,
     true,
   );
+
+  // A MINIMUM-governed key ratchets upward, so an update must be able to record its rise.
+  // Refusing it froze the real baseline: `effects.glassConsumers` and the `*.filesScanned`
+  // coverage floors all grew, no update could ever be written again, and the file's aggregate
+  // totals drifted away from their own per-file sums with no sanctioned way back.
+  const minimumRise = evaluateBaselineTightening({
+    baseline: { consumers: 3, debt: 4 },
+    candidate: { consumers: 7, debt: 3 },
+    minimum: { consumers: 1 },
+  });
+  assert.equal(minimumRise.ok, true, minimumRise.errors.join('\n'));
+
+  // The exemption is scoped to the floor. An ungoverned key rising in the same update is still
+  // absorption, and a governed key may still never fall below its floor.
+  const mixedRise = evaluateBaselineTightening({
+    baseline: { consumers: 3, debt: 4 },
+    candidate: { consumers: 7, debt: 5 },
+    minimum: { consumers: 1 },
+  });
+  assert.equal(mixedRise.ok, false);
+  assert.match(mixedRise.errors.join('\n'), /absorb an increase: debt 4 -> 5/);
+
+  const governedFall = evaluateBaselineTightening({
+    baseline: { consumers: 3 },
+    candidate: { consumers: 0 },
+    minimum: { consumers: 1 },
+  });
+  assert.equal(governedFall.ok, false);
+  assert.match(governedFall.errors.join('\n'), /below minimum floor/);
 });
 
 test('zero-lock policy is total and fail-closed over missing governance and exotic maps', () => {

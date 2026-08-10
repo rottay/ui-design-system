@@ -215,7 +215,10 @@ export const ModernAffix = forwardRef<HTMLDivElement, AffixProps>(
 
     // Bound scroll source. A memoized `target` reading a container that is
     // still unmounted on the first commit must not pin the listener to `window`.
-    const [scrollSource, setScrollSource] = useState<HTMLElement | null | undefined>(undefined);
+    /* `target` is declared as `() => HTMLElement | Window`, and the measurement below already
+       branches on `targetContainer === window`, so Window is a value this state is meant to hold.
+       `undefined` still means "not resolved yet" and `null` means "resolved to no target". */
+    const [scrollSource, setScrollSource] = useState<HTMLElement | Window | null | undefined>(undefined);
 
     // The caller's zIndex is runtime input, but the property owner remains
     // the skin. Passing the value through a family-scoped custom property
