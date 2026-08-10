@@ -124,6 +124,40 @@ unreachable names and is classified debt-until-retired; a DB tenant writing it i
 fail-closed. The sanctioned channel is `--ds-type-*`, which derives from the Standard type-scale
 control. Check that a channel is SANCTIONED before treating its zero as work.
 
+## What a token cannot carry — the second axis, measured
+
+A token carries a VALUE. Some of what separates one product from another is not a value, so the
+question is what the non-value axis actually reaches. Audited 2026-08-10:
+
+**Values: yes. Structure: yes, but enumerated and small. Composition: no.**
+
+- **Anatomy is real and gated.** Four families, ten non-default variants, every one selected by CSS
+  in both modern and rustic, zero stamped-but-unselected attributes. `anatomy-variant-gate`
+  enforces both directions and fails closed, so the class cannot silently rot. Card frame
+  (framed/underline/ghost) and table rules (ruled/zebra/open) are genuine structural change.
+- **One variant is oversold.** Sidebar `rail` sets `inline-size`, but `Layout.Sider` writes `width`
+  as an always-present INLINE style, which beats any stylesheet rule — so the rail does not narrow
+  the sidebar. Nothing anywhere hides labels; the contract's "narrow icon-first rail with flyout
+  labels" is prose, not mechanism. Item padding, gap and alignment do land.
+- **The six "recipe groups" are per-family defaults wearing the word group.** Each changes exactly
+  one family, which fails the test that a group must span more than one. A tenant selects one of
+  THREE published profile ids; it cannot author per-family recipe values. Three of the six are
+  modern-only.
+- **Emphasis does not exist.** `quiet | balanced | assertive | hero` appears only in
+  `customization-model.json` as a target. There is zero code. The `data-emphasis` that does exist
+  is an unrelated app-prop vocabulary on SemanticSurface. Do not plan around it as if it ships.
+- **`responsive.posture` is data-only** — a closed three-id enum emitting no CSS channel, with one
+  consumer in the widget-board solver. It does not restructure pages.
+
+**The six-non-colour-axis bar is already met.** Type, geometry, edge/divider, material/depth,
+density/rhythm and icon posture are all reachable and all survive greyscale. Icon posture is the
+cleanest example of the second axis: four postures select per-role glyph WEIGHT through a policy
+table, live in RSC, client and SSR, with state weights staying supreme.
+
+So two recognisably different products are achievable once the plumbing lands. Two differently
+STRUCTURED products are not, and true composition — adding, removing or reordering parts — belongs
+to the app's surface config rather than the tenant document.
+
 ## The four rules, each earned by a lane
 
 1. **A dead channel may take an ungoverned property; it may not displace an authored one.** And a
