@@ -87,6 +87,9 @@ interface WidgetResizeSession {
   previewHeight?: number;
 }
 
+/* `noop` is the pointer resting over its own current slot, which is a legal release position. */
+type DragTargetPosture = "accepted" | "refused" | "outside" | "noop";
+
 interface WidgetDragSession {
   id: string;
   pointerId: number;
@@ -117,6 +120,20 @@ function nearestSize(span: number): WidgetBoardSize {
         : nearest,
     SIZE_RAMP[0]
   );
+}
+
+/* Order compared as a SEQUENCE, never a joined string: ids are arbitrary and a delimiter can
+   appear inside one, so ["a|b","c"] and ["a","b|c"] would collide under any join. */
+function orderSnapshot(items: WidgetBoardItem[]): readonly string[] {
+  return items
+    .filter((item) => item.visible)
+    .slice()
+    .sort((left, right) => left.order - right.order)
+    .map((item) => item.id);
+}
+
+function sameOrder(a: readonly string[], b: readonly string[]): boolean {
+  return a.length === b.length && a.every((id, index) => id === b[index]);
 }
 
 function normalize(items: WidgetBoardItem[]): WidgetBoardItem[] {
@@ -163,7 +180,15 @@ export function WidgetBoardEngine({
   const resizeSessionRef = useRef<WidgetResizeSession | null>(null);
   const dragSessionRef = useRef<WidgetDragSession | null>(null);
   const layoutRef = useRef(items);
+  const itemsRef = useRef(items);
   const dragOriginLayoutRef = useRef<WidgetBoardItem[] | null>(null);
+  /* Identity of the items prop the gesture started against, plus the visible order it started
+     from: a gesture is only allowed to emit when neither has been invalidated underneath it. */
+  const sessionItemsRef = useRef<WidgetBoardItem[] | null>(null);
+  const dragOriginOrderRef = useRef<readonly string[] | null>(null);
+  /* Posture of the CURRENT pointer target, recomputed on every activated move; a release is
+     only legal from `accepted` or `noop`, never from stale history. */
+  const targetPostureRef = useRef<DragTargetPosture>("noop");
   const previousCellRectsRef = useRef(new Map<string, DOMRect>());
   const layoutAnimationsRef = useRef(new Map<string, Animation>());
   const gridRef = useRef<HTMLDivElement>(null);
@@ -171,12 +196,18 @@ export function WidgetBoardEngine({
 
   /* External ownership wins: incoming items cancel any live gesture so no listener can later
      emit props back to the consumer. */
-  useEffect(() => {
+  /* It wins in the LAYOUT phase: a passive effect leaves a window where a pointerup could still
+     emit a preview built from the previous items. */
+  useLayoutEffect(() => {
+    itemsRef.current = items;
     layoutRef.current = items;
     setLayout(items);
     if (dragSessionRef.current) {
       dragSessionRef.current = null;
       dragOriginLayoutRef.current = null;
+      dragOriginOrderRef.current = null;
+      sessionItemsRef.current = null;
+      targetPostureRef.current = "noop";
       setDraggingId(null);
       setDragPointerId(null);
       setOverIndex(null);
@@ -222,11 +253,6 @@ export function WidgetBoardEngine({
         .includes(normalizedCatalogQuery)
     );
   }, [hidden, normalizedCatalogQuery]);
-
-  const visibleIds = useMemo(
-    () => visible.map((item) => item.id).join("|"),
-    [visible]
-  );
 
   const setCellRef = useCallback(
     (id: string, node: HTMLElement | null): void => {
@@ -406,12 +432,14 @@ export function WidgetBoardEngine({
     commit(next);
   };
 
-  const previewReorder = (from: number, to: number): void => {
+  /* Returns acceptance explicitly rather than leaving the caller to infer it from identity. */
+  const previewReorder = (from: number, to: number): boolean => {
     const next = reorderedLayout(layoutRef.current, from, to);
-    if (next === layoutRef.current) return;
+    if (next === layoutRef.current) return false;
     layoutRef.current = next;
     setLayout(next);
     setOverIndex(to);
+    return true;
   };
 
   const visibleLayout = (): WidgetBoardItem[] =>
@@ -485,11 +513,24 @@ export function WidgetBoardEngine({
       setDraggingId(current.id);
     }
 
+    /* Every activated move re-resolves the posture of the target under the pointer RIGHT NOW,
+       so no earlier refusal or acceptance can survive to govern the release. */
     const currentVisible = visibleLayout();
     const from = currentVisible.findIndex((item) => item.id === current.id);
     const to = targetIndexAtPoint(clientX, clientY);
-    if (from < 0 || to === null || from === to) return;
-    previewReorder(from, to);
+    if (from < 0) {
+      targetPostureRef.current = "outside";
+      return;
+    }
+    if (to === null) {
+      targetPostureRef.current = "outside";
+      return;
+    }
+    if (from === to) {
+      targetPostureRef.current = "noop";
+      return;
+    }
+    targetPostureRef.current = previewReorder(from, to) ? "accepted" : "refused";
   };
 
   const finishMoveForPointer = (
@@ -500,13 +541,22 @@ export function WidgetBoardEngine({
     if (!current || current.pointerId !== pointerId) return;
 
     /* Commit only a real change made by a still-movable item; a barrier no-op emits nothing. */
+    /* Real means BY VALUE: the prop must still belong to this gesture, the release must not be
+       over a refused target, and the visible order must differ from where the drag started. */
     const live = layoutRef.current.find((item) => item.id === current.id);
+    const ownershipIntact = sessionItemsRef.current === itemsRef.current;
+    const orderChanged =
+      dragOriginOrderRef.current !== null &&
+      !sameOrder(orderSnapshot(layoutRef.current), dragOriginOrderRef.current);
     if (
       commitMove &&
       current.activated &&
+      ownershipIntact &&
+      (targetPostureRef.current === "accepted" ||
+        targetPostureRef.current === "noop") &&
       live !== undefined &&
       isWidgetMovable(live) &&
-      layoutRef.current !== dragOriginLayoutRef.current
+      orderChanged
     )
       onItemsChange?.(layoutRef.current);
     else if (dragOriginLayoutRef.current) {
@@ -516,6 +566,9 @@ export function WidgetBoardEngine({
 
     dragSessionRef.current = null;
     dragOriginLayoutRef.current = null;
+    dragOriginOrderRef.current = null;
+    sessionItemsRef.current = null;
+    targetPostureRef.current = "noop";
     setDragPointerId(null);
     setDraggingId(null);
     setOverIndex(null);
@@ -557,6 +610,9 @@ export function WidgetBoardEngine({
     event.preventDefault();
     event.currentTarget.setPointerCapture?.(event.pointerId);
     dragOriginLayoutRef.current = layoutRef.current;
+    dragOriginOrderRef.current = orderSnapshot(layoutRef.current);
+    sessionItemsRef.current = itemsRef.current;
+    targetPostureRef.current = "noop";
     const session: WidgetDragSession = {
       id: item.id,
       pointerId: event.pointerId,

@@ -94,19 +94,28 @@ function rect(left: number, width: number): DOMRect {
   } as DOMRect;
 }
 
+/* Slots are fixed and items move between them, so each cell reports the rect of whatever slot it
+   currently occupies. Pinning a rect per element would freeze it to its pre-reorder position. */
 function measure(container: HTMLElement, widths: number[]): void {
   const grid = container.querySelector<HTMLElement>('[data-part="grid"]');
-  const cells = Array.from(
-    container.querySelectorAll<HTMLElement>('[data-part="cell"]')
-  );
   if (grid) grid.getBoundingClientRect = () => rect(0, 1000);
+  const lefts: number[] = [];
   let left = 0;
-  cells.forEach((cell, index) => {
-    const width = widths[index] ?? 300;
-    const at = left;
-    cell.getBoundingClientRect = () => rect(at, width);
+  for (const width of widths) {
+    lefts.push(left);
     left += width + 20;
-  });
+  }
+  for (const cell of Array.from(
+    container.querySelectorAll<HTMLElement>('[data-part="cell"]')
+  )) {
+    cell.getBoundingClientRect = () => {
+      const order = Array.from(
+        container.querySelectorAll<HTMLElement>('[data-part="cell"]')
+      );
+      const index = order.indexOf(cell);
+      return rect(lefts[index] ?? 0, widths[index] ?? 300);
+    };
+  }
 }
 
 describe("WidgetBoard constraints -- defaults parity", () => {
@@ -354,6 +363,138 @@ describe("WidgetBoard constraints -- external ownership cancels a live gesture",
     expect(
       container.querySelector<HTMLElement>('[data-widget-id="a"]')?.dataset.size
     ).toBe("md");
+  });
+});
+
+describe("WidgetBoard constraints -- no emission without a real value change", () => {
+  it("emits nothing when a drag returns to its starting slot (A to B to A)", async () => {
+    const onItemsChange = vi.fn();
+    const { container } = board([item("a", 0), item("b", 1)], onItemsChange);
+    const move = await findMove(container, "a");
+    measure(container, [490, 490]);
+
+    fireEvent.pointerDown(move, { pointerId: 61, clientX: 30, clientY: 20 });
+    fireEvent.pointerMove(window, { pointerId: 61, clientX: 760, clientY: 100 });
+    await waitFor(() => expect(domOrder(container)).toEqual(["b", "a"]));
+    fireEvent.pointerMove(window, { pointerId: 61, clientX: 30, clientY: 100 });
+    await waitFor(() => expect(domOrder(container)).toEqual(["a", "b"]));
+    fireEvent.pointerUp(window, { pointerId: 61 });
+
+    // The layout array is a NEW object by then, but its visible order is identical.
+    expect(onItemsChange).not.toHaveBeenCalled();
+    expect(domOrder(container)).toEqual(["a", "b"]);
+  });
+
+  it("reverts instead of committing the last allowed preview when released over a refused target", async () => {
+    const onItemsChange = vi.fn();
+    const { container } = board(
+      [item("a", 0), item("b", 1), item("barrier", 2, { movable: false })],
+      onItemsChange
+    );
+    const move = await findMove(container, "a");
+    measure(container, [320, 320, 320]);
+
+    fireEvent.pointerDown(move, { pointerId: 62, clientX: 30, clientY: 20 });
+    fireEvent.pointerMove(window, { pointerId: 62, clientX: 500, clientY: 100 });
+    await waitFor(() => expect(domOrder(container)).toEqual(["b", "a", "barrier"]));
+    fireEvent.pointerMove(window, { pointerId: 62, clientX: 820, clientY: 100 });
+    fireEvent.pointerUp(window, { pointerId: 62 });
+
+    await waitFor(() =>
+      expect(domOrder(container)).toEqual(["a", "b", "barrier"])
+    );
+    expect(onItemsChange).not.toHaveBeenCalled();
+  });
+});
+
+describe("WidgetBoard constraints -- target posture governs the release", () => {
+  it("compares order as a sequence, so delimiter-bearing ids cannot collide into a false no-op", async () => {
+    const onItemsChange = vi.fn();
+    // A REAL collision: ["a","a|a"] and ["a|a","a"] both join to "a|a|a", so a joined signature
+    // would read this genuine reorder as unchanged. Sequence equality sees index 0 differ.
+    const { container } = board([item("a", 0), item("a|a", 1)], onItemsChange);
+    const move = await findMove(container, "a");
+    measure(container, [490, 490]);
+
+    fireEvent.pointerDown(move, { pointerId: 71, clientX: 30, clientY: 20 });
+    fireEvent.pointerMove(window, { pointerId: 71, clientX: 760, clientY: 100 });
+    await waitFor(() => expect(domOrder(container)).toEqual(["a|a", "a"]));
+    fireEvent.pointerUp(window, { pointerId: 71 });
+
+    expect(onItemsChange).toHaveBeenCalledTimes(1);
+    expect(visibleOrder(onItemsChange.mock.calls[0]![0])).toEqual(["a|a", "a"]);
+  });
+
+  it("reverts and emits nothing when the pointer leaves the board before release", async () => {
+    const onItemsChange = vi.fn();
+    const { container } = board([item("a", 0), item("b", 1)], onItemsChange);
+    const move = await findMove(container, "a");
+    measure(container, [490, 490]);
+
+    fireEvent.pointerDown(move, { pointerId: 72, clientX: 30, clientY: 20 });
+    fireEvent.pointerMove(window, { pointerId: 72, clientX: 760, clientY: 100 });
+    await waitFor(() => expect(domOrder(container)).toEqual(["b", "a"]));
+    // Far outside every measured cell: targetIndexAtPoint returns null.
+    fireEvent.pointerMove(window, { pointerId: 72, clientX: 5000, clientY: 5000 });
+    fireEvent.pointerUp(window, { pointerId: 72 });
+
+    await waitFor(() => expect(domOrder(container)).toEqual(["a", "b"]));
+    expect(onItemsChange).not.toHaveBeenCalled();
+  });
+
+  it("commits from a noop target after a refused one, proving no earlier refusal survives", async () => {
+    const onItemsChange = vi.fn();
+    const { container } = board(
+      [item("a", 0), item("b", 1), item("barrier", 2, { movable: false })],
+      onItemsChange
+    );
+    const move = await findMove(container, "a");
+    measure(container, [320, 320, 320]);
+
+    fireEvent.pointerDown(move, { pointerId: 74, clientX: 30, clientY: 20 });
+    // Accepted: a moves to index 1.
+    fireEvent.pointerMove(window, { pointerId: 74, clientX: 500, clientY: 100 });
+    await waitFor(() => expect(domOrder(container)).toEqual(["b", "a", "barrier"]));
+    // Refused: past the barrier, so the preview must not change.
+    fireEvent.pointerMove(window, { pointerId: 74, clientX: 820, clientY: 100 });
+    expect(domOrder(container)).toEqual(["b", "a", "barrier"]);
+    // Back over a's OWN current cell: from === to, so the posture is noop, not refused.
+    fireEvent.pointerMove(window, { pointerId: 74, clientX: 500, clientY: 100 });
+    fireEvent.pointerUp(window, { pointerId: 74 });
+
+    expect(domOrder(container)).toEqual(["b", "a", "barrier"]);
+    expect(onItemsChange).toHaveBeenCalledTimes(1);
+    expect(visibleOrder(onItemsChange.mock.calls[0]![0])).toEqual([
+      "b",
+      "a",
+      "barrier",
+    ]);
+  });
+
+  it("commits when the pointer returns to an accepted target after passing over a refused one", async () => {
+    const onItemsChange = vi.fn();
+    const { container } = board(
+      [item("a", 0), item("b", 1), item("barrier", 2, { movable: false })],
+      onItemsChange
+    );
+    const move = await findMove(container, "a");
+    measure(container, [320, 320, 320]);
+
+    fireEvent.pointerDown(move, { pointerId: 73, clientX: 30, clientY: 20 });
+    // Refused first: landing past the barrier.
+    fireEvent.pointerMove(window, { pointerId: 73, clientX: 820, clientY: 100 });
+    // Then back to an accepted target, which must govern the release.
+    fireEvent.pointerMove(window, { pointerId: 73, clientX: 500, clientY: 100 });
+    await waitFor(() => expect(domOrder(container)).toEqual(["b", "a", "barrier"]));
+    fireEvent.pointerUp(window, { pointerId: 73 });
+
+    expect(onItemsChange).toHaveBeenCalledTimes(1);
+    expect(visibleOrder(onItemsChange.mock.calls[0]![0])).toEqual([
+      "b",
+      "a",
+      "barrier",
+    ]);
+    expect(domOrder(container)).toEqual(["b", "a", "barrier"]);
   });
 });
 
