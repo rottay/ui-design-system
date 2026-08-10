@@ -184,6 +184,10 @@ describe('List modern — responsive grid columns are honored', () => {
   });
 
   it('the skin owns one track rule per breakpoint on the shared scale', () => {
+    // The tracks are laid inside the list's own box, so the tiers are keyed on
+    // the `ds-list` container -- a viewport query hands a 320px sidebar list
+    // the same six columns it hands a full-bleed one.
+    expect(SKIN).toContain('container-name: ds-list;');
     for (const [tier, query] of [
       ['sm', '640px'],
       ['md', '768px'],
@@ -191,9 +195,10 @@ describe('List modern — responsive grid columns are honored', () => {
       ['xl', '1280px'],
       ['xxl', '1536px'],
     ] as const) {
+      expect(SKIN).not.toContain(`@media (min-width: ${query})`);
       expect(SKIN).toMatch(
         new RegExp(
-          `@media \\(min-width: ${query}\\)[\\s\\S]*?\\[data-grid='responsive'\\][\\s\\S]*?repeat\\(var\\(--_ds-list-grid-columns-${tier}, 1\\), minmax\\(0, 1fr\\)\\)`
+          `@container ds-list \\(min-width: ${query}\\)[\\s\\S]*?\\[data-grid='responsive'\\][\\s\\S]*?repeat\\(var\\(--_ds-list-grid-columns-${tier}, 1\\), minmax\\(0, 1fr\\)\\)`
         )
       );
     }

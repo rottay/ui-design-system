@@ -130,7 +130,15 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
     const isRight = mode === 'right' || (isAlternate && index % 2 === 1);
     const MarkerIcon = MARKER_ICON_BY_TYPE[item.type ?? 'default'];
     const badgeType = item.type && item.type !== 'default' ? item.type : null;
-    const markerColorStyle = item.color ? { color: item.color } : undefined;
+    // The per-item marker tint travels as a family-private channel, never as
+    // an inline `color`: the skin owns that property outright (base tone, the
+    // three per-type tones, and the forced-colors neutralisation) and reads
+    // this as its first choice. Same shape as the connector's line-color
+    // channel below, and it lets forced-colors mode actually reach the marker
+    // -- an inline colour outranked the CanvasText rule written for it.
+    const markerColorStyle = item.color
+      ? ({ '--_ds-timeline-marker-color': item.color } as React.CSSProperties)
+      : undefined;
     const clickable = Boolean(onItemClick);
     const activate = clickable
       ? {

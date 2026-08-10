@@ -55,9 +55,9 @@
         "why": "index.tsx:387 -- background: isHex(value) ? value : 'transparent', the live swatch of the field the admin is typing into."
       },
       "patterns/communication/presence/index.tsx": {
-        "floor": 3,
+        "floor": 2,
         "runtimeSvgFloor": 1,
-        "why": "Per-user identity colours (ringColor/cursorColor) that stay runtime-authored: the avatar ring border, avatar-initials colour, and LiveCursor name-badge background are 3 inline-counter sites; the LiveCursor SVG `fill={cursorColor}` is 1 intrinsic-SVG JSX site protected separately by runtimeSvgFloor. Together these are the 4 true-runtime sites recorded by CK-F, without letting either measurement channel substitute for the other."
+        "why": "Per-user identity colours (ringColor/cursorColor) that stay runtime-authored: the avatar ring border and the LiveCursor name-badge background are 2 inline-counter sites; the LiveCursor SVG `fill={cursorColor}` is 1 intrinsic-SVG JSX site protected separately by runtimeSvgFloor. Trimmed from 3 to 2 by measured recount (2026-08-10): commit f45880192 replaced the hand-rolled face with the Avatar primitive, which now owns the initials and their ink, so the third site -- `color: ringColor` on the deleted `data-part='avatar-initials'` Text -- no longer exists. The floor follows the code; the site was not migrated to a skin, it was absorbed by a primitive."
       },
       "patterns/visualization/charts/families/bar-chart/index.tsx": {
         "floor": 2,

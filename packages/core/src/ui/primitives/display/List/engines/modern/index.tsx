@@ -59,17 +59,33 @@ function projectGrid(grid: ListGridConfig): GridProjection {
     };
   }
 
-  const style: Record<string, string | number> = { gap };
+  // Static channel keys, never a computed `style[key] = …`: a computed write
+  // into a bag that reaches an element's `style` is an unresolvable paint site
+  // to the inline-paint census, which cannot prove the key is a `--_ds-*`
+  // channel rather than `background`. Same law the Descriptions engine follows
+  // for its own tiers.
   let carried = grid.column && grid.column >= 1 ? Math.floor(grid.column) : 1;
-  for (const tier of GRID_BREAKPOINTS) {
+  const counts = GRID_BREAKPOINTS.map((tier) => {
     const declaredCount = grid[tier];
     if (typeof declaredCount === 'number' && declaredCount >= 1) {
       carried = Math.floor(declaredCount);
     }
-    style[`--_ds-list-grid-columns-${tier}`] = carried;
-  }
+    return carried;
+  });
+  const [xs, sm, md, lg, xl, xxl] = counts;
 
-  return { mode: 'responsive', style: style as React.CSSProperties };
+  return {
+    mode: 'responsive',
+    style: {
+      gap,
+      '--_ds-list-grid-columns-xs': xs,
+      '--_ds-list-grid-columns-sm': sm,
+      '--_ds-list-grid-columns-md': md,
+      '--_ds-list-grid-columns-lg': lg,
+      '--_ds-list-grid-columns-xl': xl,
+      '--_ds-list-grid-columns-xxl': xxl,
+    } as React.CSSProperties,
+  };
 }
 
 /** Modern List Item Meta. Renders avatar + title + description with a flex row. */

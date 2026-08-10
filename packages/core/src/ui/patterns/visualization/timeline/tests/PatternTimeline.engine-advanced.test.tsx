@@ -248,11 +248,33 @@ describe('PatternTimeline modern colour, avatar and date-group semantics', () =>
     const plain = items[1] as HTMLElement;
 
     expect(overridden.style.getPropertyValue('--ds-timeline-line-color')).toBe('rgb(10, 20, 30)');
-    expect((overridden.querySelector('[data-part="marker-icon"]') as HTMLElement).style.color).toBe('rgb(10, 20, 30)');
+    // The marker tint is a channel, not an inline `color`: the engine stamps
+    // it and the skin's four tone rules read it ahead of their semantic token.
+    const overriddenMarker = overridden.querySelector('[data-part="marker-icon"]') as HTMLElement;
+    expect(overriddenMarker.style.getPropertyValue('--_ds-timeline-marker-color')).toBe(
+      'rgb(10, 20, 30)',
+    );
+    expect(overriddenMarker.style.color).toBe('');
 
     expect(plain.style.getPropertyValue('--ds-timeline-line-color')).toBe('');
-    expect((plain.querySelector('[data-part="marker-icon"]') as HTMLElement).style.color).toBe('');
-    expect(plain.querySelector('[data-part="marker-icon"]')?.getAttribute('data-type')).toBe('error');
+    const plainMarker = plain.querySelector('[data-part="marker-icon"]') as HTMLElement;
+    expect(plainMarker.style.getPropertyValue('--_ds-timeline-marker-color')).toBe('');
+    expect(plainMarker.style.color).toBe('');
+    expect(plainMarker.getAttribute('data-type')).toBe('error');
+
+    // The override only lands because every marker TONE reads the channel
+    // first -- a rule that kept a bare semantic token would ignore it. The
+    // forced-colors neutralisation (`color: CanvasText`) is deliberately not a
+    // tone rule and must keep overriding the caller's tint.
+    const toneRules = cssRules(MODERN_SKIN).filter(
+      (rule) =>
+        rule.selector.includes("data-part='marker-icon'") && /color:\s*var\(/.test(rule.body),
+    );
+    expect(toneRules).toHaveLength(4);
+    for (const rule of toneRules) {
+      expect(rule.body).toContain('var(--_ds-timeline-marker-color,');
+    }
+    expect(MODERN_SKIN).toMatch(/color:\s*CanvasText;/);
   });
 });
 

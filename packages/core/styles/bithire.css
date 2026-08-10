@@ -19982,45 +19982,6 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 }
 
 /* =============================================================================
-   INPUT - .input
-   ============================================================================= */
-
-[data-tenant] .input {
-  font-family: var(--ds-font-family-base);
-  font-size: var(--ds-input-md-font-size);
-  height: var(--ds-input-md-height);
-  padding-left: var(--ds-input-md-padding-x);
-  padding-right: var(--ds-input-md-padding-x);
-  background-color: var(--ds-input-bg);
-  border-color: var(--ds-input-border);
-  border-radius: var(--ds-input-radius);
-  color: var(--ds-input-color);
-  transition: var(--ds-input-transition);
-}
-
-[data-tenant] .input::placeholder {
-  color: var(--ds-input-color-placeholder);
-}
-
-[data-tenant] .input:hover:not(:disabled) {
-  border-color: var(--ds-input-border-hover);
-}
-
-[data-tenant] .input:focus {
-  border-color: var(--ds-input-border-focus);
-  box-shadow: var(--ds-input-shadow-focus);
-  outline: none;
-}
-
-[data-tenant] .input:disabled {
-  background-color: var(--ds-input-bg-disabled);
-  border-color: var(--ds-input-border-disabled);
-  color: var(--ds-input-color-disabled);
-  opacity: var(--ds-input-disabled-opacity);
-  cursor: not-allowed;
-}
-
-/* =============================================================================
    CHECKBOX - .checkbox
    ============================================================================= */
 
@@ -69101,39 +69062,55 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
 }
 
 /* ---- authored per-breakpoint track counts. A `ResponsiveColumn` declares up
-        to six tiers; an inline count would outrank every media query, so the
-        engine publishes the tiers as channels for the responsive posture and
-        writes no inline count at all. Mobile-first, each undeclared tier
-        already carries the nearest smaller one forward, so every query reads
-        exactly one channel. These write the SAME count variable the base rule
-        above reads, so the narrow-container blocks at the end of the file --
-        which set `grid-template-columns` outright -- still win wherever the
-        family's own box is the binding constraint. ---- */
-.rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] {
+        to six tiers; an inline count would outrank every query, so the engine
+        publishes the tiers as channels for the responsive posture and writes
+        no inline count at all. Mobile-first, each undeclared tier already
+        carries the nearest smaller one forward, so every query reads exactly
+        one channel. These write the SAME count variable the base rule above
+        reads, so the narrow-container blocks at the end of the file -- which
+        set `grid-template-columns` outright -- still win wherever the family's
+        own box is the binding constraint.
+
+        THE TIERS KEY ON THE ROOT'S OWN INLINE SIZE, not the viewport: the root
+        already declares `container-type: inline-size` at the top of this file,
+        so the same six authored tiers now describe the width the family was
+        actually GIVEN. A Descriptions in a narrow detail rail stays at one
+        column while an identical one on the same screen goes wide inside a
+        full-bleed panel -- the viewport form could not tell those two apart
+        and sized both from the window. The tiers join the two
+        narrow-container blocks below on one measurement axis instead of
+        arguing with them across two.
+
+        The write sits on the rows grid rather than the root because an
+        element can never match a query against the container IT establishes.
+        Nothing is lost: the tier channels are stamped inline on the root and
+        inherit down, and `rows` is the very element whose
+        `grid-template-columns` reads the count. ---- */
+.rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] > [data-part='body'] > [data-part='rows'] {
   --ds-descriptions-column-count: var(--_ds-descriptions-columns-xs, 1);
 }
-@media (min-width: 640px) {
-  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] {
+@container (min-width: 640px) {
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] > [data-part='body'] > [data-part='rows'] {
     --ds-descriptions-column-count: var(--_ds-descriptions-columns-sm, 1);
   }
 }
-@media (min-width: 768px) {
-  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] {
+@container (min-width: 768px) {
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] > [data-part='body'] > [data-part='rows'] {
     --ds-descriptions-column-count: var(--_ds-descriptions-columns-md, 1);
   }
 }
-@media (min-width: 1024px) {
-  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] {
+@container (min-width: 1024px) {
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] > [data-part='body'] > [data-part='rows'] {
     --ds-descriptions-column-count: var(--_ds-descriptions-columns-lg, 1);
   }
 }
-@media (min-width: 1280px) {
-  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] {
+@container (min-width: 1280px) {
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] > [data-part='body'] > [data-part='rows'] {
     --ds-descriptions-column-count: var(--_ds-descriptions-columns-xl, 1);
   }
 }
-@media (min-width: 1536px) {
-  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] {
+@container (min-width: 1536px) {
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] > [data-part='body'] > [data-part='rows'] {
     --ds-descriptions-column-count: var(--_ds-descriptions-columns-xxl, 1);
   }
 }
@@ -71010,9 +70987,18 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
 
 /* ============================ List (container) ============================ */
 
+/* The root is the named container the grid tracks below adapt to. It is the
+   only skin-owned ancestor of both `[data-part='list']` and
+   `[data-part='skeleton']`, and it is never the scroll container (the list
+   body scrolls inside it), which is the one place a size container must not
+   sit. Named rather than anonymous so a List nested inside another List's item
+   still resolves to the nearest LIST box rather than to whichever ancestor
+   happened to declare a container last. */
 .rottay-list.rottay-list--modern[data-part='root'] {
   background: var(--ds-list-background-color);
   color: var(--ds-list-text-color);
+  container-type: inline-size;
+  container-name: ds-list;
 }
 .rottay-list.rottay-list--modern[data-part='root'][data-bordered='true'] {
   border: var(--ds-list-border-width) solid var(--ds-list-border-color, var(--ds-color-border));
@@ -71145,42 +71131,49 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
 /* ---- responsive grid tracks ----
    `ListGridConfig` declares per-breakpoint column counts (xs..xxl). They can
    only be honored from here: an inline `grid-template-columns` outranks every
-   media query, so the engine drops the inline track list for these callers and
+   query, so the engine drops the inline track list for these callers and
    publishes each tier's count instead. The engine also carries the nearest
    smaller declared count forward into every undeclared tier, so each query
    reads exactly one property with no fallback chain. Widths are the shared
    scale in foundation/contracts/kernel/responsive/breakpoints (the contract's
-   `xxl` is that scale's `2xl`); `xs` is the 0px baseline and needs no query. */
+   `xxl` is that scale's `2xl`); `xs` is the 0px baseline and needs no query.
+
+   The tiers key on `ds-list` -- the root's own inline size -- not on the
+   viewport. The tracks are laid inside the list's box, so its width is the
+   only measurement that can decide how many fit: a six-column tier read from
+   the window put six tracks into a 320px sidebar list on a desktop screen and
+   one track into a full-bleed list on a tablet. The authored numbers did not
+   change; the thing they are measured against did. */
 .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'],
 .rottay-list.rottay-list--modern[data-part='root'] > [data-part='skeleton'][data-grid='responsive'] {
   display: grid;
   grid-template-columns: repeat(var(--_ds-list-grid-columns-xs, 1), minmax(0, 1fr));
 }
-@media (min-width: 640px) {
+@container ds-list (min-width: 640px) {
   .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'],
 .rottay-list.rottay-list--modern[data-part='root'] > [data-part='skeleton'][data-grid='responsive'] {
     grid-template-columns: repeat(var(--_ds-list-grid-columns-sm, 1), minmax(0, 1fr));
   }
 }
-@media (min-width: 768px) {
+@container ds-list (min-width: 768px) {
   .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'],
 .rottay-list.rottay-list--modern[data-part='root'] > [data-part='skeleton'][data-grid='responsive'] {
     grid-template-columns: repeat(var(--_ds-list-grid-columns-md, 1), minmax(0, 1fr));
   }
 }
-@media (min-width: 1024px) {
+@container ds-list (min-width: 1024px) {
   .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'],
 .rottay-list.rottay-list--modern[data-part='root'] > [data-part='skeleton'][data-grid='responsive'] {
     grid-template-columns: repeat(var(--_ds-list-grid-columns-lg, 1), minmax(0, 1fr));
   }
 }
-@media (min-width: 1280px) {
+@container ds-list (min-width: 1280px) {
   .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'],
 .rottay-list.rottay-list--modern[data-part='root'] > [data-part='skeleton'][data-grid='responsive'] {
     grid-template-columns: repeat(var(--_ds-list-grid-columns-xl, 1), minmax(0, 1fr));
   }
 }
-@media (min-width: 1536px) {
+@container ds-list (min-width: 1536px) {
   .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'],
 .rottay-list.rottay-list--modern[data-part='root'] > [data-part='skeleton'][data-grid='responsive'] {
     grid-template-columns: repeat(var(--_ds-list-grid-columns-xxl, 1), minmax(0, 1fr));
@@ -106651,15 +106644,27 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   gap: var(--ds-spacing-sm, 8px);
 }
 
+/* The grid is its own named container: `auto-fill` derives the track count
+   from THIS box's inline size, so the span guard below has to be measured
+   against the same box. Named for the grid rather than the surface so a later
+   `ds-command-center` on the root cannot silently re-key these rules onto a
+   wider measurement. */
 .ds-surface.ds-command-center .ds-command-center__sections-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
   gap: var(--ds-spacing-md, 16px);
+  container-type: inline-size;
+  container-name: ds-command-center-sections;
 }
 
-/* Spans apply only where the viewport can fit multiple columns; below the
-   guard a span would create implicit tracks and overflow narrow screens. */
-@media (min-width: 40em) {
+/* Spans apply only where the grid itself can fit multiple columns; below the
+   guard a span would create implicit tracks and overflow. The threshold reads
+   the grid's own width, not the window's: the same 40em guard against the
+   viewport granted `span 2` to a sections grid sitting in a narrow rail on a
+   wide screen -- exactly the implicit-track overflow it exists to prevent --
+   and withheld it from a full-bleed grid on a small tablet that had room for
+   two 280px tracks. */
+@container ds-command-center-sections (min-width: 40em) {
   .ds-surface.ds-command-center .ds-command-center__section-card[data-span='2'] {
     grid-column: span 2;
   }
@@ -118054,20 +118059,28 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   box-shadow: 0 1px 2px 0 color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent);
 }
 
+/* ---- marker tone. `--_ds-timeline-marker-color` is the family-private
+        channel the engine stamps on the marker span when a caller gives an
+        item its own colour; it is the FIRST choice of every tone below, so a
+        per-item tint overrides the type tone without an inline `color`
+        declaration and the property keeps one owner. Absent (the normal
+        case), each rule falls through to its semantic token, and the
+        forced-colors block at the end of the file can still neutralise all
+        four -- which an inline colour used to outrank. ---- */
 .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__marker-icon[data-part='marker-icon'] {
-  color: var(--ds-color-primary);
+  color: var(--_ds-timeline-marker-color, var(--ds-color-primary));
 }
 
 .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__marker-icon[data-part='marker-icon'][data-type='success'] {
-  color: var(--ds-color-success);
+  color: var(--_ds-timeline-marker-color, var(--ds-color-success));
 }
 
 .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__marker-icon[data-part='marker-icon'][data-type='warning'] {
-  color: var(--ds-color-warning);
+  color: var(--_ds-timeline-marker-color, var(--ds-color-warning));
 }
 
 .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__marker-icon[data-part='marker-icon'][data-type='error'] {
-  color: var(--ds-color-error);
+  color: var(--_ds-timeline-marker-color, var(--ds-color-error));
 }
 
 .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__avatar[data-part='avatar'] {

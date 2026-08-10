@@ -157,39 +157,55 @@
 }
 
 /* ---- authored per-breakpoint track counts. A `ResponsiveColumn` declares up
-        to six tiers; an inline count would outrank every media query, so the
-        engine publishes the tiers as channels for the responsive posture and
-        writes no inline count at all. Mobile-first, each undeclared tier
-        already carries the nearest smaller one forward, so every query reads
-        exactly one channel. These write the SAME count variable the base rule
-        above reads, so the narrow-container blocks at the end of the file --
-        which set `grid-template-columns` outright -- still win wherever the
-        family's own box is the binding constraint. ---- */
-.rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] {
+        to six tiers; an inline count would outrank every query, so the engine
+        publishes the tiers as channels for the responsive posture and writes
+        no inline count at all. Mobile-first, each undeclared tier already
+        carries the nearest smaller one forward, so every query reads exactly
+        one channel. These write the SAME count variable the base rule above
+        reads, so the narrow-container blocks at the end of the file -- which
+        set `grid-template-columns` outright -- still win wherever the family's
+        own box is the binding constraint.
+
+        THE TIERS KEY ON THE ROOT'S OWN INLINE SIZE, not the viewport: the root
+        already declares `container-type: inline-size` at the top of this file,
+        so the same six authored tiers now describe the width the family was
+        actually GIVEN. A Descriptions in a narrow detail rail stays at one
+        column while an identical one on the same screen goes wide inside a
+        full-bleed panel -- the viewport form could not tell those two apart
+        and sized both from the window. The tiers join the two
+        narrow-container blocks below on one measurement axis instead of
+        arguing with them across two.
+
+        The write sits on the rows grid rather than the root because an
+        element can never match a query against the container IT establishes.
+        Nothing is lost: the tier channels are stamped inline on the root and
+        inherit down, and `rows` is the very element whose
+        `grid-template-columns` reads the count. ---- */
+.rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] > [data-part='body'] > [data-part='rows'] {
   --ds-descriptions-column-count: var(--_ds-descriptions-columns-xs, 1);
 }
-@media (min-width: 640px) {
-  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] {
+@container (min-width: 640px) {
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] > [data-part='body'] > [data-part='rows'] {
     --ds-descriptions-column-count: var(--_ds-descriptions-columns-sm, 1);
   }
 }
-@media (min-width: 768px) {
-  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] {
+@container (min-width: 768px) {
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] > [data-part='body'] > [data-part='rows'] {
     --ds-descriptions-column-count: var(--_ds-descriptions-columns-md, 1);
   }
 }
-@media (min-width: 1024px) {
-  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] {
+@container (min-width: 1024px) {
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] > [data-part='body'] > [data-part='rows'] {
     --ds-descriptions-column-count: var(--_ds-descriptions-columns-lg, 1);
   }
 }
-@media (min-width: 1280px) {
-  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] {
+@container (min-width: 1280px) {
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] > [data-part='body'] > [data-part='rows'] {
     --ds-descriptions-column-count: var(--_ds-descriptions-columns-xl, 1);
   }
 }
-@media (min-width: 1536px) {
-  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] {
+@container (min-width: 1536px) {
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] > [data-part='body'] > [data-part='rows'] {
     --ds-descriptions-column-count: var(--_ds-descriptions-columns-xxl, 1);
   }
 }

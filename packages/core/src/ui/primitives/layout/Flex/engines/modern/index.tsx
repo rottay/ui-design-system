@@ -35,6 +35,7 @@ import {
   resolveFlexAttributes,
   resolveFlexParameterStyle,
 } from "../../runtime/presentation";
+import type { FlexPresentationAttributes } from "../../runtime/presentation";
 import { collectFlexResponsiveEntries } from "../../runtime/responsive";
 
 /**
@@ -64,10 +65,46 @@ export const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
 
     // The resolver always returns all ten keys, so spreading it raw would let
     // an absent one erase a consumer `data-*` that BaseComponentProps allows.
-    const presentationAttributes: Record<string, string> = {};
-    for (const [key, value] of Object.entries(resolveFlexAttributes(props))) {
-      if (value !== undefined) presentationAttributes[key] = value;
-    }
+    //
+    // The drop is spelled out key by key rather than looped: a computed
+    // `bag[key] = value` that ends up spread onto an element is an
+    // unresolvable paint site to the inline-paint census, which cannot prove
+    // the key is never `color` or `background`. Naming the ten keys proves it,
+    // and the compiler now fails here if the presentation contract grows an
+    // attribute this engine forgets to forward.
+    const resolved = resolveFlexAttributes(props);
+    const presentationAttributes: FlexPresentationAttributes = {
+      ...(resolved["data-direction"] !== undefined && {
+        "data-direction": resolved["data-direction"],
+      }),
+      ...(resolved["data-wrap"] !== undefined && {
+        "data-wrap": resolved["data-wrap"],
+      }),
+      ...(resolved["data-justify"] !== undefined && {
+        "data-justify": resolved["data-justify"],
+      }),
+      ...(resolved["data-align"] !== undefined && {
+        "data-align": resolved["data-align"],
+      }),
+      ...(resolved["data-inline"] !== undefined && {
+        "data-inline": resolved["data-inline"],
+      }),
+      ...(resolved["data-gap"] !== undefined && {
+        "data-gap": resolved["data-gap"],
+      }),
+      ...(resolved["data-gap-preset"] !== undefined && {
+        "data-gap-preset": resolved["data-gap-preset"],
+      }),
+      ...(resolved["data-column-gap-preset"] !== undefined && {
+        "data-column-gap-preset": resolved["data-column-gap-preset"],
+      }),
+      ...(resolved["data-row-gap-preset"] !== undefined && {
+        "data-row-gap-preset": resolved["data-row-gap-preset"],
+      }),
+      ...(resolved["data-layout-motion"] !== undefined && {
+        "data-layout-motion": resolved["data-layout-motion"],
+      }),
+    };
     const parameterStyle = resolveFlexParameterStyle(props);
     const resolvedStyle =
       parameterStyle || consumerStyle

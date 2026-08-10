@@ -78,15 +78,27 @@
   gap: var(--ds-spacing-sm, 8px);
 }
 
+/* The grid is its own named container: `auto-fill` derives the track count
+   from THIS box's inline size, so the span guard below has to be measured
+   against the same box. Named for the grid rather than the surface so a later
+   `ds-command-center` on the root cannot silently re-key these rules onto a
+   wider measurement. */
 .ds-surface.ds-command-center .ds-command-center__sections-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
   gap: var(--ds-spacing-md, 16px);
+  container-type: inline-size;
+  container-name: ds-command-center-sections;
 }
 
-/* Spans apply only where the viewport can fit multiple columns; below the
-   guard a span would create implicit tracks and overflow narrow screens. */
-@media (min-width: 40em) {
+/* Spans apply only where the grid itself can fit multiple columns; below the
+   guard a span would create implicit tracks and overflow. The threshold reads
+   the grid's own width, not the window's: the same 40em guard against the
+   viewport granted `span 2` to a sections grid sitting in a narrow rail on a
+   wide screen -- exactly the implicit-track overflow it exists to prevent --
+   and withheld it from a full-bleed grid on a small tablet that had room for
+   two 280px tracks. */
+@container ds-command-center-sections (min-width: 40em) {
   .ds-surface.ds-command-center .ds-command-center__section-card[data-span='2'] {
     grid-column: span 2;
   }

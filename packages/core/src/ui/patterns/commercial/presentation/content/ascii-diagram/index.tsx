@@ -404,7 +404,16 @@ export function AsciiDiagram({
 
       // Re-verify after applying: quantization can still leave a sub-pixel overflow.
       const apply = (scale: number): void => {
-        grid.style.setProperty(GRID_SIZE_AXIS, `${(NATURAL_GRID_REM * scale).toFixed(4)}rem`);
+        // The channel name is spelled out rather than passed as an identifier:
+        // an imperative `setProperty(someName, …)` is an unresolvable paint
+        // site to the static census, which cannot prove the name is this
+        // `--_ds-*` sizing channel and not `background`. The `satisfies` keeps
+        // the two spellings welded -- renaming GRID_SIZE_AXIS fails to compile
+        // here instead of silently writing a dead property.
+        grid.style.setProperty(
+          "--_ds-ascii-diagram-grid-size" satisfies typeof GRID_SIZE_AXIS,
+          `${(NATURAL_GRID_REM * scale).toFixed(4)}rem`,
+        );
       };
       apply(quantized);
       const settledScale =

@@ -143,20 +143,28 @@
   box-shadow: 0 1px 2px 0 color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent);
 }
 
+/* ---- marker tone. `--_ds-timeline-marker-color` is the family-private
+        channel the engine stamps on the marker span when a caller gives an
+        item its own colour; it is the FIRST choice of every tone below, so a
+        per-item tint overrides the type tone without an inline `color`
+        declaration and the property keeps one owner. Absent (the normal
+        case), each rule falls through to its semantic token, and the
+        forced-colors block at the end of the file can still neutralise all
+        four -- which an inline colour used to outrank. ---- */
 .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__marker-icon[data-part='marker-icon'] {
-  color: var(--ds-color-primary);
+  color: var(--_ds-timeline-marker-color, var(--ds-color-primary));
 }
 
 .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__marker-icon[data-part='marker-icon'][data-type='success'] {
-  color: var(--ds-color-success);
+  color: var(--_ds-timeline-marker-color, var(--ds-color-success));
 }
 
 .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__marker-icon[data-part='marker-icon'][data-type='warning'] {
-  color: var(--ds-color-warning);
+  color: var(--_ds-timeline-marker-color, var(--ds-color-warning));
 }
 
 .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__marker-icon[data-part='marker-icon'][data-type='error'] {
-  color: var(--ds-color-error);
+  color: var(--_ds-timeline-marker-color, var(--ds-color-error));
 }
 
 .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__avatar[data-part='avatar'] {

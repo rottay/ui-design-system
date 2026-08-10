@@ -122,6 +122,34 @@ const GEOMETRY_KEYS = [
   'blockSize',
 ] as const satisfies readonly (keyof React.CSSProperties)[];
 
+type GeometryKey = (typeof GEOMETRY_KEYS)[number];
+
+/**
+ * Re-projects a measured geometry bag with STATIC keys. @internal
+ *
+ * `AffixState` carries the measurement as an opaque `CSSProperties`, and
+ * spreading an opaque bag into an element's `style` is an unresolvable paint
+ * site: nothing proves it holds no `background` or `boxShadow`. Only the six
+ * channels above are ever written (see `measure()`), and naming them here
+ * turns that from a claim into something the compiler checks -- the `Pick`
+ * return type means a seventh key cannot be projected without joining
+ * `GEOMETRY_KEYS` first. Affixed SURFACE paint stays where it belongs, in
+ * `affix.css` under `[data-sticky]`.
+ */
+function projectGeometry(
+  measured?: React.CSSProperties
+): Pick<React.CSSProperties, GeometryKey> | undefined {
+  if (!measured) return undefined;
+  return {
+    ...(measured.position !== undefined && { position: measured.position }),
+    ...(measured.top !== undefined && { top: measured.top }),
+    ...(measured.bottom !== undefined && { bottom: measured.bottom }),
+    ...(measured.left !== undefined && { left: measured.left }),
+    ...(measured.width !== undefined && { width: measured.width }),
+    ...(measured.blockSize !== undefined && { blockSize: measured.blockSize }),
+  };
+}
+
 /** Equality over the measured geometry only. @internal */
 function sameGeometry(a?: React.CSSProperties, b?: React.CSSProperties): boolean {
   if (a === b) return true;
@@ -388,7 +416,11 @@ export const ModernAffix = forwardRef<HTMLDivElement, AffixProps>(
     // P2-20: the placeholder is a stable anatomy region (`data-part`), so the
     // space reservation is addressable/observable like every other part.
     return (
-      <div ref={placeholderRef} style={state.placeholderStyle} data-part="placeholder">
+      <div
+        ref={placeholderRef}
+        style={projectGeometry(state.placeholderStyle)}
+        data-part="placeholder"
+      >
         <div
           ref={(node) => {
             (affixRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
@@ -401,7 +433,7 @@ export const ModernAffix = forwardRef<HTMLDivElement, AffixProps>(
           className={`rottay-affix rottay-affix--modern ${className}`.trim()}
           style={
             state.affixed
-              ? { ...runtimeVariables, ...state.fixedStyle, ...style }
+              ? { ...runtimeVariables, ...projectGeometry(state.fixedStyle), ...style }
               : { ...runtimeVariables, ...style }
           }
           data-part="root"
