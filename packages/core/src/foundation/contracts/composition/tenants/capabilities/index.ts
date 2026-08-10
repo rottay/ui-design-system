@@ -402,8 +402,14 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       tier: 'pro',
       status: 'active',
       evidence: {
-        consumer: 'src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css',
-        symbol: 'var(--ds-page-shell',
+        /*
+         * The citation has to prove the ANATOMY selector exists, not that the cited file reads
+         * some token. page-shell.css was named here and contains zero `data-anatomy` selectors --
+         * its 31 `--ds-page-shell` hits made the pointer look supported while proving nothing
+         * about this capability. card.css carries the real thing.
+         */
+        consumer: 'src/foundation/tokens/css/runtime/engines/modern/skin/card.css',
+        symbol: "[data-anatomy-card='framed']",
       },
       scope: 'tenant',
       owner: 'design-system',
