@@ -99,6 +99,62 @@ Only once the chain arrives. Kimi proposes inside `KIMI-ANNOTATIONS/inbox`, neve
 each proposal is adjudicated before it touches code. Structures and surfaces first — the layer a
 human reads as "a different company".
 
+## What W1 established, and what the census cannot see
+
+W1 wired 13 tint channels, 14 detail/list channels and typography's weight and display leading,
+and filed 26 retirement candidates with evidence. It also found three defects the census could
+not have found, because the census asks whether a channel LANDS, not whether it lands CORRECTLY:
+
+- rottay's primary tint scale rendering `#CCDCCA`, a green-grey, where its brand theme specifies
+  blue — on live consumers. The OKLCH ramp interpolates hue as an angle, so a ground with any
+  chroma at all drags a tone across the wheel.
+- Five BitHire surfaces painting nothing, because `color-mix()` was handed a gradient and the
+  whole declaration was dropped. Plus the widget-board error region, blank under every tenant.
+- BitHire authoring an eleven-field `tallCard` block that cannot reach a pixel, because no element
+  with that class has ever existed.
+
+**The census measures files, not screen.** Typography's roles were not unread — they were
+UNROUTED, reaching only the 23 callers that passed `textStyle` and none in app-bithire. Wiring
+them moved the token count by one and the rendered element count from roughly nothing to 8534. A
+channel with one reader and a channel with one reader that paints half the product are the same
+number here. Read the thin column as a question, never as damage.
+
+**A channel reading zero may be deprecated rather than unwired.** `--ds-text-*` showed 29
+unreachable names and is classified debt-until-retired; a DB tenant writing it is rejected
+fail-closed. The sanctioned channel is `--ds-type-*`, which derives from the Standard type-scale
+control. Check that a channel is SANCTIONED before treating its zero as work.
+
+## The four rules, each earned by a lane
+
+1. **A dead channel may take an ungoverned property; it may not displace an authored one.** And a
+   value carries a tenant decision by ANY route, including a dial it derives from — a pass-through
+   to `--ds-type-scale` is still a decision. The rule protects authorship, not DS-local formulas:
+   joining a channel twenty siblings already read is consistency, not displacement.
+2. **"The element declares nothing" is not "the element renders nothing."** An inherited value is
+   an authored value with a different owner, so the equality test is against the COMPUTED value.
+   `font-variant-numeric` resolving `normal` everywhere reads as free equality and is a trap — the
+   real value arrives by inheritance from containers setting `tabular-nums`, and an inline
+   declaration on the child outranks it.
+3. **An interpolated token name is invisible to every gate here.** `var(--ds-text-${role}-size)`
+   reads as ZERO to the reach census, engine-token-audit, the hooks manifest and the customization
+   report, all of which match `var(--ds-…` in source. Spell names literally in a channel table.
+   The blind spot under-reports, so it licenses debt.
+4. **A number that moves without the screen moving is worse than a number that does not move**,
+   because it teaches everyone to stop trusting the number. Two lanes reverted their own wiring on
+   this ground after finding both chains resolved identically.
+
+## Verification standards this programme now expects
+
+- **Zero-delta with a negative control.** Collapse every `var(--x, FALLBACK)` to its fallback and
+  compare byte-identically against the pre-wave commit — then INJECT a divergence and confirm the
+  drill names it. A drill that has never been seen to fail proves nothing.
+- **Attribute a shared-tree gate failure by re-running, never by reading the diff.** Clean detached
+  worktree of HEAD, three combinations: pristine, plus-yours, plus-theirs.
+- **A gate must assert a floor on its own corpus.** A gate that scans nothing passes everything;
+  fix the path, never lower the floor. This failure mode appeared three times in one day.
+- **Prove paint in a browser, not in a parser.** "It parses" says nothing about an invalid
+  `color-mix()`: invalid CSS neither throws nor fails a snapshot.
+
 ## Standing rules for every lane
 
 - Additive. Add readers; never remove a channel to move a number.
