@@ -238,6 +238,25 @@ A lane that cannot complete its model reason is missing its pre-pass and must no
 | 14 | `--ds-density-spacing-*` hook | **Add it to the winning `:root` declarations.** No-op until written; it is the only genuinely severed channel in that family |
 | 15 | The 49 dead `:root` declarations | **One sweep, gated by a byte-level computed-value diff**, not eyeballed. `themes/default.css` becomes the sole `:root` authority. The two behavioural ones are reviewed separately first. **The gate keys on (file, canonical selector, prop)** — not on cross-file pairs — which covers within-file self-conflicts by construction. Add `--ds-divider-text-color` `default.css:1074`, a misfiled stray that no cross-file sweep would have caught |
 
+| 16 | The hard forks | **Drift unless proven otherwise.** One name survives, the value unifies to the vertical that paints it, and any deliberate divergence is declared as a written exception per row. Turns 38 decisions into a sweep plus a short exception list |
+| 17 | `--ds-border-color` ~ `--ds-color-border` (625 reads, the largest in the corpus) | **`--ds-color-border` survives; platform's value is preserved** by rewriting its declaration onto the survivor in the same commit. Zero visible change in all three verticals |
+
+### The survivor rule — non-negotiable for every fork
+
+Tenant paint is **unlayered and outranks every layer**, so a tenant override reaches readers only
+through the exact name it declares. **The survivor is the name tenant paint overrides, never the name
+with more reads** — that inverts the obvious choice in several rows. And the losing name's tenant
+declarations must be **rewritten onto the survivor in the same commit**: deleting the loser and
+repointing readers is not value-preserving in the 38 groups carrying tenant paint.
+
+Classification is **per-vertical AND per-theme**. A pair can be an alias in light and a fork in dark;
+three groups fork in exactly one of six cells, which is precisely what a single-bundle or light-only
+audit waves through.
+
+**39 permutation groups are declared-vs-read-only.** One side has no value, so they are not fork
+candidates — they are class-5 fallback-activation hazards and are routed to that drain, never to the
+merge wave.
+
 ### Lane D corrected the premise — record for anyone resuming
 
 `base/spacing.css` (`:root`) and `base/density.css` (`:where(…:not(:root))`) **never compete**;
