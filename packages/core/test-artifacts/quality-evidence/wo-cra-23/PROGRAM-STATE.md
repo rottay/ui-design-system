@@ -81,7 +81,33 @@ drain**, not a category to exempt:
 I1 (one declared owner per token) has no standing carve-out. The drain is tracked as a finding class
 until it reaches zero.
 
-### 1.5 Standing fences
+### 1.5 Validation cadence — heavy work batches, cheap checks do not
+
+**Suites, builds and the browser run ONCE per wave**, at a reconciliation point where tests are fixed
+together. They are CPU singletons; running them per lane blocks every writer and turns the programme
+into a queue. Code progress is the priority.
+
+**But per-lane verification does not stop.** The build-free checks are cheap, need no `dist` and do
+not touch the singleton — every lane still runs them before reporting:
+
+- `channel-wiring-zero-delta-gate.mjs --baseline <pinned>`
+- selector-multiset equality on its own diff
+- the static per-vertical resolution check for any substitution
+
+Without this split, batching destroys attribution: a rendering change made early in a wave surfaces
+after twenty lanes have landed, and nobody can say which caused it. **Heavy validation is deferred;
+cheap verification is not.**
+
+At the reconciliation point, test failures are fixed as part of the wave — a wave does not close with
+a red suite.
+
+### 1.6 Comment economy
+
+Comments are the minimum that makes the code correct to read. No essays, no restating what the code
+says, no narration of what changed — git holds that. The same applies to commit messages and lane
+reports: dense and short. Effort goes into the code being right, not into prose about it.
+
+### 1.7 Standing fences
 
 No tenant selector or tenant-conditional TSX · no second compiler, engine or icon supplier · no
 public `--ds-*` minted by a family lane · no hand-edited `styles/**` or `dist/**` · no test or
