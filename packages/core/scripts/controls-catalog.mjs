@@ -60,15 +60,15 @@ function liveReads(report, channels) {
 }
 
 function controlRow(cap, report) {
-  const { total } = liveReads(report, cap.channels);
+  const { total } = liveReads(report, cap.derivedChannels);
   const domain = cap.valueType ?? '—';
-  const isData = !cap.channels?.length;
+  const isData = !cap.derivedChannels?.length;
   return [
     `\`${cap.id}\``,
     cap.title ?? '—',
     domain,
     cap.defaultBehavior ?? '—',
-    isData ? 'data → compilador → familias' : `${cap.channels.length} ch`,
+    isData ? 'data → compilador → familias' : `${cap.derivedChannels.length} ch`,
     cap.brandThemePath ? `\`${cap.brandThemePath}\`` : '—',
     cap.documentPath ? `\`${cap.documentPath}\`` : '—',
     isData ? 'vía compilador (evidence →)' : String(total),
@@ -92,7 +92,7 @@ export async function build() {
 
   const digest = createHash('sha256')
     .update(reportRaw)
-    .update(JSON.stringify(active.map((c) => [c.id, c.tier, c.channels, c.documentPath, c.brandThemePath])))
+    .update(JSON.stringify(active.map((c) => [c.id, c.tier, c.derivedChannels, c.documentPath, c.brandThemePath])))
     .digest('hex');
 
   const md = `# Controles de customización — API de producto (generado)
@@ -143,9 +143,9 @@ export async function check() {
     : active;
   for (const cap of caps.filter((c) => c.tier === 'standard' || c.tier === 'pro')) {
     if (!stored.includes(`\`${cap.id}\``)) failures.push(`control activo ausente de la vista: ${cap.id}`);
-    const { total } = liveReads(report, cap.channels);
-    const zero = drill === 'zero-consumer' && cap.id === caps[0].id ? 0 : (cap.channels?.length ? total : 1);
-    if (cap.channels?.length && zero === 0 && !cap.evidence?.consumer) {
+    const { total } = liveReads(report, cap.derivedChannels);
+    const zero = drill === 'zero-consumer' && cap.id === caps[0].id ? 0 : (cap.derivedChannels?.length ? total : 1);
+    if (cap.derivedChannels?.length && zero === 0 && !cap.evidence?.consumer) {
       failures.push(`control publicado SIN consumer real: ${cap.id}`);
     }
     if (drill === 'zero-consumer' && cap.id === caps[0].id && zero === 0) {

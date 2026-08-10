@@ -8,35 +8,35 @@
 > Rollback: cada control es un INPUT — quitar la autoría restaura el baseline del vertical
 > (probado por los legs restore-equals-default del harness no-loss).
 
-digest: 507fd7958ba98cb260cfd238db076b217dd58015fe1a95c6edf14b1527f9c3dd
+digest: 4e188f77809010203d50aa0062d5a413704c22263b15f8bd9cbcad7e50190041
 
 ## STANDARD — 13 controles (pocos diales, gran superficie)
 
 | id | control | dominio/tipo | default | canal | static path (BrandTheme) | DB path (TenantThemeDocument) | lecturas vivas | consumer probado |
 |---|---|---|---|---|---|---|---|---|
-| `palette.seeds` | Brand palette seeds | color-set | vertical baseline palette | data → compilador → familias | `palette.{primaryColor,secondaryColor,accentColor,backgroundColor}` | `appearance.general.palette.{primary,secondary,accent,background}` | vía compilador (evidence →) | `button.css` |
-| `typography.pairing` | Type pairing personality | enum | vertical baseline families | data → compilador → familias | `typography.{fontFamilyBase,fontFamilyHeading}` | `appearance.general.typography.typePairing` | vía compilador (evidence →) | `typography.css` |
-| `typography.families` | Explicit font stacks | font-stack | pairing (or vertical baseline) decides | data → compilador → familias | `typography.{fontFamilyBase,fontFamilyHeading,fontFamilyMono,fontFamilyDisplay}` | `appearance.general.typography.{fontFamilyBase,fontFamilyHeading}` | vía compilador (evidence →) | `default.css` |
-| `typography.scale` | Type scale dial | scale | 1 (vertical envelope may clamp tighter) | data → compilador → familias | `typography (ramp channels)` | `appearance.general.typography.scale` | vía compilador (evidence →) | `index.ts` |
-| `shape.radius-scale` | Radius scale dial | scale | 1 (vertical envelope may clamp tighter) | data → compilador → familias | `surfaces.borderRadius.*` | `appearance.general.shape.radiusScale` | vía compilador (evidence →) | `card.css` |
-| `shape.button-style` | Button silhouette | enum | vertical baseline silhouette | data → compilador → familias | `chrome.controls.button* (radius channels)` | `appearance.general.shape.buttonStyle` | vía compilador (evidence →) | `button.css` |
-| `density.mode` | Density posture | enum | normal (structural density scale is a separate channel) | data → compilador → familias | `surfaces.density / surfaces.densityScale` | `appearance.general.density` | vía compilador (evidence →) | `index.ts` |
-| `spacing.rhythm` | Layout rhythm | enum | normal (factor 1) — byte-identical to the pre-rhythm cascade in every vertical, because the DS floor already resolves --ds-rhythm-effective-scale to 1 | data → compilador → familias | `surfaces.rhythm` | `appearance.general.rhythm` | vía compilador (evidence →) | `layout-primitives.css` |
-| `motion.dial` | Motion intensity and duration | scale | engine cadence unchanged | data → compilador → familias | `motion.*` | `appearance.general.motion.{intensity,durationScale,ambient}` | vía compilador (evidence →) | `button.css` |
-| `surfaces.elevation-posture` | Elevation posture | enum | soft (DS shadow ramp untouched) | data → compilador → familias | `surfaces.shadows.*` | `appearance.general.surfaces.elevation` | vía compilador (evidence →) | `card.css` |
-| `surfaces.effect-intensity` | Decoration intensity | scale | 1 for the DS default; verticals author their own floor | data → compilador → familias | `surfaces.effectIntensity` | `appearance.general.surfaces.effectIntensity` | vía compilador (evidence →) | `command-palette.css` |
-| `navigation.sidebar-tone` | Sidebar tone | enum | subtle | data → compilador → familias | `chrome.sidebar.*` | `appearance.general.navigation.sidebarTone` | vía compilador (evidence →) | `menu.css` |
-| `experience.profile` | Experience profile | profile-id | baseline identity; a selection composes closed per-axis postures whose expansion always loses to any authored field or channel | data → compilador → familias | `expressive.experienceProfile` | `appearance.general.experienceProfile` | vía compilador (evidence →) | `index.tsx` |
+| `palette.seeds` | Brand palette seeds | color-set | vertical baseline palette | 5 ch | `palette.{primaryColor,secondaryColor,accentColor,backgroundColor}` | `appearance.general.palette.{primary,secondary,accent,background}` | 1791 | `button.css` |
+| `typography.pairing` | Type pairing personality | enum | vertical baseline families | 2 ch | `typography.{fontFamilyBase,fontFamilyHeading}` | `appearance.general.typography.typePairing` | 229 | `typography.css` |
+| `typography.families` | Explicit font stacks | font-stack | pairing (or vertical baseline) decides | 2 ch | `typography.{fontFamilyBase,fontFamilyHeading,fontFamilyMono,fontFamilyDisplay}` | `appearance.general.typography.{fontFamilyBase,fontFamilyHeading}` | 229 | `default.css` |
+| `typography.scale` | Type scale dial | scale | 1 (vertical envelope may clamp tighter) | 1 ch | `typography (ramp channels)` | `appearance.general.typography.scale` | 49 | `index.ts` |
+| `shape.radius-scale` | Radius scale dial | scale | 1 (vertical envelope may clamp tighter) | 2 ch | `surfaces.borderRadius.*` | `appearance.general.shape.radiusScale` | 412 | `card.css` |
+| `shape.button-style` | Button silhouette | enum | vertical baseline silhouette | 1 ch | `chrome.controls.button* (radius channels)` | `appearance.general.shape.buttonStyle` | 2 | `button.css` |
+| `density.mode` | Density posture | enum | normal (structural density scale is a separate channel) | 2 ch | `surfaces.density / surfaces.densityScale` | `appearance.general.density` | 10 | `index.ts` |
+| `spacing.rhythm` | Layout rhythm | enum | normal (factor 1) — byte-identical to the pre-rhythm cascade in every vertical, because the DS floor already resolves --ds-rhythm-effective-scale to 1 | 2 ch | `surfaces.rhythm` | `appearance.general.rhythm` | 79 | `layout-primitives.css` |
+| `motion.dial` | Motion intensity and duration | scale | engine cadence unchanged | 2 ch | `motion.*` | `appearance.general.motion.{intensity,durationScale,ambient}` | 43 | `button.css` |
+| `surfaces.elevation-posture` | Elevation posture | enum | soft (DS shadow ramp untouched) | 3 ch | `surfaces.shadows.*` | `appearance.general.surfaces.elevation` | 188 | `card.css` |
+| `surfaces.effect-intensity` | Decoration intensity | scale | 1 for the DS default; verticals author their own floor | 1 ch | `surfaces.effectIntensity` | `appearance.general.surfaces.effectIntensity` | 62 | `command-palette.css` |
+| `navigation.sidebar-tone` | Sidebar tone | enum | subtle | 2 ch | `chrome.sidebar.*` | `appearance.general.navigation.sidebarTone` | 4 | `menu.css` |
+| `experience.profile` | Experience profile | profile-id | baseline identity; a selection composes closed per-axis postures whose expansion always loses to any authored field or channel | 5 ch | `expressive.experienceProfile` | `appearance.general.experienceProfile` | 77 | `index.tsx` |
 
 ## PRO — 7 controles (familias y perfiles)
 
 | id | control | dominio/tipo | default | canal | static path (BrandTheme) | DB path (TenantThemeDocument) | lecturas vivas | consumer probado |
 |---|---|---|---|---|---|---|---|---|
-| `chrome.families` | Per-family chrome | chrome-map | family derivations over semantic channels decide | data → compilador → familias | `chrome.*` | `visualFoundation.advanced.chrome.*` | vía compilador (evidence →) | `table.css` |
+| `chrome.families` | Per-family chrome | chrome-map | family derivations over semantic channels decide | 3 ch | `chrome.*` | `visualFoundation.advanced.chrome.*` | 37 | `table.css` |
 | `chrome.anatomy` | Anatomy variants | enum | default anatomy; fails closed unless the vertical envelope opts in | data → compilador → familias | `chrome.{cardComponent,table,sidebar,layout}.anatomy` | `visualFoundation.advanced.chrome.{cardComponent,table,sidebar,layout}.anatomy` | vía compilador (evidence →) | `page-shell.css` |
-| `token-overrides` | Bounded raw channel overrides | token-map | none; closed allowlist, max 200 entries, fails closed | data → compilador → familias | `tokenOverrides` | `visualFoundation.advanced.tokenOverrides` | vía compilador (evidence →) | `index.ts` |
-| `recipe-profile` | Family recipe profile | profile-id | no profile: family recipe defaults apply | data → compilador → familias | `recipeProfile` | `visualFoundation.recipeProfile` | vía compilador (evidence →) | `index.tsx` |
-| `profiles.expressive` | Explicit expressive axes | enum | each axis independently overrides the experience composition; an unset axis falls back to it, then to baseline | data → compilador → familias | `expressive.profiles.*` | `visualFoundation.advanced.profiles.{type,geometry,edge,material,elevation,motif}` | vía compilador (evidence →) | `index.tsx` |
+| `token-overrides` | Bounded raw channel overrides | token-map | none; closed allowlist, max 200 entries, fails closed | 3 ch | `tokenOverrides` | `visualFoundation.advanced.tokenOverrides` | 778 | `index.ts` |
+| `recipe-profile` | Family recipe profile | profile-id | no profile: family recipe defaults apply | 1 ch | `recipeProfile` | `visualFoundation.recipeProfile` | 0 | `index.tsx` |
+| `profiles.expressive` | Explicit expressive axes | enum | each axis independently overrides the experience composition; an unset axis falls back to it, then to baseline | 4 ch | `expressive.profiles.*` | `visualFoundation.advanced.profiles.{type,geometry,edge,material,elevation,motif}` | 13 | `index.tsx` |
 | `profiles.icon` | Icon posture profile | enum | baseline role/state weight tables. A posture only selects among the governed PROFILE_ROLE_WEIGHT tables in the icon policy — never a supplier, glyph or local SVG; state weights stay supreme (feedback over decoration). Literal two-hue duotone stays out: the pinned supplier is single-hue/two-opacity by design. | data → compilador → familias | `expressive.profiles.icon` | `visualFoundation.advanced.profiles.icon` | vía compilador (evidence →) | `index.tsx` |
 | `responsive.posture` | Responsive posture profile | profile-id | the balanced ladder, whose container thresholds (compact ≤639px, standard ≤839px) and `preferred` span resolution ARE the constants the adaptive runtime and pure solver used before this axis opened — so an absent selection is byte-for-byte the pre-capability layout, and "unset it" is a true rollback rather than an approximate one | data → compilador → familias | `responsive.posture` | `visualFoundation.advanced.responsivePosture` | vía compilador (evidence →) | `index.ts` |
 
@@ -44,7 +44,7 @@ digest: 507fd7958ba98cb260cfd238db076b217dd58015fe1a95c6edf14b1527f9c3dd
 
 - **294 tokens** raw-override permitidos (fuente: dist-runtime).
 - Dominios: color 31 · semantic-surface 8 · semantic-material 160 · other 32 · semantic-typography 63.
-- Overlap con writers vivos: 182.
+- Overlap con writers vivos: 186.
 - Contrato: `TENANT_THEME_OVERRIDE_TOKENS` (bounded); todo lo fuera de la lista es rechazado.
 
 ## INTERNAL (no producto) — 1
