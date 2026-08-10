@@ -207,14 +207,32 @@ not a mechanism.
 | ~~11~~ | ~~Stored-document migration~~ | **RETIRED** — no application is in production, so there are no live tenant documents to migrate |
 | ~~12~~ | ~~Breaking window~~ | **RETIRED** — compatibility is not a constraint; everything may break |
 
+| 13 | Body text size | **14px canonical.** Move to `default.css`, delete the three artifact overrides via their BrandTheme sources, regenerate. Zero visible change — all three verticals already render 14px |
+| 14 | `--ds-density-spacing-*` hook | **Add it to the winning `:root` declarations.** No-op until written; it is the only genuinely severed channel in that family |
+| 15 | The 49 dead `:root` declarations | **One sweep, gated by a byte-level computed-value diff**, not eyeballed. `themes/default.css` becomes the sole `:root` authority. The two behavioural ones are reviewed separately first |
+
+### Lane D corrected the premise — record for anyone resuming
+
+`base/spacing.css` (`:root`) and `base/density.css` (`:where(…:not(:root))`) **never compete**;
+`:not(:root)` makes overlap impossible. The real winner is `themes/default.css`, imported later in the
+same layer. **`density.css` agrees with the winner; the dead scale is `base/spacing.css`**, and the
+conflict is 5 names, not the family. The density dial **is** reaching spacing (bithire 0.9, evnto
+1.125, rottay 1 — BitHire's `--ds-spacing-md` computes 14.4px). It is not severed like radius.
+
+Free action, no decision needed: delete the 5 dead alias declarations in `base/spacing.css`. They lose
+today and their `/* 12px */` comments are what produced the false premise.
+
+New defect class found: **a within-file self-conflict** — `--ds-divider-text-color` declared twice at
+`:root` inside `themes/default.css`, different values, later wins. Nobody had looked for that shape.
+
 ### Still open
 
 | # | Decision | Blocked by |
 |---|---|---|
-| a | **Which spacing scale is authoritative** — `density.css` and `spacing.css` declare the same names two steps apart, and only the density file carries the density override hook | lane D produces the list |
-| b | The cross-file `:root` disagreements, including body text 14px vs 16px | lane D |
 | c | The hard forks — per pair, **per vertical** | needs the list |
 | d | Vertical identity authority — one slug/verticalKey owner instead of five sites | proposal pending |
+| e | `--ds-type-code-font-variant-numeric` `tabular-nums` → `normal`, and numeric weight 600 → 500 — probable accidents of a re-alias sweep, not decisions | sighted check before the §15 sweep |
+| f | Hardcoded hexes at `:root` in the theme layer (`#e5e5e5`, `#737373`) — they cannot follow a tenant palette | with the §15 sweep |
 
 ---
 
