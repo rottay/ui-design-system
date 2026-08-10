@@ -33,15 +33,13 @@ import { NavigationUpIcon } from "@/graphics/icons/presentation/semantic/generat
 import { NavigationDownIcon } from "@/graphics/icons/presentation/semantic/generated/roles/navigation-down";
 import { NavigationForwardIcon } from "@/graphics/icons/presentation/semantic/generated/roles/navigation-forward";
 
-import {
-  Box,
-  Button,
-  Checkbox,
-  Flex,
-  InputNumber,
-  Popover,
-  Text,
-} from "../../../primitives";
+import { Box } from "../../../primitives/layout/Box";
+import { Button } from "../../../primitives/inputs/Button";
+import { Checkbox } from "../../../primitives/inputs/Checkbox";
+import { Flex } from "../../../primitives/layout/Flex";
+import { InputNumber } from "../../../primitives/inputs/InputNumber";
+import { Popover } from "../../../primitives/overlay/Popover";
+import { Text } from "../../../primitives/display/Typography/compound/Text";
 import { useOptionalTranslation } from "@/infrastructure/runtime/i18n";
 
 function readColumnRecordValue(value: unknown, key: PropertyKey): unknown {

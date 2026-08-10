@@ -120,9 +120,11 @@ function scrollSectionIntoContainer(
     return;
   }
 
-  const element = container as HTMLElement;
-  const delta = sectionTop - element.getBoundingClientRect().top - offsetTop;
-  element.scrollTo({ top: element.scrollTop + delta, behavior });
+  const delta = sectionTop - (container as HTMLElement).getBoundingClientRect().top - offsetTop;
+  (container as HTMLElement).scrollTo({
+    top: (container as HTMLElement).scrollTop + delta,
+    behavior,
+  });
 }
 
 // ============================================================================

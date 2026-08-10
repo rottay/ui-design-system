@@ -22,6 +22,7 @@
     "./fonts/humanist-text.css",
     "./fonts/plex-mono.css",
     "./hooks-manifest",
+    "./public-entrypoints-manifest",
     "./styles",
     "./styles.css",
     "./styles/bithire",
@@ -767,6 +768,7 @@
         "governedExitMs",
         "governedFlashMs",
         "hasCustomComponent",
+        "hasSurfaceError",
         "heightPxToRows",
         "hydrateTenantThemeConfig",
         "inferSharedHeaderActionKind",
@@ -1119,10 +1121,8 @@
           "motion"
         ],
         "AuthSurface": [
-          "@ant-design/icons",
           "@phosphor-icons/react",
           "antd",
-          "d3",
           "motion"
         ],
         "AutoComplete": [
@@ -1240,14 +1240,12 @@
           "@ant-design/icons",
           "@phosphor-icons/react",
           "antd",
-          "d3",
           "motion"
         ],
         "CollectionWorkspaceSurface": [
           "@ant-design/icons",
           "@phosphor-icons/react",
           "antd",
-          "d3",
           "motion"
         ],
         "ColorPicker": [
@@ -1267,7 +1265,6 @@
           "@ant-design/icons",
           "@phosphor-icons/react",
           "antd",
-          "d3",
           "motion"
         ],
         "CompareSurface": [
@@ -1289,7 +1286,8 @@
         ],
         "ConnectedCommandPalette": [
           "@phosphor-icons/react",
-          "antd"
+          "antd",
+          "motion"
         ],
         "ContextMenu": [
           "@phosphor-icons/react",
@@ -1335,10 +1333,8 @@
           "antd"
         ],
         "DecisionInboxSurface": [
-          "@ant-design/icons",
           "@phosphor-icons/react",
           "antd",
-          "d3",
           "motion"
         ],
         "defaultViewModeIcons": [
@@ -1502,10 +1498,8 @@
           "motion"
         ],
         "GuidedDraftFormSurface": [
-          "@ant-design/icons",
           "@phosphor-icons/react",
           "antd",
-          "d3",
           "motion"
         ],
         "HeaderSurface": [
@@ -1638,8 +1632,7 @@
         ],
         "LiveCursor": [
           "@phosphor-icons/react",
-          "antd",
-          "motion"
+          "antd"
         ],
         "LoadingOverlay": [
           "@phosphor-icons/react",
@@ -1651,10 +1644,8 @@
           "motion"
         ],
         "MarketingSurface": [
-          "@ant-design/icons",
           "@phosphor-icons/react",
           "antd",
-          "d3",
           "motion"
         ],
         "MediaSurface": [
@@ -1876,7 +1867,8 @@
         ],
         "PatternCommandPalette": [
           "@phosphor-icons/react",
-          "antd"
+          "antd",
+          "motion"
         ],
         "PatternCommentThread": [
           "@ant-design/icons",
@@ -1927,8 +1919,7 @@
         ],
         "PatternGalleryView": [
           "@phosphor-icons/react",
-          "antd",
-          "motion"
+          "antd"
         ],
         "PatternGridView": [
           "@phosphor-icons/react",
@@ -2079,13 +2070,11 @@
         ],
         "PresenceBar": [
           "@phosphor-icons/react",
-          "antd",
-          "motion"
+          "antd"
         ],
         "PresenceTypingIndicator": [
           "@phosphor-icons/react",
-          "antd",
-          "motion"
+          "antd"
         ],
         "PreviewDiffCard": [
           "@phosphor-icons/react",
@@ -2166,10 +2155,8 @@
           "motion"
         ],
         "RecordWorkbenchSurface": [
-          "@ant-design/icons",
           "@phosphor-icons/react",
           "antd",
-          "d3",
           "motion"
         ],
         "ReportSurface": [
@@ -2222,11 +2209,6 @@
           "@phosphor-icons/react",
           "antd",
           "d3",
-          "motion"
-        ],
-        "ScopeSwitcher": [
-          "@phosphor-icons/react",
-          "antd",
           "motion"
         ],
         "ScrollReveal": [
@@ -2327,9 +2309,7 @@
           "motion"
         ],
         "StatusFilterPills": [
-          "@phosphor-icons/react",
-          "antd",
-          "motion"
+          "antd"
         ],
         "Stepper": [
           "@phosphor-icons/react",
@@ -2357,17 +2337,13 @@
           "motion"
         ],
         "SurfaceCapabilityAnatomy": [
-          "@ant-design/icons",
           "@phosphor-icons/react",
           "antd",
-          "d3",
           "motion"
         ],
         "SurfaceEmptyState": [
-          "@ant-design/icons",
           "@phosphor-icons/react",
           "antd",
-          "d3",
           "motion"
         ],
         "SurfaceEmptyStateCard": [
@@ -2376,10 +2352,8 @@
           "motion"
         ],
         "SurfaceErrorState": [
-          "@ant-design/icons",
           "@phosphor-icons/react",
           "antd",
-          "d3",
           "motion"
         ],
         "SurfaceErrorStateCard": [
@@ -2398,10 +2372,8 @@
           "motion"
         ],
         "SurfaceLoadingState": [
-          "@ant-design/icons",
           "@phosphor-icons/react",
           "antd",
-          "d3",
           "motion"
         ],
         "SurfaceOfflineBanner": [
@@ -2491,8 +2463,7 @@
         ],
         "TenantThemePreviewReport": [
           "@phosphor-icons/react",
-          "antd",
-          "motion"
+          "antd"
         ],
         "Text": [
           "antd"
@@ -2664,8 +2635,7 @@
         ],
         "VoiceInputButton": [
           "@phosphor-icons/react",
-          "antd",
-          "motion"
+          "antd"
         ],
         "WaterfallChart": [
           "antd",
@@ -2713,11 +2683,6 @@
           "motion"
         ],
         "WorkspacePreviewRail": [
-          "@phosphor-icons/react",
-          "antd",
-          "motion"
-        ],
-        "WorkspaceScopes": [
           "@phosphor-icons/react",
           "antd",
           "motion"
@@ -2934,6 +2899,7 @@
         "STEPS_DEFAULTS",
         "STRENGTH_COLORS",
         "STRENGTH_WIDTHS",
+        "ScopeSwitcher",
         "ScrollArea",
         "SemanticSurface",
         "SemanticSurfaceSupport",
@@ -3000,6 +2966,7 @@
         "VERTICAL_REGISTRY",
         "VisuallyHidden",
         "WATERMARK_DEFAULTS",
+        "WorkspaceScopes",
         "acquireSkinPack",
         "actionsColumn",
         "apcaContrast",
@@ -3133,6 +3100,7 @@
         "governedExitMs",
         "governedFlashMs",
         "hasCustomComponent",
+        "hasSurfaceError",
         "heightPxToRows",
         "hydrateTenantThemeConfig",
         "isAllSurfaceAccess",
@@ -3446,6 +3414,996 @@
         "validateTenantThemeConfig",
         "validateTenantThemeDocument"
       ]
+    },
+    "./contracts/foundation": {
+      "exports": [],
+      "symbols": {},
+      "supplierFreeExports": []
+    },
+    "./contracts/patterns": {
+      "exports": [],
+      "symbols": {},
+      "supplierFreeExports": []
+    },
+    "./contracts/i18n": {
+      "exports": [],
+      "symbols": {},
+      "supplierFreeExports": []
+    },
+    "./contracts/runtime": {
+      "exports": [],
+      "symbols": {},
+      "supplierFreeExports": []
+    },
+    "./contracts/primitives": {
+      "exports": [],
+      "symbols": {},
+      "supplierFreeExports": []
+    },
+    "./contracts/structures": {
+      "exports": [],
+      "symbols": {},
+      "supplierFreeExports": []
+    },
+    "./contracts/surfaces": {
+      "exports": [],
+      "symbols": {},
+      "supplierFreeExports": []
+    },
+    "./runtime/i18n": {
+      "exports": [
+        "DEFAULT_FALLBACK_LOCALE",
+        "I18nProvider",
+        "LOCALE_CONFIGS",
+        "useI18nContext",
+        "useLocale"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "DEFAULT_FALLBACK_LOCALE",
+        "I18nProvider",
+        "LOCALE_CONFIGS",
+        "useI18nContext",
+        "useLocale"
+      ]
+    },
+    "./runtime/motion": {
+      "exports": [
+        "CountUp",
+        "FadeIn",
+        "GridPattern",
+        "NoiseTexture",
+        "ScaleIn",
+        "useInView"
+      ],
+      "symbols": {
+        "CountUp": [
+          "antd",
+          "motion"
+        ],
+        "FadeIn": [
+          "antd",
+          "motion"
+        ],
+        "GridPattern": [
+          "antd",
+          "motion"
+        ],
+        "ScaleIn": [
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": [
+        "NoiseTexture",
+        "useInView"
+      ]
+    },
+    "./runtime/navigation": {
+      "exports": [
+        "NavigationLinkProvider"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "NavigationLinkProvider"
+      ]
+    },
+    "./runtime/forms": {
+      "exports": [
+        "useUnsavedChangesGuard"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "useUnsavedChangesGuard"
+      ]
+    },
+    "./runtime/cross-tab-sync": {
+      "exports": [
+        "useCrossTabSync"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "useCrossTabSync"
+      ]
+    },
+    "./runtime/provider": {
+      "exports": [
+        "DesignSystemProvider"
+      ],
+      "symbols": {
+        "DesignSystemProvider": [
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./runtime/root-attributes": {
+      "exports": [
+        "claimRootAttribute",
+        "claimRootAttributeSet",
+        "composeRootAttributeReleases"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "claimRootAttribute",
+        "claimRootAttributeSet",
+        "composeRootAttributeReleases"
+      ]
+    },
+    "./runtime/responsive": {
+      "exports": [
+        "useBreakpoints",
+        "useMediaQuery",
+        "useResponsive"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "useBreakpoints",
+        "useMediaQuery",
+        "useResponsive"
+      ]
+    },
+    "./runtime/tenant": {
+      "exports": [
+        "getKnownTenantConfig",
+        "useTenant"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "getKnownTenantConfig",
+        "useTenant"
+      ]
+    },
+    "./runtime/visual-authority": {
+      "exports": [
+        "resolveVisualAuthority"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "resolveVisualAuthority"
+      ]
+    },
+    "./runtime/tenant-theme": {
+      "exports": [
+        "TENANT_THEME_COMPILER_VERSION"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "TENANT_THEME_COMPILER_VERSION"
+      ]
+    },
+    "./primitives/button": {
+      "exports": [
+        "Button"
+      ],
+      "symbols": {
+        "Button": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/checkbox": {
+      "exports": [
+        "Checkbox"
+      ],
+      "symbols": {
+        "Checkbox": [
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/date-picker": {
+      "exports": [
+        "DatePicker"
+      ],
+      "symbols": {
+        "DatePicker": [
+          "@phosphor-icons/react",
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/input": {
+      "exports": [
+        "Input"
+      ],
+      "symbols": {
+        "Input": [
+          "@phosphor-icons/react",
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/input-number": {
+      "exports": [
+        "InputNumber"
+      ],
+      "symbols": {
+        "InputNumber": [
+          "@phosphor-icons/react",
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/radio": {
+      "exports": [
+        "Radio"
+      ],
+      "symbols": {
+        "Radio": [
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/select": {
+      "exports": [
+        "Select"
+      ],
+      "symbols": {
+        "Select": [
+          "@phosphor-icons/react",
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/slider": {
+      "exports": [
+        "Slider"
+      ],
+      "symbols": {
+        "Slider": [
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/switch": {
+      "exports": [
+        "Switch"
+      ],
+      "symbols": {
+        "Switch": [
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/textarea": {
+      "exports": [
+        "Textarea"
+      ],
+      "symbols": {
+        "Textarea": [
+          "@phosphor-icons/react",
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/toggle": {
+      "exports": [
+        "Toggle"
+      ],
+      "symbols": {
+        "Toggle": [
+          "@phosphor-icons/react",
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/breadcrumb": {
+      "exports": [
+        "Breadcrumb"
+      ],
+      "symbols": {
+        "Breadcrumb": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/float-button": {
+      "exports": [
+        "FloatButton"
+      ],
+      "symbols": {
+        "FloatButton": [
+          "@phosphor-icons/react",
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/segmented": {
+      "exports": [
+        "Segmented"
+      ],
+      "symbols": {
+        "Segmented": [
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/steps": {
+      "exports": [
+        "Steps"
+      ],
+      "symbols": {
+        "Steps": [
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/tabs": {
+      "exports": [
+        "Tabs"
+      ],
+      "symbols": {
+        "Tabs": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/box": {
+      "exports": [
+        "Box"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "Box"
+      ]
+    },
+    "./primitives/divider": {
+      "exports": [
+        "Divider"
+      ],
+      "symbols": {
+        "Divider": [
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/flex": {
+      "exports": [
+        "Flex"
+      ],
+      "symbols": {
+        "Flex": [
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/grid": {
+      "exports": [
+        "Grid"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "Grid"
+      ]
+    },
+    "./primitives/responsive": {
+      "exports": [
+        "Show"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "Show"
+      ]
+    },
+    "./primitives/stack": {
+      "exports": [
+        "Stack"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "Stack"
+      ]
+    },
+    "./primitives/avatar": {
+      "exports": [
+        "Avatar"
+      ],
+      "symbols": {
+        "Avatar": [
+          "@phosphor-icons/react",
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/badge": {
+      "exports": [
+        "Badge"
+      ],
+      "symbols": {
+        "Badge": [
+          "@phosphor-icons/react",
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/card": {
+      "exports": [
+        "Card"
+      ],
+      "symbols": {
+        "Card": [
+          "@phosphor-icons/react",
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/empty": {
+      "exports": [
+        "Empty"
+      ],
+      "symbols": {
+        "Empty": [
+          "@phosphor-icons/react",
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/image": {
+      "exports": [
+        "Image"
+      ],
+      "symbols": {
+        "Image": [
+          "@phosphor-icons/react",
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/table": {
+      "exports": [
+        "Table"
+      ],
+      "symbols": {
+        "Table": [
+          "@phosphor-icons/react",
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/tag": {
+      "exports": [
+        "Tag"
+      ],
+      "symbols": {
+        "Tag": [
+          "@phosphor-icons/react",
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/tooltip": {
+      "exports": [
+        "Tooltip"
+      ],
+      "symbols": {
+        "Tooltip": [
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/typography": {
+      "exports": [
+        "Heading",
+        "Link",
+        "Text"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "Heading",
+        "Link",
+        "Text"
+      ]
+    },
+    "./primitives/alert": {
+      "exports": [
+        "Alert"
+      ],
+      "symbols": {
+        "Alert": [
+          "@phosphor-icons/react",
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/message": {
+      "exports": [
+        "message"
+      ],
+      "symbols": {
+        "message": [
+          "@phosphor-icons/react",
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/modal": {
+      "exports": [
+        "Modal"
+      ],
+      "symbols": {
+        "Modal": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/progress": {
+      "exports": [
+        "Progress"
+      ],
+      "symbols": {
+        "Progress": [
+          "@phosphor-icons/react",
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/skeleton": {
+      "exports": [
+        "Skeleton"
+      ],
+      "symbols": {
+        "Skeleton": [
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/spinner": {
+      "exports": [
+        "Spinner"
+      ],
+      "symbols": {
+        "Spinner": [
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/toast": {
+      "exports": [
+        "Toast",
+        "ToastContainer",
+        "ToastProvider",
+        "toast",
+        "useToast"
+      ],
+      "symbols": {
+        "Toast": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "ToastContainer": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": [
+        "ToastProvider",
+        "toast",
+        "useToast"
+      ]
+    },
+    "./primitives/dropdown": {
+      "exports": [
+        "Dropdown"
+      ],
+      "symbols": {
+        "Dropdown": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./patterns/presence": {
+      "exports": [
+        "PresenceBar"
+      ],
+      "symbols": {
+        "PresenceBar": [
+          "@phosphor-icons/react",
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./patterns/data-table": {
+      "exports": [
+        "PatternDataTable"
+      ],
+      "symbols": {
+        "PatternDataTable": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./patterns/list-toolbar": {
+      "exports": [
+        "ListToolbar"
+      ],
+      "symbols": {
+        "ListToolbar": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./patterns/record-facts": {
+      "exports": [
+        "RecordFacts"
+      ],
+      "symbols": {
+        "RecordFacts": [
+          "@phosphor-icons/react"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./patterns/stats-grid": {
+      "exports": [
+        "PatternStatsGrid"
+      ],
+      "symbols": {
+        "PatternStatsGrid": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./patterns/widget-board": {
+      "exports": [
+        "WidgetBoard",
+        "normalizeLayoutRevision"
+      ],
+      "symbols": {
+        "WidgetBoard": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": [
+        "normalizeLayoutRevision"
+      ]
+    },
+    "./patterns/adaptive-overlay": {
+      "exports": [
+        "AdaptiveOverlay"
+      ],
+      "symbols": {
+        "AdaptiveOverlay": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./patterns/empty-state": {
+      "exports": [
+        "PatternEmptyState"
+      ],
+      "symbols": {
+        "PatternEmptyState": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./patterns/command-palette": {
+      "exports": [
+        "PatternCommandPalette"
+      ],
+      "symbols": {
+        "PatternCommandPalette": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./patterns/shortcuts-overlay": {
+      "exports": [
+        "PatternShortcutsOverlay"
+      ],
+      "symbols": {
+        "PatternShortcutsOverlay": [
+          "@phosphor-icons/react",
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./patterns/feature-workspace-frame": {
+      "exports": [
+        "FeatureWorkspaceFrame"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "FeatureWorkspaceFrame"
+      ]
+    },
+    "./patterns/kanban-board": {
+      "exports": [
+        "PatternKanbanBoard"
+      ],
+      "symbols": {
+        "PatternKanbanBoard": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./patterns/charts": {
+      "exports": [
+        "AreaChart",
+        "BarChart",
+        "BulletChart",
+        "CalendarHeatMap",
+        "FunnelChart",
+        "GaugeChart",
+        "LineChart",
+        "RadarChart",
+        "Sparkline",
+        "WaterfallChart"
+      ],
+      "symbols": {
+        "AreaChart": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "BarChart": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "BulletChart": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "CalendarHeatMap": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "FunnelChart": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "GaugeChart": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "LineChart": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "RadarChart": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "Sparkline": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "WaterfallChart": [
+          "antd",
+          "d3",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./structures/dashboard-header": {
+      "exports": [
+        "DashboardHeader"
+      ],
+      "symbols": {
+        "DashboardHeader": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./structures/record-summary": {
+      "exports": [
+        "RecordSummaryStrip"
+      ],
+      "symbols": {
+        "RecordSummaryStrip": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./structures/app-shell": {
+      "exports": [
+        "AppShell"
+      ],
+      "symbols": {
+        "AppShell": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./structures/action-dock": {
+      "exports": [
+        "ActionDock"
+      ],
+      "symbols": {
+        "ActionDock": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./structures/column-menu": {
+      "exports": [
+        "ColumnMenu"
+      ],
+      "symbols": {
+        "ColumnMenu": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./surfaces/collection-workspace": {
+      "exports": [
+        "CollectionWorkspaceSurface"
+      ],
+      "symbols": {
+        "CollectionWorkspaceSurface": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./surfaces/oauth-transition": {
+      "exports": [
+        "OAuthTransitionScreen",
+        "getOAuthTransitionDefaultVariant",
+        "getOAuthTransitionProvider",
+        "isOAuthProvider",
+        "isOAuthTransitionVariantId"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "OAuthTransitionScreen",
+        "getOAuthTransitionDefaultVariant",
+        "getOAuthTransitionProvider",
+        "isOAuthProvider",
+        "isOAuthTransitionVariantId"
+      ]
+    },
+    "./surfaces/state-cards": {
+      "exports": [
+        "SurfaceEmptyStateCard",
+        "SurfaceErrorStateCard",
+        "SurfaceLoadingSkeleton",
+        "SurfaceStaleBanner"
+      ],
+      "symbols": {
+        "SurfaceEmptyStateCard": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "SurfaceErrorStateCard": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "SurfaceLoadingSkeleton": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "SurfaceStaleBanner": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
     },
     "./icons": {
       "exports": [

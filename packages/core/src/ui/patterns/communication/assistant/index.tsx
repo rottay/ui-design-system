@@ -17,7 +17,12 @@
 
 import React from 'react';
 
-import { Box, Button, Card, Stack, Text, Tag } from '../../../primitives';
+import { Box } from '../../../primitives/layout/Box';
+import { Button } from '../../../primitives/inputs/Button';
+import { Card } from '../../../primitives/display/Card';
+import { Stack } from '../../../primitives/layout/Stack';
+import { Text } from '../../../primitives/display/Typography/compound/Text';
+import { Tag } from '../../../primitives/display/Tag';
 import { ShimmerText, useReducedMotion } from '@/graphics/motion';
 import { MarkdownView } from '../../../primitives/display/MarkdownView';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';

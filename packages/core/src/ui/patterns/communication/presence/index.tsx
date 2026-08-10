@@ -23,8 +23,10 @@
 
 import React from 'react';
 
-import { Avatar, Box, Text } from '../../../primitives';
-import type { AvatarSize } from '../../../primitives';
+import { Avatar } from '../../../primitives/display/Avatar';
+import type { AvatarSize } from '../../../primitives/display/Avatar/contracts';
+import { Box } from '../../../primitives/layout/Box';
+import { Text } from '../../../primitives/display/Typography/compound/Text';
 import { formatList, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 // ---------------------------------------------------------------------------

@@ -12,7 +12,11 @@ import { createEngineComponent } from "../../../../../../infrastructure/runtime/
 import { stampDataPart } from "../../../../../../infrastructure/runtime/dom/foundation/data-part";
 import { useBreakpoints } from "@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state";
 import { useMediaQuery } from "@/infrastructure/runtime/responsive/runtime/media-query";
-import { Box, Button, Flex, Stack, Text } from "../../../../../primitives";
+import { Box } from "@/ui/primitives/layout/Box";
+import { Button } from "@/ui/primitives/inputs/Button";
+import { Flex } from "@/ui/primitives/layout/Flex";
+import { Stack } from "@/ui/primitives/layout/Stack";
+import { Text } from "@/ui/primitives/display/Typography/compound/Text";
 import { VisuallyHidden } from "@/ui/primitives/foundation/VisuallyHidden";
 import {
   AlertTriangleIcon,

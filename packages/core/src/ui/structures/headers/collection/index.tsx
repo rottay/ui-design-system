@@ -40,7 +40,11 @@
 
 import { Fragment, type ReactNode } from 'react';
 
-import { Box, Button, Dropdown, Flex, Text } from '../../../primitives';
+import { Box } from '../../../primitives/layout/Box';
+import { Button } from '../../../primitives/inputs/Button';
+import { Dropdown } from '../../../primitives/overlay/Dropdown';
+import { Flex } from '../../../primitives/layout/Flex';
+import { Text } from '../../../primitives/display/Typography/compound/Text';
 import { KeyboardIcon } from '@/graphics/icons';
 import { NavigationMoreIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-more';
 import { useResponsive } from '../../../../infrastructure/runtime/responsive';

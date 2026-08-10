@@ -18,7 +18,11 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { ImageIcon } from '../../../../../../graphics/icons';
 
-import { Box, Flex, Skeleton, Stack, Text } from '../../../../../primitives';
+import { Box } from '../../../../../primitives/layout/Box';
+import { Flex } from '../../../../../primitives/layout/Flex';
+import { Skeleton } from '../../../../../primitives/feedback/Skeleton';
+import { Stack } from '../../../../../primitives/layout/Stack';
+import { Text } from '../../../../../primitives/display/Typography/compound/Text';
 import { Checkbox } from '../../../../../primitives/inputs/Checkbox';
 import { Pagination } from '../../../../../primitives/navigation/Pagination';
 import { ShortcutScope } from '../../../../../../infrastructure/runtime/application/interaction/shortcuts';

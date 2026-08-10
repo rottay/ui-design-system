@@ -491,12 +491,12 @@ export const BackTop = React.forwardRef<HTMLButtonElement, FloatButtonBackTopPro
 
     // Bound scroll source. A memoized `target` reading a ref that is still
     // empty on the first commit must not pin the listener to `window`.
-    const [scrollSource, setScrollSource] = useState<Window | HTMLElement | null>(null);
+    const [scrollSource, setScrollSource] = useState<HTMLElement | null | undefined>(undefined);
 
     // Monitor scroll position and update visibility
     useEffect(() => {
-      if (scrollSource === null) return;
-      const container = scrollSource;
+      if (scrollSource === undefined) return;
+      const container = scrollSource ?? window;
 
       const handleScroll = () => {
         const scrollTop = container === window
@@ -516,7 +516,7 @@ export const BackTop = React.forwardRef<HTMLButtonElement, FloatButtonBackTopPro
     // Re-resolve after every commit: a container attaching its ref in a later
     // commit must still become the bound source. Equal resolutions bail out.
     useEffect(() => {
-      const next = target?.() ?? window;
+      const next = target?.() ?? null;
       setScrollSource((current) => (current === next ? current : next));
     });
 

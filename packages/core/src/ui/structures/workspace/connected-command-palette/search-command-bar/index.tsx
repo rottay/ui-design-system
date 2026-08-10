@@ -48,7 +48,11 @@ import { useVoiceInput } from '@/infrastructure/runtime/application/automation/v
 import { useRegisterCommands } from '@/infrastructure/runtime/application/commands';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ConnectedCommandPalette } from '..';
-import { Box, Button, Flex, Input, Text } from '@ui/primitives';
+import { Box } from '@ui/primitives/layout/Box';
+import { Button } from '@ui/primitives/inputs/Button';
+import { Flex } from '@ui/primitives/layout/Flex';
+import { Input } from '@ui/primitives/inputs/Input';
+import { Text } from '@ui/primitives/display/Typography/compound/Text';
 
 /** A single suggestion chip rendered in the "Smart refine" cluster. */
 export interface SearchCommandSuggestion {

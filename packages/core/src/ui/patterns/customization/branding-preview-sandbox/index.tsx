@@ -38,7 +38,13 @@
 
 import React, { useMemo, useId } from 'react';
 import type { TenantAppearance } from '../../../../foundation/contracts/composition/tenants/themes';
-import { Badge, Box, Button, Card, Heading, Input, Text } from '../../../primitives';
+import { Badge } from '../../../primitives/display/Badge';
+import { Box } from '../../../primitives/layout/Box';
+import { Button } from '../../../primitives/inputs/Button';
+import { Card } from '../../../primitives/display/Card';
+import { Heading } from '../../../primitives/display/Typography/compound/Heading';
+import { Input } from '../../../primitives/inputs/Input';
+import { Text } from '../../../primitives/display/Typography/compound/Text';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 // Lazy import to avoid pulling appearance compiler into main bundle

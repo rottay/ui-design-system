@@ -22,7 +22,10 @@
  */
 
 import { type ReactNode } from 'react';
-import { Box, Button, Flex, Text } from '../../../primitives';
+import { Box } from '../../../primitives/layout/Box';
+import { Button } from '../../../primitives/inputs/Button';
+import { Flex } from '../../../primitives/layout/Flex';
+import { Text } from '../../../primitives/display/Typography/compound/Text';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 // ---------------------------------------------------------------------------

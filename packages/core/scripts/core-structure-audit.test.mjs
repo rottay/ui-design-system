@@ -409,6 +409,41 @@ test('@ui resolves to the canonical UI root', () => {
   }
 });
 
+test('a UI sibling may consume only a leaf directly re-exported by a governed public wrapper', () => {
+  const { packageRoot, sourceRoot } = fixture();
+  try {
+    write(resolve(packageRoot, 'public-entrypoints.manifest.json'), JSON.stringify({
+      entries: {
+        './primitives/target': {
+          source: 'src/entrypoints/public/primitives/target/index.ts',
+        },
+      },
+    }));
+    write(
+      resolve(sourceRoot, 'entrypoints/public/primitives/target/index.ts'),
+      "export { target } from '../../../../ui/primitives/target';\n",
+    );
+    write(resolve(sourceRoot, 'ui/primitives/target/index.ts'), 'export const target = true;\n');
+    write(resolve(sourceRoot, 'ui/primitives/ungoverned/index.ts'), 'export const ungoverned = true;\n');
+    write(
+      resolve(sourceRoot, 'ui/primitives/source/index.ts'),
+      "import { target } from '@ui/primitives/target';\nimport { ungoverned } from '@ui/primitives/ungoverned';\nexport const source = target && ungoverned;\n",
+    );
+
+    const result = auditCoreStructure({ packageRoot, sourceRoot });
+    const ids = new Set(result.findings.map(({ id }) => id));
+
+    assert(!ids.has(
+      'sibling-owner-dependency:ui/primitives/source/index.ts->ui/primitives/target/index.ts',
+    ));
+    assert(ids.has(
+      'sibling-owner-dependency:ui/primitives/source/index.ts->ui/primitives/ungoverned/index.ts',
+    ));
+  } finally {
+    rmSync(packageRoot, { recursive: true, force: true });
+  }
+});
+
 test('local import gate includes tests and distinguishes missing modules from real assets', () => {
   const { packageRoot, sourceRoot } = fixture();
   try {
@@ -466,6 +501,19 @@ test('entrypoint support root permits only registered capability folder/index bo
         },
       },
     }));
+    write(resolve(packageRoot, 'public-entrypoints.manifest.json'), JSON.stringify({
+      entries: {
+        './contracts/example': {
+          source: 'src/entrypoints/public/contracts/example/index.ts',
+        },
+        './runtime/example': {
+          source: 'src/entrypoints/public/runtime/example/index.ts',
+        },
+        './primitives/example': {
+          source: 'src/entrypoints/public/primitives/example/index.ts',
+        },
+      },
+    }));
     write(
       resolve(sourceRoot, 'entrypoints/public/index.ts'),
       "export * from '../../feature';\n",
@@ -473,6 +521,18 @@ test('entrypoint support root permits only registered capability folder/index bo
     write(
       resolve(sourceRoot, 'entrypoints/public/helper.ts'),
       'export const misplacedHelper = true;\n',
+    );
+    write(
+      resolve(sourceRoot, 'entrypoints/public/contracts/example/index.ts'),
+      'export interface ExampleContract {}\n',
+    );
+    write(
+      resolve(sourceRoot, 'entrypoints/public/runtime/example/index.ts'),
+      'export const exampleRuntime = true;\n',
+    );
+    write(
+      resolve(sourceRoot, 'entrypoints/public/primitives/example/index.ts'),
+      'export const examplePrimitive = true;\n',
     );
     write(
       resolve(sourceRoot, 'entrypoints/hidden/index.ts'),
@@ -483,9 +543,12 @@ test('entrypoint support root permits only registered capability folder/index bo
     const ids = new Set(result.findings.map(({ id }) => id));
 
     assert(result.inventory.rootEntrypoints.includes('entrypoints/public/index.ts'));
-    assert.equal(result.inventory.ignoredByKind.entrypoint, 2);
+    assert.equal(result.inventory.ignoredByKind.entrypoint, 5);
     assert(!ids.has('unclassified-root-domain:entrypoints'));
     assert(![...ids].some((id) => id.includes('entrypoints/public/index.ts')));
+    assert(![...ids].some((id) => (
+      id.startsWith('mixed-layer-and-capability-peers:entrypoints/')
+    )));
     assert(ids.has(
       'invalid-entrypoint-support-module:entrypoints/public/helper.ts',
     ));

@@ -17,7 +17,11 @@
  */
 
 import type { TenantThemeValidationIssue } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
-import { Badge, Box, Flex, Stack, Text } from '@/ui/primitives';
+import { Badge } from '@/ui/primitives/display/Badge';
+import { Box } from '@/ui/primitives/layout/Box';
+import { Flex } from '@/ui/primitives/layout/Flex';
+import { Stack } from '@/ui/primitives/layout/Stack';
+import { Text } from '@/ui/primitives/display/Typography/compound/Text';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 // Sourced from the owner barrel rather than the sibling leaf modules so the

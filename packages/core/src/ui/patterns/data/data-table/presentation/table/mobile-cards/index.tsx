@@ -1,7 +1,12 @@
 "use client";
 
 import React from "react";
-import { Box, Card, Checkbox, Flex, Stack, Text } from "@/ui/primitives";
+import { Box } from "@/ui/primitives/layout/Box";
+import { Card } from "@/ui/primitives/display/Card";
+import { Checkbox } from "@/ui/primitives/inputs/Checkbox";
+import { Flex } from "@/ui/primitives/layout/Flex";
+import { Stack } from "@/ui/primitives/layout/Stack";
+import { Text } from "@/ui/primitives/display/Typography/compound/Text";
 import type {
   ColumnDef,
   ResponsiveColumnMode,

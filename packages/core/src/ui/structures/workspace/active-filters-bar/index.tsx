@@ -41,7 +41,10 @@
 import { useState } from "react";
 
 import { useOptionalTranslation } from "@/infrastructure/runtime/i18n";
-import { Box, Button, Flex, Tag } from "../../../primitives";
+import { Box } from "../../../primitives/layout/Box";
+import { Button } from "../../../primitives/inputs/Button";
+import { Flex } from "../../../primitives/layout/Flex";
+import { Tag } from "../../../primitives/display/Tag";
 import { ActionAddIcon } from "@/graphics/icons/presentation/semantic/generated/roles/action-add";
 import { ActionCloseIcon } from "@/graphics/icons/presentation/semantic/generated/roles/action-close";
 import { StatusDraftIcon } from "@/graphics/icons/presentation/semantic/generated/roles/status-draft";

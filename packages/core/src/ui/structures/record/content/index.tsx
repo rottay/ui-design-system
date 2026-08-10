@@ -95,7 +95,13 @@ import {
 import { StatusErrorIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-error';
 import { CopyToCheck } from '../../../../graphics/motion';
 
-import { Box, Button, Flex, Skeleton, Stack, Text, Tooltip } from '../../../primitives';
+import { Box } from '../../../primitives/layout/Box';
+import { Button } from '../../../primitives/inputs/Button';
+import { Flex } from '../../../primitives/layout/Flex';
+import { Skeleton } from '../../../primitives/feedback/Skeleton';
+import { Stack } from '../../../primitives/layout/Stack';
+import { Text } from '../../../primitives/display/Typography/compound/Text';
+import { Tooltip } from '../../../primitives/display/Tooltip';
 import { useNavigationLink } from '../../../../infrastructure/runtime/adapters/presentation/react/navigation';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import {

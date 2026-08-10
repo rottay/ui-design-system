@@ -28,7 +28,16 @@
 import React, { useCallback, useId, useMemo, useState } from 'react';
 
 import { arrayValueAt } from '@/foundation/kernel/collections';
-import { Badge, Box, Button, Card, Flex, Heading, Input, Select, Stack, Text } from '../../../primitives';
+import { Badge } from '../../../primitives/display/Badge';
+import { Box } from '../../../primitives/layout/Box';
+import { Button } from '../../../primitives/inputs/Button';
+import { Card } from '../../../primitives/display/Card';
+import { Flex } from '../../../primitives/layout/Flex';
+import { Heading } from '../../../primitives/display/Typography/compound/Heading';
+import { Input } from '../../../primitives/inputs/Input';
+import { Select } from '../../../primitives/inputs/Select';
+import { Stack } from '../../../primitives/layout/Stack';
+import { Text } from '../../../primitives/display/Typography/compound/Text';
 import { compileBrandTheme } from '@/infrastructure/compilers/kernel/runtime/brand-theme';
 import { validateBrandingContrast, type BrandingColors } from '@/foundation/kernel/accessibility/branding-contrast';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';

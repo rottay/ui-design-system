@@ -187,7 +187,7 @@ export const ModernAffix = forwardRef<HTMLDivElement, AffixProps>(
 
     // Bound scroll source. A memoized `target` reading a container that is
     // still unmounted on the first commit must not pin the listener to `window`.
-    const [scrollSource, setScrollSource] = useState<Window | HTMLElement | null>(null);
+    const [scrollSource, setScrollSource] = useState<HTMLElement | null | undefined>(undefined);
 
     // The caller's zIndex is runtime input, but the property owner remains
     // the skin. Passing the value through a family-scoped custom property
@@ -297,8 +297,8 @@ export const ModernAffix = forwardRef<HTMLDivElement, AffixProps>(
       // If no onChange, use simple sticky and skip measurements
       if (!onChange) return;
 
-      const targetContainer = scrollSource;
-      if (!targetContainer) return;
+      if (scrollSource === undefined) return;
+      const targetContainer = scrollSource ?? window;
 
       // Throttle scroll events using requestAnimationFrame
       let ticking = false;
@@ -332,7 +332,7 @@ export const ModernAffix = forwardRef<HTMLDivElement, AffixProps>(
     // commit must still become the bound source. Equal resolutions bail out.
     useEffect(() => {
       if (!onChange) return;
-      const next = getTargetContainer(target);
+      const next = target?.() ?? null;
       setScrollSource((current) => (current === next ? current : next));
     });
 

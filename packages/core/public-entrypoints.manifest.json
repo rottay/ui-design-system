@@ -1,0 +1,1801 @@
+{
+  "schemaVersion": 2,
+  "package": "@rottay/design-system",
+  "entries": {
+    "./contracts/foundation": {
+      "owner": "contracts",
+      "family": "foundation",
+      "boundary": "contracts",
+      "client": false,
+      "source": "src/entrypoints/public/contracts/foundation/index.ts",
+      "output": "entrypoints/public/contracts/foundation/index",
+      "budget": {
+        "maxDirectSources": 4,
+        "maxReachableModules": 3,
+        "maxSourceBytes": 1459
+      },
+      "symbols": [
+        {
+          "name": "FeatureRouteMeta",
+          "kind": "type"
+        },
+        {
+          "name": "ProductProfileKey",
+          "kind": "type"
+        },
+        {
+          "name": "TenantConfig",
+          "kind": "type"
+        },
+        {
+          "name": "TenantPlan",
+          "kind": "type"
+        },
+        {
+          "name": "Tone",
+          "kind": "type"
+        },
+        {
+          "name": "VerticalManifest",
+          "kind": "type"
+        }
+      ]
+    },
+    "./contracts/patterns": {
+      "owner": "contracts",
+      "family": "patterns",
+      "boundary": "contracts",
+      "client": false,
+      "source": "src/entrypoints/public/contracts/patterns/index.ts",
+      "output": "entrypoints/public/contracts/patterns/index",
+      "budget": {
+        "maxDirectSources": 10,
+        "maxReachableModules": 3,
+        "maxSourceBytes": 2265
+      },
+      "symbols": [
+        {
+          "name": "AggregationFn",
+          "kind": "type"
+        },
+        {
+          "name": "BulkAction",
+          "kind": "type"
+        },
+        {
+          "name": "ColumnDef",
+          "kind": "type"
+        },
+        {
+          "name": "ColumnResponsiveConfig",
+          "kind": "type"
+        },
+        {
+          "name": "CommandItem",
+          "kind": "type"
+        },
+        {
+          "name": "DensityKey",
+          "kind": "type"
+        },
+        {
+          "name": "EditableConfig",
+          "kind": "type"
+        },
+        {
+          "name": "FilterDef",
+          "kind": "type"
+        },
+        {
+          "name": "FilterPillConfig",
+          "kind": "type"
+        },
+        {
+          "name": "KanbanColumnDef",
+          "kind": "type"
+        },
+        {
+          "name": "LayoutIntent",
+          "kind": "type"
+        },
+        {
+          "name": "ListToolbarProps",
+          "kind": "type"
+        },
+        {
+          "name": "PaginationConfig",
+          "kind": "type"
+        },
+        {
+          "name": "RecordFact",
+          "kind": "type"
+        },
+        {
+          "name": "RecordFactSpan",
+          "kind": "type"
+        },
+        {
+          "name": "SavedView",
+          "kind": "type"
+        },
+        {
+          "name": "Series",
+          "kind": "type"
+        },
+        {
+          "name": "ShortcutDisplayItem",
+          "kind": "type"
+        },
+        {
+          "name": "SortConfig",
+          "kind": "type"
+        },
+        {
+          "name": "ViewMode",
+          "kind": "type"
+        },
+        {
+          "name": "WidgetBoardItem",
+          "kind": "type"
+        },
+        {
+          "name": "WidgetBoardSize",
+          "kind": "type"
+        }
+      ]
+    },
+    "./contracts/i18n": {
+      "owner": "contracts",
+      "family": "i18n",
+      "boundary": "contracts",
+      "client": false,
+      "source": "src/entrypoints/public/contracts/i18n/index.ts",
+      "output": "entrypoints/public/contracts/i18n/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 3,
+        "maxSourceBytes": 1136
+      },
+      "symbols": [
+        {
+          "name": "SupportedLocale",
+          "kind": "type"
+        },
+        {
+          "name": "TextDirection",
+          "kind": "type"
+        }
+      ]
+    },
+    "./contracts/runtime": {
+      "owner": "contracts",
+      "family": "runtime",
+      "boundary": "contracts",
+      "client": false,
+      "source": "src/entrypoints/public/contracts/runtime/index.ts",
+      "output": "entrypoints/public/contracts/runtime/index",
+      "budget": {
+        "maxDirectSources": 2,
+        "maxReachableModules": 3,
+        "maxSourceBytes": 1279
+      },
+      "symbols": [
+        {
+          "name": "RootAttributeSetClaim",
+          "kind": "type"
+        },
+        {
+          "name": "VisualAuthorityDeclaration",
+          "kind": "type"
+        }
+      ]
+    },
+    "./contracts/primitives": {
+      "owner": "contracts",
+      "family": "primitives",
+      "boundary": "contracts",
+      "client": false,
+      "source": "src/entrypoints/public/contracts/primitives/index.ts",
+      "output": "entrypoints/public/contracts/primitives/index",
+      "budget": {
+        "maxDirectSources": 6,
+        "maxReachableModules": 3,
+        "maxSourceBytes": 1612
+      },
+      "symbols": [
+        {
+          "name": "AvatarShape",
+          "kind": "type"
+        },
+        {
+          "name": "AvatarSize",
+          "kind": "type"
+        },
+        {
+          "name": "BadgeVariant",
+          "kind": "type"
+        },
+        {
+          "name": "ButtonVariant",
+          "kind": "type"
+        },
+        {
+          "name": "ColumnType",
+          "kind": "type"
+        },
+        {
+          "name": "TagProps",
+          "kind": "type"
+        },
+        {
+          "name": "TooltipPlacement",
+          "kind": "type"
+        }
+      ]
+    },
+    "./contracts/structures": {
+      "owner": "contracts",
+      "family": "structures",
+      "boundary": "contracts",
+      "client": false,
+      "source": "src/entrypoints/public/contracts/structures/index.ts",
+      "output": "entrypoints/public/contracts/structures/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 3,
+        "maxSourceBytes": 1137
+      },
+      "symbols": [
+        {
+          "name": "DashboardAction",
+          "kind": "type"
+        },
+        {
+          "name": "DashboardMetric",
+          "kind": "type"
+        }
+      ]
+    },
+    "./contracts/surfaces": {
+      "owner": "contracts",
+      "family": "surfaces",
+      "boundary": "contracts",
+      "client": false,
+      "source": "src/entrypoints/public/contracts/surfaces/index.ts",
+      "output": "entrypoints/public/contracts/surfaces/index",
+      "budget": {
+        "maxDirectSources": 3,
+        "maxReachableModules": 3,
+        "maxSourceBytes": 1443
+      },
+      "symbols": [
+        {
+          "name": "AdaptiveConfig",
+          "kind": "type"
+        },
+        {
+          "name": "CollectionWorkspaceProps",
+          "kind": "type"
+        },
+        {
+          "name": "EntityAdapter",
+          "kind": "type"
+        },
+        {
+          "name": "SurfaceCapabilityRegistration",
+          "kind": "type"
+        },
+        {
+          "name": "SurfacePermissionRule",
+          "kind": "type"
+        },
+        {
+          "name": "SurfacePermissionsConfig",
+          "kind": "type"
+        }
+      ]
+    },
+    "./runtime/i18n": {
+      "owner": "runtime",
+      "family": "i18n",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/runtime/i18n/index.ts",
+      "output": "entrypoints/public/runtime/i18n/index",
+      "budget": {
+        "maxDirectSources": 4,
+        "maxReachableModules": 22,
+        "maxSourceBytes": 35069
+      },
+      "symbols": [
+        {
+          "name": "DEFAULT_FALLBACK_LOCALE",
+          "kind": "value"
+        },
+        {
+          "name": "I18nProvider",
+          "kind": "value"
+        },
+        {
+          "name": "LOCALE_CONFIGS",
+          "kind": "value"
+        },
+        {
+          "name": "useI18nContext",
+          "kind": "value"
+        },
+        {
+          "name": "useLocale",
+          "kind": "value"
+        }
+      ]
+    },
+    "./runtime/motion": {
+      "owner": "runtime",
+      "family": "motion",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/runtime/motion/index.ts",
+      "output": "entrypoints/public/runtime/motion/index",
+      "budget": {
+        "maxDirectSources": 6,
+        "maxReachableModules": 187,
+        "maxSourceBytes": 1208052
+      },
+      "symbols": [
+        {
+          "name": "CountUp",
+          "kind": "value"
+        },
+        {
+          "name": "FadeIn",
+          "kind": "value"
+        },
+        {
+          "name": "GridPattern",
+          "kind": "value"
+        },
+        {
+          "name": "NoiseTexture",
+          "kind": "value"
+        },
+        {
+          "name": "ScaleIn",
+          "kind": "value"
+        },
+        {
+          "name": "useInView",
+          "kind": "value"
+        }
+      ]
+    },
+    "./runtime/navigation": {
+      "owner": "runtime",
+      "family": "navigation",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/runtime/navigation/index.ts",
+      "output": "entrypoints/public/runtime/navigation/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 4,
+        "maxSourceBytes": 5065
+      },
+      "symbols": [
+        {
+          "name": "NavigationLinkProvider",
+          "kind": "value"
+        }
+      ]
+    },
+    "./runtime/forms": {
+      "owner": "runtime",
+      "family": "forms",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/runtime/forms/index.ts",
+      "output": "entrypoints/public/runtime/forms/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 4,
+        "maxSourceBytes": 5107
+      },
+      "symbols": [
+        {
+          "name": "useUnsavedChangesGuard",
+          "kind": "value"
+        }
+      ]
+    },
+    "./runtime/cross-tab-sync": {
+      "owner": "runtime",
+      "family": "cross-tab-sync",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/runtime/cross-tab-sync/index.ts",
+      "output": "entrypoints/public/runtime/cross-tab-sync/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 4,
+        "maxSourceBytes": 14440
+      },
+      "symbols": [
+        {
+          "name": "useCrossTabSync",
+          "kind": "value"
+        }
+      ]
+    },
+    "./runtime/provider": {
+      "owner": "runtime",
+      "family": "provider",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/runtime/provider/index.ts",
+      "output": "entrypoints/public/runtime/provider/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 196,
+        "maxSourceBytes": 1350925
+      },
+      "symbols": [
+        {
+          "name": "DesignSystemProvider",
+          "kind": "value"
+        }
+      ]
+    },
+    "./runtime/root-attributes": {
+      "owner": "runtime",
+      "family": "root-attributes",
+      "boundary": "runtime",
+      "client": false,
+      "source": "src/entrypoints/public/runtime/root-attributes/index.ts",
+      "output": "entrypoints/public/runtime/root-attributes/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 4,
+        "maxSourceBytes": 16306
+      },
+      "symbols": [
+        {
+          "name": "claimRootAttribute",
+          "kind": "value"
+        },
+        {
+          "name": "claimRootAttributeSet",
+          "kind": "value"
+        },
+        {
+          "name": "composeRootAttributeReleases",
+          "kind": "value"
+        }
+      ]
+    },
+    "./runtime/responsive": {
+      "owner": "runtime",
+      "family": "responsive",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/runtime/responsive/index.ts",
+      "output": "entrypoints/public/runtime/responsive/index",
+      "budget": {
+        "maxDirectSources": 3,
+        "maxReachableModules": 12,
+        "maxSourceBytes": 58115
+      },
+      "symbols": [
+        {
+          "name": "useBreakpoints",
+          "kind": "value"
+        },
+        {
+          "name": "useMediaQuery",
+          "kind": "value"
+        },
+        {
+          "name": "useResponsive",
+          "kind": "value"
+        }
+      ]
+    },
+    "./runtime/tenant": {
+      "owner": "runtime",
+      "family": "tenant",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/runtime/tenant/index.ts",
+      "output": "entrypoints/public/runtime/tenant/index",
+      "budget": {
+        "maxDirectSources": 2,
+        "maxReachableModules": 48,
+        "maxSourceBytes": 293036
+      },
+      "symbols": [
+        {
+          "name": "getKnownTenantConfig",
+          "kind": "value"
+        },
+        {
+          "name": "useTenant",
+          "kind": "value"
+        }
+      ]
+    },
+    "./runtime/visual-authority": {
+      "owner": "runtime",
+      "family": "visual-authority",
+      "boundary": "runtime",
+      "client": false,
+      "source": "src/entrypoints/public/runtime/visual-authority/index.ts",
+      "output": "entrypoints/public/runtime/visual-authority/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 6,
+        "maxSourceBytes": 51534
+      },
+      "symbols": [
+        {
+          "name": "resolveVisualAuthority",
+          "kind": "value"
+        }
+      ]
+    },
+    "./runtime/tenant-theme": {
+      "owner": "runtime",
+      "family": "tenant-theme",
+      "boundary": "runtime",
+      "client": false,
+      "source": "src/entrypoints/public/runtime/tenant-theme/index.ts",
+      "output": "entrypoints/public/runtime/tenant-theme/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 30,
+        "maxSourceBytes": 420044
+      },
+      "symbols": [
+        {
+          "name": "TENANT_THEME_COMPILER_VERSION",
+          "kind": "value"
+        }
+      ]
+    },
+    "./primitives/button": {
+      "owner": "primitives",
+      "family": "button",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/primitives/button/index.ts",
+      "output": "entrypoints/public/primitives/button/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 589,
+        "maxSourceBytes": 1944213
+      },
+      "symbols": [
+        {
+          "name": "Button",
+          "kind": "value"
+        }
+      ]
+    },
+    "./primitives/checkbox": {
+      "owner": "primitives",
+      "family": "checkbox",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/primitives/checkbox/index.ts",
+      "output": "entrypoints/public/primitives/checkbox/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 47,
+        "maxSourceBytes": 154655
+      },
+      "symbols": [
+        {
+          "name": "Checkbox",
+          "kind": "value"
+        }
+      ]
+    },
+    "./primitives/date-picker": {
+      "owner": "primitives",
+      "family": "date-picker",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/primitives/date-picker/index.ts",
+      "output": "entrypoints/public/primitives/date-picker/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 17,
+        "maxSourceBytes": 92127
+      },
+      "symbols": [
+        {
+          "name": "DatePicker",
+          "kind": "value"
+        }
+      ]
+    },
+    "./primitives/input": {
+      "owner": "primitives",
+      "family": "input",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/primitives/input/index.ts",
+      "output": "entrypoints/public/primitives/input/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 67,
+        "maxSourceBytes": 237877
+      },
+      "symbols": [
+        {
+          "name": "Input",
+          "kind": "value"
+        }
+      ]
+    },
+    "./primitives/input-number": {
+      "owner": "primitives",
+      "family": "input-number",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/primitives/input-number/index.ts",
+      "output": "entrypoints/public/primitives/input-number/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 17,
+        "maxSourceBytes": 87891
+      },
+      "symbols": [
+        {
+          "name": "InputNumber",
+          "kind": "value"
+        }
+      ]
+    },
+    "./primitives/radio": {
+      "owner": "primitives",
+      "family": "radio",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/primitives/radio/index.ts",
+      "output": "entrypoints/public/primitives/radio/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 47,
+        "maxSourceBytes": 155628
+      },
+      "symbols": [
+        {
+          "name": "Radio",
+          "kind": "value"
+        }
+      ]
+    },
+    "./primitives/select": {
+      "owner": "primitives",
+      "family": "select",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/primitives/select/index.ts",
+      "output": "entrypoints/public/primitives/select/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 20,
+        "maxSourceBytes": 103343
+      },
+      "symbols": [
+        {
+          "name": "Select",
+          "kind": "value"
+        }
+      ]
+    },
+    "./primitives/slider": {
+      "owner": "primitives",
+      "family": "slider",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/primitives/slider/index.ts",
+      "output": "entrypoints/public/primitives/slider/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 17,
+        "maxSourceBytes": 83935
+      },
+      "symbols": [
+        {
+          "name": "Slider",
+          "kind": "value"
+        }
+      ]
+    },
+    "./primitives/switch": {
+      "owner": "primitives",
+      "family": "switch",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/primitives/switch/index.ts",
+      "output": "entrypoints/public/primitives/switch/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 17,
+        "maxSourceBytes": 83908
+      },
+      "symbols": [
+        {
+          "name": "Switch",
+          "kind": "value"
+        }
+      ]
+    },
+    "./primitives/textarea": {
+      "owner": "primitives",
+      "family": "textarea",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/primitives/textarea/index.ts",
+      "output": "entrypoints/public/primitives/textarea/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 17,
+        "maxSourceBytes": 87106
+      },
+      "symbols": [
+        {
+          "name": "Textarea",
+          "kind": "value"
+        }
+      ]
+    },
+    "./primitives/toggle": {
+      "owner": "primitives",
+      "family": "toggle",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/primitives/toggle/index.ts",
+      "output": "entrypoints/public/primitives/toggle/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 17,
+        "maxSourceBytes": 88375
+      },
+      "symbols": [
+        {
+          "name": "Toggle",
+          "kind": "value"
+        }
+      ]
+    },
+    "./primitives/breadcrumb": {
+      "owner": "primitives",
+      "family": "breadcrumb",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/primitives/breadcrumb/index.ts",
+      "output": "entrypoints/public/primitives/breadcrumb/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 19,
+        "maxSourceBytes": 101625
+      },
+      "symbols": [
+        {
+          "name": "Breadcrumb",
+          "kind": "value"
+        }
+      ]
+    },
+    "./primitives/float-button": {
+      "owner": "primitives",
+      "family": "float-button",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/primitives/float-button/index.ts",
+      "output": "entrypoints/public/primitives/float-button/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 17,
+        "maxSourceBytes": 90635
+      },
+      "symbols": [
+        {
+          "name": "FloatButton",
+          "kind": "value"
+        }
+      ]
+    },
+    "./primitives/segmented": {
+      "owner": "primitives",
+      "family": "segmented",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/primitives/segmented/index.ts",
+      "output": "entrypoints/public/primitives/segmented/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 17,
+        "maxSourceBytes": 90010
+      },
+      "symbols": [
+        {
+          "name": "Segmented",
+          "kind": "value"
+        }
+      ]
+    },
+    "./primitives/steps": {
+      "owner": "primitives",
+      "family": "steps",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/primitives/steps/index.ts",
+      "output": "entrypoints/public/primitives/steps/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 17,
+        "maxSourceBytes": 91644
+      },
+      "symbols": [
+        {
+          "name": "Steps",
+          "kind": "value"
+        }
+      ]
+    },
+    "./primitives/tabs": {
+      "owner": "primitives",
+      "family": "tabs",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/primitives/tabs/index.ts",
+      "output": "entrypoints/public/primitives/tabs/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 19,
+        "maxSourceBytes": 98589
+      },
+      "symbols": [
+        {
+          "name": "Tabs",
+          "kind": "value"
+        }
+      ]
+    },
+    "./primitives/box": {
+      "owner": "primitives",
+      "family": "box",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/primitives/box/index.ts",
+      "output": "entrypoints/public/primitives/box/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 17,
+        "maxSourceBytes": 103097
+      },
+      "symbols": [
+        {
+          "name": "Box",
+          "kind": "value"
+        }
+      ]
+    },
+    "./primitives/divider": {
+      "owner": "primitives",
+      "family": "divider",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/primitives/divider/index.ts",
+      "output": "entrypoints/public/primitives/divider/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 132,
+        "maxSourceBytes": 1041794
+      },
+      "symbols": [
+        {
+          "name": "Divider",
+          "kind": "value"
+        }
+      ]
+    },
+    "./primitives/flex": {
+      "owner": "primitives",
+      "family": "flex",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/primitives/flex/index.ts",
+      "output": "entrypoints/public/primitives/flex/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 17,
+        "maxSourceBytes": 92721
+      },
+      "symbols": [
+        {
+          "name": "Flex",
+          "kind": "value"
+        }
+      ]
+    },
+    "./primitives/grid": {
+      "owner": "primitives",
+      "family": "grid",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/primitives/grid/index.ts",
+      "output": "entrypoints/public/primitives/grid/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 18,
+        "maxSourceBytes": 104619
+      },
+      "symbols": [
+        {
+          "name": "Grid",
+          "kind": "value"
+        }
+      ]
+    },
+    "./primitives/responsive": {
+      "owner": "primitives",
+      "family": "responsive",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/primitives/responsive/index.ts",
+      "output": "entrypoints/public/primitives/responsive/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 6,
+        "maxSourceBytes": 12972
+      },
+      "symbols": [
+        {
+          "name": "Show",
+          "kind": "value"
+        }
+      ]
+    },
+    "./primitives/stack": {
+      "owner": "primitives",
+      "family": "stack",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/primitives/stack/index.ts",
+      "output": "entrypoints/public/primitives/stack/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 17,
+        "maxSourceBytes": 93582
+      },
+      "symbols": [
+        {
+          "name": "Stack",
+          "kind": "value"
+        }
+      ]
+    },
+    "./primitives/avatar": {
+      "owner": "primitives",
+      "family": "avatar",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/primitives/avatar/index.ts",
+      "output": "entrypoints/public/primitives/avatar/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 50,
+        "maxSourceBytes": 170879
+      },
+      "symbols": [
+        {
+          "name": "Avatar",
+          "kind": "value"
+        }
+      ]
+    },
+    "./primitives/badge": {
+      "owner": "primitives",
+      "family": "badge",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/primitives/badge/index.ts",
+      "output": "entrypoints/public/primitives/badge/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 133,
+        "maxSourceBytes": 1062790
+      },
+      "symbols": [
+        {
+          "name": "Badge",
+          "kind": "value"
+        }
+      ]
+    },
+    "./primitives/card": {
+      "owner": "primitives",
+      "family": "card",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/primitives/card/index.ts",
+      "output": "entrypoints/public/primitives/card/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 146,
+        "maxSourceBytes": 1090776
+      },
+      "symbols": [
+        {
+          "name": "Card",
+          "kind": "value"
+        }
+      ]
+    },
+    "./primitives/empty": {
+      "owner": "primitives",
+      "family": "empty",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/primitives/empty/index.ts",
+      "output": "entrypoints/public/primitives/empty/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 17,
+        "maxSourceBytes": 84480
+      },
+      "symbols": [
+        {
+          "name": "Empty",
+          "kind": "value"
+        }
+      ]
+    },
+    "./primitives/image": {
+      "owner": "primitives",
+      "family": "image",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/primitives/image/index.ts",
+      "output": "entrypoints/public/primitives/image/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 57,
+        "maxSourceBytes": 195748
+      },
+      "symbols": [
+        {
+          "name": "Image",
+          "kind": "value"
+        }
+      ]
+    },
+    "./primitives/table": {
+      "owner": "primitives",
+      "family": "table",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/primitives/table/index.ts",
+      "output": "entrypoints/public/primitives/table/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 17,
+        "maxSourceBytes": 99685
+      },
+      "symbols": [
+        {
+          "name": "Table",
+          "kind": "value"
+        }
+      ]
+    },
+    "./primitives/tag": {
+      "owner": "primitives",
+      "family": "tag",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/primitives/tag/index.ts",
+      "output": "entrypoints/public/primitives/tag/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 137,
+        "maxSourceBytes": 1063964
+      },
+      "symbols": [
+        {
+          "name": "Tag",
+          "kind": "value"
+        }
+      ]
+    },
+    "./primitives/tooltip": {
+      "owner": "primitives",
+      "family": "tooltip",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/primitives/tooltip/index.ts",
+      "output": "entrypoints/public/primitives/tooltip/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 20,
+        "maxSourceBytes": 100840
+      },
+      "symbols": [
+        {
+          "name": "Tooltip",
+          "kind": "value"
+        }
+      ]
+    },
+    "./primitives/typography": {
+      "owner": "primitives",
+      "family": "typography",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/primitives/typography/index.ts",
+      "output": "entrypoints/public/primitives/typography/index",
+      "budget": {
+        "maxDirectSources": 3,
+        "maxReachableModules": 142,
+        "maxSourceBytes": 1154374
+      },
+      "symbols": [
+        {
+          "name": "Heading",
+          "kind": "value"
+        },
+        {
+          "name": "Link",
+          "kind": "value"
+        },
+        {
+          "name": "Text",
+          "kind": "value"
+        }
+      ]
+    },
+    "./primitives/alert": {
+      "owner": "primitives",
+      "family": "alert",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/primitives/alert/index.ts",
+      "output": "entrypoints/public/primitives/alert/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 20,
+        "maxSourceBytes": 113623
+      },
+      "symbols": [
+        {
+          "name": "Alert",
+          "kind": "value"
+        }
+      ]
+    },
+    "./primitives/message": {
+      "owner": "primitives",
+      "family": "message",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/primitives/message/index.ts",
+      "output": "entrypoints/public/primitives/message/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 54,
+        "maxSourceBytes": 214867
+      },
+      "symbols": [
+        {
+          "name": "message",
+          "kind": "value"
+        }
+      ]
+    },
+    "./primitives/modal": {
+      "owner": "primitives",
+      "family": "modal",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/primitives/modal/index.ts",
+      "output": "entrypoints/public/primitives/modal/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 31,
+        "maxSourceBytes": 168791
+      },
+      "symbols": [
+        {
+          "name": "Modal",
+          "kind": "value"
+        }
+      ]
+    },
+    "./primitives/progress": {
+      "owner": "primitives",
+      "family": "progress",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/primitives/progress/index.ts",
+      "output": "entrypoints/public/primitives/progress/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 20,
+        "maxSourceBytes": 110795
+      },
+      "symbols": [
+        {
+          "name": "Progress",
+          "kind": "value"
+        }
+      ]
+    },
+    "./primitives/skeleton": {
+      "owner": "primitives",
+      "family": "skeleton",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/primitives/skeleton/index.ts",
+      "output": "entrypoints/public/primitives/skeleton/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 155,
+        "maxSourceBytes": 1167072
+      },
+      "symbols": [
+        {
+          "name": "Skeleton",
+          "kind": "value"
+        }
+      ]
+    },
+    "./primitives/spinner": {
+      "owner": "primitives",
+      "family": "spinner",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/primitives/spinner/index.ts",
+      "output": "entrypoints/public/primitives/spinner/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 17,
+        "maxSourceBytes": 85446
+      },
+      "symbols": [
+        {
+          "name": "Spinner",
+          "kind": "value"
+        }
+      ]
+    },
+    "./primitives/toast": {
+      "owner": "primitives",
+      "family": "toast",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/primitives/toast/index.ts",
+      "output": "entrypoints/public/primitives/toast/index",
+      "budget": {
+        "maxDirectSources": 4,
+        "maxReachableModules": 179,
+        "maxSourceBytes": 1272927
+      },
+      "symbols": [
+        {
+          "name": "Toast",
+          "kind": "value"
+        },
+        {
+          "name": "ToastContainer",
+          "kind": "value"
+        },
+        {
+          "name": "ToastProvider",
+          "kind": "value"
+        },
+        {
+          "name": "toast",
+          "kind": "value"
+        },
+        {
+          "name": "useToast",
+          "kind": "value"
+        }
+      ]
+    },
+    "./primitives/dropdown": {
+      "owner": "primitives",
+      "family": "dropdown",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/primitives/dropdown/index.ts",
+      "output": "entrypoints/public/primitives/dropdown/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 17,
+        "maxSourceBytes": 86372
+      },
+      "symbols": [
+        {
+          "name": "Dropdown",
+          "kind": "value"
+        }
+      ]
+    },
+    "./patterns/presence": {
+      "owner": "patterns",
+      "family": "presence",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/patterns/presence/index.ts",
+      "output": "entrypoints/public/patterns/presence/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 179,
+        "maxSourceBytes": 1279520
+      },
+      "symbols": [
+        {
+          "name": "PresenceBar",
+          "kind": "value"
+        }
+      ]
+    },
+    "./patterns/data-table": {
+      "owner": "patterns",
+      "family": "data-table",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/patterns/data-table/index.ts",
+      "output": "entrypoints/public/patterns/data-table/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 656,
+        "maxSourceBytes": 2292252
+      },
+      "symbols": [
+        {
+          "name": "PatternDataTable",
+          "kind": "value"
+        }
+      ]
+    },
+    "./patterns/list-toolbar": {
+      "owner": "patterns",
+      "family": "list-toolbar",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/patterns/list-toolbar/index.ts",
+      "output": "entrypoints/public/patterns/list-toolbar/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 16,
+        "maxSourceBytes": 79825
+      },
+      "symbols": [
+        {
+          "name": "ListToolbar",
+          "kind": "value"
+        }
+      ]
+    },
+    "./patterns/record-facts": {
+      "owner": "patterns",
+      "family": "record-facts",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/patterns/record-facts/index.ts",
+      "output": "entrypoints/public/patterns/record-facts/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 16,
+        "maxSourceBytes": 79603
+      },
+      "symbols": [
+        {
+          "name": "RecordFacts",
+          "kind": "value"
+        }
+      ]
+    },
+    "./patterns/stats-grid": {
+      "owner": "patterns",
+      "family": "stats-grid",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/patterns/stats-grid/index.ts",
+      "output": "entrypoints/public/patterns/stats-grid/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 16,
+        "maxSourceBytes": 79926
+      },
+      "symbols": [
+        {
+          "name": "PatternStatsGrid",
+          "kind": "value"
+        }
+      ]
+    },
+    "./patterns/widget-board": {
+      "owner": "patterns",
+      "family": "widget-board",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/patterns/widget-board/index.ts",
+      "output": "entrypoints/public/patterns/widget-board/index",
+      "budget": {
+        "maxDirectSources": 2,
+        "maxReachableModules": 38,
+        "maxSourceBytes": 165836
+      },
+      "symbols": [
+        {
+          "name": "WidgetBoard",
+          "kind": "value"
+        },
+        {
+          "name": "normalizeLayoutRevision",
+          "kind": "value"
+        }
+      ]
+    },
+    "./patterns/adaptive-overlay": {
+      "owner": "patterns",
+      "family": "adaptive-overlay",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/patterns/adaptive-overlay/index.ts",
+      "output": "entrypoints/public/patterns/adaptive-overlay/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 83,
+        "maxSourceBytes": 338697
+      },
+      "symbols": [
+        {
+          "name": "AdaptiveOverlay",
+          "kind": "value"
+        }
+      ]
+    },
+    "./patterns/empty-state": {
+      "owner": "patterns",
+      "family": "empty-state",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/patterns/empty-state/index.ts",
+      "output": "entrypoints/public/patterns/empty-state/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 16,
+        "maxSourceBytes": 79647
+      },
+      "symbols": [
+        {
+          "name": "PatternEmptyState",
+          "kind": "value"
+        }
+      ]
+    },
+    "./patterns/command-palette": {
+      "owner": "patterns",
+      "family": "command-palette",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/patterns/command-palette/index.ts",
+      "output": "entrypoints/public/patterns/command-palette/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 23,
+        "maxSourceBytes": 167162
+      },
+      "symbols": [
+        {
+          "name": "PatternCommandPalette",
+          "kind": "value"
+        }
+      ]
+    },
+    "./patterns/shortcuts-overlay": {
+      "owner": "patterns",
+      "family": "shortcuts-overlay",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/patterns/shortcuts-overlay/index.ts",
+      "output": "entrypoints/public/patterns/shortcuts-overlay/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 16,
+        "maxSourceBytes": 79718
+      },
+      "symbols": [
+        {
+          "name": "PatternShortcutsOverlay",
+          "kind": "value"
+        }
+      ]
+    },
+    "./patterns/feature-workspace-frame": {
+      "owner": "patterns",
+      "family": "feature-workspace-frame",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/patterns/feature-workspace-frame/index.ts",
+      "output": "entrypoints/public/patterns/feature-workspace-frame/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 16,
+        "maxSourceBytes": 79676
+      },
+      "symbols": [
+        {
+          "name": "FeatureWorkspaceFrame",
+          "kind": "value"
+        }
+      ]
+    },
+    "./patterns/kanban-board": {
+      "owner": "patterns",
+      "family": "kanban-board",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/patterns/kanban-board/index.ts",
+      "output": "entrypoints/public/patterns/kanban-board/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 16,
+        "maxSourceBytes": 79789
+      },
+      "symbols": [
+        {
+          "name": "PatternKanbanBoard",
+          "kind": "value"
+        }
+      ]
+    },
+    "./patterns/charts": {
+      "owner": "patterns",
+      "family": "charts",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/patterns/charts/index.ts",
+      "output": "entrypoints/public/patterns/charts/index",
+      "budget": {
+        "maxDirectSources": 10,
+        "maxReachableModules": 242,
+        "maxSourceBytes": 1783125
+      },
+      "symbols": [
+        {
+          "name": "AreaChart",
+          "kind": "value"
+        },
+        {
+          "name": "BarChart",
+          "kind": "value"
+        },
+        {
+          "name": "BulletChart",
+          "kind": "value"
+        },
+        {
+          "name": "CalendarHeatMap",
+          "kind": "value"
+        },
+        {
+          "name": "FunnelChart",
+          "kind": "value"
+        },
+        {
+          "name": "GaugeChart",
+          "kind": "value"
+        },
+        {
+          "name": "LineChart",
+          "kind": "value"
+        },
+        {
+          "name": "RadarChart",
+          "kind": "value"
+        },
+        {
+          "name": "Sparkline",
+          "kind": "value"
+        },
+        {
+          "name": "WaterfallChart",
+          "kind": "value"
+        }
+      ]
+    },
+    "./structures/dashboard-header": {
+      "owner": "structures",
+      "family": "dashboard-header",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/structures/dashboard-header/index.ts",
+      "output": "entrypoints/public/structures/dashboard-header/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 601,
+        "maxSourceBytes": 2101503
+      },
+      "symbols": [
+        {
+          "name": "DashboardHeader",
+          "kind": "value"
+        }
+      ]
+    },
+    "./structures/record-summary": {
+      "owner": "structures",
+      "family": "record-summary",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/structures/record-summary/index.ts",
+      "output": "entrypoints/public/structures/record-summary/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 700,
+        "maxSourceBytes": 2486403
+      },
+      "symbols": [
+        {
+          "name": "RecordSummaryStrip",
+          "kind": "value"
+        }
+      ]
+    },
+    "./structures/app-shell": {
+      "owner": "structures",
+      "family": "app-shell",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/structures/app-shell/index.ts",
+      "output": "entrypoints/public/structures/app-shell/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 69,
+        "maxSourceBytes": 264215
+      },
+      "symbols": [
+        {
+          "name": "AppShell",
+          "kind": "value"
+        }
+      ]
+    },
+    "./structures/action-dock": {
+      "owner": "structures",
+      "family": "action-dock",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/structures/action-dock/index.ts",
+      "output": "entrypoints/public/structures/action-dock/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 17,
+        "maxSourceBytes": 86804
+      },
+      "symbols": [
+        {
+          "name": "ActionDock",
+          "kind": "value"
+        }
+      ]
+    },
+    "./structures/column-menu": {
+      "owner": "structures",
+      "family": "column-menu",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/structures/column-menu/index.ts",
+      "output": "entrypoints/public/structures/column-menu/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 643,
+        "maxSourceBytes": 2258900
+      },
+      "symbols": [
+        {
+          "name": "ColumnMenu",
+          "kind": "value"
+        }
+      ]
+    },
+    "./surfaces/collection-workspace": {
+      "owner": "surfaces",
+      "family": "collection-workspace",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/surfaces/collection-workspace/index.ts",
+      "output": "entrypoints/public/surfaces/collection-workspace/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 778,
+        "maxSourceBytes": 3224313
+      },
+      "symbols": [
+        {
+          "name": "CollectionWorkspaceSurface",
+          "kind": "value"
+        }
+      ]
+    },
+    "./surfaces/oauth-transition": {
+      "owner": "surfaces",
+      "family": "oauth-transition",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/surfaces/oauth-transition/index.ts",
+      "output": "entrypoints/public/surfaces/oauth-transition/index",
+      "budget": {
+        "maxDirectSources": 2,
+        "maxReachableModules": 6,
+        "maxSourceBytes": 41392
+      },
+      "symbols": [
+        {
+          "name": "OAuthTransitionScreen",
+          "kind": "value"
+        },
+        {
+          "name": "getOAuthTransitionDefaultVariant",
+          "kind": "value"
+        },
+        {
+          "name": "getOAuthTransitionProvider",
+          "kind": "value"
+        },
+        {
+          "name": "isOAuthProvider",
+          "kind": "value"
+        },
+        {
+          "name": "isOAuthTransitionVariantId",
+          "kind": "value"
+        }
+      ]
+    },
+    "./surfaces/state-cards": {
+      "owner": "surfaces",
+      "family": "state-cards",
+      "boundary": "runtime",
+      "client": true,
+      "source": "src/entrypoints/public/surfaces/state-cards/index.ts",
+      "output": "entrypoints/public/surfaces/state-cards/index",
+      "budget": {
+        "maxDirectSources": 1,
+        "maxReachableModules": 632,
+        "maxSourceBytes": 2250896
+      },
+      "symbols": [
+        {
+          "name": "SurfaceEmptyStateCard",
+          "kind": "value"
+        },
+        {
+          "name": "SurfaceErrorStateCard",
+          "kind": "value"
+        },
+        {
+          "name": "SurfaceLoadingSkeleton",
+          "kind": "value"
+        },
+        {
+          "name": "SurfaceStaleBanner",
+          "kind": "value"
+        }
+      ]
+    }
+  },
+  "coverage": {
+    "runtimeSymbols": 108,
+    "typeSymbols": 47,
+    "totalSymbols": 155
+  }
+}

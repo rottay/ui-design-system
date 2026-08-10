@@ -24,6 +24,399 @@
       "import": "./dist/server.js",
       "require": "./dist/server.cjs"
     },
+    "./contracts/foundation": {
+      "types": "./dist/entrypoints/public/contracts/foundation/index.d.ts",
+      "import": "./dist/entrypoints/public/contracts/foundation/index.js",
+      "require": "./dist/entrypoints/public/contracts/foundation/index.cjs"
+    },
+    "./contracts/patterns": {
+      "types": "./dist/entrypoints/public/contracts/patterns/index.d.ts",
+      "import": "./dist/entrypoints/public/contracts/patterns/index.js",
+      "require": "./dist/entrypoints/public/contracts/patterns/index.cjs"
+    },
+    "./contracts/i18n": {
+      "types": "./dist/entrypoints/public/contracts/i18n/index.d.ts",
+      "import": "./dist/entrypoints/public/contracts/i18n/index.js",
+      "require": "./dist/entrypoints/public/contracts/i18n/index.cjs"
+    },
+    "./contracts/runtime": {
+      "types": "./dist/entrypoints/public/contracts/runtime/index.d.ts",
+      "import": "./dist/entrypoints/public/contracts/runtime/index.js",
+      "require": "./dist/entrypoints/public/contracts/runtime/index.cjs"
+    },
+    "./contracts/primitives": {
+      "types": "./dist/entrypoints/public/contracts/primitives/index.d.ts",
+      "import": "./dist/entrypoints/public/contracts/primitives/index.js",
+      "require": "./dist/entrypoints/public/contracts/primitives/index.cjs"
+    },
+    "./contracts/structures": {
+      "types": "./dist/entrypoints/public/contracts/structures/index.d.ts",
+      "import": "./dist/entrypoints/public/contracts/structures/index.js",
+      "require": "./dist/entrypoints/public/contracts/structures/index.cjs"
+    },
+    "./contracts/surfaces": {
+      "types": "./dist/entrypoints/public/contracts/surfaces/index.d.ts",
+      "import": "./dist/entrypoints/public/contracts/surfaces/index.js",
+      "require": "./dist/entrypoints/public/contracts/surfaces/index.cjs"
+    },
+    "./runtime/i18n": {
+      "types": "./dist/entrypoints/public/runtime/i18n/index.d.ts",
+      "import": "./dist/entrypoints/public/runtime/i18n/index.js",
+      "require": "./dist/entrypoints/public/runtime/i18n/index.cjs"
+    },
+    "./runtime/motion": {
+      "types": "./dist/entrypoints/public/runtime/motion/index.d.ts",
+      "import": "./dist/entrypoints/public/runtime/motion/index.js",
+      "require": "./dist/entrypoints/public/runtime/motion/index.cjs"
+    },
+    "./runtime/navigation": {
+      "types": "./dist/entrypoints/public/runtime/navigation/index.d.ts",
+      "import": "./dist/entrypoints/public/runtime/navigation/index.js",
+      "require": "./dist/entrypoints/public/runtime/navigation/index.cjs"
+    },
+    "./runtime/forms": {
+      "types": "./dist/entrypoints/public/runtime/forms/index.d.ts",
+      "import": "./dist/entrypoints/public/runtime/forms/index.js",
+      "require": "./dist/entrypoints/public/runtime/forms/index.cjs"
+    },
+    "./runtime/cross-tab-sync": {
+      "types": "./dist/entrypoints/public/runtime/cross-tab-sync/index.d.ts",
+      "import": "./dist/entrypoints/public/runtime/cross-tab-sync/index.js",
+      "require": "./dist/entrypoints/public/runtime/cross-tab-sync/index.cjs"
+    },
+    "./runtime/provider": {
+      "types": "./dist/entrypoints/public/runtime/provider/index.d.ts",
+      "import": "./dist/entrypoints/public/runtime/provider/index.js",
+      "require": "./dist/entrypoints/public/runtime/provider/index.cjs"
+    },
+    "./runtime/root-attributes": {
+      "types": "./dist/entrypoints/public/runtime/root-attributes/index.d.ts",
+      "import": "./dist/entrypoints/public/runtime/root-attributes/index.js",
+      "require": "./dist/entrypoints/public/runtime/root-attributes/index.cjs"
+    },
+    "./runtime/responsive": {
+      "types": "./dist/entrypoints/public/runtime/responsive/index.d.ts",
+      "import": "./dist/entrypoints/public/runtime/responsive/index.js",
+      "require": "./dist/entrypoints/public/runtime/responsive/index.cjs"
+    },
+    "./runtime/tenant": {
+      "types": "./dist/entrypoints/public/runtime/tenant/index.d.ts",
+      "import": "./dist/entrypoints/public/runtime/tenant/index.js",
+      "require": "./dist/entrypoints/public/runtime/tenant/index.cjs"
+    },
+    "./runtime/visual-authority": {
+      "types": "./dist/entrypoints/public/runtime/visual-authority/index.d.ts",
+      "import": "./dist/entrypoints/public/runtime/visual-authority/index.js",
+      "require": "./dist/entrypoints/public/runtime/visual-authority/index.cjs"
+    },
+    "./runtime/tenant-theme": {
+      "types": "./dist/entrypoints/public/runtime/tenant-theme/index.d.ts",
+      "import": "./dist/entrypoints/public/runtime/tenant-theme/index.js",
+      "require": "./dist/entrypoints/public/runtime/tenant-theme/index.cjs"
+    },
+    "./primitives/button": {
+      "types": "./dist/entrypoints/public/primitives/button/index.d.ts",
+      "import": "./dist/entrypoints/public/primitives/button/index.js",
+      "require": "./dist/entrypoints/public/primitives/button/index.cjs"
+    },
+    "./primitives/checkbox": {
+      "types": "./dist/entrypoints/public/primitives/checkbox/index.d.ts",
+      "import": "./dist/entrypoints/public/primitives/checkbox/index.js",
+      "require": "./dist/entrypoints/public/primitives/checkbox/index.cjs"
+    },
+    "./primitives/date-picker": {
+      "types": "./dist/entrypoints/public/primitives/date-picker/index.d.ts",
+      "import": "./dist/entrypoints/public/primitives/date-picker/index.js",
+      "require": "./dist/entrypoints/public/primitives/date-picker/index.cjs"
+    },
+    "./primitives/input": {
+      "types": "./dist/entrypoints/public/primitives/input/index.d.ts",
+      "import": "./dist/entrypoints/public/primitives/input/index.js",
+      "require": "./dist/entrypoints/public/primitives/input/index.cjs"
+    },
+    "./primitives/input-number": {
+      "types": "./dist/entrypoints/public/primitives/input-number/index.d.ts",
+      "import": "./dist/entrypoints/public/primitives/input-number/index.js",
+      "require": "./dist/entrypoints/public/primitives/input-number/index.cjs"
+    },
+    "./primitives/radio": {
+      "types": "./dist/entrypoints/public/primitives/radio/index.d.ts",
+      "import": "./dist/entrypoints/public/primitives/radio/index.js",
+      "require": "./dist/entrypoints/public/primitives/radio/index.cjs"
+    },
+    "./primitives/select": {
+      "types": "./dist/entrypoints/public/primitives/select/index.d.ts",
+      "import": "./dist/entrypoints/public/primitives/select/index.js",
+      "require": "./dist/entrypoints/public/primitives/select/index.cjs"
+    },
+    "./primitives/slider": {
+      "types": "./dist/entrypoints/public/primitives/slider/index.d.ts",
+      "import": "./dist/entrypoints/public/primitives/slider/index.js",
+      "require": "./dist/entrypoints/public/primitives/slider/index.cjs"
+    },
+    "./primitives/switch": {
+      "types": "./dist/entrypoints/public/primitives/switch/index.d.ts",
+      "import": "./dist/entrypoints/public/primitives/switch/index.js",
+      "require": "./dist/entrypoints/public/primitives/switch/index.cjs"
+    },
+    "./primitives/textarea": {
+      "types": "./dist/entrypoints/public/primitives/textarea/index.d.ts",
+      "import": "./dist/entrypoints/public/primitives/textarea/index.js",
+      "require": "./dist/entrypoints/public/primitives/textarea/index.cjs"
+    },
+    "./primitives/toggle": {
+      "types": "./dist/entrypoints/public/primitives/toggle/index.d.ts",
+      "import": "./dist/entrypoints/public/primitives/toggle/index.js",
+      "require": "./dist/entrypoints/public/primitives/toggle/index.cjs"
+    },
+    "./primitives/breadcrumb": {
+      "types": "./dist/entrypoints/public/primitives/breadcrumb/index.d.ts",
+      "import": "./dist/entrypoints/public/primitives/breadcrumb/index.js",
+      "require": "./dist/entrypoints/public/primitives/breadcrumb/index.cjs"
+    },
+    "./primitives/float-button": {
+      "types": "./dist/entrypoints/public/primitives/float-button/index.d.ts",
+      "import": "./dist/entrypoints/public/primitives/float-button/index.js",
+      "require": "./dist/entrypoints/public/primitives/float-button/index.cjs"
+    },
+    "./primitives/segmented": {
+      "types": "./dist/entrypoints/public/primitives/segmented/index.d.ts",
+      "import": "./dist/entrypoints/public/primitives/segmented/index.js",
+      "require": "./dist/entrypoints/public/primitives/segmented/index.cjs"
+    },
+    "./primitives/steps": {
+      "types": "./dist/entrypoints/public/primitives/steps/index.d.ts",
+      "import": "./dist/entrypoints/public/primitives/steps/index.js",
+      "require": "./dist/entrypoints/public/primitives/steps/index.cjs"
+    },
+    "./primitives/tabs": {
+      "types": "./dist/entrypoints/public/primitives/tabs/index.d.ts",
+      "import": "./dist/entrypoints/public/primitives/tabs/index.js",
+      "require": "./dist/entrypoints/public/primitives/tabs/index.cjs"
+    },
+    "./primitives/box": {
+      "types": "./dist/entrypoints/public/primitives/box/index.d.ts",
+      "import": "./dist/entrypoints/public/primitives/box/index.js",
+      "require": "./dist/entrypoints/public/primitives/box/index.cjs"
+    },
+    "./primitives/divider": {
+      "types": "./dist/entrypoints/public/primitives/divider/index.d.ts",
+      "import": "./dist/entrypoints/public/primitives/divider/index.js",
+      "require": "./dist/entrypoints/public/primitives/divider/index.cjs"
+    },
+    "./primitives/flex": {
+      "types": "./dist/entrypoints/public/primitives/flex/index.d.ts",
+      "import": "./dist/entrypoints/public/primitives/flex/index.js",
+      "require": "./dist/entrypoints/public/primitives/flex/index.cjs"
+    },
+    "./primitives/grid": {
+      "types": "./dist/entrypoints/public/primitives/grid/index.d.ts",
+      "import": "./dist/entrypoints/public/primitives/grid/index.js",
+      "require": "./dist/entrypoints/public/primitives/grid/index.cjs"
+    },
+    "./primitives/responsive": {
+      "types": "./dist/entrypoints/public/primitives/responsive/index.d.ts",
+      "import": "./dist/entrypoints/public/primitives/responsive/index.js",
+      "require": "./dist/entrypoints/public/primitives/responsive/index.cjs"
+    },
+    "./primitives/stack": {
+      "types": "./dist/entrypoints/public/primitives/stack/index.d.ts",
+      "import": "./dist/entrypoints/public/primitives/stack/index.js",
+      "require": "./dist/entrypoints/public/primitives/stack/index.cjs"
+    },
+    "./primitives/avatar": {
+      "types": "./dist/entrypoints/public/primitives/avatar/index.d.ts",
+      "import": "./dist/entrypoints/public/primitives/avatar/index.js",
+      "require": "./dist/entrypoints/public/primitives/avatar/index.cjs"
+    },
+    "./primitives/badge": {
+      "types": "./dist/entrypoints/public/primitives/badge/index.d.ts",
+      "import": "./dist/entrypoints/public/primitives/badge/index.js",
+      "require": "./dist/entrypoints/public/primitives/badge/index.cjs"
+    },
+    "./primitives/card": {
+      "types": "./dist/entrypoints/public/primitives/card/index.d.ts",
+      "import": "./dist/entrypoints/public/primitives/card/index.js",
+      "require": "./dist/entrypoints/public/primitives/card/index.cjs"
+    },
+    "./primitives/empty": {
+      "types": "./dist/entrypoints/public/primitives/empty/index.d.ts",
+      "import": "./dist/entrypoints/public/primitives/empty/index.js",
+      "require": "./dist/entrypoints/public/primitives/empty/index.cjs"
+    },
+    "./primitives/image": {
+      "types": "./dist/entrypoints/public/primitives/image/index.d.ts",
+      "import": "./dist/entrypoints/public/primitives/image/index.js",
+      "require": "./dist/entrypoints/public/primitives/image/index.cjs"
+    },
+    "./primitives/table": {
+      "types": "./dist/entrypoints/public/primitives/table/index.d.ts",
+      "import": "./dist/entrypoints/public/primitives/table/index.js",
+      "require": "./dist/entrypoints/public/primitives/table/index.cjs"
+    },
+    "./primitives/tag": {
+      "types": "./dist/entrypoints/public/primitives/tag/index.d.ts",
+      "import": "./dist/entrypoints/public/primitives/tag/index.js",
+      "require": "./dist/entrypoints/public/primitives/tag/index.cjs"
+    },
+    "./primitives/tooltip": {
+      "types": "./dist/entrypoints/public/primitives/tooltip/index.d.ts",
+      "import": "./dist/entrypoints/public/primitives/tooltip/index.js",
+      "require": "./dist/entrypoints/public/primitives/tooltip/index.cjs"
+    },
+    "./primitives/typography": {
+      "types": "./dist/entrypoints/public/primitives/typography/index.d.ts",
+      "import": "./dist/entrypoints/public/primitives/typography/index.js",
+      "require": "./dist/entrypoints/public/primitives/typography/index.cjs"
+    },
+    "./primitives/alert": {
+      "types": "./dist/entrypoints/public/primitives/alert/index.d.ts",
+      "import": "./dist/entrypoints/public/primitives/alert/index.js",
+      "require": "./dist/entrypoints/public/primitives/alert/index.cjs"
+    },
+    "./primitives/message": {
+      "types": "./dist/entrypoints/public/primitives/message/index.d.ts",
+      "import": "./dist/entrypoints/public/primitives/message/index.js",
+      "require": "./dist/entrypoints/public/primitives/message/index.cjs"
+    },
+    "./primitives/modal": {
+      "types": "./dist/entrypoints/public/primitives/modal/index.d.ts",
+      "import": "./dist/entrypoints/public/primitives/modal/index.js",
+      "require": "./dist/entrypoints/public/primitives/modal/index.cjs"
+    },
+    "./primitives/progress": {
+      "types": "./dist/entrypoints/public/primitives/progress/index.d.ts",
+      "import": "./dist/entrypoints/public/primitives/progress/index.js",
+      "require": "./dist/entrypoints/public/primitives/progress/index.cjs"
+    },
+    "./primitives/skeleton": {
+      "types": "./dist/entrypoints/public/primitives/skeleton/index.d.ts",
+      "import": "./dist/entrypoints/public/primitives/skeleton/index.js",
+      "require": "./dist/entrypoints/public/primitives/skeleton/index.cjs"
+    },
+    "./primitives/spinner": {
+      "types": "./dist/entrypoints/public/primitives/spinner/index.d.ts",
+      "import": "./dist/entrypoints/public/primitives/spinner/index.js",
+      "require": "./dist/entrypoints/public/primitives/spinner/index.cjs"
+    },
+    "./primitives/toast": {
+      "types": "./dist/entrypoints/public/primitives/toast/index.d.ts",
+      "import": "./dist/entrypoints/public/primitives/toast/index.js",
+      "require": "./dist/entrypoints/public/primitives/toast/index.cjs"
+    },
+    "./primitives/dropdown": {
+      "types": "./dist/entrypoints/public/primitives/dropdown/index.d.ts",
+      "import": "./dist/entrypoints/public/primitives/dropdown/index.js",
+      "require": "./dist/entrypoints/public/primitives/dropdown/index.cjs"
+    },
+    "./patterns/presence": {
+      "types": "./dist/entrypoints/public/patterns/presence/index.d.ts",
+      "import": "./dist/entrypoints/public/patterns/presence/index.js",
+      "require": "./dist/entrypoints/public/patterns/presence/index.cjs"
+    },
+    "./patterns/data-table": {
+      "types": "./dist/entrypoints/public/patterns/data-table/index.d.ts",
+      "import": "./dist/entrypoints/public/patterns/data-table/index.js",
+      "require": "./dist/entrypoints/public/patterns/data-table/index.cjs"
+    },
+    "./patterns/list-toolbar": {
+      "types": "./dist/entrypoints/public/patterns/list-toolbar/index.d.ts",
+      "import": "./dist/entrypoints/public/patterns/list-toolbar/index.js",
+      "require": "./dist/entrypoints/public/patterns/list-toolbar/index.cjs"
+    },
+    "./patterns/record-facts": {
+      "types": "./dist/entrypoints/public/patterns/record-facts/index.d.ts",
+      "import": "./dist/entrypoints/public/patterns/record-facts/index.js",
+      "require": "./dist/entrypoints/public/patterns/record-facts/index.cjs"
+    },
+    "./patterns/stats-grid": {
+      "types": "./dist/entrypoints/public/patterns/stats-grid/index.d.ts",
+      "import": "./dist/entrypoints/public/patterns/stats-grid/index.js",
+      "require": "./dist/entrypoints/public/patterns/stats-grid/index.cjs"
+    },
+    "./patterns/widget-board": {
+      "types": "./dist/entrypoints/public/patterns/widget-board/index.d.ts",
+      "import": "./dist/entrypoints/public/patterns/widget-board/index.js",
+      "require": "./dist/entrypoints/public/patterns/widget-board/index.cjs"
+    },
+    "./patterns/adaptive-overlay": {
+      "types": "./dist/entrypoints/public/patterns/adaptive-overlay/index.d.ts",
+      "import": "./dist/entrypoints/public/patterns/adaptive-overlay/index.js",
+      "require": "./dist/entrypoints/public/patterns/adaptive-overlay/index.cjs"
+    },
+    "./patterns/empty-state": {
+      "types": "./dist/entrypoints/public/patterns/empty-state/index.d.ts",
+      "import": "./dist/entrypoints/public/patterns/empty-state/index.js",
+      "require": "./dist/entrypoints/public/patterns/empty-state/index.cjs"
+    },
+    "./patterns/command-palette": {
+      "types": "./dist/entrypoints/public/patterns/command-palette/index.d.ts",
+      "import": "./dist/entrypoints/public/patterns/command-palette/index.js",
+      "require": "./dist/entrypoints/public/patterns/command-palette/index.cjs"
+    },
+    "./patterns/shortcuts-overlay": {
+      "types": "./dist/entrypoints/public/patterns/shortcuts-overlay/index.d.ts",
+      "import": "./dist/entrypoints/public/patterns/shortcuts-overlay/index.js",
+      "require": "./dist/entrypoints/public/patterns/shortcuts-overlay/index.cjs"
+    },
+    "./patterns/feature-workspace-frame": {
+      "types": "./dist/entrypoints/public/patterns/feature-workspace-frame/index.d.ts",
+      "import": "./dist/entrypoints/public/patterns/feature-workspace-frame/index.js",
+      "require": "./dist/entrypoints/public/patterns/feature-workspace-frame/index.cjs"
+    },
+    "./patterns/kanban-board": {
+      "types": "./dist/entrypoints/public/patterns/kanban-board/index.d.ts",
+      "import": "./dist/entrypoints/public/patterns/kanban-board/index.js",
+      "require": "./dist/entrypoints/public/patterns/kanban-board/index.cjs"
+    },
+    "./patterns/charts": {
+      "types": "./dist/entrypoints/public/patterns/charts/index.d.ts",
+      "import": "./dist/entrypoints/public/patterns/charts/index.js",
+      "require": "./dist/entrypoints/public/patterns/charts/index.cjs"
+    },
+    "./structures/dashboard-header": {
+      "types": "./dist/entrypoints/public/structures/dashboard-header/index.d.ts",
+      "import": "./dist/entrypoints/public/structures/dashboard-header/index.js",
+      "require": "./dist/entrypoints/public/structures/dashboard-header/index.cjs"
+    },
+    "./structures/record-summary": {
+      "types": "./dist/entrypoints/public/structures/record-summary/index.d.ts",
+      "import": "./dist/entrypoints/public/structures/record-summary/index.js",
+      "require": "./dist/entrypoints/public/structures/record-summary/index.cjs"
+    },
+    "./structures/app-shell": {
+      "types": "./dist/entrypoints/public/structures/app-shell/index.d.ts",
+      "import": "./dist/entrypoints/public/structures/app-shell/index.js",
+      "require": "./dist/entrypoints/public/structures/app-shell/index.cjs"
+    },
+    "./structures/action-dock": {
+      "types": "./dist/entrypoints/public/structures/action-dock/index.d.ts",
+      "import": "./dist/entrypoints/public/structures/action-dock/index.js",
+      "require": "./dist/entrypoints/public/structures/action-dock/index.cjs"
+    },
+    "./structures/column-menu": {
+      "types": "./dist/entrypoints/public/structures/column-menu/index.d.ts",
+      "import": "./dist/entrypoints/public/structures/column-menu/index.js",
+      "require": "./dist/entrypoints/public/structures/column-menu/index.cjs"
+    },
+    "./surfaces/collection-workspace": {
+      "types": "./dist/entrypoints/public/surfaces/collection-workspace/index.d.ts",
+      "import": "./dist/entrypoints/public/surfaces/collection-workspace/index.js",
+      "require": "./dist/entrypoints/public/surfaces/collection-workspace/index.cjs"
+    },
+    "./surfaces/oauth-transition": {
+      "types": "./dist/entrypoints/public/surfaces/oauth-transition/index.d.ts",
+      "import": "./dist/entrypoints/public/surfaces/oauth-transition/index.js",
+      "require": "./dist/entrypoints/public/surfaces/oauth-transition/index.cjs"
+    },
+    "./surfaces/state-cards": {
+      "types": "./dist/entrypoints/public/surfaces/state-cards/index.d.ts",
+      "import": "./dist/entrypoints/public/surfaces/state-cards/index.js",
+      "require": "./dist/entrypoints/public/surfaces/state-cards/index.cjs"
+    },
+    "./public-entrypoints-manifest": {
+      "default": "./public-entrypoints.manifest.json"
+    },
     "./icons": {
       "types": "./dist/icons.d.ts",
       "import": "./dist/icons.js",
@@ -245,6 +638,7 @@
     "supplier-contract.json",
     "hooks-manifest.json",
     "hooks-manifest.d.ts",
+    "public-entrypoints.manifest.json",
     "tenant-theme-canary-fixtures.json",
     "tenant-theme-canary-fixtures.d.ts",
     "consumer/ds-supplier-honesty.mjs",
@@ -257,8 +651,8 @@
     "dev": "node scripts/dev.mjs",
     "icons:generate": "node scripts/generate-semantic-icons.mjs",
     "icons:check": "node scripts/generate-semantic-icons.mjs --check",
-    "prebuild": "pnpm run cra17:licenses && pnpm run icons:check && pnpm run contract:check && pnpm run hooks:check && pnpm run tenant-theme-fixtures:check && pnpm run csssource:check",
-    "prepack": "pnpm run distfresh:check && pnpm run cra15:gate && pnpm run cra17:licenses && pnpm run cra17:declarations",
+    "prebuild": "pnpm run public-entrypoints:check && pnpm run cra17:licenses && pnpm run icons:check && pnpm run contract:check && pnpm run hooks:check && pnpm run tenant-theme-fixtures:check && pnpm run csssource:check",
+    "prepack": "pnpm run public-entrypoints:check && pnpm run distfresh:check && pnpm run cra15:gate && pnpm run cra17:licenses && pnpm run cra17:declarations",
     "build": "tsc && vite build && pnpm run build:modern-css && pnpm run build:commercial-css && pnpm run build:vertical-css && pnpm run build:fonts && pnpm run build:stamp",
     "postbuild": "pnpm run cra14:check",
     "build:modern-css": "postcss src/foundation/tokens/css/runtime/engines/modern/compiled.css -o dist/modern-engine.css",
@@ -343,11 +737,92 @@
     "tokens:catalog:write": "node scripts/tokens-catalog.mjs --write",
     "tokens:catalog:check": "node scripts/tokens-catalog.mjs --check",
     "tenant-theme-fixtures:generate": "node scripts/tenant-theme-canary-fixtures.mjs --write",
-    "tenant-theme-fixtures:check": "node scripts/tenant-theme-canary-fixtures.mjs --check"
+    "tenant-theme-fixtures:check": "node scripts/tenant-theme-canary-fixtures.mjs --check",
+    "public-entrypoints:check": "node scripts/public-entrypoint-boundary-gate.mjs",
+    "public-entrypoints:test": "node --test scripts/public-entrypoint-boundary-gate.test.mjs scripts/migrate-public-entrypoints.test.mjs",
+    "public-entrypoints:codemod": "node scripts/migrate-public-entrypoints.mjs"
   },
   "releaseSync": {
     "sourceEntrypoints": {
       "./server": "entrypoints/server/index.ts",
+      "./contracts/foundation": "entrypoints/public/contracts/foundation/index.ts",
+      "./contracts/patterns": "entrypoints/public/contracts/patterns/index.ts",
+      "./contracts/i18n": "entrypoints/public/contracts/i18n/index.ts",
+      "./contracts/runtime": "entrypoints/public/contracts/runtime/index.ts",
+      "./contracts/primitives": "entrypoints/public/contracts/primitives/index.ts",
+      "./contracts/structures": "entrypoints/public/contracts/structures/index.ts",
+      "./contracts/surfaces": "entrypoints/public/contracts/surfaces/index.ts",
+      "./runtime/i18n": "entrypoints/public/runtime/i18n/index.ts",
+      "./runtime/motion": "entrypoints/public/runtime/motion/index.ts",
+      "./runtime/navigation": "entrypoints/public/runtime/navigation/index.ts",
+      "./runtime/forms": "entrypoints/public/runtime/forms/index.ts",
+      "./runtime/cross-tab-sync": "entrypoints/public/runtime/cross-tab-sync/index.ts",
+      "./runtime/provider": "entrypoints/public/runtime/provider/index.ts",
+      "./runtime/root-attributes": "entrypoints/public/runtime/root-attributes/index.ts",
+      "./runtime/responsive": "entrypoints/public/runtime/responsive/index.ts",
+      "./runtime/tenant": "entrypoints/public/runtime/tenant/index.ts",
+      "./runtime/visual-authority": "entrypoints/public/runtime/visual-authority/index.ts",
+      "./runtime/tenant-theme": "entrypoints/public/runtime/tenant-theme/index.ts",
+      "./primitives/button": "entrypoints/public/primitives/button/index.ts",
+      "./primitives/checkbox": "entrypoints/public/primitives/checkbox/index.ts",
+      "./primitives/date-picker": "entrypoints/public/primitives/date-picker/index.ts",
+      "./primitives/input": "entrypoints/public/primitives/input/index.ts",
+      "./primitives/input-number": "entrypoints/public/primitives/input-number/index.ts",
+      "./primitives/radio": "entrypoints/public/primitives/radio/index.ts",
+      "./primitives/select": "entrypoints/public/primitives/select/index.ts",
+      "./primitives/slider": "entrypoints/public/primitives/slider/index.ts",
+      "./primitives/switch": "entrypoints/public/primitives/switch/index.ts",
+      "./primitives/textarea": "entrypoints/public/primitives/textarea/index.ts",
+      "./primitives/toggle": "entrypoints/public/primitives/toggle/index.ts",
+      "./primitives/breadcrumb": "entrypoints/public/primitives/breadcrumb/index.ts",
+      "./primitives/float-button": "entrypoints/public/primitives/float-button/index.ts",
+      "./primitives/segmented": "entrypoints/public/primitives/segmented/index.ts",
+      "./primitives/steps": "entrypoints/public/primitives/steps/index.ts",
+      "./primitives/tabs": "entrypoints/public/primitives/tabs/index.ts",
+      "./primitives/box": "entrypoints/public/primitives/box/index.ts",
+      "./primitives/divider": "entrypoints/public/primitives/divider/index.ts",
+      "./primitives/flex": "entrypoints/public/primitives/flex/index.ts",
+      "./primitives/grid": "entrypoints/public/primitives/grid/index.ts",
+      "./primitives/responsive": "entrypoints/public/primitives/responsive/index.ts",
+      "./primitives/stack": "entrypoints/public/primitives/stack/index.ts",
+      "./primitives/avatar": "entrypoints/public/primitives/avatar/index.ts",
+      "./primitives/badge": "entrypoints/public/primitives/badge/index.ts",
+      "./primitives/card": "entrypoints/public/primitives/card/index.ts",
+      "./primitives/empty": "entrypoints/public/primitives/empty/index.ts",
+      "./primitives/image": "entrypoints/public/primitives/image/index.ts",
+      "./primitives/table": "entrypoints/public/primitives/table/index.ts",
+      "./primitives/tag": "entrypoints/public/primitives/tag/index.ts",
+      "./primitives/tooltip": "entrypoints/public/primitives/tooltip/index.ts",
+      "./primitives/typography": "entrypoints/public/primitives/typography/index.ts",
+      "./primitives/alert": "entrypoints/public/primitives/alert/index.ts",
+      "./primitives/message": "entrypoints/public/primitives/message/index.ts",
+      "./primitives/modal": "entrypoints/public/primitives/modal/index.ts",
+      "./primitives/progress": "entrypoints/public/primitives/progress/index.ts",
+      "./primitives/skeleton": "entrypoints/public/primitives/skeleton/index.ts",
+      "./primitives/spinner": "entrypoints/public/primitives/spinner/index.ts",
+      "./primitives/toast": "entrypoints/public/primitives/toast/index.ts",
+      "./primitives/dropdown": "entrypoints/public/primitives/dropdown/index.ts",
+      "./patterns/presence": "entrypoints/public/patterns/presence/index.ts",
+      "./patterns/data-table": "entrypoints/public/patterns/data-table/index.ts",
+      "./patterns/list-toolbar": "entrypoints/public/patterns/list-toolbar/index.ts",
+      "./patterns/record-facts": "entrypoints/public/patterns/record-facts/index.ts",
+      "./patterns/stats-grid": "entrypoints/public/patterns/stats-grid/index.ts",
+      "./patterns/widget-board": "entrypoints/public/patterns/widget-board/index.ts",
+      "./patterns/adaptive-overlay": "entrypoints/public/patterns/adaptive-overlay/index.ts",
+      "./patterns/empty-state": "entrypoints/public/patterns/empty-state/index.ts",
+      "./patterns/command-palette": "entrypoints/public/patterns/command-palette/index.ts",
+      "./patterns/shortcuts-overlay": "entrypoints/public/patterns/shortcuts-overlay/index.ts",
+      "./patterns/feature-workspace-frame": "entrypoints/public/patterns/feature-workspace-frame/index.ts",
+      "./patterns/kanban-board": "entrypoints/public/patterns/kanban-board/index.ts",
+      "./patterns/charts": "entrypoints/public/patterns/charts/index.ts",
+      "./structures/dashboard-header": "entrypoints/public/structures/dashboard-header/index.ts",
+      "./structures/record-summary": "entrypoints/public/structures/record-summary/index.ts",
+      "./structures/app-shell": "entrypoints/public/structures/app-shell/index.ts",
+      "./structures/action-dock": "entrypoints/public/structures/action-dock/index.ts",
+      "./structures/column-menu": "entrypoints/public/structures/column-menu/index.ts",
+      "./surfaces/collection-workspace": "entrypoints/public/surfaces/collection-workspace/index.ts",
+      "./surfaces/oauth-transition": "entrypoints/public/surfaces/oauth-transition/index.ts",
+      "./surfaces/state-cards": "entrypoints/public/surfaces/state-cards/index.ts",
       "./icons": "entrypoints/icons/index.ts",
       "./icons/full": "entrypoints/icons/full/index.ts",
       "./icons/presets/bithire": "entrypoints/icons/presets/bithire/index.ts",

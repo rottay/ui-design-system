@@ -36,7 +36,8 @@
 
 import { useId } from 'react';
 
-import { Box, Tooltip } from '../..';
+import { Box } from '../../layout/Box';
+import { Tooltip } from '../../display/Tooltip';
 import { VisuallyHidden } from '../../foundation/VisuallyHidden';
 import {
   AudioLinesIcon as AudioLines,

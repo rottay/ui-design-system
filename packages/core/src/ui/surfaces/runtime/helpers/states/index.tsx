@@ -9,8 +9,14 @@
  */
 
 import type { ReactNode } from 'react';
-import { Alert, Box, Button, Card, Skeleton, Stack, Text } from '../../../../primitives';
-import { PatternEmptyState } from '../../../../patterns';
+import { Alert } from '../../../../primitives/feedback/Alert';
+import { Box } from '../../../../primitives/layout/Box';
+import { Button } from '../../../../primitives/inputs/Button';
+import { Card } from '../../../../primitives/display/Card';
+import { Skeleton } from '../../../../primitives/feedback/Skeleton';
+import { Stack } from '../../../../primitives/layout/Stack';
+import { Text } from '../../../../primitives/display/Typography/compound/Text';
+import { PatternEmptyState } from '../../../../patterns/feedback/empty-state';
 import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
 import { useTokens } from '@/infrastructure/runtime/theming/composition/react/tokens';
 import { normalizeSurfaceError, resolveSurfaceButtonVariant } from '..';

@@ -16,7 +16,11 @@ import {
   XIcon,
 } from '../../../../graphics/icons';
 
-import { Badge, Button, Flex, Text, VisuallyHidden } from '../../../primitives';
+import { Badge } from '../../../primitives/display/Badge';
+import { Button } from '../../../primitives/inputs/Button';
+import { Flex } from '../../../primitives/layout/Flex';
+import { Text } from '../../../primitives/display/Typography/compound/Text';
+import { VisuallyHidden } from '../../../primitives/foundation/VisuallyHidden';
 import { useOptionalTranslation } from '../../../../infrastructure/runtime/i18n';
 
 export interface BulkSelectToggleProps {

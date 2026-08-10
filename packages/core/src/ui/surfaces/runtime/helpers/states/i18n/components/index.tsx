@@ -15,7 +15,13 @@
 
 import type { ReactNode } from 'react';
 import { normalizeSurfaceError } from '../../../index';
-import { Alert, Button, Card, Flex, Skeleton, Stack, Text } from '../../../../../../primitives';
+import { Alert } from '@/ui/primitives/feedback/Alert';
+import { Button } from '@/ui/primitives/inputs/Button';
+import { Card } from '@/ui/primitives/display/Card';
+import { Flex } from '@/ui/primitives/layout/Flex';
+import { Skeleton } from '@/ui/primitives/feedback/Skeleton';
+import { Stack } from '@/ui/primitives/layout/Stack';
+import { Text } from '@/ui/primitives/display/Typography/compound/Text';
 import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
 import { useTokens } from '@/infrastructure/runtime/theming/composition/react/tokens';
 import { useSurfaceTranslations } from '..';

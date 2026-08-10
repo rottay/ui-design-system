@@ -31,7 +31,7 @@
  */
 
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
-import { Box } from '../../../primitives';
+import { Box } from '../../../primitives/layout/Box';
 import ModernSegmented from '../../../primitives/navigation/Segmented/engines/modern';
 
 /** Definition of a single scope pill rendered by the strip. */

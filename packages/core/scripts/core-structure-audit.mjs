@@ -302,6 +302,37 @@ function moduleSpecifiers(source, path) {
   return sorted(new Set(specifiers));
 }
 
+function directReexportSpecifiers(source, path) {
+  const sourceFile = ts.createSourceFile(
+    path,
+    source,
+    ts.ScriptTarget.Latest,
+    true,
+    scriptKind(path),
+  );
+  return sorted(new Set(sourceFile.statements
+    .filter((statement) => (
+      ts.isExportDeclaration(statement)
+      && statement.moduleSpecifier
+      && ts.isStringLiteralLike(statement.moduleSpecifier)
+    ))
+    .map((statement) => statement.moduleSpecifier.text)));
+}
+
+function readPublicEntrypointManifest(packageRoot) {
+  const manifestPath = resolve(packageRoot, 'public-entrypoints.manifest.json');
+  if (!existsSync(manifestPath)) return null;
+  const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
+  return manifest.entries && typeof manifest.entries === 'object'
+    ? manifest
+    : null;
+}
+
+function manifestSourceRelativePath(source) {
+  const normalized = toPosix(source);
+  return normalized.startsWith('src/') ? normalized.slice('src/'.length) : normalized;
+}
+
 function discoverRootEntrypoints({ packageRoot, sourceRoot, explicitEntrypoints = [] }) {
   const entrypoints = new Set([...CONVENTIONAL_ROOT_ENTRYPOINTS, ...explicitEntrypoints]);
   const packageJsonPath = resolve(packageRoot, 'package.json');
@@ -318,9 +349,44 @@ function discoverRootEntrypoints({ packageRoot, sourceRoot, explicitEntrypoints 
       entrypoints.add(toPosix(match[1]));
     }
   }
+  const publicManifest = readPublicEntrypointManifest(packageRoot);
+  for (const entry of Object.values(publicManifest?.entries ?? {})) {
+    if (typeof entry.source === 'string') {
+      entrypoints.add(manifestSourceRelativePath(entry.source));
+    }
+  }
   return new Set(
     [...entrypoints].filter((entry) => existsSync(resolve(sourceRoot, entry)) || explicitEntrypoints.includes(entry)),
   );
+}
+
+function discoverGovernedPublicLeafSources({
+  packageRoot,
+  sourceRoot,
+  rootEntrypoints,
+  sourcePaths,
+}) {
+  const publicManifest = readPublicEntrypointManifest(packageRoot);
+  const governedLeafSources = new Set();
+  for (const entry of Object.values(publicManifest?.entries ?? {})) {
+    if (typeof entry.source !== 'string') continue;
+    const wrapperRelativePath = manifestSourceRelativePath(entry.source);
+    if (!wrapperRelativePath.startsWith('entrypoints/public/')
+      || !rootEntrypoints.has(wrapperRelativePath)) continue;
+    const wrapperPath = resolve(sourceRoot, wrapperRelativePath);
+    if (!sourcePaths.has(wrapperPath)) continue;
+    const wrapperSource = readFileSync(wrapperPath, 'utf8');
+    for (const specifier of directReexportSpecifiers(wrapperSource, wrapperPath)) {
+      const targetPath = resolveSourceModule({
+        importer: wrapperPath,
+        specifier,
+        sourceRoot,
+        sourcePaths,
+      });
+      if (targetPath) governedLeafSources.add(resolve(targetPath));
+    }
+  }
+  return governedLeafSources;
 }
 
 function classifyFile({ path, sourceRoot, rootEntrypoints }) {
@@ -514,6 +580,12 @@ export function auditCoreStructure({
   }));
   const sourceFiles = files.filter(({ isSource }) => isSource);
   const sourcePaths = new Set(sourceFiles.map(({ path }) => resolve(path)));
+  const governedPublicLeafSources = discoverGovernedPublicLeafSources({
+    packageRoot: absolutePackageRoot,
+    sourceRoot: absoluteSourceRoot,
+    rootEntrypoints,
+    sourcePaths,
+  });
   const knownPaths = new Set(files.map(({ path }) => resolve(path)));
   const authoredFiles = sourceFiles.filter(({ ignoredKind, isIndex }) => !ignoredKind && !isIndex);
   const productionIndexes = sourceFiles.filter(({ ignoredKind, isIndex }) => !ignoredKind && isIndex);
@@ -771,6 +843,7 @@ export function auditCoreStructure({
     .sort(([left], [right]) => left.localeCompare(right))) {
     if (directory === '.') continue;
     const directorySegments = pathSegments(directory);
+    if (directorySegments[0] === 'entrypoints') continue;
     // A canonical UI tier is itself an aggregate catalog: its category owners
     // may consume tier-wide foundation/runtime support without an artificial
     // `shared` or `catalog` wrapper. Collection owners make the same shape
@@ -921,6 +994,7 @@ export function auditCoreStructure({
       }
 
       if (sourceUiLayer && targetUiLayer && sourceUiLayer.rank === targetUiLayer.rank) {
+        if (governedPublicLeafSources.has(resolve(targetFile.path))) continue;
         const scopedRanks = SCOPED_OWNER_RANKS[relativeCommon];
         if (scopedRanks) {
           const sourceScopedRank = scopedRanks[common.leftOwner];

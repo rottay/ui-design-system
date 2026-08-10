@@ -15,7 +15,9 @@
 import type { ComponentType } from 'react';
 type StatusFilterPillIcon = ComponentType<any>;
 
-import { Box, Flex, Text } from '../../../primitives';
+import { Box } from '../../../primitives/layout/Box';
+import { Flex } from '../../../primitives/layout/Flex';
+import { Text } from '../../../primitives/display/Typography/compound/Text';
 
 export interface StatusFilterPillOption {
   value: string;

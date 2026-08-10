@@ -2,9 +2,19 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import dts from 'vite-plugin-dts';
 import preserveDirectives from 'rollup-plugin-preserve-directives';
+import { readFileSync } from 'fs';
 import { resolve } from 'path';
 
 const isWatchMode = process.argv.includes('--watch');
+const publicEntrypointManifest = JSON.parse(
+  readFileSync(resolve(__dirname, 'public-entrypoints.manifest.json'), 'utf8'),
+) as { entries: Record<string, { output: string; source: string }> };
+const publicEntries = Object.fromEntries(
+  Object.values(publicEntrypointManifest.entries).map((entry) => [
+    entry.output,
+    resolve(__dirname, entry.source),
+  ]),
+);
 
 export default defineConfig({
   plugins: [
@@ -44,6 +54,7 @@ export default defineConfig({
       entry: {
         index: resolve(__dirname, 'src/index.ts'),
         server: resolve(__dirname, 'src/entrypoints/server/index.ts'),
+        ...publicEntries,
         icons: resolve(__dirname, 'src/entrypoints/icons/index.ts'),
         'icons-full': resolve(__dirname, 'src/entrypoints/icons/full/index.ts'),
         'icons-preset-bithire': resolve(__dirname, 'src/entrypoints/icons/presets/bithire/index.ts'),

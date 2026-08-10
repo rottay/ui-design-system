@@ -14,15 +14,13 @@
 
 import React, { useCallback, useMemo, useState } from 'react';
 
-import {
-  Box,
-  Checkbox,
-  Flex,
-  Pagination,
-  SkeletonCard,
-  Stack,
-  Text,
-} from '../../../../../primitives';
+import { Box } from '../../../../../primitives/layout/Box';
+import { Checkbox } from '../../../../../primitives/inputs/Checkbox';
+import { Flex } from '../../../../../primitives/layout/Flex';
+import { Pagination } from '../../../../../primitives/navigation/Pagination';
+import { SkeletonCard } from '../../../../../primitives/feedback/Skeleton';
+import { Stack } from '../../../../../primitives/layout/Stack';
+import { Text } from '../../../../../primitives/display/Typography/compound/Text';
 import type { GridViewProps } from '../../contracts';
 import { resolveGridRowKey } from '../../runtime/item-identity';
 import { useCollectionStagger } from '../../../../foundation/motion';

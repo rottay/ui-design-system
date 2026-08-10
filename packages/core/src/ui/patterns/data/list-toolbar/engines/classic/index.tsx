@@ -17,18 +17,16 @@
 
 import { useState, useCallback, useMemo } from 'react';
 
-import {
-  Box,
-  Flex,
-  Stack,
-  Text,
-  Button,
-  Badge,
-  Input,
-  Popover,
-  Tabs,
-  Tag,
-} from '../../../../../primitives';
+import { Box } from '../../../../../primitives/layout/Box';
+import { Flex } from '../../../../../primitives/layout/Flex';
+import { Stack } from '../../../../../primitives/layout/Stack';
+import { Text } from '../../../../../primitives/display/Typography/compound/Text';
+import { Button } from '../../../../../primitives/inputs/Button';
+import { Badge } from '../../../../../primitives/display/Badge';
+import { Input } from '../../../../../primitives/inputs/Input';
+import { Popover } from '../../../../../primitives/overlay/Popover';
+import { Tabs } from '../../../../../primitives/navigation/Tabs';
+import { Tag } from '../../../../../primitives/display/Tag';
 import {
   SearchIcon as Search,
   ListIcon as List,
