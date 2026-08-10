@@ -154,7 +154,12 @@ describe('Mentions modern -- geometry lives in the skin, hooks in the DOM', () =
 
   it('skin pins: default-status hover repaints the border on the Input grammar (premium hover regression)', () => {
     expect(
-      /\[data-part='textarea'\]:not\(\[data-disabled='true'\]\):not\(\[data-status\]\):hover:not\(:focus\)\s*\{[^}]*border-color:\s*var\(--ds-mentions-border-hover,\s*var\(--ds-color-border-hover\)\)/.test(SKIN_NC)
+      // The terminal is the governed material channel rather than
+      // `--ds-color-border-hover`, which is declared nowhere and therefore
+      // resolved to nothing. `--ds-material-control-border-hover` is declared in
+      // the foundation theme and resolves to a border that visibly differs from
+      // rest, so the repaint this test guards actually happens.
+      /\[data-part='textarea'\]:not\(\[data-disabled='true'\]\):not\(\[data-status\]\):hover:not\(:focus\)\s*\{[^}]*border-color:\s*var\(--ds-mentions-border-hover,\s*var\(--ds-material-control-border-hover\)\)/.test(SKIN_NC)
     ).toBe(true);
     // Motion honoured with the standard reduced-motion guard.
     expect(/\[data-part='textarea'\]\s*\{[^}]*transition:/.test(SKIN_NC)).toBe(true);

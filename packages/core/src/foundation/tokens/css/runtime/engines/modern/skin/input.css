@@ -344,7 +344,7 @@ input.rottay-input.rottay-input--modern[data-part='root']::selection {
 /* Interaction and semantic states */
 .rottay-input.rottay-input--modern[data-part='root'][data-state~='hovered']:not([data-state~='focused']):not([data-disabled='true']):not([data-readonly='true']):not([data-invalid='true']):not([data-warning='true']):not([data-success='true']):not([data-variant='unstyled']) {
   background: var(--ds-input-bg-hover, var(--ds-input-bg));
-  border-color: var(--ds-input-border-hover, var(--ds-color-border));
+  border-color: var(--ds-input-border-hover, var(--ds-material-control-border-hover));
   box-shadow: var(--ds-input-shadow-hover, var(--ds-input-shadow-rest)), var(--ds-input-inset-shadow, none);
 }
 

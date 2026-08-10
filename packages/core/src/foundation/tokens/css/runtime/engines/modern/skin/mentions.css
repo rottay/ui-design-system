@@ -32,7 +32,7 @@
  * default rode `currentColor` at reduced alpha; the certified Input family
  * ships these same raw values and passes the wave's axe gates, which do not
  * evaluate placeholder ink). INTERACTION STATES: a default-status-only
- * border repaint on `:hover` (`--ds-color-border-hover`) and the certified
+ * border repaint on `:hover` (`--ds-material-control-border-hover`) and the certified
  * Input/Textarea focus grammar on `:focus` (native `:focus`, not
  * `:focus-visible` -- a text field's border is not a keyboard-only
  * affordance): the default-status border reads
@@ -96,11 +96,11 @@
    `:active` equivalent, and the focused tap rides the focus grammar. */
 @media (hover: hover) {
   .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea']:not([data-disabled='true']):not([data-status]):hover:not(:focus) {
-    border-color: var(--ds-mentions-border-hover, var(--ds-color-border));
+    border-color: var(--ds-mentions-border-hover, var(--ds-material-control-border-hover));
   }
 }
 .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea']:not([data-disabled='true']):not([data-status]):active:not(:focus) {
-  border-color: var(--ds-mentions-border-hover, var(--ds-color-border));
+  border-color: var(--ds-mentions-border-hover, var(--ds-material-control-border-hover));
 }
 .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea']::placeholder {
   color: var(--ds-mentions-placeholder-color, var(--ds-input-color-placeholder, var(--ds-color-text-muted)));

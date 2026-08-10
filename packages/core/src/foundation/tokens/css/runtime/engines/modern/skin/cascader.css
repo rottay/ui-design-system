@@ -130,13 +130,13 @@
 @media (hover: hover) {
   .ds-cascader.ds-cascader--modern[data-part="root"]
     [data-part="trigger"]:where(:hover):not([data-disabled="true"]) {
-    border-color: var(--ds-cascader-border-hover, var(--ds-color-border));
+    border-color: var(--ds-cascader-border-hover, var(--ds-material-control-border-hover));
   }
 }
 /* Touch/active equivalent of the hover border. */
 .ds-cascader.ds-cascader--modern[data-part="root"]
   [data-part="trigger"]:active:not([data-disabled="true"]) {
-  border-color: var(--ds-cascader-border-hover, var(--ds-color-border));
+  border-color: var(--ds-cascader-border-hover, var(--ds-material-control-border-hover));
 }
 .ds-cascader.ds-cascader--modern[data-part="root"]
   [data-part="trigger"]:focus-visible {
@@ -287,13 +287,13 @@
 @media (hover: hover) {
   .ds-cascader.ds-cascader--modern[data-part="root"]
     [data-part="search-input"]:where(:hover):not(:disabled):not(:focus-visible) {
-    border-color: var(--ds-cascader-border-hover, var(--ds-color-border));
+    border-color: var(--ds-cascader-border-hover, var(--ds-material-control-border-hover));
   }
 }
 /* Touch/active equivalent of the hover border (4th-tanda law). */
 .ds-cascader.ds-cascader--modern[data-part="root"]
   [data-part="search-input"]:active:not(:disabled):not(:focus-visible) {
-  border-color: var(--ds-cascader-border-hover, var(--ds-color-border));
+  border-color: var(--ds-cascader-border-hover, var(--ds-material-control-border-hover));
 }
 .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="search-input"]::placeholder {
   color: var(--ds-input-color-placeholder, var(--ds-color-text-muted));

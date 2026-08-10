@@ -371,6 +371,14 @@
 
   --ds-material-inset-background: var(--ds-surface-inset);
   --ds-material-inset-foreground: var(--ds-color-text-primary);
+  /* An inset surface is recessed, so its states deepen the inner shadow rather
+     than lifting the way the card material does. These were read by
+     semantic-surface.css and by the runtime token map while being declared
+     nowhere, which left the whole inset depth axis dormant. */
+  --ds-material-inset-shadow: var(--ds-shadow-inner);
+  --ds-material-inset-shadow-hover: inset 0 2px 6px 0 rgba(0, 0, 0, 0.07);
+  --ds-material-inset-shadow-active: inset 0 3px 8px 0 rgba(0, 0, 0, 0.09);
+  --ds-material-inset-shadow-selected: var(--ds-focus-ring, var(--ds-shadow-focus-ring));
 
   --ds-material-control-background: var(--ds-surface-control);
   --ds-material-control-background-hover: var(

@@ -1639,6 +1639,14 @@
 
   --ds-material-inset-background: var(--ds-surface-inset);
   --ds-material-inset-foreground: var(--ds-color-text-primary);
+  /* An inset surface is recessed, so its states deepen the inner shadow rather
+     than lifting the way the card material does. These were read by
+     semantic-surface.css and by the runtime token map while being declared
+     nowhere, which left the whole inset depth axis dormant. */
+  --ds-material-inset-shadow: var(--ds-shadow-inner);
+  --ds-material-inset-shadow-hover: inset 0 2px 6px 0 rgba(0, 0, 0, 0.07);
+  --ds-material-inset-shadow-active: inset 0 3px 8px 0 rgba(0, 0, 0, 0.09);
+  --ds-material-inset-shadow-selected: var(--ds-focus-ring, var(--ds-shadow-focus-ring));
 
   --ds-material-control-background: var(--ds-surface-control);
   --ds-material-control-background-hover: var(
@@ -5432,6 +5440,16 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   }
 }
 
+/* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
+   relaid out, or left waiting on an event that never arrives. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-icon-frame {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
 }
 @layer rottay-components {
 /**
@@ -5529,6 +5547,16 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   .ds-arc {
     --_ds-arc-fill: Highlight;
     --_ds-arc-track: Canvas;
+  }
+}
+
+/* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
+   relaid out, or left waiting on an event that never arrives. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-arc {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }
 
@@ -5813,6 +5841,16 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   }
   .ds-meter [data-part='tick'] {
     border-color: CanvasText;
+  }
+}
+
+/* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
+   relaid out, or left waiting on an event that never arrives. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-meter [data-part='fill'] {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }
 
@@ -7831,6 +7869,16 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 
 .ds-card--interactive {
   transition: var(--ds-premium-card-transition);
+}
+
+/* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
+   relaid out, or left waiting on an event that never arrives. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-card--interactive {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }
 
 }
@@ -19825,7 +19873,9 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 [data-tenant] .btn-primary:hover:not(:disabled) {
   background-color: var(--ds-button-primary-bg-hover);
   border-color: var(--ds-button-primary-bg-hover);
-  box-shadow: var(--ds-button-primary-shadow-hover);
+  /* Not every artifact declares the hover shadow, and a bare read would drop the whole
+     declaration rather than fall back to the governed elevation. */
+  box-shadow: var(--ds-button-primary-shadow-hover, var(--ds-shadow-md));
   transform: var(--ds-button-hover-transform, translateY(0) scale(1));
 }
 
@@ -20664,6 +20714,18 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 @media (pointer: coarse) {
   [data-tenant] .rottay-input--modern {
     min-height: var(--ds-touch-target-min);
+  }
+}
+
+/* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
+   relaid out, or left waiting on an event that never arrives. */
+@media (prefers-reduced-motion: reduce) {
+  [data-tenant] .btn,
+  [data-tenant] .input,
+  [data-tenant] .loading {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }
 
@@ -25197,7 +25259,7 @@ input.rottay-input.rottay-input--modern[data-part='root']::selection {
 /* Interaction and semantic states */
 .rottay-input.rottay-input--modern[data-part='root'][data-state~='hovered']:not([data-state~='focused']):not([data-disabled='true']):not([data-readonly='true']):not([data-invalid='true']):not([data-warning='true']):not([data-success='true']):not([data-variant='unstyled']) {
   background: var(--ds-input-bg-hover, var(--ds-input-bg));
-  border-color: var(--ds-input-border-hover, var(--ds-color-border-hover));
+  border-color: var(--ds-input-border-hover, var(--ds-material-control-border-hover));
   box-shadow: var(--ds-input-shadow-hover, var(--ds-input-shadow-rest)), var(--ds-input-inset-shadow, none);
 }
 
@@ -25258,7 +25320,7 @@ input.rottay-input.rottay-input--modern[data-part='root']::selection {
      background would fall back to `initial` (transparent). The terminal chain
      is the one Select already authors for the same state. */
   background: var(--ds-input-bg-disabled, var(--ds-surface-disabled, var(--ds-surface-subtle, var(--ds-surface-canvas))));
-  border-color: var(--ds-input-border-disabled, var(--ds-color-border-disabled));
+  border-color: var(--ds-input-border-disabled, var(--ds-color-border));
   box-shadow: var(--ds-input-shadow-disabled, none);
   cursor: var(--ds-input-disabled-cursor);
   opacity: var(--ds-input-disabled-opacity);
@@ -26048,7 +26110,7 @@ input.rottay-input.rottay-input--modern[data-part='root'][type='number'] {
 .rottay-badge.rottay-badge--modern[data-part='root'][data-variant='default'] {
   --ds-badge-tone-solid-bg: var(--ds-color-neutral-200);
   --ds-badge-tone-solid-color: var(--ds-color-text-primary);
-  --ds-badge-tone-soft-bg: var(--ds-color-alpha-black-100);
+  --ds-badge-tone-soft-bg: var(--ds-color-alpha-black-100, color-mix(in srgb, var(--ds-color-text-primary) 20%, transparent));
   --ds-badge-tone-soft-color: var(--ds-color-text-secondary);
   --ds-badge-tone-outline: var(--ds-color-border);
 }
@@ -26185,9 +26247,11 @@ input.rottay-input.rottay-input--modern[data-part='root'][type='number'] {
 }
 
 .rottay-badge.rottay-badge--modern[data-state~='pressed'] {
-  background: var(--ds-badge-surface-pressed, var(--ds-badge-surface-hover));
-  border-color: var(--ds-badge-frame-pressed, var(--ds-badge-frame-hover));
-  color: var(--ds-badge-ink-pressed, var(--ds-badge-ink-hover));
+  /* The hover channels are tenant-declared, so pressed must fall through to the same
+     per-treatment mixes hover uses or an unconfigured tenant presses to transparent. */
+  background: var(--ds-badge-surface-pressed, var(--ds-badge-surface-hover, var(--_ds-badge-hover-bg-fallback)));
+  border-color: var(--ds-badge-frame-pressed, var(--ds-badge-frame-hover, color-mix(in srgb, currentColor 24%, transparent)));
+  color: var(--ds-badge-ink-pressed, var(--ds-badge-ink-hover, var(--ds-badge-hover-ink-fallback)));
   transform: var(--ds-badge-position-transform, translateY(0))
     var(--ds-badge-press-transform, translateY(0) scale(0.985));
   box-shadow: var(--ds-badge-shadow-pressed, inset 0 1px 2px color-mix(in srgb, currentColor 12%, transparent));
@@ -33384,12 +33448,12 @@ input.rottay-input.rottay-input--modern[data-part='root'][type='number'] {
    grammar which already follows. */
 @media (hover: hover) {
   .ds-textarea.ds-textarea--modern[data-part='root']:not([data-variant='borderless'])[data-status='default']:hover:not([data-disabled='true']):not([data-readonly='true']):not(:focus) {
-    border-color: var(--ds-textarea-border-hover, var(--ds-input-border-hover, var(--ds-color-border-hover)));
+    border-color: var(--ds-textarea-border-hover, var(--ds-input-border-hover, var(--ds-color-border)));
   }
 }
 /* Touch/active equivalent of the hover border. */
 .ds-textarea.ds-textarea--modern[data-part='root']:not([data-variant='borderless'])[data-status='default']:active:not([data-disabled='true']):not([data-readonly='true']) {
-  border-color: var(--ds-textarea-border-hover, var(--ds-input-border-hover, var(--ds-color-border-hover)));
+  border-color: var(--ds-textarea-border-hover, var(--ds-input-border-hover, var(--ds-color-border)));
 }
 .ds-textarea.ds-textarea--modern[data-part='root']:not([data-variant='borderless'])[data-status='default']:focus:not([data-disabled='true']) {
   border-color: var(--ds-textarea-border-focus, var(--ds-input-border-focus, var(--ds-color-primary)));
@@ -33818,12 +33882,12 @@ input.rottay-input.rottay-input--modern[data-part='root'][type='number'] {
 }
 @media (hover: hover) {
   .ds-tag-input.ds-tag-input--modern[data-part='root'][data-size]:where(:hover):not([data-disabled='true']):not([data-error='true']) {
-    border-color: var(--ds-tag-input-border-hover, var(--ds-color-border-hover));
+    border-color: var(--ds-tag-input-border-hover, var(--ds-material-control-border-hover));
   }
 }
 /* Touch/active equivalent of the hover border (4th-tanda law). */
 .ds-tag-input.ds-tag-input--modern[data-part='root'][data-size]:active:not([data-disabled='true']):not([data-error='true']) {
-  border-color: var(--ds-tag-input-border-hover, var(--ds-color-border-hover));
+  border-color: var(--ds-tag-input-border-hover, var(--ds-material-control-border-hover));
 }
 .ds-tag-input.ds-tag-input--modern[data-part='root'][data-error='true'] {
   border: 1px solid var(--ds-color-error);
@@ -34276,7 +34340,7 @@ input.rottay-input.rottay-input--modern[data-part='root'][type='number'] {
 /* Hover is hover-capable-only; touch gets the :active/focus path below. */
 @media (hover: hover) {
   .ds-input-number.ds-input-number--modern[data-part='root'][data-part='root']:where(:hover):not([data-disabled='true']):not([data-status='error']):not([data-status='warning']) {
-    border-color: var(--ds-input-number-border-hover, var(--ds-input-border-hover, var(--ds-color-border-hover)));
+    border-color: var(--ds-input-number-border-hover, var(--ds-input-border-hover, var(--ds-color-border)));
   }
 }
 .ds-input-number.ds-input-number--modern[data-part='root'][data-part='root']:focus-visible {
@@ -34335,7 +34399,7 @@ input.rottay-input.rottay-input--modern[data-part='root'][type='number'] {
      --ds-surface-disabled cannot make this declaration invalid at
      computed-value time (same terminal Select authors for this state). */
   background: var(--ds-input-bg-disabled, var(--ds-surface-disabled, var(--ds-surface-subtle, var(--ds-surface-canvas))));
-  border-color: var(--ds-input-border-disabled, var(--ds-color-border-disabled));
+  border-color: var(--ds-input-border-disabled, var(--ds-color-border));
   opacity: var(--ds-disabled-opacity, 0.58);
   cursor: var(--ds-input-disabled-cursor);
 }
@@ -34422,7 +34486,7 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
      --ds-surface-disabled cannot make this declaration invalid at
      computed-value time (same terminal Select authors for this state). */
   background: var(--ds-input-bg-disabled, var(--ds-surface-disabled, var(--ds-surface-subtle, var(--ds-surface-canvas))));
-  border-color: var(--ds-input-border-disabled, var(--ds-color-border-disabled));
+  border-color: var(--ds-input-border-disabled, var(--ds-color-border));
 }
 
 [data-part='prefix']:has(~ .ds-input-number.ds-input-number--modern[data-part='root']) {
@@ -34974,7 +35038,7 @@ div:has(> .ds-input-number.ds-input-number--rustic[data-part='root']) ~ [data-pa
 /* Interaction and semantic states */
 .ds-password-input.ds-password-input--modern[data-part='root'][data-state~='hovered']:not([data-state~='focused']):not([data-disabled='true']):not([data-readonly='true']):not([data-error='true']):not([data-variant='unstyled']) {
   background: var(--ds-input-bg-hover, var(--ds-input-bg, var(--ds-surface-control)));
-  border-color: var(--ds-input-border-hover, var(--ds-color-border-hover));
+  border-color: var(--ds-input-border-hover, var(--ds-material-control-border-hover));
 }
 
 .ds-password-input.ds-password-input--modern[data-part='root'][data-variant='filled'][data-state~='hovered']:not([data-state~='focused']):not([data-disabled='true']):not([data-readonly='true']) {
@@ -35013,7 +35077,7 @@ div:has(> .ds-input-number.ds-input-number--rustic[data-part='root']) ~ [data-pa
      --ds-surface-disabled cannot make this declaration invalid at
      computed-value time (same terminal Select authors for this state). */
   background: var(--ds-input-bg-disabled, var(--ds-surface-disabled, var(--ds-surface-subtle, var(--ds-surface-canvas))));
-  border-color: var(--ds-input-border-disabled, var(--ds-color-border-disabled));
+  border-color: var(--ds-input-border-disabled, var(--ds-color-border));
   box-shadow: var(--ds-input-shadow-disabled, none);
   cursor: var(--ds-input-disabled-cursor);
   opacity: var(--ds-input-disabled-opacity);
@@ -37774,7 +37838,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
    halo itself (a press focuses the slot). */
 @media (hover: hover) {
   .ds-otp-input.ds-otp-input--modern[data-part='root'] [data-part='slot']:hover:not(:focus):not([data-error='true']) {
-    border-color: var(--ds-otp-slot-border-hover, var(--ds-color-border-hover));
+    border-color: var(--ds-otp-slot-border-hover, var(--ds-material-control-border-hover));
   }
 }
 /* Filled slots read one step stronger than empty (state distinction, K4-D
@@ -37782,10 +37846,10 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
    a hue swap; the focus/error chains below stay sovereign (the keyline rides
    background-image precisely so it cannot clobber the halo's box-shadow). */
 .ds-otp-input.ds-otp-input--modern [data-part='slot'][data-part='slot'][data-filled='true'] {
-  border-color: var(--ds-otp-slot-border-filled, var(--ds-color-border-hover));
+  border-color: var(--ds-otp-slot-border-filled, var(--ds-color-border));
   background-image: linear-gradient(
     to top,
-    var(--_ds-otp-filled-keyline, var(--ds-color-border-hover)) 2px,
+    var(--_ds-otp-filled-keyline, var(--ds-color-border)) 2px,
     transparent 2px
   );
 }
@@ -39496,6 +39560,16 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   }
 }
 
+/* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
+   relaid out, or left waiting on an event that never arrives. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-code-block[data-part='root'] [data-part='copy-button'] {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
 }
 @layer rottay-components {
 /**
@@ -39708,6 +39782,16 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   }
 }
 
+/* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
+   relaid out, or left waiting on an event that never arrives. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-markdown-view[data-part='root'] a[data-part='link'] {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
 }
 @layer rottay-components {
 /** Input compounds: shared public anatomy for Group, Addon and TextArea. */
@@ -39863,7 +39947,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
      --ds-surface-disabled cannot make this declaration invalid at
      computed-value time (same terminal Select authors for this state). */
   background: var(--ds-input-bg-disabled, var(--ds-surface-disabled, var(--ds-surface-subtle, var(--ds-surface-canvas))));
-  border-color: var(--ds-input-border-disabled, var(--ds-color-border-disabled));
+  border-color: var(--ds-input-border-disabled, var(--ds-color-border));
 }
 
 /* Select joins the same seam (C-02 compound field): a Select shell as a
@@ -39915,7 +39999,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 .rottay-input-group[data-part='group'][data-compact='true'] > .ds-select-shell[data-disabled='true'] + .rottay-input-addon.ds-input-addon[data-part='root']:not([data-variant='transparent']) {
   color: var(--ds-input-color-disabled, var(--ds-color-text-disabled));
   background: var(--ds-input-bg-disabled, var(--ds-surface-disabled, var(--ds-surface-subtle, var(--ds-surface-canvas))));
-  border-color: var(--ds-input-border-disabled, var(--ds-color-border-disabled));
+  border-color: var(--ds-input-border-disabled, var(--ds-color-border));
 }
 
 /* TextArea --------------------------------------------------------------- */
@@ -40771,13 +40855,13 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 @media (hover: hover) {
   .ds-upload.ds-upload--modern[data-part='root'] [data-part='trigger'] button:where(:hover):not(:disabled) {
-    border-color: var(--ds-upload-trigger-border-hover, var(--ds-color-border-hover));
+    border-color: var(--ds-upload-trigger-border-hover, var(--ds-material-control-border-hover));
     background: var(--ds-upload-trigger-bg-hover, var(--ds-surface-inset));
   }
 }
 /* Touch/active equivalent of the hover treatment. */
 .ds-upload.ds-upload--modern[data-part='root'] [data-part='trigger'] button:active:not(:disabled) {
-  border-color: var(--ds-upload-trigger-border-hover, var(--ds-color-border-hover));
+  border-color: var(--ds-upload-trigger-border-hover, var(--ds-material-control-border-hover));
   background: var(--ds-upload-trigger-bg-hover, var(--ds-surface-inset));
 }
 .ds-upload.ds-upload--modern[data-part='root'] [data-part='trigger'] button:disabled {
@@ -41528,20 +41612,20 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
-  inline-size: var(--ds-transfer-item-remove-size, var(--ds-spacing-5));
-  block-size: var(--ds-transfer-item-remove-size, var(--ds-spacing-5));
+  inline-size: var(--ds-spacing-5);
+  block-size: var(--ds-spacing-5);
   padding: 0;
   border: none;
   border-radius: var(--ds-transfer-item-radius, var(--ds-radius-md));
   background: transparent;
-  color: var(--ds-transfer-item-remove-color, var(--ds-color-text-tertiary));
+  color: var(--ds-color-text-tertiary);
   cursor: pointer;
   transition: background-color var(--ds-motion-fast), color var(--ds-motion-fast);
 }
 @media (hover: hover) {
   .rottay-transfer.rottay-transfer--modern [data-part='panel-item-remove']:not(:disabled):hover {
     background: var(--ds-transfer-button-bg-hover, var(--ds-button-ghost-bg-hover, var(--ds-surface-inset)));
-    color: var(--ds-transfer-item-remove-color-hover, var(--ds-color-text-primary));
+    color: var(--ds-color-text-primary);
   }
 }
 .rottay-transfer.rottay-transfer--modern [data-part='panel-item-remove']:not(:disabled):active {
@@ -42694,7 +42778,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 .rottay-timepicker.rottay-timepicker--modern [data-part='trigger-input'][data-status]:where(:hover):not(:disabled):not([data-status='error']):not([data-status='warning']),
 .rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'][data-status]:where(:hover):not(:disabled):not([data-status='error']):not([data-status='warning']) {
-  border-color: var(--ds-timepicker-border-hover, var(--ds-color-border-hover));
+  border-color: var(--ds-timepicker-border-hover, var(--ds-material-control-border-hover));
 }
 .rottay-timepicker.rottay-timepicker--modern [data-part='trigger-input'][data-status]:focus-visible,
 .rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'][data-status]:focus-visible {
@@ -43390,7 +43474,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   background: var(--ds-input-warning-bg, var(--ds-input-bg, var(--ds-surface-control)));
 }
 .rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'][data-status]:where(:hover):not(:disabled):not([data-status='error']):not([data-status='warning']) {
-  border-color: var(--ds-datepicker-border-hover, var(--ds-input-border-hover, var(--ds-color-border-hover)));
+  border-color: var(--ds-datepicker-border-hover, var(--ds-input-border-hover, var(--ds-color-border)));
   background: var(--ds-input-bg-hover, var(--ds-input-bg, var(--ds-surface-control)));
 }
 .rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'][data-status]:focus-visible {
@@ -43416,7 +43500,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
      --ds-surface-disabled cannot make this declaration invalid at
      computed-value time (same terminal Select authors for this state). */
   background: var(--ds-input-bg-disabled, var(--ds-surface-disabled, var(--ds-surface-subtle, var(--ds-surface-canvas))));
-  border-color: var(--ds-input-border-disabled, var(--ds-color-border-disabled));
+  border-color: var(--ds-input-border-disabled, var(--ds-color-border));
   opacity: var(--ds-disabled-opacity, 0.5);
   cursor: not-allowed;
 }
@@ -43485,7 +43569,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   background: var(--ds-input-warning-bg, var(--ds-input-bg, var(--ds-surface-control)));
 }
 .rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'][data-status]:where(:hover):not(:disabled):not([data-status='error']):not([data-status='warning']) {
-  border-color: var(--ds-datepicker-border-hover, var(--ds-input-border-hover, var(--ds-color-border-hover)));
+  border-color: var(--ds-datepicker-border-hover, var(--ds-input-border-hover, var(--ds-color-border)));
   background: var(--ds-input-bg-hover, var(--ds-input-bg, var(--ds-surface-control)));
 }
 .rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'][data-status]:focus-visible {
@@ -43507,7 +43591,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 .rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input']:disabled {
   color: var(--ds-input-color-disabled, var(--ds-color-text-disabled));
   background: var(--ds-input-bg-disabled, var(--ds-surface-disabled, var(--ds-surface-subtle, var(--ds-surface-canvas))));
-  border-color: var(--ds-input-border-disabled, var(--ds-color-border-disabled));
+  border-color: var(--ds-input-border-disabled, var(--ds-color-border));
   opacity: var(--ds-disabled-opacity, 0.5);
   cursor: not-allowed;
 }
@@ -44437,12 +44521,12 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 @media (hover: hover) {
   .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='input']:where(:hover):not(:disabled):not(:focus-visible) {
-    border-color: var(--ds-autocomplete-border-hover, var(--ds-color-border-hover));
+    border-color: var(--ds-autocomplete-border-hover, var(--ds-material-control-border-hover));
   }
 }
 /* Touch/active equivalent of the hover border (4th-tanda law). */
 .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='input']:active:not(:disabled):not(:focus-visible) {
-  border-color: var(--ds-autocomplete-border-hover, var(--ds-color-border-hover));
+  border-color: var(--ds-autocomplete-border-hover, var(--ds-material-control-border-hover));
 }
 .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='input']:focus-visible {
   border-color: var(--ds-autocomplete-border-focus, var(--ds-color-primary));
@@ -44835,7 +44919,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * default rode `currentColor` at reduced alpha; the certified Input family
  * ships these same raw values and passes the wave's axe gates, which do not
  * evaluate placeholder ink). INTERACTION STATES: a default-status-only
- * border repaint on `:hover` (`--ds-color-border-hover`) and the certified
+ * border repaint on `:hover` (`--ds-material-control-border-hover`) and the certified
  * Input/Textarea focus grammar on `:focus` (native `:focus`, not
  * `:focus-visible` -- a text field's border is not a keyboard-only
  * affordance): the default-status border reads
@@ -44899,11 +44983,11 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
    `:active` equivalent, and the focused tap rides the focus grammar. */
 @media (hover: hover) {
   .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea']:not([data-disabled='true']):not([data-status]):hover:not(:focus) {
-    border-color: var(--ds-mentions-border-hover, var(--ds-color-border-hover));
+    border-color: var(--ds-mentions-border-hover, var(--ds-material-control-border-hover));
   }
 }
 .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea']:not([data-disabled='true']):not([data-status]):active:not(:focus) {
-  border-color: var(--ds-mentions-border-hover, var(--ds-color-border-hover));
+  border-color: var(--ds-mentions-border-hover, var(--ds-material-control-border-hover));
 }
 .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea']::placeholder {
   color: var(--ds-mentions-placeholder-color, var(--ds-input-color-placeholder, var(--ds-color-text-muted)));
@@ -45430,7 +45514,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 /* ---- Interaction and semantic states (Input grammar: flat + hairline). ---- */
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger']:not([data-disabled='true']):not([data-open='true']):not([data-status='error']):not([data-status='warning']):not([data-status='success']):hover {
-  border-color: var(--ds-select-border-color-hover, var(--ds-color-border-hover));
+  border-color: var(--ds-select-border-color-hover, var(--ds-color-border));
   background: var(--ds-select-bg-hover, var(--ds-material-control-background-hover, var(--ds-select-bg, var(--ds-surface-control))));
   box-shadow: var(--ds-select-shadow-hover, var(--ds-select-shadow, none));
 }
@@ -46557,7 +46641,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   border-color: var(--ds-input-warning-border, var(--ds-color-warning));
 }
 .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"]:where(:hover):not([data-disabled='true']) {
-  border-color: var(--ds-tree-select-border-hover, var(--ds-color-border-hover));
+  border-color: var(--ds-tree-select-border-hover, var(--ds-material-control-border-hover));
 }
 .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"]:focus-visible {
   border-color: var(--ds-tree-select-border-focus, var(--ds-color-primary));
@@ -47318,13 +47402,13 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 @media (hover: hover) {
   .ds-cascader.ds-cascader--modern[data-part="root"]
     [data-part="trigger"]:where(:hover):not([data-disabled="true"]) {
-    border-color: var(--ds-cascader-border-hover, var(--ds-color-border-hover));
+    border-color: var(--ds-cascader-border-hover, var(--ds-material-control-border-hover));
   }
 }
 /* Touch/active equivalent of the hover border. */
 .ds-cascader.ds-cascader--modern[data-part="root"]
   [data-part="trigger"]:active:not([data-disabled="true"]) {
-  border-color: var(--ds-cascader-border-hover, var(--ds-color-border-hover));
+  border-color: var(--ds-cascader-border-hover, var(--ds-material-control-border-hover));
 }
 .ds-cascader.ds-cascader--modern[data-part="root"]
   [data-part="trigger"]:focus-visible {
@@ -47475,13 +47559,13 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 @media (hover: hover) {
   .ds-cascader.ds-cascader--modern[data-part="root"]
     [data-part="search-input"]:where(:hover):not(:disabled):not(:focus-visible) {
-    border-color: var(--ds-cascader-border-hover, var(--ds-color-border-hover));
+    border-color: var(--ds-cascader-border-hover, var(--ds-material-control-border-hover));
   }
 }
 /* Touch/active equivalent of the hover border (4th-tanda law). */
 .ds-cascader.ds-cascader--modern[data-part="root"]
   [data-part="search-input"]:active:not(:disabled):not(:focus-visible) {
-  border-color: var(--ds-cascader-border-hover, var(--ds-color-border-hover));
+  border-color: var(--ds-cascader-border-hover, var(--ds-material-control-border-hover));
 }
 .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="search-input"]::placeholder {
   color: var(--ds-input-color-placeholder, var(--ds-color-text-muted));
@@ -49470,6 +49554,16 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='line'],
   .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='line'][data-animation='shimmer'] {
     background: GrayText;
+  }
+}
+
+/* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
+   relaid out, or left waiting on an event that never arrives. */
+@media (prefers-reduced-motion: reduce) {
+  .rottay-skeleton.rottay-skeleton--modern[data-part='root'], .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='avatar'], .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='title'], .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='line'] {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }
 
@@ -52884,6 +52978,16 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   }
   .rottay-result--modern[data-tone][data-part='root'] > [data-part='icon'] > [data-part='status-code'] {
     color: CanvasText;
+  }
+}
+
+/* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
+   relaid out, or left waiting on an event that never arrives. */
+@media (prefers-reduced-motion: reduce) {
+  .rottay-result--modern.rottay-result--modern[data-part='root'][data-part='root'] {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }
 
@@ -59582,9 +59686,10 @@ html[data-ds-motion='reduced']
     --ds-popover-inverse-background,
     var(--ds-color-text-primary)
   );
+  /* The inverse surface paints on --ds-color-text-primary, so its ink is the inverse role. */
   --ds-popover-ink: var(
     --ds-popover-inverse-foreground,
-    var(--ds-color-bg-base)
+    var(--ds-color-text-inverse)
   );
   --ds-popover-muted-ink: var(
     --ds-popover-inverse-muted-foreground,
@@ -63049,7 +63154,7 @@ html[data-ds-motion="reduced"]
      Secondary ink is the lowest safe default; tenants can still move the
      hierarchy through the bounded --ds-tab-color / text-secondary channels. */
   color: var(--ds-tab-color, var(--ds-color-text-secondary));
-  font-family: var(--ds-tabs-item-font-family, var(--ds-font-family-body));
+  font-family: var(--ds-tabs-item-font-family, var(--ds-font-family-base));
   font-size: var(--_ds-tabs-current-font-size);
   font-weight: var(--ds-tabs-item-font-weight, var(--ds-font-weight-medium));
   line-height: var(--ds-tabs-item-line-height, 1.15);
@@ -68674,6 +68779,16 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
   }
 }
 
+/* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
+   relaid out, or left waiting on an event that never arrives. */
+@media (prefers-reduced-motion: reduce) {
+  .rottay-collapse[data-part='root'] [data-part='header'] {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
 }
 @layer rottay-engines {
 /**
@@ -72318,7 +72433,7 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
         flat black to neutral-900 shifts fill luminance by ~0.004 at most --
         ratios hold within ~2%). ---- */
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root']:not([data-outlined]) {
-  background: var(--ds-tag-custom-bg, var(--ds-color-alpha-black-100));
+  background: var(--ds-tag-custom-bg, var(--ds-color-alpha-black-100, color-mix(in srgb, var(--ds-color-text-primary) 20%, transparent)));
   color: var(--ds-color-text-primary);
 }
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='primary']:not([data-outlined]) {
@@ -72367,7 +72482,7 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
         clear AA on every governed source (worst 4.78:1). ---- */
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-outlined='true'] {
   background: var(--ds-tag-custom-bg, transparent);
-  border: var(--ds-tag-border-width, var(--ds-edge-hairline-width, 1px)) solid var(--ds-color-alpha-black-100);
+  border: var(--ds-tag-border-width, var(--ds-edge-hairline-width, 1px)) solid var(--ds-color-alpha-black-100, color-mix(in srgb, var(--ds-color-text-primary) 20%, transparent));
   /* The old near-transparent alpha-black-100 ink is replaced by the adaptive
      primary text ink: the outlined default hosts body-size text. */
   color: var(--ds-tag-outlined-ink, var(--ds-color-text-primary));
@@ -73344,7 +73459,7 @@ html[data-ds-motion='reduced']
   );
   --ds-tooltip-ink: var(
     --ds-tooltip-inverse-foreground,
-    var(--ds-color-bg-base, var(--ds-tooltip-color))
+    var(--ds-color-text-inverse, var(--ds-tooltip-color))
   );
   --ds-tooltip-edge: var(
     --ds-tooltip-inverse-border,
@@ -74618,6 +74733,16 @@ html[data-ds-motion="reduced"]
   border-color: var(--ds-color-neutral-100, #f5f5f5);
 }
 
+/* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
+   relaid out, or left waiting on an event that never arrives. */
+@media (prefers-reduced-motion: reduce) {
+  .rottay-scroll-area-classic::-webkit-scrollbar-thumb {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
 }
 @layer rottay-engines {
 /**
@@ -75144,7 +75269,9 @@ html[data-ds-motion="reduced"]
 /* `pillBadgeSmStyle` still supplies the pill's box (radius, padding, type scale)
    inline; it sets no colour, so nothing here is overwriting a spread. */
 .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='pending'] {
-  background: var(--ds-color-alpha-black-100);
+  /* alpha-black-100 is declared only by the rottay artifact, so every other tenant needs the
+     ink-derived mix or the whole background drops and the status badge paints nothing. */
+  background: var(--ds-color-alpha-black-100, color-mix(in srgb, var(--ds-color-text-primary) 20%, transparent));
   color: var(--ds-color-text-primary);
 }
 
@@ -75164,7 +75291,9 @@ html[data-ds-motion="reduced"]
 }
 
 .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='skipped'] {
-  background: var(--ds-color-alpha-black-100);
+  /* alpha-black-100 is declared only by the rottay artifact, so every other tenant needs the
+     ink-derived mix or the whole background drops and the status badge paints nothing. */
+  background: var(--ds-color-alpha-black-100, color-mix(in srgb, var(--ds-color-text-primary) 20%, transparent));
   color: var(--ds-color-text-primary);
 }
 
@@ -81159,6 +81288,17 @@ html[data-ds-motion="reduced"]
   }
 }
 
+/* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
+   relaid out, or left waiting on an event that never arrives. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-command-palette.ds-engine-modern [data-part='item'],
+  .ds-pattern-command-palette.ds-engine-modern [data-part='skeleton-icon'], .ds-pattern-command-palette.ds-engine-modern [data-part='skeleton-line'] {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
 }
 @layer rottay-engines {
 /**
@@ -81432,6 +81572,19 @@ html[data-ds-motion="reduced"]
   }
   .ds-pattern-environment-toggle.ds-engine-modern [data-part='check'] {
     color: CanvasText;
+  }
+}
+
+/* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
+   relaid out, or left waiting on an event that never arrives. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-environment-toggle.ds-engine-modern [data-part='banner'],
+  .ds-pattern-environment-toggle.ds-engine-modern [data-part='banner-dot'],
+  .ds-pattern-environment-toggle.ds-engine-modern [data-part='dot'], .ds-pattern-environment-toggle.ds-engine-modern [data-part='banner-dot'],
+  .ds-pattern-environment-toggle.ds-engine-modern [data-part='panel'] {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }
 
@@ -82244,6 +82397,16 @@ html[data-ds-motion="reduced"]
   }
 }
 
+/* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
+   relaid out, or left waiting on an event that never arrives. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='dialog'] {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
 }
 @layer rottay-engines {
 /**
@@ -82467,6 +82630,19 @@ html[data-ds-motion="reduced"]
   .ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger'],
   .ds-pattern-locale-switcher.ds-engine-modern [data-part='option'] {
     min-block-size: var(--ds-touch-target-min, 44px);
+  }
+}
+
+/* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
+   relaid out, or left waiting on an event that never arrives. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-locale-switcher.ds-engine-modern [data-part='option'],
+  .ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger'],
+  .ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger'] > svg,
+  .ds-pattern-locale-switcher.ds-engine-modern[data-part='root'] [data-part='panel'] {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }
 
@@ -84936,7 +85112,9 @@ html[data-ds-motion="reduced"]
 /* ---- Avatar.Group: the overlap cut-out, worn by every tile including surplus ---- */
 .rottay-avatar-group[data-part='root'] > [data-part='item'][data-part='item'],
 .rottay-avatar-group[data-part='root'] > [data-part='surplus'][data-part='surplus'] {
-  border: 2px solid var(--ds-avatar-group-border, var(--ds-color-bg-base));
+  /* The ring separates overlapping avatars from the surface they sit on, and --ds-color-bg is
+     declared per tenant, so the fallback stays tenant-causal instead of dropping the border. */
+  border: 2px solid var(--ds-avatar-group-border, var(--ds-color-bg));
 }
 .rottay-avatar-group[data-part='root'] > [data-part='surplus'] {
   background-color: var(--ds-avatar-surplus-bg, var(--ds-color-bg-secondary));
@@ -85524,6 +85702,16 @@ html[data-ds-motion="reduced"]
   }
 }
 
+/* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
+   relaid out, or left waiting on an event that never arrives. */
+@media (prefers-reduced-motion: reduce) {
+  .rottay-image-skeleton[data-part='skeleton'][data-part='skeleton'][data-animate='true'] {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
 }
 @layer rottay-components {
 /**
@@ -85594,7 +85782,7 @@ html[data-ds-motion="reduced"]
 
 .rottay-tooltip-content {
   background-color: var(--ds-tooltip-bg, var(--ds-color-text-primary));
-  color: var(--ds-tooltip-color, var(--ds-color-bg-base));
+  color: var(--ds-tooltip-color, var(--ds-color-text-inverse));
   border-radius: var(--ds-tooltip-radius, 0.375rem);
   box-shadow: var(--ds-tooltip-shadow, var(--ds-shadow-lg));
 }
@@ -87340,6 +87528,16 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   .ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-nav-item[data-active='true'] {
     outline: 2px solid ButtonText;
     outline-offset: -2px;
+  }
+}
+
+/* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
+   relaid out, or left waiting on an event that never arrives. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-surface.ds-guided-draft-form [data-part='draft-status'] {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }
 
@@ -101609,6 +101807,18 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   }
 }
 
+/* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
+   relaid out, or left waiting on an event that never arrives. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'],
+  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__presence-dot[data-part='presence-dot'][data-online='true']::after,
+  .ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-interactive='true'] {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
 }
 @layer rottay-engines {
 /**
@@ -101867,7 +102077,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__plan-head {
   /* Without a floor the auto table shrinks plan columns until the CTA sets one
      glyph per line; the floor is what makes the scroll frame overflow instead. */
-  min-inline-size: var(--ds-pricing-table-plan-head-min-inline-size, 9rem);
+  min-inline-size: var(--ds-spacing-36, 9rem);
   padding: var(--ds-spacing-2, 8px);
   text-align: center;
   vertical-align: top;
@@ -103369,6 +103579,16 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
       var(--_ds-record-facts-fact-bg-share, 96%),
     var(--ds-color-primary)
   );
+}
+
+/* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
+   relaid out, or left waiting on an event that never arrives. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-record-facts.ds-engine-modern .ds-record-facts__skeleton-line::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }
 
 }
@@ -106261,6 +106481,16 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   }
 }
 
+/* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
+   relaid out, or left waiting on an event that never arrives. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-surface.ds-collection-render-dispatch .ds-collection-render-dispatch__card-item[data-part="card-item"][data-activatable="true"] .ds-collection-render-dispatch__fallback-card[data-part="fallback-card"] {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
 }
 @layer rottay-components {
 /**
@@ -107008,6 +107238,18 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   .ds-surface.ds-record-workbench .ds-record-workbench__tab-badge[data-part='tab-badge'] {
     border: 1px solid ButtonBorder;
     background: Canvas;
+  }
+}
+
+/* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
+   relaid out, or left waiting on an event that never arrives. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-surface.ds-record-workbench .ds-record-workbench__status-badge[data-part='status-badge'],
+  .ds-surface.ds-record-workbench .ds-record-workbench__tab-badge[data-part='tab-badge'],
+  .ds-surface.ds-record-workbench .ds-record-workbench__tab-underline[data-part='tab-underline'] {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }
 
@@ -114363,7 +114605,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='axis-tick-label'] {
   fill: var(--ds-chart-label-color, var(--ds-color-text-secondary));
-  font-family: var(--ds-font-family-body);
+  font-family: var(--ds-font-family-base);
   font-size: var(--ds-font-size-xs);
   font-variant-numeric: var(--ds-numeric-tabular);
 }
@@ -114373,7 +114615,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * no tracking, so Arabic typography stays untouched. */
 .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='axis-label'] {
   fill: var(--ds-chart-label-color, var(--ds-color-text-secondary));
-  font-family: var(--ds-font-family-body);
+  font-family: var(--ds-font-family-base);
   font-size: var(--ds-font-size-xs);
   font-weight: var(--ds-font-weight-medium, 500);
 }
@@ -114384,7 +114626,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='value-label'] {
   fill: var(--ds-color-text-primary);
-  font-family: var(--ds-font-family-body);
+  font-family: var(--ds-font-family-base);
   font-size: var(--ds-font-size-xs);
   font-variant-numeric: var(--ds-numeric-tabular);
 }
@@ -114517,7 +114759,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']
   [data-part='pie-center-label'] {
   fill: var(--ds-color-text-primary);
-  font-family: var(--ds-font-family-body);
+  font-family: var(--ds-font-family-base);
   font-size: var(--ds-font-size-sm);
   font-weight: var(--ds-font-weight-semibold, 600);
   font-variant-numeric: var(--ds-numeric-tabular);
@@ -114697,7 +114939,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-chart-axes='high-contrast-compact']
   [data-part='axis-tick-label'] {
-  font-family: var(--ds-font-family-mono, var(--ds-font-family-body));
+  font-family: var(--ds-font-family-mono, var(--ds-font-family-base));
   font-size: calc(var(--ds-font-size-xs) * 0.94);
   font-weight: 600;
 }
@@ -114820,7 +115062,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   stroke: var(--ds-chart-plot-bg, var(--ds-color-bg-primary));
   stroke-width: 3px;
   paint-order: stroke fill;
-  font-family: var(--ds-font-family-body);
+  font-family: var(--ds-font-family-base);
   font-size: var(--ds-font-size-xs);
   font-weight: 600;
   unicode-bidi: plaintext;
@@ -114944,7 +115186,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     stroke: CanvasText;
     stroke-width: 3;
     paint-order: stroke fill;
-    font-family: var(--ds-font-family-body);
+    font-family: var(--ds-font-family-base);
     font-size: var(--ds-font-size-xs);
     font-weight: 700;
     forced-color-adjust: auto;
@@ -117574,6 +117816,16 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   .ds-pattern-map-view.ds-engine-modern [data-part='marker-row'][data-selected='true'] {
     outline: 2px solid Highlight;
     outline-offset: -2px;
+  }
+}
+
+/* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
+   relaid out, or left waiting on an event that never arrives. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-map-view.ds-engine-modern [data-part='marker-row'] {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }
 

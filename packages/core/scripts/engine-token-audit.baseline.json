@@ -3309,5 +3309,17 @@
   "embeddedCssPaint.patterns/data/widget-board/runtime/solver/index.ts": 0,
   "fleet.inlinePaint.patterns/data/widget-board/runtime/solver/react/index.ts": 0,
   "runtimeSvgPaint.patterns/data/widget-board/runtime/solver/react/index.ts": 0,
-  "embeddedCssPaint.patterns/data/widget-board/runtime/solver/react/index.ts": 0
+  "embeddedCssPaint.patterns/data/widget-board/runtime/solver/react/index.ts": 0,
+  "fleet.inlinePaint.primitives/foundation/compose-refs/index.ts": 0,
+  "fleet.inlinePaint.primitives/foundation/scroll-reveal/index.ts": 0,
+  "fleet.inlinePaint.primitives/navigation/Segmented/runtime/reveal/index.ts": 0,
+  "fleet.inlinePaint.primitives/navigation/Tabs/runtime/reveal/index.ts": 0,
+  "runtimeSvgPaint.primitives/foundation/compose-refs/index.ts": 0,
+  "runtimeSvgPaint.primitives/foundation/scroll-reveal/index.ts": 0,
+  "runtimeSvgPaint.primitives/navigation/Segmented/runtime/reveal/index.ts": 0,
+  "runtimeSvgPaint.primitives/navigation/Tabs/runtime/reveal/index.ts": 0,
+  "embeddedCssPaint.primitives/foundation/compose-refs/index.ts": 0,
+  "embeddedCssPaint.primitives/foundation/scroll-reveal/index.ts": 0,
+  "embeddedCssPaint.primitives/navigation/Segmented/runtime/reveal/index.ts": 0,
+  "embeddedCssPaint.primitives/navigation/Tabs/runtime/reveal/index.ts": 0
 }

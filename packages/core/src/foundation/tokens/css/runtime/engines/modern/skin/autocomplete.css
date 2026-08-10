@@ -136,12 +136,12 @@
 
 @media (hover: hover) {
   .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='input']:where(:hover):not(:disabled):not(:focus-visible) {
-    border-color: var(--ds-autocomplete-border-hover, var(--ds-color-border));
+    border-color: var(--ds-autocomplete-border-hover, var(--ds-material-control-border-hover));
   }
 }
 /* Touch/active equivalent of the hover border (4th-tanda law). */
 .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='input']:active:not(:disabled):not(:focus-visible) {
-  border-color: var(--ds-autocomplete-border-hover, var(--ds-color-border));
+  border-color: var(--ds-autocomplete-border-hover, var(--ds-material-control-border-hover));
 }
 .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='input']:focus-visible {
   border-color: var(--ds-autocomplete-border-focus, var(--ds-color-primary));
