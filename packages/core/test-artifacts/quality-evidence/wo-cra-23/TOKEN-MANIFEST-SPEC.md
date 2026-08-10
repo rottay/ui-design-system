@@ -165,20 +165,62 @@ Eleven controls replacing twenty. **This is consolidation AND dimensionality red
 presented it as pure deduplication, which was false: every merge collapses a product space into a
 one-dimensional path. Each row below states what is lost.
 
-| Control | Tier | Named stops | Absorbs | **Lost in the merge** |
-|---|---|---|---|---|
-| `brand.color-seeds` | free | — | unchanged | — |
-| `shape.geometry` | free | sharp · soft · rounded · pill-accented | `shape.button-style`, `shape.radius-scale`, geometry axis | silhouette × radius independence; the range [0.75, 0.85) |
-| `layout.density` | free | compact · standard · spacious | `density.mode`, density field — **NOT rhythm** | continuous densityScale between stops |
-| `spacing.rhythm` | free | tight · normal · airy | — (**kept separate**) | — |
-| `surface.edge` | free | borderless · hairline · outlined · ruled | edge axis | `inset-double` moves to premium |
-| `surface.depth` | free | flat · paper · soft-depth · dramatic | `material`, `elevation`, `effect-intensity`, `elevation-posture` | `frosted`, `luminous`, `hairline-lift`, `luminous-glow`; continuous effect-intensity |
-| `type.voice` | free | sober · editorial · humanist · geometric · **technical** | `typography.pairing` | — (technical restored, see below) |
-| `motion.energy` | free | calm · standard · lively | `motion.dial` | intensity × duration × ambient independence |
-| `type.foundations` | premium | graded ±8% + stack choice | `typography.families`, `typography.scale` | — |
-| `iconography.style` | **pro** | linear · strong-outline · duotone · solid-active | `profiles.icon` | — (tier held, see below) |
-| `chrome.suite` | premium | per-surface bundles | `sidebar-tone`, `chrome.families`, `chrome.anatomy` | 36 independent anatomy combinations |
-| `surface.motif` | premium | none · micro-grid · pinstripe · contour | background patterns | three stops currently expand to nothing |
+**The tier boundary is a rule, not a list**: *what is visible in a still frame is free; what is only
+felt in use is premium.* Two free tenants therefore read as different companies in a screenshot —
+the product goal — while premium sells the product feeling alive, which is perceived after purchase.
+
+**FREE — nine controls, all legible in a static capture**
+
+| Control | Named stops | Absorbs | **Lost in the merge** |
+|---|---|---|---|
+| `brand.color-seeds` | — | unchanged | — |
+| `shape.geometry` | sharp · soft · rounded · pill-accented | `shape.button-style`, `shape.radius-scale`, geometry axis | silhouette × radius independence; the range [0.75, 0.85) |
+| `layout.density` | compact · standard · spacious | `density.mode`, density field — **NOT rhythm** | continuous densityScale between stops |
+| `spacing.rhythm` | tight · normal · airy | — (**kept separate**) | — |
+| `surface.edge` | borderless · hairline · outlined · ruled | edge axis | `inset-double` moves to premium |
+| `surface.depth` | flat · paper · soft-depth · dramatic | `material`, `elevation`, `effect-intensity`, `elevation-posture` | `frosted`, `luminous`, `hairline-lift`, `luminous-glow`; continuous effect-intensity |
+| `type.voice` | sober · editorial · humanist · geometric · **technical** | `typography.pairing` | — |
+| **`type.weight`** ★ | light · regular · medium · bold-ui · editorial-contrast | — **new axis** | — |
+| **`focus.identity`** ★ | ring · halo · underline · solid-offset · inset | — **new axis** | — |
+
+**PREMIUM — seven controls: everything temporal, plus fine grain**
+
+| Control | Named stops | Absorbs | **Lost in the merge** |
+|---|---|---|---|
+| `motion.energy` | calm · standard · lively | `motion.dial` | intensity × duration × ambient independence |
+| **`motion.character`** ★ | precise · fluid · spring · still | the ten static-only BrandTheme motion fields | authored timings stay forbidden — this SELECTS reviewed postures |
+| `type.foundations` | graded ±8% + stack choice | `typography.families`, `typography.scale` | — |
+| `iconography.style` | linear · strong-outline · duotone · solid-active | `profiles.icon` | — (held at pro, §2.1) |
+| `chrome.suite` | per-surface bundles | `sidebar-tone`, `chrome.families`, `chrome.anatomy` | 36 independent anatomy combinations |
+| `surface.motif` | none · micro-grid · pinstripe · contour | background patterns | three stops currently expand to nothing |
+| **`control.size`** ★ | compact · standard · comfortable · large | — **new axis**, unwelded from density | — |
+
+★ = a new axis, not a consolidation. These four **do not exist today in any form** and are the
+programme's largest capability addition.
+
+| New axis | Would reach | Status today |
+|---|---:|---|
+| `type.weight` | **154 families (61%)** | No axis, no override token, no dial. The strongest greyscale identity signal in the product is completely ungoverned |
+| `focus.identity` | **95 families (38%)** | 385 read sites, no control of any kind |
+| `control.size` | **88 families (35%)** | Welded to density — a "spacious" tenant gets airy layout with identical button heights |
+| `motion.character` | 206 families paint motion, 81% reachable | The ten choreography fields exist in BrandTheme with live consumers; they are simply not opened to tenants |
+
+**Cost note:** `type.weight`, `focus.identity` and `control.size` require creating the token and
+wiring it before it can be exposed — each is a repair wave in its own right, comparable to the border
+wave. `motion.character` is far cheaper: the fields and their consumers already exist, so only the
+tenant-selection surface is missing. Motion is also the best-plumbed axis in the system (81% reach,
+**zero literals**), which is why it is the one addition that is nearly free.
+
+**Why opening motion character does not violate the standing restriction.** The contract states
+*"motion is deliberately bounded to a semantic dial; arbitrary timing, springs, keyframes and topology
+remain owned by the vertical envelope"*, and `motionRecipes` sits in `forbiddenCapabilities`. That
+rule forbids a tenant **authoring** timings; `motion.character` lets a tenant **select** one of four
+reviewed postures. It is a second semantic dial, which is the sanctioned shape.
+
+**The accessibility floor already exists and is unconditional.** Two `!important` declarations zero
+all thirteen `--ds-motion-*` tokens under `prefers-reduced-motion`, and they beat every selector
+including the tenant block. **No tenant can impose motion on a user who asked for none.** That
+guarantee is what makes a character axis safe to open.
 
 ### 2.1 Four corrections to revision 1
 
@@ -518,23 +560,22 @@ New hand-authored input: probes per (control, stop), ~250 family headers, a hand
 
 ---
 
-## 7. Open owner decisions [O]
+## 7. Owner decisions
 
-1. **Stored-document migration.** Consolidation deletes document paths; every persisted tenant
-   document addressing an old path is orphaned, and renumbering stops silently remaps stored floats.
-   **Does "nothing legacy survives" override tenants' persisted branding, or is there a versioning and
-   remap contract?** Wave 10 is blocked on this.
-2. **Derived dark.** A tenant authoring only light seeds gets a derived dark ramp. Acceptable, or must
-   a tenant be able to review it?
-3. **The hard forks.** Each is two live names with different values, **and the classification is
-   per-vertical**. Adjudicate per pair, per vertical.
-4. **Shadow and the elevation ramp.** Hand-rolled shadows bypass a ramp that does not express what
-   components paint. Does the ramp change, or do the components?
-5. **Breaking window.** The duplicate vocabularies are public API — `useTokens().transitions` is a
-   published hook. Without a sanctioned breaking release the purge reduces to aliasing.
-6. **Vertical identity authority.** `platform` ships an artifact but has no envelope; the
-   slug/verticalKey pair lives in at least five places; `styles/rottay.css` and `styles/platform.css`
-   are byte-identical (shipped twice). Since every edge is keyed per vertical from day one, **which
-   verticals exist and under which key is blocking, not deferrable**.
-7. **Tier moves.** `iconography.style` pro→premium is an access regression for existing Pro tenants.
-   Tier placement is a commercial decision and is held at its current tier until decided.
+### 7.1 Decided — 2026-08-10
+
+| # | Decision | Ruling | Consequence |
+|---|---|---|---|
+| 1 | **Stored-document migration** | **Versioning + remap contract.** Each control carries a scale version and a remap table; persisted documents migrate automatically | Wave 10 unblocked, but the remap machinery becomes a prerequisite deliverable of that wave. Nothing is silently orphaned |
+| 2 | **Breaking window** | **One sanctioned major.** Duplicates are deleted for real, with codemod and migration guide | The legacy purge becomes deletion rather than aliasing. `useTokens().transitions` and the legacy vocabularies go in that release |
+| 3 | **Shadow and the elevation ramp** | **Migrate components to the ramp as it stands** | *Owner ruled against the recommendation to extend the ramp first.* This is therefore a **deliberate visual-change wave**: any component whose shadow does not fall on an existing rung will look different. It requires the resolution instrument (wave 2) and sighted capture review — a green gate is not sufficient evidence for this wave |
+| 4 | **Tier split** | **9 free / 7 premium**, governed by a rule: *visible in a still frame is free; only felt in use is premium* | Supersedes the earlier 7/4 ruling. `motion.energy` moves from free to premium so the whole temporal axis sits on one side of the line |
+| 5 | **Four new axes** | **Add `type.weight`, `focus.identity`, `control.size`, `motion.character`** | The set grows from 12 to 16. Three of the four require creating and wiring a token before exposure, so each is a repair wave, not a config item. `motion.character` is cheap — its fields already exist |
+
+### 7.2 Still open
+
+| # | Decision | Why it is not yet decided |
+|---|---|---|
+| 5 | **Derived dark** | Largely settled by the standing ruling that dark is a product capability, not a tenant authoring axis — a tenant customising its branding is enough. Confirm that a derived dark ramp needs no tenant review before it is treated as closed |
+| 6 | **The hard forks** | A batch of roughly forty pairs, each two live names with different values, **and the classification is per-vertical**. Needs a per-pair list with both values and the affected verticals, not a single ruling |
+| 7 | **Vertical identity authority** | The model is settled — three verticals, `rottay` = `platform`, The Management is a DB tenant of bithire. What remains is mechanical normalisation: one slug/verticalKey authority instead of five sites, and not shipping `rottay.css` and `platform.css` as byte-identical duplicates. Proposal to be brought with a concrete diff |
