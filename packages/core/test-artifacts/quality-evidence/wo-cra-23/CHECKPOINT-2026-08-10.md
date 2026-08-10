@@ -331,11 +331,18 @@ precedence; anatomy silently wins.
 
 ### 4.1 The one honest number **[L]**
 
-`family-ledger.json`, 252 rows: **SOURCE_TOUCHED 206 · TESTS_ONLY 11 · UNTOUCHED 35 ·
-`reviewVerdict: null` on all 252.** Its own vocabulary says SOURCE_TOUCHED *"does NOT mean the family
-is DONE, elevated, reviewed, or Quiet-Premium-compliant."*
+`family-ledger.json`, 252 rows: **SOURCE_TOUCHED 206 · TESTS_ONLY 11 · UNTOUCHED 35**, with
+**`reviewVerdict` null on all 252 AND `batch` null on all 252.**
 
-> **Defensible claim today: 206 families edited, 0 families reviewed.**
+**The ledger does not track elevation at all.** `stateVocabulary` defines SOURCE_TOUCHED as *"at
+least one commit since the baseline touched a non-tests file under sourceOwner"* — it is a
+**git-touch** state. Reading it as progress is reading file visitation as quality, which
+`craft.md` WO-CRA-23 forbids by name.
+
+> **Defensible claim today: 206 families touched by a commit, 0 families reviewed.**
+
+Note also the veto counts, since they get mis-cited: the craft contract carries **25**
+`hardVisualVetoes` and the rubric a **further 52** `hardVetoes` — two different live lists.
 
 ### 4.2 R0–R7 reality **[L]**
 
@@ -377,7 +384,49 @@ named owner and reason.
   domain *precisely so a lane cannot edit the tooling that judges it*. The substitution note lives in
   the unpoliced evidence root, **so CI still enforces the superseded law**.
 
-### 4.4 One programme run as two **[L]**
+### 4.4 The strategic parent — what it demands that nobody tracks **[L]**
+
+`packages/core/docs/rottay-design-platform-10-10/` is the parent programme. Its **counts and
+certification state must be struck**, exactly as `COMPONENT-LEDGER.md:3-9` already struck itself:
+
+- Its "14/93 certified (15.1%)" is **hand-authored and self-invalidated** — *"never produced by
+  `scoreQualityEvidence()`: no non-example scorecard has ever been persisted."* It is a record of
+  intent, not a measurement. **Do not plan against it.**
+- Its 8-row capability scorecard (3.5 → 9.5 etc.) has **no artifact behind it**. No file computes
+  those numbers; they have not moved.
+- Its non-primitive counts are **stale at HEAD**: structures **69** (doc says 46), surfaces **75**
+  (51), modern pattern engines **44** (39). **Do not cite 39/46/51.**
+
+**Denominators DO reconcile** — same population, two counting laws. 94 ledger rows − 1 duplicate
+(`feedback/Modal` + `overlay/Modal`) + 2 (`layout/responsive` splits into Show/Hide/ResponsiveSlot)
++ 5 never listed (IconFrame, LoadingIndicator, Meter, ResizeHandle, VisuallyHidden) = **100**.
+The parent is a hand-curated public subset; the child is a machine-derived superset.
+
+**The one irreconcilable part — and it needs a human decision.** The parent's 120-basket includes
+**6 AI capability families** (DS-AI001–006), backed by 9 AI primitives and 10 AI patterns in
+MASTER §8.1/8.2. Searching all 252 inventory rows for ai/assistant/prompt/agent finds **exactly one**
+plausible match. The rest **do not exist as source**.
+*The parent counts what must be CERTIFIED, including things not yet built; the child counts what
+EXISTS.* Either the AI families enter the 252 as a follow-on class, or the parent's 120 drops to 114
+and the AI programme becomes an explicitly separate deliverable.
+
+**WHAT THE PARENT DEMANDS THAT HAS SILENTLY FALLEN OFF** — keep the parent for exactly this:
+
+| # | Fallen | Detail |
+|---|---|---|
+| a | **A supplier gate was crossed unrecorded** | MASTER:1151-1152 gates Select and Modal/Drawer behind DS-S002 (React Aria vs Base UI bake-off). **Neither package is installed.** R1 Cohort 1 opened exactly those two families. The child's registry is the operative authority (MASTER:29-33), but **nothing recorded that the gate was consciously crossed** |
+| b | **An unaccepted supplier is installed** | `tailwind-variants@3.2.2` is in `package.json`; MASTER:525-529 says **"not accepted"** until facade, gates, provenance, bundle evidence and contrasting-tenant proof pass. It appears **zero** times in either child contract. A spike dependency shipping with no tracker |
+| c | **Performance and bundle gates (§11) are absent** | `performance` 0 hits, `16.7` 0, `33.3` 0 across both child contracts. The per-ticket bundle budget, the 16.7 ms frame budget and the "disclose frames above 33.3 ms rather than claiming 60 fps" rule are tracked by **nobody** |
+| d | **Manual screen-reader pass dropped** | Parent §12:1242-1245 requires a manual AT pass with browser/AT/version recorded and says *"automated ARIA checks do not claim spoken-output proof."* Child has `nvda` 0, `voiceover` 0, `manual` 0 — its contract is axe, which is automated |
+| e | §14.8 five-number accounting | No owner. #5 (application canary coverage) is a deliberate sequencing choice by the child, but the number is unreported |
+| f | **Two evidence roots, both populated** | Parent mandates `test-artifacts/rottay-design-platform/<WO-ID>/`; child writes `test-artifacts/quality-evidence/wo-cra-23/R{n}/`. **This is how a future audit finds half the proof** |
+| g | Daisy drain + rejection list | The 15→12 ceiling tighten has no owning round; §7.4's rejected-supplier list is prose with no lint |
+
+**Quality bars: strictly stronger, one-way.** All 14 parent-accepted rows fail the child's formula
+today; nothing can pass the child and fail the parent. Both counters are **0 measured** — the
+parent's 14 is unearned, the child's 0 is honest.
+
+### 4.5 One programme run as two **[L]**
 
 Same defect, one level up. **ONE**, because REACH-PROGRAM sits inside the R-programme's evidence
 root, borrows `family-ledger.json` for its lane boundaries, and restates the pack's fences verbatim.
@@ -413,7 +462,8 @@ evidence and producing confident nonsense.
 | `vars[CONSTANT_NAME] = …` | a literal-only emitter scan reports a live dial as dead | resolve constants |
 | A gate with a wrong corpus path | scans nothing, passes everything (3× in one day) | every gate asserts a floor on its own corpus |
 | A count without scope | the 845 excludes all CSS; every "zero readers" here is **DS-internal** | state what was scanned AND excluded |
-| Interpolated names | 270 sites (`--ds-type-${role}-${facet}`) invisible to every scan | spell names literally in a channel table |
+| Interpolated names | **217 prod sites** (307 with tests) invisible to every scan. The bulk is `--ds-color-${role}-${step}`, `--ds-material-${role}-*`, `--ds-surface-${role}` — NOT `--ds-type-${…}`, which is only 11 sites | spell names literally in a channel table |
+| **A generated block read only by interpolation** | the ~294-name material/type blocks and the 100-name `--ds-color-{role}-{step}` grid are reached ONLY through interpolation, so **every read count in this repo is a floor understated by up to ~300 names** | never conclude "unused" from a read count alone |
 | Measuring source shapes in `dist` | a bundle emits `(0, mod.fn)(…)` — `fn(` returns zero | never |
 
 ### 5.2 The dead-list trap — do not delete on "zero readers"
