@@ -579,6 +579,64 @@ New hand-authored input: probes per (control, stop), ~250 family headers, a hand
 | 10 | Control consolidation | 20 → 16 |
 | 11 | Legacy purge | dead-by-gate plus unreachable. **Deletion, never aliasing** |
 
+### 6.0 The formula-or-literal law, and the gate it demands [M]
+
+> **A static-only emitter is harmless when it emits a `var()` FORMULA over tenant-overridable inputs,
+> and harmful when it bakes a RESOLVED value. "Which compiler emits it" is the wrong question. "Is the
+> emitted value a formula or a literal" is the right one.**
+
+The vertical block and the DB tenant overlay match the **same root element**, so custom-property
+substitution resolves a formula against whatever the tenant wrote. A tint declared as
+`color-mix(… var(--ds-color-primary) …)` re-derives from the tenant's own primary and is
+self-correcting; the same channel baked as a hex is frozen to the vertical forever.
+
+The codebase already knew this — `brand-theme/index.ts:400` documents the alias remedy verbatim. **It
+was applied to one channel per surface role and left off the other twenty.**
+
+**Measured consequence [M]:** across the three artifacts, **606 names carrying 3,084 DS-internal reads
+are baked literals with no tenant dial at all** — not typed appearance field, not chrome family, not
+raw override. Per vertical: bithire 213 frozen (59 painting), evnto 83 (49), rottay 625 (573).
+
+**The headline is a NAME MISMATCH, not a missing emitter.** The DS reads four border channels; the DB
+compiler emits two, and not the two most read:
+
+| channel | DS reads | emitted by the appearance compiler |
+|---|---:|---|
+| `--ds-color-border` | **537** | **no** |
+| `--ds-color-border-subtle` | **283** | **no** |
+| `--ds-color-border-secondary` | 264 | yes |
+| `--ds-color-border-primary` | 203 | yes |
+
+A tenant setting its border colour moves 467 of 1,287 read sites and leaves **820 (64%) painting the
+vertical's literal**. The repair is **one emitter edit against 820 read sites** — the best
+effort-to-reach ratio found in this programme.
+
+**Why no gate caught it, and the gate that must exist.** Both relevant gates are green and neither
+asks the question. `tenant-channel-consumer-gate` enumerates *declared* channels and hunts for
+readers — the dead-dial direction — so a channel with 537 readers that is not declared can never
+appear in it. `theme-channel-parity-gate` asks whether a name is *owned by some typed field*, never
+whether it is **writable by a TENANT**; static BrandTheme ownership satisfies it.
+
+> **The missing gate:** every `--ds-*` a vertical artifact declares as a **resolved literal**, above a
+> read-count floor, must be reachable from the tenant document — typed field or override token — or be
+> an accepted constant with a written reason. Decrease-only, seeded at 606.
+
+That is the converse of the dead-dial ratchet, and it belongs in the manifest.
+
+### 6.0b The artifact gate is blind to unbuilt compiler changes [M]
+
+`build-vertical-artifacts.mjs` imports from `../dist`, so `lint:artifacts` compares a **dist-derived
+build against the committed artifact — both stale, both agreeing, gate green.**
+
+Live instance: the compiler source emits `color-mix(in oklab, …)` under a 35-line comment explaining
+that OKLCH interpolates hue as an angle and turned a blue primary into a green-grey. `dist` still
+emits `oklch`, and all three artifacts ship **25 oklch tint declarations each, zero oklab**. The
+correction is stranded.
+
+**Corollary for every lane:** artifact byte-identity is NOT evidence that a compiler *source* change is
+output-neutral — the builder never read the source. Output neutrality for a source edit must be argued
+from the source, or from a rebuild.
+
 ### 6.1 Wave 9 is a consolidation, not a new build [M]
 
 Revision 2 described `type.weight`, `focus.identity` and `control.size` as axes that "do not exist
