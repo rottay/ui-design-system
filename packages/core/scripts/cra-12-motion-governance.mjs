@@ -216,6 +216,39 @@ export function collectRuntimeMotionImports(source) {
 }
 
 /** Source-level scanner; workspace-level prefix/duplicate checks happen later. */
+/**
+ * Offset ranges of every `@media (prefers-reduced-motion: …)` block, as [start, end).
+ *
+ * CSS ONLY. In a .ts/.tsx file the same text appears as prose inside an assertion --
+ * `expect(skin).toContain('@media (prefers-reduced-motion: reduce)')` -- and this brace matcher
+ * would take it for a real block and run through unrelated JS braces, exempting a near-zero
+ * literal somewhere below it. That is a false negative, and a false negative in a ratchet does
+ * not merely under-report: it licenses new debt.
+ */
+function reducedMotionRanges(masked, extension) {
+  if (extension !== '.css') return [];
+  const ranges = [];
+  for (const match of masked.matchAll(/@media[^{]*prefers-reduced-motion[^{]*\{/gi)) {
+    let depth = 1;
+    let index = match.index + match[0].length;
+    while (index < masked.length && depth > 0) {
+      const char = masked[index];
+      if (char === '{') depth += 1;
+      else if (char === '}') depth -= 1;
+      index += 1;
+    }
+    ranges.push([match.index, index]);
+  }
+  return ranges;
+}
+
+/** True when every time literal in the value is at most 1ms. */
+function isNearZeroTiming(value) {
+  const times = [...value.matchAll(/(?:^|[^\w.-])((?:\d*\.\d+|\d+))(ms|s)\b/gi)];
+  if (times.length === 0) return false;
+  return times.every(([, amount, unit]) => Number(amount) * (unit.toLowerCase() === 's' ? 1000 : 1) <= 1);
+}
+
 export function scanSource({ source, extension = '.tsx', repo, path, scope = scopeFor(repo, path) }) {
   const masked = maskComments(source, extension);
   const definitions = [];
@@ -258,13 +291,24 @@ export function scanSource({ source, extension = '.tsx', repo, path, scope = sco
     }
   }
 
+  const reducedMotion = reducedMotionRanges(masked, extension);
   for (const match of masked.matchAll(MOTION_TIME_PROPERTY)) {
-    if (RAW_TIME.test(match[1])) {
-      findings.push(finding({
-        channel: 'raw-motion-timing', kind: 'css-or-style-time', repo, path, scope,
-        line: lineAt(masked, match.index), symbol: match[0].split(':', 1)[0].trim(), evidence: match[0],
-      }));
-    }
+    if (!RAW_TIME.test(match[1])) continue;
+    /*
+     * A prefers-reduced-motion block collapses motion to a conventional near-zero. That value is
+     * not a design decision the token canon should own -- there is no motion posture called
+     * "0.01ms" -- so counting it taught this gate to report accessibility work as motion debt: an
+     * a11y rollout across twenty-two files read as twenty-two new raw timings.
+     *
+     * Only the near-zero is exempt. A real duration inside the same block is still a finding,
+     * because that IS a design decision and it belongs to the token canon like any other.
+     */
+    const inReducedMotion = reducedMotion.some(([start, end]) => match.index >= start && match.index < end);
+    if (inReducedMotion && isNearZeroTiming(match[1])) continue;
+    findings.push(finding({
+      channel: 'raw-motion-timing', kind: 'css-or-style-time', repo, path, scope,
+      line: lineAt(masked, match.index), symbol: match[0].split(':', 1)[0].trim(), evidence: match[0],
+    }));
   }
 
   const runtimeMotionImports = collectRuntimeMotionImports(masked);

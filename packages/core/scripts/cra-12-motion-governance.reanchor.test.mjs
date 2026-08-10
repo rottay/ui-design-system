@@ -112,3 +112,63 @@ test('every baseline channel still carries owner, reason and a future expiry', (
     );
   }
 });
+
+/**
+ * The reduced-motion escape hatch is not motion debt.
+ *
+ * `transition-duration: 0.01ms !important` inside a prefers-reduced-motion block is the sanctioned
+ * way to neutralise motion, not a design decision the token canon should own -- there is no motion
+ * posture called "0.01ms". Counting it made an accessibility rollout across twenty-two files read
+ * as twenty-two new raw timings, which is how a gate teaches people to ignore it.
+ *
+ * The exemption is deliberately narrow, and these drills pin all three edges of it.
+ */
+test('the reduced-motion near-zero is exempt, and nothing wider is', async () => {
+  const { scanSource } = await import('./cra-12-motion-governance.mjs');
+  const raw = (source) =>
+    scanSource({ source, extension: '.css', repo: 'ui-design-system', path: 'packages/core/src/x.css' })
+      .findings.filter((entry) => entry.channel === 'raw-motion-timing');
+
+  const guarded = `@media (prefers-reduced-motion: reduce) {
+  .thing { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}`;
+  assert.equal(raw(guarded).length, 0, 'a near-zero inside a reduced-motion block must not be a finding');
+
+  // A real duration inside the same block IS a design decision and stays a finding.
+  const realDurationInsideGuard = `@media (prefers-reduced-motion: reduce) {
+  .thing { transition-duration: 220ms; }
+}`;
+  assert.equal(raw(realDurationInsideGuard).length, 1, 'a real duration inside the guard must still be a finding');
+
+  // The exemption is scoped to the block, never to the value.
+  const nearZeroOutsideGuard = `.thing { transition-duration: 0.01ms; }`;
+  assert.equal(raw(nearZeroOutsideGuard).length, 1, 'a near-zero outside any guard must still be a finding');
+
+  // The block must close properly: a declaration after it is not covered.
+  const afterGuard = `@media (prefers-reduced-motion: reduce) {
+  .thing { transition-duration: 0.01ms; }
+}
+.other { transition-duration: 0.01ms; }`;
+  assert.equal(raw(afterGuard).length, 1, 'the exemption must end with the block it belongs to');
+});
+
+/**
+ * The exemption is CSS-only.
+ *
+ * A .ts test asserting on the guard's own text carries the literal string
+ * `@media (prefers-reduced-motion: reduce)` as prose. Treating that as a real block let the brace
+ * matcher run through unrelated JS braces and silently exempt a near-zero literal further down --
+ * a false negative, which in a ratchet does not merely under-report, it licenses new debt.
+ */
+test('the reduced-motion exemption does not apply to prose in a TS file', async () => {
+  const { scanSource } = await import('./cra-12-motion-governance.mjs');
+  const source = `
+const guard = '@media (prefers-reduced-motion: reduce)';
+expect(skin).toContain(guard);
+function unrelated() { return { transitionDuration: '0.01ms' }; }
+`;
+  const findings = scanSource({
+    source, extension: '.ts', repo: 'ui-design-system', path: 'packages/core/src/x.test.ts',
+  }).findings.filter((entry) => entry.channel === 'raw-motion-timing');
+  assert.equal(findings.length, 1, 'a TS near-zero must stay counted even beside the guard string');
+});

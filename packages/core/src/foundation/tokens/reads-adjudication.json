@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "generatedBy": "FASE K + Codex C1 reconciliation 2026-08-03 — rows that gained productive writers removed from the orphan-read ledger",
-  "basedOnManifestDigest": "1d18701de034e1c78c18484e01e6fcbcc04c4a2f8b633ce8341599f5648b0229",
+  "basedOnManifestDigest": "09b9c025d6e8e00f06070725d8886b1bddd95b8fd89dee1e5e642905fb9c5c5c",
   "laws": [
     "a read without an owner classification cannot ship: every name in hooks-manifest.unadjudicatedReads has exactly one row here",
     "MODERN_PRIVATE includes engine-agnostic private channels (fallback-governed, single owning reader) — the non-modern-reader:foundation-tokens flag preserves the distinction without widening the closed vocabulary",
@@ -20,11 +20,11 @@
     "c1Reconciliation": "Five reads left this ledger after gaining productive writers: dropdown hover shadow, shell/sidebar spacing, and the two DataTable minimum-height channels. No baseline widening."
   },
   "counts": {
-    "total": 2691,
+    "total": 2676,
     "byClass": {
-      "MODERN_PRIVATE": 2048,
+      "MODERN_PRIVATE": 2034,
       "FROZEN_ENGINE_SCOPED": 525,
-      "TENANT_FACING_CANDIDATE": 77,
+      "TENANT_FACING_CANDIDATE": 76,
       "FOUNDATION_SHARED": 39,
       "ALIAS_READ": 2
     }
@@ -15104,42 +15104,6 @@
       }
     },
     {
-      "name": "--ds-empty-border-color",
-      "family": "--ds-empty-border",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:31  border: var(--ds-empty-border-width, 1px) solid var(--ds-empty-border-color, var(--ds-color-border));",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-empty-border-width",
-      "family": "--ds-empty-border",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:31  border: var(--ds-empty-border-width, 1px) solid var(--ds-empty-border-color, var(--ds-color-border));",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
       "name": "--ds-empty-description-size",
       "family": "--ds-empty-description",
       "class": "MODERN_PRIVATE",
@@ -15230,24 +15194,6 @@
       }
     },
     {
-      "name": "--ds-empty-shadow",
-      "family": "--ds-empty-shadow",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:34  box-shadow: var(--ds-empty-shadow, none);",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
       "name": "--ds-empty-simple-min-height",
       "family": "--ds-empty-simple",
       "class": "MODERN_PRIVATE",
@@ -15279,24 +15225,6 @@
         },
         "declBuckets": {},
         "withFallback": 2,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-empty-simple-visual-size",
-      "family": "--ds-empty-simple",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css",
-      "readSites": 4,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:72  inline-size: var(--ds-empty-simple-visual-size, 3rem);",
-      "flag": "undeclared by design: 4 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 4
-        },
-        "declBuckets": {},
-        "withFallback": 4,
         "bare": 0,
         "testStoryReads": 0
       }
@@ -15686,96 +15614,6 @@
       "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css",
       "readSites": 2,
       "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css:74  inline-size: var(--ds-empty-state-visual-size, 5rem);",
-      "flag": "undeclared by design: 2 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 2
-        },
-        "declBuckets": {},
-        "withFallback": 2,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-empty-surface",
-      "family": "--ds-empty-surface",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:33  background: var(--ds-empty-surface, var(--ds-color-surface));",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-empty-visual-bg",
-      "family": "--ds-empty-visual",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:67  background: var(--ds-empty-visual-bg, color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-color-surface)));",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-empty-visual-border",
-      "family": "--ds-empty-visual",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:65  border: 1px solid var(--ds-empty-visual-border, color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border)));",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-empty-visual-radius",
-      "family": "--ds-empty-visual",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:66  border-radius: var(--ds-empty-visual-radius, var(--ds-radius-lg));",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "modern": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-empty-visual-size",
-      "family": "--ds-empty-visual",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css",
-      "readSites": 2,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:62  inline-size: var(--ds-empty-visual-size, 4rem);",
       "flag": "undeclared by design: 2 read(s) carry a fallback that governs",
       "_audit": {
         "readBuckets": {
@@ -22845,81 +22683,6 @@
       "owner": "packages/core/src/foundation/tokens/css/presentation/components/semantic-surface.css",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/presentation/components/semantic-surface.css:155  --_surface-highlight: var(--ds-material-inset-highlight, none);",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "foundation-tokens": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-material-inset-shadow",
-      "family": "--ds-material-inset",
-      "class": "TENANT_FACING_CANDIDATE",
-      "owner": "packages/showroom/src/components/brand-locale-evidence/index.tsx",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/presentation/components/semantic-surface.css:151  --_surface-shadow: var(--ds-material-inset-shadow, none);",
-      "flag": "already authorable through the Expert tokenOverrides allowlist",
-      "_audit": {
-        "readBuckets": {
-          "foundation-tokens": 1
-        },
-        "declBuckets": {
-          "showroom": 2
-        },
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      },
-      "destination": "EXPERT_ALLOWLIST_EXISTENTE"
-    },
-    {
-      "name": "--ds-material-inset-shadow-active",
-      "family": "--ds-material-inset",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/presentation/components/semantic-surface.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/presentation/components/semantic-surface.css:153  --_surface-shadow-active: var(--ds-material-inset-shadow-active, var(--_surface-shadow));",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "foundation-tokens": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-material-inset-shadow-hover",
-      "family": "--ds-material-inset",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/presentation/components/semantic-surface.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/presentation/components/semantic-surface.css:152  --_surface-shadow-hover: var(--ds-material-inset-shadow-hover, var(--_surface-shadow));",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "foundation-tokens": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-material-inset-shadow-selected",
-      "family": "--ds-material-inset",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/presentation/components/semantic-surface.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/presentation/components/semantic-surface.css:154  --_surface-shadow-selected: var(--ds-material-inset-shadow-selected, var(--_surface-shadow));",
       "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
       "_audit": {
         "readBuckets": {
@@ -30044,19 +29807,6 @@
         "foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css"
       ],
       "evidence": "undeclared internal channel; 1 read(s) in modern, 1 with a governing fallback"
-    },
-    {
-      "name": "--ds-spinner-duration",
-      "family": "spinner",
-      "class": "MODERN_PRIVATE",
-      "owner": "foundation/tokens/css/runtime/engines/modern/skin/mentions.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/modern/skin/mentions.css",
-        "foundation/tokens/css/runtime/engines/modern/skin/spinner.css",
-        "ui/primitives/feedback/Message/engines/rustic/index.tsx"
-      ],
-      "evidence": "undeclared internal channel; 5 read(s) in modern+rustic, 5 with a governing fallback",
-      "flag": "also-read-by-frozen:rustic; tsx-inline-read"
     },
     {
       "name": "--ds-spinner-label-color",
@@ -37240,16 +36990,6 @@
         "foundation/tokens/css/runtime/engines/modern/skin/tree.css"
       ],
       "evidence": "undeclared internal channel; 1 read(s) in modern, 1 with a governing fallback"
-    },
-    {
-      "name": "--ds-tree-node-frame-selected",
-      "family": "tree",
-      "class": "MODERN_PRIVATE",
-      "owner": "foundation/tokens/css/runtime/engines/modern/skin/tree.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/modern/skin/tree.css"
-      ],
-      "evidence": "undeclared internal channel; 2 read(s) in modern, 2 with a governing fallback"
     },
     {
       "name": "--ds-tree-node-hover-bg",

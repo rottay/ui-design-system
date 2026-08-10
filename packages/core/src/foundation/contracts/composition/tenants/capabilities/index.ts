@@ -314,7 +314,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       tier: 'standard',
       status: 'active',
       evidence: {
-        consumer: 'src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css',
+        consumer: 'src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css',
         symbol: 'var(--ds-glass',
       },
       scope: 'tenant',

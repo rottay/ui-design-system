@@ -7175,15 +7175,15 @@
         "consumerEvidence": [
           {
             "repository": "app-bithire",
-            "commit": "bd1142d3a5895eb24a21c64f43849bedb24999c0",
+            "commit": "8abd05578d04cd3cf1c82ca8d777f0ca1ef6925f",
             "path": "src/ui/surfaces/index.tsx",
             "selector": "ds-rich-card",
             "consumerKind": "class-skin-consumer",
-            "fileDigest": "baaf456defebb1f3"
+            "fileDigest": "ce0e55637e7bb5e7"
           },
           {
             "repository": "app-bithire",
-            "commit": "bd1142d3a5895eb24a21c64f43849bedb24999c0",
+            "commit": "8abd05578d04cd3cf1c82ca8d777f0ca1ef6925f",
             "path": "src/vertical/surface/shell/command-header/index.tsx",
             "selector": "ds-rich-card",
             "consumerKind": "class-skin-consumer",
@@ -7246,15 +7246,15 @@
         "consumerEvidence": [
           {
             "repository": "app-bithire",
-            "commit": "bd1142d3a5895eb24a21c64f43849bedb24999c0",
+            "commit": "8abd05578d04cd3cf1c82ca8d777f0ca1ef6925f",
             "path": "src/ui/surfaces/index.tsx",
             "selector": "ds-rich-card",
             "consumerKind": "class-skin-consumer",
-            "fileDigest": "baaf456defebb1f3"
+            "fileDigest": "ce0e55637e7bb5e7"
           },
           {
             "repository": "app-bithire",
-            "commit": "bd1142d3a5895eb24a21c64f43849bedb24999c0",
+            "commit": "8abd05578d04cd3cf1c82ca8d777f0ca1ef6925f",
             "path": "src/vertical/surface/shell/command-header/index.tsx",
             "selector": "ds-rich-card",
             "consumerKind": "class-skin-consumer",
@@ -7317,15 +7317,15 @@
         "consumerEvidence": [
           {
             "repository": "app-bithire",
-            "commit": "bd1142d3a5895eb24a21c64f43849bedb24999c0",
+            "commit": "8abd05578d04cd3cf1c82ca8d777f0ca1ef6925f",
             "path": "src/ui/surfaces/index.tsx",
             "selector": "ds-rich-card",
             "consumerKind": "class-skin-consumer",
-            "fileDigest": "baaf456defebb1f3"
+            "fileDigest": "ce0e55637e7bb5e7"
           },
           {
             "repository": "app-bithire",
-            "commit": "bd1142d3a5895eb24a21c64f43849bedb24999c0",
+            "commit": "8abd05578d04cd3cf1c82ca8d777f0ca1ef6925f",
             "path": "src/vertical/surface/shell/command-header/index.tsx",
             "selector": "ds-rich-card",
             "consumerKind": "class-skin-consumer",
@@ -7388,15 +7388,15 @@
         "consumerEvidence": [
           {
             "repository": "app-bithire",
-            "commit": "bd1142d3a5895eb24a21c64f43849bedb24999c0",
+            "commit": "8abd05578d04cd3cf1c82ca8d777f0ca1ef6925f",
             "path": "src/ui/surfaces/index.tsx",
             "selector": "ds-rich-card",
             "consumerKind": "class-skin-consumer",
-            "fileDigest": "baaf456defebb1f3"
+            "fileDigest": "ce0e55637e7bb5e7"
           },
           {
             "repository": "app-bithire",
-            "commit": "bd1142d3a5895eb24a21c64f43849bedb24999c0",
+            "commit": "8abd05578d04cd3cf1c82ca8d777f0ca1ef6925f",
             "path": "src/vertical/surface/shell/command-header/index.tsx",
             "selector": "ds-rich-card",
             "consumerKind": "class-skin-consumer",
@@ -7459,15 +7459,15 @@
         "consumerEvidence": [
           {
             "repository": "app-bithire",
-            "commit": "bd1142d3a5895eb24a21c64f43849bedb24999c0",
+            "commit": "8abd05578d04cd3cf1c82ca8d777f0ca1ef6925f",
             "path": "src/ui/surfaces/index.tsx",
             "selector": "ds-rich-card",
             "consumerKind": "class-skin-consumer",
-            "fileDigest": "baaf456defebb1f3"
+            "fileDigest": "ce0e55637e7bb5e7"
           },
           {
             "repository": "app-bithire",
-            "commit": "bd1142d3a5895eb24a21c64f43849bedb24999c0",
+            "commit": "8abd05578d04cd3cf1c82ca8d777f0ca1ef6925f",
             "path": "src/vertical/surface/shell/command-header/index.tsx",
             "selector": "ds-rich-card",
             "consumerKind": "class-skin-consumer",
@@ -7530,15 +7530,15 @@
         "consumerEvidence": [
           {
             "repository": "app-bithire",
-            "commit": "bd1142d3a5895eb24a21c64f43849bedb24999c0",
+            "commit": "8abd05578d04cd3cf1c82ca8d777f0ca1ef6925f",
             "path": "src/ui/surfaces/index.tsx",
             "selector": "ds-rich-card",
             "consumerKind": "class-skin-consumer",
-            "fileDigest": "baaf456defebb1f3"
+            "fileDigest": "ce0e55637e7bb5e7"
           },
           {
             "repository": "app-bithire",
-            "commit": "bd1142d3a5895eb24a21c64f43849bedb24999c0",
+            "commit": "8abd05578d04cd3cf1c82ca8d777f0ca1ef6925f",
             "path": "src/vertical/surface/shell/command-header/index.tsx",
             "selector": "ds-rich-card",
             "consumerKind": "class-skin-consumer",
@@ -7601,15 +7601,15 @@
         "consumerEvidence": [
           {
             "repository": "app-bithire",
-            "commit": "bd1142d3a5895eb24a21c64f43849bedb24999c0",
+            "commit": "8abd05578d04cd3cf1c82ca8d777f0ca1ef6925f",
             "path": "src/ui/surfaces/index.tsx",
             "selector": "ds-rich-card",
             "consumerKind": "class-skin-consumer",
-            "fileDigest": "baaf456defebb1f3"
+            "fileDigest": "ce0e55637e7bb5e7"
           },
           {
             "repository": "app-bithire",
-            "commit": "bd1142d3a5895eb24a21c64f43849bedb24999c0",
+            "commit": "8abd05578d04cd3cf1c82ca8d777f0ca1ef6925f",
             "path": "src/vertical/surface/shell/command-header/index.tsx",
             "selector": "ds-rich-card",
             "consumerKind": "class-skin-consumer",
