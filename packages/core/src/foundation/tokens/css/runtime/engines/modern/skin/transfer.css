@@ -316,20 +316,20 @@
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
-  inline-size: var(--ds-transfer-item-remove-size, var(--ds-spacing-5));
-  block-size: var(--ds-transfer-item-remove-size, var(--ds-spacing-5));
+  inline-size: var(--ds-spacing-5);
+  block-size: var(--ds-spacing-5);
   padding: 0;
   border: none;
   border-radius: var(--ds-transfer-item-radius, var(--ds-radius-md));
   background: transparent;
-  color: var(--ds-transfer-item-remove-color, var(--ds-color-text-tertiary));
+  color: var(--ds-color-text-tertiary);
   cursor: pointer;
   transition: background-color var(--ds-motion-fast), color var(--ds-motion-fast);
 }
 @media (hover: hover) {
   .rottay-transfer.rottay-transfer--modern [data-part='panel-item-remove']:not(:disabled):hover {
     background: var(--ds-transfer-button-bg-hover, var(--ds-button-ghost-bg-hover, var(--ds-surface-inset)));
-    color: var(--ds-transfer-item-remove-color-hover, var(--ds-color-text-primary));
+    color: var(--ds-color-text-primary);
   }
 }
 .rottay-transfer.rottay-transfer--modern [data-part='panel-item-remove']:not(:disabled):active {
