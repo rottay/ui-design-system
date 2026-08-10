@@ -1,0 +1,210 @@
+# Programme state and operating law
+
+Read this file FIRST. It is the resume point when a session ends or context is lost.
+
+It carries **state and law**, never content. The content lives in three documents:
+
+| Document | What it holds |
+|---|---|
+| `CHECKPOINT-2026-08-10.md` | the diagnosis — what is broken and why |
+| `ROADMAP-TENANT-SYSTEM.md` | the model — how a tenant becomes pixels |
+| `TOKEN-MANIFEST-SPEC.md` | the normative target — what must be, and the waves |
+
+**Nothing in this file may be a number a command could produce.** If a figure appears here that
+`git`, a gate, or a script can derive, the design has failed and the figure must be deleted.
+
+---
+
+## 1. IMMUTABLE OPERATING LAW
+
+**These rules do not change until the programme is finished. A future session may not revise them
+without an explicit owner instruction in that session.**
+
+### 1.1 Two independent auditors, and they are not interchangeable
+
+| Auditor | Sees | Answers |
+|---|---|---|
+| **Fable** | the diff | *does this change do what it claims?* |
+| **Kimi** | the repository | *is what it claims true against the code?* |
+
+Both audit every wave. **They are never merged into one review and never replaced by a single
+model.** They cannot address each other directly — Fable is a subagent, Kimi is a separate CLI — so
+the coordinator brokers: each audits independently, then **Kimi is given Fable's verdict as input and
+must refute or confirm it explicitly.**
+
+> The point of two auditors is not redundancy. Where they agree, the information is low. **Where they
+> disagree is the finding.** A brokered loop preserves that; letting them converge destroys it.
+
+A wave does not close while either auditor holds an unrefuted hard finding.
+
+### 1.2 Model routing
+
+| Model | Work | Condition |
+|---|---|---|
+| **Opus** | coordination, contracts, adjudication, anything expensive to get wrong | — |
+| **Sonnet** | mechanical volume: headers, substitutions, wiring sweeps | **only work already PROVEN mechanical** |
+| **Fable** | read-only adversarial review, with power to reject | — |
+
+**Sonnet never receives work that merely looks mechanical.** It receives work that has passed a
+value-parity pre-pass across all three verticals. Five separate times in this programme a change that
+looked mechanical changed rendering; the pre-pass is what separates the two.
+
+Every work order names its model **and its reason**. A lane that cannot complete the reason field is
+not ready to be delegated — it is missing its pre-pass.
+
+### 1.3 Nothing legacy survives, and compatibility is not a constraint
+
+**There is no application in production.** Breaking an app is therefore permitted: the app adapts.
+
+Consequences, all binding:
+
+- **Delete, never alias.** No deprecation windows, no compatibility shims, no dual vocabularies.
+- **No stored-document migration is required.** There are no live tenant documents to preserve.
+- **A public export is not a reason to keep something.** `useTokens().transitions` and every other
+  published surface may be deleted.
+- **"An app might read it" is no longer a defence.** It remains true that a DS-internal read count of
+  zero does not prove a name unused — but the consequence has changed: we do not protect the reader,
+  we fix the app.
+
+What has *not* changed: breaking an app creates work. Compatibility is not a constraint; **effort
+still is.** A lane that breaks three apps must say so, and the repair is part of the wave.
+
+### 1.4 Every token is under our control
+
+There is no permanent ownerless class. A token that today has no declared owner is a **finding to
+drain**, not a category to exempt:
+
+- Names emitted only into generated artifacts inherit ownership from their generator.
+- Names that exist only inside `var()` fallbacks are either declared under an owner or their reads
+  are removed.
+
+I1 (one declared owner per token) has no standing carve-out. The drain is tracked as a finding class
+until it reaches zero.
+
+### 1.5 Standing fences
+
+No tenant selector or tenant-conditional TSX · no second compiler, engine or icon supplier · no
+public `--ds-*` minted by a family lane · no hand-edited `styles/**` or `dist/**` · no test or
+baseline weakened to preserve a defect · Classic and Rustic are read-only · app-bithire is read-only
+for this programme.
+
+**Operational:** commits are allowed, **pushing is not**. Author `davila23 <daniel.avila@rottay.com>`,
+conventional commits, no co-authors, no AI attribution, no emojis. Never `git checkout` or
+`git restore` on a directory.
+
+---
+
+## 2. THE FIVE CLASSES OF UNSAFE "MECHANICAL" FIX
+
+Every one of these was discovered *after* being described as mechanical. A lane brief that does not
+guard against all five is not admissible.
+
+| # | Class | How it hides |
+|---|---|---|
+| 1 | **Value-shifting emission cut** | Removing a "redundant" emitted value is not value-preserving when the vertical's scale differs |
+| 2 | **Pass-through deletion** | Deleting a middle declaration is a no-op where an artifact declares the same name, and a repaint where it does not |
+| 3 | **Permutation rename** | Two names for one concept usually hold two different live values |
+| 4 | **Per-vertical class dependency** | A pair that is a safe alias in one vertical is a divergent fork in another |
+| 5 | **Fallback-activation** | Declaring a name that today exists only inside `var(--name, fallback)` flips every read site **without editing any of them** — invisible to diff review and to read-count checks |
+
+**The mandatory sentence in every lane brief, verbatim:**
+
+> *Make only the edits enumerated in the substitution table. Never declare a token name that is not in
+> your table — above all, never declare a name that currently appears only inside `var()` fallbacks.
+> Do not reorder, reformat, dedupe, rename, or fix anything adjacent; every out-of-scope observation
+> is a written finding, not an edit.*
+
+**The mandatory build-free verification**, which every lane runs and nothing runs for them:
+`scripts/channel-wiring-zero-delta-gate.mjs --baseline <pinned>` — static, needs no `dist`, collapses
+every new `var()` read to its fallback and byte-compares. Plus selector-multiset equality on the diff,
+and a static per-vertical resolution check for any substitution.
+
+---
+
+## 3. MEASUREMENT LAW
+
+- A citation must prove what it **claims**, not that a symbol appears in the file. *This defect
+  produced the wave-1 error: name overlap was measured and value identity was reported.*
+- Every count carries its **scope** — what was scanned and what was excluded.
+- Capture exit codes **directly**. `cmd | tail` reports the pipe's status; this reported three red
+  gates as green in one session.
+- `grep -- "x" DIR --include=…` filters nothing: `--` ends option parsing.
+- CSS attribute selectors here use **single quotes**; `:not([data-theme="dark"])` contains the string
+  `data-theme="dark"` and is a **light** selector.
+- Interpolated names are invisible to text scans, so read counts are **floors**.
+- A gate must assert a **floor on its own corpus**; a gate that scans nothing passes everything.
+- Attribute a shared-tree failure by **re-running in a clean worktree**, never by reading the diff.
+- A subagent's plain text is **invisible** to the coordinator — only `SendMessage` arrives.
+
+---
+
+## 4. STATE
+
+*Everything in this section is intent. Anything derivable is derived by command, not typed here.*
+
+**Current wave:** 0 — unblock. **Build is red.**
+
+**Blocked on:** `hooks:check` — unadjudicated DS reads plus a stale hooks manifest.
+
+**Day-one lanes** (per the execution audit; none may open a family CSS lane while the build is red):
+
+| Lane | Work | Model |
+|---|---|---|
+| A | Adjudicate the unadjudicated DS reads; regenerate the hooks manifest | opus |
+| B | Collapse the two-route registry read; regenerate the canon; re-derive the drifted ledger headers | opus |
+| C | The resolution instrument — the long pole, start immediately | opus ×2 |
+| D | Wave 1 **reframed as adjudication**: produce the owner decision list. **Merge nothing** | opus |
+| E | Coordinator machinery: writeSet intersection checker, state-file writer, work-order template | sonnet |
+
+**Refused until the build is green:** any family CSS lane · waves 3–11 · wave 9 design · two lanes on
+`themes/default.css` at once (single ownership, always).
+
+**`writeRoot` is enforced by nothing today.** Until lane E lands, "provably disjoint lanes" is prose,
+not a mechanism.
+
+---
+
+## 5. DECISIONS TAKEN
+
+| # | Decision | Ruling |
+|---|---|---|
+| 1 | Unadjudicated DS reads | **Option A** — promote to tenant channels |
+| 2 | Border authority | **`--ds-color-border*`** survives |
+| 3 | Codex substitution | Authorised to amend the programme pack |
+| 4 | Rottay default posture | Dark — **already satisfied**, the brand theme is dark by default |
+| 5 | Graded scales | Yes, with today's named stops as presets |
+| 6 | Raw token overrides | Demoted to internal |
+| 7 | Shadow and the elevation ramp | **Components migrate to the ramp as it stands.** A deliberate visual-change wave: sighted capture review required, a green gate is not evidence |
+| 8 | Tier split | **9 free / 7 premium**, by the rule *visible in a still frame is free; only felt in use is premium* |
+| 9 | Control set | **Closed at 16** |
+| 10 | Motion | Included, premium — `motion.energy` and `motion.character` |
+| ~~11~~ | ~~Stored-document migration~~ | **RETIRED** — no application is in production, so there are no live tenant documents to migrate |
+| ~~12~~ | ~~Breaking window~~ | **RETIRED** — compatibility is not a constraint; everything may break |
+
+### Still open
+
+| # | Decision | Blocked by |
+|---|---|---|
+| a | **Which spacing scale is authoritative** — `density.css` and `spacing.css` declare the same names two steps apart, and only the density file carries the density override hook | lane D produces the list |
+| b | The cross-file `:root` disagreements, including body text 14px vs 16px | lane D |
+| c | The hard forks — per pair, **per vertical** | needs the list |
+| d | Vertical identity authority — one slug/verticalKey owner instead of five sites | proposal pending |
+
+---
+
+## 6. WHAT R0–R7 BECAME
+
+Not obsolete — **absorbed**. One inventory, one status authority.
+
+| Round | Disposition |
+|---|---|
+| R0 | Sealed and valid; the instrumentation stands |
+| R1 | **NO-GO still standing**; its canaries become verification for the new programme |
+| R2–R4 | **Executed, unsealed** — families touched, none reviewed. Their unfinished content *is* the plumbing work |
+| R5 | Was "canon closure" — **is the manifest programme**, much larger than planned |
+| R6 | Codex certification — **replaced by the Fable ↔ Kimi loop (§1.1)** |
+| R7 | Customization depth — **is the sixteen-control set** |
+
+The R-rounds measured from the **family** side; this programme measures from the **tenant** side. Both
+are needed, and the R-rounds can pass while two tenants still read as one product — which is what
+happened.

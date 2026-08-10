@@ -317,18 +317,39 @@ Family is declared once per declaration block and every token inside inherits:
    @ds-scope component-channel */
 ```
 
-**Revision 1 claimed no token is declared in more than one unit within a layer. That is false.** [M]
+**Revision 1 claimed no token is declared in more than one unit within a layer. That is false** — and
+revision 2's own account of *why* was also wrong, in a way worth recording because it is the exact
+defect this document exists to prevent.
 
-| Duplication | Names |
-|---|---:|
-| `base/density.css:64-141` ≡ `base/spacing.css:34-126`, byte-identical | **63** (verified) |
-| family-skin files | 11 |
-| engine-skin files | 3 |
-| twice inside `default.css` (light `:root` vs dark block) | 49 |
+**Revision 2 called the density/spacing overlap "byte-identical (verified)".** It is not. What was
+measured was the overlap of declared **names** (63 shared); what was reported was identity of
+**values**. A citation that does not prove its claim, tagged `[M]`, load-bearing for the entire
+family-authority wave.
 
-**Prerequisite, blocking:** deduplicate the byte-identical density/spacing block and define light/dark
-precedence **before** a single header is written. Otherwise ~77 tokens receive two family headers on
-day one and the unresolvable-pair rule reds the gate at birth.
+**Measured [M]:** the two files declare the same names **two scale steps apart**, and only 14 of
+75/86 non-blank lines match at all.
+
+```
+      base/density.css                                     base/spacing.css
+xs    var(--ds-density-spacing-xs, var(--ds-spacing-1))     var(--ds-spacing-3)
+sm    var(--ds-density-spacing-sm, var(--ds-spacing-2))     var(--ds-spacing-4)
+md    var(--ds-density-spacing-md, var(--ds-spacing-4))     var(--ds-spacing-6)
+lg    var(--ds-density-spacing-lg, var(--ds-spacing-6))     var(--ds-spacing-8)
+xl    var(--ds-density-spacing-xl, var(--ds-spacing-8))     var(--ds-spacing-10)
+```
+
+**This is not duplication debt. It is two competing spacing scales under one set of names**, resolved
+by load order. And only the `density.css` form carries the density override hook — so if the flat form
+wins, **the semantic spacing scale is severed from the density dial**, the same defect class as the
+radius dial on another axis.
+
+The other duplications are smaller and of a different kind. The ~49 "twice inside `default.css`" are
+**light/dark pairs under a higher-specificity theme selector group — normal theming, not debt**; both
+blocks may carry the same `@ds-family` header provided the gate is theme-scope aware.
+
+**Wave 1 is therefore reframed: it is an ADJUDICATION, not a dedupe.** Which scale is authoritative is
+an owner decision, not a sweep. It remains the blocking prerequisite for family headers, but its
+content and its risk are different from what revision 2 scheduled.
 
 Multi-layer declarations resolve by scope precedence; an unresolvable pair within a layer is a gate
 failure.
@@ -545,8 +566,8 @@ New hand-authored input: probes per (control, stop), ~250 family headers, a hand
 
 | Order | Wave | Generated from |
 |---|---|---|
-| 0 | Unblock | red gates — 2 red, 1 falsely green |
-| 1 | **Base-layer dedupe** | the byte-identical density/spacing block — **blocks the family authority** |
+| 0 | Unblock | red gates |
+| 1 | **Base-layer ADJUDICATION** | the competing spacing scales, the cross-file `:root` disagreements, body text 14px vs **16px**. An owner decision list, not a sweep — **blocks the family authority** |
 | 2 | **Resolution instrument** | the computed-style harness. **Revision 1 dropped this wave entirely**; nothing in plumbing can be honestly validated without it |
 | 3 | Family authority | tokens with no declared family (~250 headers) |
 | 4 | Naming ratchet | R1–R3 violations; R4 reports into the fork queue |
@@ -554,9 +575,44 @@ New hand-authored input: probes per (control, stop), ~250 family headers, a hand
 | 6 | Duplicate vocabularies | I2 violations; hard forks adjudicated per pair, **per vertical** |
 | 7 | Plumbing reach | axis reach below target — requires wave 2 |
 | 8 | Literal debt | pure-literal declarations — requires wave 2 |
-| 9 | Missing axes | weight, focus, control size, rhythm |
-| 10 | Control consolidation | 20 → 11 — **gated on open decision #1** |
-| 11 | Legacy purge | dead-by-gate plus unreachable |
+| 9 | **Control-to-axis consolidation** | weight, focus, control size, rhythm. **NOT greenfield** — see below |
+| 10 | Control consolidation | 20 → 16 |
+| 11 | Legacy purge | dead-by-gate plus unreachable. **Deletion, never aliasing** |
+
+### 6.1 Wave 9 is a consolidation, not a new build [M]
+
+Revision 2 described `type.weight`, `focus.identity` and `control.size` as axes that "do not exist
+today in any form". **The tokens exist; the CONTROL does not.**
+
+- A nine-step global weight scale in `base/typography.css`, plus **52 component-level font-weight
+  tokens across 834 occurrences in 212 files**
+- **Four `--ds-focus-ring-*` tokens with ~418 read sites**
+
+That makes wave 9 cheaper than budgeted, and **overlapping with wave 6** — both adjudicate the same
+font-weight vocabulary. Run them separately and two waves will reach different verdicts on the same
+tokens. Re-scope wave 9 against the existing sets before scheduling it.
+
+### 6.2 Serialisation — what may not run in parallel
+
+```
+1 → 3                      family headers consume the adjudication
+3 → {6, 7, 8, 9}           headers are the ownership unit those waves read
+6 → 7                      wave 7 wires into names wave 6 may delete
+4-baselines ↔ 6-renames    a rename nets a decrease-only ratchet to zero
+9 ↔ 6                      same font-weight vocabulary
+10 last                    it rewires axes 6 and 9 just settled
+2 ∥ everything             it writes only new tooling — but its validation
+                           competes for the singleton browser
+```
+
+Waves 7, 8 and 9 are parallel **only** under family-ledger partitioning **plus single ownership of
+the shared non-family files**: `themes/default.css` (1,124 declarations in one file),
+`foundation/base/*.css`, the capabilities registry, `tokens/ts/`.
+
+> **Never two lanes on `themes/default.css` in one batch.**
+
+`writeRoot` — the field that bounds a family lane — **is enforced by nothing today**. Until the
+coordinator's intersection checker exists, "provably disjoint lanes" is prose.
 
 ---
 
@@ -564,10 +620,15 @@ New hand-authored input: probes per (control, stop), ~250 family headers, a hand
 
 ### 7.1 Decided — 2026-08-10
 
+> **Standing directive, 2026-08-10: there is no application in production.** Compatibility is not a
+> constraint. Nothing legacy survives; delete rather than alias; a published export is not a reason to
+> keep anything. If an app breaks, the app adapts — but breaking one still creates work, and the
+> repair belongs to the wave that caused it. Full text in `PROGRAM-STATE.md` §1.3.
+
 | # | Decision | Ruling | Consequence |
 |---|---|---|---|
-| 1 | **Stored-document migration** | **Versioning + remap contract.** Each control carries a scale version and a remap table; persisted documents migrate automatically | Wave 10 unblocked, but the remap machinery becomes a prerequisite deliverable of that wave. Nothing is silently orphaned |
-| 2 | **Breaking window** | **One sanctioned major.** Duplicates are deleted for real, with codemod and migration guide | The legacy purge becomes deletion rather than aliasing. `useTokens().transitions` and the legacy vocabularies go in that release |
+| ~~1~~ | ~~Stored-document migration~~ | **RETIRED** by the standing directive | No live tenant documents exist, so the versioning and remap machinery previously approved is unnecessary. Wave 10 is unblocked outright |
+| ~~2~~ | ~~Breaking window~~ | **RETIRED** by the standing directive | No window is needed because nothing must be preserved. The legacy purge is deletion by default |
 | 3 | **Shadow and the elevation ramp** | **Migrate components to the ramp as it stands** | *Owner ruled against the recommendation to extend the ramp first.* This is therefore a **deliberate visual-change wave**: any component whose shadow does not fall on an existing rung will look different. It requires the resolution instrument (wave 2) and sighted capture review — a green gate is not sufficient evidence for this wave |
 | 4 | **Tier split** | **9 free / 7 premium**, governed by a rule: *visible in a still frame is free; only felt in use is premium* | Supersedes the earlier 7/4 ruling. `motion.energy` moves from free to premium so the whole temporal axis sits on one side of the line |
 | 5 | **Four new axes** | **Add `type.weight`, `focus.identity`, `control.size`, `motion.character`** | The set grows from 12 to 16. Three of the four require creating and wiring a token before exposure, so each is a repair wave, not a config item. `motion.character` is cheap — its fields already exist |
