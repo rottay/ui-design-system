@@ -3,10 +3,17 @@
  *
  * The brand compiler must emit the closed tint scale --ds-tint-{4,8,12,16,24}
  * for the primary role (unsuffixed) and each status tone (success/warning/error/
- * info), each as `color-mix(in oklch, <role> N%, var(--ds-color-bg-primary))`.
+ * info), each as `color-mix(in oklab, <role> N%, var(--ds-color-bg-primary))`.
  * This is what lets `bithire.ts` drop the retired second blue (#0A66C2 =
  * rgba(10, 102, 194, …)) and re-derive every interaction tint from the single
  * primary (#3A6FB0). See design-language.md §2.5.
+ *
+ * The interpolation space is load-bearing and is asserted, not incidental. OKLAB
+ * and OKLCH are the same space and agree exactly on a neutral ground, so a scale
+ * checked only against white shows no difference between them -- but the polar
+ * form interpolates hue as an angle, and every real page background carries some
+ * chroma, which drags a role's hue toward the ground's. The rationale is on
+ * `setTintScaleVariables` in the brand-theme compiler.
  */
 import { describe, expect, it } from 'vitest';
 
@@ -30,7 +37,7 @@ describe('bithire brand compiler emits the one-blue tint scale', () => {
   it('emits --ds-tint-{4,8,12,16,24} for the primary role (unsuffixed)', () => {
     for (const step of STEPS) {
       expect(cssVariables[`--ds-tint-${step}`]).toBe(
-        `color-mix(in oklch, var(--ds-color-primary) ${step}%, var(--ds-color-bg-primary))`,
+        `color-mix(in oklab, var(--ds-color-primary) ${step}%, var(--ds-color-bg-primary))`,
       );
     }
   });
@@ -39,7 +46,7 @@ describe('bithire brand compiler emits the one-blue tint scale', () => {
     for (const { suffix, colorVar } of TONE_ROLES) {
       for (const step of STEPS) {
         expect(cssVariables[`--ds-tint-${suffix}-${step}`]).toBe(
-          `color-mix(in oklch, var(${colorVar}) ${step}%, var(--ds-color-bg-primary))`,
+          `color-mix(in oklab, var(${colorVar}) ${step}%, var(--ds-color-bg-primary))`,
         );
       }
     }

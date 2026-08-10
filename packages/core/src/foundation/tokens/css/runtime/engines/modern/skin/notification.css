@@ -101,6 +101,15 @@
      glyph floor). The `open` tone (primary) keeps the raw accent: no ink
      authority exists for brand hues. Fallbacks are the raw accent. */
   --_ds-notification-accent-ink: var(--ds-color-info-ink, var(--ds-notification-accent));
+  /* Same relay shape for the washes, off the tenant's semantic tint ramp:
+     `--ds-tint-<tone>-8` is how a tenant states how heavy a status surface
+     reads, and every status family draws its fill from that step so they move
+     together. The well sits one step up at tint-12 -- it is a small disc that
+     has to hold its own against the head wash behind it. Each fallback is that
+     site's pre-ramp mix and fires only where the ramp is undeclared, so the
+     untenanted render is unchanged. */
+  --_ds-notification-wash-head: var(--ds-tint-info-8, color-mix(in srgb, var(--ds-notification-accent) 10%, var(--ds-color-bg-primary)));
+  --_ds-notification-wash-well: var(--ds-tint-info-12, color-mix(in srgb, var(--ds-notification-accent) 11%, var(--ds-color-bg-primary)));
   position: relative;
   inline-size: 100%;
   overflow: hidden;
@@ -117,7 +126,7 @@
     var(--ds-material-overlay-texture, none),
     linear-gradient(
       135deg,
-      color-mix(in srgb, var(--ds-notification-accent) 10%, var(--ds-color-bg-primary)) 0%,
+      var(--_ds-notification-wash-head) 0%,
       color-mix(in srgb, var(--ds-color-bg-primary) 98%, var(--ds-notification-accent) 2%) 52%,
       var(--ds-color-bg-primary) 100%
     );
@@ -156,20 +165,31 @@
 .rottay-notification-stack--modern[data-part='stack-container'] .rottay-notification--modern[data-part='root'][data-tone='success'] {
   --ds-notification-accent: var(--ds-color-success);
   --_ds-notification-accent-ink: var(--ds-color-success-ink, var(--ds-notification-accent));
+  --_ds-notification-wash-head: var(--ds-tint-success-8, color-mix(in srgb, var(--ds-notification-accent) 10%, var(--ds-color-bg-primary)));
+  --_ds-notification-wash-well: var(--ds-tint-success-12, color-mix(in srgb, var(--ds-notification-accent) 11%, var(--ds-color-bg-primary)));
 }
 .rottay-notification-stack--modern[data-part='stack-container'] .rottay-notification--modern[data-part='root'][data-tone='error'] {
   --ds-notification-accent: var(--ds-color-error);
   --_ds-notification-accent-ink: var(--ds-color-error-ink, var(--ds-notification-accent));
+  --_ds-notification-wash-head: var(--ds-tint-error-8, color-mix(in srgb, var(--ds-notification-accent) 10%, var(--ds-color-bg-primary)));
+  --_ds-notification-wash-well: var(--ds-tint-error-12, color-mix(in srgb, var(--ds-notification-accent) 11%, var(--ds-color-bg-primary)));
 }
 .rottay-notification-stack--modern[data-part='stack-container'] .rottay-notification--modern[data-part='root'][data-tone='warning'] {
   --ds-notification-accent: var(--ds-color-warning);
   --_ds-notification-accent-ink: var(--ds-color-warning-ink, var(--ds-notification-accent));
+  --_ds-notification-wash-head: var(--ds-tint-warning-8, color-mix(in srgb, var(--ds-notification-accent) 10%, var(--ds-color-bg-primary)));
+  --_ds-notification-wash-well: var(--ds-tint-warning-12, color-mix(in srgb, var(--ds-notification-accent) 11%, var(--ds-color-bg-primary)));
 }
 .rottay-notification-stack--modern[data-part='stack-container'] .rottay-notification--modern[data-part='root'][data-tone='open'] {
   --ds-notification-accent: var(--ds-color-primary);
   /* Primary has no ink authority: reset the relay so the root's info-ink
      cannot leak into the open tone. */
   --_ds-notification-accent-ink: var(--ds-notification-accent);
+  /* The primary role's ramp is the UNSUFFIXED scale, so the open tone reads
+     `--ds-tint-8` / `--ds-tint-12` -- the same steps the status tones take, on
+     the one-blue interaction scale rather than a status tone. */
+  --_ds-notification-wash-head: var(--ds-tint-8, color-mix(in srgb, var(--ds-notification-accent) 10%, var(--ds-color-bg-primary)));
+  --_ds-notification-wash-well: var(--ds-tint-12, color-mix(in srgb, var(--ds-notification-accent) 11%, var(--ds-color-bg-primary)));
 }
 
 .rottay-notification--modern[data-part='root'] > [data-part='layout'] {
@@ -194,7 +214,7 @@
      effect-intensity dial exactly like the Alert/Toast wells -- at 0 the
      decoration dissolves while tint, frame and glyph carry the severity. */
   color: var(--_ds-notification-accent-ink, var(--ds-notification-accent));
-  background: color-mix(in srgb, var(--ds-notification-accent) 11%, var(--ds-color-bg-primary));
+  background: var(--_ds-notification-wash-well);
   border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-notification-accent) 26%, var(--ds-color-border-subtle));
   border-radius: var(--ds-radius-md);
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) calc(56% * var(--ds-effect-intensity)), transparent);

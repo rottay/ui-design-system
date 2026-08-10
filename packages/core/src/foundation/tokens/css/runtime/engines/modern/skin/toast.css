@@ -42,6 +42,18 @@
 
 .rottay-toast--modern.rottay-toast--modern[data-part='root'][data-part='root'] {
   --ds-toast-accent: var(--ds-color-primary);
+  /* The washes come off the tenant's semantic tint ramp rather than local
+     percentages: `--ds-tint-<tone>-8` is how a tenant states how heavy a status
+     surface reads, and every status family draws its fill from that step so
+     they move together; the icon well sits one step up at tint-12 because it is
+     a small disc holding its own against the head wash behind it. Three
+     channels rather than two because head, well and action carry different
+     fallbacks (10%, 11%, 9%); each fires only where the ramp is undeclared, so
+     the untenanted render is unchanged. The base is the primary role, whose
+     ramp is the UNSUFFIXED scale -- default/primary/gradient inherit it. */
+  --_ds-toast-wash-head: var(--ds-tint-8, color-mix(in srgb, var(--ds-toast-accent) 10%, var(--ds-color-bg-primary)));
+  --_ds-toast-wash-well: var(--ds-tint-12, color-mix(in srgb, var(--ds-toast-accent) 11%, var(--ds-color-bg-primary)));
+  --_ds-toast-wash-action: var(--ds-tint-8, color-mix(in srgb, var(--ds-toast-accent) 9%, var(--ds-color-bg-primary)));
   position: relative;
   width: min(28rem, calc(100vw - (var(--ds-toast-viewport-gutter, var(--ds-spacing-3)) * 2)));
   /* In-flow hosts narrower than the viewport formula (e.g. a padded 390px
@@ -61,7 +73,7 @@
     var(--ds-material-overlay-texture, none),
     linear-gradient(
       135deg,
-      color-mix(in srgb, var(--ds-toast-accent) 10%, var(--ds-color-bg-primary)) 0%,
+      var(--_ds-toast-wash-head) 0%,
       color-mix(in srgb, var(--ds-color-bg-primary) 98%, var(--ds-toast-accent) 2%) 54%,
       var(--ds-color-bg-primary) 100%
     );
@@ -134,20 +146,40 @@
 .rottay-toast--modern[data-part='root'][data-tone='success'] {
   --ds-toast-accent: var(--ds-color-success);
   --_ds-toast-accent-ink: var(--ds-color-success-ink, var(--ds-toast-accent));
+  --_ds-toast-wash-head: var(--ds-tint-success-8, color-mix(in srgb, var(--ds-toast-accent) 10%, var(--ds-color-bg-primary)));
+  --_ds-toast-wash-well: var(--ds-tint-success-12, color-mix(in srgb, var(--ds-toast-accent) 11%, var(--ds-color-bg-primary)));
+  --_ds-toast-wash-action: var(--ds-tint-success-8, color-mix(in srgb, var(--ds-toast-accent) 9%, var(--ds-color-bg-primary)));
 }
 .rottay-toast--modern[data-part='root'][data-tone='error'] {
   --ds-toast-accent: var(--ds-color-error);
   --_ds-toast-accent-ink: var(--ds-color-error-ink, var(--ds-toast-accent));
+  --_ds-toast-wash-head: var(--ds-tint-error-8, color-mix(in srgb, var(--ds-toast-accent) 10%, var(--ds-color-bg-primary)));
+  --_ds-toast-wash-well: var(--ds-tint-error-12, color-mix(in srgb, var(--ds-toast-accent) 11%, var(--ds-color-bg-primary)));
+  --_ds-toast-wash-action: var(--ds-tint-error-8, color-mix(in srgb, var(--ds-toast-accent) 9%, var(--ds-color-bg-primary)));
 }
 .rottay-toast--modern[data-part='root'][data-tone='warning'] {
   --ds-toast-accent: var(--ds-color-warning);
   --_ds-toast-accent-ink: var(--ds-color-warning-ink, var(--ds-toast-accent));
+  --_ds-toast-wash-head: var(--ds-tint-warning-8, color-mix(in srgb, var(--ds-toast-accent) 10%, var(--ds-color-bg-primary)));
+  --_ds-toast-wash-well: var(--ds-tint-warning-12, color-mix(in srgb, var(--ds-toast-accent) 11%, var(--ds-color-bg-primary)));
+  --_ds-toast-wash-action: var(--ds-tint-warning-8, color-mix(in srgb, var(--ds-toast-accent) 9%, var(--ds-color-bg-primary)));
 }
 .rottay-toast--modern[data-part='root'][data-tone='info'] {
   --ds-toast-accent: var(--ds-color-info);
   --_ds-toast-accent-ink: var(--ds-color-info-ink, var(--ds-toast-accent));
+  --_ds-toast-wash-head: var(--ds-tint-info-8, color-mix(in srgb, var(--ds-toast-accent) 10%, var(--ds-color-bg-primary)));
+  --_ds-toast-wash-well: var(--ds-tint-info-12, color-mix(in srgb, var(--ds-toast-accent) 11%, var(--ds-color-bg-primary)));
+  --_ds-toast-wash-action: var(--ds-tint-info-8, color-mix(in srgb, var(--ds-toast-accent) 9%, var(--ds-color-bg-primary)));
 }
-.rottay-toast--modern[data-part='root'][data-tone='secondary'] { --ds-toast-accent: var(--ds-color-secondary); }
+/* The ramp carries no `secondary` role (primary + the four status tones only),
+   so the inherited unsuffixed channels are reset to the computed mix here --
+   without this a secondary toast would paint itself with the PRIMARY's tint. */
+.rottay-toast--modern[data-part='root'][data-tone='secondary'] {
+  --ds-toast-accent: var(--ds-color-secondary);
+  --_ds-toast-wash-head: color-mix(in srgb, var(--ds-toast-accent) 10%, var(--ds-color-bg-primary));
+  --_ds-toast-wash-well: color-mix(in srgb, var(--ds-toast-accent) 11%, var(--ds-color-bg-primary));
+  --_ds-toast-wash-action: color-mix(in srgb, var(--ds-toast-accent) 9%, var(--ds-color-bg-primary));
+}
 
 .rottay-toast--modern.rottay-toast--modern[data-part='root'][data-part='root'][data-tone='gradient'] {
   color: var(--ds-toast-gradient-color, var(--ds-color-text-on-primary));
@@ -175,7 +207,7 @@
   /* The glyph carries the severity INK, never the raw hue (Alert/Callout
      parity); brand tones fall back to the raw accent. */
   color: var(--_ds-toast-accent-ink, var(--ds-toast-accent));
-  background: color-mix(in srgb, var(--ds-toast-accent) 11%, var(--ds-color-bg-primary));
+  background: var(--_ds-toast-wash-well);
   border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-toast-accent) 26%, var(--ds-color-border-subtle));
   border-radius: var(--ds-radius-md);
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) calc(56% * var(--ds-effect-intensity)), transparent);
@@ -256,7 +288,7 @@
      (quiet tint, accent-keyed frame) while the dismiss stays a neutral ghost,
      so the two never read as the same affordance (urgency without excess
      chroma: the tint stays under the surface's own accent wash). */
-  background: color-mix(in srgb, var(--ds-toast-accent) 9%, var(--ds-color-bg-primary));
+  background: var(--_ds-toast-wash-action);
   border-color: color-mix(in srgb, var(--ds-toast-accent) 30%, var(--ds-color-border-subtle));
 }
 .rottay-toast--modern[data-part='root'] [data-part='close-button'] {

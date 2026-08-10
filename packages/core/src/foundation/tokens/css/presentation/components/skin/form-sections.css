@@ -110,7 +110,17 @@
   --ds-form-sections-accent-secondary: color-mix(in srgb, var(--ds-color-text-primary) 7%, transparent);
   --ds-form-sections-grid-color: color-mix(in srgb, var(--ds-color-text-muted) 22%, transparent);
   --ds-form-sections-grid-size: 26px;
-  --ds-form-sections-shadow: 0 14px 34px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent);
+  /* The family's one depth decision (the OPEN card section lifts) chains the
+     governed `raised` role's SELECTED facet before its literal. The channel is
+     declared by neither the default theme nor any shipped artifact, so the
+     rendered default is unchanged; a tenant whose material law is "rules, not
+     floating cards" flattens the open section through the same channel it uses
+     for every other lifted region. The closed section resolves `none`, so the
+     state channel can never collapse onto the resting value. */
+  --ds-form-sections-shadow: var(
+    --ds-material-raised-shadow-selected,
+    0 14px 34px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent)
+  );
 }
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-tone='editorial'] {

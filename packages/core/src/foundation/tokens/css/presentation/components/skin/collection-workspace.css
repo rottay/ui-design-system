@@ -420,27 +420,52 @@
    Preview rail + resize handle (geometry drained from inline; RTL-safe via
    logical properties, drag/keyboard direction resolved in JS).
    ------------------------------------------------------------------------- */
+/* PREVIEW SURFACE (W1 reach lane): this element IS the tenant's
+   `--ds-list-preview-panel-*` surface. The rail's only child is the caller's
+   `previewRail.render(...)` node, so the box below is the one panel the
+   workspace paints -- bg, border and the shadow socket tier over it, the
+   `rail-gap` channel governs the room on its inline-start edge (the historic
+   reader used the same channel for the rail's block-start padding when the
+   pane stacked), and the resize choreography reads the tenant's preview
+   motion pair. Every read keeps the exact prior expression as its fallback,
+   so an artifact that authors none renders byte-identical. `panel-shadow`
+   floors on `none`: the rail painted no shadow, and `none` is the neutral.
+   BORDER FLOOR (P-48): the compound stays at (0,4,0) -- three classes plus
+   the always-stamped `data-part` -- so the border colour still outranks the
+   tenant `html[data-tenant] *` rule at (0,3,1).
+   UNWIRED ON PURPOSE: `rail-border` is a second border for a second box --
+   the tenant authored the rail AND an inner panel, this surface renders one,
+   so only `panel-border` can land and lighting both would be a fiction.
+   `row-gap`, `lane-gap`, `lane-marker-size`, `meter-height`,
+   `cockpit-min-column-width` and `action-min-width` name parts that live
+   inside `previewRail.render(...)`, which is the caller's node; this surface
+   renders no lane, meter, cockpit or quick-action element to host them. */
 .ds-surface.ds-collection-workspace
   .ds-collection-preview-rail[data-part="preview-rail"] {
   position: relative;
   isolation: isolate;
-  padding-inline-start: var(--ds-spacing-md, 16px);
+  padding-inline-start: var(--ds-list-preview-rail-gap, var(--ds-spacing-md, 16px));
   overflow: auto;
-  border: 1px solid var(--ds-color-border-secondary);
-  background: color-mix(
-    in srgb,
-    var(--ds-surface-card) 50%,
-    var(--ds-color-bg-primary) 50%
+  border: 1px solid
+    var(--ds-list-preview-panel-border, var(--ds-color-border-secondary));
+  background: var(
+    --ds-list-preview-panel-bg,
+    color-mix(in srgb, var(--ds-surface-card) 50%, var(--ds-color-bg-primary) 50%)
   );
   border-radius: var(--ds-radius-sm, 6px);
+  box-shadow: var(--ds-list-preview-panel-shadow, none);
 }
 
 .ds-surface.ds-collection-workspace
   .ds-collection-preview-rail[data-part="preview-rail"][data-resizable="true"] {
-  transition: width var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    min-width var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    max-width var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    flex-basis var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+  transition: width var(--ds-list-preview-motion-duration, var(--ds-motion-fast, 120ms))
+      var(--ds-list-preview-motion-ease, var(--ds-motion-ease-out, ease-out)),
+    min-width var(--ds-list-preview-motion-duration, var(--ds-motion-fast, 120ms))
+      var(--ds-list-preview-motion-ease, var(--ds-motion-ease-out, ease-out)),
+    max-width var(--ds-list-preview-motion-duration, var(--ds-motion-fast, 120ms))
+      var(--ds-list-preview-motion-ease, var(--ds-motion-ease-out, ease-out)),
+    flex-basis var(--ds-list-preview-motion-duration, var(--ds-motion-fast, 120ms))
+      var(--ds-list-preview-motion-ease, var(--ds-motion-ease-out, ease-out));
 }
 
 .ds-surface.ds-collection-workspace
@@ -626,7 +651,14 @@
   isolation: isolate;
   z-index: 4;
   overflow: visible;
-  padding-block-start: calc(var(--ds-spacing-1, 4px) * 1.5);
+  /* The tenant's list-shell section gap is the room that opens the toolbar
+     band away from the section above it -- the same seam the historic reader
+     set as this row's block-start margin. The half-step calc is the exact
+     pre-wave value, so an artifact that authors nothing is unchanged. */
+  padding-block-start: var(
+    --ds-list-shell-section-gap,
+    calc(var(--ds-spacing-1, 4px) * 1.5)
+  );
   padding-inline: var(--ds-spacing-4, 16px);
   container: ds-collection-toolbar / inline-size;
   border-top: 1px solid

@@ -19,6 +19,17 @@
  *
  * INK DERIVATION: the surface brightening mixes resolve against
  * `--ds-color-bg-elevated` — never a hard `white` literal.
+ *
+ * MATERIAL ROLE (overlay): the portaled panel is a floating sheet over a
+ * backdrop, so its depth and keyline read the governed `overlay` role
+ * (`--ds-material-overlay-shadow` / `--ds-material-overlay-border`) with the
+ * pre-wave literals as the typed fallback. Neither channel is declared by the
+ * default theme or by any shipped artifact, so an unbranded tenant renders the
+ * SAME bytes it did before; a tenant whose direction is "hard rules, not soft
+ * blooms" now reaches the panel without a selector. The hover lift on a view
+ * item is the `raised` role's HOVER facet — a row that rises is not the
+ * overlay itself, and the resting row carries no shadow, so the state channel
+ * stays distinct from rest.
  */
 
 /* trigger ----------------------------------------------------------------- */
@@ -109,7 +120,10 @@
 .ds-structure.ds-saved-views-menu-panel[data-part='panel'] {
   border-radius: var(--ds-radius-xl, 18px);
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 98%, var(--ds-color-bg-elevated) 2%), color-mix(in srgb, var(--ds-color-bg-primary) 28%, var(--ds-surface-card)));
-  box-shadow: 0 24px 60px color-mix(in srgb, var(--ds-color-primary) 16%, transparent);
+  box-shadow: var(
+    --ds-material-overlay-shadow,
+    0 24px 60px color-mix(in srgb, var(--ds-color-primary) 16%, transparent)
+  );
   animation: ds-saved-views-menu-panel-in var(--ds-motion-disclosure) var(--ds-motion-ease-enter, ease-out);
   /* programmatic focus lands here on open (tabIndex=-1); the ring lives on
      the interactive children, the container is a landmark waypoint */
@@ -117,7 +131,10 @@
 }
 
 .ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 78%, transparent);
+  border: 1px solid var(
+    --ds-material-overlay-border,
+    color-mix(in srgb, var(--ds-color-border-secondary) 78%, transparent)
+  );
 }
 
 .ds-structure.ds-saved-views-menu-panel [data-part='header'] {
@@ -371,7 +388,10 @@
 @media (hover: hover) {
   .ds-structure.ds-saved-views-menu-panel [data-part='view-item']:hover:not([data-active='true']) {
     background: color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-bg-primary) 4%);
-    box-shadow: 0 4px 14px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
+    box-shadow: var(
+      --ds-material-raised-shadow-hover,
+      0 4px 14px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
+    );
   }
   .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='view-item']:hover:not([data-active='true']) {
     border-color: color-mix(in srgb, var(--ds-color-border-secondary) 88%, transparent);

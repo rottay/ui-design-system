@@ -77,9 +77,15 @@
   border-radius: 50%;
 }
 
+/* The well's fill is the tenant's semantic tint ramp at step 8, not a local
+   percentage: `--ds-tint-<tone>-8` is how a tenant states how heavy a status
+   surface reads, and every status family in the engine draws its fill from the
+   same step so they move together. The fallback is the pre-ramp mix and fires
+   only where the ramp is undeclared (a bundle with no tenant artifact), so the
+   untenanted render is unchanged. */
 .rottay-result--modern[data-tone='success'][data-part='root'] > [data-part='icon'] > [data-part='status-icon'][data-part='status-icon'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-success) 30%, var(--ds-color-border));
-  background: color-mix(in srgb, var(--ds-color-success) 9%, var(--ds-color-surface));
+  background: var(--ds-tint-success-8, color-mix(in srgb, var(--ds-color-success) 9%, var(--ds-color-surface)));
   /* Quiet grammar (Empty/StatePanel: "no bloom shadow"): the well keeps only
      its inset highlight; the 28px tone bloom read as glow makeup. */
   box-shadow: var(--ds-result-icon-well-shadow, inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 42%, transparent));
@@ -87,19 +93,19 @@
 }
 .rottay-result--modern[data-tone='error'][data-part='root'] > [data-part='icon'] > [data-part='status-icon'][data-part='status-icon'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-error) 30%, var(--ds-color-border));
-  background: color-mix(in srgb, var(--ds-color-error) 9%, var(--ds-color-surface));
+  background: var(--ds-tint-error-8, color-mix(in srgb, var(--ds-color-error) 9%, var(--ds-color-surface)));
   box-shadow: var(--ds-result-icon-well-shadow, inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 42%, transparent));
   color: var(--ds-color-error);
 }
 .rottay-result--modern[data-tone='info'][data-part='root'] > [data-part='icon'] > [data-part='status-icon'][data-part='status-icon'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-info) 30%, var(--ds-color-border));
-  background: color-mix(in srgb, var(--ds-color-info) 9%, var(--ds-color-surface));
+  background: var(--ds-tint-info-8, color-mix(in srgb, var(--ds-color-info) 9%, var(--ds-color-surface)));
   box-shadow: var(--ds-result-icon-well-shadow, inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 42%, transparent));
   color: var(--ds-color-info);
 }
 .rottay-result--modern[data-tone='warning'][data-part='root'] > [data-part='icon'] > [data-part='status-icon'][data-part='status-icon'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-warning) 30%, var(--ds-color-border));
-  background: color-mix(in srgb, var(--ds-color-warning) 9%, var(--ds-color-surface));
+  background: var(--ds-tint-warning-8, color-mix(in srgb, var(--ds-color-warning) 9%, var(--ds-color-surface)));
   box-shadow: var(--ds-result-icon-well-shadow, inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 42%, transparent));
   color: var(--ds-color-warning);
 }

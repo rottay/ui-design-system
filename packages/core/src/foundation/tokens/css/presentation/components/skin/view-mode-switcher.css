@@ -24,6 +24,35 @@
  * (0,3,1) tenant floor is moot here; the two scope classes + the root's own
  * `data-part` stay as the anatomy hook (the engine also stamps
  * `data-structure='view-mode-switcher'` for tenants that want the budget).
+ *
+ * WHY THIS FAMILY READS NOTHING ON ANY LEVERAGE CHANNEL, and why that is the
+ * correct end state (structure-material wave). A census of the 25 skin-owning
+ * structures found this the only one reading no radius, elevation, spacing,
+ * motion or type token. That is not a hole; it is the RECEIPT for the S25/S617B
+ * composition above. This file owns no surface: after the wrapper frame was
+ * retired there is no border, no ground, no corner and no state here to key a
+ * token to, and a token read against no declaration would be dead CSS.
+ *
+ * All five channels live one layer down, on the certified Segmented this
+ * component IS — verified in `runtime/engines/modern/skin/segmented.css`:
+ *   radius     `--ds-segmented-*-radius` → `--ds-radius-xs/sm/md`
+ *   material   `--ds-material-control-background` / `-border` / `-border-hover`
+ *   elevation  `--ds-material-control-shadow-hover` → `--ds-elevation-1`,
+ *              plus the track keyline on `--ds-shadow-xs`
+ *   spacing    `--ds-segmented-*-padding-x` / `-gap` / `-height`
+ *   motion     `--ds-motion-fast` / `-normal` / `--ds-state-press-scale`
+ *   type       `--ds-segmented-*-font-size` / `--ds-font-weight-*`
+ * A tenant's material, geometry and motion posture therefore reaches every
+ * pixel a user sees of this switcher. Re-adding any of them here would rebuild
+ * a lower layer — the exact double hairline S617B removed — and would make the
+ * wrapper a second authority for a decision the primitive already owns.
+ *
+ * What this family SHOULD own is what only it can know: how the switcher
+ * behaves as one item in a workspace toolbar row. That is the intrinsic
+ * `inline-flex` measure plus the `max-inline-size: 100%` cap that hands
+ * overflow to the primitive's own scroll affordance instead of pushing the row
+ * wide — and both are already here. The correct read count for this file is
+ * zero.
  */
 
 /* ---- root: layout-only pass-through (the primitive owns the track frame) ---- */

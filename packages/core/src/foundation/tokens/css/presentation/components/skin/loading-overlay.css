@@ -32,6 +32,26 @@
  * retired — the descendant chain carries the needed specificity without
  * repeating an identical selector (4th-tanda law). The pinned declaration
  * strings are untouched by that cleanup.
+ *
+ * MATERIAL INVARIANT — A SCRIM HAS NO ELEVATION (structure-material wave).
+ * This family reads no elevation channel and must not grow one. The root is
+ * `position: absolute; inset: 0; border-radius: inherit` — it does not sit
+ * ABOVE a surface, it IS the surface for as long as it is mounted, covering
+ * its host edge to edge and inheriting the host's corner. A shadow here would
+ * be cast onto the very element the scrim is covering. Depth for this region
+ * belongs to whatever the overlay is laid over, and that host reads its own
+ * material role.
+ *
+ * DEBT, recorded not fixed: the veil is hand-rolled
+ * (`var(--ds-color-bg-primary, rgba(...))`) instead of resolving the canonical
+ * `--ds-overlay-scrim`, which exists precisely so components never pick a veil
+ * ad hoc. That is a real reachability gap — a tenant moving its overlay veil
+ * does not move this one — but it cannot be closed from this lane: the
+ * background literal is one of the FROZEN STRINGS a pre-step contract test
+ * pins byte-exactly (see above), and `--ds-overlay-scrim` is declared by the
+ * default theme, so the swap would repaint the unbranded default as well as
+ * break the pin. It travels with the same re-pin migration the blur is
+ * already waiting on.
  */
 
 @keyframes ds-loading-overlay-pulse {

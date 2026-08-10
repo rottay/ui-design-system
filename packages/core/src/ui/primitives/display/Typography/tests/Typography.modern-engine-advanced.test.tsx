@@ -88,11 +88,13 @@ describe('Typography modern advanced engine coverage', () => {
     );
     expect(heading).toHaveAttribute('data-part', 'root');
     expect(heading).toHaveAttribute('data-color', 'error');
-    // Size resolves to a DS font token via inline fontSize; happy-dom drops
-    // var() values for validated properties, so probe the plain-literal
-    // companions of the 2xl heading ramp instead.
+    // The 2xl heading renders the display register, so its leading and weight
+    // resolve through that role while the scale and the tracking stay exactly
+    // where they were. Which facets may bind, and why size, tracking and figure
+    // style never do, is asserted in Typography.type-roles.test.tsx.
     expect(heading.style.letterSpacing).toBe('-0.025em');
-    expect(heading.style.lineHeight).toBe('1.1');
+    expect(heading.style.lineHeight).toBe('var(--ds-type-display-line-height)');
+    expect(heading.style.fontWeight).toBe('var(--ds-type-display-font-weight)');
 
     const inlineText = screen.getByText('Inline text');
     expect(inlineText).toHaveClass(
@@ -138,6 +140,9 @@ describe('Typography modern advanced engine coverage', () => {
     );
     expect(externalLink).toHaveAttribute('data-color', 'success');
     expect(externalLink).toHaveAttribute('rel', 'noopener noreferrer');
+    // Figure style is inherited, never declared here: a role read would outrank
+    // the tabular figures a surrounding skin sets on its own container.
+    expect(externalLink.style.fontVariantNumeric).toBe('');
 
     rerender(
       <ModernLink

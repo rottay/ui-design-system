@@ -71,6 +71,156 @@ const HEADING_FLUID_SIZE_MAP: Record<TextSize, string> = {
   '3xl': 'var(--ds-font-size-fluid-5xl, var(--ds-font-size-5xl))',
 };
 
+/**
+ * The semantic type roles a brand actually controls.
+ *
+ * `--ds-type-<role>-<facet>` is the sanctioned tenant typography channel: it is
+ * the `TENANT_SEMANTIC_TYPOGRAPHY_TOKENS` allowlist entry, so a customer theme
+ * can write it and have it accepted, and each role derives its size from
+ * `--ds-type-scale` rather than from a flat literal.
+ *
+ * The family already resolved these roles — but only when a caller passed an
+ * explicit `textStyle`, which almost no application markup does. So the roles
+ * were reachable in principle and unreached in practice. Binding the tier a
+ * component renders at to the role it represents puts every `Text`, `Heading`,
+ * `Paragraph` and `Link` on that channel by default.
+ *
+ * A facet is bound ONLY where the role's declared value already equals what the
+ * engine renders today, measured across the untenanted default and all three
+ * compiled artifacts. A non-authored value may not displace what renders, so a
+ * facet whose role value differs anywhere is left with its current owner and
+ * reported instead of quietly retuned.
+ */
+export type TypeRole = 'display' | 'sectionTitle' | 'body' | 'supporting' | 'caption';
+
+/**
+ * Which role each heading tier renders as. The two largest tiers are the
+ * display register; the rest are section titles, which is also what keeps every
+ * default heading's weight bindable (h1/h2 render 700 against display's 700,
+ * h3-h6 render 600 against section-title's 600).
+ */
+export const HEADING_TYPE_ROLE: Record<TextSize, TypeRole> = {
+  xs: 'sectionTitle',
+  sm: 'sectionTitle',
+  md: 'sectionTitle',
+  lg: 'sectionTitle',
+  xl: 'sectionTitle',
+  '2xl': 'display',
+  '3xl': 'display',
+};
+
+/** Inline text, paragraphs and links share one tier-to-role reading. */
+export const TEXT_TYPE_ROLE: Record<TextSize, TypeRole> = {
+  xs: 'caption',
+  sm: 'supporting',
+  md: 'body',
+  lg: 'body',
+  xl: 'body',
+  '2xl': 'body',
+  '3xl': 'body',
+};
+
+/**
+ * One bindable channel: the value the role resolves to in every theme, and the
+ * read that replaces the literal once they agree.
+ *
+ * `invariant` is not a guess. It is the value `--ds-type-<role>-<facet>`
+ * resolves to in the DS default AND in the bithire, evnto and rottay artifacts;
+ * a facet that differs in any of them has no entry here, because binding it
+ * would move a pixel on the strength of a value nobody authored for that tier.
+ * That is why `font-size`, `letter-spacing` and `font-variant-numeric` appear
+ * nowhere below. Every role varies its size per brand (only `section-title`
+ * does not, and it matches just one heading tier and one text tier, which would
+ * let a brand invert the scale at those two tiers alone). Tracking and figure
+ * style are not declared by these components at all — they are INHERITED, and a
+ * role resolves to a concrete value, never to `inherit`. Reading them would not
+ * be a swap but a seizure: several skins set `font-variant-numeric:
+ * tabular-nums` on a container (stats-grid, tag, step-wizard, live-feed,
+ * progress, date-picker…), and an inline declaration on the child outranks
+ * inheritance, so every `Text` inside those would silently lose its tabular
+ * figures.
+ *
+ * The reads carry no literal fallback because these channels are always
+ * declared by the foundation — the fallback-parity law this package follows.
+ * Each name is spelled out rather than assembled from the role: the reach
+ * census, the engine token audit and the hooks manifest all find a reader by
+ * matching `var(--ds-…` in source, so an interpolated name is a read no gate
+ * can see.
+ */
+interface TypeRoleChannel {
+  /** What the role resolves to in the default and in every compiled artifact. */
+  invariant: string;
+  /** The declaration that takes over once the engine renders that same value. */
+  read: string;
+}
+
+interface TypeRoleChannels {
+  weight: TypeRoleChannel;
+  /** Absent where the role's leading differs between the default and a brand. */
+  lineHeight?: TypeRoleChannel;
+}
+
+const TYPE_ROLE_CHANNELS: Record<TypeRole, TypeRoleChannels> = {
+  display: {
+    weight: { invariant: '700', read: 'var(--ds-type-display-font-weight)' },
+    lineHeight: { invariant: '1.1', read: 'var(--ds-type-display-line-height)' },
+  },
+  sectionTitle: {
+    weight: { invariant: '600', read: 'var(--ds-type-section-title-font-weight)' },
+    // Leading is 1.25 in the default and 1.3 in all three artifacts.
+  },
+  body: {
+    weight: { invariant: '400', read: 'var(--ds-type-body-font-weight)' },
+    // Leading is 1.5 in the default and 1.6 in all three artifacts.
+  },
+  supporting: {
+    weight: { invariant: '400', read: 'var(--ds-type-supporting-font-weight)' },
+    lineHeight: { invariant: '1.5', read: 'var(--ds-type-supporting-line-height)' },
+  },
+  caption: {
+    weight: { invariant: '400', read: 'var(--ds-type-caption-font-weight)' },
+    lineHeight: { invariant: '1.35', read: 'var(--ds-type-caption-line-height)' },
+  },
+};
+
+export interface ResolveTypeRoleStyleOptions {
+  /** Semantic role the element renders as. */
+  role: TypeRole;
+  /**
+   * Line height the engine renders today. Pass `inherit` where it declares
+   * none: no role resolves to `inherit`, so the channel correctly stays unbound.
+   */
+  lineHeight?: string;
+  /** Numeric weight that renders today, or `undefined` when the element inherits it. */
+  weight?: number;
+}
+
+/**
+ * Binds one element to its semantic role, one facet at a time, and only where
+ * the role already carries the value being rendered. Anything else keeps its
+ * current owner, so this can never move a pixel in any theme that ships today —
+ * what changes is that the brand's dial now reaches the default render path
+ * instead of only the elements that opted in through `textStyle`.
+ */
+export function resolveTypeRoleStyle({
+  role,
+  lineHeight,
+  weight,
+}: ResolveTypeRoleStyleOptions): CSSProperties {
+  const channels = TYPE_ROLE_CHANNELS[role];
+  const style: CSSProperties = {};
+
+  if (lineHeight !== undefined && channels.lineHeight?.invariant === lineHeight) {
+    style.lineHeight = channels.lineHeight.read;
+  }
+
+  if (weight !== undefined && channels.weight.invariant === String(weight)) {
+    style.fontWeight = channels.weight.read;
+  }
+
+  return style;
+}
+
 /** Normalizes caller input so invalid clamp values never produce broken CSS. */
 export function normalizeLineClamp(lineClamp: number | undefined): number | undefined {
   if (typeof lineClamp !== 'number' || !Number.isFinite(lineClamp) || lineClamp < 1) {

@@ -1395,11 +1395,11 @@
       var(--ds-surface-card-border, var(--ds-color-border-primary))
     );
   border-radius: var(--ds-radius-xl, 16px);
-  background: color-mix(
-    in srgb,
-    var(--ds-color-error) 4%,
-    var(--ds-empty-state-bg, var(--ds-surface-panel-bg))
-  );
+  /* `--ds-empty-state-bg` is a gradient, so it can only be painted directly
+     (as the empty sibling above does) — inside color-mix() it invalidates the
+     declaration and the region loses its ground entirely. The error tint is
+     therefore keyed to the panel color the gradient itself resolves toward. */
+  background: color-mix(in srgb, var(--ds-color-error) 4%, var(--ds-surface-panel-bg));
   color: var(--ds-color-text-secondary);
 }
 

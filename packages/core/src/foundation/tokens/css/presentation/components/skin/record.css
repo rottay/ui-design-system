@@ -89,6 +89,22 @@
  *    (the canonical dock surface, edit-fields toggle precedent) plus the
  *    divider-grammar seam keep scrolled content from bleeding through —
  *    the translucent gradient it replaces would have.
+ *
+ * MATERIAL INVARIANT — DELIBERATELY FLAT AND RULED (structure-material wave).
+ * This family reads no elevation channel and must not grow one. The C1 ledger
+ * decision above IS the material decision: the field grid was deliberately
+ * taken from N floating mini-cards to ONE data plane divided by hairline
+ * seams, which is the opposite of depth and the reason nothing here casts a
+ * shadow. The three `box-shadow` declarations in this file are all INSET
+ * keylines (focus-within, per-field error, empty-cell dash) — state cues drawn
+ * as rules, never lift.
+ *
+ * That makes this family the one that already answers a rule-led tenant
+ * correctly, and it answers on the EDGE axis rather than the depth axis: every
+ * frame resolves `--ds-edge-standard-width` and every seam resolves
+ * `--ds-divider-width`/`--ds-divider-style`, both of which a tenant reaches
+ * through the expressive `edge` profile. Adding a material shadow read here
+ * would invent paint the anatomy spent a whole wave removing.
  */
 
 /* --- RecordSummaryStrip ---------------------------------------------------- */

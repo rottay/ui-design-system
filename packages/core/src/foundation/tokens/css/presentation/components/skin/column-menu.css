@@ -7,6 +7,17 @@
  * popover and exposes bounded component hooks for app/tenant refinement.
  *
  * No coloured side rail is part of the anatomy.
+ *
+ * MATERIAL ROLE (overlay): the surface is a Popover-hosted floating panel, so
+ * its keyline and depth chain through the governed `overlay` role after the
+ * family channel and before the generic ramp —
+ * `--ds-column-menu-panel-*` → `--ds-material-overlay-*` → the pre-wave value.
+ * Neither overlay channel is declared by the default theme or by any shipped
+ * artifact, so the rendered default is unchanged: the panel still resolves to
+ * `--ds-elevation-4` and to the same keyline mix it had before. A row in the
+ * stamped visible/draft state lifts through the `raised` role's SELECTED
+ * facet; the resting row paints an inset keyline instead, so the state channel
+ * cannot collapse onto rest.
  */
 
 .ds-structure.ds-column-menu[data-part="trigger"] {
@@ -35,7 +46,10 @@
   border: var(
     --ds-column-menu-panel-border,
     1px solid
-      color-mix(in srgb, var(--ds-color-border-secondary) 72%, transparent)
+      var(
+        --ds-material-overlay-border,
+        color-mix(in srgb, var(--ds-color-border-secondary) 72%, transparent)
+      )
   );
   background: var(
     --ds-column-menu-panel-background,
@@ -59,9 +73,12 @@
   box-shadow: var(
     --ds-column-menu-panel-shadow,
     var(
-      --ds-elevation-4,
-      0 24px 64px
-        color-mix(in srgb, var(--ds-color-text-primary) 14%, transparent)
+      --ds-material-overlay-shadow,
+      var(
+        --ds-elevation-4,
+        0 24px 64px
+          color-mix(in srgb, var(--ds-color-text-primary) 14%, transparent)
+      )
     )
   );
   backdrop-filter: var(--ds-column-menu-panel-backdrop, none);
@@ -208,7 +225,10 @@
   );
   box-shadow: var(
     --ds-column-menu-row-active-shadow,
-    0 8px 20px color-mix(in srgb, var(--ds-color-primary) 8%, transparent)
+    var(
+      --ds-material-raised-shadow-selected,
+      0 8px 20px color-mix(in srgb, var(--ds-color-primary) 8%, transparent)
+    )
   );
 }
 

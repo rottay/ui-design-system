@@ -35,6 +35,14 @@
      below reads ONE name across every tone; the fallbacks are the pre-authority
      mixes verbatim, so an app on an older token bundle paints identically. */
   --_ds-callout-tone-ink: var(--ds-color-info-ink, var(--ds-color-info));
+  /* Same relay shape for the washes, off the tenant's semantic tint ramp: the
+     panel rests a step below the other status families (tint-4, the quietest
+     step) because a Callout is ambient guidance, not an interruption, while its
+     control's hover meets them at tint-8. Each fallback is that site's pre-ramp
+     mix and fires only where the ramp is undeclared, so the untenanted render
+     is unchanged. */
+  --_ds-callout-wash: var(--ds-tint-info-4, color-mix(in srgb, var(--ds-callout-tone) 6%, var(--ds-color-surface)));
+  --_ds-callout-control-wash-hover: var(--ds-tint-info-8, color-mix(in srgb, var(--ds-callout-tone) 9%, var(--ds-color-surface)));
   position: relative;
   isolation: isolate;
   display: flex;
@@ -47,7 +55,7 @@
      hook wins, the grammar is the fallback, 1px solid the floor). */
   border: var(--ds-callout-border-width, var(--ds-edge-standard-width, 1px)) var(--ds-edge-standard-style, solid) color-mix(in srgb, var(--ds-callout-tone) 28%, var(--ds-color-border));
   border-radius: var(--ds-callout-radius, var(--ds-radius-lg));
-  background-color: color-mix(in srgb, var(--ds-callout-tone) 6%, var(--ds-color-surface));
+  background-color: var(--_ds-callout-wash);
   background-image:
     linear-gradient(135deg, color-mix(in srgb, var(--ds-callout-tone) 7%, transparent), transparent 58%),
     var(--ds-gradient-surface);
@@ -71,16 +79,22 @@
      deepens toward the tenant-safe dark neutral; frames and washes keep the
      raw hue because they are decorative, not signal. */
   --_ds-callout-tone-ink: var(--ds-color-warning-ink, color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-neutral-900) 45%));
+  --_ds-callout-wash: var(--ds-tint-warning-4, color-mix(in srgb, var(--ds-callout-tone) 6%, var(--ds-color-surface)));
+  --_ds-callout-control-wash-hover: var(--ds-tint-warning-8, color-mix(in srgb, var(--ds-callout-tone) 9%, var(--ds-color-surface)));
 }
 
 .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-tone='error'] {
   --ds-callout-tone: var(--ds-color-error);
   --_ds-callout-tone-ink: var(--ds-color-error-ink, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-neutral-900) 22%));
+  --_ds-callout-wash: var(--ds-tint-error-4, color-mix(in srgb, var(--ds-callout-tone) 6%, var(--ds-color-surface)));
+  --_ds-callout-control-wash-hover: var(--ds-tint-error-8, color-mix(in srgb, var(--ds-callout-tone) 9%, var(--ds-color-surface)));
 }
 
 .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-tone='success'] {
   --ds-callout-tone: var(--ds-color-success);
   --_ds-callout-tone-ink: var(--ds-color-success-ink, color-mix(in srgb, var(--ds-color-success) 60%, var(--ds-color-neutral-900) 40%));
+  --_ds-callout-wash: var(--ds-tint-success-4, color-mix(in srgb, var(--ds-callout-tone) 6%, var(--ds-color-surface)));
+  --_ds-callout-control-wash-hover: var(--ds-tint-success-8, color-mix(in srgb, var(--ds-callout-tone) 9%, var(--ds-color-surface)));
 }
 
 /* The anatomy class already contributes the 4th specificity unit for every
@@ -93,7 +107,11 @@
   place-items: center;
   border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-callout-tone) 34%, var(--ds-color-border));
   border-radius: var(--ds-callout-icon-radius, var(--ds-radius-md));
-  background: color-mix(in srgb, var(--ds-callout-tone) 11%, var(--ds-color-surface-raised));
+  /* The lifted ground enters color-mix() as `--ds-color-bg-elevated`, never as
+     a `--ds-surface-*` role: a surface role may carry a gradient (BitHire's
+     raised role does), and one gradient argument invalidates the whole
+     declaration, leaving the well with no fill at all. */
+  background: color-mix(in srgb, var(--ds-callout-tone) 11%, var(--ds-color-bg-elevated));
   box-shadow:
     inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 50%, transparent),
     0 8px 18px color-mix(in srgb, var(--ds-callout-tone) 11%, transparent);
@@ -142,7 +160,7 @@
   padding: var(--ds-spacing-sm);
   border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-callout-tone) 20%, var(--ds-color-border));
   border-radius: var(--ds-radius-md);
-  background: color-mix(in srgb, var(--ds-color-surface-raised) 86%, transparent);
+  background: color-mix(in srgb, var(--ds-color-bg-elevated) 86%, transparent);
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 32%, transparent);
 }
 
@@ -155,7 +173,7 @@
   padding: 0;
   border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-callout-tone) 24%, var(--ds-color-border));
   border-radius: var(--ds-radius-md);
-  background: color-mix(in srgb, var(--ds-color-surface-raised) 86%, transparent);
+  background: color-mix(in srgb, var(--ds-color-bg-elevated) 86%, transparent);
   color: var(--ds-color-text-secondary);
   cursor: pointer;
   box-shadow: var(--ds-shadow-xs);
@@ -169,7 +187,7 @@
 @media (hover: hover) {
   .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'] > [data-part='close-button']:hover {
     border-color: color-mix(in srgb, var(--ds-callout-tone) 44%, var(--ds-color-border));
-    background: color-mix(in srgb, var(--ds-callout-tone) 9%, var(--ds-color-surface));
+    background: var(--_ds-callout-control-wash-hover);
     color: var(--ds-color-text-primary);
     transform: scale(1.04);
   }
@@ -178,7 +196,7 @@
 .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'] > [data-part='close-button']:active {
   transform: scale(var(--ds-state-press-scale));
   border-color: color-mix(in srgb, var(--ds-callout-tone) 44%, var(--ds-color-border));
-  background: color-mix(in srgb, var(--ds-callout-tone) 9%, var(--ds-color-surface));
+  background: var(--_ds-callout-control-wash-hover);
   color: var(--ds-color-text-primary);
 }
 

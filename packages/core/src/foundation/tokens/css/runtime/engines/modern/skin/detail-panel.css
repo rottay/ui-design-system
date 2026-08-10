@@ -69,6 +69,34 @@
  * consumer ReactNodes, there is no meter/number/value region to host them
  * and minting an empty one is dishonest (metrics-cards `action-*`
  * precedent) -- BLOCKED(owner: Codex) in the roadmap.
+ *
+ * DETAIL-PAGE CHROME (W1 reach lane): `--ds-detail-*` is the tenant's
+ * vocabulary for the detail PAGE, and this pattern is the only thing
+ * `DetailSurface` composes below the page shell, so its parts are the parts
+ * those names describe. `hero-*` tiers over the `header` region (the identity
+ * frame that carries avatar, title, status and actions); `section-*` tiers
+ * over the two body surfaces, `tab-panel` and `sidebar`; `rail-width` sits
+ * BEHIND the inline `--ds-detail-panel-sidebar-width`, so the `sidebarWidth`
+ * prop still outranks the tenant. Each read keeps the exact prior expression
+ * as its fallback, so an artifact that authors none renders byte-identical.
+ *
+ * A DEAD CHANNEL MAY TAKE AN UNGOVERNED PROPERTY; IT MAY NOT DISPLACE AN
+ * AUTHORED ONE. `--ds-detail-radius` is the case that law was written for and
+ * is deliberately NOT wired here. Its only declarer publishes it as
+ * `var(--ds-radius-md, 8px)` -- a pass-through to a scale token, so it carries
+ * no decision -- while every radius site it could take is already governed:
+ * root/tab-panel/sidebar by an authored literal (`--ds-workspace-card-radius`,
+ * 14px), header by `--ds-card-radius`, the tab and toolbar radii by their own
+ * family channels, and the pill/motif radii by `--ds-radius-full`/`inherit`.
+ * Ranking it first would have replaced an authored 14px with a defaulted 10px
+ * on three regions and been an exact no-op on the fourth (both chains land on
+ * `--ds-radius-md`). Retirement candidate, not a cosmetic read.
+ *
+ * `hero-spine`, `control-*` and `continuous-*` stay unwired for the other
+ * reason: this pattern paints no spine, no form control (the panel's content
+ * is opaque consumer ReactNodes and the controls are the certified field
+ * primitives) and offers no continuous/uncarded posture, so hosting them would
+ * mean inventing parts nothing renders.
  */
 
 /* ---- root: card surface + radius (was containerStyle) ---- */
@@ -119,22 +147,28 @@
   gap: var(--ds-detail-panel-content-gap);
   min-inline-size: 0;
   padding: var(--ds-card-header-padding, var(--ds-spacing-4, 16px));
-  border: 1px solid var(--ds-card-header-border, var(--ds-color-border));
+  border: 1px solid
+    var(--ds-detail-hero-border, var(--ds-card-header-border, var(--ds-color-border)));
   border-radius: var(--ds-card-radius, var(--ds-radius-lg));
   background: var(
-    --ds-card-header-bg,
-    linear-gradient(
-      112deg,
-      color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)),
-      var(--ds-surface-card) 56%,
-      var(--ds-surface-panel)
+    --ds-detail-hero-bg,
+    var(
+      --ds-card-header-bg,
+      linear-gradient(
+        112deg,
+        color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)),
+        var(--ds-surface-card) 56%,
+        var(--ds-surface-panel)
+      )
     )
   );
   background-position: 0% 50%;
   background-size: 180% 180%;
-  box-shadow:
+  box-shadow: var(
+    --ds-detail-hero-shadow,
     inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent),
-    var(--ds-workspace-card-shadow, var(--ds-elevation-1));
+    var(--ds-workspace-card-shadow, var(--ds-elevation-1))
+  );
   transition:
     background-position var(--ds-motion-slow, 320ms) var(--ds-motion-ease-out, ease-out),
     border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
@@ -501,12 +535,18 @@
   min-inline-size: 0;
   min-block-size: var(--ds-workspace-card-min-height, 0px);
   padding: var(--ds-workspace-card-padding, var(--ds-spacing-4, 16px));
-  border: 1px solid var(--ds-workspace-card-border, var(--ds-color-border));
+  border: 1px solid
+    var(--ds-detail-section-border, var(--ds-workspace-card-border, var(--ds-color-border)));
   border-radius: var(--ds-workspace-card-radius, var(--ds-radius-lg));
-  background: var(--ds-workspace-card-glass-bg, var(--ds-workspace-card-bg, var(--ds-surface-card)));
-  box-shadow:
+  background: var(
+    --ds-detail-section-bg,
+    var(--ds-workspace-card-glass-bg, var(--ds-workspace-card-bg, var(--ds-surface-card)))
+  );
+  box-shadow: var(
+    --ds-detail-section-shadow,
     inset 0 1px 0 var(--ds-workspace-card-sheen, transparent),
-    var(--ds-workspace-card-depth, var(--ds-workspace-card-shadow, var(--ds-elevation-1)));
+    var(--ds-workspace-card-depth, var(--ds-workspace-card-shadow, var(--ds-elevation-1)))
+  );
   transition: var(--ds-workspace-card-transition, none);
 }
 
@@ -528,7 +568,10 @@
 }
 .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='sidebar-slot'] {
   flex-shrink: 0;
-  inline-size: var(--ds-detail-panel-sidebar-width, 300px);
+  /* Caller anatomy outranks tenant voice: the `sidebarWidth` prop lands as the
+     inline `--ds-detail-panel-sidebar-width` and still wins; the tenant's
+     detail-page rail width supplies the posture when the prop is absent. */
+  inline-size: var(--ds-detail-panel-sidebar-width, var(--ds-detail-rail-width, 300px));
 }
 .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='body'][data-sidebar-position='left'] > [data-part='sidebar-slot'] {
   order: 1;
@@ -540,12 +583,18 @@
   position: relative;
   min-block-size: var(--ds-workspace-card-min-height, 0px);
   padding: var(--ds-workspace-card-padding);
-  background: var(--ds-workspace-card-glass-bg, var(--ds-workspace-card-bg, var(--ds-surface-panel)));
-  border: 1px solid var(--ds-workspace-card-border, var(--ds-color-border));
+  background: var(
+    --ds-detail-section-bg,
+    var(--ds-workspace-card-glass-bg, var(--ds-workspace-card-bg, var(--ds-surface-panel)))
+  );
+  border: 1px solid
+    var(--ds-detail-section-border, var(--ds-workspace-card-border, var(--ds-color-border)));
   border-radius: var(--ds-workspace-card-radius, var(--ds-radius-lg));
-  box-shadow:
+  box-shadow: var(
+    --ds-detail-section-shadow,
     inset 0 1px 0 var(--ds-workspace-card-sheen, transparent),
-    var(--ds-workspace-card-depth, var(--ds-workspace-card-shadow, none));
+    var(--ds-workspace-card-depth, var(--ds-workspace-card-shadow, none))
+  );
   transition: var(--ds-workspace-card-transition, none);
 }
 
@@ -584,11 +633,11 @@
         guard per house hover law; the reduced-motion twin lives below. ---- */
 @media (hover: hover) {
   .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-panel']:hover {
-    background: var(--ds-workspace-card-bg-hover, var(--ds-workspace-card-glass-bg, var(--ds-workspace-card-bg, var(--ds-surface-card))));
+    background: var(--ds-workspace-card-bg-hover, var(--ds-detail-section-bg, var(--ds-workspace-card-glass-bg, var(--ds-workspace-card-bg, var(--ds-surface-card)))));
     transform: var(--ds-workspace-card-hover-transform, none);
   }
   .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='sidebar']:hover {
-    background: var(--ds-workspace-card-bg-hover, var(--ds-workspace-card-glass-bg, var(--ds-workspace-card-bg, var(--ds-surface-panel))));
+    background: var(--ds-workspace-card-bg-hover, var(--ds-detail-section-bg, var(--ds-workspace-card-glass-bg, var(--ds-workspace-card-bg, var(--ds-surface-panel)))));
     transform: var(--ds-workspace-card-hover-transform, none);
   }
 }

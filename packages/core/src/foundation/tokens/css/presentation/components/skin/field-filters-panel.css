@@ -40,6 +40,22 @@
  * active set are gone. All inline geometry is drained here: root padding,
  * header/signals/pills/signal chrome, the responsive card grid (230px+
  * auto-fit), card anatomy and the 40px control floor.
+ *
+ * MATERIAL (structure-material wave). The panel ROOT is a flat page region,
+ * not a floating sheet: it mounts inline under the workspace toolbar, is
+ * separated by the toolbar's own hairline, and carries no shadow by design —
+ * an elevated filters panel would put a second dominant boundary on a region
+ * that already has one. That flatness is a family invariant, not an omission,
+ * and the root is deliberately left with no elevation read.
+ *
+ * What DOES carry a material channel is the control landing: the two rules
+ * that paint the panel's own Select/Input surface read the governed
+ * `--ds-material-control-highlight` for their optical top edge, with the
+ * pre-wave inset as the typed fallback. That channel is declared by neither
+ * the default theme nor any shipped artifact, so an unbranded tenant renders
+ * the same bytes; a tenant with a flat-material law can now switch the panel's
+ * control sheen off through the same channel it uses everywhere else, instead
+ * of this family being the one place the decision does not land.
  */
 
 /* root ------------------------------------------------------------------- */
@@ -245,7 +261,10 @@
   min-block-size: 40px;
   border-radius: 12px;
   background: color-mix(in srgb, var(--ds-color-bg-primary) 72%, var(--ds-surface-card));
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 4%, transparent);
+  box-shadow: var(
+    --ds-material-control-highlight,
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 4%, transparent)
+  );
 }
 
 .ds-structure.ds-field-filters-panel[data-part='root'] .ds-field-filters-panel__control {
@@ -264,7 +283,10 @@
   border-radius: 12px;
   background: color-mix(in srgb, var(--ds-color-bg-primary) 72%, var(--ds-surface-card));
   border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 88%, transparent);
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 4%, transparent);
+  box-shadow: var(
+    --ds-material-control-highlight,
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 4%, transparent)
+  );
 }
 
 /* ---------------------------------------------------------------------------

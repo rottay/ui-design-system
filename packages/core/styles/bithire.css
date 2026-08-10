@@ -12868,6 +12868,11 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
       var(--ds-signal-card-accent, var(--ds-color-primary)) 20%,
       var(--ds-color-border)
     );
+  /* The accent is mixed into `--ds-color-bg-elevated`, not into
+     `--ds-icon-tile-bg`: the tile channel is a gradient by default, and one
+     gradient argument invalidates the color-mix -- which drops the whole
+     shorthand, costing the sheen layer above it as well as this ground. The
+     gradient still paints directly on the rich-card tile. */
   background: linear-gradient(
       180deg,
       color-mix(in srgb, var(--ds-surface-card-bg) 84%, transparent),
@@ -12876,7 +12881,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
     color-mix(
       in srgb,
       var(--ds-signal-card-accent, var(--ds-color-primary)) 12%,
-      var(--ds-icon-tile-bg)
+      var(--ds-color-bg-elevated)
     );
   box-shadow: 0 1px 2px
     color-mix(
@@ -16889,11 +16894,11 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
       var(--ds-surface-card-border, var(--ds-color-border-primary))
     );
   border-radius: var(--ds-radius-xl, 16px);
-  background: color-mix(
-    in srgb,
-    var(--ds-color-error) 4%,
-    var(--ds-empty-state-bg, var(--ds-surface-panel-bg))
-  );
+  /* `--ds-empty-state-bg` is a gradient, so it can only be painted directly
+     (as the empty sibling above does) — inside color-mix() it invalidates the
+     declaration and the region loses its ground entirely. The error tint is
+     therefore keyed to the panel color the gradient itself resolves toward. */
+  background: color-mix(in srgb, var(--ds-color-error) 4%, var(--ds-surface-panel-bg));
   color: var(--ds-color-text-secondary);
 }
 
@@ -27558,6 +27563,22 @@ input.rottay-input.rottay-input--modern[data-part='root'][type='number'] {
  * active set are gone. All inline geometry is drained here: root padding,
  * header/signals/pills/signal chrome, the responsive card grid (230px+
  * auto-fit), card anatomy and the 40px control floor.
+ *
+ * MATERIAL (structure-material wave). The panel ROOT is a flat page region,
+ * not a floating sheet: it mounts inline under the workspace toolbar, is
+ * separated by the toolbar's own hairline, and carries no shadow by design —
+ * an elevated filters panel would put a second dominant boundary on a region
+ * that already has one. That flatness is a family invariant, not an omission,
+ * and the root is deliberately left with no elevation read.
+ *
+ * What DOES carry a material channel is the control landing: the two rules
+ * that paint the panel's own Select/Input surface read the governed
+ * `--ds-material-control-highlight` for their optical top edge, with the
+ * pre-wave inset as the typed fallback. That channel is declared by neither
+ * the default theme nor any shipped artifact, so an unbranded tenant renders
+ * the same bytes; a tenant with a flat-material law can now switch the panel's
+ * control sheen off through the same channel it uses everywhere else, instead
+ * of this family being the one place the decision does not land.
  */
 
 /* root ------------------------------------------------------------------- */
@@ -27763,7 +27784,10 @@ input.rottay-input.rottay-input--modern[data-part='root'][type='number'] {
   min-block-size: 40px;
   border-radius: 12px;
   background: color-mix(in srgb, var(--ds-color-bg-primary) 72%, var(--ds-surface-card));
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 4%, transparent);
+  box-shadow: var(
+    --ds-material-control-highlight,
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 4%, transparent)
+  );
 }
 
 .ds-structure.ds-field-filters-panel[data-part='root'] .ds-field-filters-panel__control {
@@ -27782,7 +27806,10 @@ input.rottay-input.rottay-input--modern[data-part='root'][type='number'] {
   border-radius: 12px;
   background: color-mix(in srgb, var(--ds-color-bg-primary) 72%, var(--ds-surface-card));
   border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 88%, transparent);
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 4%, transparent);
+  box-shadow: var(
+    --ds-material-control-highlight,
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 4%, transparent)
+  );
 }
 
 /* ---------------------------------------------------------------------------
@@ -28392,6 +28419,27 @@ input.rottay-input.rottay-input--modern[data-part='root'][type='number'] {
  * value lands on one (16px/12px); the rest stay literal. The composed Button
  * primitive keeps its coarse-pointer `--ds-touch-target-min` floor: the 34px
  * inline `min-width` that used to veto it is gone.
+ *
+ * MATERIAL — WHY THE THREE CARDS ARE STILL UNREACHABLE (structure-material
+ * wave; a measurement, not a preference). `custom-sticky-card`, `identity-card`
+ * and `snapshot-card` are the rail's whole material argument: three lifted
+ * surfaces on soft 44/48/30px blooms. They are exactly what a tenant whose law
+ * is "hard rules, no floating cards" needs to reach, and today nothing it can
+ * author touches them.
+ *
+ * Their honest governed channel is the `raised` role's resting shadow. It is
+ * NOT wired because the two candidate names both break the lane's
+ * default-preservation fence in different ways:
+ *   - `--ds-material-raised-shadow` is declared by the bithire artifact, so
+ *     reading it repaints all three cards under a shipped tenant.
+ *   - `--ds-material-card-shadow` is declared by the DEFAULT THEME
+ *     (`var(--ds-shadow-sm)`), and a `var()` fallback fires only for an
+ *     UNDECLARED name — so the literal would become dead and the unbranded
+ *     default would silently drop to elevation-1.
+ * Neither is a defect in this file; both are the same structural fact, that
+ * the material role matrix has no undeclared resting-depth facet. The change
+ * is one line per card once an owner adjudicates it against a sighted
+ * before/after under bithire and the default theme.
  */
 
 /* roots — two mutually-exclusive trees, keyed on data-preview ---------------- */
@@ -28694,6 +28742,34 @@ input.rottay-input.rottay-input--modern[data-part='root'][type='number'] {
  * consumer ReactNodes, there is no meter/number/value region to host them
  * and minting an empty one is dishonest (metrics-cards `action-*`
  * precedent) -- BLOCKED(owner: Codex) in the roadmap.
+ *
+ * DETAIL-PAGE CHROME (W1 reach lane): `--ds-detail-*` is the tenant's
+ * vocabulary for the detail PAGE, and this pattern is the only thing
+ * `DetailSurface` composes below the page shell, so its parts are the parts
+ * those names describe. `hero-*` tiers over the `header` region (the identity
+ * frame that carries avatar, title, status and actions); `section-*` tiers
+ * over the two body surfaces, `tab-panel` and `sidebar`; `rail-width` sits
+ * BEHIND the inline `--ds-detail-panel-sidebar-width`, so the `sidebarWidth`
+ * prop still outranks the tenant. Each read keeps the exact prior expression
+ * as its fallback, so an artifact that authors none renders byte-identical.
+ *
+ * A DEAD CHANNEL MAY TAKE AN UNGOVERNED PROPERTY; IT MAY NOT DISPLACE AN
+ * AUTHORED ONE. `--ds-detail-radius` is the case that law was written for and
+ * is deliberately NOT wired here. Its only declarer publishes it as
+ * `var(--ds-radius-md, 8px)` -- a pass-through to a scale token, so it carries
+ * no decision -- while every radius site it could take is already governed:
+ * root/tab-panel/sidebar by an authored literal (`--ds-workspace-card-radius`,
+ * 14px), header by `--ds-card-radius`, the tab and toolbar radii by their own
+ * family channels, and the pill/motif radii by `--ds-radius-full`/`inherit`.
+ * Ranking it first would have replaced an authored 14px with a defaulted 10px
+ * on three regions and been an exact no-op on the fourth (both chains land on
+ * `--ds-radius-md`). Retirement candidate, not a cosmetic read.
+ *
+ * `hero-spine`, `control-*` and `continuous-*` stay unwired for the other
+ * reason: this pattern paints no spine, no form control (the panel's content
+ * is opaque consumer ReactNodes and the controls are the certified field
+ * primitives) and offers no continuous/uncarded posture, so hosting them would
+ * mean inventing parts nothing renders.
  */
 
 /* ---- root: card surface + radius (was containerStyle) ---- */
@@ -28744,22 +28820,28 @@ input.rottay-input.rottay-input--modern[data-part='root'][type='number'] {
   gap: var(--ds-detail-panel-content-gap);
   min-inline-size: 0;
   padding: var(--ds-card-header-padding, var(--ds-spacing-4, 16px));
-  border: 1px solid var(--ds-card-header-border, var(--ds-color-border));
+  border: 1px solid
+    var(--ds-detail-hero-border, var(--ds-card-header-border, var(--ds-color-border)));
   border-radius: var(--ds-card-radius, var(--ds-radius-lg));
   background: var(
-    --ds-card-header-bg,
-    linear-gradient(
-      112deg,
-      color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)),
-      var(--ds-surface-card) 56%,
-      var(--ds-surface-panel)
+    --ds-detail-hero-bg,
+    var(
+      --ds-card-header-bg,
+      linear-gradient(
+        112deg,
+        color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)),
+        var(--ds-surface-card) 56%,
+        var(--ds-surface-panel)
+      )
     )
   );
   background-position: 0% 50%;
   background-size: 180% 180%;
-  box-shadow:
+  box-shadow: var(
+    --ds-detail-hero-shadow,
     inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent),
-    var(--ds-workspace-card-shadow, var(--ds-elevation-1));
+    var(--ds-workspace-card-shadow, var(--ds-elevation-1))
+  );
   transition:
     background-position var(--ds-motion-slow, 320ms) var(--ds-motion-ease-out, ease-out),
     border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
@@ -29126,12 +29208,18 @@ input.rottay-input.rottay-input--modern[data-part='root'][type='number'] {
   min-inline-size: 0;
   min-block-size: var(--ds-workspace-card-min-height, 0px);
   padding: var(--ds-workspace-card-padding, var(--ds-spacing-4, 16px));
-  border: 1px solid var(--ds-workspace-card-border, var(--ds-color-border));
+  border: 1px solid
+    var(--ds-detail-section-border, var(--ds-workspace-card-border, var(--ds-color-border)));
   border-radius: var(--ds-workspace-card-radius, var(--ds-radius-lg));
-  background: var(--ds-workspace-card-glass-bg, var(--ds-workspace-card-bg, var(--ds-surface-card)));
-  box-shadow:
+  background: var(
+    --ds-detail-section-bg,
+    var(--ds-workspace-card-glass-bg, var(--ds-workspace-card-bg, var(--ds-surface-card)))
+  );
+  box-shadow: var(
+    --ds-detail-section-shadow,
     inset 0 1px 0 var(--ds-workspace-card-sheen, transparent),
-    var(--ds-workspace-card-depth, var(--ds-workspace-card-shadow, var(--ds-elevation-1)));
+    var(--ds-workspace-card-depth, var(--ds-workspace-card-shadow, var(--ds-elevation-1)))
+  );
   transition: var(--ds-workspace-card-transition, none);
 }
 
@@ -29153,7 +29241,10 @@ input.rottay-input.rottay-input--modern[data-part='root'][type='number'] {
 }
 .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='sidebar-slot'] {
   flex-shrink: 0;
-  inline-size: var(--ds-detail-panel-sidebar-width, 300px);
+  /* Caller anatomy outranks tenant voice: the `sidebarWidth` prop lands as the
+     inline `--ds-detail-panel-sidebar-width` and still wins; the tenant's
+     detail-page rail width supplies the posture when the prop is absent. */
+  inline-size: var(--ds-detail-panel-sidebar-width, var(--ds-detail-rail-width, 300px));
 }
 .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='body'][data-sidebar-position='left'] > [data-part='sidebar-slot'] {
   order: 1;
@@ -29165,12 +29256,18 @@ input.rottay-input.rottay-input--modern[data-part='root'][type='number'] {
   position: relative;
   min-block-size: var(--ds-workspace-card-min-height, 0px);
   padding: var(--ds-workspace-card-padding);
-  background: var(--ds-workspace-card-glass-bg, var(--ds-workspace-card-bg, var(--ds-surface-panel)));
-  border: 1px solid var(--ds-workspace-card-border, var(--ds-color-border));
+  background: var(
+    --ds-detail-section-bg,
+    var(--ds-workspace-card-glass-bg, var(--ds-workspace-card-bg, var(--ds-surface-panel)))
+  );
+  border: 1px solid
+    var(--ds-detail-section-border, var(--ds-workspace-card-border, var(--ds-color-border)));
   border-radius: var(--ds-workspace-card-radius, var(--ds-radius-lg));
-  box-shadow:
+  box-shadow: var(
+    --ds-detail-section-shadow,
     inset 0 1px 0 var(--ds-workspace-card-sheen, transparent),
-    var(--ds-workspace-card-depth, var(--ds-workspace-card-shadow, none));
+    var(--ds-workspace-card-depth, var(--ds-workspace-card-shadow, none))
+  );
   transition: var(--ds-workspace-card-transition, none);
 }
 
@@ -29209,11 +29306,11 @@ input.rottay-input.rottay-input--modern[data-part='root'][type='number'] {
         guard per house hover law; the reduced-motion twin lives below. ---- */
 @media (hover: hover) {
   .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-panel']:hover {
-    background: var(--ds-workspace-card-bg-hover, var(--ds-workspace-card-glass-bg, var(--ds-workspace-card-bg, var(--ds-surface-card))));
+    background: var(--ds-workspace-card-bg-hover, var(--ds-detail-section-bg, var(--ds-workspace-card-glass-bg, var(--ds-workspace-card-bg, var(--ds-surface-card)))));
     transform: var(--ds-workspace-card-hover-transform, none);
   }
   .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='sidebar']:hover {
-    background: var(--ds-workspace-card-bg-hover, var(--ds-workspace-card-glass-bg, var(--ds-workspace-card-bg, var(--ds-surface-panel))));
+    background: var(--ds-workspace-card-bg-hover, var(--ds-detail-section-bg, var(--ds-workspace-card-glass-bg, var(--ds-workspace-card-bg, var(--ds-surface-panel)))));
     transform: var(--ds-workspace-card-hover-transform, none);
   }
 }
@@ -48184,7 +48281,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   );
   border: var(--ds-alert-border-width, var(--ds-edge-standard-width, 1px)) var(--ds-edge-standard-style, solid) color-mix(in srgb, var(--ds-alert-tone) 30%, var(--ds-color-border));
   border-radius: var(--ds-alert-radius, var(--ds-radius-lg));
-  background-color: color-mix(in srgb, var(--ds-alert-tone) 7%, var(--ds-color-surface));
+  background-color: var(--_ds-alert-wash);
   background-image: var(--ds-gradient-surface);
   /* Optical-edge keyline scales with the governed effect-intensity dial: at 0
      the decoration dissolves while the tone wash, frame and type hierarchy
@@ -48217,24 +48314,39 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
    the 3:1 floor for a semantic glyph. Frames and washes keep the raw tone
    (decorative, not signal). Fallbacks are the raw tone: a bundle without the
    authority paints exactly as before. */
+/* The two washes come off the tenant's semantic tint ramp rather than a local
+   percentage: `--ds-tint-<tone>-8` is how a tenant states how heavy a status
+   surface reads, and every status family draws its fill from the same step so
+   they move together. Each fallback is that site's pre-ramp mix and fires only
+   where the ramp is undeclared (a bundle with no tenant artifact), so the
+   untenanted render is unchanged. The two channels stay separate because their
+   fallbacks differ (7% at rest, 9% under the action's hover). */
 .rottay-alert-shell.rottay-alert-shell--modern[data-part='root'][data-tone='info'] {
   --ds-alert-tone: var(--ds-color-info);
   --_ds-alert-tone-ink: var(--ds-color-info-ink, var(--ds-alert-tone));
+  --_ds-alert-wash: var(--ds-tint-info-8, color-mix(in srgb, var(--ds-alert-tone) 7%, var(--ds-color-surface)));
+  --_ds-alert-action-wash-hover: var(--ds-tint-info-8, color-mix(in srgb, var(--ds-alert-tone) 9%, var(--ds-color-surface)));
 }
 
 .rottay-alert-shell.rottay-alert-shell--modern[data-part='root'][data-tone='success'] {
   --ds-alert-tone: var(--ds-color-success);
   --_ds-alert-tone-ink: var(--ds-color-success-ink, var(--ds-alert-tone));
+  --_ds-alert-wash: var(--ds-tint-success-8, color-mix(in srgb, var(--ds-alert-tone) 7%, var(--ds-color-surface)));
+  --_ds-alert-action-wash-hover: var(--ds-tint-success-8, color-mix(in srgb, var(--ds-alert-tone) 9%, var(--ds-color-surface)));
 }
 
 .rottay-alert-shell.rottay-alert-shell--modern[data-part='root'][data-tone='warning'] {
   --ds-alert-tone: var(--ds-color-warning);
   --_ds-alert-tone-ink: var(--ds-color-warning-ink, var(--ds-alert-tone));
+  --_ds-alert-wash: var(--ds-tint-warning-8, color-mix(in srgb, var(--ds-alert-tone) 7%, var(--ds-color-surface)));
+  --_ds-alert-action-wash-hover: var(--ds-tint-warning-8, color-mix(in srgb, var(--ds-alert-tone) 9%, var(--ds-color-surface)));
 }
 
 .rottay-alert-shell.rottay-alert-shell--modern[data-part='root'][data-tone='error'] {
   --ds-alert-tone: var(--ds-color-error);
   --_ds-alert-tone-ink: var(--ds-color-error-ink, var(--ds-alert-tone));
+  --_ds-alert-wash: var(--ds-tint-error-8, color-mix(in srgb, var(--ds-alert-tone) 7%, var(--ds-color-surface)));
+  --_ds-alert-action-wash-hover: var(--ds-tint-error-8, color-mix(in srgb, var(--ds-alert-tone) 9%, var(--ds-color-surface)));
 }
 
 .rottay-alert-shell.rottay-alert-shell--modern > .rottay-alert-shell__icon[data-part='icon'][data-part='icon'] {
@@ -48245,7 +48357,11 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   place-items: center;
   border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-alert-tone) 34%, var(--ds-color-border));
   border-radius: var(--ds-alert-icon-well-radius, var(--ds-radius-md));
-  background: color-mix(in srgb, var(--ds-alert-tone) 11%, var(--ds-color-surface-raised));
+  /* The lifted ground enters color-mix() as `--ds-color-bg-elevated`, never as
+     a `--ds-surface-*` role: a surface role may carry a gradient (BitHire's
+     raised role does), and one gradient argument invalidates the whole
+     declaration, leaving the well with no fill at all. */
+  background: color-mix(in srgb, var(--ds-alert-tone) 11%, var(--ds-color-bg-elevated));
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) calc(48% * var(--ds-effect-intensity)), transparent);
   /* The glyph carries the severity INK, never the raw hue: on a tinted well
      the raw warning/error/success hues fall under the 3:1 glyph floor. */
@@ -48312,7 +48428,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   padding: 0;
   border: 1px solid color-mix(in srgb, var(--ds-alert-tone) 26%, var(--ds-color-border));
   border-radius: var(--ds-radius-md);
-  background: color-mix(in srgb, var(--ds-color-surface-raised) 86%, transparent);
+  background: color-mix(in srgb, var(--ds-color-bg-elevated) 86%, transparent);
   color: var(--ds-color-text-secondary);
   cursor: pointer;
   box-shadow: var(--ds-shadow-xs);
@@ -48328,7 +48444,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 @media (hover: hover) {
   .rottay-alert-shell.rottay-alert-shell--modern[data-tone] > [data-part='action']:hover {
     border-color: color-mix(in srgb, var(--ds-alert-tone) 45%, var(--ds-color-border));
-    background: color-mix(in srgb, var(--ds-alert-tone) 9%, var(--ds-color-surface));
+    background: var(--_ds-alert-action-wash-hover);
     color: var(--ds-color-text-primary);
   }
 }
@@ -51037,6 +51153,18 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 .rottay-toast--modern.rottay-toast--modern[data-part='root'][data-part='root'] {
   --ds-toast-accent: var(--ds-color-primary);
+  /* The washes come off the tenant's semantic tint ramp rather than local
+     percentages: `--ds-tint-<tone>-8` is how a tenant states how heavy a status
+     surface reads, and every status family draws its fill from that step so
+     they move together; the icon well sits one step up at tint-12 because it is
+     a small disc holding its own against the head wash behind it. Three
+     channels rather than two because head, well and action carry different
+     fallbacks (10%, 11%, 9%); each fires only where the ramp is undeclared, so
+     the untenanted render is unchanged. The base is the primary role, whose
+     ramp is the UNSUFFIXED scale -- default/primary/gradient inherit it. */
+  --_ds-toast-wash-head: var(--ds-tint-8, color-mix(in srgb, var(--ds-toast-accent) 10%, var(--ds-color-bg-primary)));
+  --_ds-toast-wash-well: var(--ds-tint-12, color-mix(in srgb, var(--ds-toast-accent) 11%, var(--ds-color-bg-primary)));
+  --_ds-toast-wash-action: var(--ds-tint-8, color-mix(in srgb, var(--ds-toast-accent) 9%, var(--ds-color-bg-primary)));
   position: relative;
   width: min(28rem, calc(100vw - (var(--ds-toast-viewport-gutter, var(--ds-spacing-3)) * 2)));
   /* In-flow hosts narrower than the viewport formula (e.g. a padded 390px
@@ -51056,7 +51184,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
     var(--ds-material-overlay-texture, none),
     linear-gradient(
       135deg,
-      color-mix(in srgb, var(--ds-toast-accent) 10%, var(--ds-color-bg-primary)) 0%,
+      var(--_ds-toast-wash-head) 0%,
       color-mix(in srgb, var(--ds-color-bg-primary) 98%, var(--ds-toast-accent) 2%) 54%,
       var(--ds-color-bg-primary) 100%
     );
@@ -51129,20 +51257,40 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 .rottay-toast--modern[data-part='root'][data-tone='success'] {
   --ds-toast-accent: var(--ds-color-success);
   --_ds-toast-accent-ink: var(--ds-color-success-ink, var(--ds-toast-accent));
+  --_ds-toast-wash-head: var(--ds-tint-success-8, color-mix(in srgb, var(--ds-toast-accent) 10%, var(--ds-color-bg-primary)));
+  --_ds-toast-wash-well: var(--ds-tint-success-12, color-mix(in srgb, var(--ds-toast-accent) 11%, var(--ds-color-bg-primary)));
+  --_ds-toast-wash-action: var(--ds-tint-success-8, color-mix(in srgb, var(--ds-toast-accent) 9%, var(--ds-color-bg-primary)));
 }
 .rottay-toast--modern[data-part='root'][data-tone='error'] {
   --ds-toast-accent: var(--ds-color-error);
   --_ds-toast-accent-ink: var(--ds-color-error-ink, var(--ds-toast-accent));
+  --_ds-toast-wash-head: var(--ds-tint-error-8, color-mix(in srgb, var(--ds-toast-accent) 10%, var(--ds-color-bg-primary)));
+  --_ds-toast-wash-well: var(--ds-tint-error-12, color-mix(in srgb, var(--ds-toast-accent) 11%, var(--ds-color-bg-primary)));
+  --_ds-toast-wash-action: var(--ds-tint-error-8, color-mix(in srgb, var(--ds-toast-accent) 9%, var(--ds-color-bg-primary)));
 }
 .rottay-toast--modern[data-part='root'][data-tone='warning'] {
   --ds-toast-accent: var(--ds-color-warning);
   --_ds-toast-accent-ink: var(--ds-color-warning-ink, var(--ds-toast-accent));
+  --_ds-toast-wash-head: var(--ds-tint-warning-8, color-mix(in srgb, var(--ds-toast-accent) 10%, var(--ds-color-bg-primary)));
+  --_ds-toast-wash-well: var(--ds-tint-warning-12, color-mix(in srgb, var(--ds-toast-accent) 11%, var(--ds-color-bg-primary)));
+  --_ds-toast-wash-action: var(--ds-tint-warning-8, color-mix(in srgb, var(--ds-toast-accent) 9%, var(--ds-color-bg-primary)));
 }
 .rottay-toast--modern[data-part='root'][data-tone='info'] {
   --ds-toast-accent: var(--ds-color-info);
   --_ds-toast-accent-ink: var(--ds-color-info-ink, var(--ds-toast-accent));
+  --_ds-toast-wash-head: var(--ds-tint-info-8, color-mix(in srgb, var(--ds-toast-accent) 10%, var(--ds-color-bg-primary)));
+  --_ds-toast-wash-well: var(--ds-tint-info-12, color-mix(in srgb, var(--ds-toast-accent) 11%, var(--ds-color-bg-primary)));
+  --_ds-toast-wash-action: var(--ds-tint-info-8, color-mix(in srgb, var(--ds-toast-accent) 9%, var(--ds-color-bg-primary)));
 }
-.rottay-toast--modern[data-part='root'][data-tone='secondary'] { --ds-toast-accent: var(--ds-color-secondary); }
+/* The ramp carries no `secondary` role (primary + the four status tones only),
+   so the inherited unsuffixed channels are reset to the computed mix here --
+   without this a secondary toast would paint itself with the PRIMARY's tint. */
+.rottay-toast--modern[data-part='root'][data-tone='secondary'] {
+  --ds-toast-accent: var(--ds-color-secondary);
+  --_ds-toast-wash-head: color-mix(in srgb, var(--ds-toast-accent) 10%, var(--ds-color-bg-primary));
+  --_ds-toast-wash-well: color-mix(in srgb, var(--ds-toast-accent) 11%, var(--ds-color-bg-primary));
+  --_ds-toast-wash-action: color-mix(in srgb, var(--ds-toast-accent) 9%, var(--ds-color-bg-primary));
+}
 
 .rottay-toast--modern.rottay-toast--modern[data-part='root'][data-part='root'][data-tone='gradient'] {
   color: var(--ds-toast-gradient-color, var(--ds-color-text-on-primary));
@@ -51170,7 +51318,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   /* The glyph carries the severity INK, never the raw hue (Alert/Callout
      parity); brand tones fall back to the raw accent. */
   color: var(--_ds-toast-accent-ink, var(--ds-toast-accent));
-  background: color-mix(in srgb, var(--ds-toast-accent) 11%, var(--ds-color-bg-primary));
+  background: var(--_ds-toast-wash-well);
   border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-toast-accent) 26%, var(--ds-color-border-subtle));
   border-radius: var(--ds-radius-md);
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) calc(56% * var(--ds-effect-intensity)), transparent);
@@ -51251,7 +51399,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
      (quiet tint, accent-keyed frame) while the dismiss stays a neutral ghost,
      so the two never read as the same affordance (urgency without excess
      chroma: the tint stays under the surface's own accent wash). */
-  background: color-mix(in srgb, var(--ds-toast-accent) 9%, var(--ds-color-bg-primary));
+  background: var(--_ds-toast-wash-action);
   border-color: color-mix(in srgb, var(--ds-toast-accent) 30%, var(--ds-color-border-subtle));
 }
 .rottay-toast--modern[data-part='root'] [data-part='close-button'] {
@@ -51852,6 +52000,14 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
      across tones; its fallback is the raw accent, so a bundle without the
      authority paints exactly as before. */
   --_ds-message-accent-ink: var(--ds-color-info-ink, var(--ds-message-accent));
+  /* Same relay shape for the washes, off the tenant's semantic tint ramp:
+     `--ds-tint-<tone>-8` is how a tenant states how heavy a status surface
+     reads, and every status family draws its fill from that step so they move
+     together. Head and well stay separate channels because their fallbacks
+     differ (9% and 10%); each fires only where the ramp is undeclared, so the
+     untenanted render is unchanged. */
+  --_ds-message-wash-head: var(--ds-tint-info-8, color-mix(in srgb, var(--ds-message-accent) 9%, var(--ds-color-bg-primary)));
+  --_ds-message-wash-well: var(--ds-tint-info-8, color-mix(in srgb, var(--ds-message-accent) 10%, var(--ds-color-bg-primary)));
   position: relative;
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
@@ -51872,7 +52028,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
     var(--ds-material-overlay-texture, none),
     linear-gradient(
       135deg,
-      color-mix(in srgb, var(--ds-message-accent) 9%, var(--ds-color-bg-primary)) 0%,
+      var(--_ds-message-wash-head) 0%,
       var(--ds-color-bg-primary) 72%
     );
   /* The frame rides the tenant edge grammar (hairline / ruled / inset-double)
@@ -51896,20 +52052,31 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 .rottay-message-stack--modern[data-part='stack-container'] .rottay-message--modern[data-part='root'][data-tone='success'] {
   --ds-message-accent: var(--ds-color-success);
   --_ds-message-accent-ink: var(--ds-color-success-ink, var(--ds-message-accent));
+  --_ds-message-wash-head: var(--ds-tint-success-8, color-mix(in srgb, var(--ds-message-accent) 9%, var(--ds-color-bg-primary)));
+  --_ds-message-wash-well: var(--ds-tint-success-8, color-mix(in srgb, var(--ds-message-accent) 10%, var(--ds-color-bg-primary)));
 }
 .rottay-message-stack--modern[data-part='stack-container'] .rottay-message--modern[data-part='root'][data-tone='error'] {
   --ds-message-accent: var(--ds-color-error);
   --_ds-message-accent-ink: var(--ds-color-error-ink, var(--ds-message-accent));
+  --_ds-message-wash-head: var(--ds-tint-error-8, color-mix(in srgb, var(--ds-message-accent) 9%, var(--ds-color-bg-primary)));
+  --_ds-message-wash-well: var(--ds-tint-error-8, color-mix(in srgb, var(--ds-message-accent) 10%, var(--ds-color-bg-primary)));
 }
 .rottay-message-stack--modern[data-part='stack-container'] .rottay-message--modern[data-part='root'][data-tone='warning'] {
   --ds-message-accent: var(--ds-color-warning);
   --_ds-message-accent-ink: var(--ds-color-warning-ink, var(--ds-message-accent));
+  --_ds-message-wash-head: var(--ds-tint-warning-8, color-mix(in srgb, var(--ds-message-accent) 9%, var(--ds-color-bg-primary)));
+  --_ds-message-wash-well: var(--ds-tint-warning-8, color-mix(in srgb, var(--ds-message-accent) 10%, var(--ds-color-bg-primary)));
 }
 .rottay-message-stack--modern[data-part='stack-container'] .rottay-message--modern[data-part='root'][data-tone='loading'] {
   --ds-message-accent: var(--ds-color-primary);
   /* No primary-ink authority exists: the relay resets to the raw accent so
      the root's info-ink cannot leak into the loading tone. */
   --_ds-message-accent-ink: var(--ds-message-accent);
+  /* The primary role's ramp is the UNSUFFIXED scale, so the loading tone reads
+     `--ds-tint-8` -- the same step the status tones take, on the one-blue
+     interaction scale rather than a status tone. */
+  --_ds-message-wash-head: var(--ds-tint-8, color-mix(in srgb, var(--ds-message-accent) 9%, var(--ds-color-bg-primary)));
+  --_ds-message-wash-well: var(--ds-tint-8, color-mix(in srgb, var(--ds-message-accent) 10%, var(--ds-color-bg-primary)));
 }
 
 .rottay-message-stack--modern[data-part='stack-container'] .rottay-message--modern[data-part='root'] > [data-part='icon'] {
@@ -51923,7 +52090,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
      keyline scales with the effect-intensity dial -- Toast/Notification well
      parity, the same hand at a smaller measure. */
   color: var(--_ds-message-accent-ink, var(--ds-message-accent));
-  background: color-mix(in srgb, var(--ds-message-accent) 10%, var(--ds-color-bg-primary));
+  background: var(--_ds-message-wash-well);
   border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-message-accent) 24%, var(--ds-color-border-subtle));
   border-radius: var(--ds-radius-md);
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) calc(56% * var(--ds-effect-intensity)), transparent);
@@ -52391,6 +52558,15 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
      glyph floor). The `open` tone (primary) keeps the raw accent: no ink
      authority exists for brand hues. Fallbacks are the raw accent. */
   --_ds-notification-accent-ink: var(--ds-color-info-ink, var(--ds-notification-accent));
+  /* Same relay shape for the washes, off the tenant's semantic tint ramp:
+     `--ds-tint-<tone>-8` is how a tenant states how heavy a status surface
+     reads, and every status family draws its fill from that step so they move
+     together. The well sits one step up at tint-12 -- it is a small disc that
+     has to hold its own against the head wash behind it. Each fallback is that
+     site's pre-ramp mix and fires only where the ramp is undeclared, so the
+     untenanted render is unchanged. */
+  --_ds-notification-wash-head: var(--ds-tint-info-8, color-mix(in srgb, var(--ds-notification-accent) 10%, var(--ds-color-bg-primary)));
+  --_ds-notification-wash-well: var(--ds-tint-info-12, color-mix(in srgb, var(--ds-notification-accent) 11%, var(--ds-color-bg-primary)));
   position: relative;
   inline-size: 100%;
   overflow: hidden;
@@ -52407,7 +52583,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
     var(--ds-material-overlay-texture, none),
     linear-gradient(
       135deg,
-      color-mix(in srgb, var(--ds-notification-accent) 10%, var(--ds-color-bg-primary)) 0%,
+      var(--_ds-notification-wash-head) 0%,
       color-mix(in srgb, var(--ds-color-bg-primary) 98%, var(--ds-notification-accent) 2%) 52%,
       var(--ds-color-bg-primary) 100%
     );
@@ -52446,20 +52622,31 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 .rottay-notification-stack--modern[data-part='stack-container'] .rottay-notification--modern[data-part='root'][data-tone='success'] {
   --ds-notification-accent: var(--ds-color-success);
   --_ds-notification-accent-ink: var(--ds-color-success-ink, var(--ds-notification-accent));
+  --_ds-notification-wash-head: var(--ds-tint-success-8, color-mix(in srgb, var(--ds-notification-accent) 10%, var(--ds-color-bg-primary)));
+  --_ds-notification-wash-well: var(--ds-tint-success-12, color-mix(in srgb, var(--ds-notification-accent) 11%, var(--ds-color-bg-primary)));
 }
 .rottay-notification-stack--modern[data-part='stack-container'] .rottay-notification--modern[data-part='root'][data-tone='error'] {
   --ds-notification-accent: var(--ds-color-error);
   --_ds-notification-accent-ink: var(--ds-color-error-ink, var(--ds-notification-accent));
+  --_ds-notification-wash-head: var(--ds-tint-error-8, color-mix(in srgb, var(--ds-notification-accent) 10%, var(--ds-color-bg-primary)));
+  --_ds-notification-wash-well: var(--ds-tint-error-12, color-mix(in srgb, var(--ds-notification-accent) 11%, var(--ds-color-bg-primary)));
 }
 .rottay-notification-stack--modern[data-part='stack-container'] .rottay-notification--modern[data-part='root'][data-tone='warning'] {
   --ds-notification-accent: var(--ds-color-warning);
   --_ds-notification-accent-ink: var(--ds-color-warning-ink, var(--ds-notification-accent));
+  --_ds-notification-wash-head: var(--ds-tint-warning-8, color-mix(in srgb, var(--ds-notification-accent) 10%, var(--ds-color-bg-primary)));
+  --_ds-notification-wash-well: var(--ds-tint-warning-12, color-mix(in srgb, var(--ds-notification-accent) 11%, var(--ds-color-bg-primary)));
 }
 .rottay-notification-stack--modern[data-part='stack-container'] .rottay-notification--modern[data-part='root'][data-tone='open'] {
   --ds-notification-accent: var(--ds-color-primary);
   /* Primary has no ink authority: reset the relay so the root's info-ink
      cannot leak into the open tone. */
   --_ds-notification-accent-ink: var(--ds-notification-accent);
+  /* The primary role's ramp is the UNSUFFIXED scale, so the open tone reads
+     `--ds-tint-8` / `--ds-tint-12` -- the same steps the status tones take, on
+     the one-blue interaction scale rather than a status tone. */
+  --_ds-notification-wash-head: var(--ds-tint-8, color-mix(in srgb, var(--ds-notification-accent) 10%, var(--ds-color-bg-primary)));
+  --_ds-notification-wash-well: var(--ds-tint-12, color-mix(in srgb, var(--ds-notification-accent) 11%, var(--ds-color-bg-primary)));
 }
 
 .rottay-notification--modern[data-part='root'] > [data-part='layout'] {
@@ -52484,7 +52671,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
      effect-intensity dial exactly like the Alert/Toast wells -- at 0 the
      decoration dissolves while tint, frame and glyph carry the severity. */
   color: var(--_ds-notification-accent-ink, var(--ds-notification-accent));
-  background: color-mix(in srgb, var(--ds-notification-accent) 11%, var(--ds-color-bg-primary));
+  background: var(--_ds-notification-wash-well);
   border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-notification-accent) 26%, var(--ds-color-border-subtle));
   border-radius: var(--ds-radius-md);
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) calc(56% * var(--ds-effect-intensity)), transparent);
@@ -52909,9 +53096,15 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   border-radius: 50%;
 }
 
+/* The well's fill is the tenant's semantic tint ramp at step 8, not a local
+   percentage: `--ds-tint-<tone>-8` is how a tenant states how heavy a status
+   surface reads, and every status family in the engine draws its fill from the
+   same step so they move together. The fallback is the pre-ramp mix and fires
+   only where the ramp is undeclared (a bundle with no tenant artifact), so the
+   untenanted render is unchanged. */
 .rottay-result--modern[data-tone='success'][data-part='root'] > [data-part='icon'] > [data-part='status-icon'][data-part='status-icon'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-success) 30%, var(--ds-color-border));
-  background: color-mix(in srgb, var(--ds-color-success) 9%, var(--ds-color-surface));
+  background: var(--ds-tint-success-8, color-mix(in srgb, var(--ds-color-success) 9%, var(--ds-color-surface)));
   /* Quiet grammar (Empty/StatePanel: "no bloom shadow"): the well keeps only
      its inset highlight; the 28px tone bloom read as glow makeup. */
   box-shadow: var(--ds-result-icon-well-shadow, inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 42%, transparent));
@@ -52919,19 +53112,19 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 .rottay-result--modern[data-tone='error'][data-part='root'] > [data-part='icon'] > [data-part='status-icon'][data-part='status-icon'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-error) 30%, var(--ds-color-border));
-  background: color-mix(in srgb, var(--ds-color-error) 9%, var(--ds-color-surface));
+  background: var(--ds-tint-error-8, color-mix(in srgb, var(--ds-color-error) 9%, var(--ds-color-surface)));
   box-shadow: var(--ds-result-icon-well-shadow, inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 42%, transparent));
   color: var(--ds-color-error);
 }
 .rottay-result--modern[data-tone='info'][data-part='root'] > [data-part='icon'] > [data-part='status-icon'][data-part='status-icon'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-info) 30%, var(--ds-color-border));
-  background: color-mix(in srgb, var(--ds-color-info) 9%, var(--ds-color-surface));
+  background: var(--ds-tint-info-8, color-mix(in srgb, var(--ds-color-info) 9%, var(--ds-color-surface)));
   box-shadow: var(--ds-result-icon-well-shadow, inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 42%, transparent));
   color: var(--ds-color-info);
 }
 .rottay-result--modern[data-tone='warning'][data-part='root'] > [data-part='icon'] > [data-part='status-icon'][data-part='status-icon'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-warning) 30%, var(--ds-color-border));
-  background: color-mix(in srgb, var(--ds-color-warning) 9%, var(--ds-color-surface));
+  background: var(--ds-tint-warning-8, color-mix(in srgb, var(--ds-color-warning) 9%, var(--ds-color-surface)));
   box-shadow: var(--ds-result-icon-well-shadow, inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 42%, transparent));
   color: var(--ds-color-warning);
 }
@@ -64580,6 +64773,36 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
  * media block), so the degradation contract is: UA forcing + hairline +
  * primitive-owned chrome.
  *
+ * MATERIAL — WHY THE HAIRLINE IS **NOT** RE-KEYED ONTO THE OVERLAY ROLE.
+ * The dock is a chrome sheet over content, so `--ds-material-overlay-border`
+ * looks like its governed keyline, and this file briefly carried that chain.
+ * It was reverted, and the reason is worth keeping: a dead channel may take an
+ * UNGOVERNED property, but it may not displace an AUTHORED one, and this
+ * hairline is already authored on both sides.
+ *   - What it would displace is `var(--ds-color-border-primary)` VERBATIM —
+ *     not a formula over it. The bithire artifact gives that name a literal
+ *     (#D4E0EA), i.e. a tenant decision, not a compiler pass-through.
+ *   - And the one tenant that authors the overlay channel (The Management)
+ *     sets it to #2A2824, which is exactly what its own
+ *     `palette.border.primary` already resolves to here. Before and after are
+ *     the same pixel. The wire would have moved a census and not a screen.
+ * The dock's edge therefore stays on the palette token it already reaches,
+ * which every tenant already controls.
+ *
+ * WHY THE DEPTH IS NOT RE-KEYED EITHER (a separate, structural reason): both
+ * placements paint box-shadow as a COMMA LIST — the edge highlight plus the
+ * placement shadow. `--ds-material-overlay-shadow` is publicly `none`-capable
+ * (the tenant contract types it as a whole box-shadow value and tenants
+ * legitimately author `none`), and `none` inside a comma list is not a list
+ * item, it is a whole-value keyword: splicing it here would void the ENTIRE
+ * declaration and take the edge highlight down with the shadow. This is the
+ * same unsoundness already recorded against Dropdown/Drawer/Modal and it is
+ * pending adjudication; this lane refuses to add a fourth instance. The dock's
+ * top placement already reaches the tenant through `--ds-shadow-navbar` →
+ * `--ds-shadow-sm`, which IS in the tenant override set; the bottom
+ * placement's upward ambient shadow stays a family invariant until the
+ * comma-list contract is decided.
+ *
  * GLASS: the frosted surface blur is the pinned W10 design contract
  * (`blur(var(--ds-glass-blur, 8px))` is asserted verbatim) and rides the
  * `--ds-action-dock-backdrop-filter` channel with the reduced-effects
@@ -67808,6 +68031,14 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
      below reads ONE name across every tone; the fallbacks are the pre-authority
      mixes verbatim, so an app on an older token bundle paints identically. */
   --_ds-callout-tone-ink: var(--ds-color-info-ink, var(--ds-color-info));
+  /* Same relay shape for the washes, off the tenant's semantic tint ramp: the
+     panel rests a step below the other status families (tint-4, the quietest
+     step) because a Callout is ambient guidance, not an interruption, while its
+     control's hover meets them at tint-8. Each fallback is that site's pre-ramp
+     mix and fires only where the ramp is undeclared, so the untenanted render
+     is unchanged. */
+  --_ds-callout-wash: var(--ds-tint-info-4, color-mix(in srgb, var(--ds-callout-tone) 6%, var(--ds-color-surface)));
+  --_ds-callout-control-wash-hover: var(--ds-tint-info-8, color-mix(in srgb, var(--ds-callout-tone) 9%, var(--ds-color-surface)));
   position: relative;
   isolation: isolate;
   display: flex;
@@ -67820,7 +68051,7 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
      hook wins, the grammar is the fallback, 1px solid the floor). */
   border: var(--ds-callout-border-width, var(--ds-edge-standard-width, 1px)) var(--ds-edge-standard-style, solid) color-mix(in srgb, var(--ds-callout-tone) 28%, var(--ds-color-border));
   border-radius: var(--ds-callout-radius, var(--ds-radius-lg));
-  background-color: color-mix(in srgb, var(--ds-callout-tone) 6%, var(--ds-color-surface));
+  background-color: var(--_ds-callout-wash);
   background-image:
     linear-gradient(135deg, color-mix(in srgb, var(--ds-callout-tone) 7%, transparent), transparent 58%),
     var(--ds-gradient-surface);
@@ -67844,16 +68075,22 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
      deepens toward the tenant-safe dark neutral; frames and washes keep the
      raw hue because they are decorative, not signal. */
   --_ds-callout-tone-ink: var(--ds-color-warning-ink, color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-neutral-900) 45%));
+  --_ds-callout-wash: var(--ds-tint-warning-4, color-mix(in srgb, var(--ds-callout-tone) 6%, var(--ds-color-surface)));
+  --_ds-callout-control-wash-hover: var(--ds-tint-warning-8, color-mix(in srgb, var(--ds-callout-tone) 9%, var(--ds-color-surface)));
 }
 
 .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-tone='error'] {
   --ds-callout-tone: var(--ds-color-error);
   --_ds-callout-tone-ink: var(--ds-color-error-ink, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-neutral-900) 22%));
+  --_ds-callout-wash: var(--ds-tint-error-4, color-mix(in srgb, var(--ds-callout-tone) 6%, var(--ds-color-surface)));
+  --_ds-callout-control-wash-hover: var(--ds-tint-error-8, color-mix(in srgb, var(--ds-callout-tone) 9%, var(--ds-color-surface)));
 }
 
 .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-tone='success'] {
   --ds-callout-tone: var(--ds-color-success);
   --_ds-callout-tone-ink: var(--ds-color-success-ink, color-mix(in srgb, var(--ds-color-success) 60%, var(--ds-color-neutral-900) 40%));
+  --_ds-callout-wash: var(--ds-tint-success-4, color-mix(in srgb, var(--ds-callout-tone) 6%, var(--ds-color-surface)));
+  --_ds-callout-control-wash-hover: var(--ds-tint-success-8, color-mix(in srgb, var(--ds-callout-tone) 9%, var(--ds-color-surface)));
 }
 
 /* The anatomy class already contributes the 4th specificity unit for every
@@ -67866,7 +68103,11 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
   place-items: center;
   border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-callout-tone) 34%, var(--ds-color-border));
   border-radius: var(--ds-callout-icon-radius, var(--ds-radius-md));
-  background: color-mix(in srgb, var(--ds-callout-tone) 11%, var(--ds-color-surface-raised));
+  /* The lifted ground enters color-mix() as `--ds-color-bg-elevated`, never as
+     a `--ds-surface-*` role: a surface role may carry a gradient (BitHire's
+     raised role does), and one gradient argument invalidates the whole
+     declaration, leaving the well with no fill at all. */
+  background: color-mix(in srgb, var(--ds-callout-tone) 11%, var(--ds-color-bg-elevated));
   box-shadow:
     inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 50%, transparent),
     0 8px 18px color-mix(in srgb, var(--ds-callout-tone) 11%, transparent);
@@ -67915,7 +68156,7 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
   padding: var(--ds-spacing-sm);
   border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-callout-tone) 20%, var(--ds-color-border));
   border-radius: var(--ds-radius-md);
-  background: color-mix(in srgb, var(--ds-color-surface-raised) 86%, transparent);
+  background: color-mix(in srgb, var(--ds-color-bg-elevated) 86%, transparent);
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 32%, transparent);
 }
 
@@ -67928,7 +68169,7 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
   padding: 0;
   border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-callout-tone) 24%, var(--ds-color-border));
   border-radius: var(--ds-radius-md);
-  background: color-mix(in srgb, var(--ds-color-surface-raised) 86%, transparent);
+  background: color-mix(in srgb, var(--ds-color-bg-elevated) 86%, transparent);
   color: var(--ds-color-text-secondary);
   cursor: pointer;
   box-shadow: var(--ds-shadow-xs);
@@ -67942,7 +68183,7 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
 @media (hover: hover) {
   .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'] > [data-part='close-button']:hover {
     border-color: color-mix(in srgb, var(--ds-callout-tone) 44%, var(--ds-color-border));
-    background: color-mix(in srgb, var(--ds-callout-tone) 9%, var(--ds-color-surface));
+    background: var(--_ds-callout-control-wash-hover);
     color: var(--ds-color-text-primary);
     transform: scale(1.04);
   }
@@ -67951,7 +68192,7 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
 .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'] > [data-part='close-button']:active {
   transform: scale(var(--ds-state-press-scale));
   border-color: color-mix(in srgb, var(--ds-callout-tone) 44%, var(--ds-color-border));
-  background: color-mix(in srgb, var(--ds-callout-tone) 9%, var(--ds-color-surface));
+  background: var(--_ds-callout-control-wash-hover);
   color: var(--ds-color-text-primary);
 }
 
@@ -85974,6 +86215,23 @@ html[data-ds-motion="reduced"]
  * cut the collapsed single column drops its row gap and sews cells with the
  * family's divider-grammar seam — the same one-column ledger read the
  * record field-grid keeps at 320/390px.
+ *
+ * MATERIAL INVARIANT — DELIBERATELY FLAT AND RULED (structure-material wave).
+ * This file contains no `box-shadow` at all, and that is the contract. An
+ * inline-edit region is a form, and the house law is that forms are not card
+ * stacks: hierarchy comes from section headers, seams and aligned controls,
+ * never from boxed field cards floating over the page. Every separation here
+ * is already a rule on the governed edge axis
+ * (`--ds-divider-width`/`--ds-divider-style`, floors 1px solid), the active
+ * field is marked by a ground wash plus a label ink shift rather than a lift,
+ * and the sticky toggle dock takes the canonical `--ds-surface-canvas` paint
+ * plus one seam instead of a shadow — the comment on that rule states the
+ * refusal explicitly ("this structure does not introduce a second theme
+ * channel").
+ *
+ * So the family is not deaf to a tenant's material law; it hears it on the
+ * edge axis, which is the axis a ruled direction actually moves. Giving it an
+ * elevation read would satisfy a census and contradict the anatomy.
  */
 
 /* --- InlineEditor ---------------------------------------------------------- */
@@ -86484,7 +86742,17 @@ html[data-ds-motion="reduced"]
   --ds-form-sections-accent-secondary: color-mix(in srgb, var(--ds-color-text-primary) 7%, transparent);
   --ds-form-sections-grid-color: color-mix(in srgb, var(--ds-color-text-muted) 22%, transparent);
   --ds-form-sections-grid-size: 26px;
-  --ds-form-sections-shadow: 0 14px 34px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent);
+  /* The family's one depth decision (the OPEN card section lifts) chains the
+     governed `raised` role's SELECTED facet before its literal. The channel is
+     declared by neither the default theme nor any shipped artifact, so the
+     rendered default is unchanged; a tenant whose material law is "rules, not
+     floating cards" flattens the open section through the same channel it uses
+     for every other lifted region. The closed section resolves `none`, so the
+     state channel can never collapse onto the resting value. */
+  --ds-form-sections-shadow: var(
+    --ds-material-raised-shadow-selected,
+    0 14px 34px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent)
+  );
 }
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-tone='editorial'] {
@@ -87705,6 +87973,22 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  *    (the canonical dock surface, edit-fields toggle precedent) plus the
  *    divider-grammar seam keep scrolled content from bleeding through —
  *    the translucent gradient it replaces would have.
+ *
+ * MATERIAL INVARIANT — DELIBERATELY FLAT AND RULED (structure-material wave).
+ * This family reads no elevation channel and must not grow one. The C1 ledger
+ * decision above IS the material decision: the field grid was deliberately
+ * taken from N floating mini-cards to ONE data plane divided by hairline
+ * seams, which is the opposite of depth and the reason nothing here casts a
+ * shadow. The three `box-shadow` declarations in this file are all INSET
+ * keylines (focus-within, per-field error, empty-cell dash) — state cues drawn
+ * as rules, never lift.
+ *
+ * That makes this family the one that already answers a rule-led tenant
+ * correctly, and it answers on the EDGE axis rather than the depth axis: every
+ * frame resolves `--ds-edge-standard-width` and every seam resolves
+ * `--ds-divider-width`/`--ds-divider-style`, both of which a tenant reaches
+ * through the expressive `edge` profile. Adding a material shadow read here
+ * would invent paint the anatomy spent a whole wave removing.
  */
 
 /* --- RecordSummaryStrip ---------------------------------------------------- */
@@ -88961,6 +89245,26 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * BREADCRUMB: own grammar (the §4 anatomy tests pin
  * `breadcrumb-link/separator/item`); composing the Breadcrumb primitive is a
  * contract-level migration, documented in the engine header.
+ *
+ * MATERIAL (structure-material wave). WIRED: the context card's optical top
+ * edge reads the governed `inset` role highlight (see that rule below); the
+ * channel is undeclared by the default theme and by every shipped artifact,
+ * so the rendered default is byte-identical.
+ *
+ * NOT WIRED, and this is a measurement, not a preference. The root's resting
+ * depth (`box-shadow: 0 12px 28px …`) is this family's dominant material
+ * decision and is precisely what a "rules, not floating cards" tenant needs to
+ * reach. Its honest channel is `--ds-material-card-shadow`, which the DEFAULT
+ * THEME already declares as `var(--ds-shadow-sm)`. A `var()` fallback fires
+ * only for an UNDECLARED name, so `var(--ds-material-card-shadow, 0 12px 28px …)`
+ * would silently repaint the unbranded default from a 28px bloom to
+ * elevation-1. That is a pixel change this lane is fenced against, so the
+ * literal stays and the block is recorded instead: adopting the channel is a
+ * one-line change that needs a sighted before/after, because it moves the
+ * default theme and all three artifacts at once. The icon-badge's depth is
+ * blocked for a second, independent reason — it is a COMMA LIST (inset
+ * highlight + drop), and the material shadow channels are publicly
+ * `none`-capable, where `none` inside a list voids the whole declaration.
  */
 
 /* ─── SHARED EDIT+FORM: hero-panel archetype gradient (buildPatternStyle) ─── */
@@ -89271,7 +89575,14 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     linear-gradient(90deg, color-mix(in srgb, var(--ds-color-text-muted) 15%, transparent) 1px, transparent 1px);
   background-size: 100% 100%, 100% 100%, 100% 100%, 24px 24px, 24px 24px;
   background-position: 0 0, 0 0, 0 0, 0 0;
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
+  /* The context card is a RECESSED well inside the header card (darker ground,
+     own keyline, opt-in frost), so its optical top edge reads the governed
+     `inset` role's highlight facet. Declared by neither the default theme nor
+     any shipped artifact, so the pre-wave inset is what still renders. */
+  box-shadow: var(
+    --ds-material-inset-highlight,
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
+  );
   backdrop-filter: var(--ds-edit-header-context-card-filter, none);
 }
 .ds-structure.ds-edit-header[data-part='root'] [data-part='context-card'] {
@@ -89365,6 +89676,24 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * `--ds-form-header-context-backdrop` channel (default `none`) — the retired
  * `blur(8px)` default-ON taxed every scroll frame and is not the sanctioned
  * glass contract (cockpit-header PT29 precedent, Sheet's `--ds-glass-*`).
+ *
+ * MATERIAL (structure-material wave). WIRED: the context card's optical top
+ * edge reads the governed `inset` role highlight (see the rule below) — that
+ * channel is undeclared by the default theme and by every shipped artifact, so
+ * the rendered default is byte-identical.
+ *
+ * NOT WIRED, and this is a measurement, not a preference. The root's resting
+ * depth (`box-shadow: 0 12px 28px …`) is the family's dominant material
+ * decision and is exactly what a "rules, not floating cards" tenant needs to
+ * reach. Its honest channel is `--ds-material-card-shadow`, which the DEFAULT
+ * THEME already declares (`var(--ds-shadow-sm)`). A `var()` fallback fires only
+ * for an UNDECLARED name, so `var(--ds-material-card-shadow, 0 12px 28px …)`
+ * would silently repaint the unbranded default from a 28px bloom to elevation-1
+ * — a pixel change this lane is fenced against. The same block applies to the
+ * sibling edit-header root and to the three SelectionPreviewRail cards. The
+ * one-line change is ready in each file's note; adopting it is an owner call
+ * that needs a sighted before/after, because it moves the default and every
+ * shipped artifact at once.
  */
 
 /* ---- root card (geometry drained from the component's inline styles) ---- */
@@ -89493,7 +89822,15 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     linear-gradient(90deg, color-mix(in srgb, var(--ds-color-text-muted) 15%, transparent) 1px, transparent 1px);
   background-size: 100% 100%, 100% 100%, 100% 100%, 24px 24px, 24px 24px;
   background-position: 0 0, 0 0, 0 0, 0 0, 0 0;
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
+  /* The context card is a RECESSED well inside the header card (darker ground,
+     own keyline, opt-in frost), so its optical top edge reads the governed
+     `inset` role's highlight facet — the edit-header sibling carries the same
+     chain. Declared by neither the default theme nor any shipped artifact, so
+     the pre-wave inset is what still renders. */
+  box-shadow: var(
+    --ds-material-inset-highlight,
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
+  );
   /* Glass is opt-in (default none): a default-ON blur taxed every scroll
      frame; tenants enable it through this channel (cockpit-header PT29
      precedent, Sheet glass contract). */
@@ -93899,6 +94236,25 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  *
  * Values transcribed verbatim from index.tsx (the `DS` token map + the two
  * threshold/binary selectors).
+ *
+ * MATERIAL INVARIANT — DELIBERATELY FLAT (structure-material wave). Across
+ * 1300+ lines this family declares zero `box-shadow`, and the ROOT section
+ * already says why in one line: the card is a full-body link that answers
+ * hover and press with "a quiet border shift … never a lift or glow". A
+ * terminal/HUD surface is defined by its frame, its ground and its instrument
+ * layers; depth would read as a different product, not a themed one. Its
+ * material argument is carried by the four variant grounds, the decorative
+ * scan/flow/activity textures and the 1px frame — not by elevation.
+ *
+ * The frame IS the channel a tenant should reach, and it is the one thing this
+ * family cannot express governedly today: `--ds-color-border` and the
+ * `color-mix(primary 28%, border)` hover both bypass the governed
+ * `--ds-material-card-border` / `-border-hover` role. Those two names are
+ * declared by the default theme, so re-keying them makes the typed fallback
+ * inert and repaints the unbranded default — the same structural block
+ * recorded in edit-header.css and selection-preview-rail.css, and the same
+ * owner adjudication. Recorded here so a later pass does not read the zero
+ * shadow count as the whole story.
  */
 
 /* ============================================================================
@@ -98385,6 +98741,21 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * the former `[data-part='root']×2`, `pill×3`, `chip×2`, `chip-label×3`,
  * `chip-value×3`, `chip-remove×2`, `clear-all×2`, `add-filter×2` selectors
  * are retired).
+ *
+ * MATERIAL INVARIANT — DELIBERATELY FLAT (structure-material wave). The bar
+ * paints no shadow anywhere, and that is the family contract, not a gap. It is
+ * a strip in normal flow directly under the collection chrome; in the embedded
+ * variant it has no frame at all, and standalone it carries ONE hairline
+ * (`--ds-active-filters-bar-border`). Its own material surface area is a
+ * count eyebrow — everything the eye reads as material here belongs to the
+ * composed primitives: the filter chips are Tag and the actions are Button,
+ * each painting through its own governed channels. An elevated filters bar
+ * would stack a second sheet on the toolbar it sits beneath.
+ *
+ * Its tenant-reachable material decisions are therefore the ground and the
+ * rule, both already on family channels with semantic fallbacks
+ * (`--ds-active-filters-bar-background` / `-border`); it does not need, and
+ * must not acquire, an elevation read.
  */
 
 /* ---- root: quiet hairline strip (padding drained from the engine's inline
@@ -98620,6 +98991,17 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * popover and exposes bounded component hooks for app/tenant refinement.
  *
  * No coloured side rail is part of the anatomy.
+ *
+ * MATERIAL ROLE (overlay): the surface is a Popover-hosted floating panel, so
+ * its keyline and depth chain through the governed `overlay` role after the
+ * family channel and before the generic ramp —
+ * `--ds-column-menu-panel-*` → `--ds-material-overlay-*` → the pre-wave value.
+ * Neither overlay channel is declared by the default theme or by any shipped
+ * artifact, so the rendered default is unchanged: the panel still resolves to
+ * `--ds-elevation-4` and to the same keyline mix it had before. A row in the
+ * stamped visible/draft state lifts through the `raised` role's SELECTED
+ * facet; the resting row paints an inset keyline instead, so the state channel
+ * cannot collapse onto rest.
  */
 
 .ds-structure.ds-column-menu[data-part="trigger"] {
@@ -98648,7 +99030,10 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   border: var(
     --ds-column-menu-panel-border,
     1px solid
-      color-mix(in srgb, var(--ds-color-border-secondary) 72%, transparent)
+      var(
+        --ds-material-overlay-border,
+        color-mix(in srgb, var(--ds-color-border-secondary) 72%, transparent)
+      )
   );
   background: var(
     --ds-column-menu-panel-background,
@@ -98672,9 +99057,12 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   box-shadow: var(
     --ds-column-menu-panel-shadow,
     var(
-      --ds-elevation-4,
-      0 24px 64px
-        color-mix(in srgb, var(--ds-color-text-primary) 14%, transparent)
+      --ds-material-overlay-shadow,
+      var(
+        --ds-elevation-4,
+        0 24px 64px
+          color-mix(in srgb, var(--ds-color-text-primary) 14%, transparent)
+      )
     )
   );
   backdrop-filter: var(--ds-column-menu-panel-backdrop, none);
@@ -98821,7 +99209,10 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   );
   box-shadow: var(
     --ds-column-menu-row-active-shadow,
-    0 8px 20px color-mix(in srgb, var(--ds-color-primary) 8%, transparent)
+    var(
+      --ds-material-raised-shadow-selected,
+      0 8px 20px color-mix(in srgb, var(--ds-color-primary) 8%, transparent)
+    )
   );
 }
 
@@ -99178,6 +99569,17 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  *
  * INK DERIVATION: the surface brightening mixes resolve against
  * `--ds-color-bg-elevated` — never a hard `white` literal.
+ *
+ * MATERIAL ROLE (overlay): the portaled panel is a floating sheet over a
+ * backdrop, so its depth and keyline read the governed `overlay` role
+ * (`--ds-material-overlay-shadow` / `--ds-material-overlay-border`) with the
+ * pre-wave literals as the typed fallback. Neither channel is declared by the
+ * default theme or by any shipped artifact, so an unbranded tenant renders the
+ * SAME bytes it did before; a tenant whose direction is "hard rules, not soft
+ * blooms" now reaches the panel without a selector. The hover lift on a view
+ * item is the `raised` role's HOVER facet — a row that rises is not the
+ * overlay itself, and the resting row carries no shadow, so the state channel
+ * stays distinct from rest.
  */
 
 /* trigger ----------------------------------------------------------------- */
@@ -99268,7 +99670,10 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-structure.ds-saved-views-menu-panel[data-part='panel'] {
   border-radius: var(--ds-radius-xl, 18px);
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 98%, var(--ds-color-bg-elevated) 2%), color-mix(in srgb, var(--ds-color-bg-primary) 28%, var(--ds-surface-card)));
-  box-shadow: 0 24px 60px color-mix(in srgb, var(--ds-color-primary) 16%, transparent);
+  box-shadow: var(
+    --ds-material-overlay-shadow,
+    0 24px 60px color-mix(in srgb, var(--ds-color-primary) 16%, transparent)
+  );
   animation: ds-saved-views-menu-panel-in var(--ds-motion-disclosure) var(--ds-motion-ease-enter, ease-out);
   /* programmatic focus lands here on open (tabIndex=-1); the ring lives on
      the interactive children, the container is a landmark waypoint */
@@ -99276,7 +99681,10 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 78%, transparent);
+  border: 1px solid var(
+    --ds-material-overlay-border,
+    color-mix(in srgb, var(--ds-color-border-secondary) 78%, transparent)
+  );
 }
 
 .ds-structure.ds-saved-views-menu-panel [data-part='header'] {
@@ -99530,7 +99938,10 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 @media (hover: hover) {
   .ds-structure.ds-saved-views-menu-panel [data-part='view-item']:hover:not([data-active='true']) {
     background: color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-bg-primary) 4%);
-    box-shadow: 0 4px 14px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
+    box-shadow: var(
+      --ds-material-raised-shadow-hover,
+      0 4px 14px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
+    );
   }
   .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='view-item']:hover:not([data-active='true']) {
     border-color: color-mix(in srgb, var(--ds-color-border-secondary) 88%, transparent);
@@ -99654,6 +100065,17 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * former `[data-part='root']×2`, `pill×2` ×6 and `pill-label×3` selectors
  * are retired). The `white` color-mix literals of the retired pill gradients
  * violated the zero-literals law and are gone with them.
+ *
+ * MATERIAL INVARIANT — DELIBERATELY FLAT (structure-material wave). The strip
+ * reads no elevation channel and must not grow one: it is a section band in
+ * normal flow whose only frame is a `border-bottom` in the non-inline variant,
+ * and the inline variant paints nothing at all. The control material a tenant
+ * actually perceives here belongs to the composed Segmented primitive, which
+ * already reads the governed `--ds-material-control-*` role (background,
+ * border, border-hover and the hover shadow facet) — that is what COMPOSITION
+ * LAW S22 above means by "the active fill belongs to segmented.css". Adding a
+ * shadow to the wrapper would double the frame the composition deliberately
+ * gave away.
  */
 
 /* ---- root: quiet hairline strip (padding drained from the engine's inline
@@ -100638,6 +101060,23 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * color-mix, never a raw literal); the search icon stays muted and deepens
  * when its field gains focus. Search typography uses the supporting step of
  * the system scale on the exact per-engine paint node.
+ *
+ * MATERIAL INVARIANT — DELIBERATELY FLAT (structure-material wave). This
+ * family reads no elevation channel and must not grow one. The toolbar is a
+ * row ON the surface it belongs to, not a sheet above it: it is in normal
+ * flow, shares its host's ground, and is separated by exactly one hairline
+ * (`border-bottom` on the root). Giving it a shadow would put a SECOND
+ * dominant boundary on a region that already has one, which is a named hard
+ * veto, and it would invent paint to satisfy a census rather than express a
+ * material decision. The single `box-shadow` in this file is the divider's 1px
+ * paper highlight — an optical edge on a 2px rule, not depth.
+ *
+ * The family is therefore not silent on the tenant's material law, it answers
+ * it in the register a flat row has: the root hairline and the divider both
+ * resolve through `--ds-color-border`, and the search field's surface is the
+ * composed Input's, painted through the primitive's own governed channels. A
+ * tenant that moves from soft blooms to hard rules sees this row change with
+ * the rest of the page because its rules are the thing that changes.
  */
 
 /* ---- root: hairline-bottomed chrome row + named container ---- */
@@ -100822,6 +101261,35 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * (0,3,1) tenant floor is moot here; the two scope classes + the root's own
  * `data-part` stay as the anatomy hook (the engine also stamps
  * `data-structure='view-mode-switcher'` for tenants that want the budget).
+ *
+ * WHY THIS FAMILY READS NOTHING ON ANY LEVERAGE CHANNEL, and why that is the
+ * correct end state (structure-material wave). A census of the 25 skin-owning
+ * structures found this the only one reading no radius, elevation, spacing,
+ * motion or type token. That is not a hole; it is the RECEIPT for the S25/S617B
+ * composition above. This file owns no surface: after the wrapper frame was
+ * retired there is no border, no ground, no corner and no state here to key a
+ * token to, and a token read against no declaration would be dead CSS.
+ *
+ * All five channels live one layer down, on the certified Segmented this
+ * component IS — verified in `runtime/engines/modern/skin/segmented.css`:
+ *   radius     `--ds-segmented-*-radius` → `--ds-radius-xs/sm/md`
+ *   material   `--ds-material-control-background` / `-border` / `-border-hover`
+ *   elevation  `--ds-material-control-shadow-hover` → `--ds-elevation-1`,
+ *              plus the track keyline on `--ds-shadow-xs`
+ *   spacing    `--ds-segmented-*-padding-x` / `-gap` / `-height`
+ *   motion     `--ds-motion-fast` / `-normal` / `--ds-state-press-scale`
+ *   type       `--ds-segmented-*-font-size` / `--ds-font-weight-*`
+ * A tenant's material, geometry and motion posture therefore reaches every
+ * pixel a user sees of this switcher. Re-adding any of them here would rebuild
+ * a lower layer — the exact double hairline S617B removed — and would make the
+ * wrapper a second authority for a decision the primitive already owns.
+ *
+ * What this family SHOULD own is what only it can know: how the switcher
+ * behaves as one item in a workspace toolbar row. That is the intrinsic
+ * `inline-flex` measure plus the `max-inline-size: 100%` cap that hands
+ * overflow to the primitive's own scroll affordance instead of pushing the row
+ * wide — and both are already here. The correct read count for this file is
+ * zero.
  */
 
 /* ---- root: layout-only pass-through (the primitive owns the track frame) ---- */
@@ -105535,27 +106003,52 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    Preview rail + resize handle (geometry drained from inline; RTL-safe via
    logical properties, drag/keyboard direction resolved in JS).
    ------------------------------------------------------------------------- */
+/* PREVIEW SURFACE (W1 reach lane): this element IS the tenant's
+   `--ds-list-preview-panel-*` surface. The rail's only child is the caller's
+   `previewRail.render(...)` node, so the box below is the one panel the
+   workspace paints -- bg, border and the shadow socket tier over it, the
+   `rail-gap` channel governs the room on its inline-start edge (the historic
+   reader used the same channel for the rail's block-start padding when the
+   pane stacked), and the resize choreography reads the tenant's preview
+   motion pair. Every read keeps the exact prior expression as its fallback,
+   so an artifact that authors none renders byte-identical. `panel-shadow`
+   floors on `none`: the rail painted no shadow, and `none` is the neutral.
+   BORDER FLOOR (P-48): the compound stays at (0,4,0) -- three classes plus
+   the always-stamped `data-part` -- so the border colour still outranks the
+   tenant `html[data-tenant] *` rule at (0,3,1).
+   UNWIRED ON PURPOSE: `rail-border` is a second border for a second box --
+   the tenant authored the rail AND an inner panel, this surface renders one,
+   so only `panel-border` can land and lighting both would be a fiction.
+   `row-gap`, `lane-gap`, `lane-marker-size`, `meter-height`,
+   `cockpit-min-column-width` and `action-min-width` name parts that live
+   inside `previewRail.render(...)`, which is the caller's node; this surface
+   renders no lane, meter, cockpit or quick-action element to host them. */
 .ds-surface.ds-collection-workspace
   .ds-collection-preview-rail[data-part="preview-rail"] {
   position: relative;
   isolation: isolate;
-  padding-inline-start: var(--ds-spacing-md, 16px);
+  padding-inline-start: var(--ds-list-preview-rail-gap, var(--ds-spacing-md, 16px));
   overflow: auto;
-  border: 1px solid var(--ds-color-border-secondary);
-  background: color-mix(
-    in srgb,
-    var(--ds-surface-card) 50%,
-    var(--ds-color-bg-primary) 50%
+  border: 1px solid
+    var(--ds-list-preview-panel-border, var(--ds-color-border-secondary));
+  background: var(
+    --ds-list-preview-panel-bg,
+    color-mix(in srgb, var(--ds-surface-card) 50%, var(--ds-color-bg-primary) 50%)
   );
   border-radius: var(--ds-radius-sm, 6px);
+  box-shadow: var(--ds-list-preview-panel-shadow, none);
 }
 
 .ds-surface.ds-collection-workspace
   .ds-collection-preview-rail[data-part="preview-rail"][data-resizable="true"] {
-  transition: width var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    min-width var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    max-width var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    flex-basis var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+  transition: width var(--ds-list-preview-motion-duration, var(--ds-motion-fast, 120ms))
+      var(--ds-list-preview-motion-ease, var(--ds-motion-ease-out, ease-out)),
+    min-width var(--ds-list-preview-motion-duration, var(--ds-motion-fast, 120ms))
+      var(--ds-list-preview-motion-ease, var(--ds-motion-ease-out, ease-out)),
+    max-width var(--ds-list-preview-motion-duration, var(--ds-motion-fast, 120ms))
+      var(--ds-list-preview-motion-ease, var(--ds-motion-ease-out, ease-out)),
+    flex-basis var(--ds-list-preview-motion-duration, var(--ds-motion-fast, 120ms))
+      var(--ds-list-preview-motion-ease, var(--ds-motion-ease-out, ease-out));
 }
 
 .ds-surface.ds-collection-workspace
@@ -105741,7 +106234,14 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   isolation: isolate;
   z-index: 4;
   overflow: visible;
-  padding-block-start: calc(var(--ds-spacing-1, 4px) * 1.5);
+  /* The tenant's list-shell section gap is the room that opens the toolbar
+     band away from the section above it -- the same seam the historic reader
+     set as this row's block-start margin. The half-step calc is the exact
+     pre-wave value, so an artifact that authors nothing is unchanged. */
+  padding-block-start: var(
+    --ds-list-shell-section-gap,
+    calc(var(--ds-spacing-1, 4px) * 1.5)
+  );
   padding-inline: var(--ds-spacing-4, 16px);
   container: ds-collection-toolbar / inline-size;
   border-top: 1px solid
@@ -112173,6 +112673,26 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * retired — the descendant chain carries the needed specificity without
  * repeating an identical selector (4th-tanda law). The pinned declaration
  * strings are untouched by that cleanup.
+ *
+ * MATERIAL INVARIANT — A SCRIM HAS NO ELEVATION (structure-material wave).
+ * This family reads no elevation channel and must not grow one. The root is
+ * `position: absolute; inset: 0; border-radius: inherit` — it does not sit
+ * ABOVE a surface, it IS the surface for as long as it is mounted, covering
+ * its host edge to edge and inheriting the host's corner. A shadow here would
+ * be cast onto the very element the scrim is covering. Depth for this region
+ * belongs to whatever the overlay is laid over, and that host reads its own
+ * material role.
+ *
+ * DEBT, recorded not fixed: the veil is hand-rolled
+ * (`var(--ds-color-bg-primary, rgba(...))`) instead of resolving the canonical
+ * `--ds-overlay-scrim`, which exists precisely so components never pick a veil
+ * ad hoc. That is a real reachability gap — a tenant moving its overlay veil
+ * does not move this one — but it cannot be closed from this lane: the
+ * background literal is one of the FROZEN STRINGS a pre-step contract test
+ * pins byte-exactly (see above), and `--ds-overlay-scrim` is declared by the
+ * default theme, so the swap would repaint the unbranded default as well as
+ * break the pin. It travels with the same re-pin migration the blur is
+ * already waiting on.
  */
 
 @keyframes ds-loading-overlay-pulse {

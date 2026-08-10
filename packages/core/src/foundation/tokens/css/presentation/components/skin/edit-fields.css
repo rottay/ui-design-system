@@ -50,6 +50,23 @@
  * cut the collapsed single column drops its row gap and sews cells with the
  * family's divider-grammar seam — the same one-column ledger read the
  * record field-grid keeps at 320/390px.
+ *
+ * MATERIAL INVARIANT — DELIBERATELY FLAT AND RULED (structure-material wave).
+ * This file contains no `box-shadow` at all, and that is the contract. An
+ * inline-edit region is a form, and the house law is that forms are not card
+ * stacks: hierarchy comes from section headers, seams and aligned controls,
+ * never from boxed field cards floating over the page. Every separation here
+ * is already a rule on the governed edge axis
+ * (`--ds-divider-width`/`--ds-divider-style`, floors 1px solid), the active
+ * field is marked by a ground wash plus a label ink shift rather than a lift,
+ * and the sticky toggle dock takes the canonical `--ds-surface-canvas` paint
+ * plus one seam instead of a shadow — the comment on that rule states the
+ * refusal explicitly ("this structure does not introduce a second theme
+ * channel").
+ *
+ * So the family is not deaf to a tenant's material law; it hears it on the
+ * edge axis, which is the axis a ruled direction actually moves. Giving it an
+ * elevation read would satisfy a census and contradict the anatomy.
  */
 
 /* --- InlineEditor ---------------------------------------------------------- */

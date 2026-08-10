@@ -3043,6 +3043,11 @@
       var(--ds-signal-card-accent, var(--ds-color-primary)) 20%,
       var(--ds-color-border)
     );
+  /* The accent is mixed into `--ds-color-bg-elevated`, not into
+     `--ds-icon-tile-bg`: the tile channel is a gradient by default, and one
+     gradient argument invalidates the color-mix -- which drops the whole
+     shorthand, costing the sheen layer above it as well as this ground. The
+     gradient still paints directly on the rich-card tile. */
   background: linear-gradient(
       180deg,
       color-mix(in srgb, var(--ds-surface-card-bg) 84%, transparent),
@@ -3051,7 +3056,7 @@
     color-mix(
       in srgb,
       var(--ds-signal-card-accent, var(--ds-color-primary)) 12%,
-      var(--ds-icon-tile-bg)
+      var(--ds-color-bg-elevated)
     );
   box-shadow: 0 1px 2px
     color-mix(

@@ -22,6 +22,21 @@
  * the former `[data-part='root']×2`, `pill×3`, `chip×2`, `chip-label×3`,
  * `chip-value×3`, `chip-remove×2`, `clear-all×2`, `add-filter×2` selectors
  * are retired).
+ *
+ * MATERIAL INVARIANT — DELIBERATELY FLAT (structure-material wave). The bar
+ * paints no shadow anywhere, and that is the family contract, not a gap. It is
+ * a strip in normal flow directly under the collection chrome; in the embedded
+ * variant it has no frame at all, and standalone it carries ONE hairline
+ * (`--ds-active-filters-bar-border`). Its own material surface area is a
+ * count eyebrow — everything the eye reads as material here belongs to the
+ * composed primitives: the filter chips are Tag and the actions are Button,
+ * each painting through its own governed channels. An elevated filters bar
+ * would stack a second sheet on the toolbar it sits beneath.
+ *
+ * Its tenant-reachable material decisions are therefore the ground and the
+ * rule, both already on family channels with semantic fallbacks
+ * (`--ds-active-filters-bar-background` / `-border`); it does not need, and
+ * must not acquire, an elevation read.
  */
 
 /* ---- root: quiet hairline strip (padding drained from the engine's inline

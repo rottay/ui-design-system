@@ -22,6 +22,23 @@
  * color-mix, never a raw literal); the search icon stays muted and deepens
  * when its field gains focus. Search typography uses the supporting step of
  * the system scale on the exact per-engine paint node.
+ *
+ * MATERIAL INVARIANT — DELIBERATELY FLAT (structure-material wave). This
+ * family reads no elevation channel and must not grow one. The toolbar is a
+ * row ON the surface it belongs to, not a sheet above it: it is in normal
+ * flow, shares its host's ground, and is separated by exactly one hairline
+ * (`border-bottom` on the root). Giving it a shadow would put a SECOND
+ * dominant boundary on a region that already has one, which is a named hard
+ * veto, and it would invent paint to satisfy a census rather than express a
+ * material decision. The single `box-shadow` in this file is the divider's 1px
+ * paper highlight — an optical edge on a 2px rule, not depth.
+ *
+ * The family is therefore not silent on the tenant's material law, it answers
+ * it in the register a flat row has: the root hairline and the divider both
+ * resolve through `--ds-color-border`, and the search field's surface is the
+ * composed Input's, painted through the primitive's own governed channels. A
+ * tenant that moves from soft blooms to hard rules sees this row change with
+ * the rest of the page because its rules are the thing that changes.
  */
 
 /* ---- root: hairline-bottomed chrome row + named container ---- */

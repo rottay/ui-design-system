@@ -43,6 +43,36 @@
  * media block), so the degradation contract is: UA forcing + hairline +
  * primitive-owned chrome.
  *
+ * MATERIAL — WHY THE HAIRLINE IS **NOT** RE-KEYED ONTO THE OVERLAY ROLE.
+ * The dock is a chrome sheet over content, so `--ds-material-overlay-border`
+ * looks like its governed keyline, and this file briefly carried that chain.
+ * It was reverted, and the reason is worth keeping: a dead channel may take an
+ * UNGOVERNED property, but it may not displace an AUTHORED one, and this
+ * hairline is already authored on both sides.
+ *   - What it would displace is `var(--ds-color-border-primary)` VERBATIM —
+ *     not a formula over it. The bithire artifact gives that name a literal
+ *     (#D4E0EA), i.e. a tenant decision, not a compiler pass-through.
+ *   - And the one tenant that authors the overlay channel (The Management)
+ *     sets it to #2A2824, which is exactly what its own
+ *     `palette.border.primary` already resolves to here. Before and after are
+ *     the same pixel. The wire would have moved a census and not a screen.
+ * The dock's edge therefore stays on the palette token it already reaches,
+ * which every tenant already controls.
+ *
+ * WHY THE DEPTH IS NOT RE-KEYED EITHER (a separate, structural reason): both
+ * placements paint box-shadow as a COMMA LIST — the edge highlight plus the
+ * placement shadow. `--ds-material-overlay-shadow` is publicly `none`-capable
+ * (the tenant contract types it as a whole box-shadow value and tenants
+ * legitimately author `none`), and `none` inside a comma list is not a list
+ * item, it is a whole-value keyword: splicing it here would void the ENTIRE
+ * declaration and take the edge highlight down with the shadow. This is the
+ * same unsoundness already recorded against Dropdown/Drawer/Modal and it is
+ * pending adjudication; this lane refuses to add a fourth instance. The dock's
+ * top placement already reaches the tenant through `--ds-shadow-navbar` →
+ * `--ds-shadow-sm`, which IS in the tenant override set; the bottom
+ * placement's upward ambient shadow stays a family invariant until the
+ * comma-list contract is decided.
+ *
  * GLASS: the frosted surface blur is the pinned W10 design contract
  * (`blur(var(--ds-glass-blur, 8px))` is asserted verbatim) and rides the
  * `--ds-action-dock-backdrop-filter` channel with the reduced-effects

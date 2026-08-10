@@ -46,13 +46,16 @@
 
 import React, { forwardRef, useId } from 'react';
 import type { HeadingProps, TextProps, ParagraphProps, LinkProps, TextSize } from '../../contracts';
-import { TYPOGRAPHY_DEFAULTS, SIZE_MAP, LINE_HEIGHT_MAP } from '../../contracts';
+import { TYPOGRAPHY_DEFAULTS, SIZE_MAP, LINE_HEIGHT_MAP, WEIGHT_MAP } from '../../contracts';
 import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '@/infrastructure/runtime/responsive/runtime/style-properties';
 import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
 import {
+  HEADING_TYPE_ROLE,
+  TEXT_TYPE_ROLE,
   isJoiningScriptLang,
   normalizeLineClamp,
   resolveFluidTypographySize,
+  resolveTypeRoleStyle,
   resolveTypographyCraftStyle,
   typographyDataAttributes,
 } from '../../runtime';
@@ -121,6 +124,18 @@ const HEADING_LEVEL_WEIGHTS: Record<string, string> = {
   h4: 'font-semibold',
   h5: 'font-semibold',
   h6: 'font-semibold',
+};
+
+/**
+ * Numeric weight each utility class resolves to. The ramp role only takes over
+ * the weight where it already matches what the class paints, so this lookup is
+ * what makes that comparison possible.
+ */
+const CLASS_FONT_WEIGHT: Record<string, number> = {
+  'font-normal': WEIGHT_MAP.normal,
+  'font-medium': WEIGHT_MAP.medium,
+  'font-semibold': WEIGHT_MAP.semibold,
+  'font-bold': WEIGHT_MAP.bold,
 };
 
 /**
@@ -297,17 +312,29 @@ export const ModernHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
 
     // Apply premium typographic refinements: font-size from DS tokens,
     // negative letter-spacing, and tighter line-height for larger heading
-    // sizes. These inline styles give headings the editorial feel of
-    // Linear/Vercel/Stripe typography.
-    const typographyStyle: React.CSSProperties = {};
-    if (!sizeIsResponsive && !textStyle) {
-      typographyStyle.fontSize = HEADING_SIZE_STYLES[effectiveSize] || HEADING_SIZE_STYLES.md;
-      const ls = HEADING_LETTER_SPACING[effectiveSize];
-      if (!suppressTracking && ls && ls !== '0') {
-        typographyStyle.letterSpacing = ls;
-      }
-      typographyStyle.lineHeight = HEADING_LINE_HEIGHT[effectiveSize] || '1.25';
-    }
+    // sizes. Each channel now reads the ramp role the tier renders as, and
+    // falls back to the exact value it painted before, so the editorial feel of
+    // Linear/Vercel/Stripe typography survives an untenanted render while a
+    // brand that retunes the role finally moves the heading.
+    const headingLetterSpacing = HEADING_LETTER_SPACING[effectiveSize];
+    const typographyStyle: React.CSSProperties =
+      !sizeIsResponsive && !textStyle
+        ? {
+            // Size and tracking stay where they are: the scale already carries
+            // the brand's `--ds-type-scale` dial, and no role's tracking equals
+            // what any tier renders, so neither may be handed to a role.
+            fontSize: HEADING_SIZE_STYLES[effectiveSize] || HEADING_SIZE_STYLES.md,
+            ...(!suppressTracking && headingLetterSpacing && headingLetterSpacing !== '0'
+              ? { letterSpacing: headingLetterSpacing }
+              : {}),
+            lineHeight: HEADING_LINE_HEIGHT[effectiveSize] || '1.25',
+            ...resolveTypeRoleStyle({
+              role: HEADING_TYPE_ROLE[effectiveSize] ?? HEADING_TYPE_ROLE.md,
+              lineHeight: HEADING_LINE_HEIGHT[effectiveSize] || '1.25',
+              weight: CLASS_FONT_WEIGHT[resolvedWeightClass],
+            }),
+          }
+        : {};
 
     const craftProps = {
       textStyle,
@@ -469,14 +496,23 @@ export const ModernText = forwardRef<HTMLElement, TextProps>(
       .filter(Boolean)
       .join(' ');
 
-    // Apply DS token-based font-size for non-responsive sizes. Semantic roles
-    // remain explicit until their defaults have deterministic visual evidence;
-    // silently opting every existing Text consumer into `body` would retune
-    // tenant typography without an application markup change.
+    // Apply DS token-based font-size for non-responsive sizes, bound to the ramp
+    // role the tier renders as. `textStyle` stays the explicit channel and keeps
+    // precedence; the tier binding only reaches the elements that never declared
+    // one, and every facet falls back to the value they painted before.
     const effectiveTextStyle = textStyle;
     const textSizeStyle: React.CSSProperties =
       !sizeIsResponsive && effectiveTextStyle === undefined
-        ? { fontSize: TEXT_SIZE_STYLES[size] || TEXT_SIZE_STYLES.md }
+        ? {
+            fontSize: TEXT_SIZE_STYLES[size] || TEXT_SIZE_STYLES.md,
+            ...resolveTypeRoleStyle({
+              role: TEXT_TYPE_ROLE[size] ?? TEXT_TYPE_ROLE.md,
+              // Inline text declares no leading and inherits it, which no role
+              // resolves to, so the channel stays correctly unbound.
+              lineHeight: 'inherit',
+              weight: WEIGHT_MAP[weight],
+            }),
+          }
         : {};
     const craftProps = {
       textStyle: effectiveTextStyle,
@@ -619,7 +655,17 @@ export const ModernParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
       : null;
     const size = scalarOrUndefined(sizeProp) ?? TYPOGRAPHY_DEFAULTS.paragraph.size;
     const paragraphSizeStyle: React.CSSProperties = !sizeIsResponsive
-      ? { fontSize: TEXT_SIZE_STYLES[size] || TEXT_SIZE_STYLES.md }
+      ? {
+          fontSize: TEXT_SIZE_STYLES[size] || TEXT_SIZE_STYLES.md,
+          ...resolveTypeRoleStyle({
+            role: TEXT_TYPE_ROLE[size] ?? TEXT_TYPE_ROLE.md,
+            // `leading-relaxed` owns the paragraph leading and resolves through
+            // a utility this lane cannot restate exactly, so the role is never
+            // offered it. Draining that utility is the skin-adoption lane's call.
+            lineHeight: undefined,
+            weight: WEIGHT_MAP[weight],
+          }),
+        }
       : {};
     const craftProps = {
       textStyle,
@@ -767,8 +813,18 @@ export const ModernLink = forwardRef<HTMLAnchorElement, LinkProps>(
       ? generateResponsiveCSS(`link-${reactId.replace(/:/g, '')}`, responsiveEntries)
       : null;
     const size = scalarOrUndefined(sizeProp) ?? TYPOGRAPHY_DEFAULTS.link.size;
+    // A link declares no weight of its own unless the caller asks or `strong`
+    // is set, so anywhere else it inherits one and the role must not seize it.
+    const linkWeight = weight ? WEIGHT_MAP[weight] : strong ? WEIGHT_MAP.semibold : undefined;
     const linkSizeStyle: React.CSSProperties = !sizeIsResponsive
-      ? { fontSize: TEXT_SIZE_STYLES[size] || TEXT_SIZE_STYLES.md }
+      ? {
+          fontSize: TEXT_SIZE_STYLES[size] || TEXT_SIZE_STYLES.md,
+          ...resolveTypeRoleStyle({
+            role: TEXT_TYPE_ROLE[size] ?? TEXT_TYPE_ROLE.md,
+            lineHeight: 'inherit',
+            weight: linkWeight,
+          }),
+        }
       : {};
     const craftProps = {
       textStyle,

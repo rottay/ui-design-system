@@ -427,6 +427,20 @@ const CERTIFIED_INLINE_STYLE_PRODUCERS = new Map([
         },
       ],
       [
+        // The type-role binding declares exactly three channels — lineHeight,
+        // fontWeight and fontVariantNumeric — and every one of them resolves
+        // through `var(--ds-type-<role>-…)`. None is a paint name under
+        // ARC09_PAINT_KEY_RE, so the producer is zeroPaint; the engine skins
+        // keep every colour, border and shadow decision.
+        "resolveTypeRoleStyle",
+        {
+          kind: "style",
+          ownership: "zeroPaint",
+          stylePaths: new Set([""]),
+          transparentArgs: [],
+        },
+      ],
+      [
         "typographyDataAttributes",
         {
           kind: "nonStylePropBag",

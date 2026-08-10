@@ -139,8 +139,12 @@ describe('Tag modern skin: solid-content contrast channels (R0/Axe)', () => {
   });
 
   it('keeps the default solid pair dark-on-light and the outlined variants on darkened hue ink', () => {
+    // `--ds-color-alpha-black-100` carries a governed terminal fallback: it is declared only under
+    // a tenant, so an untenanted bundle would otherwise resolve the chain to nothing. What this
+    // assertion protects is the ORDER -- custom bg first, then the alpha channel -- so the pattern
+    // admits that fallback rather than pinning the chain to its pre-fallback shape.
     const solidDefault = SKIN.match(
-      /\[data-part='root'\]\[data-part='root'\]:not\(\[data-outlined\]\) \{\s*background: var\(--ds-tag-custom-bg, var\(--ds-color-alpha-black-100\)\);\s*color: var\(--ds-color-text-primary\);/
+      /\[data-part='root'\]\[data-part='root'\]:not\(\[data-outlined\]\) \{\s*background: var\(--ds-tag-custom-bg, var\(--ds-color-alpha-black-100[\s\S]*?;\s*color: var\(--ds-color-text-primary\);/
     );
     expect(solidDefault).not.toBeNull();
     // Outlined frames stay raw hue (decorative, not axe-tested); the INK is a

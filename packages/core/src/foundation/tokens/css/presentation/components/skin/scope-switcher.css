@@ -18,6 +18,17 @@
  * former `[data-part='root']×2`, `pill×2` ×6 and `pill-label×3` selectors
  * are retired). The `white` color-mix literals of the retired pill gradients
  * violated the zero-literals law and are gone with them.
+ *
+ * MATERIAL INVARIANT — DELIBERATELY FLAT (structure-material wave). The strip
+ * reads no elevation channel and must not grow one: it is a section band in
+ * normal flow whose only frame is a `border-bottom` in the non-inline variant,
+ * and the inline variant paints nothing at all. The control material a tenant
+ * actually perceives here belongs to the composed Segmented primitive, which
+ * already reads the governed `--ds-material-control-*` role (background,
+ * border, border-hover and the hover shadow facet) — that is what COMPOSITION
+ * LAW S22 above means by "the active fill belongs to segmented.css". Adding a
+ * shadow to the wrapper would double the frame the composition deliberately
+ * gave away.
  */
 
 /* ---- root: quiet hairline strip (padding drained from the engine's inline

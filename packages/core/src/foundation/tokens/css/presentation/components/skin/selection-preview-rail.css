@@ -58,6 +58,27 @@
  * value lands on one (16px/12px); the rest stay literal. The composed Button
  * primitive keeps its coarse-pointer `--ds-touch-target-min` floor: the 34px
  * inline `min-width` that used to veto it is gone.
+ *
+ * MATERIAL — WHY THE THREE CARDS ARE STILL UNREACHABLE (structure-material
+ * wave; a measurement, not a preference). `custom-sticky-card`, `identity-card`
+ * and `snapshot-card` are the rail's whole material argument: three lifted
+ * surfaces on soft 44/48/30px blooms. They are exactly what a tenant whose law
+ * is "hard rules, no floating cards" needs to reach, and today nothing it can
+ * author touches them.
+ *
+ * Their honest governed channel is the `raised` role's resting shadow. It is
+ * NOT wired because the two candidate names both break the lane's
+ * default-preservation fence in different ways:
+ *   - `--ds-material-raised-shadow` is declared by the bithire artifact, so
+ *     reading it repaints all three cards under a shipped tenant.
+ *   - `--ds-material-card-shadow` is declared by the DEFAULT THEME
+ *     (`var(--ds-shadow-sm)`), and a `var()` fallback fires only for an
+ *     UNDECLARED name — so the literal would become dead and the unbranded
+ *     default would silently drop to elevation-1.
+ * Neither is a defect in this file; both are the same structural fact, that
+ * the material role matrix has no undeclared resting-depth facet. The change
+ * is one line per card once an owner adjudicates it against a sighted
+ * before/after under bithire and the default theme.
  */
 
 /* roots — two mutually-exclusive trees, keyed on data-preview ---------------- */

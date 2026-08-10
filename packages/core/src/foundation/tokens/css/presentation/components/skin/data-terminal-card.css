@@ -83,6 +83,25 @@
  *
  * Values transcribed verbatim from index.tsx (the `DS` token map + the two
  * threshold/binary selectors).
+ *
+ * MATERIAL INVARIANT — DELIBERATELY FLAT (structure-material wave). Across
+ * 1300+ lines this family declares zero `box-shadow`, and the ROOT section
+ * already says why in one line: the card is a full-body link that answers
+ * hover and press with "a quiet border shift … never a lift or glow". A
+ * terminal/HUD surface is defined by its frame, its ground and its instrument
+ * layers; depth would read as a different product, not a themed one. Its
+ * material argument is carried by the four variant grounds, the decorative
+ * scan/flow/activity textures and the 1px frame — not by elevation.
+ *
+ * The frame IS the channel a tenant should reach, and it is the one thing this
+ * family cannot express governedly today: `--ds-color-border` and the
+ * `color-mix(primary 28%, border)` hover both bypass the governed
+ * `--ds-material-card-border` / `-border-hover` role. Those two names are
+ * declared by the default theme, so re-keying them makes the typed fallback
+ * inert and repaints the unbranded default — the same structural block
+ * recorded in edit-header.css and selection-preview-rail.css, and the same
+ * owner adjudication. Recorded here so a later pass does not read the zero
+ * shadow count as the whole story.
  */
 
 /* ============================================================================

@@ -83,6 +83,14 @@
      across tones; its fallback is the raw accent, so a bundle without the
      authority paints exactly as before. */
   --_ds-message-accent-ink: var(--ds-color-info-ink, var(--ds-message-accent));
+  /* Same relay shape for the washes, off the tenant's semantic tint ramp:
+     `--ds-tint-<tone>-8` is how a tenant states how heavy a status surface
+     reads, and every status family draws its fill from that step so they move
+     together. Head and well stay separate channels because their fallbacks
+     differ (9% and 10%); each fires only where the ramp is undeclared, so the
+     untenanted render is unchanged. */
+  --_ds-message-wash-head: var(--ds-tint-info-8, color-mix(in srgb, var(--ds-message-accent) 9%, var(--ds-color-bg-primary)));
+  --_ds-message-wash-well: var(--ds-tint-info-8, color-mix(in srgb, var(--ds-message-accent) 10%, var(--ds-color-bg-primary)));
   position: relative;
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
@@ -103,7 +111,7 @@
     var(--ds-material-overlay-texture, none),
     linear-gradient(
       135deg,
-      color-mix(in srgb, var(--ds-message-accent) 9%, var(--ds-color-bg-primary)) 0%,
+      var(--_ds-message-wash-head) 0%,
       var(--ds-color-bg-primary) 72%
     );
   /* The frame rides the tenant edge grammar (hairline / ruled / inset-double)
@@ -127,20 +135,31 @@
 .rottay-message-stack--modern[data-part='stack-container'] .rottay-message--modern[data-part='root'][data-tone='success'] {
   --ds-message-accent: var(--ds-color-success);
   --_ds-message-accent-ink: var(--ds-color-success-ink, var(--ds-message-accent));
+  --_ds-message-wash-head: var(--ds-tint-success-8, color-mix(in srgb, var(--ds-message-accent) 9%, var(--ds-color-bg-primary)));
+  --_ds-message-wash-well: var(--ds-tint-success-8, color-mix(in srgb, var(--ds-message-accent) 10%, var(--ds-color-bg-primary)));
 }
 .rottay-message-stack--modern[data-part='stack-container'] .rottay-message--modern[data-part='root'][data-tone='error'] {
   --ds-message-accent: var(--ds-color-error);
   --_ds-message-accent-ink: var(--ds-color-error-ink, var(--ds-message-accent));
+  --_ds-message-wash-head: var(--ds-tint-error-8, color-mix(in srgb, var(--ds-message-accent) 9%, var(--ds-color-bg-primary)));
+  --_ds-message-wash-well: var(--ds-tint-error-8, color-mix(in srgb, var(--ds-message-accent) 10%, var(--ds-color-bg-primary)));
 }
 .rottay-message-stack--modern[data-part='stack-container'] .rottay-message--modern[data-part='root'][data-tone='warning'] {
   --ds-message-accent: var(--ds-color-warning);
   --_ds-message-accent-ink: var(--ds-color-warning-ink, var(--ds-message-accent));
+  --_ds-message-wash-head: var(--ds-tint-warning-8, color-mix(in srgb, var(--ds-message-accent) 9%, var(--ds-color-bg-primary)));
+  --_ds-message-wash-well: var(--ds-tint-warning-8, color-mix(in srgb, var(--ds-message-accent) 10%, var(--ds-color-bg-primary)));
 }
 .rottay-message-stack--modern[data-part='stack-container'] .rottay-message--modern[data-part='root'][data-tone='loading'] {
   --ds-message-accent: var(--ds-color-primary);
   /* No primary-ink authority exists: the relay resets to the raw accent so
      the root's info-ink cannot leak into the loading tone. */
   --_ds-message-accent-ink: var(--ds-message-accent);
+  /* The primary role's ramp is the UNSUFFIXED scale, so the loading tone reads
+     `--ds-tint-8` -- the same step the status tones take, on the one-blue
+     interaction scale rather than a status tone. */
+  --_ds-message-wash-head: var(--ds-tint-8, color-mix(in srgb, var(--ds-message-accent) 9%, var(--ds-color-bg-primary)));
+  --_ds-message-wash-well: var(--ds-tint-8, color-mix(in srgb, var(--ds-message-accent) 10%, var(--ds-color-bg-primary)));
 }
 
 .rottay-message-stack--modern[data-part='stack-container'] .rottay-message--modern[data-part='root'] > [data-part='icon'] {
@@ -154,7 +173,7 @@
      keyline scales with the effect-intensity dial -- Toast/Notification well
      parity, the same hand at a smaller measure. */
   color: var(--_ds-message-accent-ink, var(--ds-message-accent));
-  background: color-mix(in srgb, var(--ds-message-accent) 10%, var(--ds-color-bg-primary));
+  background: var(--_ds-message-wash-well);
   border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-message-accent) 24%, var(--ds-color-border-subtle));
   border-radius: var(--ds-radius-md);
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) calc(56% * var(--ds-effect-intensity)), transparent);
