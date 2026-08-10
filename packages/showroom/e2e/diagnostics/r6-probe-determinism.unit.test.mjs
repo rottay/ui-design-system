@@ -8,7 +8,7 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 const SHOWROOM_ROOT = path.resolve(HERE, '../..');
 const DS_REFERENCE = path.join(SHOWROOM_ROOT, 'src/app/probe/ds-reference');
 /** Every probe tree whose fixtures back a capture batch. */
-const PROBE_SECTIONS = ['r6-surfaces', 'compositions'];
+const PROBE_SECTIONS = ['r6-surfaces', 'compositions', 'commercial'];
 
 /** One clock or entropy read in this tree makes every shot of that family
  *  irreproducible; the rejected round proved it. */
