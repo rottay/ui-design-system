@@ -1,0 +1,69 @@
+{
+  "_comment": "INTENT ONLY. Everything here is a decision a human made. Every figure is a {{derived.…}} placeholder, and the writer refuses to render if a figure that a command could produce is typed into any prose field. This example mirrors the §4 that PROGRAM-STATE.md carries today, so a --write against a copy produces a recognisable section.",
+  "plan": "packages/core/src/tooling/lane-control/composition/plan/examples/plan.example.json",
+  "currentWave": "0 — unblock. **Build is red.**",
+  "blockedOn": "`hooks:check` — unadjudicated DS reads plus a stale hooks manifest.",
+  "laneTableCaption": "**Day-one lanes** (per the execution audit; none may open a family CSS lane while the build is red):",
+  "lanes": [
+    {
+      "id": "A",
+      "work": "Adjudicate the unadjudicated DS reads; regenerate the hooks manifest",
+      "model": "opus",
+      "modelReason": "Adjudication decides what a published surface means; expensive to get wrong and impossible to pre-pass."
+    },
+    {
+      "id": "B",
+      "work": "Collapse the two-route registry read; regenerate the canon; re-derive the drifted ledger headers",
+      "model": "opus",
+      "modelReason": "Two routes disagreeing is a contract question, not a substitution."
+    },
+    {
+      "id": "C",
+      "work": "The resolution instrument — the long pole, start immediately",
+      "model": "opus ×2",
+      "modelReason": "The instrument is what every later wave's evidence depends on; a defect here is invisible and inherited by everything."
+    },
+    {
+      "id": "D",
+      "work": "Wave 1 **reframed as adjudication**: produce the owner decision list. **Merge nothing**",
+      "model": "opus",
+      "modelReason": "The wave-1 error was reporting name overlap as value identity; the re-run is a judgement, not a sweep."
+    },
+    {
+      "id": "E",
+      "work": "Coordinator machinery: writeSet intersection checker, containment check, work-order template, state-file writer",
+      "model": "sonnet",
+      "modelReason": "Greenfield tooling in its own folder, touching no family and no existing file, so the blast radius is bounded by construction."
+    }
+  ],
+  "refusedCaption": "Refused until the build is green",
+  "refused": [
+    "any family CSS lane",
+    "waves 3–11",
+    "wave 9 design",
+    "two lanes on `themes/default.css` at once (single ownership, always)"
+  ],
+  "notes": [
+    "`writeRoot` is enforced by `write-set-intersection`; a batch is admissible only when it passes. Disjointness is no longer prose.",
+    "The lane table's model column is law from §1.2: a lane that cannot complete its reason is missing its pre-pass and must not be delegated."
+  ],
+  "derivedFacts": [
+    "head.short",
+    "head.committedAt",
+    "tree.dirty",
+    "ledger.families",
+    "ledger.syntheticRows",
+    "ledger.sharedSkinFiles",
+    "ledger.driftClean",
+    "singleOwner.entries",
+    "universe.files",
+    "plan.lanes",
+    "plan.coveredFiles"
+  ],
+  "allowedLiterals": [
+    {
+      "value": "11",
+      "reason": "The 11 in \"waves 3–11\" is a wave number, not a count. It collides with the commercial layer's family count only by coincidence, and the writer is right to have stopped on it until somebody said so."
+    }
+  ]
+}

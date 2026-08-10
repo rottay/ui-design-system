@@ -166,29 +166,56 @@ and a static per-vertical resolution check for any substitution.
 
 ## 4. STATE
 
+<!-- lane-control:program-state v1 — DO NOT EDIT BY HAND. Rewrite it with:
+     node packages/core/src/tooling/lane-control/program-state/index.mjs --write --intent <intent.json>
+     head=c0bd3ca6a written=2026-08-10T23:47:31.317Z intent=3ddff5c387244f46 render=faecf1eff1095f5d -->
+
 *Everything in this section is intent. Anything derivable is derived by command, not typed here.*
 
-**Current wave:** 0 — unblock. **Build is red.**
+**Current wave:** 0 — unblock. **`hooks:check` is green; lane A's change is with the auditors and is NOT committed.**
 
-**Blocked on:** `hooks:check` — unadjudicated DS reads plus a stale hooks manifest.
+**Blocked on:** The two-auditor verdict on lane A. Nothing downstream of the hooks manifest may open until Fable and Kimi have both ruled.
 
-**Day-one lanes** (per the execution audit; none may open a family CSS lane while the build is red):
+**Day-one lanes.** No family CSS lane opens until lane A's change is ratified and committed:
 
-| Lane | Work | Model |
+| Lane | Work | Model | Reason for the model |
+|---|---|---|---|
+| A | Adjudicated the unadjudicated DS reads; regenerated the hooks manifest. **Done, in audit, uncommitted.** Now read-only, scoping the DB tint-ramp defect it found | opus | Adjudication decides what a published surface means; expensive to get wrong and impossible to pre-pass. |
+| B | Collapse the two-route registry read; regenerate the canon; re-derive the drifted ledger headers. **Held deliberately** — it regenerates the canon against the manifest lane A just changed | opus | Two routes disagreeing is a contract question, not a substitution. |
+| C | The resolution instrument — the long pole. Opens once lane A is committed | opus ×2 | The instrument is what every later wave's evidence depends on; a defect here is invisible and inherited by everything. |
+| D | Delivered the base-layer adjudication and the self-conflict census. Now producing the hard-fork list, per pair **per vertical** | opus | Fork classification changes between verticals, so a single-bundle answer is not adjudicable; this is judgement, not a sweep. |
+| E | **Delivered.** writeSet intersection, containment, work-order validator, state-file writer. Not registered in the CI manifest — that is a coordinator decision | sonnet | Greenfield tooling in its own folder, touching no family and no existing file, so the blast radius is bounded by construction. |
+
+**Refused until lane A is ratified and committed:** any family CSS lane · the base-layer rulings already taken — the dead spacing aliases, 14px canonical, the density hook, the dead-declaration sweep · wave 9 design, until its false new-axis premise is re-scoped against the existing weight and focus-ring token sets · two lanes on `themes/default.css` at once (single ownership, always)
+
+`writeRoot` is enforced by `write-set-intersection`; a batch is admissible only when it passes. Disjointness is no longer prose.
+
+Territory, not files: two lanes may share zero files today and still collide by shape. Overlap is decided symbolically, with a witness or a proof none exists.
+
+Exit vocabulary is 0 clean · 1 violation · 2 could not run. Conflating 1 and 2 is how a broken invocation reads as a clean lane.
+
+Any future lane under `src/` must use folder/index with layer-named owners; `structure:check` reads `.mjs` and is decrease-only.
+
+A lane that cannot complete its model reason is missing its pre-pass and must not be delegated (§1.2).
+
+### Derived at write time
+
+*Produced by the command that wrote this section. Never typed, never edited.*
+
+| Fact | Value | Derivation |
 |---|---|---|
-| A | Adjudicate the unadjudicated DS reads; regenerate the hooks manifest | opus |
-| B | Collapse the two-route registry read; regenerate the canon; re-derive the drifted ledger headers | opus |
-| C | The resolution instrument — the long pole, start immediately | opus ×2 |
-| D | Wave 1 **reframed as adjudication**: produce the owner decision list. **Merge nothing** | opus |
-| E | Coordinator machinery: writeSet intersection checker, state-file writer, work-order template | sonnet |
+| `head.short` | c0bd3ca6a | git rev-parse --short HEAD |
+| `head.committedAt` | 2026-08-10T19:34:02-04:00 | git log -1 --format=%cI |
+| `tree.dirty` | yes | git status --porcelain |
+| `ledger.families` | 252 | family-ledger.json rows.length |
+| `ledger.syntheticRows` | 4 | synthetic-rows.json rows.length |
+| `ledger.sharedSkinFiles` | 35 | re-derived from rows[].skinFiles: files claimed by more than one family |
+| `ledger.driftClean` | yes | derived sharedSkinFiles vs the recorded map |
+| `singleOwner.entries` | 39 | seeded single-owner regions + files derived as multi-owner from the ledger |
+| `universe.files` | 6095 | git ls-files --cached --others --exclude-standard |
+| `plan.lanes` | 6 | packages/core/src/tooling/lane-control/composition/plan/examples/plan.example.json lanes.length |
+| `plan.coveredFiles` | 129 | packages/core/src/tooling/lane-control/composition/plan/examples/plan.example.json — files resolved by every lane's writeSet |
 
-**Refused until the build is green:** any family CSS lane · waves 3–11 · wave 9 design · two lanes on
-`themes/default.css` at once (single ownership, always).
-
-**`writeRoot` is enforced by nothing today.** Until lane E lands, "provably disjoint lanes" is prose,
-not a mechanism.
-
----
 
 ## 5. DECISIONS TAKEN
 

@@ -1,0 +1,47 @@
+{
+  "planId": "example-batch",
+  "note": "An example lane plan. It mixes the three shapes a batch really has: family lanes bounded by a ledger row, a synthetic lane over a non-family region, and one lane that legitimately owns a single-owner file and says so. The three nested writeRoot pairs in the ledger are the interesting case — `structure/shell/app-shell` and `structure/shell/bottom-tab-bar` are nested, and only the row's writeExcludes keeps them apart.",
+  "lanes": [
+    {
+      "id": "F1",
+      "row": "primitive/display/avatar",
+      "model": "sonnet"
+    },
+    {
+      "id": "F2",
+      "row": "structure/shell/app-shell",
+      "model": "sonnet"
+    },
+    {
+      "id": "F3",
+      "row": "structure/shell/bottom-tab-bar",
+      "model": "sonnet"
+    },
+    {
+      "id": "G",
+      "row": "tooling:gates",
+      "model": "opus"
+    },
+    {
+      "id": "H",
+      "row": "tooling:generator",
+      "model": "opus"
+    },
+    {
+      "id": "B",
+      "row": "layer:base",
+      "model": "opus",
+      "claimsSharedFiles": [
+        "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+        "packages/core/src/foundation/tokens/css/foundation/base/borders.css",
+        "packages/core/src/foundation/tokens/css/foundation/base/density.css",
+        "packages/core/src/foundation/tokens/css/foundation/base/index.css",
+        "packages/core/src/foundation/tokens/css/foundation/base/properties.css",
+        "packages/core/src/foundation/tokens/css/foundation/base/shadows.css",
+        "packages/core/src/foundation/tokens/css/foundation/base/spacing.css",
+        "packages/core/src/foundation/tokens/css/foundation/base/typography.css",
+        "packages/core/src/foundation/tokens/css/foundation/base/z-index.css"
+      ]
+    }
+  ]
+}

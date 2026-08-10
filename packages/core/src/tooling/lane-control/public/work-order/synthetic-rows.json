@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "programId": "modern-rescue",
+  "purpose": "Ledger rows for the NON-FAMILY lanes. family-ledger.json bounds 252 family lanes and nothing else; the base CSS layer, the gates, the generator and the capability registry were bounded by prose, and prose cannot be intersected. These rows carry the same shape as a family row so they pass through identical machinery. They are not families and never claim to be: `synthetic` is true on every one.",
+  "fieldNotes": {
+    "synthetic": "Always true here. It is what tells a reader — and a checker — that this row was authored as a lane boundary rather than derived from a component owner.",
+    "writeSet": "Family rows imply their write set from `writeRoot`. These rows may declare one explicitly, because two of them share a directory and can only be separated by filename shape.",
+    "writeExcludes": "Directory entries exclude a subtree; entries carrying glob magic exclude a shape. `tooling:gates` and `tooling:generator` are provably disjoint ONLY because each excludes the other's shape — `packages/core/scripts` today holds no file matching both, so a file-level intersection would call them disjoint and be wrong the first time somebody writes `build-something-gate.mjs`.",
+    "sourceCommits/lastCommit/lastCommitDate": "Null on purpose. They are derivable by command, and a figure a command can produce must not be typed into a document.",
+    "skinFiles": "Empty. These rows own no family skin CSS; `layer:base` owns the base layer, which is a different thing and is in the single-owner set for exactly that reason."
+  },
+  "rows": [
+    {
+      "id": "layer:base",
+      "layer": "layer",
+      "category": "base",
+      "family": "Base CSS layer",
+      "synthetic": true,
+      "sourceOwner": "packages/core/src/foundation/tokens/css/foundation",
+      "layerProfile": "foundation-css-layer",
+      "state": "SYNTHETIC",
+      "sourceCommits": null,
+      "lastCommit": null,
+      "lastCommitDate": null,
+      "skinFiles": [],
+      "hasFocusedTests": null,
+      "hasProbeScene": null,
+      "batch": null,
+      "reviewVerdict": null,
+      "openDefects": [],
+      "writeRoot": "packages/core/src/foundation/tokens/css/foundation",
+      "writeSet": [
+        "packages/core/src/foundation/tokens/css/foundation/base/**",
+        "packages/core/src/foundation/tokens/css/foundation/themes/default.css"
+      ],
+      "writeExcludes": [
+        "packages/core/src/foundation/tokens/css/foundation/animations",
+        "packages/core/src/foundation/tokens/css/foundation/responsive",
+        "packages/core/src/foundation/tokens/css/foundation/typography"
+      ],
+      "note": "Every file in this row is in the single-owner set, so a lane using it MUST declare `claimsSharedFiles` and no second lane in the same plan may claim any of them. The sibling layers are excluded explicitly rather than merely left out, so that widening the write set later is a visible contradiction instead of a silent expansion."
+    },
+    {
+      "id": "tooling:gates",
+      "layer": "tooling",
+      "category": "gates",
+      "family": "CI gates",
+      "synthetic": true,
+      "sourceOwner": "packages/core/scripts",
+      "layerProfile": "tooling-gate",
+      "state": "SYNTHETIC",
+      "sourceCommits": null,
+      "lastCommit": null,
+      "lastCommitDate": null,
+      "skinFiles": [],
+      "hasFocusedTests": null,
+      "hasProbeScene": null,
+      "batch": null,
+      "reviewVerdict": null,
+      "openDefects": [],
+      "writeRoot": "packages/core/scripts",
+      "writeSet": [
+        "packages/core/scripts/**/*-gate.mjs",
+        "packages/core/scripts/**/*-gate.test.mjs",
+        "packages/core/scripts/ci-gates.manifest.mjs",
+        "packages/core/scripts/run-ci-gates.mjs"
+      ],
+      "writeExcludes": [
+        "packages/core/scripts/**/build-*.mjs",
+        "packages/core/scripts/**/generate-*.mjs",
+        "packages/core/scripts/codemods"
+      ],
+      "note": "Owning `ci-gates.manifest.mjs` is a WRITE boundary, not standing permission to register a gate. Registration is a coordinator decision and belongs in the work order."
+    },
+    {
+      "id": "tooling:generator",
+      "layer": "tooling",
+      "category": "generator",
+      "family": "Artifact generators",
+      "synthetic": true,
+      "sourceOwner": "packages/core/scripts",
+      "layerProfile": "tooling-generator",
+      "state": "SYNTHETIC",
+      "sourceCommits": null,
+      "lastCommit": null,
+      "lastCommitDate": null,
+      "skinFiles": [],
+      "hasFocusedTests": null,
+      "hasProbeScene": null,
+      "batch": null,
+      "reviewVerdict": null,
+      "openDefects": [],
+      "writeRoot": "packages/core/scripts",
+      "writeSet": [
+        "packages/core/scripts/**/generate-*.mjs",
+        "packages/core/scripts/**/build-*.mjs",
+        "packages/core/scripts/codemods/**",
+        "packages/core/scripts/tokens-catalog.mjs"
+      ],
+      "writeExcludes": [
+        "packages/core/scripts/**/*-gate.mjs",
+        "packages/core/scripts/**/*-gate.test.mjs"
+      ],
+      "note": "A generator lane writes the producer, never the produced artifact. Generated outputs under `styles/**`, `dist/**` and `foundation/tokens/css/facade/artifacts/**` are outside this root, and a lane that regenerates them is making a claim its containment check will refuse."
+    },
+    {
+      "id": "contracts:registry",
+      "layer": "contracts",
+      "category": "registry",
+      "family": "Tenant capability registry",
+      "synthetic": true,
+      "sourceOwner": "packages/core/src/foundation/contracts/composition/tenants",
+      "layerProfile": "contract-registry",
+      "state": "SYNTHETIC",
+      "sourceCommits": null,
+      "lastCommit": null,
+      "lastCommitDate": null,
+      "skinFiles": [],
+      "hasFocusedTests": null,
+      "hasProbeScene": null,
+      "batch": null,
+      "reviewVerdict": null,
+      "openDefects": [],
+      "writeRoot": "packages/core/src/foundation/contracts/composition/tenants",
+      "writeSet": ["packages/core/src/foundation/contracts/composition/tenants/capabilities/**"],
+      "writeExcludes": [
+        "packages/core/src/foundation/contracts/composition/tenants/themes",
+        "packages/core/src/foundation/contracts/composition/tenants/product-profiles"
+      ],
+      "note": "The registry declares tenant access; the themes and product-profile contracts beside it are separate authorities and are excluded so that a registry lane cannot quietly redefine either."
+    }
+  ]
+}
