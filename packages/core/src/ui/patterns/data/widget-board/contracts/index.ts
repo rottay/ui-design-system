@@ -45,6 +45,18 @@ export interface WidgetBoardItem {
   height?: number;
   order: number;
   visible: boolean;
+  /** Reorderable by pointer and keyboard; default true. False locks position and bars crossing. */
+  movable?: boolean;
+  /** Removable in edit mode; default true. */
+  removable?: boolean;
+  /** Resizable in edit mode; default true. An object locks one axis. */
+  resizable?: boolean | WidgetBoardResizeAxes;
+}
+
+/** Per-axis resize permission; an omitted axis stays permitted. */
+export interface WidgetBoardResizeAxes {
+  inline?: boolean;
+  block?: boolean;
 }
 
 export interface WidgetBoardLabels {

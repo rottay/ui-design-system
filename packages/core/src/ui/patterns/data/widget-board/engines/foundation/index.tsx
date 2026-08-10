@@ -37,6 +37,19 @@ import type {
 } from "../../contracts";
 import { useAdaptiveBoardLayout } from "../../runtime/solver/react";
 
+/* Private, not exported: constraint defaults are permissive so an unconstrained item is unchanged. */
+const isWidgetMovable = (item: WidgetBoardItem): boolean => item.movable !== false;
+const isWidgetRemovable = (item: WidgetBoardItem): boolean => item.removable !== false;
+const isWidgetResizable = (
+  item: WidgetBoardItem,
+  axis: "inline" | "block"
+): boolean => {
+  const resizable = item.resizable;
+  if (resizable === undefined || resizable === true) return true;
+  if (resizable === false) return false;
+  return resizable[axis] !== false;
+};
+
 
 const SIZE_RAMP: readonly WidgetBoardSize[] = ["sm", "md", "lg", "wide"];
 const SIZE_SPAN: Record<WidgetBoardSize, number> = {
@@ -156,9 +169,22 @@ export function WidgetBoardEngine({
   const gridRef = useRef<HTMLDivElement>(null);
   const cellRefs = useRef(new Map<string, HTMLElement>());
 
+  /* External ownership wins: incoming items cancel any live gesture so no listener can later
+     emit props back to the consumer. */
   useEffect(() => {
     layoutRef.current = items;
     setLayout(items);
+    if (dragSessionRef.current) {
+      dragSessionRef.current = null;
+      dragOriginLayoutRef.current = null;
+      setDraggingId(null);
+      setDragPointerId(null);
+      setOverIndex(null);
+    }
+    if (resizeSessionRef.current) {
+      resizeSessionRef.current = null;
+      setResizeSession(null);
+    }
   }, [items]);
 
   const visible = useMemo(
@@ -351,6 +377,14 @@ export function WidgetBoardEngine({
       to >= sourceVisible.length
     )
       return source;
+    /* A locked item is an order BARRIER: scanning the whole travelled span rejects a locked
+       source, a locked target and any barrier crossing in one pass, fail-closed. */
+    const low = Math.min(from, to);
+    const high = Math.max(from, to);
+    for (let index = low; index <= high; index += 1) {
+      const candidate = sourceVisible[index];
+      if (!candidate || !isWidgetMovable(candidate)) return source;
+    }
     const reordered = sourceVisible.slice();
     const [moved] = reordered.splice(from, 1);
     if (!moved) return source;
@@ -366,7 +400,10 @@ export function WidgetBoardEngine({
   };
 
   const reorder = (from: number, to: number): void => {
-    commit(reorderedLayout(layoutRef.current, from, to));
+    /* A refused span returns the identical source; committing it would emit an unchanged layout. */
+    const next = reorderedLayout(layoutRef.current, from, to);
+    if (next === layoutRef.current) return;
+    commit(next);
   };
 
   const previewReorder = (from: number, to: number): void => {
@@ -462,7 +499,16 @@ export function WidgetBoardEngine({
     const current = dragSessionRef.current;
     if (!current || current.pointerId !== pointerId) return;
 
-    if (commitMove && current.activated) onItemsChange?.(layoutRef.current);
+    /* Commit only a real change made by a still-movable item; a barrier no-op emits nothing. */
+    const live = layoutRef.current.find((item) => item.id === current.id);
+    if (
+      commitMove &&
+      current.activated &&
+      live !== undefined &&
+      isWidgetMovable(live) &&
+      layoutRef.current !== dragOriginLayoutRef.current
+    )
+      onItemsChange?.(layoutRef.current);
     else if (dragOriginLayoutRef.current) {
       layoutRef.current = dragOriginLayoutRef.current;
       setLayout(dragOriginLayoutRef.current);
@@ -505,6 +551,9 @@ export function WidgetBoardEngine({
     item: WidgetBoardItem
   ): void => {
     if (!editing || resizeSessionRef.current) return;
+    /* Re-resolve from the live layout: a stale closure must not authorise a move. */
+    const live = layoutRef.current.find((entry) => entry.id === item.id);
+    if (!live || !isWidgetMovable(live)) return;
     event.preventDefault();
     event.currentTarget.setPointerCapture?.(event.pointerId);
     dragOriginLayoutRef.current = layoutRef.current;
@@ -519,24 +568,31 @@ export function WidgetBoardEngine({
     setDragPointerId(event.pointerId);
   };
 
-  const resizeWidthTo = (id: string, size: WidgetBoardSize): void =>
+  /* Both step helpers delegate here, so guarding these two closes every keyboard resize path. */
+  const resizeWidthTo = (id: string, size: WidgetBoardSize): void => {
+    const target = layoutRef.current.find((item) => item.id === id);
+    if (!target || !isWidgetResizable(target, "inline")) return;
+    if (target.size === size) return;
     commit(
-      layout.map((item) => {
-        if (item.id !== id) return item;
-        return { ...item, size };
-      })
+      layoutRef.current.map((item) =>
+        item.id === id ? { ...item, size } : item
+      )
     );
+  };
 
-  const resizeHeightTo = (id: string, height?: number): void =>
+  const resizeHeightTo = (id: string, height?: number): void => {
+    const target = layoutRef.current.find((item) => item.id === id);
+    if (!target || !isWidgetResizable(target, "block")) return;
+    if (target.height === height) return;
     commit(
-      layout.map((item) => {
-        if (item.id !== id) return item;
-        return { ...item, height };
-      })
+      layoutRef.current.map((item) =>
+        item.id === id ? { ...item, height } : item
+      )
     );
+  };
 
   const resizeByStep = (id: string, direction: -1 | 1): void => {
-    const item = layout.find((candidate) => candidate.id === id);
+    const item = layoutRef.current.find((candidate) => candidate.id === id);
     if (!item) return;
     const current = SIZE_RAMP.indexOf(item.size);
     const next = Math.max(
@@ -547,7 +603,7 @@ export function WidgetBoardEngine({
   };
 
   const resizeHeightByStep = (id: string, direction: -1 | 1): void => {
-    const item = layout.find((candidate) => candidate.id === id);
+    const item = layoutRef.current.find((candidate) => candidate.id === id);
     if (!item) return;
     const node = cellRefs.current.get(id);
     const currentHeight = Math.max(
@@ -620,24 +676,28 @@ export function WidgetBoardEngine({
   ): void => {
     const current = resizeSessionRef.current;
     if (!current || current.pointerId !== pointerId) return;
-    if (commitResize)
+    /* Re-resolve at commit: a constraint change or removal mid-gesture cancels with no emission. */
+    const live = layoutRef.current.find((item) => item.id === current.id);
+    const inlineChanges = resizesInline(current.edge);
+    const blockChanges = resizesBlock(current.edge);
+    const cancel = (): void => {
+      resizeSessionRef.current = null;
+      setResizeSession(null);
+    };
+    if (!commitResize || !live) return cancel();
+    if (inlineChanges && !isWidgetResizable(live, "inline")) return cancel();
+    if (blockChanges && !isWidgetResizable(live, "block")) return cancel();
+    const nextSize = inlineChanges ? current.previewSize : live.size;
+    const nextHeight = blockChanges ? current.previewHeight : live.height;
+    if (nextSize !== live.size || nextHeight !== live.height)
       commit(
-        layout.map((item) =>
+        layoutRef.current.map((item) =>
           item.id === current.id
-            ? {
-                ...item,
-                size: resizesInline(current.edge)
-                  ? current.previewSize
-                  : item.size,
-                height: resizesBlock(current.edge)
-                  ? current.previewHeight
-                  : item.height,
-              }
+            ? { ...item, size: nextSize, height: nextHeight }
             : item
         )
       );
-    resizeSessionRef.current = null;
-    setResizeSession(null);
+    cancel();
   };
 
   useEffect(() => {
@@ -667,6 +727,11 @@ export function WidgetBoardEngine({
     edge: WidgetResizeEdge
   ): void => {
     if (narrow) return;
+    /* Re-resolve live, then require every axis this edge would change to be permitted. */
+    const live = layoutRef.current.find((entry) => entry.id === item.id);
+    if (!live) return;
+    if (resizesInline(edge) && !isWidgetResizable(live, "inline")) return;
+    if (resizesBlock(edge) && !isWidgetResizable(live, "block")) return;
     event.preventDefault();
     event.stopPropagation();
     event.currentTarget.setPointerCapture?.(event.pointerId);
@@ -686,24 +751,29 @@ export function WidgetBoardEngine({
       edge,
       startX: event.clientX,
       startY: event.clientY,
-      startSpan: SIZE_SPAN[item.size],
-      startHeight: item.height ?? renderedHeight,
+      startSpan: SIZE_SPAN[live.size],
+      startHeight: live.height ?? renderedHeight,
       columnWidth: Math.max(1, (gridWidth - columnGap * 11) / 12),
       inlineDirection,
-      previewSize: item.size,
-      previewHeight: item.height,
+      previewSize: live.size,
+      previewHeight: live.height,
     };
     resizeSessionRef.current = session;
     setResizeSession(session);
   };
 
   const setVisible = (id: string, visibleValue: boolean): void => {
-    const maxOrder = visible.reduce(
-      (max, item) => Math.max(max, item.order),
+    /* Resolve the CURRENT target: a stale id must not commit, and hiding a locked item is refused. */
+    const target = layoutRef.current.find((item) => item.id === id);
+    if (!target) return;
+    if (!visibleValue && !isWidgetRemovable(target)) return;
+    if (target.visible === visibleValue) return;
+    const maxOrder = layoutRef.current.reduce(
+      (max, item) => (item.visible ? Math.max(max, item.order) : max),
       -1
     );
     commit(
-      layout.map((item) =>
+      layoutRef.current.map((item) =>
         item.id === id
           ? {
               ...item,
@@ -1079,36 +1149,43 @@ export function WidgetBoardEngine({
                    */
                   <div
                     className="ds-widget-board__cell-controls"
-                    onPointerDown={(event) => beginMove(event, item)}
+                    onPointerDown={
+                      isWidgetMovable(item)
+                        ? (event) => beginMove(event, item)
+                        : undefined
+                    }
                   >
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      icon={<ActionReorderIcon size={15} decorative />}
-                      aria-label={`${labels.move}: ${item.accessibleTitle}`}
-                      aria-keyshortcuts="ArrowLeft ArrowRight ArrowUp ArrowDown"
-                      onKeyDown={(event: KeyboardEvent<HTMLButtonElement>) => {
-                        if (
-                          event.key === "ArrowLeft" ||
-                          event.key === "ArrowUp"
-                        ) {
-                          event.preventDefault();
-                          reorder(index, Math.max(0, index - 1));
-                        }
-                        if (
-                          event.key === "ArrowRight" ||
-                          event.key === "ArrowDown"
-                        ) {
-                          event.preventDefault();
-                          reorder(
-                            index,
-                            Math.min(visible.length - 1, index + 1)
-                          );
-                        }
-                      }}
-                    >
-                      {labels.move}
-                    </Button>
+                    {/* Forbidden controls are not rendered, so they expose no shortcut or focus target. */}
+                    {isWidgetMovable(item) ? (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        icon={<ActionReorderIcon size={15} decorative />}
+                        aria-label={`${labels.move}: ${item.accessibleTitle}`}
+                        aria-keyshortcuts="ArrowLeft ArrowRight ArrowUp ArrowDown"
+                        onKeyDown={(event: KeyboardEvent<HTMLButtonElement>) => {
+                          if (
+                            event.key === "ArrowLeft" ||
+                            event.key === "ArrowUp"
+                          ) {
+                            event.preventDefault();
+                            reorder(index, Math.max(0, index - 1));
+                          }
+                          if (
+                            event.key === "ArrowRight" ||
+                            event.key === "ArrowDown"
+                          ) {
+                            event.preventDefault();
+                            reorder(
+                              index,
+                              Math.min(visible.length - 1, index + 1)
+                            );
+                          }
+                        }}
+                      >
+                        {labels.move}
+                      </Button>
+                    ) : null}
                     <span className="ds-widget-board__size-readout" aria-hidden>
                       <LayoutColumnsIcon size={14} decorative />
                       <span>{SIZE_SPAN[effectiveSize]} / 12</span>
@@ -1116,15 +1193,17 @@ export function WidgetBoardEngine({
                         <span>· {Math.round(effectiveHeight)} px</span>
                       ) : null}
                     </span>
-                    <Button.Icon
-                      variant="default"
-                      size="sm"
-                      icon={<ActionCloseIcon size={15} decorative />}
-                      aria-label={`${labels.remove}: ${item.accessibleTitle}`}
-                      tooltip={`${labels.remove}: ${item.accessibleTitle}`}
-                      onPointerDown={(event) => event.stopPropagation()}
-                      onClick={() => setVisible(item.id, false)}
-                    />
+                    {isWidgetRemovable(item) ? (
+                      <Button.Icon
+                        variant="default"
+                        size="sm"
+                        icon={<ActionCloseIcon size={15} decorative />}
+                        aria-label={`${labels.remove}: ${item.accessibleTitle}`}
+                        tooltip={`${labels.remove}: ${item.accessibleTitle}`}
+                        onPointerDown={(event) => event.stopPropagation()}
+                        onClick={() => setVisible(item.id, false)}
+                      />
+                    ) : null}
                   </div>
                 ) : null}
                 {editing && !narrow ? (
@@ -1140,7 +1219,16 @@ export function WidgetBoardEngine({
                         "block-end-inline-start",
                         "block-end-inline-end",
                       ] as const
-                    ).map((edge) => {
+                    )
+                      /* An edge survives only when every axis it would change is permitted. */
+                      .filter(
+                        (edge) =>
+                          (!resizesInline(edge) ||
+                            isWidgetResizable(item, "inline")) &&
+                          (!resizesBlock(edge) ||
+                            isWidgetResizable(item, "block"))
+                      )
+                      .map((edge) => {
                       const horizontal = resizesInline(edge);
                       const vertical = resizesBlock(edge);
                       const diagonal = horizontal && vertical;

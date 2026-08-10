@@ -356,7 +356,7 @@ describe("WidgetBoard product layout", () => {
 
   it("previews neighbouring reflow from the full pointer drag surface and persists on release", async () => {
     const onItemsChange = vi.fn();
-    const { container, getByRole } = render(
+    const { container, findByRole } = render(
       <WidgetBoardEngine
         labels={labels}
         items={[item("one", "lg", 0), item("two", "lg", 1)]}
@@ -365,7 +365,8 @@ describe("WidgetBoard product layout", () => {
         onItemsChange={onItemsChange}
       />
     );
-    const move = getByRole("button", { name: `${labels.move}: one` });
+    /* The move control is an engine-routed lazy Button; a synchronous query races its mount. */
+    const move = await findByRole("button", { name: `${labels.move}: one` });
     const grid = container.querySelector<HTMLElement>('[data-part="grid"]');
     const initialCells = Array.from(
       container.querySelectorAll<HTMLElement>('[data-part="cell"]')

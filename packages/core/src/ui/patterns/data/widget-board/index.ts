@@ -7,6 +7,7 @@ export type {
   WidgetBoardHeader,
   WidgetBoardLabels,
   WidgetBoardProps,
+  WidgetBoardResizeAxes,
   WidgetBoardSize,
 } from './contracts';
 export const PatternWidgetBoard = createEngineComponent<WidgetBoardProps>(
