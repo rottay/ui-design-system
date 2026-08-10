@@ -83,4 +83,39 @@ describe('Transfer modern oneWay target removal', () => {
     // still ['1'] -- a selection the panel no longer shows.
     expect(onSelectChange).toHaveBeenLastCalledWith([], []);
   });
+
+  // Removing a row unmounts the focused button, so focus must move first or it
+  // strands on <body> and a keyboard user loses their place.
+  it('moves focus to the next remove button instead of stranding it after removal', () => {
+    render(<ModernTransfer oneWay dataSource={DATA} defaultTargetKeys={['1', '2', '3']} />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Remove Bravo' }));
+
+    expect(document.activeElement).toBe(
+      within(targetPanel()).getByRole('button', { name: 'Remove Charlie' })
+    );
+  });
+
+  it('falls back to the previous remove button when the last row is removed', () => {
+    render(<ModernTransfer oneWay dataSource={DATA} defaultTargetKeys={['1', '2', '3']} />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Remove Charlie' }));
+
+    expect(document.activeElement).toBe(
+      within(targetPanel()).getByRole('button', { name: 'Remove Bravo' })
+    );
+  });
+
+  // With one row there is no neighbour at all, which is exactly the case the
+  // neighbour-only restore left stranded on <body>.
+  it('falls back to the panel title when the only row is removed', () => {
+    render(<ModernTransfer oneWay dataSource={DATA} defaultTargetKeys={['2']} />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Remove Bravo' }));
+
+    expect(document.activeElement).not.toBe(document.body);
+    expect(document.activeElement).toBe(
+      targetPanel().querySelector('[data-part="panel-title"]')
+    );
+  });
 });

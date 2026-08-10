@@ -201,6 +201,49 @@ describe('DetailSurface', () => {
     expect(await screen.findByText('Activity content')).toBeInTheDocument();
   });
 
+  // The tab contract says content is "called only when the tab is active"; deferring the
+  // callback into a mounted node is what makes that literally true.
+  it('invokes only the active tab content callback until another tab is activated', async () => {
+    const overview = vi.fn(() => <div>Overview content</div>);
+    const activity = vi.fn(() => <div>Activity content</div>);
+
+    const config = buildConfig({
+      access: undefined,
+      behavior: { activeTab: undefined, onTabChange: vi.fn(), actions: [] },
+      presentation: {
+        title: (item: WorkspaceView) => item.name,
+        tabs: [
+          { key: 'overview', label: 'Overview', content: overview },
+          { key: 'activity', label: 'Activity', content: activity },
+        ],
+      },
+    });
+
+    renderSurface(
+      <DetailSurface
+        data={{ id: 'ws-1', name: 'Acme Workspace' }}
+        adapter={adapter}
+        config={config}
+      />
+    );
+
+    await screen.findByText('Overview content');
+    expect(overview).toHaveBeenCalled();
+    expect(activity).not.toHaveBeenCalled();
+    expect(screen.queryByText('Activity content')).not.toBeInTheDocument();
+
+    const activityTab = (await screen.findByText('Activity')).closest('button');
+    if (!activityTab) throw new Error('Activity tab not found');
+    const overviewCallsBeforeSwitch = overview.mock.calls.length;
+    fireEvent.click(activityTab);
+
+    expect(await screen.findByText('Activity content')).toBeInTheDocument();
+    expect(activity).toHaveBeenCalled();
+    // The previous tab's node unmounts, so its callback must not run again.
+    expect(overview.mock.calls.length).toBe(overviewCallsBeforeSwitch);
+    expect(screen.queryByText('Overview content')).not.toBeInTheDocument();
+  });
+
   it('renders chrome, sidebar, subtitle, header extra, footer, and mapped action variants', async () => {
     const editAction = vi.fn();
 

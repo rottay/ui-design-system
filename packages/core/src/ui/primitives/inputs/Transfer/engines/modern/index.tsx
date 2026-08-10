@@ -173,7 +173,7 @@ const TransferList: React.FC<TransferListProps> = ({
             />
           </span>
         )}
-        <span data-part="panel-title">{title}</span>
+        <span data-part="panel-title" tabIndex={-1}>{title}</span>
         <span data-part="panel-count">
           {/* Count + governed unit (contract locale.itemUnit/itemsUnit,
               catalog-backed). Tabular numerals ride the skin. A panel with no
@@ -250,7 +250,21 @@ const TransferList: React.FC<TransferListProps> = ({
                       aria-label={tOr('transfer.remove_item', `Remove ${item.title}`, {
                         item: item.title,
                       })}
-                      onClick={() => onRemoveItem(item)}
+                      onClick={(e) => {
+                        // Removing this row unmounts the focused button, so focus must move first or it
+                        // strands on <body> and a keyboard user loses their place.
+                        const row = e.currentTarget.closest('li');
+                        const neighbor = row?.nextElementSibling ?? row?.previousElementSibling;
+                        // Removing the only row leaves no neighbour, so its panel title
+                        // becomes the stable programmatic focus target.
+                        const fallback = e.currentTarget
+                          .closest('[data-part="panel"]')
+                          ?.querySelector<HTMLElement>('[data-part="panel-title"]');
+                        (neighbor?.querySelector<HTMLButtonElement>(
+                          '[data-part="panel-item-remove"]',
+                        ) ?? fallback)?.focus();
+                        onRemoveItem(item);
+                      }}
                     >
                       <ActionCloseIcon decorative size={12} />
                     </button>

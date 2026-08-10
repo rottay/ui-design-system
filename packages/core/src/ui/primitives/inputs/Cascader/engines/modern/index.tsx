@@ -109,6 +109,34 @@ function flattenOptions(
   return result;
 }
 
+/* Both ways the trigger is asked to show what `value` actually is must agree, so the
+   value-sync effect and the non-commit close path derive path and columns here. */
+function resolvePathAndColumns(
+  value: CascaderValue,
+  options: CascaderOption[],
+  fieldNames?: CascaderFieldNames,
+): { path: CascaderOption[]; columns: CascaderOption[][] } {
+  const path: CascaderOption[] = [];
+  let currentOptions = options;
+  for (const val of value) {
+    const found = currentOptions.find((opt) => getValue(opt, fieldNames) === val);
+    if (found) {
+      path.push(found);
+      const children = getChildren(found, fieldNames);
+      if (children) {
+        currentOptions = children;
+      }
+    }
+  }
+  const columns: CascaderOption[][] = [options];
+  for (const opt of path) {
+    const children = getChildren(opt, fieldNames);
+    if (!children || children.length === 0) break;
+    columns.push(children);
+  }
+  return { path, columns };
+}
+
 /**
  * Modern Cascader component (DaisyUI/Tailwind CSS).
  *
@@ -162,6 +190,9 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
     const [selectedPath, setSelectedPath] = useState<CascaderOption[]>([]);
     const [loadingKeys, setLoadingKeys] = useState<Set<string | number>>(new Set());
     const [searchValue, setSearchValue] = useState('');
+    // Bumped on every commit attempt so the value-sync effect also runs when a controlled
+    // consumer REFUSES the value and `value` therefore never changes.
+    const [commitNonce, setCommitNonce] = useState(0);
 
     // Support both controlled (value prop provided) and uncontrolled modes.
     // When controlled, external state is the source of truth for the selection.
@@ -201,6 +232,15 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       }
     }, [controlledOpen, onDropdownVisibleChange, showSearch]);
 
+    /* Abandoning a drill leaves `value` unchanged, so the uncommitted branch must be resynced
+       away; commit paths call handleOpenChange(false) directly and must not be overwritten. */
+    const closeWithoutCommit = useCallback(() => {
+      handleOpenChange(false);
+      const { path, columns } = resolvePathAndColumns(value, options, fieldNames);
+      setSelectedPath(path);
+      setActiveColumns(columns);
+    }, [handleOpenChange, value, options, fieldNames]);
+
     // Sync first column when options change
     useEffect(() => {
       setActiveColumns((prev) => {
@@ -214,22 +254,12 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
     // a non-empty value left the trigger label, its accessible name and the
     // clear affordance showing a stale path forever once a controlled consumer
     // reset `value` to [] (form reset, external clear, route change).
+    /* Columns rebuild with the path so a preset value exposes its full drill chain. */
     useEffect(() => {
-      const path: CascaderOption[] = [];
-      let currentOptions = options;
-
-      for (const val of value) {
-        const found = currentOptions.find((opt) => getValue(opt, fieldNames) === val);
-        if (found) {
-          path.push(found);
-          const children = getChildren(found, fieldNames);
-          if (children) {
-            currentOptions = children;
-          }
-        }
-      }
+      const { path, columns } = resolvePathAndColumns(value, options, fieldNames);
       setSelectedPath(path);
-    }, [value, options, fieldNames]);
+      setActiveColumns(columns);
+    }, [value, options, fieldNames, commitNonce]);
 
     // ------ Async load helpers ------
     // When loadData is provided, children are fetched on-demand as the user
@@ -276,6 +306,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
         }
         setSelectedPath(newPath);
         onChange?.(newValue, newPath);
+        setCommitNonce((n) => n + 1);
         handleOpenChange(false);
         // Options are real focused buttons here, so dismissing the panel
         // unmounts the focused element -- without the restore, focus strands
@@ -369,7 +400,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       if (e.key === 'Escape') {
         e.preventDefault();
         e.stopPropagation();
-        handleOpenChange(false);
+        closeWithoutCommit();
         triggerRef.current?.focus();
         return;
       }
@@ -446,14 +477,14 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
     useEffect(() => {
       const handleClickOutside = (e: MouseEvent) => {
         if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-          handleOpenChange(false);
+          closeWithoutCommit();
         }
       };
       if (isOpen) {
         document.addEventListener('mousedown', handleClickOutside);
       }
       return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [isOpen, handleOpenChange]);
+    }, [isOpen, closeWithoutCommit]);
 
     const getDisplayValue = () => {
       if (selectedPath.length === 0) return '';
@@ -502,7 +533,11 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
             paint is drained -- single paint owner per family law). */}
         <div
           ref={triggerRef}
-          onClick={() => !disabled && handleOpenChange(!isOpen)}
+          onClick={() => {
+            if (disabled) return;
+            if (isOpen) closeWithoutCommit();
+            else handleOpenChange(true);
+          }}
           onKeyDown={(e) => {
             if (disabled) return;
             if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown') {
@@ -510,7 +545,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
               if (!isOpen) handleOpenChange(true);
             } else if (e.key === 'Escape' && isOpen) {
               e.preventDefault();
-              handleOpenChange(false);
+              closeWithoutCommit();
             }
           }}
           data-part="trigger"

@@ -12,6 +12,7 @@ import {
   SurfaceErrorState,
   SurfaceLoadingState,
 } from '..';
+import { hasSurfaceError } from '../..';
 import {
   SurfaceEmptyStateCard,
   SurfaceLoadingSkeleton,
@@ -107,5 +108,50 @@ describe('Surface lifecycle states — R2+R3 ownership contract', () => {
     expect(skin).not.toMatch(/rgba?\(/);
     expect(skin).not.toMatch(/#[0-9a-fA-F]{3,8}\b/);
     expect(skin).toContain("[data-disabled='true']");
+  });
+});
+
+describe('SurfaceErrorState — error?: unknown surfaces a message, never a stack', () => {
+  it('shows the message of an Error without printing its stack frames', async () => {
+    const error = new Error('Surface exploded');
+    const { container } = renderSurface(<SurfaceErrorState error={error} />, {
+      engine: 'modern',
+    });
+
+    await waitFor(() => expect(container.textContent).toContain('Surface exploded'));
+    // A stack frame is `at <fn> (<file>:<line>:<col>)`; no rendered text may carry one.
+    expect(error.stack).toBeTruthy();
+    expect(container.textContent ?? '').not.toMatch(/\bat .+:\d+:\d+/);
+  });
+
+  it('treats 0 as a caught value and renders it', async () => {
+    expect(hasSurfaceError(0)).toBe(true);
+    const { container } = renderSurface(<SurfaceErrorState error={0} />, { engine: 'modern' });
+
+    await waitFor(() => expect(container.textContent).toContain('0'));
+  });
+
+  it.each([
+    ['empty string', ''],
+    ['false', false],
+  ])('treats %s as caught but unrenderable and falls back', async (_label, value) => {
+    expect(hasSurfaceError(value)).toBe(true);
+    const { container } = renderSurface(<SurfaceErrorState error={value} />, {
+      engine: 'modern',
+    });
+
+    await waitFor(() =>
+      expect(container.textContent).toContain('Something went wrong while rendering this surface.'),
+    );
+  });
+
+  it('renders a ReactNode title alongside a normalized message', async () => {
+    const { container } = renderSurface(
+      <SurfaceErrorState error={new Error('Boom')} title={<span>Custom title</span>} />,
+      { engine: 'modern' },
+    );
+
+    await waitFor(() => expect(container.textContent).toContain('Custom title'));
+    expect(container.textContent).toContain('Boom');
   });
 });

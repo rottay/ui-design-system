@@ -42,6 +42,18 @@ import {
 } from "../../../../runtime/helpers/states";
 import { PageShellSurface } from "../../../../composition/layout/page-shell";
 
+/* The panel mounts only the active tab's node, so running the callback inside a component
+   body is what makes the contract's "called only when the tab is active" literally true. */
+function DeferredTabContent<TView>({
+  item,
+  render,
+}: {
+  item: TView;
+  render: (item: TView) => React.ReactNode;
+}): React.ReactElement {
+  return <>{render(item)}</>;
+}
+
 export interface DetailSurfaceProps<TRaw, TView> {
   data?: TRaw | null;
   adapter: EntityAdapter<TRaw, TView>;
@@ -171,7 +183,7 @@ export function DetailSurface<TRaw, TView>({
         key: tab.key,
         label: tab.label,
         icon: tab.icon,
-        content: tab.content(item),
+        content: <DeferredTabContent key={tab.key} item={item} render={tab.content} />,
         badge: typeof tab.badge === "function" ? tab.badge(item) : tab.badge,
         disabled: tab.disabled,
       }))

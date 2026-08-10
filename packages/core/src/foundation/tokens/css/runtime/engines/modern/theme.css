@@ -62,7 +62,9 @@
 [data-tenant] .btn-primary:hover:not(:disabled) {
   background-color: var(--ds-button-primary-bg-hover);
   border-color: var(--ds-button-primary-bg-hover);
-  box-shadow: var(--ds-button-primary-shadow-hover);
+  /* Not every artifact declares the hover shadow, and a bare read would drop the whole
+     declaration rather than fall back to the governed elevation. */
+  box-shadow: var(--ds-button-primary-shadow-hover, var(--ds-shadow-md));
   transform: var(--ds-button-hover-transform, translateY(0) scale(1));
 }
 
@@ -88,45 +90,6 @@
   background-color: var(--ds-button-ghost-bg-active);
   color: var(--ds-button-ghost-color-active);
   transform: var(--ds-button-active-transform, scale(0.98));
-}
-
-/* =============================================================================
-   INPUT - .input
-   ============================================================================= */
-
-[data-tenant] .input {
-  font-family: var(--ds-font-family-base);
-  font-size: var(--ds-input-md-font-size);
-  height: var(--ds-input-md-height);
-  padding-left: var(--ds-input-md-padding-x);
-  padding-right: var(--ds-input-md-padding-x);
-  background-color: var(--ds-input-bg);
-  border-color: var(--ds-input-border);
-  border-radius: var(--ds-input-radius);
-  color: var(--ds-input-color);
-  transition: var(--ds-input-transition);
-}
-
-[data-tenant] .input::placeholder {
-  color: var(--ds-input-color-placeholder);
-}
-
-[data-tenant] .input:hover:not(:disabled) {
-  border-color: var(--ds-input-border-hover);
-}
-
-[data-tenant] .input:focus {
-  border-color: var(--ds-input-border-focus);
-  box-shadow: var(--ds-input-shadow-focus);
-  outline: none;
-}
-
-[data-tenant] .input:disabled {
-  background-color: var(--ds-input-bg-disabled);
-  border-color: var(--ds-input-border-disabled);
-  color: var(--ds-input-color-disabled);
-  opacity: var(--ds-input-disabled-opacity);
-  cursor: not-allowed;
 }
 
 /* =============================================================================

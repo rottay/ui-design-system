@@ -134,6 +134,19 @@ function areAllChildrenSelected(node: TreeSelectNode, selectedKeys: Set<string |
   return node.children.every((child) => areAllChildrenSelected(child, selectedKeys));
 }
 
+/* Ancestor chain root-first, excluding the target: cascading recheck decides an
+   ancestor's checked state from ALL its children, so it must walk to the root. */
+function findAncestorPath(nodes: TreeSelectNode[], targetValue: string | number): TreeSelectNode[] | null {
+  for (const node of nodes) {
+    if (node.value === targetValue) return [];
+    if (node.children) {
+      const childPath = findAncestorPath(node.children, targetValue);
+      if (childPath !== null) return [node, ...childPath];
+    }
+  }
+  return null;
+}
+
 /**
  * Walk the tree and collect keys of parent nodes that have at least one
  * descendant matching the filter. Used to auto-expand ancestors during search
@@ -663,6 +676,18 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
             // Check: add self + all descendants
             allValues.forEach((v) => newSelectedKeys.add(v));
           }
+
+          // Re-derive each ancestor from ITS children, deepest-first: checking children one at a
+          // time never added the parent, leaving a fully-selected subtree rendered unchecked.
+          const ancestors = findAncestorPath(treeData, node.value) ?? [];
+          for (let i = ancestors.length - 1; i >= 0; i -= 1) {
+            const ancestor = ancestors[i];
+            if (areAllChildrenSelected(ancestor, newSelectedKeys)) {
+              newSelectedKeys.add(ancestor.value);
+            } else {
+              newSelectedKeys.delete(ancestor.value);
+            }
+          }
         }
       } else {
         newSelectedKeys = new Set([node.value]);
@@ -676,7 +701,7 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
       const valueArray = Array.from(newSelectedKeys);
       const outputValue = multiple || treeCheckable ? valueArray : valueArray[0];
       onChange?.(outputValue, [node.title], { triggerValue: node.value });
-    }, [selectedKeys, multiple, treeCheckable, treeCheckStrictly, isControlled, onChange, handleOpenChange]);
+    }, [selectedKeys, multiple, treeCheckable, treeCheckStrictly, isControlled, onChange, handleOpenChange, treeData]);
 
     const handleClear = (e: React.MouseEvent) => {
       e.stopPropagation();

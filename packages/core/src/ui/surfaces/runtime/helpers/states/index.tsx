@@ -137,7 +137,6 @@ export function SurfaceErrorState({
             type="error"
             showIcon
             message={normalized.message}
-            description={normalized.description}
           />
           {onRetry && (
             <Button className="ds-error-state__retry" variant="primary" onClick={() => onRetry()}>

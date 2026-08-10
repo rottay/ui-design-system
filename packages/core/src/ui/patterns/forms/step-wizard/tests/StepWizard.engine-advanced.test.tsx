@@ -223,6 +223,16 @@ describe('StepWizard advanced engine coverage', () => {
     expect(await screen.findByRole('button', { name: 'Next' })).toBeDisabled();
   });
 
+  it('clamps an out-of-range currentStep to the last step instead of announcing a phantom step', async () => {
+    render(<ModernStepWizard {...buildProps({ currentStep: 5 })} />);
+
+    // Only 2 steps exist, so a controlled currentStep=5 must clamp to the last real step
+    // rather than announce "Step 6 of 2" or render blank content.
+    const announcer = await screen.findByRole('status');
+    expect(announcer).toHaveTextContent('Step 2 of 2: Review');
+    expect(screen.getByText('Review content')).toBeInTheDocument();
+  });
+
   it('announces the active step in the default rail posture', async () => {
     const { rerender } = render(<ModernStepWizard {...buildProps({ currentStep: 0 })} />);
 

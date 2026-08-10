@@ -197,6 +197,12 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
       setAlignEdge(overflowEnd > 0 ? 'end' : 'start');
     }, [isOpen]);
 
+    // A controlled `open` can close the panel outside this component's own handlers, so an
+    // unresolved draft must be cleared or the next open shows stale text.
+    useEffect(() => {
+      if (!isOpen) setHexDraft(null);
+    }, [isOpen]);
+
     // Action/field strings: translated when an I18nProvider is mounted, with
     // the documented English fallbacks otherwise (a missing catalog key echoes
     // the raw key back, which the endsWith guard detects — K4-C wires the

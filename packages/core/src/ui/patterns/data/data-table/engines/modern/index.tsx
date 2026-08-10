@@ -1331,7 +1331,9 @@ export default function ModernDataTable<T extends object>(
               role="grid"
               aria-label={messages?.tableLabel ?? "Data table"}
               aria-colcount={totalColSpan}
-              aria-rowcount={data.length}
+              // aria-rowcount is the dataset total, not the page length: under pagination
+              // `data` is only the current page, so a reader would announce "row 1 of 20".
+              aria-rowcount={pagination ? pagination.total : data.length}
               data-part="table"
               data-resizable={resizable ? "true" : "false"}
               data-has-pinned={hasPinnedColumns ? "true" : "false"}

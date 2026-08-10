@@ -20,7 +20,7 @@
  * ```
  */
 
-import { useState, useMemo, useCallback } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type {
   ColumnDef,
   PaginationConfig,
@@ -101,10 +101,47 @@ export function useDataTable<T extends Record<string, unknown>>(
     clientSidePagination = true,
   } = options;
 
-  const [sorting, setSorting] = useState<SortConfig | null>(initialSort);
-  const [page, setPage] = useState(initialPage);
-  const [pageSize, setPageSize] = useState(initialPageSize);
+  const [sorting, setSortingState] = useState<SortConfig | null>(initialSort);
+  const [page, setPageState] = useState(initialPage);
+  const [pageSize, setPageSizeState] = useState(initialPageSize);
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
+
+  const clearUnstableSelection = useCallback(() => {
+    if (rowKey === undefined) setSelectedKeys([]);
+  }, [rowKey]);
+
+  const setSorting = useCallback((nextSorting: SortConfig | null) => {
+    setSortingState(nextSorting);
+    clearUnstableSelection();
+  }, [clearUnstableSelection]);
+
+  const setPage = useCallback((nextPage: number) => {
+    setPageState(nextPage);
+    clearUnstableSelection();
+  }, [clearUnstableSelection]);
+
+  const setPageSize = useCallback((nextPageSize: number) => {
+    setPageSizeState(nextPageSize);
+    clearUnstableSelection();
+  }, [clearUnstableSelection]);
+
+  /*
+   * Positional keys stop meaning anything once the rows behind them move, so a
+   * data change has to drop them. It is compared row by row rather than by array
+   * identity: a parent that passes `data={[...]}` inline hands over a fresh array
+   * on every render, and keying this on identity would wipe the user's selection
+   * between one render and the next.
+   */
+  const previousData = useRef(data);
+  useEffect(() => {
+    const previous = previousData.current;
+    previousData.current = data;
+    if (rowKey !== undefined) return;
+    const sameRows = previous.length === data.length
+      && previous.every((row, index) => row === data[index]);
+    if (sameRows) return;
+    setSelectedKeys((current) => (current.length === 0 ? current : []));
+  }, [data, rowKey]);
 
   // -- Client-side sort --
   // Memoized to avoid re-sorting on every render. The sort is skipped entirely
@@ -139,13 +176,18 @@ export function useDataTable<T extends Record<string, unknown>>(
   // (not processedData) so selections persist across page changes.
   const selectedRows = useMemo(() => {
     if (selectedKeys.length === 0) return [];
-    return data.filter((row, i) => {
-      const key = rowKey
-        ? typeof rowKey === 'function' ? rowKey(row) : String(row[rowKey as string])
-        : String(i);
-      return selectedKeys.includes(key);
-    });
-  }, [data, selectedKeys, rowKey]);
+    if (rowKey !== undefined) {
+      return data.filter((row) => {
+        const key = typeof rowKey === 'function' ? rowKey(row) : String(row[rowKey as string]);
+        return selectedKeys.includes(key);
+      });
+    }
+    /* Positional keys resolve against the rendered page, then retain source ordering. */
+    const selectedOnPage = new Set(
+      processedData.filter((_row, i) => selectedKeys.includes(String(i))),
+    );
+    return data.filter((row) => selectedOnPage.has(row));
+  }, [data, processedData, selectedKeys, rowKey]);
 
   const handleSelectionChange = useCallback((keys: string[], rows: T[]) => {
     setSelectedKeys(keys);
@@ -156,7 +198,7 @@ export function useDataTable<T extends Record<string, unknown>>(
   const handleSortChange = useCallback((sort: SortConfig) => {
     setSorting(sort);
     setPage(1);
-  }, []);
+  }, [setPage, setSorting]);
 
   // When the page size changes, reset to page 1 to avoid showing an empty
   // page beyond the new total page count.
@@ -166,7 +208,7 @@ export function useDataTable<T extends Record<string, unknown>>(
       setPageSize(newPageSize);
       setPage(1);
     }
-  }, [pageSize]);
+  }, [pageSize, setPage, setPageSize]);
 
   const pagination: PaginationConfig | false = clientSidePagination
     ? {

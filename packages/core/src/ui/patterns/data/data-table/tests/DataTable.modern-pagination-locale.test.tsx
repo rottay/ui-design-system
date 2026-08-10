@@ -60,3 +60,39 @@ describe('PatternDataTable modern — pagination range follows the active catalo
     expect(english).not.toMatch(/(^|[^\d,])12001([^\d]|$)/);
   });
 });
+
+describe('PatternDataTable modern — aria-rowcount reflects the true dataset size', () => {
+  it('reports pagination.total, not the rendered page length', () => {
+    // `data` is a single-row page slice; a paginated table only ever
+    // receives the current page, never the full dataset.
+    const { container } = render(
+      <I18nProvider locale="en" fallbackLocale="en">
+        <ModernDataTable<Row>
+          columns={columns}
+          data={data}
+          rowKey="id"
+          pagination={{ current: 1, pageSize: 20, total: 200, onChange: () => {} }}
+        />
+      </I18nProvider>,
+    );
+
+    const table = container.querySelector('table[role="grid"]');
+    expect(table?.getAttribute('aria-rowcount')).toBe('200');
+  });
+
+  it('falls back to data.length when pagination is not used', () => {
+    const rows: Row[] = [
+      { id: 1, name: 'Ada' },
+      { id: 2, name: 'Bo' },
+      { id: 3, name: 'Cy' },
+    ];
+    const { container } = render(
+      <I18nProvider locale="en" fallbackLocale="en">
+        <ModernDataTable<Row> columns={columns} data={rows} rowKey="id" />
+      </I18nProvider>,
+    );
+
+    const table = container.querySelector('table[role="grid"]');
+    expect(table?.getAttribute('aria-rowcount')).toBe('3');
+  });
+});

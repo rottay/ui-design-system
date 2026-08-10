@@ -128,7 +128,7 @@
         flat black to neutral-900 shifts fill luminance by ~0.004 at most --
         ratios hold within ~2%). ---- */
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root']:not([data-outlined]) {
-  background: var(--ds-tag-custom-bg, var(--ds-color-alpha-black-100));
+  background: var(--ds-tag-custom-bg, var(--ds-color-alpha-black-100, color-mix(in srgb, var(--ds-color-text-primary) 20%, transparent)));
   color: var(--ds-color-text-primary);
 }
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='primary']:not([data-outlined]) {
@@ -177,7 +177,7 @@
         clear AA on every governed source (worst 4.78:1). ---- */
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-outlined='true'] {
   background: var(--ds-tag-custom-bg, transparent);
-  border: var(--ds-tag-border-width, var(--ds-edge-hairline-width, 1px)) solid var(--ds-color-alpha-black-100);
+  border: var(--ds-tag-border-width, var(--ds-edge-hairline-width, 1px)) solid var(--ds-color-alpha-black-100, color-mix(in srgb, var(--ds-color-text-primary) 20%, transparent));
   /* The old near-transparent alpha-black-100 ink is replaced by the adaptive
      primary text ink: the outlined default hosts body-size text. */
   color: var(--ds-tag-outlined-ink, var(--ds-color-text-primary));

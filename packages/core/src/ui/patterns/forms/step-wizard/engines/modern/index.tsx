@@ -111,7 +111,7 @@ export default function ModernStepWizard(props: StepWizardProps) {
   const [internalStep, setInternalStep] = useState(0);
   const [validationMessage, setValidationMessage] = useState<string | null>(null);
   const [isValidating, setIsValidating] = useState(false);
-  const current = controlledStep ?? internalStep;
+  const rawCurrent = controlledStep ?? internalStep;
 
   // Clear stale validation messages whenever the step changes
   const setCurrent = (step: number) => {
@@ -124,6 +124,9 @@ export default function ModernStepWizard(props: StepWizardProps) {
   // sources), so length-derived state is guarded rather than assumed.
   const stepCount = steps.length;
   const hasSteps = stepCount > 0;
+  // Clamp once so progress, the announced "Step N of M" and the rail agree; a controlled
+  // currentStep past a shrunk `steps` would drive progress over 100%.
+  const current = hasSteps ? Math.min(Math.max(rawCurrent, 0), stepCount - 1) : 0;
   const isLast = hasSteps && current >= stepCount - 1;
   const currentDef = steps[current];
   const stickyActions = actionPosture === 'sticky-bottom';

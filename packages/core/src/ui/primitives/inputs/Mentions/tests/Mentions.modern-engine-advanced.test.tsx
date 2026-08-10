@@ -147,12 +147,11 @@ describe('Mentions modern advanced coverage', () => {
     fireEvent.change(input, { target: { value: '@' } });
     await screen.findByRole('listbox');
 
-    // OPTIONS[1] ('archer') is disabled: ArrowDown onto it, then Enter and
-    // Tab must NOT select it (the pointer path is guarded by the disabled
-    // attribute; the keyboard path now matches).
+    // OPTIONS[1] ('archer') is disabled: ArrowDown onto it, then Enter must NOT
+    // select it (the pointer path is guarded by the disabled attribute; the
+    // keyboard path now matches).
     fireEvent.keyDown(input, { key: 'ArrowDown' });
     fireEvent.keyDown(input, { key: 'Enter' });
-    fireEvent.keyDown(input, { key: 'Tab' });
     expect(handleSelect).not.toHaveBeenCalled();
     expect(handleChange).not.toHaveBeenCalledWith(expect.stringContaining('archer'));
 
@@ -161,6 +160,30 @@ describe('Mentions modern advanced coverage', () => {
     fireEvent.keyDown(input, { key: 'Enter' });
     await waitFor(() => {
       expect(handleSelect).toHaveBeenCalledWith(expect.objectContaining({ value: 'backend' }), '@');
+    });
+  });
+
+  // Tab on a disabled option must not select it either, and because Tab carries
+  // focus out of the textarea the popup cannot outlive the keystroke. Separated
+  // from the Enter case: once the popup closes there is no list left to arrow
+  // through, so the two contracts cannot share one key sequence.
+  it('closes the popup on Tab without selecting a disabled option', async () => {
+    const handleSelect = vi.fn();
+    render(
+      <ModernMentions options={OPTIONS} filterOption={false} onSelect={handleSelect} />
+    );
+
+    const input = screen.getByRole('textbox');
+    Object.defineProperty(input, 'selectionStart', { configurable: true, writable: true, value: 1 });
+    fireEvent.change(input, { target: { value: '@' } });
+    await screen.findByRole('listbox');
+
+    fireEvent.keyDown(input, { key: 'ArrowDown' });
+    fireEvent.keyDown(input, { key: 'Tab' });
+
+    expect(handleSelect).not.toHaveBeenCalled();
+    await waitFor(() => {
+      expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
     });
   });
 });

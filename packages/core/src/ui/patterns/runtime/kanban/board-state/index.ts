@@ -20,7 +20,7 @@
  * ```
  */
 
-import { useState, useCallback } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import type { KanbanColumnDef } from '../../../../../foundation/contracts/runtime/components/patterns/core';
 
 export interface UseKanbanOptions<T> {
@@ -59,56 +59,58 @@ export interface UseKanbanReturn<T> {
  */
 export function useKanban<T>(options: UseKanbanOptions<T>): UseKanbanReturn<T> {
   const { initialColumns, itemKey, onItemMoved } = options;
-  const [columns, setColumns] = useState<KanbanColumnDef<T>[]>(initialColumns);
+  const [columns, setColumnsState] = useState<KanbanColumnDef<T>[]>(initialColumns);
+  const columnsRef = useRef(columns);
+  const setColumns = useCallback((next: KanbanColumnDef<T>[]) => {
+    columnsRef.current = next;
+    setColumnsState(next);
+  }, []);
 
   // Moves an item between columns (or reorders within the same column).
   // Deep-copies every column's items array so React sees fresh references
   // and re-renders the affected columns.
   const moveItem = useCallback((itemId: string, fromColumn: string, toColumn: string, position: number) => {
-    setColumns((prev) => {
-      // Shallow-clone each column and its items array to preserve immutability.
-      const next = prev.map((col) => ({ ...col, items: [...col.items] }));
-      const fromCol = next.find((c) => c.id === fromColumn);
-      const toCol = next.find((c) => c.id === toColumn);
-      if (!fromCol || !toCol) return prev;
+    // Shallow-clone each column and its items array to preserve immutability.
+    const next = columnsRef.current.map((col) => ({ ...col, items: [...col.items] }));
+    const fromCol = next.find((c) => c.id === fromColumn);
+    const toCol = next.find((c) => c.id === toColumn);
+    if (!fromCol || !toCol) return;
 
-      const itemIndex = fromCol.items.findIndex((item) => itemKey(item) === itemId);
-      if (itemIndex === -1) return prev;
+    const itemIndex = fromCol.items.findIndex((item) => itemKey(item) === itemId);
+    if (itemIndex === -1) return;
 
-      const [item] = fromCol.items.splice(itemIndex, 1);
-      toCol.items.splice(position, 0, item);
-
-      return next;
-    });
+    const [item] = fromCol.items.splice(itemIndex, 1);
+    toCol.items.splice(position, 0, item);
+    setColumns(next);
     // Fire the external callback after state update so the consumer can
     // persist the move to a backend without blocking the UI update.
     onItemMoved?.(itemId, fromColumn, toColumn, position);
-  }, [itemKey, onItemMoved]);
+  }, [itemKey, onItemMoved, setColumns]);
 
   /** Appends an item to the end of the specified column. */
   const addItem = useCallback((columnId: string, item: T) => {
-    setColumns((prev) =>
-      prev.map((col) =>
+    setColumns(
+      columnsRef.current.map((col) =>
         col.id === columnId ? { ...col, items: [...col.items, item] } : col
       )
     );
-  }, []);
+  }, [setColumns]);
 
   /** Removes an item by its key from the specified column. */
   const removeItem = useCallback((columnId: string, itemId: string) => {
-    setColumns((prev) =>
-      prev.map((col) =>
+    setColumns(
+      columnsRef.current.map((col) =>
         col.id === columnId
           ? { ...col, items: col.items.filter((item) => itemKey(item) !== itemId) }
           : col
       )
     );
-  }, [itemKey]);
+  }, [itemKey, setColumns]);
 
   /** Applies an updater function to a single item within the specified column. */
   const updateItem = useCallback((columnId: string, itemId: string, updater: (item: T) => T) => {
-    setColumns((prev) =>
-      prev.map((col) =>
+    setColumns(
+      columnsRef.current.map((col) =>
         col.id === columnId
           ? {
               ...col,
@@ -119,21 +121,21 @@ export function useKanban<T>(options: UseKanbanOptions<T>): UseKanbanReturn<T> {
           : col
       )
     );
-  }, [itemKey]);
+  }, [itemKey, setColumns]);
 
   // Searches all columns to find an item by key. Reads from the current
   // `columns` state, so it includes any pending moves/adds.
   const getItem = useCallback((itemId: string): T | undefined => {
-    for (const col of columns) {
+    for (const col of columnsRef.current) {
       const item = col.items.find((i) => itemKey(i) === itemId);
       if (item) return item;
     }
     return undefined;
-  }, [columns, itemKey]);
+  }, [itemKey]);
 
   const getColumnItems = useCallback((columnId: string): T[] => {
-    return columns.find((c) => c.id === columnId)?.items ?? [];
-  }, [columns]);
+    return columnsRef.current.find((c) => c.id === columnId)?.items ?? [];
+  }, []);
 
   return {
     columns,

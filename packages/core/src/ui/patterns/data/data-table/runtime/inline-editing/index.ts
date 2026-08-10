@@ -176,9 +176,20 @@ export function useInlineEditing<T extends Record<string, unknown>>(
         for (const [ck, newValue] of Object.entries(colEdits)) {
           const oldValue = readRecordValue(row, ck);
           await onSave(row, ck, newValue, oldValue);
+          // Drop each cell as it saves: if a later cell throws, an already-saved cell left
+          // pending would be re-submitted to onSave on retry.
+          setPendingEdits((prev) => {
+            const rowEdits = prev[rk];
+            if (!rowEdits) return prev;
+            const { [ck]: _omitted, ...restCols } = rowEdits;
+            if (Object.keys(restCols).length === 0) {
+              const { [rk]: _omittedRow, ...restRows } = prev;
+              return restRows;
+            }
+            return { ...prev, [rk]: restCols };
+          });
         }
       }
-      setPendingEdits({});
     } catch (err) {
       setSaveError(err instanceof Error ? err : new Error(String(err)));
     } finally {

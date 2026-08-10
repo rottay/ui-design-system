@@ -69,4 +69,41 @@ describe('Mentions modern active option', () => {
       expect(li).toHaveAttribute('role', 'none');
     }
   });
+
+  // The contract is that focus never leaves the textarea (aria-activedescendant), so a
+  // real per-option button would let Tab land DOM focus on an option instead.
+  it('keeps every option out of the real tab order (virtual focus via aria-activedescendant only)', () => {
+    render(<ModernMentions options={FIVE} />);
+    openPopup(screen.getByRole('textbox'));
+
+    for (const option of screen.getAllByRole('option')) {
+      expect(option).toHaveAttribute('tabindex', '-1');
+    }
+  });
+
+  // Tab carries focus out of the component; a popup that survives it is anchored to a
+  // control the user has already left.
+  it('dismisses the popup on Tab when no navigable option can consume it', () => {
+    render(<ModernMentions options={[]} />);
+    const textarea = screen.getByRole('textbox');
+    openPopup(textarea);
+
+    const prevented = !fireEvent.keyDown(textarea, { key: 'Tab' });
+
+    expect(prevented).toBe(false);
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+  });
+
+  // An IME confirmation arrives as Enter with isComposing set; intercepting it would insert
+  // a mention instead of the text the user was composing.
+  it('leaves Enter to the IME while a composition is in flight', () => {
+    render(<ModernMentions options={FIVE} />);
+    const textarea = screen.getByRole('textbox');
+    openPopup(textarea);
+
+    fireEvent.keyDown(textarea, { key: 'Enter', isComposing: true });
+
+    expect(screen.getByRole('listbox')).toBeInTheDocument();
+    expect((textarea as HTMLTextAreaElement).value).toBe('@');
+  });
 });

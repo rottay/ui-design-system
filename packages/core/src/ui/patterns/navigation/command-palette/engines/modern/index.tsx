@@ -97,6 +97,8 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
   const instanceId = useId();
   const listboxId = `${instanceId}-listbox`;
   const optionId = (idx: number) => `${instanceId}-option-${idx}`;
+  const argumentPromptId = `${instanceId}-argument-prompt`;
+  const argumentErrorId = `${instanceId}-argument-error`;
   const {
     mode,
     pendingItem,
@@ -157,6 +159,12 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
 
   // Reset the keyboard cursor to the first item whenever the query changes.
   useEffect(() => { setActiveIndex(0); }, [query]);
+
+  // Clamp the cursor when the navigable set shrinks with no query change: a stale
+  // activeIndex past the end leaves aria-activedescendant undefined and Enter inert.
+  useEffect(() => {
+    setActiveIndex((i) => Math.min(i, Math.max(0, navigableItems.length - 1)));
+  }, [navigableItems]);
 
   // Reset search and route INITIAL focus to the search box on open. Focus
   // RESTORE on close is deliberately absent: the composed Modal opens a native
@@ -335,17 +343,27 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
                 ? optionId(activeIndex)
                 : undefined
             }
+            // Argument mode swaps the listbox for a prompt, which a screen reader user would
+            // otherwise never hear; placeholder text vanishes as soon as they type.
+            aria-describedby={
+              mode === 'argument'
+                ? [argumentPromptId, argumentError ? argumentErrorId : undefined]
+                    .filter(Boolean)
+                    .join(' ')
+                : undefined
+            }
           />
         </div>
         {/* Argument mode replaces the result list with the parameter prompt. */}
         {mode === 'argument' && pendingItem ? (
           <div data-part="argument-panel">
-            <div data-part="argument-prompt">
+            <div data-part="argument-prompt" id={argumentPromptId}>
               {pendingItem.parameter?.prompt}
             </div>
             {argumentError && (
               <div
                 data-part="argument-error"
+                id={argumentErrorId}
                 role="alert"
               >
                 {argumentError}

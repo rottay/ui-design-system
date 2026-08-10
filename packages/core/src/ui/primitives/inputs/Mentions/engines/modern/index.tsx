@@ -253,6 +253,10 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
       if (!isOpen) return;
+      // While an IME composes, Enter confirms the candidate and the arrows walk the candidate
+      // window; intercepting them would insert a mention instead of the text being composed.
+      const native = e.nativeEvent as KeyboardEvent;
+      if (native.isComposing || native.keyCode === 229) return;
 
       switch (e.key) {
         case 'ArrowDown':
@@ -275,7 +279,11 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
           if (focusedOption && !focusedOption.disabled) {
             e.preventDefault();
             handleSelect(focusedOption);
+            break;
           }
+          // Tab carries focus out of the component, so the popup must not outlive it. Native
+          // Tab is deliberately left alone: there is nothing navigable to consume it.
+          if (e.key === 'Tab') setIsOpen(false);
           break;
         }
         case 'Escape':
@@ -377,6 +385,9 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
                     data-part="option"
                     data-active={focusedIndex === index || undefined}
                     data-disabled={option.disabled || undefined}
+                    /* Virtual focus stays on the textarea; options must never become
+                       independent tab stops. */
+                    tabIndex={-1}
                   >
                     {/* Governed label slot: the stable addressable part for
                         the option's primary content (truncation/typography

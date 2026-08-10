@@ -339,6 +339,76 @@ describe('modern command palette -- governed shell + instance scoping', () => {
     // focus trap and the backdrop it wrapped are now Modal's.
     expect(document.querySelector("[data-part='dialog']")).toBeNull();
   });
+
+  it('links the argument-mode prompt and error to the input via aria-describedby', async () => {
+    const props = createProps({
+      recentItems: undefined,
+      items: [
+        {
+          id: 'rename-branch',
+          label: 'Rename branch',
+          group: 'Actions',
+          parameter: {
+            prompt: 'Branch name',
+            validate: (value) => (value.trim() ? null : 'Name is required'),
+          },
+          onSelect: vi.fn(),
+          onSubmit: vi.fn(),
+        },
+      ],
+    });
+
+    renderWithEngine(<ModernCommandPalette {...props} />, 'modern');
+
+    const input = await screen.findByPlaceholderText('Type a command...');
+    fireEvent.click(screen.getByText('Rename branch'));
+    const prompt = await screen.findByText('Branch name');
+    expect(prompt.id).toBeTruthy();
+
+    // Screen readers announce aria-describedby on focus, so the prompt must be reachable
+    // that way, not only by DOM order after the input.
+    const describedBy = input.getAttribute('aria-describedby');
+    expect(describedBy).toContain(prompt.id);
+
+    // An empty argument still describes what to type, even before the
+    // validation error exists.
+    fireEvent.keyDown(input, { key: 'Enter' });
+    const error = await screen.findByText('Name is required');
+    expect(input.getAttribute('aria-describedby')).toContain(error.id);
+    expect(input.getAttribute('aria-describedby')).toContain(prompt.id);
+  });
+
+  it('clamps the keyboard cursor when the item set shrinks with no query change', async () => {
+    const props = createProps({ onSearch: undefined, recentItems: undefined });
+    const { rerender } = renderWithEngine(<ModernCommandPalette {...props} />, 'modern');
+
+    const input = await screen.findByPlaceholderText('Type a command...');
+    // Move the cursor onto the last of the 3 seeded items.
+    fireEvent.keyDown(input, { key: 'ArrowDown' });
+    fireEvent.keyDown(input, { key: 'ArrowDown' });
+    expect(input.getAttribute('aria-activedescendant')).toBe(
+      screen.getAllByRole('option')[2]!.id,
+    );
+
+    // An async source resolving with fewer rows than were visible, with no query change
+    // so the query-reset effect does not run.
+    const onlyItemSelect = vi.fn();
+    rerender(
+      <ModernCommandPalette
+        {...props}
+        items={[{ id: 'only-item', label: 'Only item', group: 'Actions', onSelect: onlyItemSelect }]}
+      />,
+    );
+
+    // The cursor must land on the one remaining option -- not point past
+    // the end with aria-activedescendant undefined and no row highlighted.
+    const remaining = screen.getAllByRole('option');
+    expect(remaining).toHaveLength(1);
+    expect(input.getAttribute('aria-activedescendant')).toBe(remaining[0]!.id);
+
+    fireEvent.keyDown(input, { key: 'Enter' });
+    expect(onlyItemSelect).toHaveBeenCalledTimes(1);
+  });
 });
 
 // Modern-only: the empty result set must not leave a dangling virtual focus.

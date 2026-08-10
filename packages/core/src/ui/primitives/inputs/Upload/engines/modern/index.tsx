@@ -327,6 +327,33 @@ const UploadProgress: React.FC<UploadProgressProps> = ({ percent = 0, strokeColo
 // File Item Renderer
 // ---------------------------------------------------------------------------
 
+/* Removing a row unmounts the focused button, so focus moves to the neighbouring row's
+   remove button first, else it strands on <body>. */
+function focusNeighborFileAction(e: React.MouseEvent<HTMLButtonElement>): void {
+  const row = e.currentTarget.closest('[role="listitem"]');
+  const neighbor = row?.nextElementSibling ?? row?.previousElementSibling;
+  const target =
+    neighbor?.querySelector<HTMLButtonElement>('[data-part="file-item-action"][data-action="remove"]') ??
+    neighbor?.querySelector<HTMLButtonElement>('[data-part="file-item-action"]');
+  // Removing the only file leaves no neighbour, so the trigger that opened this list is the
+  // nearest control that survives the unmount. The candidates are tried one at a time: a
+  // single comma-separated list would resolve in DOCUMENT order, which returns the wrapper
+  // before the control it wraps.
+  const root = e.currentTarget.closest('[data-part="root"]');
+  const fallback = root
+    ? ['[data-part="trigger"] button:not([disabled])',
+      '[data-part="add-button"]',
+      '[data-part="dropzone"]',
+      '[data-part="trigger"]',
+      '[data-part="file-list"]']
+      .reduce<HTMLElement | null>(
+        (found, selector) => found ?? root.querySelector<HTMLElement>(selector),
+        null,
+      )
+    : null;
+  (target ?? fallback)?.focus();
+}
+
 interface FileItemProps {
   file: UploadFile;
   listType: UploadListType;
@@ -424,7 +451,7 @@ const FileItem: React.FC<FileItemProps> = ({
             )}
             {retryButton}
             {showRemoveAction && (
-              <button type="button" data-part="file-item-action" data-action="remove" onClick={() => onRemove(file)} aria-label={removeLabel}>
+              <button type="button" data-part="file-item-action" data-action="remove" onClick={(e) => { focusNeighborFileAction(e); onRemove(file); }} aria-label={removeLabel}>
                 <ActionDeleteIcon decorative size={16} />
               </button>
             )}
@@ -465,7 +492,7 @@ const FileItem: React.FC<FileItemProps> = ({
             )}
             {retryButton}
             {showRemoveAction && (
-              <button type="button" data-part="file-item-action" data-action="remove" onClick={() => onRemove(file)} aria-label={removeLabel}>
+              <button type="button" data-part="file-item-action" data-action="remove" onClick={(e) => { focusNeighborFileAction(e); onRemove(file); }} aria-label={removeLabel}>
                 <ActionDeleteIcon decorative size={12} />
               </button>
             )}
@@ -507,7 +534,7 @@ const FileItem: React.FC<FileItemProps> = ({
         )}
         {retryButton}
         {showRemoveAction && (
-          <button type="button" data-part="file-item-action" data-action="remove" onClick={() => onRemove(file)} aria-label={removeLabel}>
+          <button type="button" data-part="file-item-action" data-action="remove" onClick={(e) => { focusNeighborFileAction(e); onRemove(file); }} aria-label={removeLabel}>
             <ActionDeleteIcon decorative size={14} />
           </button>
         )}
@@ -535,7 +562,7 @@ const FileItem: React.FC<FileItemProps> = ({
       </div>
       {retryButton}
       {showRemoveAction && (
-        <button type="button" data-part="file-item-action" data-action="remove" onClick={() => onRemove(file)} aria-label={removeLabel}>
+        <button type="button" data-part="file-item-action" data-action="remove" onClick={(e) => { focusNeighborFileAction(e); onRemove(file); }} aria-label={removeLabel}>
           <ActionDeleteIcon decorative size={14} />
         </button>
       )}
@@ -727,6 +754,7 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
         ) : (
           <span
             data-part="trigger"
+            tabIndex={-1}
             data-disabled={disabled ? 'true' : undefined}
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); if (!disabled) inputRef.current?.click(); }}
           >
@@ -758,7 +786,7 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
     return (
       <div ref={ref} data-part="root" className={rootClassName} style={style}>
         {isPictureCardOrCircle ? (
-          <div data-part="file-list" role="list" aria-label={fileListLabel} aria-live="polite" aria-atomic="false">
+          <div data-part="file-list" role="list" tabIndex={-1} aria-label={fileListLabel} aria-live="polite" aria-atomic="false">
             {showUploadList && fileItems}
             {uploadTrigger}
           </div>

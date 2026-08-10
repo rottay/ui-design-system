@@ -85,7 +85,11 @@ export function useVirtualScroll(options: UseVirtualScrollOptions): UseVirtualSc
   const totalHeight = totalItems * rowHeight;
 
   // First visible row (before overscan)
-  const rawStartIndex = Math.floor(scrollTop / rowHeight);
+  /* A stale scrollTop is clamped so a shrinking list cannot render an empty slice. */
+  const rawStartIndex = Math.min(
+    Math.floor(scrollTop / rowHeight),
+    Math.max(0, totalItems - 1),
+  );
   // Apply overscan buffer, clamped to valid range
   const startIndex = Math.max(0, rawStartIndex - overscan);
 

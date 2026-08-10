@@ -359,7 +359,7 @@
 .rottay-badge.rottay-badge--modern[data-part='root'][data-variant='default'] {
   --ds-badge-tone-solid-bg: var(--ds-color-neutral-200);
   --ds-badge-tone-solid-color: var(--ds-color-text-primary);
-  --ds-badge-tone-soft-bg: var(--ds-color-alpha-black-100);
+  --ds-badge-tone-soft-bg: var(--ds-color-alpha-black-100, color-mix(in srgb, var(--ds-color-text-primary) 20%, transparent));
   --ds-badge-tone-soft-color: var(--ds-color-text-secondary);
   --ds-badge-tone-outline: var(--ds-color-border);
 }
@@ -496,9 +496,11 @@
 }
 
 .rottay-badge.rottay-badge--modern[data-state~='pressed'] {
-  background: var(--ds-badge-surface-pressed, var(--ds-badge-surface-hover));
-  border-color: var(--ds-badge-frame-pressed, var(--ds-badge-frame-hover));
-  color: var(--ds-badge-ink-pressed, var(--ds-badge-ink-hover));
+  /* The hover channels are tenant-declared, so pressed must fall through to the same
+     per-treatment mixes hover uses or an unconfigured tenant presses to transparent. */
+  background: var(--ds-badge-surface-pressed, var(--ds-badge-surface-hover, var(--_ds-badge-hover-bg-fallback)));
+  border-color: var(--ds-badge-frame-pressed, var(--ds-badge-frame-hover, color-mix(in srgb, currentColor 24%, transparent)));
+  color: var(--ds-badge-ink-pressed, var(--ds-badge-ink-hover, var(--ds-badge-hover-ink-fallback)));
   transform: var(--ds-badge-position-transform, translateY(0))
     var(--ds-badge-press-transform, translateY(0) scale(0.985));
   box-shadow: var(--ds-badge-shadow-pressed, inset 0 1px 2px color-mix(in srgb, currentColor 12%, transparent));

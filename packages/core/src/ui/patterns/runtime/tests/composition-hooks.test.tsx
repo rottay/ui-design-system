@@ -172,7 +172,10 @@ describe('composition hooks', () => {
         result.current.setSelectedKeys(['0', '2']);
       });
 
-      expect(result.current.selectedRows.map((row) => row.name)).toEqual(['Gamma', 'Beta']);
+      // Without a rowKey the keys are positions in the RENDERED page, which the
+      // descending sort has reordered to Alpha/Gamma/Beta; the resolved rows then
+      // come back in source order.
+      expect(result.current.selectedRows.map((row) => row.name)).toEqual(['Alpha', 'Beta']);
     });
   });
 
@@ -315,11 +318,32 @@ describe('composition hooks', () => {
 
       // Invalid moves should be ignored instead of corrupting board state.
       const snapshot = result.current.columns;
+      onItemMoved.mockClear();
       act(() => {
         result.current.moveItem('missing', 'todo', 'done', 1);
       });
 
       expect(result.current.columns).toEqual(snapshot);
+      expect(onItemMoved).not.toHaveBeenCalled();
+    });
+
+    it('applies back-to-back mutations against the latest columns snapshot', () => {
+      const { result } = renderHook(() =>
+        useKanban<Task>({
+          initialColumns,
+          itemKey: (item) => item.id,
+        })
+      );
+
+      act(() => {
+        result.current.addItem('todo', { id: 'd', title: 'Run QA' });
+        result.current.updateItem('todo', 'd', (item) => ({ ...item, title: 'Run premium QA' }));
+        result.current.moveItem('d', 'todo', 'done', 1);
+      });
+
+      expect(result.current.getItem('d')?.title).toBe('Run premium QA');
+      expect(result.current.getColumnItems('todo').map((item) => item.id)).toEqual(['a', 'b']);
+      expect(result.current.getColumnItems('done').map((item) => item.id)).toEqual(['c', 'd']);
     });
   });
 });
