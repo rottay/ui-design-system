@@ -133,3 +133,12 @@ export const TypographyText = forwardRef<HTMLElement, TextProps>(
 );
 
 TypographyText.displayName = 'Typography.Text';
+
+/**
+ * Short alias for direct-entrypoint consumers.
+ *
+ * The parent `Typography` barrel also publishes this alias, but the governed
+ * public entrypoint and every deep import resolve this module directly, so the
+ * alias has to exist here or those bindings resolve to `undefined`.
+ */
+export { TypographyText as Text };

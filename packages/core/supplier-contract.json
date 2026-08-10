@@ -3941,12 +3941,18 @@
         "Link",
         "Text"
       ],
-      "symbols": {},
-      "supplierFreeExports": [
-        "Heading",
-        "Link",
-        "Text"
-      ]
+      "symbols": {
+        "Heading": [
+          "antd"
+        ],
+        "Link": [
+          "antd"
+        ],
+        "Text": [
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
     },
     "./primitives/alert": {
       "exports": [

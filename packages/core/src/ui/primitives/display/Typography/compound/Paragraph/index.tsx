@@ -125,3 +125,12 @@ export const TypographyParagraph = forwardRef<HTMLParagraphElement, ParagraphPro
 );
 
 TypographyParagraph.displayName = 'Typography.Paragraph';
+
+/**
+ * Short alias for direct-entrypoint consumers.
+ *
+ * The parent `Typography` barrel also publishes this alias, but the governed
+ * public entrypoint and every deep import resolve this module directly, so the
+ * alias has to exist here or those bindings resolve to `undefined`.
+ */
+export { TypographyParagraph as Paragraph };

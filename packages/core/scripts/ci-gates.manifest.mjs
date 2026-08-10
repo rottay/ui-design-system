@@ -27,6 +27,12 @@ export const CI_GATES = Object.freeze([
   // First: a workflow that references a script which does not exist cannot be
   // trusted to run anything below.
   { id: 'workflow-script-wiring', run: ['node', 'scripts/workflow-script-wiring-gate.mjs'], blocking: true },
+  // A named import of a binding the target module never publishes is `undefined`
+  // at runtime and renders an invalid element. A deep-path import rewrite landed
+  // 22 of them at once because the short alias for a compound primitive lives in
+  // the parent barrel; no other gate in this list can see that edge.
+  { id: 'import-binding-integrity-drill', run: ['node', '--test', 'scripts/import-binding-integrity-gate.test.mjs'], blocking: true },
+  { id: 'import-binding-integrity', run: ['node', 'scripts/import-binding-integrity-gate.mjs'], blocking: true },
   { id: 'cra17:licenses', run: ['pnpm', 'run', 'cra17:licenses'], blocking: true },
   { id: 'effects:provenance', run: ['pnpm', 'run', 'effects:provenance'], blocking: true },
   { id: 'contract:check', run: ['pnpm', 'run', 'contract:check'], blocking: true },
