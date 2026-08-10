@@ -3,11 +3,19 @@
  *  var(--ds-color-border))`, where the family-private half is declared nowhere, so every chain
  *  fell through to the border the control already had.
  *
- *  Resolution is declaration-aware, because a fallback only fires when the name in front of it is
- *  undeclared. `var(--ds-select-bg-hover, var(--ds-material-control-background-hover, ...,
- *  var(--ds-surface-control)))` ends on a resting name and is still perfectly alive: the middle
- *  channel is declared, so the chain stops there and the resting tail is unreachable. Judging by
- *  the last name alone would condemn the correct idiom along with the broken one. */
+ *  Two things make this decidable rather than a guess.
+ *
+ *  Resolution is DECLARATION-AWARE, because a fallback only fires when the name in front of it is
+ *  undeclared. `var(--ds-select-bg-hover, var(--ds-material-control-background-hover), …,
+ *  var(--ds-surface-control))` ends on a resting name and is still alive: the middle channel is
+ *  declared, so the chain stops there and the resting tail is unreachable.
+ *
+ *  Comparison is PER ELEMENT, not against a global idea of "rest". `record.css` rests its prose
+ *  field on `--ds-color-border-secondary` and hovers it to `--ds-color-border`; against a fixed
+ *  list of resting names that reads as dead, when it is exactly the quiet shift the family
+ *  documents. So a state rule is judged against the base rule for the same element -- same
+ *  `[data-*]` qualifiers on the final compound, no state pseudo-class -- and is an offender only
+ *  when it resolves to what that element already had. */
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
@@ -34,8 +42,12 @@ const blankComments = (src: string): string =>
 const CSS_FILES = walk(CSS_ROOT, [".css"]);
 const TS_FILES = walk(CORE, [".ts", ".tsx"]);
 
-/* Classic and Rustic are read-only for this programme; the repaired scope is Modern skin. */
-const IN_SCOPE = CSS_FILES.filter((f) => f.includes("/engines/modern/"));
+/* Classic and Rustic are read-only for this programme. The scope is Modern skin PLUS the shared
+ * presentation skin, which is engine-agnostic and where structures, charts and the commercial kit
+ * keep their CSS -- scanning only the engine tree would miss 146 files that Modern also renders. */
+const IN_SCOPE = CSS_FILES.filter(
+  (f) => f.includes("/engines/modern/") || f.includes("/presentation/components/"),
+);
 
 /** A property is declared by CSS *or* by a component stamping it at runtime. */
 function declaredNames(): Set<string> {
@@ -54,19 +66,12 @@ function declaredNames(): Set<string> {
   return declared;
 }
 
-/** The resting names a state repaint must not end up resolving to. */
-const RESTING_SOURCE: Record<string, string[]> = {
-  "border-color": ["--ds-color-border"],
-  background: ["--ds-surface-control", "--ds-surface-card"],
-  "background-color": ["--ds-surface-control", "--ds-surface-card"],
-};
-
 /**
- * The name a pure `var()` fallback chain actually resolves to: the first declared one, or the
- * terminal when none is declared.
+ * The name a pure `var()` fallback chain resolves to: the first declared one, or the terminal
+ * when none is declared.
  *
  * Only a pure chain is judged. `color-mix(in srgb, var(--ds-color-primary) 5%,
- * var(--ds-surface-card))` also mentions a resting name, but it is a tint computed OVER rest —
+ * var(--ds-surface-card))` also mentions a resting name, but it is a tint computed OVER rest --
  * a real repaint, and the idiom most of the corpus uses deliberately.
  */
 function resolvedSource(value: string, declared: Set<string>): string | null {
@@ -82,23 +87,92 @@ function resolvedSource(value: string, declared: Set<string>): string | null {
   return last[2] ? null : last[1];
 }
 
+/** `border: 1px solid var(--x)` also sets border-color; the shorthand has to be read as one. */
+function colorPart(property: string, value: string): { property: string; value: string } | null {
+  if (property === "border-color" || property === "background" || property === "background-color") {
+    return { property: property === "background-color" ? "background" : property, value };
+  }
+  if (property === "border") {
+    const match = value.match(/var\(.*\)\s*$/);
+    return match ? { property: "border-color", value: match[0] } : null;
+  }
+  return null;
+}
+
 /**
- * Declarations that only apply while the pointer is over the control or pressing it.
+ * The element a rule paints, as the `[data-*]` qualifiers on its final compound selector.
  *
- * Attribute states such as `[data-active='true']` are out of scope: a selected tab adopting the
- * card surface it merges into is correct, so flagging it would make the drill argue with a working
- * idiom instead of catching a dead repaint.
+ * Pseudo-classes are dropped so `…[data-part='field'][data-mono='false']:hover` and its base rule
+ * key identically, while `[data-mono='true']` stays a different element from `[data-mono='false']`.
+ * Returns null for a selector with no data qualifier, which cannot be matched to a base rule and
+ * is therefore never judged.
  */
-function stateRules(css: string): { selector: string; declarations: [string, string][] }[] {
-  const out: { selector: string; declarations: [string, string][] }[] = [];
+/**
+ * A selector with its functional pseudo-class arguments removed.
+ *
+ * `:not([data-active='true'])` NEGATES a qualifier. Reading it as one keyed the command palette's
+ * hover to its own active rule and reported a real repaint as dead; reading it as a disabled
+ * marker exempted every field family whose hover is gated `:not([data-disabled='true'])`, which
+ * silently switched this whole drill off. Both readings must go through here.
+ */
+const withoutPseudoArgs = (selector: string): string =>
+  selector.replace(/:(?:not|is|where|has)\([^()]*\)/g, "");
+
+/**
+ * A selector with only its NEGATIONS removed.
+ *
+ * `:where(:hover)` is a real hover. Stripping it the way a negation is stripped made the tag-input
+ * hover rule read as a base rule, which then became that element's "resting" border -- and the
+ * `:active` twin beside it, painting the same correct value, got reported as dead. State detection
+ * must keep positive `:is`/`:where` contents; only `:not` says "this element is NOT that".
+ */
+const withoutNegations = (selector: string): string => selector.replace(/:not\([^()]*\)/g, "");
+
+function elementKey(selector: string): string | null {
+  const finalCompound = withoutPseudoArgs(selector).split(",")[0].trim().split(/\s+|>/).filter(Boolean).pop() ?? "";
+  const qualifiers = [...finalCompound.matchAll(/\[[^\]]+\]/g)]
+    .map((m) => m[0])
+    .filter((q) => q.startsWith("[data-"));
+  return qualifiers.length > 0 ? qualifiers.sort().join("") : null;
+}
+
+/**
+ * A state rule on a disabled or inert element that restores the resting paint is CANCELLING a
+ * broader hover, which is the correct treatment -- a disabled row must not react to the pointer.
+ */
+const cancelsStateDeliberately = (selector: string): boolean =>
+  /\[aria-disabled=['"]?true|\[data-disabled=['"]?true|:disabled|\[aria-readonly=['"]?true|\[data-readonly=['"]?true/.test(
+    withoutNegations(selector),
+  );
+
+/** The two states this drill judges. */
+const isJudgedState = (selector: string): boolean => /:hover|:active/.test(withoutNegations(selector));
+
+/**
+ * Any state at all, for the purpose of deciding what an element looks like AT REST.
+ *
+ * `:focus` counts. Leaving it out let the focus border overwrite the resting border in the map,
+ * so the hover comparison had nothing true to compare against and the drill went quiet on the
+ * very defect it was built for.
+ */
+const isAnyStateRule = (selector: string): boolean =>
+  /:hover|:active|:focus|:checked|:visited|:target|:disabled|:indeterminate|\[data-active=|\[data-selected=|\[data-open=|\[aria-selected=|\[aria-expanded=/.test(
+    withoutNegations(selector),
+  );
+
+interface Rule {
+  selector: string;
+  declarations: [string, string][];
+}
+
+function rules(css: string): Rule[] {
+  const out: Rule[] = [];
   for (const rule of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
-    const selector = rule[1].trim();
-    if (!/:hover|:active/.test(selector)) continue;
     const declarations: [string, string][] = [];
     for (const declaration of rule[2].matchAll(/(^|[\s;])([a-z-]+)\s*:\s*([^;]+)/g)) {
       declarations.push([declaration[2], declaration[3].trim()]);
     }
-    out.push({ selector, declarations });
+    if (declarations.length > 0) out.push({ selector: rule[1].trim(), declarations });
   }
   return out;
 }
@@ -107,33 +181,59 @@ describe("Modern state channels resolve to something other than rest", () => {
   const declared = declaredNames();
 
   it("indexes a real corpus, so a pass cannot come from scanning nothing", () => {
-    expect(IN_SCOPE.length).toBeGreaterThan(100);
+    expect(IN_SCOPE.length).toBeGreaterThan(200);
     expect(declared.size).toBeGreaterThan(1000);
-    const rules = IN_SCOPE.reduce(
-      (n, f) => n + stateRules(blankComments(readFileSync(f, "utf8"))).length,
+    const stateRules = IN_SCOPE.reduce(
+      (n, f) => n + rules(blankComments(readFileSync(f, "utf8"))).filter((r) => isJudgedState(r.selector)).length,
       0,
     );
-    expect(rules).toBeGreaterThan(100);
+    expect(stateRules).toBeGreaterThan(100);
   });
 
-  it("finds no hover or active rule whose every paint resolves back to rest", () => {
+  it("finds no hover or active rule that repaints an element to the value it already had", () => {
     const offenders: string[] = [];
     for (const file of IN_SCOPE) {
-      const css = blankComments(readFileSync(file, "utf8"));
-      for (const { selector, declarations } of stateRules(css)) {
+      const parsed = rules(blankComments(readFileSync(file, "utf8")));
+
+      /* What each element already looks like, from the rules that carry no state pseudo-class. */
+      const restingByElement = new Map<string, Map<string, string>>();
+      for (const rule of parsed) {
+        if (isAnyStateRule(rule.selector)) continue;
+        const key = elementKey(rule.selector);
+        if (!key) continue;
+        for (const [property, value] of rule.declarations) {
+          const paint = colorPart(property, value);
+          if (!paint) continue;
+          const source = resolvedSource(paint.value, declared);
+          if (!source) continue;
+          if (!restingByElement.has(key)) restingByElement.set(key, new Map());
+          restingByElement.get(key)!.set(paint.property, source);
+        }
+      }
+
+      for (const rule of parsed) {
+        if (!isJudgedState(rule.selector)) continue;
+        if (cancelsStateDeliberately(rule.selector)) continue;
+        const key = elementKey(rule.selector);
+        const resting = key ? restingByElement.get(key) : undefined;
+        if (!resting) continue;
+
         const dead: string[] = [];
         let live = false;
-        for (const [property, value] of declarations) {
-          const resting = RESTING_SOURCE[property];
-          const source = resting ? resolvedSource(value, declared) : null;
-          if (source && resting?.includes(source)) dead.push(`${property}: ${value}`);
-          else live = true;
+        for (const [property, value] of rule.declarations) {
+          const paint = colorPart(property, value);
+          const source = paint ? resolvedSource(paint.value, declared) : null;
+          if (paint && source && resting.get(paint.property) === source) {
+            dead.push(`${property}: ${value}`);
+          } else {
+            live = true;
+          }
         }
-        // A rule that also moves background, colour or shadow is composing its
-        // hover deliberately -- holding the border steady there is a decision,
-        // not a dead chain. Only a rule with nothing left alive is a defect.
+        // A rule that also moves background, colour or shadow is composing its hover
+        // deliberately -- holding the border steady there is a decision, not a dead
+        // chain. Only a rule with nothing left alive is a defect.
         if (dead.length > 0 && !live) {
-          offenders.push(`${file.slice(CSS_ROOT.length + 1)} -> ${selector} { ${dead.join("; ")} }`);
+          offenders.push(`${file.slice(CSS_ROOT.length + 1)} -> ${rule.selector} { ${dead.join("; ")} }`);
         }
       }
     }
