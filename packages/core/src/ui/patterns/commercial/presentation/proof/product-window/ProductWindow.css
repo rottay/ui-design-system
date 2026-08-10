@@ -63,7 +63,7 @@
   text-transform: uppercase;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: var(--ds-commercial-fg);
+  color: var(--ds-commercial-fg, currentColor);
 }
 
 /*

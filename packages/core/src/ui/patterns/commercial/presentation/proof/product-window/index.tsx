@@ -1,3 +1,5 @@
+import type { ElementType } from "react";
+
 import type { ProductWindowProps } from '../../../foundation/contracts/proof/product-window';
 
 import "./ProductWindow.css";
@@ -19,6 +21,9 @@ export function ProductWindow({
   className,
 }: ProductWindowProps): React.JSX.Element {
   const classes = ["rt-product-window", className].filter(Boolean).join(" ");
+  // <figcaption> is only valid inside <figure>, so an `as` override must not
+  // leave an orphaned caption element behind.
+  const CaptionTag: ElementType = As === "figure" ? "figcaption" : "div";
 
   return (
     <As className={classes} data-part="root">
@@ -36,9 +41,9 @@ export function ProductWindow({
         </div>
       </div>
       {caption != null && (
-        <figcaption className="rt-product-window__caption" data-part="caption">
+        <CaptionTag className="rt-product-window__caption" data-part="caption">
           {caption}
-        </figcaption>
+        </CaptionTag>
       )}
     </As>
   );

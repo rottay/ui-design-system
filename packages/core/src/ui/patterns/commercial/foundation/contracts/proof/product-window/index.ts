@@ -12,7 +12,8 @@ export interface ProductWindowProps {
    * rendered in the mono title bar, not decorative ASCII.
    */
   label: ReactNode;
-  /** A one-line story rendered under the window as a `figcaption`. */
+  /** A one-line story under the window: a `figcaption` under the default `figure` container,
+   *  and a generic element when `as` overrides it, since `figcaption` needs a `figure` parent. */
   caption?: ReactNode;
   /** Element to render as the window container. Defaults to `figure`. */
   as?: ElementType;

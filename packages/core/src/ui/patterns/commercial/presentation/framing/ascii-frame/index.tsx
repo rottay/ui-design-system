@@ -28,27 +28,51 @@ export function AsciiFrame({
   const corners = CORNERS[variant];
   const classes = ["rt-ascii-frame", className].filter(Boolean).join(" ");
 
+  // data-part hooks match the kit-wide anatomy contract (product-window, tree-view, ...).
   return (
     <As
       className={classes}
+      data-part="root"
       data-variant={variant}
       aria-label={ariaLabel}
       role={ariaLabel != null ? "region" : undefined}
     >
-      <span className="rt-ascii-frame__corner rt-ascii-frame__corner--tl" aria-hidden="true">
+      <span
+        className="rt-ascii-frame__corner rt-ascii-frame__corner--tl"
+        data-part="corner-tl"
+        aria-hidden="true"
+      >
         {corners.tl}
       </span>
-      <span className="rt-ascii-frame__corner rt-ascii-frame__corner--tr" aria-hidden="true">
+      <span
+        className="rt-ascii-frame__corner rt-ascii-frame__corner--tr"
+        data-part="corner-tr"
+        aria-hidden="true"
+      >
         {corners.tr}
       </span>
-      <span className="rt-ascii-frame__corner rt-ascii-frame__corner--bl" aria-hidden="true">
+      <span
+        className="rt-ascii-frame__corner rt-ascii-frame__corner--bl"
+        data-part="corner-bl"
+        aria-hidden="true"
+      >
         {corners.bl}
       </span>
-      <span className="rt-ascii-frame__corner rt-ascii-frame__corner--br" aria-hidden="true">
+      <span
+        className="rt-ascii-frame__corner rt-ascii-frame__corner--br"
+        data-part="corner-br"
+        aria-hidden="true"
+      >
         {corners.br}
       </span>
-      {label != null && <span className="rt-ascii-frame__label">{label}</span>}
-      <div className="rt-ascii-frame__body">{children}</div>
+      {label != null && (
+        <span className="rt-ascii-frame__label" data-part="label">
+          {label}
+        </span>
+      )}
+      <div className="rt-ascii-frame__body" data-part="body">
+        {children}
+      </div>
     </As>
   );
 }

@@ -8,7 +8,7 @@
 
 .rt-mono-stat {
   display: block;
-  color: var(--ds-commercial-fg);
+  color: var(--ds-commercial-fg, currentColor);
 }
 
 .rt-mono-stat__value {

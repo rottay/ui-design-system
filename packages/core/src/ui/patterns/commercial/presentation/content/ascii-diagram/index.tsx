@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import type {
   AsciiDiagramProps,
@@ -17,6 +17,9 @@ import "./AsciiDiagram.css";
  * label) so columns line up cleanly and edge routing math stays simple. `H_GAP`/`V_GAP` are the
  * character channels between adjacent columns/rows that connectors route through.
  */
+
+/* A CONSUMED CONTRACT: a consumer re-derives these four to position an overlay, so changing
+   one mis-registers that overlay rather than failing here. */
 const BOX_HEIGHT = 3;
 const H_GAP = 6;
 const V_GAP = 2;
@@ -32,6 +35,19 @@ const LINE_STEP_MS = 90;
 
 /** Family-private channel governing the "type" reveal cadence (see `LINE_STEP_MS`). */
 const LINE_CADENCE_AXIS = "--_ds-ascii-diagram-line-cadence";
+
+/** Mirrors the grid's CSS line-height: the type reveal grows the text line by
+ *  line, so the full height must be reserved up front or the page shifts. */
+const GRID_LINE_HEIGHT_EM = 1.25;
+
+/** Absolute px, not a rem ratio: the tenant root font varies (15px / 15.6px observed), so a
+ *  ratio of the natural rem would silently permit sub-9px type on a smaller root. */
+const MIN_FIT_PX = 9;
+const GRID_SIZE_AXIS = "--_ds-ascii-diagram-grid-size";
+const NATURAL_GRID_REM = 0.8125;
+/* The reservation is expressed in the NATURAL size, not in em: an em would shrink with the fit
+   and the guard would give back exactly the height it exists to hold. */
+const GRID_LINE_HEIGHT_REM = GRID_LINE_HEIGHT_EM * NATURAL_GRID_REM;
 
 /**
  * Reads a private `<time>` channel from the resolved style of `node`, falling back to
@@ -305,6 +321,9 @@ function buildDiagramText(nodes: DiagramNode[], edges: DiagramEdge[]): string {
  * `revealed` signal (with a `prefers-reduced-motion` CSS fallback of its own). `reveal="none"`
  * never enters any animated branch — the grid is simply always the final, full text.
  */
+
+/* ONE painter renders the same text at every viewport; a constrained measure is answered by
+   type size, then by a reachable region, never by a second layout. */
 export function AsciiDiagram({
   nodes,
   edges,
@@ -313,7 +332,11 @@ export function AsciiDiagram({
   className,
 }: AsciiDiagramProps): React.JSX.Element {
   const { ref, revealed, animate } = useReveal<HTMLDivElement>();
+  const gridRef = useRef<HTMLPreElement>(null);
+  const [overflowing, setOverflowing] = useState(false);
+  const [fitScale, setFitScale] = useState<number | null>(null);
   const fullText = useMemo(() => buildDiagramText(nodes, edges), [nodes, edges]);
+  const lineCount = useMemo(() => (fullText === "" ? 0 : fullText.split("\n").length), [fullText]);
 
   // Start at the final grid: safe for SSR/first paint/no-JS and for reduced motion, matching
   // the kit's Typewriter/MonoStat/TerminalBlock convention. Only ever reset to reveal
@@ -350,6 +373,55 @@ export function AsciiDiagram({
   }, [reveal, revealed, animate, fullText]);
 
   const typedText = reveal === "type" ? display : fullText;
+  const settled = typedText === fullText;
+
+  /* Gate on `settled`: a partially-typed frame measures narrower than its final self, and
+     growing text inside a block box fires no ResizeObserver to correct it. */
+  useEffect(() => {
+    const grid = gridRef.current;
+    if (!grid || !settled) return;
+
+    const measure = (): void => {
+      // Measure at natural metrics; a still-applied fit would report "fits" and ratchet down.
+      grid.style.removeProperty(GRID_SIZE_AXIS);
+      const available = grid.clientWidth;
+      const required = grid.scrollWidth;
+
+      if (available <= 0 || required <= available + 1) {
+        setFitScale(null);
+        setOverflowing(false);
+        return;
+      }
+
+      const naturalPx = Number.parseFloat(getComputedStyle(grid).fontSize);
+      const floor = Number.isFinite(naturalPx) && naturalPx > 0 ? MIN_FIT_PX / naturalPx : 1;
+      const quantized = Math.floor((available / required) * 100) / 100;
+      if (quantized < floor) {
+        setFitScale(null);
+        setOverflowing(true);
+        return;
+      }
+
+      // Re-verify after applying: quantization can still leave a sub-pixel overflow.
+      const apply = (scale: number): void => {
+        grid.style.setProperty(GRID_SIZE_AXIS, `${(NATURAL_GRID_REM * scale).toFixed(4)}rem`);
+      };
+      apply(quantized);
+      const settledScale =
+        grid.scrollWidth > grid.clientWidth + 1 ? Math.max(floor, quantized - 0.01) : quantized;
+      if (settledScale !== quantized) apply(settledScale);
+
+      setFitScale(settledScale);
+      setOverflowing(false);
+    };
+    measure();
+
+    if (typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver(measure);
+    observer.observe(grid);
+    return () => observer.disconnect();
+  }, [settled, fullText]);
+
   const classes = ["rt-ascii-diagram", className].filter(Boolean).join(" ");
 
   return (
@@ -359,9 +431,31 @@ export function AsciiDiagram({
       data-part="root"
       data-reveal={reveal}
       data-visible={revealed ? "true" : "false"}
+      data-overflowing={overflowing ? "true" : "false"}
+      data-fitted={fitScale === null ? "false" : "true"}
     >
-      <span className="rt-ascii-diagram__visually-hidden">{description}</span>
-      <pre className="rt-ascii-diagram__grid" data-part="grid" aria-hidden="true">
+      {/* Exactly one description carrier: the span here, or the named region below. */}
+      {overflowing ? null : (
+        <span className="rt-ascii-diagram__visually-hidden">{description}</span>
+      )}
+      <pre
+        ref={gridRef}
+        className="rt-ascii-diagram__grid"
+        data-part="grid"
+        /* role=img keeps the glyphs unvoiced while making the region nameable and focusable. */
+        aria-hidden={overflowing ? undefined : "true"}
+        role={overflowing ? "img" : undefined}
+        aria-label={overflowing ? description : undefined}
+        tabIndex={overflowing ? 0 : undefined}
+        style={
+          {
+            minHeight: `${(lineCount * GRID_LINE_HEIGHT_REM).toFixed(4)}rem`,
+            ...(fitScale === null
+              ? {}
+              : { [GRID_SIZE_AXIS]: `${(NATURAL_GRID_REM * fitScale).toFixed(4)}rem` }),
+          } as React.CSSProperties
+        }
+      >
         {typedText}
       </pre>
     </div>

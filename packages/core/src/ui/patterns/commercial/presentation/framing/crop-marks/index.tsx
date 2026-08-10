@@ -15,13 +15,32 @@ import "./CropMarks.css";
 export function CropMarks({ children, as: As = "div", className }: CropMarksProps): React.JSX.Element {
   const classes = ["rt-crop-marks", className].filter(Boolean).join(" ");
 
+  // data-part hooks match the kit-wide anatomy contract (product-window, tree-view, ...).
   return (
-    <As className={classes}>
-      <span className="rt-crop-marks__tick rt-crop-marks__tick--tl" aria-hidden="true" />
-      <span className="rt-crop-marks__tick rt-crop-marks__tick--tr" aria-hidden="true" />
-      <span className="rt-crop-marks__tick rt-crop-marks__tick--bl" aria-hidden="true" />
-      <span className="rt-crop-marks__tick rt-crop-marks__tick--br" aria-hidden="true" />
-      <div className="rt-crop-marks__body">{children}</div>
+    <As className={classes} data-part="root">
+      <span
+        className="rt-crop-marks__tick rt-crop-marks__tick--tl"
+        data-part="tick-tl"
+        aria-hidden="true"
+      />
+      <span
+        className="rt-crop-marks__tick rt-crop-marks__tick--tr"
+        data-part="tick-tr"
+        aria-hidden="true"
+      />
+      <span
+        className="rt-crop-marks__tick rt-crop-marks__tick--bl"
+        data-part="tick-bl"
+        aria-hidden="true"
+      />
+      <span
+        className="rt-crop-marks__tick rt-crop-marks__tick--br"
+        data-part="tick-br"
+        aria-hidden="true"
+      />
+      <div className="rt-crop-marks__body" data-part="body">
+        {children}
+      </div>
     </As>
   );
 }

@@ -8,6 +8,8 @@ export interface SectionFrameProps {
    * a string is used verbatim.
    */
   index?: number | string;
+  /** Localized accessible ordinal announced before the title; defaults to the index value alone. */
+  indexLabel?: ReactNode;
   /** Section title, shown next to the index in the mono label rule. */
   title?: ReactNode;
   /** Optional right-aligned mono annotation in the label rule (e.g. a count or status). */

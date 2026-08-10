@@ -26,7 +26,7 @@
 .rt-terminal-block__scanlines {
   position: absolute;
   inset: 0;
-  opacity: var(--ds-commercial-texture-opacity);
+  opacity: var(--ds-commercial-texture-opacity, 0.03);
   background-image: repeating-linear-gradient(
     to bottom,
     var(--ds-commercial-texture-ink) 0,
@@ -63,25 +63,33 @@
   line-height: 1.6;
 }
 
+/* One cell per row: the carrier sets the settled box and the streamed layer paints into it, so
+   a wrapped command reserves every line it will end up occupying. */
 .rt-terminal-block__line {
-  display: block;
+  display: grid;
 }
 
-.rt-terminal-block__visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
+/* Both layers share wrapping AND bidi pinning so their footprints match under any direction. */
+.rt-terminal-block__visually-hidden,
 .rt-terminal-block__visual {
+  grid-area: 1 / 1;
   white-space: pre-wrap;
   word-break: break-word;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+/* Paint is clipped for the whole subtree, so a child that sets its own colour cannot show
+   through; layout and the accessibility tree are untouched. */
+.rt-terminal-block__visually-hidden {
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+/* Decorative and aria-hidden: it must not join a selection or a copy alongside the carrier. */
+.rt-terminal-block__visual {
+  user-select: none;
+  pointer-events: none;
 }
 
 .rt-terminal-block__prompt {
@@ -91,6 +99,19 @@
 /* Texture is a whisper-only accent: it drops out entirely when the user asks for more
    contrast, so the scanline motif never fights legibility (degradable by design). */
 @media (prefers-contrast: more) {
+  .rt-terminal-block__scanlines {
+    display: none;
+  }
+}
+
+/* Decorative scanlines drop entirely under forced-colors so the UA doesn't re-key them
+   to an unwanted flat wash. */
+@media (forced-colors: active) {
+  .rt-terminal-block__scanlines {
+    display: none;
+  }
+}
+@media print {
   .rt-terminal-block__scanlines {
     display: none;
   }

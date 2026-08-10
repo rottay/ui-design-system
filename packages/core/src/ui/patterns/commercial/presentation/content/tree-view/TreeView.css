@@ -24,7 +24,7 @@
   /* Row rhythm is private to this ASCII tree grammar. Unitless, so it scales
      with any type size inherited by the pattern. */
   line-height: var(--_ds-tree-view-row-rhythm, 1.7);
-  color: var(--ds-commercial-fg);
+  color: var(--ds-commercial-fg, currentColor);
 }
 
 .rt-tree-view__item {
@@ -42,11 +42,21 @@
   color: var(--ds-commercial-hairline-strong);
   pointer-events: none;
   user-select: none;
+  /* Box-drawing glyphs are bidi-neutral (not Unicode-mirrored); pinned ltr/isolate so an RTL
+     document cannot reorder them (label stays unpinned for real RTL text). */
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+/* Isolation fixes character order, not geometry: the reversed flex row leaves the arm pointing
+   away from its label. Keyed on the root -- the connector's own `direction: ltr` would go dormant. */
+.rt-tree-view:dir(rtl) .rt-tree-view__connector {
+  transform: scaleX(-1);
 }
 
 .rt-tree-view__label {
   min-inline-size: 0;
-  color: var(--ds-commercial-fg);
+  color: var(--ds-commercial-fg, currentColor);
   /* Long labels (deep paths, long translations) wrap under the label column instead of
      overflowing the tree; the flex row keeps continuation lines aligned past the connector. */
   overflow-wrap: anywhere;
@@ -63,12 +73,14 @@
 
 @media (hover: hover) {
   .rt-tree-view__link:hover {
-    border-block-end-color: var(--ds-commercial-fg);
+    border-block-end-color: var(--ds-commercial-fg, currentColor);
   }
 }
 
 .rt-tree-view__link:focus-visible {
-  outline: var(--ds-commercial-focus-ring-width) solid var(--ds-commercial-fg);
+  /* An unresolvable var() invalidates the whole `outline` shorthand at computed-value time,
+     dropping the focus ring to `none` -- these fallbacks are load-bearing, not cosmetic. */
+  outline: var(--ds-commercial-focus-ring-width, 2px) solid var(--ds-commercial-fg, currentColor);
   outline-offset: 2px;
   border-block-end-color: transparent;
 }

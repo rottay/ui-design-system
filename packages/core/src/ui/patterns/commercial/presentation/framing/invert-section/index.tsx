@@ -22,8 +22,9 @@ export function InvertSection({
 }: InvertSectionProps): React.JSX.Element {
   const classes = ["rt-invert-section", className].filter(Boolean).join(" ");
 
+  // data-part hooks match the kit-wide anatomy contract (product-window, tree-view, ...).
   return (
-    <As className={classes} data-surface={surface}>
+    <As className={classes} data-part="root" data-surface={surface}>
       {children}
     </As>
   );

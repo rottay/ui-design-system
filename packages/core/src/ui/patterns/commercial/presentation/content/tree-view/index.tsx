@@ -78,6 +78,9 @@ function TreeItem({ node, guides, isLast, showConnector }: TreeItemProps): React
  * last-child position and ancestor continuation, never the sole carrier of the hierarchy. Pure
  * presentational markup: no state, no client-only APIs, safe to render on the server.
  */
+
+/* Connector glyphs and label stay separate elements so TreeView.css can pin the connector's
+   bidi direction and mirror its geometry without touching the label. */
 export function TreeView({ data, className, "aria-label": ariaLabel }: TreeViewProps): React.JSX.Element {
   const isList = Array.isArray(data);
   const roots = isList ? data : [data];

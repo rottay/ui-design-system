@@ -142,17 +142,25 @@ export function TerminalBlock({
                 : 0;
           return (
             <div className="rt-terminal-block__line" data-part="line" key={index}>
-              <span className="rt-terminal-block__visually-hidden">{line.text}</span>
-              {started && (
-                <span className="rt-terminal-block__visual" aria-hidden="true">
-                  {line.prompt && (
-                    <span className="rt-terminal-block__prompt" data-part="prompt">
-                      {"$ "}
-                    </span>
-                  )}
-                  {line.text.slice(0, typedCount)}
-                </span>
-              )}
+              {/* The carrier reserves the FINAL row, prompt footprint included, so a wrapped
+                  command occupies its settled box from the first frame. */}
+              <span className="rt-terminal-block__visually-hidden">
+                {line.prompt && (
+                  <span className="rt-terminal-block__prompt" aria-hidden="true">
+                    {"$ "}
+                  </span>
+                )}
+                {line.text}
+              </span>
+              {/* Always mounted so the row's DOM shape is constant across the stream. */}
+              <span className="rt-terminal-block__visual" aria-hidden="true">
+                {started && line.prompt && (
+                  <span className="rt-terminal-block__prompt" data-part="prompt">
+                    {"$ "}
+                  </span>
+                )}
+                {started ? line.text.slice(0, typedCount) : ""}
+              </span>
             </div>
           );
         })}

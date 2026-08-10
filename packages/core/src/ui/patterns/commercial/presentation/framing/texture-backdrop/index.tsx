@@ -25,12 +25,16 @@ export function TextureBackdrop({
 }: TextureBackdropProps): React.JSX.Element {
   const classes = ["rt-texture-backdrop", className].filter(Boolean).join(" ");
   const layerStyle =
-    opacity != null ? ({ "--rt-texture-opacity": opacity } as React.CSSProperties) : undefined;
+    opacity != null
+      ? ({ "--_ds-texture-backdrop-opacity": opacity } as React.CSSProperties)
+      : undefined;
 
+  // data-part hooks match the kit-wide anatomy contract (product-window, tree-view, ...).
   return (
-    <As className={classes}>
+    <As className={classes} data-part="root">
       <div
         className="rt-texture-backdrop__layer"
+        data-part="layer"
         data-pattern={pattern}
         style={layerStyle}
         aria-hidden="true"

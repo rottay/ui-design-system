@@ -12,9 +12,24 @@
  * Logical properties throughout: the boundary reads identically in RTL.
  */
 
+/* Re-keys the generic `--ds-color-text-*`/`-border*` roles too, not just the kit's own fg/bg
+   pair, so a composed DS primitive gets surface-correct ink instead of page-theme ink. */
+
 .rt-invert-section {
   --ds-commercial-fg: var(--ds-commercial-gray-1000);
   --ds-commercial-bg: var(--ds-commercial-ink);
+
+  --ds-color-text-primary: var(--ds-commercial-fg);
+  --ds-color-text-secondary: var(--ds-commercial-gray-600);
+  --ds-color-text-tertiary: var(--ds-commercial-gray-600);
+  --ds-color-text-muted: var(--ds-commercial-gray-600);
+  --ds-color-text-inverse: var(--ds-commercial-bg);
+  --ds-color-text-disabled: var(--ds-commercial-gray-500);
+  --ds-color-border: var(--ds-commercial-hairline-strong);
+  --ds-color-border-primary: var(--ds-commercial-hairline-strong);
+  --ds-color-border-secondary: var(--ds-commercial-hairline-strong);
+  --ds-color-border-subtle: var(--ds-commercial-hairline-strong);
+  --ds-color-border-tertiary: var(--ds-commercial-hairline-strong);
 
   position: relative;
   display: block;
@@ -27,6 +42,19 @@
 .rt-invert-section[data-surface="paper"] {
   --ds-commercial-fg: var(--ds-commercial-gray-0);
   --ds-commercial-bg: var(--ds-commercial-paper);
+
+  --ds-color-text-secondary: var(--ds-commercial-gray-400);
+  --ds-color-text-tertiary: var(--ds-commercial-gray-400);
+  --ds-color-text-muted: var(--ds-commercial-gray-400);
+}
+
+/* Print drops background colours by default, which would leave this surface's own foreground
+   printing on blank paper - white-on-white for an ink section. */
+@media print {
+  .rt-invert-section {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
 }
 
 /* Forced colors: the UA re-keys the surface pairing itself, but the crossing hairline is

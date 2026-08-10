@@ -35,6 +35,9 @@ function easeOutCubic(t: number): number {
  * visible digits render the final value instantly, with no count-up, matching the hidden
  * accessible text exactly. The reveal — and therefore the count-up — fires at most once.
  */
+
+/* `defaultFormat`'s `Intl.NumberFormat(undefined, ...)` can resolve a different locale on SSR
+   than on CSR and hydrate mismatched; pass an explicit `format` when that matters. */
 export function MonoStat({
   value,
   label,
@@ -58,6 +61,9 @@ export function MonoStat({
       return;
     }
 
+    // The SSR-safe initial state holds the final value, so without this reset the
+    // digits flash that number before counting up from zero.
+    setCount(0);
     const start = performance.now();
 
     const tick = (now: number): void => {

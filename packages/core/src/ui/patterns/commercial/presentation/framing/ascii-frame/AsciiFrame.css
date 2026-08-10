@@ -13,19 +13,24 @@
  * All offsets are logical properties: RTL mirrors corners and the seated label for free.
  */
 
+/* Mirroring the corner POSITIONS alone would seat `┌` at the top-right; the glyph is flipped to
+   match, so an RTL frame draws the same box. Root-keyed: the corner pins its own direction. */
+
 .rt-ascii-frame {
   position: relative;
   display: block;
   padding-block: var(--ds-spacing-4, 1rem);
   padding-inline: var(--ds-spacing-5, 1.25rem);
-  color: var(--ds-commercial-fg);
+  color: var(--ds-commercial-fg, currentColor);
   border: 1px solid var(--ds-commercial-hairline);
   background: transparent;
 }
 
 .rt-ascii-frame[data-variant="double"] {
   border-width: 1px;
-  box-shadow: 0 0 0 3px var(--ds-commercial-bg), 0 0 0 4px var(--ds-commercial-hairline-strong);
+  box-shadow:
+    0 0 0 3px var(--ds-commercial-bg, transparent),
+    0 0 0 4px var(--ds-commercial-hairline-strong);
 }
 
 /* Box-drawing corner glyphs. Positioned over each corner; the hairline border draws the
@@ -38,6 +43,11 @@
   color: var(--ds-commercial-hairline-strong);
   pointer-events: none;
   user-select: none;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+.rt-ascii-frame:dir(rtl) .rt-ascii-frame__corner {
+  transform: scaleX(-1);
 }
 .rt-ascii-frame__corner--tl {
   inset-block-start: -0.5em;
@@ -74,8 +84,8 @@
   font-size: var(--ds-font-size-xs, 0.75rem);
   letter-spacing: var(--_ds-ascii-frame-label-tracking, 0.08em);
   text-transform: uppercase;
-  color: var(--ds-commercial-fg);
-  background: var(--ds-commercial-bg);
+  color: var(--ds-commercial-fg, currentColor);
+  background: var(--ds-commercial-bg, transparent);
 }
 
 .rt-ascii-frame__body {
