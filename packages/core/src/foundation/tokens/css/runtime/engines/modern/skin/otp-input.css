@@ -134,7 +134,7 @@
    halo itself (a press focuses the slot). */
 @media (hover: hover) {
   .ds-otp-input.ds-otp-input--modern[data-part='root'] [data-part='slot']:hover:not(:focus):not([data-error='true']) {
-    border-color: var(--ds-otp-slot-border-hover, var(--ds-color-border-hover));
+    border-color: var(--ds-otp-slot-border-hover, var(--ds-color-border));
   }
 }
 /* Filled slots read one step stronger than empty (state distinction, K4-D
@@ -142,10 +142,10 @@
    a hue swap; the focus/error chains below stay sovereign (the keyline rides
    background-image precisely so it cannot clobber the halo's box-shadow). */
 .ds-otp-input.ds-otp-input--modern [data-part='slot'][data-part='slot'][data-filled='true'] {
-  border-color: var(--ds-otp-slot-border-filled, var(--ds-color-border-hover));
+  border-color: var(--ds-otp-slot-border-filled, var(--ds-color-border));
   background-image: linear-gradient(
     to top,
-    var(--_ds-otp-filled-keyline, var(--ds-color-border-hover)) 2px,
+    var(--_ds-otp-filled-keyline, var(--ds-color-border)) 2px,
     transparent 2px
   );
 }

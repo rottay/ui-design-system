@@ -234,7 +234,7 @@
 /* Hover is hover-capable-only; touch gets the :active/focus path below. */
 @media (hover: hover) {
   .ds-input-number.ds-input-number--modern[data-part='root'][data-part='root']:where(:hover):not([data-disabled='true']):not([data-status='error']):not([data-status='warning']) {
-    border-color: var(--ds-input-number-border-hover, var(--ds-input-border-hover, var(--ds-color-border-hover)));
+    border-color: var(--ds-input-number-border-hover, var(--ds-input-border-hover, var(--ds-color-border)));
   }
 }
 .ds-input-number.ds-input-number--modern[data-part='root'][data-part='root']:focus-visible {
@@ -293,7 +293,7 @@
      --ds-surface-disabled cannot make this declaration invalid at
      computed-value time (same terminal Select authors for this state). */
   background: var(--ds-input-bg-disabled, var(--ds-surface-disabled, var(--ds-surface-subtle, var(--ds-surface-canvas))));
-  border-color: var(--ds-input-border-disabled, var(--ds-color-border-disabled));
+  border-color: var(--ds-input-border-disabled, var(--ds-color-border));
   opacity: var(--ds-disabled-opacity, 0.58);
   cursor: var(--ds-input-disabled-cursor);
 }
@@ -380,7 +380,7 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
      --ds-surface-disabled cannot make this declaration invalid at
      computed-value time (same terminal Select authors for this state). */
   background: var(--ds-input-bg-disabled, var(--ds-surface-disabled, var(--ds-surface-subtle, var(--ds-surface-canvas))));
-  border-color: var(--ds-input-border-disabled, var(--ds-color-border-disabled));
+  border-color: var(--ds-input-border-disabled, var(--ds-color-border));
 }
 
 [data-part='prefix']:has(~ .ds-input-number.ds-input-number--modern[data-part='root']) {

@@ -101,12 +101,12 @@
 }
 @media (hover: hover) {
   .ds-tag-input.ds-tag-input--modern[data-part='root'][data-size]:where(:hover):not([data-disabled='true']):not([data-error='true']) {
-    border-color: var(--ds-tag-input-border-hover, var(--ds-color-border-hover));
+    border-color: var(--ds-tag-input-border-hover, var(--ds-color-border));
   }
 }
 /* Touch/active equivalent of the hover border (4th-tanda law). */
 .ds-tag-input.ds-tag-input--modern[data-part='root'][data-size]:active:not([data-disabled='true']):not([data-error='true']) {
-  border-color: var(--ds-tag-input-border-hover, var(--ds-color-border-hover));
+  border-color: var(--ds-tag-input-border-hover, var(--ds-color-border));
 }
 .ds-tag-input.ds-tag-input--modern[data-part='root'][data-error='true'] {
   border: 1px solid var(--ds-color-error);

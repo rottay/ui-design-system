@@ -276,3 +276,15 @@
     background: Canvas;
   }
 }
+
+/* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
+   relaid out, or left waiting on an event that never arrives. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-surface.ds-record-workbench .ds-record-workbench__status-badge[data-part='status-badge'],
+  .ds-surface.ds-record-workbench .ds-record-workbench__tab-badge[data-part='tab-badge'],
+  .ds-surface.ds-record-workbench .ds-record-workbench__tab-underline[data-part='tab-underline'] {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

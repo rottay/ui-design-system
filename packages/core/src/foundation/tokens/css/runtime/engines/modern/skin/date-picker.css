@@ -227,7 +227,7 @@
   background: var(--ds-input-warning-bg, var(--ds-input-bg, var(--ds-surface-control)));
 }
 .rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'][data-status]:where(:hover):not(:disabled):not([data-status='error']):not([data-status='warning']) {
-  border-color: var(--ds-datepicker-border-hover, var(--ds-input-border-hover, var(--ds-color-border-hover)));
+  border-color: var(--ds-datepicker-border-hover, var(--ds-input-border-hover, var(--ds-color-border)));
   background: var(--ds-input-bg-hover, var(--ds-input-bg, var(--ds-surface-control)));
 }
 .rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'][data-status]:focus-visible {
@@ -253,7 +253,7 @@
      --ds-surface-disabled cannot make this declaration invalid at
      computed-value time (same terminal Select authors for this state). */
   background: var(--ds-input-bg-disabled, var(--ds-surface-disabled, var(--ds-surface-subtle, var(--ds-surface-canvas))));
-  border-color: var(--ds-input-border-disabled, var(--ds-color-border-disabled));
+  border-color: var(--ds-input-border-disabled, var(--ds-color-border));
   opacity: var(--ds-disabled-opacity, 0.5);
   cursor: not-allowed;
 }
@@ -322,7 +322,7 @@
   background: var(--ds-input-warning-bg, var(--ds-input-bg, var(--ds-surface-control)));
 }
 .rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'][data-status]:where(:hover):not(:disabled):not([data-status='error']):not([data-status='warning']) {
-  border-color: var(--ds-datepicker-border-hover, var(--ds-input-border-hover, var(--ds-color-border-hover)));
+  border-color: var(--ds-datepicker-border-hover, var(--ds-input-border-hover, var(--ds-color-border)));
   background: var(--ds-input-bg-hover, var(--ds-input-bg, var(--ds-surface-control)));
 }
 .rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'][data-status]:focus-visible {
@@ -344,7 +344,7 @@
 .rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input']:disabled {
   color: var(--ds-input-color-disabled, var(--ds-color-text-disabled));
   background: var(--ds-input-bg-disabled, var(--ds-surface-disabled, var(--ds-surface-subtle, var(--ds-surface-canvas))));
-  border-color: var(--ds-input-border-disabled, var(--ds-color-border-disabled));
+  border-color: var(--ds-input-border-disabled, var(--ds-color-border));
   opacity: var(--ds-disabled-opacity, 0.5);
   cursor: not-allowed;
 }

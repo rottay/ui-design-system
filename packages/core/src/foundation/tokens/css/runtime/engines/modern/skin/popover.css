@@ -383,9 +383,10 @@
     --ds-popover-inverse-background,
     var(--ds-color-text-primary)
   );
+  /* The inverse surface paints on --ds-color-text-primary, so its ink is the inverse role. */
   --ds-popover-ink: var(
     --ds-popover-inverse-foreground,
-    var(--ds-color-bg-base)
+    var(--ds-color-text-inverse)
   );
   --ds-popover-muted-ink: var(
     --ds-popover-inverse-muted-foreground,

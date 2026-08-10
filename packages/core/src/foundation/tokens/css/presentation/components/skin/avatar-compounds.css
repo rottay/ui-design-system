@@ -47,7 +47,9 @@
 /* ---- Avatar.Group: the overlap cut-out, worn by every tile including surplus ---- */
 .rottay-avatar-group[data-part='root'] > [data-part='item'][data-part='item'],
 .rottay-avatar-group[data-part='root'] > [data-part='surplus'][data-part='surplus'] {
-  border: 2px solid var(--ds-avatar-group-border, var(--ds-color-bg-base));
+  /* The ring separates overlapping avatars from the surface they sit on, and --ds-color-bg is
+     declared per tenant, so the fallback stays tenant-causal instead of dropping the border. */
+  border: 2px solid var(--ds-avatar-group-border, var(--ds-color-bg));
 }
 .rottay-avatar-group[data-part='root'] > [data-part='surplus'] {
   background-color: var(--ds-avatar-surplus-bg, var(--ds-color-bg-secondary));

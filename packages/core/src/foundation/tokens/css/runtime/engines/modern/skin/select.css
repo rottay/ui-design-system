@@ -212,7 +212,7 @@
 /* ---- Interaction and semantic states (Input grammar: flat + hairline). ---- */
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger']:not([data-disabled='true']):not([data-open='true']):not([data-status='error']):not([data-status='warning']):not([data-status='success']):hover {
-  border-color: var(--ds-select-border-color-hover, var(--ds-color-border-hover));
+  border-color: var(--ds-select-border-color-hover, var(--ds-color-border));
   background: var(--ds-select-bg-hover, var(--ds-material-control-background-hover, var(--ds-select-bg, var(--ds-surface-control))));
   box-shadow: var(--ds-select-shadow-hover, var(--ds-select-shadow, none));
 }

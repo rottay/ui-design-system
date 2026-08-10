@@ -739,7 +739,7 @@
 
 .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='axis-tick-label'] {
   fill: var(--ds-chart-label-color, var(--ds-color-text-secondary));
-  font-family: var(--ds-font-family-body);
+  font-family: var(--ds-font-family-base);
   font-size: var(--ds-font-size-xs);
   font-variant-numeric: var(--ds-numeric-tabular);
 }
@@ -749,7 +749,7 @@
  * no tracking, so Arabic typography stays untouched. */
 .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='axis-label'] {
   fill: var(--ds-chart-label-color, var(--ds-color-text-secondary));
-  font-family: var(--ds-font-family-body);
+  font-family: var(--ds-font-family-base);
   font-size: var(--ds-font-size-xs);
   font-weight: var(--ds-font-weight-medium, 500);
 }
@@ -760,7 +760,7 @@
 
 .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='value-label'] {
   fill: var(--ds-color-text-primary);
-  font-family: var(--ds-font-family-body);
+  font-family: var(--ds-font-family-base);
   font-size: var(--ds-font-size-xs);
   font-variant-numeric: var(--ds-numeric-tabular);
 }
@@ -893,7 +893,7 @@
 .ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']
   [data-part='pie-center-label'] {
   fill: var(--ds-color-text-primary);
-  font-family: var(--ds-font-family-body);
+  font-family: var(--ds-font-family-base);
   font-size: var(--ds-font-size-sm);
   font-weight: var(--ds-font-weight-semibold, 600);
   font-variant-numeric: var(--ds-numeric-tabular);
@@ -1073,7 +1073,7 @@
 
 .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-chart-axes='high-contrast-compact']
   [data-part='axis-tick-label'] {
-  font-family: var(--ds-font-family-mono, var(--ds-font-family-body));
+  font-family: var(--ds-font-family-mono, var(--ds-font-family-base));
   font-size: calc(var(--ds-font-size-xs) * 0.94);
   font-weight: 600;
 }
@@ -1196,7 +1196,7 @@
   stroke: var(--ds-chart-plot-bg, var(--ds-color-bg-primary));
   stroke-width: 3px;
   paint-order: stroke fill;
-  font-family: var(--ds-font-family-body);
+  font-family: var(--ds-font-family-base);
   font-size: var(--ds-font-size-xs);
   font-weight: 600;
   unicode-bidi: plaintext;
@@ -1320,7 +1320,7 @@
     stroke: CanvasText;
     stroke-width: 3;
     paint-order: stroke fill;
-    font-family: var(--ds-font-family-body);
+    font-family: var(--ds-font-family-base);
     font-size: var(--ds-font-size-xs);
     font-weight: 700;
     forced-color-adjust: auto;

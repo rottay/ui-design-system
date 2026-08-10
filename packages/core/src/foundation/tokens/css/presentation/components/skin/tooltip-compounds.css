@@ -24,7 +24,7 @@
 
 .rottay-tooltip-content {
   background-color: var(--ds-tooltip-bg, var(--ds-color-text-primary));
-  color: var(--ds-tooltip-color, var(--ds-color-bg-base));
+  color: var(--ds-tooltip-color, var(--ds-color-text-inverse));
   border-radius: var(--ds-tooltip-radius, 0.375rem);
   box-shadow: var(--ds-tooltip-shadow, var(--ds-shadow-lg));
 }

@@ -217,7 +217,7 @@
   );
   --ds-tooltip-ink: var(
     --ds-tooltip-inverse-foreground,
-    var(--ds-color-bg-base, var(--ds-tooltip-color))
+    var(--ds-color-text-inverse, var(--ds-tooltip-color))
   );
   --ds-tooltip-edge: var(
     --ds-tooltip-inverse-border,

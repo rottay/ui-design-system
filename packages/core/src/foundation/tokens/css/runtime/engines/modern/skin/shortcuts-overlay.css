@@ -205,3 +205,13 @@
     color: GrayText;
   }
 }
+
+/* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
+   relaid out, or left waiting on an event that never arrives. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='dialog'] {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

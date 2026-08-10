@@ -221,3 +221,16 @@
     min-block-size: var(--ds-touch-target-min, 44px);
   }
 }
+
+/* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
+   relaid out, or left waiting on an event that never arrives. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-locale-switcher.ds-engine-modern [data-part='option'],
+  .ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger'],
+  .ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger'] > svg,
+  .ds-pattern-locale-switcher.ds-engine-modern[data-part='root'] [data-part='panel'] {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

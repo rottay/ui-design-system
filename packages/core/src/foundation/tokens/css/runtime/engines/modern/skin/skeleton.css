@@ -168,3 +168,13 @@
     background: GrayText;
   }
 }
+
+/* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
+   relaid out, or left waiting on an event that never arrives. */
+@media (prefers-reduced-motion: reduce) {
+  .rottay-skeleton.rottay-skeleton--modern[data-part='root'], .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='avatar'], .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='title'], .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='line'] {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

@@ -166,7 +166,7 @@
 }
 .rottay-timepicker.rottay-timepicker--modern [data-part='trigger-input'][data-status]:where(:hover):not(:disabled):not([data-status='error']):not([data-status='warning']),
 .rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'][data-status]:where(:hover):not(:disabled):not([data-status='error']):not([data-status='warning']) {
-  border-color: var(--ds-timepicker-border-hover, var(--ds-color-border-hover));
+  border-color: var(--ds-timepicker-border-hover, var(--ds-color-border));
 }
 .rottay-timepicker.rottay-timepicker--modern [data-part='trigger-input'][data-status]:focus-visible,
 .rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'][data-status]:focus-visible {

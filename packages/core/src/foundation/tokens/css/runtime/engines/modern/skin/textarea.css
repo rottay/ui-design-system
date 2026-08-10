@@ -165,12 +165,12 @@
    grammar which already follows. */
 @media (hover: hover) {
   .ds-textarea.ds-textarea--modern[data-part='root']:not([data-variant='borderless'])[data-status='default']:hover:not([data-disabled='true']):not([data-readonly='true']):not(:focus) {
-    border-color: var(--ds-textarea-border-hover, var(--ds-input-border-hover, var(--ds-color-border-hover)));
+    border-color: var(--ds-textarea-border-hover, var(--ds-input-border-hover, var(--ds-color-border)));
   }
 }
 /* Touch/active equivalent of the hover border. */
 .ds-textarea.ds-textarea--modern[data-part='root']:not([data-variant='borderless'])[data-status='default']:active:not([data-disabled='true']):not([data-readonly='true']) {
-  border-color: var(--ds-textarea-border-hover, var(--ds-input-border-hover, var(--ds-color-border-hover)));
+  border-color: var(--ds-textarea-border-hover, var(--ds-input-border-hover, var(--ds-color-border)));
 }
 .ds-textarea.ds-textarea--modern[data-part='root']:not([data-variant='borderless'])[data-status='default']:focus:not([data-disabled='true']) {
   border-color: var(--ds-textarea-border-focus, var(--ds-input-border-focus, var(--ds-color-primary)));

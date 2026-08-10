@@ -358,3 +358,13 @@
     border-color: ButtonText;
   }
 }
+
+/* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
+   relaid out, or left waiting on an event that never arrives. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-surface.ds-collection-render-dispatch .ds-collection-render-dispatch__card-item[data-part="card-item"][data-activatable="true"] .ds-collection-render-dispatch__fallback-card[data-part="fallback-card"] {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

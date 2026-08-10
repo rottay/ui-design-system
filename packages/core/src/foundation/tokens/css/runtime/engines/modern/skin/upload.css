@@ -581,13 +581,13 @@
 }
 @media (hover: hover) {
   .ds-upload.ds-upload--modern[data-part='root'] [data-part='trigger'] button:where(:hover):not(:disabled) {
-    border-color: var(--ds-upload-trigger-border-hover, var(--ds-color-border-hover));
+    border-color: var(--ds-upload-trigger-border-hover, var(--ds-color-border));
     background: var(--ds-upload-trigger-bg-hover, var(--ds-surface-inset));
   }
 }
 /* Touch/active equivalent of the hover treatment. */
 .ds-upload.ds-upload--modern[data-part='root'] [data-part='trigger'] button:active:not(:disabled) {
-  border-color: var(--ds-upload-trigger-border-hover, var(--ds-color-border-hover));
+  border-color: var(--ds-upload-trigger-border-hover, var(--ds-color-border));
   background: var(--ds-upload-trigger-bg-hover, var(--ds-surface-inset));
 }
 .ds-upload.ds-upload--modern[data-part='root'] [data-part='trigger'] button:disabled {

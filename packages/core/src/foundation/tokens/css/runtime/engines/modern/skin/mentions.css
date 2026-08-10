@@ -96,11 +96,11 @@
    `:active` equivalent, and the focused tap rides the focus grammar. */
 @media (hover: hover) {
   .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea']:not([data-disabled='true']):not([data-status]):hover:not(:focus) {
-    border-color: var(--ds-mentions-border-hover, var(--ds-color-border-hover));
+    border-color: var(--ds-mentions-border-hover, var(--ds-color-border));
   }
 }
 .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea']:not([data-disabled='true']):not([data-status]):active:not(:focus) {
-  border-color: var(--ds-mentions-border-hover, var(--ds-color-border-hover));
+  border-color: var(--ds-mentions-border-hover, var(--ds-color-border));
 }
 .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea']::placeholder {
   color: var(--ds-mentions-placeholder-color, var(--ds-input-color-placeholder, var(--ds-color-text-muted)));
