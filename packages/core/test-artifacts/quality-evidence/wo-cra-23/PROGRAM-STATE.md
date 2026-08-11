@@ -2161,6 +2161,35 @@ layer at nearly the same density.
 > owns broadly (39), bithire owns narrowly and deeply (13, four-fifths in five), evnto owns only the
 > control layer (5). Indirect shaping is a constant, not a differentiator.
 
+**THE CAPTION THAT MUST TRAVEL WITH THIS TABLE.** The lane that built it corrected its own inference
+after another lane read two scopes it had only inferred, and the correction is wider than the flag
+that triggered it:
+
+> The direct column measures which families a vertical **NAMES**, not which families **LOOK
+> different**. Wherever a DS value is a formula over inputs the vertical does author, the family
+> diverges with **zero own-prefix channels**.
+
+Concretely: bithire's segmented track has 0 of 38 own-family dark channels *and* resolves to a dark
+value anyway, because `--ds-surface-control` is dark-authored one level down and the base value is
+`var(--ds-surface-control, …)`. The name count was right; the identity claim drawn from it was not.
+
+So, precisely:
+
+- **The counts stand.** They are name counts and they are correct.
+- **The inference does not.** "evnto authors zero badge and segmented channels" is true; "evnto's
+  badges have no dark or brand identity" does not follow, and it was asserted more than once tonight,
+  by that lane and by me repeating it.
+- **The 3:1–8:1 dark asymmetry is an upper bound on outstanding work, not a backlog.** Part is
+  already covered a level down; only resolution says how much.
+
+The two-column design was necessary and not sufficient: direct and indirect were separated, and then
+the direct column was still read as identity. The missing third fact is that **indirect inputs
+propagate through DS formulas into families nobody named** — which is unmeasurable statically and is
+exactly what the probe answers.
+
+Honest caption for any citation: *these are the families each vertical names; divergence is at least
+this and probably more.*
+
 **CORRECTED once the prefix map was fixed — two numbers above are wrong and the mechanism is not
 concentration.** Deriving each family's prefix from *what it reads* rather than from its filename cut
 the misfiled families from 19 to 2 (`tree-view`, `typography`, both carried as `unknown` and excluded
