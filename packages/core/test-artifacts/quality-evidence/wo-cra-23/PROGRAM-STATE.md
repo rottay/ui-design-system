@@ -431,6 +431,38 @@ under §1.4 is always no. Rows c–f above are all this shape.
 Corollary: idling for an answer is itself the defect. An hourly heartbeat now re-enters the programme
 if a lane has stalled waiting on a decision that was never the owner's to make.
 
+### D2 IS WITHDRAWN — the theme layer is the tenant-free baseline, not dead code
+
+The execution lane refuted the whole ruling, and the refutation is structural.
+
+`foundation/themes/default.css` declares on bare `:root`, which paints unconditionally. The three
+tenant artifacts apply only under `:is(html[data-tenant='X'], :where([data-ds-root][data-vertical='X']))`.
+`facade/entrypoints/base.css` is the **tenant-free** bundle — its own header says so ("compiled tenant
+paint is intentionally unlayered and omitted here") — and it imports `default.css` with no tenant
+scoping. So on any consumer without the tenant attribute, those 62 rows are not the losing layer:
+**they are the only layer.** Deleting them strips typography from every untenanted surface.
+
+The zero-delta gate reported all 62 as "WON in base.css/styles.css before this change." It was right
+and both prior reviewers were wrong.
+
+**Why two reviewers missed it, which matters more than the ruling.** An adversarial auditor simulated
+the deletion in Chromium across six cells and measured zero change; I accepted that as proof. Every one
+of those six cells is **tenanted**. The simulation was structurally incapable of observing the only
+consumer that depended on the rows. This is §3's law arriving from the other side — two instruments
+agreeing is not evidence when they share a technique, and *my ruling and its audit shared the technique*.
+The gate refuted us because it reasons positionally about which declaration wins **per bundle**,
+including the tenant-free one.
+
+Standing correction: a claim of the form "layer L is dead" must enumerate **which bundles** were
+measured. Four scope holes are now known on this question — the DB/appearance path, the non-bundled
+tenant path, the read-only engines, and the tenant-free bundle. A deletion is legal only when all four
+are covered or explicitly excluded in writing.
+
+What survives: the theme layer's relationship to the artifacts is not duplication, it is default versus
+override, and that is correct architecture. The residual real question is different and stays open [O]:
+whether the untenanted default should deliberately be its own neutral identity rather than drifting
+toward whichever vertical was edited last.
+
 ### A selector census must be PARSED, never grepped
 
 I reported that `form-header.css` and `edit-header.css` each claimed both scope classes, and called it
