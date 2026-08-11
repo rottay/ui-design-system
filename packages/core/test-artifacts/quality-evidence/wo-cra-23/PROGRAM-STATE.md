@@ -529,6 +529,35 @@ fallback arm, and the declared-nowhere census. Those stand. But **the instrument
 evidence within its roster**, and a roster of six fixtures is not the component library. Any lane
 quoting `changedRows: 0` must state which fixtures could have moved.
 
+### A ROLE RULE HAS TWO SIDES — testing one is half a test
+
+A lane's edge rule fired only on **light-valued** edges, so it structurally could not see a flat edge
+**too dark to read on a dark ground**. It found the gap in its own instrument when a sibling measured
+the mirror direction, probed for it, and reported: **0 bithire-declared channels in the blind spot** —
+so its 291→0 headline survives the widened rule in *both* brightness directions. The 26 that do sit
+there are `#171717`/`#000000` inherited from the base layer and none is contract-writable.
+
+Same session, the mirror: a sibling's "20 bithire grounds" does not reproduce as a defect count. Of 51
+candidates, **42 are correct** — 21 tone fills (a red progress bar, an amber warning edge) and 21
+filled or inverted controls (a dark tooltip, a checked checkbox). A dark tooltip on a light page is the
+light theme working. **9 are real**, and not one is a page-level ground: they are per-component focus
+and hover edges, an identity gap rather than a contrast defect.
+
+And **0 of the 51 are writable from the BrandTheme contract** — no field emits them, established by
+perturbing all 754 leaf fields. The pinning plan could not have executed where it said it would, which
+is a second independent reason the no-pin ruling was right.
+
+**Converse of the pinning law already recorded:** pinning a *correct* inherited value is also wrong. It
+freezes a dark tooltip and a red progress fill into a vertical's contract as though they were defects,
+and it is churn someone later undoes.
+
+Method worth keeping: a **hue self-audit** over the 460 moved channels found 0 saturated→neutral and
+one shift >40° — and that one is pre-existing rather than introduced. **BitHire's dark palette defines
+success as blue** (`successColor: #5ca6cf`); success and info are one hue family in that theme. A
+rewrite that routes more channels through `var(--ds-color-success)` makes it visible in more places
+without having caused it. Flagged for the sighted pass. Neither a value ledger nor a brightness rule can
+see a tone turning neutral, because both values are "correct for a dark ground".
+
 ### THE DENOMINATOR, MEASURED — "bithire misses only 23" does not survive
 
 The third correction to my own headline finding, and the most consequential. Runtime census, 4,027
