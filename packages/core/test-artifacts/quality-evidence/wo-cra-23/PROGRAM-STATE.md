@@ -440,33 +440,37 @@ if a lane has stalled waiting on a decision that was never the owner's to make.
 | **D3** the 38 hard forks | Collapse to the surviving name; where both are tenant-painted (6), the tenant channel survives. Guarded by the survivor rule above. **Refutable**: collapsing two names a tenant moves independently REMOVES a degree of freedom, which is the opposite of the goal. |
 | **D4** the DS default palette | It stays (sole authority for the 37/63/77% ramp) but **stops being a paint authority**. The 547 component channels relocate to formulas over tenant-reachable names, leaving the palette as pure ramp mathematics. Constrained by §2 clause 7 — relocation changes scope, and 17 channels were previously measured to flip. |
 
-### The structures tier has no engine, and the four that claim one are forwarders
+### A tier has more than one skin tree, and searching one of them is not a census
 
-Measured 2026-08-10. Of 28 real structure families, **zero** have a genuine modern engine. The four
-that appeared to — `stats-header`, `mobile-header`, `bottom-tab-bar`, `action-dock` — are nine-line
-files doing `export { default } from '../../runtime/rendering'`, with no skin CSS, no scope class and
-no `--ds-*` read. `CLAUDE.md` forbids exactly this shape. There are **zero** `.ds-structure-*`
-selectors in the skin tree; the five files that look like structure skins (`cockpit-header`,
-`workbench-header`, `list-toolbar`, `filter-panel`, `filter-builder`) are all scoped `.ds-pattern-*`
-and belong to patterns.
+Measured 2026-08-10, and **the first version of this section was wrong** — recorded here because the
+error is the lesson, not the finding.
 
-Consequence for the goal: structures are page chrome, so they are where product identity is most
-visible. A structure that merely stacks primitives gives every tenant the same layout with different
-paint — which is precisely the measured disease (66 of 512 leaves written, 31% of them moving ≤2
-files). Chrome that cannot be restructured cannot make two tenants read as different companies.
+What is true: the four structures that appear to have a modern engine — `stats-header`,
+`mobile-header`, `bottom-tab-bar`, `action-dock` — are nine-line files doing
+`export { default } from '../../runtime/rendering'`. `CLAUDE.md` forbids exactly this shape.
 
-**The convention, set here because none existed:**
+What I then concluded, and what was FALSE: "structures have no scope-class convention and no skin."
+I had searched `runtime/engines/modern/skin/` (123 files, all `.ds-pattern-*`) and reported zero
+coverage. The structures skin tree is a DIFFERENT directory —
+`presentation/components/skin/`, **146 files**, every one imported by both entrypoints, **18 of them
+scoped `.ds-structure`** plus a family class (`.ds-structure .ds-collection-header`). Every family I
+had just dispatched a lane to "establish a convention for" already had a skin, some 400+ lines.
 
-1. No TSX fork per engine. Structures compose primitives that already resolve through engines; three
-   near-identical engine files IS the forwarder defect.
-2. The rendering declares a stable scope class `ds-structure-<family>` on its root and stable
-   `data-part` attributes on every meaningful region. CSS anchors to the **scope class**, never to a
-   `data-part` alone — that mistake has drawn blood seven times here.
-3. The skin lives at `runtime/engines/modern/skin/structure-<family>.css`, scoped
-   `.ds-engine-modern .ds-structure-<family>`, one owner per file, registered through the existing
-   aggregator and never a second loading mechanism.
+**The law: a tier's styling can live in more than one tree, so a census of one directory is not a
+census of the tier.** The failure mode is specific and expensive — a false "nothing exists here"
+licenses five lanes to CREATE what already exists, in the wrong tree, producing exactly the
+second-paint-path defect this programme keeps finding. Two competing skins for one family is worse
+than none.
 
-Divergence therefore arrives through the skin and the channels, not through per-engine branches.
+Companion law, same shape: **a name matcher has a direction.** Matching family `collection` against
+`collection.css` reported "no skin" while `collection-header.css` sat beside it. A false negative on
+existence licenses duplication; a false positive merely blocks. Prefer a prefix match and read the
+directory before concluding absence.
+
+The real convention, verified: one engine-agnostic rendering, skin at
+`presentation/components/skin/<family>.css` scoped `.ds-structure .ds-<family>`, already aggregated.
+Divergence arrives through the skin and the channels, not through per-engine branches. The forwarder
+files remain a (minor) `CLAUDE.md` violation; do not create more.
 
 ---
 
