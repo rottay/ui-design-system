@@ -431,7 +431,30 @@ under §1.4 is always no. Rows c–f above are all this shape.
 Corollary: idling for an answer is itself the defect. An hourly heartbeat now re-enters the programme
 if a lane has stalled waiting on a decision that was never the owner's to make.
 
-### The four rulings that unblocked the wave
+### A ruling that names a channel must be diffed against the decision table first
+
+Fable's fifth finding, adopted as law. D2 below and standing Decision 13 commanded **opposite**
+treatments of the same declaration — `themes/default.css:534` — four rows apart in the same document.
+Separately, the `#161619` escalated to the owner as an aesthetic choice turned out to be the DS's own
+dark fallback (`themes/default.css:227`) leaking into evnto's light theme.
+
+Neither was caught by any gate, because no gate compares a NEW ruling against the STANDING ones. The
+fix is cheap and mandatory: **before adopting any ruling that names a channel, grep the decision table
+for that channel.** A ruling that contradicts a standing decision is not a ruling; it is a conflict
+that must be resolved explicitly, with one of the two withdrawn in writing.
+
+### The four rulings, as corrected by adversarial audit
+
+Recorded in corrected form. Fable's verdicts are [M] where it ran the measurement; Kimi's independent
+read is still outstanding, and the two are **brokered, never merged** — a disagreement is itself the
+finding.
+
+| | Corrected ruling |
+|---|---|
+| **D1** evnto border slots | Direction CONFIRMED, execution wrong on four counts. `#161619` is not a proposal — it is `themes/default.css:227`, the DS dark fallback evnto paints **today**: measured, evnto/light renders `rgb(22,22,25)` hairlines on `rgb(255,255,255)`. Authoring it would freeze a live defect into the tenant tier. But "the formula the other two verticals use" was FALSE: bithire and platform author literals too, and bithire's cells are hand-picked (hue moved 7.7° and 37.5°), so a derivation would not reproduce them. The derivation `deriveBorderSubtle` (mix of border and **ground**, not ink/surface, 1/3) is reached only by the DB path. My conditional — "if it lands near-black, evnto's pair is wrong" — cannot fire: derived from evnto's own light border the slot lands ≈`#F1F2F2`, a proper hairline. Evnto's pair is fine; the **seed** is missing. Blockers to budget: evnto's light palette declares no border seed in the contract, `deriveBorderSubtle` refuses non-hex seeds, and static emission was deliberately withheld under EXTENSION-CANNOT-BEAT-TENANT. Expressible today with no new contract field via `borderSubtleColor` as a `var()`-based `color-mix` string. **Reads are 348 across the five, not 305; 305 is border-subtle alone.** |
+| **D2** delete the theme typography rows | REFUTED AS STATED, by exactly one — the worst one. Deletion simulated and measured in all six cells: 62 of 63 change nothing (all three artifacts declare them in the unconditional base block, which outranks the layered theme). The 63rd, `--ds-type-body-font-size`, has its **only** declaration in the repo at `themes/default.css:534`, carrying the type-scale dial; deleting it collapses the composed shorthand and moves painted body text **13.125px → 15px in all six cells**. Standing Decision 13 deliberately made that row the sole authority. Corrected ruling: **delete 62**, and either keep the body row or first restore a tenant-reachable builder emission and delete within the same wave. Unresolved scope hole [O]: the DB/appearance compiler emits no `--ds-type-*` role channels, so wherever DB-compiled CSS is the only tenant layer all 63 rows are live — and the probe is blind to that path, so "dead on every tenanted page" was claimed from an instrument that cannot see it. The "19 disagreeing rows" does not reproduce (26/27/26 by declaration); immaterial to deletion legality but the number is [U]. |
+| **D3** collapse the 38 forks | REFUTED AS A SWEEP; sound only per pair. The corpus never pinned 38 or 6 — the spec says 32–41 of 95–100 groups, and Fable's own census finds 18 dual-declared groups. Four carve-outs are mandatory: (i) `--ds-color-border-focus` ~ `--ds-border-color-focus` is a **live two-concept distinction** — rottay paints them at different strengths in both themes and the loser feeds the composed 2px focus shorthand; collapse destroys tenant freedom, which is the opposite of the goal; (ii) Decision 17's "zero visible change in all three verticals" is **FALSE at HEAD** — `--ds-color-border` ~ `--ds-border-color` fork in rottay dark (`#1C1C20` vs `#2A2A2F`) and the loser has two real painted readers; (iii) pairs whose only reader is the read-only `rustic` engine cannot be collapsed without severing that engine's sole channel, and keeping an alias violates §1.3 — carve out or lift the fence, explicitly; (iv) zero-reader pairs belong in the class-5 drain, never the merge wave. Where collapse IS right: mode-split pairs, one concept whose theme halves wear different spellings, proven per-scope. |
+| **D4** palette relocation | CONFIRMED structurally — 1,057 root declarations, all eight per-component counts, the layer ranks, and the 17-flip set all reproduce independently, and pair-moves neutralise all 17. Two corrections. First, **"sole authority for the 37/63/77% ramp" garbles its own source**: those are per-vertical sole-authority **fractions** of the 1,057 (platform 391, bithire 666, evnto 811), not ramp steps. Stated as "the ramp" it invites a future lane to delete everything "non-ramp" — the deletion bar actually protects up to 811 winning declarations in evnto. Second, the ruling silently added an unmeasured operation: 6.0-pal measured a value-preserving **relocation**; "relocate to formulas" is relocation **plus** a literal→formula rewrite of 547 values, whose per-cell identity was never measured. Each formula needs its own six-cell proof or an explicit visible-change declaration. Still unchosen [O]: pair-move versus the `expectedLayer()` gate amendment — different blast radii. |
 
 | | Ruling |
 |---|---|
