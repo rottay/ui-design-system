@@ -573,6 +573,21 @@
   --ds-type-numeric-text-transform: none;
   --ds-type-numeric-font-variant-numeric: tabular-nums;
 
+  /* The eyebrow role, which had no base declaration at all: the three vertical
+     artifacts each declared the SAME 0.08em / uppercase, which makes it a DS
+     default misfiled into the tenant tier, not a tenant opinion. The channels
+     below are read BARE (`--ds-table-header-*`), so a document with no tenant
+     resolved them to nothing and the table header rendered initial values —
+     exactly what the DS-A007 note above promises cannot happen. Declaring them
+     here is that promise kept; the artifacts keep winning for the tenants that
+     ship one, unchanged.
+
+     0.08em is a literal because the tracking scale has no step for it: `wider`
+     is 0.05em and `widest` is 0.1em. Adding a step is a scale decision, not
+     this one's. */
+  --ds-text-eyebrow-letter-spacing: 0.08em;
+  --ds-text-eyebrow-transform: uppercase;
+
   /* Font Sizes
      This block wins the cascade over foundation/base/typography.css (imported
      earlier in the rottay-tokens layer). Each public step is a calc() over a
