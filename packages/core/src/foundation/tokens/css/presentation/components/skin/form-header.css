@@ -199,7 +199,7 @@
   /* the eyebrow is a micro-label, so it reads the `code` role's family (the
      tenant's mono choice) and the foundation tracking rung — never a literal */
   font-family: var(--ds-type-code-font-family, var(--ds-font-family-mono, monospace));
-  letter-spacing: var(--ds-letter-spacing-widest, 0.12em);
+  letter-spacing: var(--ds-letter-spacing-widest, 0.1em);
   text-transform: uppercase;
 }
 .ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] [data-part='title'] {

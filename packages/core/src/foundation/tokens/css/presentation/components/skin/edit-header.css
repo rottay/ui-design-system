@@ -231,7 +231,7 @@
      tenant's mono choice) and the foundation tracking rung — the old literal
      also letter-spaced Arabic, which the rung correctly collapses to 0 */
   font-family: var(--ds-type-code-font-family, var(--ds-font-family-mono, monospace));
-  letter-spacing: var(--ds-letter-spacing-widest, 0.12em);
+  letter-spacing: var(--ds-letter-spacing-widest, 0.1em);
   text-transform: uppercase;
 }
 .ds-structure.ds-edit-header [data-part='title'] {

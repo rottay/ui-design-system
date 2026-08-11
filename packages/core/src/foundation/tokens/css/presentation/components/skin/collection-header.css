@@ -95,7 +95,7 @@
 
   --_ds-collection-header-chip-block-size: var(--ds-spacing-6, 24px);
   --_ds-collection-header-chip-inline-padding: var(--ds-spacing-2, 8px);
-  --_ds-collection-header-chip-radius: var(--ds-radius-full, 999px);
+  --_ds-collection-header-chip-radius: var(--ds-radius-full, 9999px);
   --_ds-collection-header-chip-family: var(--ds-type-caption-font-family, inherit);
   --_ds-collection-header-chip-size: var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px));
   --_ds-collection-header-chip-weight: var(--ds-font-weight-bold, 700);
@@ -196,7 +196,7 @@
 .ds-structure.ds-collection-header [data-part='eyebrow']::before {
   content: '';
   flex-shrink: 0;
-  inline-size: var(--ds-edge-emphasis-width, 2px);
+  inline-size: var(--ds-edge-emphasis-width, 1px);
   block-size: 0.75em;
   border-radius: var(--_ds-collection-header-chip-radius);
   background: var(--_ds-collection-header-accent);
@@ -364,7 +364,7 @@
   block-size: var(--ds-edge-hairline-width, 1px);
   /* Optical: the rule aligns to the supporting copy's first baseline, not to
      its box top, so it reads as a lead-in rather than a stray tick. */
-  margin-block-start: calc(var(--ds-type-supporting-line-height, 1.56) * 0.5em);
+  margin-block-start: calc(var(--ds-type-supporting-line-height, 1.5) * 0.5em);
   background: linear-gradient(90deg, color-mix(in srgb, var(--ds-color-border-subtle) 82%, transparent) 0%, color-mix(in srgb, var(--ds-color-border-subtle) 34%, transparent) 100%);
 }
 .ds-structure.ds-collection-header [data-part='editorial-tech-rule'] {
@@ -581,7 +581,7 @@
      affordance, and a flat cap is indistinguishable from a chip. */
   .ds-structure.ds-collection-header [data-part='eyebrow']::before {
     background: ButtonText;
-    border: var(--ds-edge-emphasis-width, 2px) solid ButtonText;
+    border: var(--ds-edge-emphasis-width, 1px) solid ButtonText;
   }
 
   .ds-structure.ds-collection-header[data-part='root'] [data-part='shortcut-pill'] {

@@ -432,7 +432,7 @@
   font-weight: var(--ds-table-header-font-weight, 500);
   letter-spacing: var(
     --ds-table-header-letter-spacing,
-    var(--ds-text-eyebrow-letter-spacing, 0.05em)
+    var(--ds-text-eyebrow-letter-spacing, 0.08em)
   );
   text-transform: var(
     --ds-table-header-text-transform,

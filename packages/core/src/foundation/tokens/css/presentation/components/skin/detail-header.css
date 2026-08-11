@@ -410,8 +410,8 @@
   inset-block: var(--_ds-detail-header-gutter);
   inset-inline-start: 0;
   inline-size: var(--_ds-detail-header-spine-size);
-  border-start-end-radius: var(--ds-radius-full, 999px);
-  border-end-end-radius: var(--ds-radius-full, 999px);
+  border-start-end-radius: var(--ds-radius-full, 9999px);
+  border-end-end-radius: var(--ds-radius-full, 9999px);
   background: var(--_ds-detail-header-spine);
 }
 
@@ -546,8 +546,8 @@
   inset-inline: var(--ds-spacing-2, 8px);
   inset-block-end: 0;
   block-size: var(--_ds-detail-header-rail-size);
-  border-start-start-radius: var(--ds-radius-full, 999px);
-  border-start-end-radius: var(--ds-radius-full, 999px);
+  border-start-start-radius: var(--ds-radius-full, 9999px);
+  border-start-end-radius: var(--ds-radius-full, 9999px);
   background: transparent;
   transition: background var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
@@ -604,7 +604,7 @@
 }
 .ds-structure.ds-detail-header [data-part='tab-count'] {
   padding: var(--ds-detail-header-tab-count-padding, 2px 6px);
-  border-radius: var(--ds-radius-full, 999px);
+  border-radius: var(--ds-radius-full, 9999px);
   background: color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent);
 }
 .ds-structure.ds-detail-header [data-part='tab'][data-active='true'] [data-part='tab-count'] {
@@ -689,7 +689,7 @@
     inset-inline: var(--_ds-detail-header-gutter);
     inline-size: auto;
     block-size: var(--_ds-detail-header-spine-size);
-    border-radius: 0 0 var(--ds-radius-full, 999px) var(--ds-radius-full, 999px);
+    border-radius: 0 0 var(--ds-radius-full, 9999px) var(--ds-radius-full, 9999px);
   }
 
   /* the divided lane becomes a stacked list: vertical hairlines at this width

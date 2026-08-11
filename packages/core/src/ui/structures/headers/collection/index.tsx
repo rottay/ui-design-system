@@ -446,7 +446,7 @@ export function CollectionHeader({
                     : useDottedTitle
                       ? 'var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px))'
                       : 'var(--ds-type-supporting-font-size, var(--ds-font-size-sm, 14px))',
-                  lineHeight: 'var(--ds-type-supporting-line-height, 1.56)',
+                  lineHeight: 'var(--ds-type-supporting-line-height, 1.5)',
                   textWrap: 'pretty',
                   fontFamily: useMonoSubtitle
                     ? 'var(--ds-font-family-mono, var(--ds-font-family-base))'
@@ -499,9 +499,9 @@ export function CollectionHeader({
                       ? 'var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px))'
                       : 'var(--ds-type-supporting-font-size, var(--ds-font-size-sm, 14px))',
                   lineHeight: useDisplayTitle
-                    ? 'var(--ds-type-supporting-line-height, 1.65)'
+                    ? 'var(--ds-type-supporting-line-height, 1.5)'
                     : useDottedTitle
-                      ? 'var(--ds-type-caption-line-height, 1.5)'
+                      ? 'var(--ds-type-caption-line-height, 1.35)'
                       : 'var(--ds-type-supporting-line-height, 1.5)',
                   textWrap: 'pretty',
                   fontFamily: useMonoSubtitle

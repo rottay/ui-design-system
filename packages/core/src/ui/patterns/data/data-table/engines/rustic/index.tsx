@@ -130,7 +130,7 @@ const styles = {
     height: 'var(--ds-table-header-block-size, auto)',
     fontWeight: 'var(--ds-table-header-font-weight, 500)' as unknown as number,
     textTransform: 'var(--ds-table-header-text-transform, var(--ds-text-eyebrow-transform, uppercase))' as unknown as React.CSSProperties['textTransform'],
-    letterSpacing: 'var(--ds-table-header-letter-spacing, var(--ds-text-eyebrow-letter-spacing, 0.05em))',
+    letterSpacing: 'var(--ds-table-header-letter-spacing, var(--ds-text-eyebrow-letter-spacing, 0.08em))',
     whiteSpace: 'nowrap' as const,
     userSelect: 'none' as const,
     position: 'relative' as const,
