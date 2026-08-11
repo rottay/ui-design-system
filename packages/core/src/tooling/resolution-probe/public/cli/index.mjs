@@ -190,7 +190,9 @@ function summarise(artifact, options) {
       ? 'freshness NOT proven (shipped bundle read as-is)'
       : drift.identical
         ? 'matches shipped dist'
-        : `shipped dist diverges from src at line ${drift.firstDifferingLine}`;
+        : drift.prefixIdentical
+          ? `matches shipped dist + ${drift.shippedTailBytes}B tail (spring block; see the staleness gate)`
+          : `shipped dist diverges from src at line ${drift.firstDifferingLine}`;
     lines.push(`  ${vertical}: sha=${provenance.sha256.slice(0, 12)} | ${driftNote}`);
   }
   for (const row of artifact.unmatched) {

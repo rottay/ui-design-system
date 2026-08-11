@@ -90,16 +90,17 @@ test('projection drill: the scope vocabulary still agrees with the SSR projectio
 test('formula drill: the fresh composition agrees with the repository staleness gate', async () => {
   const result = await runFormulaAgreementDrill();
   assert.ok(
-    Object.keys(result.gate).length > 0,
-    'the staleness gate reported no divergence at all — either it now passes (in which case ' +
-      'dist is fresh and this drill needs rewriting) or its output format changed',
+    result.gateAssertions > 0,
+    'the staleness gate subprocess produced no parseable TAP result lines, so this drill ' +
+      'scanned an empty corpus and would have passed on anything. Its output format changed, ' +
+      'or the child stopped speaking TAP.',
   );
   assert.equal(
     result.agrees,
     true,
     'this harness recomposes the bundles with a formula transcribed from build-vertical-css.mjs. ' +
-      'It no longer agrees with the gate about where the shipped bundle diverges from source, ' +
-      `so "fresh" is fresh only by its own definition: ${JSON.stringify(result.comparisons)}`,
+      'It no longer agrees with the gate about whether — and where — the shipped bundle diverges ' +
+      `from source, so "fresh" is fresh only by its own definition: ${JSON.stringify(result.comparisons)}`,
   );
 });
 

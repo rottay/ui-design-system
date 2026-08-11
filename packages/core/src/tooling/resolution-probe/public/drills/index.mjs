@@ -44,9 +44,13 @@ import { measureScope } from '../../runtime/measure/index.mjs';
  *
  * `.drill-live` derives its radius from the dial. `.drill-shadowed` is
  * identical except that the tenant scope flat-declares the derived token above
- * the derivation — which is exactly what each generated vertical artifact
- * (`src/foundation/tokens/css/facade/artifacts/<vertical>/index.css`) does to
- * `--ds-radius-md` today.
+ * the derivation.
+ *
+ * The shadowed arm is SYNTHETIC and stays that way on purpose. The generated
+ * artifacts no longer do this to `--ds-radius-{sm,md,lg,xl}` — they emit the
+ * `-base` operands instead — but the shape recurs (BitHire's
+ * `--ds-radius-input: 9px` is the same defect one hop lower), and a drill that
+ * only ever sees a live channel has never been seen to say "did not move".
  */
 export const DRILL_CSS = `
 :root {
@@ -173,8 +177,17 @@ export function runFixtureDrill() {
  * could drift from it silently and produce a "fresh" bundle that is fresh
  * only by its own definition. `scripts/vertical-css-staleness.gate.mjs`
  * independently recomposes the same bundles and reports the first line at
- * which each committed file diverges. If the two formulas agree, they must
- * name the SAME line.
+ * which each committed file diverges.
+ *
+ * THE DRILL COMPARES VERDICTS, NOT DIVERGENCE LINES. Its first version could
+ * only assert "both name the same line", which silently required the shipped
+ * bundle to be STALE — so the moment a build made `dist` fresh the drill went
+ * red for the healthy outcome, and its own message had to guess which of the
+ * two had happened. Agreement is now per vertical and covers both regimes:
+ * where the gate reports a divergence the probe must name the same line, and
+ * where the gate reports none the probe must also find the shipped bundle
+ * byte-identical. Disagreement about the REGIME is the strongest form of drift
+ * this drill can catch, and the old shape could not express it.
  *
  * The gate's output includes whole bundles in its assertion messages — tens of
  * megabytes — so it is scanned line by line as it streams rather than
@@ -184,8 +197,16 @@ export async function runFormulaAgreementDrill() {
   const gateLines = await streamMatchingLines(
     process.execPath,
     ['--test', 'scripts/vertical-css-staleness.gate.mjs'],
-    /^\s*(styles\/[a-z]+\.css is stale or hand-edited|line \d+)/,
+    /^\s*(styles\/[a-z]+\.css is stale or hand-edited|line \d+|(not )?ok \d+)/,
   );
+
+  // THE CORPUS FLOOR, and it must not be inferred from the findings. A scan
+  // that matches nothing used to be indistinguishable from a gate reporting no
+  // divergence, so the drill leaned on "at least one divergence was found" as
+  // its proof of life — which is a floor that disappears the moment the
+  // repository is healthy. Counting the child's TAP result lines proves the
+  // subprocess ran and was parsed, in both regimes.
+  const gateAssertions = gateLines.filter((line) => /^\s*(not )?ok \d+/.test(line)).length;
 
   /** @type {Record<string, number>} */
   const gate = {};
@@ -209,18 +230,27 @@ export async function runFormulaAgreementDrill() {
   const comparisons = [];
   for (const vertical of ['platform', 'bithire', 'evnto']) {
     const bundle = await resolveBundle({ vertical, mode: 'fresh' });
+    const drift = bundle.provenance.shippedDistDrift;
+    const gateLine = gate[vertical] ?? null;
+    const probeLine = drift?.firstDifferingLine ?? null;
     comparisons.push({
       vertical,
-      probeLine: bundle.provenance.shippedDistDrift?.firstDifferingLine ?? null,
-      gateLine: gate[vertical] ?? null,
+      gateLine,
+      probeLine,
+      // Like for like: the gate compares the RECOMPOSED PREFIX and validates
+      // the spring tail separately, so the probe's prefix verdict is what its
+      // verdict must be compared against.
+      agrees: gateLine === null ? drift?.prefixIdentical === true : probeLine === gateLine,
     });
   }
   return {
     gate,
+    gateAssertions,
+    // Which regime the repository is in. Not an assertion — the drill is green
+    // in both — but a reader of a red needs it to know which half broke.
+    shippedBundlesAreStale: Object.keys(gate).length > 0,
     comparisons,
-    agrees: comparisons.every(
-      (row) => row.gateLine !== null && row.probeLine === row.gateLine,
-    ),
+    agrees: comparisons.every((row) => row.agrees),
   };
 }
 

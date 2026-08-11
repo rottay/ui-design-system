@@ -60,10 +60,13 @@ sweep it into the suite.
 `dist/*.css` is what the npm tarball ships, so it looks like the obvious thing
 to measure. Three facts complicate that:
 
-1. **`dist/` is stale.** `node --test scripts/vertical-css-staleness.gate.mjs`
-   recomposes the five committed bundles from source and **fails on all five**
-   (`styles/{platform,rottay,bithire,evnto,index}.css`). Platform first diverges
-   at line 77.
+1. **`dist/` goes stale, and nothing warns you when it has.** It is regenerated
+   by a build, so between a compiler change and the next build the shipped
+   bundle describes the previous tree. `node --test scripts/vertical-css-staleness.gate.mjs`
+   is the authority on which regime you are in: it recomposes the five committed
+   bundles from source and names the first diverging line of each. It has been
+   red on all five (platform first diverging at line 77); at HEAD 6a4a78b29 it
+   is green. **Do not pin either answer** — ask the gate.
 2. **`styles/` is not a second opinion.** This harness verifies it is
    byte-identical to `dist/` — which is exactly what `build-vertical-css.mjs`
    promises. A drill asserts it.
@@ -83,9 +86,11 @@ shipped one.
 
 That formula is *transcribed*, so it could drift from the real one and produce
 a bundle that is fresh only by its own definition. The formula drill runs the
-staleness gate as a subprocess and compares where each side says the shipped
-bundle diverges. They agree exactly today — platform **77**, bithire **155**,
-evnto **77**.
+staleness gate as a subprocess and requires the two to agree **per vertical, in
+whichever regime the repository is in**: where the gate reports a divergence the
+probe must name the same line, and where it reports none the probe must also
+find the shipped bundle byte-identical. Disagreeing about the regime is itself
+the finding.
 
 **What `fresh` cannot produce:** `build-vertical-css.mjs` appends a per-tenant
 `--ds-motion-spring: linear(...)` tail derived from compiled BrandTheme modules
@@ -158,47 +163,74 @@ scope-free total anywhere in the artifact.
 
 ---
 
-## The v1 result
+## The radius-scale result, at HEAD 6a4a78b29
 
-`dial --set --ds-radius-scale=1.5`, `--bundle fresh`, three verticals × two
-themes, controls **harness-live**:
+`dial --set --ds-radius-scale=1.5 --dial-target root`, `--bundle fresh`, three
+verticals × two themes, controls **harness-live**, witness **landedEverywhere**,
+totals **90 moved / 186 inert**:
 
 | fixture | declared chain | platform | bithire | evnto |
 |---|---|---|---|---|
 | `skeleton-card-line` | `calc(4px * var(--ds-radius-scale,1))` | 4px → **6px** | 5px → **6px** | 4px → **6px** |
 | `skeleton-form-action` | `calc(6px * var(--ds-radius-scale,1))` | 6px → **9px** | 7.5px → **9px** | 6px → **9px** |
-| `card-modern-md` | ← `--ds-radius-lg` | 14px → 14px | 10px → 10px | 18px → 18px |
-| `button-modern-md` | ← `--ds-radius-md` | 10px → 10px | 9px → 9px | 14px → 14px |
-| `input-modern-md` | ← `--ds-radius-md` | 10px → 10px | 9px → 9px | 14px → 14px |
+| `card-modern-md` | ← `--ds-radius-lg` | 14px → **21px** | 10px → **12px** | 18px → **27px** |
+| `button-modern-md` | ← `--ds-button-md-radius` | 10px → **15px** | 9px → 9px | 14px → **21px** |
+| `input-modern-md` | ← `--ds-input-radius` | 10px → **15px** | 9px → 9px | 14px → **21px** |
 
-The dial is **live for direct consumers and inert for every derived-token
-consumer**, on all three verticals, in both themes. The cause is visible in the
-`token-readout` fixture: `--ds-radius-md-base` is `8px` and `--ds-radius-scale`
-is `1`, yet `--ds-radius-md` resolves to `10px` — because each generated
-vertical artifact flat-declares `--ds-radius-{sm,md,lg,xl}` at the tenant scope,
-*above* the `calc()` derivation in the base layer.
+14 of the 18 painted radius rows move. The **4 that do not are BitHire's button
+and input, in both themes**, and the cause is not the radius ramp: BitHire's
+compiled artifact flat-declares `--ds-button-md-radius: 9px`, `--ds-input-md-radius: 9px`
+and `--ds-radius-input: 9px` at tenant scope, and those names sit BELOW the
+`--ds-radius-md` derivation in the paint chain rather than above it. They come
+from a second emitter — `chrome-variables` (`--ds-button-${size}-radius`,
+`--ds-radius-input`), fed by `chrome.controls.*.geometry.radius` — which the
+brand-theme `-base` repair never touched.
 
-Re-run with `--dial-target fixture`, which writes the property inline on the
-measured element — a strictly stronger position than any tenant can occupy —
-and the card/button/input radii still do not move. No tenant configuration
-anywhere can move them through `--ds-radius-scale`.
+### `--dial-target fixture` cannot answer this question
+
+Writing the dial inline on the measured element was documented here as "a
+strictly stronger position than any tenant can occupy". **That was false, and it
+produced a wrong verdict that stood for a whole wave.** `var()` inside a custom
+property is substituted at computed-value time on the element where the
+declaration applies; descendants inherit the already-substituted stream. So a
+descendant write cannot re-derive a `:root`-declared token, and for derived
+tokens `fixture` is strictly WEAKER than `root`.
+
+Measured, same bundle sha, same HEAD, same dial:
+
+| target | `card-modern-md` on evnto/light | totals |
+|---|---|---|
+| `root` | 18px → **27px** | 90 moved / 186 inert |
+| `fixture` | 18px → 18px (**inert**) | 18 moved / 258 inert |
+
+A strictly stronger position cannot yield strictly fewer movements. The 18 rows
+that do move under `fixture` are exactly the three channels read on the same
+element they were written on — the two skeleton `border-radius` literals and the
+readout's own `--ds-radius-scale` — 3 × 6 cells. Everything else in that artifact
+is structurally unable to move and its inertness means nothing.
+
+**`root` is the position a real tenant occupies** and is the only target whose
+inert verdicts transfer. The Standard `shape.radius-scale` control
+(`appearance.general.shape.radiusScale`) compiles through `appearance-posture`,
+which emits `--ds-radius-scale` and **no** `--ds-radius-*-base` — a bare scale in
+a later block, multiplying the vertical's baked bases. That is exactly what a
+root inline write models.
 
 Two further readings the run produced, both of the kind only a resolution
 instrument can produce:
 
-- **BitHire declares a dial it contradicts.** Its artifact sets
-  `--ds-radius-scale: 1.25` *and* flat radii that are not `base × 1.25`
-  (`sm` 7px vs 7.5, `lg` 14px vs 15, `xl` 18px vs 20). The declared dial and the
-  painted values disagree by construction.
+- **BitHire's ramp is now self-consistent, and the readout says so.** Its
+  artifact declares `--ds-radius-scale: 1.25` with `--ds-radius-md-base: calc(10px / 1.25)`,
+  so the foundation calc reproduces the authored 10px today while leaving the
+  multiplier live. The readout reads it back verbatim as
+  `calc(calc(10px / 1.25) * 1.25)` — a token stream, not a length, which is why
+  only the painted longhand settles anything.
 - **The same token pair is an alias in two verticals and a fork in the third.**
   `--ds-button-md-radius: var(--ds-button-md-border-radius)` holds on platform
   (10/10) and evnto (14/14). On BitHire the pair reads 10px and 9px, and the
   button paints **9px** — the derived member is overridden directly, so the
-  channel a tenant would be told to write is not the one that paints.
-
-A `--bundle dist` run diffed against `--bundle fresh` shows **zero** changed
-rows across this roster: the `dist` staleness is real, but it does not reach any
-of the properties measured here.
+  channel a tenant would be told to write is not the one that paints. This is
+  the residue that keeps the radius dial from reaching BitHire's controls.
 
 A `--bundle dist` run diffed against `--bundle fresh` shows **zero** changed
 rows across this roster: the `dist` staleness is real, but it does not reach any

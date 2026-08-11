@@ -16,10 +16,26 @@
  *
  * WHERE THE DIAL IS APPLIED MATTERS, so it is a parameter and it is recorded.
  * `root` writes on the document element, which is where `resolveDocumentRootAttributes`
- * puts the tenant scope and where a compiled tenant artifact lands. `fixture`
- * writes on the measured element itself, which is a strictly stronger position
- * than any tenant can occupy. If a property does not move even at `fixture`,
- * no tenant configuration anywhere can move it.
+ * puts the tenant scope and where a compiled tenant artifact lands. It is the
+ * position a real tenant occupies, and it is the only one whose verdicts
+ * transfer to a consumer.
+ *
+ * `fixture` writes on the measured element itself. THAT IS NOT A STRONGER
+ * POSITION — it is a different one, and for a derived token it is strictly
+ * weaker. A custom property's `var()` references are substituted at
+ * computed-value time ON THE ELEMENT WHERE THE DECLARATION APPLIES; descendants
+ * inherit the already-substituted stream. `--ds-radius-md` is declared at
+ * `:root` as `calc(var(--ds-radius-md-base) * var(--ds-radius-scale, 1))`, so
+ * the root computes it to `calc(14px * 1)` and every descendant inherits that.
+ * Writing `--ds-radius-scale` on a descendant cannot re-derive it. Measured at
+ * HEAD 6a4a78b29 on one bundle sha: `card-modern-md` moves 18px -> 27px at
+ * `root` and is INERT at `fixture`, in all six cells.
+ *
+ * So `fixture` answers exactly one question — does this element's own declared
+ * value read the dial directly — and an inert verdict from it is evidence about
+ * NOTHING ELSE. `base/density.css` carries a `:where(…:not(:root))`
+ * redeclaration precisely because descendant re-derivation has to be authored
+ * to exist.
  *
  * WHAT A CUSTOM PROPERTY READ MEANS. `getComputedStyle().getPropertyValue('--x')`
  * returns the substituted token stream, not an evaluated length: `--ds-radius-md`
@@ -148,7 +164,7 @@ export async function measureScope({
     }
 
     await applyDial(page, plan, dial, dialTarget);
-    const witness = await readDialWitness(page, dial, dialTarget);
+    const witness = await readDialWitness(page, plan, dial, dialTarget);
     const dialled = await readAll(page, plan);
     return { readings: baseline, dialled, witness, unmatched: unmatchedRows(validations) };
   } finally {
@@ -266,16 +282,37 @@ async function applyDial(page, plan, dial, dialTarget) {
  *
  * Separates "the design system ignored this input" from "the input was never
  * written", which are the two readings a dial probe must never conflate.
+ *
+ * IT MUST READ THE ELEMENTS THAT WERE WRITTEN. This read used `document.body`
+ * for the `fixture` target, and body is never a dial target — so every
+ * fixture-target run reported the tenant artifact's own value as the witness and
+ * `landedEverywhere: false`, which reads as "the input never landed" for a dial
+ * that landed on every element it was aimed at. A witness that watches the wrong
+ * element is worse than none: it converts a real inert verdict into a harness
+ * failure, and would eventually be used to dismiss one.
+ *
+ * A `fixture` witness is one value per property only when every dialled element
+ * agrees. Disagreement is reported, never averaged away.
  */
-export async function readDialWitness(page, dial, dialTarget) {
+export async function readDialWitness(page, plan, dial, dialTarget) {
   return page.evaluate(
-    ({ properties, target }) => {
-      const element = target === 'root' ? document.documentElement : document.body;
-      const computed = getComputedStyle(element);
+    ({ rows, properties, target }) => {
+      const elements =
+        target === 'root'
+          ? [document.documentElement]
+          : rows.map((row) => document.querySelector(row.selector)).filter(Boolean);
       return Object.fromEntries(
-        Object.keys(properties).map((name) => [name, computed.getPropertyValue(name).trim()]),
+        Object.keys(properties).map((name) => {
+          const seen = [
+            ...new Set(
+              elements.map((element) => getComputedStyle(element).getPropertyValue(name).trim()),
+            ),
+          ];
+          if (seen.length === 0) return [name, 'no-dialled-element'];
+          return [name, seen.length === 1 ? seen[0] : `mixed: ${seen.join(' | ')}`];
+        }),
       );
     },
-    { properties: dial, target: dialTarget },
+    { rows: plan, properties: dial, target: dialTarget },
   );
 }

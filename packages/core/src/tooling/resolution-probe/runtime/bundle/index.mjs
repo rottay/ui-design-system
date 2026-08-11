@@ -208,7 +208,7 @@ export async function resolveBundle({ vertical, mode = 'fresh' }) {
   }
 
   const { css, inputs } = await composeFresh(vertical);
-  const drift = distCss === null ? null : firstDifferingLine(css, distCss);
+  const drift = distCss === null ? null : describeShippedDrift(css, distCss);
   return {
     mode,
     vertical,
@@ -225,18 +225,53 @@ export async function resolveBundle({ vertical, mode = 'fresh' }) {
         'Recomposed in memory from src/foundation/tokens/css with the formula in ' +
         'build-vertical-css.mjs. Omits the per-tenant --ds-motion-spring tail, which ' +
         'requires compiled BrandTheme modules under dist/.',
-      shippedDistDrift:
-        drift === null
-          ? { identical: true }
-          : {
-              identical: false,
-              firstDifferingLine: drift.line,
-              fresh: drift.fresh,
-              shipped: drift.shipped,
-              meaning:
-                'dist/ and styles/ are behind src/. Anything measured against the ' +
-                'shipped bundle is measuring that older source.',
-            },
+      shippedDistDrift: drift,
     },
+  };
+}
+
+/**
+ * How the shipped bundle relates to the freshly recomposed one.
+ *
+ * IT MUST SEPARATE THE PREFIX FROM THE TAIL, because `fresh` deliberately omits
+ * the per-tenant `--ds-motion-spring: linear(...)` block that
+ * `build-vertical-css.mjs` appends from compiled BrandTheme modules under
+ * `dist/`. Comparing whole files therefore reported EVERY spring-carrying
+ * bundle as drifted, at end-of-file, for a difference the harness creates on
+ * purpose — which read as "dist is behind src" on a tree where it was not, and
+ * put the formula drill permanently at odds with the staleness gate.
+ *
+ * Whether a tail is the *sanctioned* spring block is
+ * `scripts/vertical-css-staleness.gate.mjs`'s question, and it is deliberately
+ * not re-answered here: that gate owns the grammar, and a second copy of it
+ * would make the two instruments' agreement worthless (they would share the
+ * derivation). This reports the tail's size and says whose question it is.
+ */
+function describeShippedDrift(fresh, shipped) {
+  if (fresh === shipped) {
+    return { identical: true, prefixIdentical: true, shippedTailBytes: 0 };
+  }
+  if (shipped.startsWith(fresh)) {
+    return {
+      identical: false,
+      prefixIdentical: true,
+      shippedTailBytes: shipped.length - fresh.length,
+      meaning:
+        'The shipped bundle is this exact text plus a trailing remainder — the expected ' +
+        'shape, since `fresh` omits the per-tenant --ds-motion-spring tail. Whether that ' +
+        'remainder is the sanctioned spring block is scripts/vertical-css-staleness.gate.mjs\'s ' +
+        'question, not this harness\'s.',
+    };
+  }
+  const drift = firstDifferingLine(fresh, shipped);
+  return {
+    identical: false,
+    prefixIdentical: false,
+    firstDifferingLine: drift.line,
+    fresh: drift.fresh,
+    shipped: drift.shipped,
+    meaning:
+      'dist/ and styles/ are behind src/ WITHIN the recomposed prefix. Anything measured ' +
+      'against the shipped bundle is measuring that older source.',
   };
 }

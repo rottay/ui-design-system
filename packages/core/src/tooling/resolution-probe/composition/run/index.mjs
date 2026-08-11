@@ -156,9 +156,13 @@ function buildDialReport({ dial, dialTarget, readings, dialled, witnesses, fixtu
     targetMeaning:
       dialTarget === 'root'
         ? 'Written inline on the document element — where the tenant scope and a compiled ' +
-          'tenant artifact land.'
-        : 'Written inline on the measured element itself — a strictly stronger position than ' +
-          'any tenant can occupy.',
+          'tenant artifact land. This is the position a real tenant occupies, so verdicts ' +
+          'from this target transfer to a consumer.'
+        : 'Written inline on the measured element itself. NOT a stronger position than root — ' +
+          'for a token derived at :root it is strictly WEAKER, because var() is substituted ' +
+          'where the declaration applies and descendants inherit the substituted stream. An ' +
+          'inert verdict from this target is evidence about this element\'s own declared ' +
+          'value and about nothing else; it must never be quoted as "no tenant can move this".',
     totals: {
       scope: 'across every (vertical × theme × fixture × property) row in this artifact',
       movedProperties: moved,
