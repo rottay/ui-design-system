@@ -90,7 +90,13 @@ describe('T1 · BrandTheme values propagate into the rendered artifact', () => {
         badge: { ...bithireBrandTheme.chrome!.badge!, radius: '3px' },
       },
     };
-    expect(render(mutated, spec)).toContain('--ds-badge-radius: 3px;');
+    // An authored literal reaches the block folded through the radius dial,
+    // divided by the scale this same compilation emits so the resting corner
+    // is still 3px — bithire's dial is 1.25. The `var(--ds-radius-full)` above
+    // is left alone, being no single length.
+    expect(render(mutated, spec)).toContain(
+      '--ds-badge-radius: calc(3px / 1.25 * var(--ds-radius-scale, 1));'
+    );
   });
 
   it('the declared default mode reaches the artifact as color-scheme', () => {

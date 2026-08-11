@@ -115,8 +115,14 @@ describe("divergence fixtures (W4 section 9)", () => {
       );
     }
 
-    expect(sober["--ds-radius-button"]).toBe("2px");
-    expect(editorial["--ds-radius-button"]).toBe("9999px");
+    // Both buttonStyle presets reach the artifact folded through the radius
+    // dial; the divergence is in the operand, which is what the fixtures pin.
+    expect(sober["--ds-radius-button"]).toBe(
+      "calc(2px * var(--ds-radius-scale, 1))"
+    );
+    expect(editorial["--ds-radius-button"]).toBe(
+      "calc(9999px * var(--ds-radius-scale, 1))"
+    );
     expect(sober["--ds-type-scale"]).toBe("0.96");
     expect(editorial["--ds-type-scale"]).toBe("1.06");
     expect(sober["--ds-density-scale"]).toBe("0.92");

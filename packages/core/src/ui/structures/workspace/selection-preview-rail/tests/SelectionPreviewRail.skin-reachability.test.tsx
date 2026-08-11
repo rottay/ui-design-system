@@ -1,12 +1,13 @@
 import React from 'react';
 import { describe, expect, it } from 'vitest';
-import { screen } from '@testing-library/react';
+import { waitFor } from '@testing-library/react';
 
 import { SelectionPreviewRail } from '..';
 import { renderWithEngine } from '../../../../../tooling/testing/helpers/engine';
 import {
   readSkinRules,
   unreachableSelectors,
+  waitForComposedContent,
   type SkinRule,
 } from '../../../../../tooling/testing/helpers/skin-reachability';
 
@@ -29,8 +30,15 @@ const COLUMNS = [
   { key: 'absent', title: 'Absent', dataIndex: 'absent' },
 ];
 
-function renderDefault() {
-  return renderWithEngine(
+/**
+ * Each branch is gated on a COMPOSED primitive, never on the rail's own text.
+ * The close affordance is a `Button` — a separately-imported engine module
+ * behind its own `<Suspense fallback={null}>` — so the rail's Box/Flex/Text
+ * tree renders complete while the Button is still absent, and every rule
+ * keyed on it reads dead. See the composition law in the helper.
+ */
+async function renderDefault() {
+  const result = renderWithEngine(
     <SelectionPreviewRail
       item={ITEM}
       itemKey="row-1"
@@ -43,10 +51,12 @@ function renderDefault() {
     />,
     'modern'
   );
+  await waitForComposedContent(waitFor, result.container, "[data-part='close']");
+  return result;
 }
 
-function renderCustom() {
-  return renderWithEngine(
+async function renderCustom() {
+  const result = renderWithEngine(
     <SelectionPreviewRail
       item={ITEM}
       itemKey="row-2"
@@ -58,10 +68,12 @@ function renderCustom() {
     />,
     'modern'
   );
+  await waitForComposedContent(waitFor, result.container, '.ds-selection-preview-rail__close');
+  return result;
 }
 
-function renderEmptySnapshot() {
-  return renderWithEngine(
+async function renderEmptySnapshot() {
+  const result = renderWithEngine(
     <SelectionPreviewRail
       item={ITEM}
       itemKey="row-3"
@@ -72,15 +84,17 @@ function renderEmptySnapshot() {
     />,
     'modern'
   );
+  await waitForComposedContent(waitFor, result.container, "[data-part='snapshot-empty']");
+  return result;
 }
 
 describe('SelectionPreviewRail skin reachability', () => {
   it('matches every authored selector across both branches and the empty state', async () => {
-    const scopes = [renderDefault().container, renderCustom().container, renderEmptySnapshot().container];
-    expect(await screen.findByText('Consumer preview')).toBeTruthy();
-    expect(
-      await screen.findByText('No preview fields are available for this record.')
-    ).toBeTruthy();
+    const scopes = [
+      (await renderDefault()).container,
+      (await renderCustom()).container,
+      (await renderEmptySnapshot()).container,
+    ];
 
     const rules = readSkinRules('selection-preview-rail');
     expect(rules.length, 'skin parsed to nothing — the read is broken').toBeGreaterThan(20);
@@ -89,8 +103,7 @@ describe('SelectionPreviewRail skin reachability', () => {
   });
 
   it('reports the spaced root form as unreachable (positive control)', async () => {
-    const { container } = renderDefault();
-    expect(await screen.findByText('Matched on name')).toBeTruthy();
+    const { container } = await renderDefault();
 
     const planted: SkinRule[] = [
       {
@@ -107,8 +120,7 @@ describe('SelectionPreviewRail skin reachability', () => {
   });
 
   it('owns the rail track in the skin, not inline on either root', async () => {
-    const scopes = [renderDefault().container, renderCustom().container];
-    expect(await screen.findByText('Consumer preview')).toBeTruthy();
+    const scopes = [(await renderDefault()).container, (await renderCustom()).container];
 
     for (const scope of scopes) {
       const root = scope.querySelector('.ds-selection-preview-rail') as HTMLElement;

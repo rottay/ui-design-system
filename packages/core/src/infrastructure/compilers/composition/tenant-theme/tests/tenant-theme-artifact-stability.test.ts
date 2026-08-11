@@ -44,6 +44,34 @@ const DENSITY_MODE_FACTOR_TOKEN = "--ds-density-mode-factor";
 const ON_PRIMARY_INK_TOKEN = "--ds-color-text-on-primary";
 const BEHAVIOR_ONLY_AMBIENT_TOKEN = "--ds-motion-ambient";
 
+/**
+ * The fourth sanctioned divergence: an authored radius LITERAL now reaches the
+ * artifact as its own product with `--ds-radius-scale`, so a tenant corner
+ * stays reachable by `shape.radius-scale` instead of outranking it from the
+ * unlayered tenant block. Every resting pixel is unchanged — these documents
+ * author no radius scale, so the dial rests at 1.
+ *
+ * Declared per call site, never pattern-matched, and deliberately not refreshed
+ * into the fixtures: a channel that starts folding without being declared is a
+ * change to review. Two neighbours prove how narrow the rule is — the populated
+ * fixture's `--ds-radius-button` is `var(--ds-radius-md, 8px)` and stays
+ * untouched, and `--ds-radius-md` arrives through `tokenOverrides`, which the
+ * dial does not reach at all.
+ */
+const dialedRadius = (authored: string): string =>
+  `calc(${authored} * var(--ds-radius-scale, 1))`;
+
+/** Rewrite a frozen fixture's declarations of `tokens` into their dialed form. */
+const withDialedRadius = (css: string, tokens: readonly string[]): string =>
+  css
+    .split("\n")
+    .map((line) => {
+      const match = /^(\s*)(--[\w-]+):\s*(.+);$/.exec(line);
+      if (!match || !tokens.includes(match[2])) return line;
+      return `${match[1]}${match[2]}: ${dialedRadius(match[3])};`;
+    })
+    .join("\n");
+
 /** The artifact css minus its digest banner line. */
 const cssBody = (artifact: Pick<TenantThemeArtifact, "css">): string =>
   artifact.css.split("\n").slice(1).join("\n");
@@ -67,7 +95,8 @@ const withoutBehaviorOnlyAmbient = (css: string): string =>
 
 function expectStableEmission(
   artifact: TenantThemeArtifact,
-  fixture: TenantThemeArtifact
+  fixture: TenantThemeArtifact,
+  dialFolded: readonly string[] = []
 ): string[] {
   expect(JSON.stringify(artifact.normalizedAppearance)).toBe(
     JSON.stringify(fixture.normalizedAppearance)
@@ -76,8 +105,22 @@ function expectStableEmission(
   expect(artifact.adjustments).toBeUndefined();
   for (const [token, value] of Object.entries(fixture.variables)) {
     if (token === BEHAVIOR_ONLY_AMBIENT_TOKEN) continue;
-    expect(artifact.variables[token], token).toBe(value);
+    const expected = dialFolded.includes(token) ? dialedRadius(value) : value;
+    expect(artifact.variables[token], token).toBe(expected);
   }
+  // Refuses a stale declaration in both directions: a token that left the
+  // fixture, and a token the compiler stopped folding. Without it the list
+  // could outlive the exception and quietly stop asserting anything.
+  for (const token of dialFolded) {
+    expect(fixture.variables[token], `${token} absent from fixture`).toBeDefined();
+    expect(fixture.variables[token]?.startsWith("calc(")).toBe(false);
+  }
+  // And nothing folded behind our back.
+  expect(
+    Object.keys(fixture.variables)
+      .filter((token) => artifact.variables[token]?.startsWith("calc("))
+      .sort()
+  ).toEqual([...dialFolded].sort());
   expect(artifact.variables[BEHAVIOR_ONLY_AMBIENT_TOKEN]).toBeUndefined();
   const additions = Object.keys(artifact.variables).filter(
     (token) => fixture.variables[token] === undefined
@@ -223,11 +266,20 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
       { verticalEnvelope: getTenantThemeVerticalEnvelope("bithire") }
     );
     const fixture = readFixture("w4-absent-new-fields-artifact.fixture.json");
-    const additions = expectStableEmission(artifact, fixture);
+    // The three authored radius literals in this document; `--ds-radius-md`
+    // is authored too but arrives through `tokenOverrides`, which the dial
+    // does not reach, so it is absent here on purpose.
+    const dialFolded = [
+      "--ds-card-border-radius",
+      "--ds-card-radius",
+      "--ds-radius-button",
+    ];
+    const additions = expectStableEmission(artifact, fixture, dialFolded);
     expect(additions).toEqual([DENSITY_MODE_FACTOR_TOKEN]);
     expect(artifact.variables[DENSITY_MODE_FACTOR_TOKEN]).toBe("0.85");
+    expect(artifact.variables["--ds-radius-md"]).toBe("10px");
     expect(withoutDensityModeFactor(cssBody(artifact))).toBe(
-      withoutBehaviorOnlyAmbient(cssBody(fixture))
+      withDialedRadius(withoutBehaviorOnlyAmbient(cssBody(fixture)), dialFolded)
     );
   });
 

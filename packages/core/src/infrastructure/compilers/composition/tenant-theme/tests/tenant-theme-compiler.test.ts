@@ -175,6 +175,16 @@ const hydrate = (
   identity: TenantThemeConfigIdentity = IDENTITY
 ) => hydrateTenantThemeConfig(document, identity);
 
+/**
+ * How an authored radius literal reaches the artifact once the shared radius
+ * dial folds it: a tenant corner stays reachable by `shape.radius-scale`
+ * instead of outranking it from the unlayered tenant block. Spelled out here
+ * rather than imported so the expectation is not the emitter's own arithmetic.
+ * These documents author no radius scale, so there is no divisor.
+ */
+const dialedRadius = (authored: string) =>
+  `calc(${authored} * var(--ds-radius-scale, 1))`;
+
 describe("DS-S001 DB recipe-profile channel", () => {
   it("persists a valid selection through normalized Appearance and CSS", () => {
     const document = structuredClone(ADVANCED_DOCUMENT);
@@ -506,7 +516,9 @@ describe("deterministic artifact compilation and isolation", () => {
         appearance: { shape: { buttonStyle: "pill" } },
       })
     );
-    expect(artifact.variables["--ds-radius-button"]).toBe("9999px");
+    expect(artifact.variables["--ds-radius-button"]).toBe(
+      "calc(9999px * var(--ds-radius-scale, 1))"
+    );
   });
 
   it("accepts only code-owned font-pack references inside font-family lists", () => {
@@ -723,9 +735,11 @@ describe("deterministic artifact compilation and isolation", () => {
       "--ds-command-home-console-padding": "20px",
       "--ds-badge-font-family": "Optima, Candara, 'Noto Sans', sans-serif",
       "--ds-badge-font-weight": "650",
-      "--ds-badge-radius": "3px",
-      "--ds-badge-chip-radius": "4px",
-      "--ds-badge-pill-radius": "6px",
+      // Authored 3/4/6px, emitted through the shared radius dial so
+      // `shape.radius-scale` reaches a corner the tenant authored.
+      "--ds-badge-radius": "calc(3px * var(--ds-radius-scale, 1))",
+      "--ds-badge-chip-radius": "calc(4px * var(--ds-radius-scale, 1))",
+      "--ds-badge-pill-radius": "calc(6px * var(--ds-radius-scale, 1))",
       "--ds-badge-surface": "#FFFEFB",
       "--ds-badge-frame-hover": "#0F766E",
       "--ds-badge-remove-opacity": "0.82",
@@ -866,13 +880,13 @@ describe("closed schema and hostile input rejection", () => {
     const expectedVariables = {
       "--ds-container-background": layout.containerBackground,
       "--ds-container-border": layout.containerBorder,
-      "--ds-container-radius": layout.containerRadius,
+      "--ds-container-radius": dialedRadius(layout.containerRadius),
       "--ds-container-shadow": layout.containerShadow,
       "--ds-container-motion-duration": layout.containerMotionDuration,
       "--ds-container-motion-easing": layout.containerMotionEasing,
       "--ds-aspect-ratio-background": layout.aspectRatioBackground,
       "--ds-aspect-ratio-border": layout.aspectRatioBorder,
-      "--ds-aspect-ratio-radius": layout.aspectRatioRadius,
+      "--ds-aspect-ratio-radius": dialedRadius(layout.aspectRatioRadius),
       "--ds-aspect-ratio-shadow": layout.aspectRatioShadow,
       "--ds-aspect-ratio-overflow": layout.aspectRatioOverflow,
       "--ds-aspect-ratio-motion-duration": layout.aspectRatioMotionDuration,

@@ -4,11 +4,12 @@ import { fileURLToPath } from 'node:url';
 
 import React from 'react';
 import { describe, expect, it } from 'vitest';
-import { screen } from '@testing-library/react';
+import { waitFor } from '@testing-library/react';
 
 import { FieldFiltersPanel } from '..';
 import type { FieldFilterDefinition, FieldFilterPreset, FieldFilterVisual } from '..';
 import { renderWithEngine } from '../../../../../tooling/testing/helpers/engine';
+import { waitForComposedContent } from '../../../../../tooling/testing/helpers/skin-reachability';
 
 /**
  * `data-part` is a shared VOCABULARY, not an identifier. This component composes
@@ -246,7 +247,17 @@ describe.each(['modern'] as const)(
         engine
       );
 
-      expect(await screen.findByText('Advanced filters')).toBeTruthy();
+      // `preset-chip` is a composed Button and the controls are composed
+      // Select/Input — each behind its own `<Suspense fallback={null}>`, so
+      // the panel's own tree (title included) renders while they are absent.
+      // Gate on the composed parts this test asserts, never on the title.
+      await waitForComposedContent(waitFor, container, '[data-part="preset-chip"]', PRESETS.length);
+      await waitForComposedContent(
+        waitFor,
+        container,
+        '.ds-field-filters-panel__control',
+        FILTERS.length,
+      );
 
       for (const part of NO_PAINT_PARTS) {
         const nodes = ownParts(container, part);

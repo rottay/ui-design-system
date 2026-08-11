@@ -14,6 +14,7 @@
 
 import React from 'react';
 import { beforeAll, describe, expect, it } from 'vitest';
+import { waitFor } from '@testing-library/react';
 
 import { MobileHeader } from '..';
 import { renderSurface } from '../../../../surfaces/foundation/common/test-utils';
@@ -48,9 +49,18 @@ async function renderFull() {
     </MobileHeader>,
     { engine: 'modern' },
   );
-  // The engine resolves lazily. Sampling before it does reads the family as
-  // entirely unpainted — a state not reached, never a dead rule.
-  await view.findByTestId('mobile-header');
+  // GATE ON CONTENT, NEVER ON THE CONTAINER. `createEngineComponent` gives
+  // every primitive its own `React.lazy`, so the Box root can resolve while
+  // the Flex bar and the slots inside it are still pending. Waiting on the
+  // root samples a correctly-classed but empty header and reads every
+  // descendant rule as unmatched — a state not reached, never a dead rule.
+  await waitFor(() => {
+    const { container } = view;
+    expect(container.querySelector('[data-part="bar"]')).not.toBeNull();
+    expect(container.querySelector('[data-part="trigger"]')).not.toBeNull();
+    expect(container.querySelector('[data-part="label"]')).not.toBeNull();
+    expect(container.querySelector('[data-part="body"]')).not.toBeNull();
+  });
   return view;
 }
 

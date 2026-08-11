@@ -453,15 +453,28 @@ describe('patterns/shell header family -- data-part contract (WO-SKIN-06 CK-B/P)
     });
 
     it('stamps the loading skeleton branch (six blocks, one shared PULSE_STYLE)', async () => {
+      // The skeleton mirrors the shape the CALLER declared -- icon, eyebrow,
+      // subtitle, each quick action and the tab strip are all conditional -- so
+      // the six only appear for the full header. A title-only header skeletons
+      // exactly one block, which is the branch asserted just below.
+      const { container } = renderFull({ loading: true });
+      await partsOf(container);
+
+      const root = container.querySelector('[data-part="root"]') as HTMLElement;
+      expect(root.getAttribute('data-loading')).toBe('true');
+      // title + subtitle + three quick actions + tabs.
+      expect(partCount(container, 'skeleton')).toBe(6);
+    });
+
+    it('skeletons only the blocks the caller declared', async () => {
       const { container } = renderWithEngine(
         <PatternWorkbenchHeader title="Operations Dashboard" loading />,
         'modern',
       );
       await partsOf(container);
 
-      const root = container.querySelector('[data-part="root"]') as HTMLElement;
-      expect(root.getAttribute('data-loading')).toBe('true');
-      expect(partCount(container, 'skeleton')).toBe(6);
+      expect(partCount(container, 'skeleton')).toBe(1);
+      expect(container.querySelector('[data-part="skeleton-actions"]')).toBeNull();
     });
 
     it('renders NO back button -- WorkbenchHeader s BackButton is unreachable', async () => {

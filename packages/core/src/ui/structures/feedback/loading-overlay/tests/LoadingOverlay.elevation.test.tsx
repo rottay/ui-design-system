@@ -40,10 +40,19 @@ async function renderFull() {
     />,
     'modern',
   );
-  // The composed primitives resolve lazily. Sampling before they do reads the
-  // family as entirely unpainted — a state not reached, never a dead rule.
+  // GATE ON CONTENT, NEVER ON THE CONTAINER — the portal law, arriving at a
+  // lazy-engine boundary instead of a portal. `createEngineComponent` gives
+  // EVERY primitive its own `React.lazy`, so Box, Flex and Text resolve
+  // independently. The root is a Box and `content`/`status` are Flex, so
+  // waiting on the root proves Box resolved and says nothing about Flex: a
+  // sample taken in that window sees a correctly-classed root with no stack
+  // inside it, and every part rule reads as unstamped. The dot count covers
+  // the third boundary (Text) the same way.
   await waitFor(() => {
-    expect(view.container.querySelector('[data-part="root"]')).not.toBeNull();
+    const { container } = view;
+    expect(container.querySelector('[data-part="content"]')).not.toBeNull();
+    expect(container.querySelector('[data-part="status"]')).not.toBeNull();
+    expect(container.querySelectorAll('[data-part="dot"]')).toHaveLength(3);
   });
   return view;
 }

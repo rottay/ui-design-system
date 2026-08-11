@@ -17,6 +17,7 @@
 
 import React from 'react';
 import { beforeAll, describe, expect, it } from 'vitest';
+import { waitFor } from '@testing-library/react';
 
 import { BottomTabBar } from '..';
 import { renderSurface } from '../../../../surfaces/foundation/common/test-utils';
@@ -123,11 +124,20 @@ describe('BottomTabBar elevation contract', () => {
   });
 
   it('leaves no authored selector unmatched by the rendered family', async () => {
-    const { container, findByTestId } = renderSurface(
+    const { container } = renderSurface(
       <BottomTabBar items={ITEMS} activeKey="home" />,
       { engine: 'modern' },
     );
-    await findByTestId('bottom-tab-bar');
+    // Gate on CONTENT, never on the container: `createEngineComponent` gives
+    // every primitive its own `React.lazy`, so the Box root can resolve while
+    // the Flex list and the tabs inside it are still pending. Waiting on the
+    // root would sample a correctly-classed but empty bar and read every
+    // descendant rule as unmatched.
+    await waitFor(() => {
+      expect(container.querySelector('[data-part="list"]')).not.toBeNull();
+      expect(container.querySelectorAll('[data-part="tab-button"]')).toHaveLength(ITEMS.length);
+      expect(container.querySelector('[data-part="badge"]')).not.toBeNull();
+    });
 
     // A pseudo-element is not addressable by `querySelector` in ANY DOM, so
     // reporting one as unmatched would be the instrument's limit read as a

@@ -136,6 +136,41 @@ export function unreachableSelectors({
 }
 
 /**
+ * ── THE COMPOSITION LAW (the portal law's sibling, and much wider) ────────
+ * `createEngineComponent` wraps EVERY engine primitive in its own
+ * `<Suspense fallback={null}>` (`component-factory/index.tsx:182`, fallback
+ * defaulting to `null` at `:102`), and each engine module is a separate
+ * dynamic `import()`. So the primitives of one family resolve INDEPENDENTLY:
+ * `Box`/`Flex`/`Text` land and the family's own DOM — including its title —
+ * appears, while `Select` or `Button` is still pending and renders NOTHING.
+ * There is no marker for it: the fallback is `null`, so the panel looks
+ * finished and simply has no controls.
+ *
+ * A fixture gating on the family's OWN text therefore samples a tree whose
+ * composed primitives are absent, and every rule keyed on one reads dead.
+ * Measured on `field-filters-panel`: 4 of 4 control landings at a content
+ * gate, 1 of 4 at the family-text gate under a loaded suite, 0 of 4 at mount.
+ * It is load-dependent, so it passes in isolation and fails in the suite.
+ *
+ * Gate on the composed primitive itself — never on the family's own text.
+ */
+export async function waitForComposedContent(
+  waitFor: (cb: () => void) => Promise<unknown>,
+  scope: ParentNode,
+  selector: string,
+  minCount = 1
+): Promise<void> {
+  await waitFor(() => {
+    const found = scope.querySelectorAll(selector).length;
+    if (found < minCount) {
+      throw new Error(
+        `composed primitive not mounted: ${selector} matched ${found}, need ${minCount}`
+      );
+    }
+  });
+}
+
+/**
  * The readiness gate for a portalled family: resolves only once the family's
  * CONTENT is mounted inside its governed surface, never at the surface alone.
  * `minContent` guards the case where a list container mounts before its rows.

@@ -131,7 +131,12 @@ const ACTIVE_CAPABILITY_PROBES = {
     // dial at 1.0 — the explicit override bends the posture, never breaks it.
     expect(artifact.variables['--ds-radius-scale']).toBe('1'),
   'shape.button-style': (artifact) =>
-    expect(artifact.variables['--ds-radius-button']).toBe('2px'),
+    // The pill/sharp presets are folded through the radius dial like every
+    // other emitted corner, so the preset reaches the artifact as its own
+    // product with the dial. The dial rests at 1 above, so this paints 2px.
+    expect(artifact.variables['--ds-radius-button']).toBe(
+      'calc(2px * var(--ds-radius-scale, 1))'
+    ),
   'density.mode': (artifact) =>
     expect(artifact.variables['--ds-density-mode-factor']).toBeDefined(),
   'motion.dial': (artifact) =>

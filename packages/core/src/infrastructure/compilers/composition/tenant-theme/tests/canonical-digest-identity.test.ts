@@ -115,9 +115,12 @@ const ABSENT_NEW_FIELDS_DOCUMENT = {
 
 describe("digest identity across the canonicalization extraction", () => {
   it("pins the digests against the compiler version they were captured on", () => {
-    // A compiler-version bump is a legitimate reason for artifact digests to
-    // move. This assertion makes the pins below unambiguous: while the version
-    // is unchanged, a moved digest is a regression, never a sanctioned bump.
+    // The version is inside the digest source, so bumping it moves every
+    // artifact digest at once — which is why this file has never used a bump
+    // to sanction a move, and why `nullOverrideDigest` survives as a negative
+    // control. A pin below may only move with a written attribution in the
+    // fixture's `reanchored` field naming what changed and how it was
+    // measured; an unattributed move is a regression.
     expect(TENANT_THEME_COMPILER_VERSION).toBe(PINNED.compilerVersion);
   });
 

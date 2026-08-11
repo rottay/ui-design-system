@@ -1,10 +1,11 @@
 import React from 'react';
 import { describe, expect, it } from 'vitest';
-import { screen } from '@testing-library/react';
+import { waitFor } from '@testing-library/react';
 
 import { FieldFiltersPanel } from '..';
 import type { FieldFilterDefinition, FieldFilterPreset, FieldFilterVisual } from '..';
 import { renderWithEngine } from '../../../../../tooling/testing/helpers/engine';
+import { waitForComposedContent } from '../../../../../tooling/testing/helpers/skin-reachability';
 
 const ENGINES = ['modern'] as const;
 
@@ -98,7 +99,17 @@ describe('FieldFiltersPanel data-part contract', () => {
       engine,
     );
 
-    expect(await screen.findByText('Advanced filters')).toBeTruthy();
+    // Gate on the control landings, not on the panel title: each control is a
+    // separately-imported engine primitive behind its own
+    // `<Suspense fallback={null}>`, so the title is present while the Selects
+    // and the Input are not. The title gate read 1 of 4 controls under a
+    // loaded suite and 4 of 4 in isolation.
+    await waitForComposedContent(
+      waitFor,
+      container,
+      '.ds-field-filters-panel__control',
+      FILTERS.length,
+    );
 
     const root = container.querySelector('[data-part="root"]');
     expect(root, 'root data-part is missing').not.toBeNull();
