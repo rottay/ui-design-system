@@ -111,6 +111,38 @@ declaration's, never by comparing declaration text: `var(--x, var(--y))` and
 declared. It is still a floor on similarity, not a value proof, and every run
 prints that limit.
 
+### The third anchor: default parts that are not `root`
+
+Both halves test `[data-part='root']` as a literal, so a primitive whose
+rendered root stamps something else is invisible to them — the matcher works
+and the **hook** is wrong. `nonroot-parts.mjs` closes that hole.
+
+The anchor set comes from the DOM: **13 distinct non-root default parts across
+59 engine implementations**, led by `trigger` (10 primitives), `field` (6) and
+`anchor` (5).
+
+```
+PRESENT    orphan rows on a non-root anchor    4   (A 4 · B 0)
+REACHABLE  the anchor is caller-replaceable    0
+UNSCOPED   cannot be bound to a selector      12 impls across 5 anchors
+```
+
+**The hypothesis that motivated this census is false, and that is the first
+result.** `Menu` and `List` both stamp `root` — render-proven — so their large
+latent counts were measured against the correct anchor all along and their
+zeros mean what they appear to mean. The hole was real; it was just not where
+it was expected to be.
+
+The 4 rows are `popover.css` and `hover-card.css` reading a closed-transform
+channel declared in their own `[data-part='trigger']` rule. Neither family's
+root part is caller-replaceable, so none is reachable.
+
+**Unscoped is not safe.** Twelve implementations — `Message`, the five
+`anchor`-stamping overlays, `InputNumber`, `Splitter`, `Anchor` — render a root
+that carries no class and own no skin file matching their name, so no selector
+can be bound to them. They are printed on every run as not-measured rather than
+folded into the zero.
+
 ### Reconciling the two halves
 
 The two censuses partition one population, so a family appearing in one and not
@@ -188,6 +220,7 @@ those names are gone.
 | `callsites.mjs` | Every JSX call site passing `data-part` to a component, across 5 corpora. `--control` runs 3 checks over 8 planted shapes. Writes `callsites.json`. |
 | `engine-pin.mjs` | Class 3: pinned engine props and single-engine imports. `--control` scans the planted fixture. |
 | `join.mjs` | Joins the rendered roots against the CSS and writes `FINDINGS.json`, deduped. |
+| `nonroot-parts.mjs` | The same orphan-channel question on anchors that are not `root`, with the anchor set taken from the DOM. `--control` runs 6 shapes, 3 firing and 3 silent. Writes `NONROOT-PARTS.json`. |
 | `fallback-reads.mjs` | Class B: reads whose fallback fires on severance and delivers another cell. Carries the reachability gate. `--control` runs 7 shapes, 3 firing and 4 silent. Writes `FALLBACK-READS.json`. |
 | `void-reads.mjs` | The second-order class: a custom property declared inside a root-keyed rule and read from a rule that survives severance. `node void-reads.mjs <tree> <pkg-with-postcss>`; point the first argument at `control/void-reads` for the 7 planted shapes. |
 | `render-census.test.tsx` | The render harness. **Copy into `src/ui/primitives/tests/` to run, then delete** — the header carries the exact commands. |
@@ -269,6 +302,20 @@ The first join matched on the base class only, charging 27 rustic Input rules
 and 60 rustic Button rules to modern defects. Attribute by the explicit
 `--modern` / `--rustic` / `--classic` modifier first, then by the skin
 directory, then agnostic.
+
+**9e — a part NAME is not an identifier, and neither is an anchor's owner set.**
+Three defects in one instrument, each caught by looking at its own output, and
+each pointing the dangerous way. (i) Searching for `[data-part='group']` across
+the tree charged 16 `edit-fields` rows to `InputNumber`: `edit-fields` writes
+that part for its own anatomy. Scope by the owner's rendered class. (ii) Scoping
+by class alone then printed a clean **0** while silently dropping 28 portal
+implementations whose rendered root carries no class — a zero with a quarter of
+the corpus missing looks exactly like a zero. Fall back to the family's own skin
+file, and print whatever neither mechanism can bind. (iii) `trigger` is the
+default part of **ten** primitives, so pooling their reachability let `Button`
+— the one that IS caller-replaceable — lend its severability to `Popover` and
+`HoverCard`, which are not. That alone moved the headline from 4 reachable to 0.
+Attribute reachability to the owner whose FILE the row is in.
 
 **9d — the call-site census matches a TAG NAME, and `Link` is usually `next/link`.**
 `navigation/Link` shipped in this ranking as LIVE on the strength of one call
