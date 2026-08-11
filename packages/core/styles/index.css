@@ -153,46 +153,16 @@
      scale from this file. The fluid ramp below is a separate opt-in axis and is
      intentionally NOT density-wrapped.
      ======================================================================== */
-  --ds-density-global-effective-scale: clamp(
-    0.5,
-    calc(var(--ds-density-scale, 1) * var(--ds-density-mode-factor, 1)),
-    3
-  );
-  --ds-density-effective-scale: clamp(
-    0.5,
-    calc(
-      var(--ds-density-global-effective-scale, 1) *
-      var(--ds-density-local-factor, 1)
-    ),
-    3
-  );
-  --ds-spacing-0: 0;
-  --ds-spacing-1: calc(0.25rem * var(--ds-density-effective-scale, 1));   /* 4px */
-  --ds-spacing-2: calc(0.5rem * var(--ds-density-effective-scale, 1));    /* 8px */
-  --ds-spacing-3: calc(0.75rem * var(--ds-density-effective-scale, 1));   /* 12px */
-  --ds-spacing-4: calc(1rem * var(--ds-density-effective-scale, 1));      /* 16px */
-  --ds-spacing-5: calc(1.25rem * var(--ds-density-effective-scale, 1));   /* 20px */
-  --ds-spacing-6: calc(1.5rem * var(--ds-density-effective-scale, 1));    /* 24px */
   --ds-spacing-7: calc(1.75rem * var(--ds-density-effective-scale, 1));   /* 28px */
-  --ds-spacing-8: calc(2rem * var(--ds-density-effective-scale, 1));      /* 32px */
   --ds-spacing-9: calc(2.25rem * var(--ds-density-effective-scale, 1));   /* 36px */
-  --ds-spacing-10: calc(2.5rem * var(--ds-density-effective-scale, 1));   /* 40px */
   --ds-spacing-11: calc(2.75rem * var(--ds-density-effective-scale, 1));  /* 44px */
-  --ds-spacing-12: calc(3rem * var(--ds-density-effective-scale, 1));     /* 48px */
   --ds-spacing-14: calc(3.5rem * var(--ds-density-effective-scale, 1));   /* 56px */
-  --ds-spacing-16: calc(4rem * var(--ds-density-effective-scale, 1));     /* 64px */
-  --ds-spacing-20: calc(5rem * var(--ds-density-effective-scale, 1));     /* 80px */
-  --ds-spacing-24: calc(6rem * var(--ds-density-effective-scale, 1));     /* 96px */
   --ds-spacing-28: calc(7rem * var(--ds-density-effective-scale, 1));     /* 112px */
-  --ds-spacing-32: calc(8rem * var(--ds-density-effective-scale, 1));     /* 128px */
   --ds-spacing-36: calc(9rem * var(--ds-density-effective-scale, 1));     /* 144px */
-  --ds-spacing-40: calc(10rem * var(--ds-density-effective-scale, 1));    /* 160px */
   --ds-spacing-44: calc(11rem * var(--ds-density-effective-scale, 1));    /* 176px */
-  --ds-spacing-48: calc(12rem * var(--ds-density-effective-scale, 1));    /* 192px */
   --ds-spacing-52: calc(13rem * var(--ds-density-effective-scale, 1));    /* 208px */
   --ds-spacing-56: calc(14rem * var(--ds-density-effective-scale, 1));    /* 224px */
   --ds-spacing-60: calc(15rem * var(--ds-density-effective-scale, 1));    /* 240px */
-  --ds-spacing-64: calc(16rem * var(--ds-density-effective-scale, 1));    /* 256px */
   --ds-spacing-72: calc(18rem * var(--ds-density-effective-scale, 1));    /* 288px */
   --ds-spacing-80: calc(20rem * var(--ds-density-effective-scale, 1));    /* 320px */
   --ds-spacing-96: calc(24rem * var(--ds-density-effective-scale, 1));    /* 384px */
@@ -201,51 +171,44 @@
      NAMED SPACING - Semantic Aliases
      Commonly used spacing values with semantic names
      ======================================================================== */
-  --ds-spacing-xxxs: var(--ds-spacing-1);   /* 4px */
-  --ds-spacing-xxs: var(--ds-spacing-2);    /* 8px */
-  --ds-spacing-xs: var(--ds-spacing-3);     /* 12px */
-  --ds-spacing-sm: var(--ds-spacing-4);     /* 16px */
-  --ds-spacing-md: var(--ds-spacing-6);     /* 24px */
-  --ds-spacing-lg: var(--ds-spacing-8);     /* 32px */
-  --ds-spacing-xl: var(--ds-spacing-10);    /* 40px */
-  --ds-spacing-2xl: var(--ds-spacing-12);   /* 48px */
-  --ds-spacing-3xl: var(--ds-spacing-16);   /* 64px */
-  --ds-spacing-4xl: var(--ds-spacing-20);   /* 80px */
-  --ds-spacing-5xl: var(--ds-spacing-24);   /* 96px */
+  --ds-spacing-xxxs: var(--ds-density-spacing-xxxs, var(--ds-spacing-1)); /* 4px */
+  --ds-spacing-xxs: var(--ds-density-spacing-xxs, var(--ds-spacing-2)); /* 8px */
+  --ds-spacing-4xl: var(--ds-density-spacing-4xl, var(--ds-spacing-20)); /* 80px */
+  --ds-spacing-5xl: var(--ds-density-spacing-5xl, var(--ds-spacing-24)); /* 96px */
 
   /* ========================================================================
      LAYOUT SPACING - Page/Section Level
      Used for larger layout spacing needs
      ======================================================================== */
-  --ds-spacing-gutter: var(--ds-spacing-4);        /* 16px - Base gutter */
-  --ds-spacing-gutter-sm: var(--ds-spacing-2);     /* 8px - Small screens */
-  --ds-spacing-gutter-md: var(--ds-spacing-6);     /* 24px - Medium screens */
-  --ds-spacing-gutter-lg: var(--ds-spacing-8);     /* 32px - Large screens */
-  --ds-spacing-gutter-xl: var(--ds-spacing-12);    /* 48px - Extra large screens */
+  --ds-spacing-gutter: var(--ds-density-spacing-gutter, var(--ds-spacing-4)); /* 16px - Base gutter */
+  --ds-spacing-gutter-sm: var(--ds-density-spacing-gutter-sm, var(--ds-spacing-2)); /* 8px - Small screens */
+  --ds-spacing-gutter-md: var(--ds-density-spacing-gutter-md, var(--ds-spacing-6)); /* 24px - Medium screens */
+  --ds-spacing-gutter-lg: var(--ds-density-spacing-gutter-lg, var(--ds-spacing-8)); /* 32px - Large screens */
+  --ds-spacing-gutter-xl: var(--ds-density-spacing-gutter-xl, var(--ds-spacing-12)); /* 48px - Extra large screens */
 
-  --ds-spacing-section: var(--ds-spacing-16);      /* 64px - Section spacing */
-  --ds-spacing-section-sm: var(--ds-spacing-8);    /* 32px - Small sections */
-  --ds-spacing-section-lg: var(--ds-spacing-24);   /* 96px - Large sections */
+  --ds-spacing-section: var(--ds-density-spacing-section, var(--ds-spacing-16)); /* 64px - Section spacing */
+  --ds-spacing-section-sm: var(--ds-density-spacing-section-sm, var(--ds-spacing-8)); /* 32px - Small sections */
+  --ds-spacing-section-lg: var(--ds-density-spacing-section-lg, var(--ds-spacing-24)); /* 96px - Large sections */
 
-  --ds-spacing-container: var(--ds-spacing-6);     /* 24px - Container padding */
-  --ds-spacing-container-sm: var(--ds-spacing-4);  /* 16px - Small containers */
-  --ds-spacing-container-lg: var(--ds-spacing-12); /* 48px - Large containers */
+  --ds-spacing-container: var(--ds-density-spacing-container, var(--ds-spacing-6)); /* 24px - Container padding */
+  --ds-spacing-container-sm: var(--ds-density-spacing-container-sm, var(--ds-spacing-4)); /* 16px - Small containers */
+  --ds-spacing-container-lg: var(--ds-density-spacing-container-lg, var(--ds-spacing-12)); /* 48px - Large containers */
 
   /* ========================================================================
      COMPONENT SPACING - Component-Specific
      Default spacing for common component patterns
      ======================================================================== */
-  --ds-spacing-component-gap: var(--ds-spacing-4);          /* 16px - Gap between items */
-  --ds-spacing-component-gap-sm: var(--ds-spacing-2);       /* 8px - Small gap */
-  --ds-spacing-component-gap-lg: var(--ds-spacing-6);       /* 24px - Large gap */
+  --ds-spacing-component-gap: var(--ds-density-spacing-component-gap, var(--ds-spacing-4)); /* 16px - Gap between items */
+  --ds-spacing-component-gap-sm: var(--ds-density-spacing-component-gap-sm, var(--ds-spacing-2)); /* 8px - Small gap */
+  --ds-spacing-component-gap-lg: var(--ds-density-spacing-component-gap-lg, var(--ds-spacing-6)); /* 24px - Large gap */
 
-  --ds-spacing-component-padding: var(--ds-spacing-4);      /* 16px - Internal padding */
-  --ds-spacing-component-padding-sm: var(--ds-spacing-2);   /* 8px - Small padding */
-  --ds-spacing-component-padding-lg: var(--ds-spacing-6);   /* 24px - Large padding */
+  --ds-spacing-component-padding: var(--ds-density-spacing-component-padding, var(--ds-spacing-4)); /* 16px - Internal padding */
+  --ds-spacing-component-padding-sm: var(--ds-density-spacing-component-padding-sm, var(--ds-spacing-2)); /* 8px - Small padding */
+  --ds-spacing-component-padding-lg: var(--ds-density-spacing-component-padding-lg, var(--ds-spacing-6)); /* 24px - Large padding */
 
-  --ds-spacing-component-margin: var(--ds-spacing-4);       /* 16px - External margin */
-  --ds-spacing-component-margin-sm: var(--ds-spacing-2);    /* 8px - Small margin */
-  --ds-spacing-component-margin-lg: var(--ds-spacing-8);    /* 32px - Large margin */
+  --ds-spacing-component-margin: var(--ds-density-spacing-component-margin, var(--ds-spacing-4)); /* 16px - External margin */
+  --ds-spacing-component-margin-sm: var(--ds-density-spacing-component-margin-sm, var(--ds-spacing-2)); /* 8px - Small margin */
+  --ds-spacing-component-margin-lg: var(--ds-density-spacing-component-margin-lg, var(--ds-spacing-8)); /* 32px - Large margin */
 
   /* ---------------------------------------------------------------------
    * Fluid space ramp (WO-ARC-05).
@@ -462,12 +425,6 @@
   /* DS-A007: "Noto Sans Arabic" precedes the generic family so Arabic copy
      never falls through to a glyph-poor default; tenant-selected families
      still win because they prepend, never replace, this bounded chain. */
-  --ds-font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, "Noto Sans", "Noto Sans Arabic", sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --ds-font-family-heading: var(--ds-font-family-base);
-  --ds-font-family-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco,
-    Consolas, "Liberation Mono", "Courier New", monospace;
   --ds-font-family-display: var(--ds-font-family-base);
 
   /* Rendering/craft channels. Variable fonts consume optical sizing and
@@ -509,17 +466,7 @@
      defined here (md, 7xl-9xl) win from this file.
      ======================================================================== */
   --ds-font-size-2xs-base: 0.6875rem; /* 11px - micro labels/eyebrows */
-  --ds-font-size-xs-base: 0.75rem; /* 12px */
-  --ds-font-size-sm-base: 0.875rem; /* 14px */
-  --ds-font-size-base-base: 1rem; /* 16px */
   --ds-font-size-md-base: 1rem; /* 16px - Alias for base */
-  --ds-font-size-lg-base: 1.125rem; /* 18px */
-  --ds-font-size-xl-base: 1.25rem; /* 20px */
-  --ds-font-size-2xl-base: 1.5rem; /* 24px */
-  --ds-font-size-3xl-base: 1.875rem; /* 30px */
-  --ds-font-size-4xl-base: 2.25rem; /* 36px */
-  --ds-font-size-5xl-base: 3rem; /* 48px */
-  --ds-font-size-6xl-base: 3.75rem; /* 60px */
   --ds-font-size-7xl-base: 4.5rem; /* 72px */
   --ds-font-size-8xl-base: 6rem; /* 96px */
   --ds-font-size-9xl-base: 8rem; /* 128px */
@@ -527,38 +474,8 @@
   --ds-font-size-2xs: calc(
     var(--ds-font-size-2xs-base) * var(--ds-type-scale, 1)
   );
-  --ds-font-size-xs: calc(
-    var(--ds-font-size-xs-base) * var(--ds-type-scale, 1)
-  );
-  --ds-font-size-sm: calc(
-    var(--ds-font-size-sm-base) * var(--ds-type-scale, 1)
-  );
-  --ds-font-size-base: calc(
-    var(--ds-font-size-base-base) * var(--ds-type-scale, 1)
-  );
   --ds-font-size-md: calc(
     var(--ds-font-size-md-base) * var(--ds-type-scale, 1)
-  );
-  --ds-font-size-lg: calc(
-    var(--ds-font-size-lg-base) * var(--ds-type-scale, 1)
-  );
-  --ds-font-size-xl: calc(
-    var(--ds-font-size-xl-base) * var(--ds-type-scale, 1)
-  );
-  --ds-font-size-2xl: calc(
-    var(--ds-font-size-2xl-base) * var(--ds-type-scale, 1)
-  );
-  --ds-font-size-3xl: calc(
-    var(--ds-font-size-3xl-base) * var(--ds-type-scale, 1)
-  );
-  --ds-font-size-4xl: calc(
-    var(--ds-font-size-4xl-base) * var(--ds-type-scale, 1)
-  );
-  --ds-font-size-5xl: calc(
-    var(--ds-font-size-5xl-base) * var(--ds-type-scale, 1)
-  );
-  --ds-font-size-6xl: calc(
-    var(--ds-font-size-6xl-base) * var(--ds-type-scale, 1)
   );
   --ds-font-size-7xl: calc(
     var(--ds-font-size-7xl-base) * var(--ds-type-scale, 1)
@@ -585,15 +502,7 @@
      FONT WEIGHTS
      Weight scale for text emphasis
      ======================================================================== */
-  --ds-font-weight-thin: 100;
   --ds-font-weight-extralight: 200;
-  --ds-font-weight-light: 300;
-  --ds-font-weight-normal: 400;
-  --ds-font-weight-medium: 500;
-  --ds-font-weight-semibold: 600;
-  --ds-font-weight-bold: 700;
-  --ds-font-weight-extrabold: 800;
-  --ds-font-weight-black: 900;
 
   /* Semantic aliases */
   --ds-font-weight-body: var(--ds-font-weight-normal);
@@ -604,12 +513,6 @@
      LINE HEIGHTS
      Vertical spacing for text readability
      ======================================================================== */
-  --ds-line-height-none: 1;
-  --ds-line-height-tight: 1.25;
-  --ds-line-height-snug: 1.375;
-  --ds-line-height-normal: 1.5;
-  --ds-line-height-relaxed: 1.625;
-  --ds-line-height-loose: 2;
 
   /* Contextual line heights */
   --ds-line-height-body: 1.6; /* Relaxed for readability */
@@ -620,15 +523,9 @@
      LETTER SPACING
      Horizontal spacing between characters
      ======================================================================== */
-  --ds-letter-spacing-tighter: -0.05em;
-  --ds-letter-spacing-tight: -0.025em;
   --ds-letter-spacing-snug: -0.015em;
   --ds-letter-spacing-subtle: -0.01em;
-  --ds-letter-spacing-normal: 0;
   --ds-letter-spacing-subtle-wide: 0.01em;
-  --ds-letter-spacing-wide: 0.025em;
-  --ds-letter-spacing-wider: 0.05em;
-  --ds-letter-spacing-widest: 0.1em;
 
   /* Heading-specific tracking: larger sizes get tighter spacing
      for the editorial, premium feel (Linear / Vercel / Stripe). */
@@ -653,86 +550,16 @@
      Product components consume these roles; BrandTheme can override every
      facet without changing component anatomy or application markup.
      ======================================================================== */
-  --ds-type-display-font-family: var(
-    --ds-font-family-display,
-    var(--ds-font-family-heading)
-  );
-  --ds-type-display-font-size: var(--ds-font-size-fluid-5xl, calc(3rem * var(--ds-type-scale, 1)));
-  --ds-type-display-font-weight: 700;
-  --ds-type-display-line-height: 1.1;
-  --ds-type-display-letter-spacing: var(--ds-letter-spacing-display, -0.03em);
-  --ds-type-display-text-transform: none;
-  --ds-type-display-font-variant-numeric: normal;
 
-  --ds-type-page-title-font-family: var(--ds-font-family-heading);
-  --ds-type-page-title-font-size: var(--ds-font-size-fluid-3xl, calc(1.875rem * var(--ds-type-scale, 1)));
-  --ds-type-page-title-font-weight: 700;
-  --ds-type-page-title-line-height: 1.16;
-  --ds-type-page-title-letter-spacing: var(
-    --ds-letter-spacing-heading,
-    -0.02em
-  );
-  --ds-type-page-title-text-transform: none;
-  --ds-type-page-title-font-variant-numeric: normal;
 
-  --ds-type-section-title-font-family: var(--ds-font-family-heading);
-  --ds-type-section-title-font-size: var(--ds-font-size-fluid-xl, calc(1.25rem * var(--ds-type-scale, 1)));
-  --ds-type-section-title-font-weight: 600;
-  --ds-type-section-title-line-height: 1.3;
-  --ds-type-section-title-letter-spacing: var(
-    --ds-letter-spacing-heading,
-    -0.01em
-  );
-  --ds-type-section-title-text-transform: none;
-  --ds-type-section-title-font-variant-numeric: normal;
 
-  --ds-type-body-font-family: var(--ds-font-family-base);
-  --ds-type-body-font-size: calc(0.875rem * var(--ds-type-scale, 1));
-  --ds-type-body-font-weight: 400;
-  --ds-type-body-line-height: var(--ds-line-height-body, 1.6);
-  --ds-type-body-letter-spacing: var(--ds-letter-spacing-body, 0);
-  --ds-type-body-text-transform: none;
-  --ds-type-body-font-variant-numeric: normal;
 
-  --ds-type-supporting-font-family: var(--ds-font-family-base);
-  --ds-type-supporting-font-size: calc(0.8125rem * var(--ds-type-scale, 1));
-  --ds-type-supporting-font-weight: 400;
-  --ds-type-supporting-line-height: 1.5;
-  --ds-type-supporting-letter-spacing: var(--ds-letter-spacing-body, 0);
-  --ds-type-supporting-text-transform: none;
-  --ds-type-supporting-font-variant-numeric: normal;
 
-  --ds-type-label-font-family: var(--ds-font-family-base);
-  --ds-type-label-font-size: calc(0.75rem * var(--ds-type-scale, 1));
-  --ds-type-label-font-weight: 600;
-  --ds-type-label-line-height: 1.3;
-  --ds-type-label-letter-spacing: 0.04em;
-  --ds-type-label-text-transform: none;
-  --ds-type-label-font-variant-numeric: normal;
 
-  --ds-type-caption-font-family: var(--ds-font-family-base);
-  --ds-type-caption-font-size: calc(0.6875rem * var(--ds-type-scale, 1));
-  --ds-type-caption-font-weight: 400;
-  --ds-type-caption-line-height: 1.35;
-  --ds-type-caption-letter-spacing: 0.01em;
-  --ds-type-caption-text-transform: none;
-  --ds-type-caption-font-variant-numeric: normal;
 
-  --ds-type-code-font-family: var(--ds-font-family-mono);
-  --ds-type-code-font-size: calc(0.8125rem * var(--ds-type-scale, 1));
-  --ds-type-code-font-weight: 400;
-  --ds-type-code-line-height: 1.5;
-  --ds-type-code-letter-spacing: var(--ds-letter-spacing-mono, 0);
-  --ds-type-code-text-transform: none;
   --ds-type-code-font-variant-numeric: tabular-nums;
 
-  --ds-type-numeric-font-family: var(--ds-font-family-heading);
-  --ds-type-numeric-font-size: calc(1rem * var(--ds-type-scale, 1));
   --ds-type-numeric-font-weight: 600;
-  --ds-type-numeric-line-height: 1.2;
-  --ds-type-numeric-letter-spacing: -0.01em;
-  --ds-type-numeric-text-transform: none;
-  --ds-type-numeric-font-variant-numeric: tabular-nums lining-nums;
 
   /* Dynamic shorthand aliases. They reference the facets instead of copying
      values so a DB tenant can retune one role property without leaving a
@@ -1006,13 +833,6 @@
      in every entrypoint). classic/rustic components and the brand compiler
      consume these --ds-shadow-* names.
      ======================================================================== */
-  --ds-shadow-none: var(--ds-elevation-0);
-  --ds-shadow-xs: var(--ds-elevation-1);
-  --ds-shadow-sm: var(--ds-elevation-1);
-  --ds-shadow-md: var(--ds-elevation-2);
-  --ds-shadow-lg: var(--ds-elevation-3);
-  --ds-shadow-xl: var(--ds-elevation-4);
-  --ds-shadow-2xl: var(--ds-elevation-5);
   --ds-shadow-3xl: var(--ds-elevation-5), 0 48px 96px rgba(0, 0, 0, 0.1);
 
   /* Inner shadow for inset effects */
@@ -1136,10 +956,6 @@
      BORDER WIDTHS
      Standard border widths for component boundaries
      ======================================================================== */
-  --ds-border-width-0: 0;
-  --ds-border-width-1: 1px;
-  --ds-border-width-2: 2px;
-  --ds-border-width-4: 4px;
   --ds-border-width-8: 8px;
 
   /* Semantic aliases */
@@ -1177,14 +993,7 @@
      Contextual border colors based on the color palette
      ======================================================================== */
 
-  /* Default borders */
-  --ds-border-color-default: var(--ds-color-neutral-200);
-  --ds-border-color-muted: var(--ds-color-neutral-100);
-  --ds-border-color-strong: var(--ds-color-neutral-300);
-
   /* Interactive borders */
-  --ds-border-color-hover: var(--ds-color-neutral-300);
-  --ds-border-color-focus: var(--ds-color-primary-500);
   --ds-border-color-active: var(--ds-color-primary-600);
 
   /* Semantic borders */
@@ -1202,8 +1011,6 @@
      DIVIDER STYLES
      Styles for visual separators
      ======================================================================== */
-  --ds-divider-width: var(--ds-border-width-1);
-  --ds-divider-color: var(--ds-border-color-default);
   --ds-divider-style: var(--ds-border-style-solid);
 
   /* Divider with spacing */
@@ -1263,39 +1070,6 @@
      Z-INDEX SCALE - Layering System
      Organized from bottom to top of the stack
      ======================================================================== */
-
-  /* Base layer - Normal document flow */
-  --ds-z-index-base: 0;
-
-  /* Dropdown layer - Select menus, autocomplete, etc */
-  --ds-z-index-dropdown: 1000;
-
-  /* Sticky elements - Sticky headers, footers */
-  --ds-z-index-sticky: 1100;
-
-  /* Fixed elements - Fixed navigation, banners */
-  --ds-z-index-fixed: 1200;
-
-  /* Overlay backdrop - Modal/drawer backdrops */
-  --ds-z-index-overlay: 1300;
-
-  /* Drawer - Side panels */
-  --ds-z-index-drawer: 1400;
-
-  /* Modal/Dialog - Modal windows */
-  --ds-z-index-modal: 1500;
-
-  /* Popover - Context menus, popovers */
-  --ds-z-index-popover: 1600;
-
-  /* Tooltip - Tooltips and hints */
-  --ds-z-index-tooltip: 1700;
-
-  /* Notification/Toast - Toast messages, notifications */
-  --ds-z-index-notification: 1800;
-
-  /* Maximum - Highest priority elements */
-  --ds-z-index-max: 9999;
 
   /* ========================================================================
      COMPONENT-SPECIFIC Z-INDEX
@@ -1878,7 +1652,7 @@
   --ds-type-section-title-text-transform: none;
   --ds-type-section-title-font-variant-numeric: normal;
   --ds-type-body-font-family: var(--ds-font-family-base);
-  --ds-type-body-font-size: var(--ds-font-size-base);
+  --ds-type-body-font-size: calc(0.875rem * var(--ds-type-scale, 1));
   --ds-type-body-font-weight: 400;
   --ds-type-body-line-height: var(--ds-line-height-normal);
   --ds-type-body-letter-spacing: var(--ds-letter-spacing-normal);
@@ -2030,13 +1804,13 @@
   --ds-spacing-64: calc(16rem * var(--ds-density-effective-scale, 1));
 
   /* Semantic Spacing */
-  --ds-spacing-xs: var(--ds-spacing-1);
-  --ds-spacing-sm: var(--ds-spacing-2);
-  --ds-spacing-md: var(--ds-spacing-4);
-  --ds-spacing-lg: var(--ds-spacing-6);
-  --ds-spacing-xl: var(--ds-spacing-8);
-  --ds-spacing-2xl: var(--ds-spacing-12);
-  --ds-spacing-3xl: var(--ds-spacing-16);
+  --ds-spacing-xs: var(--ds-density-spacing-xs, var(--ds-spacing-1));
+  --ds-spacing-sm: var(--ds-density-spacing-sm, var(--ds-spacing-2));
+  --ds-spacing-md: var(--ds-density-spacing-md, var(--ds-spacing-4));
+  --ds-spacing-lg: var(--ds-density-spacing-lg, var(--ds-spacing-6));
+  --ds-spacing-xl: var(--ds-density-spacing-xl, var(--ds-spacing-8));
+  --ds-spacing-2xl: var(--ds-density-spacing-2xl, var(--ds-spacing-12));
+  --ds-spacing-3xl: var(--ds-density-spacing-3xl, var(--ds-spacing-16));
 
   /* ─────────────────────────────────────────────────────────────────────────────
      4. BORDERS - Vercel Minimal Style
@@ -2418,7 +2192,6 @@
   --ds-card-footer-border: #e5e5e5;
 
   /* Card Common */
-  --ds-divider-text-color: var(--ds-color-text-primary);
   --ds-page-shell-subtitle-color: var(--ds-color-text-secondary);
 
   /* ─────────────────────────────────────────────────────────────────────────────
@@ -5135,9 +4908,6 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
      SHAPES - Avatar Border Radius
      Three shape variants: circle, square, rounded
      ======================================================================== */
-  --ds-avatar-circle-radius: 50%;                          /* Fully rounded */
-  --ds-avatar-square-radius: 0;                            /* No rounding */
-  --ds-avatar-rounded-radius: var(--ds-radius-md, 0.5rem);    /* 8px rounded corners */
 
   /* ========================================================================
      VARIANTS - Avatar Color Variants
@@ -7516,7 +7286,6 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   /* Default variant */
   --ds-card-default-bg: var(--ds-card-bg);
   --ds-card-default-border-color: var(--ds-card-border-color);
-  --ds-card-default-shadow: var(--ds-card-shadow-default);
 
   /* Bordered variant (emphasized border, no shadow) */
   --ds-card-bordered-bg: var(--ds-card-bg);
@@ -7899,7 +7668,6 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
      ======================================================================== */
   --ds-card-disabled-opacity: 0.5;
   --ds-card-disabled-cursor: not-allowed;
-  --ds-card-disabled-bg: var(--ds-card-bg-disabled);
 }
 
 .ds-card {
@@ -8013,7 +7781,6 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
      CONTAINER
      Modal container positioning and appearance
      ======================================================================== */
-  --ds-modal-z-index: var(--ds-z-index-modal-content);
   --ds-modal-margin: 2rem;                 /* Margin from viewport edges */
   --ds-modal-margin-mobile: 1rem;
 
@@ -8299,12 +8066,10 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-checkbox-md-border-width: 2px;
 
   /* LG - Large (20px) */
-  --ds-checkbox-lg-size: 1.25rem;          /* 20px */
   --ds-checkbox-lg-font-size: 1rem;        /* 16px */
   --ds-checkbox-lg-border-width: 2px;
 
   /* XL - Extra Large (24px) */
-  --ds-checkbox-xl-size: 1.5rem;           /* 24px */
   --ds-checkbox-xl-font-size: 1.125rem;    /* 18px */
   --ds-checkbox-xl-border-width: 2px;
 
@@ -8420,12 +8185,10 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-radio-md-border-width: 2px;
 
   /* LG - Large (20px) */
-  --ds-radio-lg-size: 1.25rem;          /* 20px */
   --ds-radio-lg-font-size: 1rem;        /* 16px */
   --ds-radio-lg-border-width: 2px;
 
   /* XL - Extra Large (24px) */
-  --ds-radio-xl-size: 1.5rem;           /* 24px */
   --ds-radio-xl-font-size: 1.125rem;    /* 18px */
   --ds-radio-xl-border-width: 2px;
 
@@ -36405,14 +36168,14 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   min-inline-size: calc(var(--ds-radio-md-size) * var(--ds-density-effective-scale));
 }
 .ds-radio.ds-radio--modern[data-part='root'][data-size='lg'] [data-part='circle'] {
-  inline-size: calc(var(--ds-radio-lg-size) * var(--ds-density-effective-scale));
-  block-size: calc(var(--ds-radio-lg-size) * var(--ds-density-effective-scale));
-  min-inline-size: calc(var(--ds-radio-lg-size) * var(--ds-density-effective-scale));
+  inline-size: calc(var(--ds-radio-size-lg) * var(--ds-density-effective-scale));
+  block-size: calc(var(--ds-radio-size-lg) * var(--ds-density-effective-scale));
+  min-inline-size: calc(var(--ds-radio-size-lg) * var(--ds-density-effective-scale));
 }
 .ds-radio.ds-radio--modern[data-part='root'][data-size='xl'] [data-part='circle'] {
-  inline-size: calc(var(--ds-radio-xl-size) * var(--ds-density-effective-scale));
-  block-size: calc(var(--ds-radio-xl-size) * var(--ds-density-effective-scale));
-  min-inline-size: calc(var(--ds-radio-xl-size) * var(--ds-density-effective-scale));
+  inline-size: calc(var(--ds-radio-size-xl) * var(--ds-density-effective-scale));
+  block-size: calc(var(--ds-radio-size-xl) * var(--ds-density-effective-scale));
+  min-inline-size: calc(var(--ds-radio-size-xl) * var(--ds-density-effective-scale));
 }
 
 /* press: the circle dips on pointer-press, mirroring the checkbox. */
@@ -36806,14 +36569,14 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   min-inline-size: calc(var(--ds-checkbox-md-size) * var(--ds-density-effective-scale));
 }
 .ds-checkbox.ds-checkbox--modern[data-part='root'][data-size='lg'] [data-part='box'] {
-  inline-size: calc(var(--ds-checkbox-lg-size) * var(--ds-density-effective-scale));
-  block-size: calc(var(--ds-checkbox-lg-size) * var(--ds-density-effective-scale));
-  min-inline-size: calc(var(--ds-checkbox-lg-size) * var(--ds-density-effective-scale));
+  inline-size: calc(var(--ds-checkbox-size-lg) * var(--ds-density-effective-scale));
+  block-size: calc(var(--ds-checkbox-size-lg) * var(--ds-density-effective-scale));
+  min-inline-size: calc(var(--ds-checkbox-size-lg) * var(--ds-density-effective-scale));
 }
 .ds-checkbox.ds-checkbox--modern[data-part='root'][data-size='xl'] [data-part='box'] {
-  inline-size: calc(var(--ds-checkbox-xl-size) * var(--ds-density-effective-scale));
-  block-size: calc(var(--ds-checkbox-xl-size) * var(--ds-density-effective-scale));
-  min-inline-size: calc(var(--ds-checkbox-xl-size) * var(--ds-density-effective-scale));
+  inline-size: calc(var(--ds-checkbox-size-xl) * var(--ds-density-effective-scale));
+  block-size: calc(var(--ds-checkbox-size-xl) * var(--ds-density-effective-scale));
+  min-inline-size: calc(var(--ds-checkbox-size-xl) * var(--ds-density-effective-scale));
 }
 
 /* Radius grammar: the prop picks a canonical channel, never a literal. */
@@ -121935,11 +121698,11 @@ html[lang]:lang(ar) {
   --ds-overlay-heavy: rgba(255, 255, 255, 0.1);
   --ds-overlay-light: rgba(255, 255, 255, 0.03);
   --ds-overlay-medium: rgba(255, 255, 255, 0.06);
-  --ds-radius-lg: 14px;
-  --ds-radius-md: 10px;
+  --ds-radius-lg-base: 14px;
+  --ds-radius-md-base: 10px;
   --ds-radius-scale: 1;
-  --ds-radius-sm: 6px;
-  --ds-radius-xl: 18px;
+  --ds-radius-sm-base: 6px;
+  --ds-radius-xl-base: 18px;
   --ds-recipe-profile: "rottay/technical-sharp@1";
   --ds-shadow-lg: var(--ds-elevation-3);
   --ds-shadow-md: var(--ds-elevation-2);
@@ -122055,34 +121818,33 @@ html[lang]:lang(ar) {
   --ds-text-title-line-height: 1.75rem;
   --ds-text-title-size: 1.25rem;
   --ds-text-title-weight: 600;
-  --ds-tint-12: color-mix(in oklch, var(--ds-color-primary) 12%, var(--ds-color-bg-primary));
-  --ds-tint-16: color-mix(in oklch, var(--ds-color-primary) 16%, var(--ds-color-bg-primary));
-  --ds-tint-24: color-mix(in oklch, var(--ds-color-primary) 24%, var(--ds-color-bg-primary));
-  --ds-tint-4: color-mix(in oklch, var(--ds-color-primary) 4%, var(--ds-color-bg-primary));
-  --ds-tint-8: color-mix(in oklch, var(--ds-color-primary) 8%, var(--ds-color-bg-primary));
-  --ds-tint-error-12: color-mix(in oklch, var(--ds-color-error) 12%, var(--ds-color-bg-primary));
-  --ds-tint-error-16: color-mix(in oklch, var(--ds-color-error) 16%, var(--ds-color-bg-primary));
-  --ds-tint-error-24: color-mix(in oklch, var(--ds-color-error) 24%, var(--ds-color-bg-primary));
-  --ds-tint-error-4: color-mix(in oklch, var(--ds-color-error) 4%, var(--ds-color-bg-primary));
-  --ds-tint-error-8: color-mix(in oklch, var(--ds-color-error) 8%, var(--ds-color-bg-primary));
-  --ds-tint-info-12: color-mix(in oklch, var(--ds-color-info) 12%, var(--ds-color-bg-primary));
-  --ds-tint-info-16: color-mix(in oklch, var(--ds-color-info) 16%, var(--ds-color-bg-primary));
-  --ds-tint-info-24: color-mix(in oklch, var(--ds-color-info) 24%, var(--ds-color-bg-primary));
-  --ds-tint-info-4: color-mix(in oklch, var(--ds-color-info) 4%, var(--ds-color-bg-primary));
-  --ds-tint-info-8: color-mix(in oklch, var(--ds-color-info) 8%, var(--ds-color-bg-primary));
-  --ds-tint-success-12: color-mix(in oklch, var(--ds-color-success) 12%, var(--ds-color-bg-primary));
-  --ds-tint-success-16: color-mix(in oklch, var(--ds-color-success) 16%, var(--ds-color-bg-primary));
-  --ds-tint-success-24: color-mix(in oklch, var(--ds-color-success) 24%, var(--ds-color-bg-primary));
-  --ds-tint-success-4: color-mix(in oklch, var(--ds-color-success) 4%, var(--ds-color-bg-primary));
-  --ds-tint-success-8: color-mix(in oklch, var(--ds-color-success) 8%, var(--ds-color-bg-primary));
-  --ds-tint-warning-12: color-mix(in oklch, var(--ds-color-warning) 12%, var(--ds-color-bg-primary));
-  --ds-tint-warning-16: color-mix(in oklch, var(--ds-color-warning) 16%, var(--ds-color-bg-primary));
-  --ds-tint-warning-24: color-mix(in oklch, var(--ds-color-warning) 24%, var(--ds-color-bg-primary));
-  --ds-tint-warning-4: color-mix(in oklch, var(--ds-color-warning) 4%, var(--ds-color-bg-primary));
-  --ds-tint-warning-8: color-mix(in oklch, var(--ds-color-warning) 8%, var(--ds-color-bg-primary));
+  --ds-tint-12: color-mix(in oklab, var(--ds-color-primary) 12%, var(--ds-color-bg-primary));
+  --ds-tint-16: color-mix(in oklab, var(--ds-color-primary) 16%, var(--ds-color-bg-primary));
+  --ds-tint-24: color-mix(in oklab, var(--ds-color-primary) 24%, var(--ds-color-bg-primary));
+  --ds-tint-4: color-mix(in oklab, var(--ds-color-primary) 4%, var(--ds-color-bg-primary));
+  --ds-tint-8: color-mix(in oklab, var(--ds-color-primary) 8%, var(--ds-color-bg-primary));
+  --ds-tint-error-12: color-mix(in oklab, var(--ds-color-error) 12%, var(--ds-color-bg-primary));
+  --ds-tint-error-16: color-mix(in oklab, var(--ds-color-error) 16%, var(--ds-color-bg-primary));
+  --ds-tint-error-24: color-mix(in oklab, var(--ds-color-error) 24%, var(--ds-color-bg-primary));
+  --ds-tint-error-4: color-mix(in oklab, var(--ds-color-error) 4%, var(--ds-color-bg-primary));
+  --ds-tint-error-8: color-mix(in oklab, var(--ds-color-error) 8%, var(--ds-color-bg-primary));
+  --ds-tint-info-12: color-mix(in oklab, var(--ds-color-info) 12%, var(--ds-color-bg-primary));
+  --ds-tint-info-16: color-mix(in oklab, var(--ds-color-info) 16%, var(--ds-color-bg-primary));
+  --ds-tint-info-24: color-mix(in oklab, var(--ds-color-info) 24%, var(--ds-color-bg-primary));
+  --ds-tint-info-4: color-mix(in oklab, var(--ds-color-info) 4%, var(--ds-color-bg-primary));
+  --ds-tint-info-8: color-mix(in oklab, var(--ds-color-info) 8%, var(--ds-color-bg-primary));
+  --ds-tint-success-12: color-mix(in oklab, var(--ds-color-success) 12%, var(--ds-color-bg-primary));
+  --ds-tint-success-16: color-mix(in oklab, var(--ds-color-success) 16%, var(--ds-color-bg-primary));
+  --ds-tint-success-24: color-mix(in oklab, var(--ds-color-success) 24%, var(--ds-color-bg-primary));
+  --ds-tint-success-4: color-mix(in oklab, var(--ds-color-success) 4%, var(--ds-color-bg-primary));
+  --ds-tint-success-8: color-mix(in oklab, var(--ds-color-success) 8%, var(--ds-color-bg-primary));
+  --ds-tint-warning-12: color-mix(in oklab, var(--ds-color-warning) 12%, var(--ds-color-bg-primary));
+  --ds-tint-warning-16: color-mix(in oklab, var(--ds-color-warning) 16%, var(--ds-color-bg-primary));
+  --ds-tint-warning-24: color-mix(in oklab, var(--ds-color-warning) 24%, var(--ds-color-bg-primary));
+  --ds-tint-warning-4: color-mix(in oklab, var(--ds-color-warning) 4%, var(--ds-color-bg-primary));
+  --ds-tint-warning-8: color-mix(in oklab, var(--ds-color-warning) 8%, var(--ds-color-bg-primary));
   --ds-type-body: var(--ds-type-body-font-weight) var(--ds-type-body-font-size)/var(--ds-type-body-line-height) var(--ds-type-body-font-family);
   --ds-type-body-font-family: var(--ds-font-family-base);
-  --ds-type-body-font-size: calc(0.875rem * var(--ds-type-scale, 1));
   --ds-type-body-font-variant-numeric: normal;
   --ds-type-body-font-weight: 400;
   --ds-type-body-letter-spacing: var(--ds-letter-spacing-body, 0);
@@ -124561,6 +124323,8 @@ html[lang]:lang(ar) {
   --ds-card-body-padding: 14px;
   --ds-card-border: var(--ds-premium-card-border);
   --ds-card-border-color: var(--ds-premium-card-border);
+  --ds-card-border-color-hover: var(--ds-premium-card-border-hover);
+  --ds-card-border-hover: var(--ds-premium-card-border-hover);
   --ds-card-border-radius: var(--ds-radius-md);
   --ds-card-color: #14283B;
   --ds-card-color-muted: #728398;
@@ -124594,6 +124358,7 @@ html[lang]:lang(ar) {
   --ds-card-title-color: #14283B;
   --ds-card-title-font-size: 13px;
   --ds-card-title-font-weight: 600;
+  --ds-card-title-letter-spacing: 0;
   --ds-card-xl-padding: 1.5rem;
   --ds-collection-card-bg: #FFFFFF;
   --ds-collection-card-bg-hover: #F9FBFE;
@@ -124761,6 +124526,13 @@ html[lang]:lang(ar) {
   --ds-compact-card-value-color: #14283B;
   --ds-density-mode-factor: 1;
   --ds-density-scale: 0.9;
+  --ds-detail-hero-bg: linear-gradient( 180deg, color-mix( in srgb, var(--ds-control-surface) 98%, var(--ds-color-primary) 2% ), color-mix(in srgb, var(--ds-surface-panel) 54%, var(--ds-control-surface)) );
+  --ds-detail-hero-border: color-mix( in srgb, var(--ds-color-text-primary) 9%, transparent );
+  --ds-detail-hero-shadow: 0 1px 2px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent), 0 12px 28px color-mix(in srgb, var(--ds-color-primary) 5%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ds-surface-card) 76%, transparent);
+  --ds-detail-rail-width: clamp(280px, 22vw, 340px);
+  --ds-detail-section-bg: linear-gradient( 180deg, var(--ds-surface-card) 0%, color-mix(in srgb, var(--ds-surface-panel) 34%, var(--ds-surface-card)) 100% );
+  --ds-detail-section-border: color-mix( in srgb, var(--ds-surface-tone, var(--rt-surface-tone, var(--ds-color-primary))) 11%, var(--ds-color-border) );
+  --ds-detail-section-shadow: 0 1px 2px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent), 0 8px 20px color-mix(in srgb, var(--ds-color-text-primary) 3%, transparent);
   --ds-ease-exit: cubic-bezier(0.4, 0, 1, 1);
   --ds-ease-standard: cubic-bezier(0.2, 0, 0, 1);
   --ds-edge-emphasis-width: 1px;
@@ -124953,6 +124725,13 @@ html[lang]:lang(ar) {
   --ds-line-height-heading: 1.25;
   --ds-line-height-relaxed: 1.75;
   --ds-line-height-tight: 1.25;
+  --ds-list-preview-motion-duration: 180ms;
+  --ds-list-preview-motion-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ds-list-preview-panel-bg: linear-gradient( 180deg, color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-primary) 2%), color-mix(in srgb, var(--ds-surface-panel) 36%, var(--ds-surface-card)) );
+  --ds-list-preview-panel-border: color-mix( in srgb, var(--ds-color-primary) 14%, var(--ds-color-border) );
+  --ds-list-preview-panel-shadow: 0 10px 24px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ds-surface-card) 76%, transparent);
+  --ds-list-preview-rail-gap: clamp(14px, 1.45vw, 22px);
+  --ds-list-shell-section-gap: 14px;
   --ds-listing-grid-card-bg: #FFFFFF;
   --ds-listing-grid-card-border: #D4E0EA;
   --ds-listing-grid-card-gap: 10px;
@@ -125096,11 +124875,11 @@ html[lang]:lang(ar) {
   --ds-page-header-eyebrow-text-transform: none;
   --ds-radius-button: 9px;
   --ds-radius-input: 9px;
-  --ds-radius-lg: 14px;
-  --ds-radius-md: 10px;
+  --ds-radius-lg-base: calc(14px / 1.25);
+  --ds-radius-md-base: calc(10px / 1.25);
   --ds-radius-scale: 1.25;
-  --ds-radius-sm: 7px;
-  --ds-radius-xl: 18px;
+  --ds-radius-sm-base: calc(7px / 1.25);
+  --ds-radius-xl-base: calc(18px / 1.25);
   --ds-recipe-profile: "rottay/network-professional@1";
   --ds-search-bg: #ffffff;
   --ds-search-border: #D4E0EA;
@@ -125206,6 +124985,7 @@ html[lang]:lang(ar) {
   --ds-signal-card-section-bg: #ffffff;
   --ds-signal-card-shadow: 0 1px 2px rgba(20, 40, 59, 0.06);
   --ds-signal-card-title-color: #14283B;
+  --ds-signal-card-top-line-display: none;
   --ds-surface-canvas: #f8fbff;
   --ds-surface-card: #FFFFFF;
   --ds-surface-card-bg: var(--ds-surface-card);
@@ -125359,31 +125139,31 @@ html[lang]:lang(ar) {
   --ds-textarea-padding-y: 10px;
   --ds-textarea-radius: 10px;
   --ds-textarea-resize: vertical;
-  --ds-tint-12: color-mix(in oklch, var(--ds-color-primary) 12%, var(--ds-color-bg-primary));
-  --ds-tint-16: color-mix(in oklch, var(--ds-color-primary) 16%, var(--ds-color-bg-primary));
-  --ds-tint-24: color-mix(in oklch, var(--ds-color-primary) 24%, var(--ds-color-bg-primary));
-  --ds-tint-4: color-mix(in oklch, var(--ds-color-primary) 4%, var(--ds-color-bg-primary));
-  --ds-tint-8: color-mix(in oklch, var(--ds-color-primary) 8%, var(--ds-color-bg-primary));
-  --ds-tint-error-12: color-mix(in oklch, var(--ds-color-error) 12%, var(--ds-color-bg-primary));
-  --ds-tint-error-16: color-mix(in oklch, var(--ds-color-error) 16%, var(--ds-color-bg-primary));
-  --ds-tint-error-24: color-mix(in oklch, var(--ds-color-error) 24%, var(--ds-color-bg-primary));
-  --ds-tint-error-4: color-mix(in oklch, var(--ds-color-error) 4%, var(--ds-color-bg-primary));
-  --ds-tint-error-8: color-mix(in oklch, var(--ds-color-error) 8%, var(--ds-color-bg-primary));
-  --ds-tint-info-12: color-mix(in oklch, var(--ds-color-info) 12%, var(--ds-color-bg-primary));
-  --ds-tint-info-16: color-mix(in oklch, var(--ds-color-info) 16%, var(--ds-color-bg-primary));
-  --ds-tint-info-24: color-mix(in oklch, var(--ds-color-info) 24%, var(--ds-color-bg-primary));
-  --ds-tint-info-4: color-mix(in oklch, var(--ds-color-info) 4%, var(--ds-color-bg-primary));
-  --ds-tint-info-8: color-mix(in oklch, var(--ds-color-info) 8%, var(--ds-color-bg-primary));
-  --ds-tint-success-12: color-mix(in oklch, var(--ds-color-success) 12%, var(--ds-color-bg-primary));
-  --ds-tint-success-16: color-mix(in oklch, var(--ds-color-success) 16%, var(--ds-color-bg-primary));
-  --ds-tint-success-24: color-mix(in oklch, var(--ds-color-success) 24%, var(--ds-color-bg-primary));
-  --ds-tint-success-4: color-mix(in oklch, var(--ds-color-success) 4%, var(--ds-color-bg-primary));
-  --ds-tint-success-8: color-mix(in oklch, var(--ds-color-success) 8%, var(--ds-color-bg-primary));
-  --ds-tint-warning-12: color-mix(in oklch, var(--ds-color-warning) 12%, var(--ds-color-bg-primary));
-  --ds-tint-warning-16: color-mix(in oklch, var(--ds-color-warning) 16%, var(--ds-color-bg-primary));
-  --ds-tint-warning-24: color-mix(in oklch, var(--ds-color-warning) 24%, var(--ds-color-bg-primary));
-  --ds-tint-warning-4: color-mix(in oklch, var(--ds-color-warning) 4%, var(--ds-color-bg-primary));
-  --ds-tint-warning-8: color-mix(in oklch, var(--ds-color-warning) 8%, var(--ds-color-bg-primary));
+  --ds-tint-12: color-mix(in oklab, var(--ds-color-primary) 12%, var(--ds-color-bg-primary));
+  --ds-tint-16: color-mix(in oklab, var(--ds-color-primary) 16%, var(--ds-color-bg-primary));
+  --ds-tint-24: color-mix(in oklab, var(--ds-color-primary) 24%, var(--ds-color-bg-primary));
+  --ds-tint-4: color-mix(in oklab, var(--ds-color-primary) 4%, var(--ds-color-bg-primary));
+  --ds-tint-8: color-mix(in oklab, var(--ds-color-primary) 8%, var(--ds-color-bg-primary));
+  --ds-tint-error-12: color-mix(in oklab, var(--ds-color-error) 12%, var(--ds-color-bg-primary));
+  --ds-tint-error-16: color-mix(in oklab, var(--ds-color-error) 16%, var(--ds-color-bg-primary));
+  --ds-tint-error-24: color-mix(in oklab, var(--ds-color-error) 24%, var(--ds-color-bg-primary));
+  --ds-tint-error-4: color-mix(in oklab, var(--ds-color-error) 4%, var(--ds-color-bg-primary));
+  --ds-tint-error-8: color-mix(in oklab, var(--ds-color-error) 8%, var(--ds-color-bg-primary));
+  --ds-tint-info-12: color-mix(in oklab, var(--ds-color-info) 12%, var(--ds-color-bg-primary));
+  --ds-tint-info-16: color-mix(in oklab, var(--ds-color-info) 16%, var(--ds-color-bg-primary));
+  --ds-tint-info-24: color-mix(in oklab, var(--ds-color-info) 24%, var(--ds-color-bg-primary));
+  --ds-tint-info-4: color-mix(in oklab, var(--ds-color-info) 4%, var(--ds-color-bg-primary));
+  --ds-tint-info-8: color-mix(in oklab, var(--ds-color-info) 8%, var(--ds-color-bg-primary));
+  --ds-tint-success-12: color-mix(in oklab, var(--ds-color-success) 12%, var(--ds-color-bg-primary));
+  --ds-tint-success-16: color-mix(in oklab, var(--ds-color-success) 16%, var(--ds-color-bg-primary));
+  --ds-tint-success-24: color-mix(in oklab, var(--ds-color-success) 24%, var(--ds-color-bg-primary));
+  --ds-tint-success-4: color-mix(in oklab, var(--ds-color-success) 4%, var(--ds-color-bg-primary));
+  --ds-tint-success-8: color-mix(in oklab, var(--ds-color-success) 8%, var(--ds-color-bg-primary));
+  --ds-tint-warning-12: color-mix(in oklab, var(--ds-color-warning) 12%, var(--ds-color-bg-primary));
+  --ds-tint-warning-16: color-mix(in oklab, var(--ds-color-warning) 16%, var(--ds-color-bg-primary));
+  --ds-tint-warning-24: color-mix(in oklab, var(--ds-color-warning) 24%, var(--ds-color-bg-primary));
+  --ds-tint-warning-4: color-mix(in oklab, var(--ds-color-warning) 4%, var(--ds-color-bg-primary));
+  --ds-tint-warning-8: color-mix(in oklab, var(--ds-color-warning) 8%, var(--ds-color-bg-primary));
   --ds-toolbar-bg: color-mix(in srgb, #3A6FB0 4%, #FFFFFF);
   --ds-toolbar-border: #D4E0EA;
   --ds-toolbar-border-bottom: color-mix(in srgb, #D4E0EA 82%, transparent);
@@ -125398,7 +125178,6 @@ html[lang]:lang(ar) {
   --ds-toolbar-shadow: 0 1px 2px rgba(20, 40, 59, 0.04);
   --ds-type-body: var(--ds-type-body-font-weight) var(--ds-type-body-font-size)/var(--ds-type-body-line-height) var(--ds-type-body-font-family);
   --ds-type-body-font-family: var(--ds-font-family-base);
-  --ds-type-body-font-size: calc(0.875rem * var(--ds-type-scale, 1));
   --ds-type-body-font-variant-numeric: normal;
   --ds-type-body-font-weight: 400;
   --ds-type-body-letter-spacing: var(--ds-letter-spacing-body, 0);
@@ -125890,34 +125669,18 @@ html[lang]:lang(ar) {
 :is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire'])) {
   --ds-z-index-tooltip: 2700;
   --ds-tooltip-z-index: 2700;
-  --ds-list-preview-rail-gap: clamp(14px, 1.45vw, 22px);
   --ds-list-preview-rail-border: color-mix(
     in srgb,
     var(--ds-color-primary) 18%,
     var(--ds-color-border-secondary)
   );
-  --ds-list-preview-panel-bg: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-primary) 2%),
-    color-mix(in srgb, var(--ds-surface-panel) 36%, var(--ds-surface-card))
-  );
-  --ds-list-preview-panel-border: color-mix(
-    in srgb,
-    var(--ds-color-primary) 14%,
-    var(--ds-color-border)
-  );
   --ds-list-preview-row-gap: 10px;
-  --ds-list-preview-motion-duration: 180ms;
-  --ds-list-preview-motion-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
   --ds-table-tooltip-z-index: 2700;
   --ds-table-action-tooltip-max-width: min(272px, calc(100vw - 32px));
   --ds-preview-tooltip-max-width: min(280px, calc(100vw - 32px));
   --ds-table-row-focus-shadow: inset 0 0 0 1px
       color-mix(in srgb, var(--ds-color-primary) 28%, transparent),
     0 4px 14px color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
-  --ds-list-preview-panel-shadow: 0 10px 24px
-      color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent),
-    inset 0 1px 0 color-mix(in srgb, var(--ds-surface-card) 76%, transparent);
   --ds-expanded-panel-bg: color-mix(
     in srgb,
     var(--ds-table-header-bg, var(--ds-color-bg-secondary)) 72%,
@@ -126063,9 +125826,6 @@ html[lang]:lang(ar) {
   );
   --ds-premium-card-selected-ring: 0 0 0 3px
     color-mix(in srgb, var(--ds-color-primary) 12%, transparent);
-  --ds-card-border-hover: var(--ds-premium-card-border-hover);
-  --ds-card-border-color-hover: var(--ds-premium-card-border-hover);
-  --ds-card-title-letter-spacing: 0;
   --ds-surface-card-border-strong: var(--ds-color-border-secondary);
   --ds-surface-card-border-soft: var(--ds-color-border-subtle);
   --ds-surface-card-grid-size: 22px;
@@ -126112,8 +125872,6 @@ html[lang]:lang(ar) {
       transparent 1px
     );
   --ds-premium-card-header-top-line-display: none;
-  --ds-signal-card-top-line-display: none;
-  --ds-list-shell-section-gap: 14px;
   --ds-breadcrumb-bar-padding-x: 18px;
   --ds-breadcrumb-bar-bg: linear-gradient(
     180deg,
@@ -126157,38 +125915,6 @@ html[lang]:lang(ar) {
     var(--ds-color-primary) 46%,
     transparent
   );
-  --ds-detail-rail-width: clamp(280px, 22vw, 340px);
-  --ds-detail-hero-bg: linear-gradient(
-    180deg,
-    color-mix(
-      in srgb,
-      var(--ds-control-surface) 98%,
-      var(--ds-color-primary) 2%
-    ),
-    color-mix(in srgb, var(--ds-surface-panel) 54%, var(--ds-control-surface))
-  );
-  --ds-detail-hero-border: color-mix(
-    in srgb,
-    var(--ds-color-text-primary) 9%,
-    transparent
-  );
-  --ds-detail-hero-shadow: 0 1px 2px
-      color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent),
-    0 12px 28px color-mix(in srgb, var(--ds-color-primary) 5%, transparent),
-    inset 0 1px 0 color-mix(in srgb, var(--ds-surface-card) 76%, transparent);
-  --ds-detail-section-bg: linear-gradient(
-    180deg,
-    var(--ds-surface-card) 0%,
-    color-mix(in srgb, var(--ds-surface-panel) 34%, var(--ds-surface-card)) 100%
-  );
-  --ds-detail-section-border: color-mix(
-    in srgb,
-    var(--ds-surface-tone, var(--rt-surface-tone, var(--ds-color-primary))) 11%,
-    var(--ds-color-border)
-  );
-  --ds-detail-section-shadow: 0 1px 2px
-      color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent),
-    0 8px 20px color-mix(in srgb, var(--ds-color-text-primary) 3%, transparent);
   --ds-action-rail-card-bg: linear-gradient(
     180deg,
     color-mix(
@@ -126589,11 +126315,11 @@ html[lang]:lang(ar) {
   --ds-overlay-heavy: rgba(0, 0, 0, 0.06);
   --ds-overlay-light: rgba(0, 0, 0, 0.01);
   --ds-overlay-medium: rgba(0, 0, 0, 0.03);
-  --ds-radius-lg: 18px;
-  --ds-radius-md: 14px;
+  --ds-radius-lg-base: 18px;
+  --ds-radius-md-base: 14px;
   --ds-radius-scale: 1;
-  --ds-radius-sm: 10px;
-  --ds-radius-xl: 24px;
+  --ds-radius-sm-base: 10px;
+  --ds-radius-xl-base: 24px;
   --ds-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.08);
   --ds-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
   --ds-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
@@ -126651,34 +126377,33 @@ html[lang]:lang(ar) {
   --ds-text-title-line-height: 1.75rem;
   --ds-text-title-size: 1.25rem;
   --ds-text-title-weight: 600;
-  --ds-tint-12: color-mix(in oklch, var(--ds-color-primary) 12%, var(--ds-color-bg-primary));
-  --ds-tint-16: color-mix(in oklch, var(--ds-color-primary) 16%, var(--ds-color-bg-primary));
-  --ds-tint-24: color-mix(in oklch, var(--ds-color-primary) 24%, var(--ds-color-bg-primary));
-  --ds-tint-4: color-mix(in oklch, var(--ds-color-primary) 4%, var(--ds-color-bg-primary));
-  --ds-tint-8: color-mix(in oklch, var(--ds-color-primary) 8%, var(--ds-color-bg-primary));
-  --ds-tint-error-12: color-mix(in oklch, var(--ds-color-error) 12%, var(--ds-color-bg-primary));
-  --ds-tint-error-16: color-mix(in oklch, var(--ds-color-error) 16%, var(--ds-color-bg-primary));
-  --ds-tint-error-24: color-mix(in oklch, var(--ds-color-error) 24%, var(--ds-color-bg-primary));
-  --ds-tint-error-4: color-mix(in oklch, var(--ds-color-error) 4%, var(--ds-color-bg-primary));
-  --ds-tint-error-8: color-mix(in oklch, var(--ds-color-error) 8%, var(--ds-color-bg-primary));
-  --ds-tint-info-12: color-mix(in oklch, var(--ds-color-info) 12%, var(--ds-color-bg-primary));
-  --ds-tint-info-16: color-mix(in oklch, var(--ds-color-info) 16%, var(--ds-color-bg-primary));
-  --ds-tint-info-24: color-mix(in oklch, var(--ds-color-info) 24%, var(--ds-color-bg-primary));
-  --ds-tint-info-4: color-mix(in oklch, var(--ds-color-info) 4%, var(--ds-color-bg-primary));
-  --ds-tint-info-8: color-mix(in oklch, var(--ds-color-info) 8%, var(--ds-color-bg-primary));
-  --ds-tint-success-12: color-mix(in oklch, var(--ds-color-success) 12%, var(--ds-color-bg-primary));
-  --ds-tint-success-16: color-mix(in oklch, var(--ds-color-success) 16%, var(--ds-color-bg-primary));
-  --ds-tint-success-24: color-mix(in oklch, var(--ds-color-success) 24%, var(--ds-color-bg-primary));
-  --ds-tint-success-4: color-mix(in oklch, var(--ds-color-success) 4%, var(--ds-color-bg-primary));
-  --ds-tint-success-8: color-mix(in oklch, var(--ds-color-success) 8%, var(--ds-color-bg-primary));
-  --ds-tint-warning-12: color-mix(in oklch, var(--ds-color-warning) 12%, var(--ds-color-bg-primary));
-  --ds-tint-warning-16: color-mix(in oklch, var(--ds-color-warning) 16%, var(--ds-color-bg-primary));
-  --ds-tint-warning-24: color-mix(in oklch, var(--ds-color-warning) 24%, var(--ds-color-bg-primary));
-  --ds-tint-warning-4: color-mix(in oklch, var(--ds-color-warning) 4%, var(--ds-color-bg-primary));
-  --ds-tint-warning-8: color-mix(in oklch, var(--ds-color-warning) 8%, var(--ds-color-bg-primary));
+  --ds-tint-12: color-mix(in oklab, var(--ds-color-primary) 12%, var(--ds-color-bg-primary));
+  --ds-tint-16: color-mix(in oklab, var(--ds-color-primary) 16%, var(--ds-color-bg-primary));
+  --ds-tint-24: color-mix(in oklab, var(--ds-color-primary) 24%, var(--ds-color-bg-primary));
+  --ds-tint-4: color-mix(in oklab, var(--ds-color-primary) 4%, var(--ds-color-bg-primary));
+  --ds-tint-8: color-mix(in oklab, var(--ds-color-primary) 8%, var(--ds-color-bg-primary));
+  --ds-tint-error-12: color-mix(in oklab, var(--ds-color-error) 12%, var(--ds-color-bg-primary));
+  --ds-tint-error-16: color-mix(in oklab, var(--ds-color-error) 16%, var(--ds-color-bg-primary));
+  --ds-tint-error-24: color-mix(in oklab, var(--ds-color-error) 24%, var(--ds-color-bg-primary));
+  --ds-tint-error-4: color-mix(in oklab, var(--ds-color-error) 4%, var(--ds-color-bg-primary));
+  --ds-tint-error-8: color-mix(in oklab, var(--ds-color-error) 8%, var(--ds-color-bg-primary));
+  --ds-tint-info-12: color-mix(in oklab, var(--ds-color-info) 12%, var(--ds-color-bg-primary));
+  --ds-tint-info-16: color-mix(in oklab, var(--ds-color-info) 16%, var(--ds-color-bg-primary));
+  --ds-tint-info-24: color-mix(in oklab, var(--ds-color-info) 24%, var(--ds-color-bg-primary));
+  --ds-tint-info-4: color-mix(in oklab, var(--ds-color-info) 4%, var(--ds-color-bg-primary));
+  --ds-tint-info-8: color-mix(in oklab, var(--ds-color-info) 8%, var(--ds-color-bg-primary));
+  --ds-tint-success-12: color-mix(in oklab, var(--ds-color-success) 12%, var(--ds-color-bg-primary));
+  --ds-tint-success-16: color-mix(in oklab, var(--ds-color-success) 16%, var(--ds-color-bg-primary));
+  --ds-tint-success-24: color-mix(in oklab, var(--ds-color-success) 24%, var(--ds-color-bg-primary));
+  --ds-tint-success-4: color-mix(in oklab, var(--ds-color-success) 4%, var(--ds-color-bg-primary));
+  --ds-tint-success-8: color-mix(in oklab, var(--ds-color-success) 8%, var(--ds-color-bg-primary));
+  --ds-tint-warning-12: color-mix(in oklab, var(--ds-color-warning) 12%, var(--ds-color-bg-primary));
+  --ds-tint-warning-16: color-mix(in oklab, var(--ds-color-warning) 16%, var(--ds-color-bg-primary));
+  --ds-tint-warning-24: color-mix(in oklab, var(--ds-color-warning) 24%, var(--ds-color-bg-primary));
+  --ds-tint-warning-4: color-mix(in oklab, var(--ds-color-warning) 4%, var(--ds-color-bg-primary));
+  --ds-tint-warning-8: color-mix(in oklab, var(--ds-color-warning) 8%, var(--ds-color-bg-primary));
   --ds-type-body: var(--ds-type-body-font-weight) var(--ds-type-body-font-size)/var(--ds-type-body-line-height) var(--ds-type-body-font-family);
   --ds-type-body-font-family: var(--ds-font-family-base);
-  --ds-type-body-font-size: calc(0.875rem * var(--ds-type-scale, 1));
   --ds-type-body-font-variant-numeric: normal;
   --ds-type-body-font-weight: 400;
   --ds-type-body-letter-spacing: var(--ds-letter-spacing-body, 0);
