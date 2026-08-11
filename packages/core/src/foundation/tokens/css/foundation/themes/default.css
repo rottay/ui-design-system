@@ -190,26 +190,26 @@
   --ds-color-alpha-error-20: rgba(239, 68, 68, 0.20);
   --ds-color-alpha-info-10: rgba(59, 130, 246, 0.10);
 
-  --ds-color-bg-primary: #0A0A0C;
-  --ds-color-bg-secondary: #0F0F12;
-  --ds-color-bg-tertiary: #141417;
+  --ds-color-bg-primary: var(--ds-color-neutral-50);
+  --ds-color-bg-secondary: var(--ds-color-neutral-100);
+  --ds-color-bg-tertiary: var(--ds-color-neutral-200);
   /* Derived, not literal: bithire and evnto override the whole bg-* family to
      a light canvas but never authored a subtle rung, so a literal here left
      them resolving near-black in light mode while every sibling was light.
      Following bg-secondary keeps one definition and makes a vertical's canvas
      carry its own subtle; the verticals that DO author a literal still win. */
   --ds-color-bg-subtle: var(--ds-color-bg-secondary, #0D0D10);
-  --ds-color-bg-hover: #18181C;
-  --ds-color-bg-canvas: #0A0A0C;
-  --ds-color-bg-elevated: #18181C;
-  --ds-color-bg-input: #0F0F12;
+  --ds-color-bg-hover: var(--ds-color-neutral-100);
+  --ds-color-bg-canvas: var(--ds-color-bg-primary);
+  --ds-color-bg-elevated: var(--ds-color-neutral-0);
+  --ds-color-bg-input: var(--ds-color-neutral-0);
   --ds-color-bg-info: var(--ds-color-info-50);
   --ds-color-bg-overlay: var(--ds-color-alpha-black-50);
   --ds-color-bg-surface: var(--ds-color-bg-secondary);
   --ds-color-bg: var(--ds-color-bg-primary);
   --ds-color-background: var(--ds-color-bg-primary);
 
-  --ds-color-text-primary: #ECECEC;
+  --ds-color-text-primary: var(--ds-color-neutral-900);
   --ds-color-text-secondary: #A0A0A5;
   /* Ladder re-leveled (W8): muted must clear APCA |Lc| 45 on the page ground
      (#6B6B72 measured 25.3); tertiary rises with it so the
@@ -221,11 +221,11 @@
   --ds-color-text-inverse: var(--ds-color-text-on-primary);
   --ds-color-text: var(--ds-color-text-primary);
 
-  --ds-color-border: #1C1C20;
-  --ds-color-border-primary: #1C1C20;
-  --ds-color-border-secondary: #252529;
-  --ds-color-border-subtle: #161619;
-  --ds-color-border-tertiary: #161619;
+  --ds-color-border: var(--ds-color-neutral-200);
+  --ds-color-border-primary: var(--ds-color-neutral-200);
+  --ds-color-border-secondary: var(--ds-color-neutral-300);
+  --ds-color-border-subtle: var(--ds-color-neutral-100);
+  --ds-color-border-tertiary: var(--ds-color-neutral-100);
   --ds-color-border-focus: var(--ds-color-primary);
 
   --ds-color-surface: var(--ds-color-bg-primary);
@@ -2097,6 +2097,19 @@
 html[data-theme='dark'],
 html.dark {
   color-scheme: dark;
+
+  /* Pins, not new opinions. These six seeds were dark literals on bare :root and
+     are now wired to the light neutral ramp; that ramp resolves dark here, which
+     would REPAINT dark. Each value below is exactly what dark resolved to before
+     the rewire, so dark stays byte-identical. --ds-color-bg-canvas is the one that
+     cannot follow its source: as var(--ds-color-bg-primary) it would track
+     neutral-50 (#0b1220) rather than the #0A0A0C it resolves to today. */
+  --ds-color-bg-hover: #18181C;
+  --ds-color-bg-canvas: #0A0A0C;
+  --ds-color-bg-input: #0F0F12;
+  --ds-color-border: #1C1C20;
+  --ds-color-border-subtle: #161619;
+  --ds-color-border-tertiary: #161619;
 
   /* Semantic neutrals reference the dark neutral ramp below wherever a ramp
      step carries the exact same value, so a ramp override cascades here.
