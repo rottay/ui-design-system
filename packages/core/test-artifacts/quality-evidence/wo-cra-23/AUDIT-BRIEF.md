@@ -116,6 +116,69 @@ resolution probe. (d) Was dropping the seals a loss of auditability, or of cerem
 
 ---
 
+## 1C. The plan as it now stands — audit this against what was executed
+
+**Codex holds the R0–R7 plan. That plan is superseded. This section is the current one, stated so
+plan-versus-execution can be audited as a gap.**
+
+### The programme in one line
+
+Make a small set of tenant controls move many downstream properties, so the same React tree renders
+as different companies — and **prove it by measurement from the tenant side**, not by certifying
+families from the family side.
+
+### The four phases, and where execution actually is
+
+| phase | intent | executed? |
+|---|---|---|
+| **P1 Plumbing** | make declared paint reach the screen: severance, dead channels, illegible values, unreachable literals | **substantially, and it is where the session ended** |
+| **P2 Measurement** | answer whether the verticals can diverge at all, and by how much | **done — this is the reach census and it changed P3** |
+| **P3 Elevation** | take families to the Quiet Premium standard | **NOT STARTED. Zero families carry a review verdict.** |
+| **P4 Certification** | independent audit, sighted acceptance per block | **partial — one family, six cells** |
+
+> **The honest state: this session was P1 and P2. P3 has not begun.** `family-ledger.json` shows 206
+> of 252 rows `SOURCE_TOUCHED`, and its own vocabulary says that means only that a file was edited —
+> not elevated, not reviewed, not compliant. **`reviewVerdict` is unset on every row.**
+
+### What P2 did to P3, and this is the part worth auditing hardest
+
+The reach census found that **~⅓ of all painted declarations terminate in a DS literal, an inline
+fallback, or nothing — identical across all three verticals by construction.** That bounds what
+elevation can achieve and makes "elevate all 252 families" partly futile as a goal.
+
+**Audit target:** is that conclusion sound enough to re-scope a programme on? If it is, P3 should be
+re-planned around the 103 families carrying a ≥4-declaration spread rather than around the full 252.
+If it is not, P3's original scope stands and the census mis-scoped the work.
+
+### The fences, unchanged from the inherited plan and still binding
+
+```
+no tenant selector, no tenant-conditional TSX
+no second compiler, engine, or icon supplier
+no public --ds-* minted by a family lane          ← see §2A: the engine skin layer breaches this today
+no hand-edited styles/** or dist/**
+no test or baseline weakened to preserve a defect
+```
+
+### The verification contract for a family to be called DONE
+
+Declared, never executed at scale this session:
+
+1. one named observable defect closed, with a before/after — **not** a token rename, a selector tweak
+   or a green test alone
+2. token reads only through the chain: foundation → semantic channel → recipe/anatomy →
+   family-private `--_ds-*` → stable DOM part
+3. every visible string keyed in all five locales, RTL-safe
+4. container-aware at 320 / 390 / 768 / 1440; mobile a simplified posture, not a compressed desktop
+5. a focused test under the family's `tests/` **and** a probe scene so it is visually observable
+6. ledger row updated with state and evidence
+7. adversarial review accepts it
+
+**Audit target:** items 3, 4 and 5 were not applied to any family this session. Check whether any
+family was called finished without them.
+
+---
+
 ## 1B. How the two auditors were used
 
 Codex certification (R6) was replaced by a **brokered two-auditor loop**. It is not a redundancy
