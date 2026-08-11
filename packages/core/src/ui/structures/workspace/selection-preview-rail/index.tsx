@@ -264,11 +264,6 @@ export function SelectionPreviewRail<T extends object>({
         data-part="root"
         data-preview="custom"
         aria-label={landmarkLabel}
-        style={{
-          flex: '0 1 clamp(320px, 29vw, 380px)',
-          width: 'min(100%, 380px)',
-          minWidth: 'min(100%, 320px)',
-        }}
       >
         <Box data-part="sticky">
           <Box
@@ -315,11 +310,6 @@ export function SelectionPreviewRail<T extends object>({
       data-part="root"
       data-preview="default"
       aria-label={landmarkLabel}
-      style={{
-        flex: '0 1 clamp(320px, 29vw, 380px)',
-        width: 'min(100%, 380px)',
-        minWidth: 'min(100%, 320px)',
-      }}
     >
       <Box data-part="sticky">
         <Box

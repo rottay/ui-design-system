@@ -2,7 +2,10 @@
  * FieldFiltersPanel skin — engine-agnostic.
  * Home: foundation/tokens/css/presentation/components/skin/field-filters-panel.css — the structures/
  * shared-file home of the WO-ARC-09 contract; no --modern/--rustic
- * discriminator because the component renders one DOM under every engine.
+ * discriminator, because the family's OWN elements (Box/Flex) render one DOM
+ * under every engine. Its composed Text parts do not: rustic and classic
+ * replace the caller's `data-part` with `root`, so every text rule at the
+ * end of this file reaches modern only.
  *
  * LAYER: imported by `facade/entrypoints/base.css` and
  * `facade/entrypoints/styles.css` into `layer(rottay-components)` (the old
@@ -13,8 +16,10 @@
  * `border-color` on every element. Border paint reaches (0,4,0) through the
  * always-stamped root `data-part` ancestor — repeating a class or attribute
  * is forbidden (the source-gated contract bans role/aria-label/placeholder
- * as the fourth unit and audits this file's specificity). Text rules add the
- * always-stamped `data-size` for b>=5 over Typography's `[data-color]`.
+ * as the fourth unit and audits this file's specificity). Against the
+ * Typography engine skin no specificity ladder is available at all: it sorts
+ * in `rottay-engines`, after this file, so the layer decides — which is why
+ * the text rules below declare no colour, size or weight.
  *
  * CONTROL LANDINGS: `.ds-field-filters-panel__control` is passed as
  * `className` to the panel's Select/Input controls and lands on the element
@@ -290,56 +295,61 @@
 }
 
 /* ---------------------------------------------------------------------------
-   WAVE R2+R3 — typography + microinteractions (skin-owned, never inline).
-   Text parts carry the repeated data-part x3 so typography clears the
-   Typography engine skin the same way color does (0,5,0).
+   TEXT PARTS — the root compound is ONE element. These rules were authored
+   with a space before `[data-part='root']`, which asks for a second
+   root-parted element nested inside the family; nothing renders one, so all
+   seven matched nothing since they were written. Three of the declarations
+   they carry (`display: block` twice, the description offset) and the
+   control-slot floor below were live INLINE styles before the geometry
+   drain, so the drain silently deleted painted layout.
+
+   `[data-size]` is kept because it is exactly what the modern Typography
+   engine stamps, which scopes these rules to the engine that can honour
+   them: rustic and classic replace a composed Text's `data-part` with
+   `root` and stamp no `data-size`, so no part-keyed rule reaches their text.
+   Font size and weight are NOT declared here — modern paints both inline
+   from the type-role channels, so a skin literal could only ever lose to
+   them, and reviving one would trade a tenant channel for a literal.
 --------------------------------------------------------------------------- */
 
 /* header eyebrow + subtitle */
-.ds-structure.ds-field-filters-panel [data-part='root'] [data-part='title-pill'][data-size] {
-  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
-  font-weight: 700;
+.ds-structure.ds-field-filters-panel[data-part='root'] [data-part='title-pill'][data-size] {
   letter-spacing: 0.11em;
   text-transform: uppercase;
 }
-.ds-structure.ds-field-filters-panel [data-part='root'] [data-part='subtitle'][data-size] {
-  font-size: var(--ds-font-size-xs);
+.ds-structure.ds-field-filters-panel[data-part='root'] [data-part='subtitle'][data-size] {
   line-height: 1.45;
 }
-.ds-structure.ds-field-filters-panel [data-part='root'] [data-part='presets-pill'][data-size] {
-  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
-  font-weight: 700;
+.ds-structure.ds-field-filters-panel[data-part='root'] [data-part='presets-pill'][data-size] {
   letter-spacing: 0.11em;
   text-transform: uppercase;
 }
 
 /* inline signal — tabular-nums so the live count never jitters */
-.ds-structure.ds-field-filters-panel [data-part='root'] [data-part='signal-label'][data-size] {
-  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
-  font-weight: 700;
+.ds-structure.ds-field-filters-panel[data-part='root'] [data-part='signal-label'][data-size] {
   letter-spacing: 0.09em;
   line-height: 1;
   text-transform: uppercase;
   font-variant-numeric: tabular-nums;
 }
 
-/* filter card eyebrow + description */
-.ds-structure.ds-field-filters-panel [data-part='root'] [data-part='filter-card-label'][data-size] {
+/* filter card eyebrow + description: two composed Texts render as inline
+   spans, so without the block reads they set on ONE line. */
+.ds-structure.ds-field-filters-panel[data-part='root'] [data-part='filter-card-label'][data-size] {
   display: block;
-  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
-  font-weight: 700;
   letter-spacing: 0.11em;
   text-transform: uppercase;
 }
-.ds-structure.ds-field-filters-panel [data-part='root'] [data-part='filter-card-description'][data-size] {
+.ds-structure.ds-field-filters-panel[data-part='root'] [data-part='filter-card-description'][data-size] {
   display: block;
   margin-block-start: 3px;
-  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
   line-height: 1.35;
 }
 
-/* control slot: pins the control to the card floor (drained from inline) */
-.ds-structure.ds-field-filters-panel [data-part='root'] [data-part='control-slot'] {
+/* control slot: pins the control to the card floor, so every card in the
+   auto-fit grid lands its Select/Input on one line regardless of how far
+   its description wraps. */
+.ds-structure.ds-field-filters-panel[data-part='root'] [data-part='control-slot'] {
   margin-block-start: auto;
 }
 

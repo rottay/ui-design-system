@@ -2,8 +2,10 @@
  * SelectionPreviewRail skin — engine-agnostic.
  * Home: foundation/tokens/css/presentation/components/skin/selection-preview-rail.css — the second
  * consumer of the structures/ shared-file home after field-filters-panel.css;
- * no --modern/--rustic discriminator because the component renders one DOM
- * under every engine.
+ * no --modern/--rustic discriminator, because the rail's OWN elements
+ * (Box/Flex) render one DOM under every engine. Its composed Text parts do
+ * not: rustic and classic replace the caller's `data-part` with `root`, so
+ * every text rule near the end of this file reaches modern only.
  *
  * LAYER: imported by `facade/entrypoints/base.css` and
  * `facade/entrypoints/styles.css` into `layer(rottay-components)` (the old
@@ -22,8 +24,9 @@
  * `border-color` on every element. Border paint reaches (0,4,0) through the
  * always-stamped root `data-part` + contract `data-preview` on the roots, and
  * the root ancestor on descendants — repeating a class or attribute is
- * forbidden. Text rules add the always-stamped `data-size` for b>=5 over
- * Typography's `[data-color]` rule.
+ * forbidden. Against the Typography engine skin no specificity ladder is
+ * available at all: it sorts in `rottay-engines`, after this file, so the
+ * layer decides — which is why the text rules declare no colour.
  *
  * CLOSE-BUTTON RULE (source-gated): the customPreview close is a
  * `variant="ghost"` Button whose historical inline style froze `background` +
@@ -46,7 +49,9 @@
  *
  * WAVE S617B (geometry drain + landmark): both roots render as `aside` with an
  * aria-label (the rail is a complementary landmark), and the rail's own static
- * geometry moved here from the engines' inline styles: root paddings (keyed per
+ * geometry moved here from the engines' inline styles: the root track (flex
+ * basis plus the inline-size floor and ceiling, identical on both branches),
+ * root paddings (keyed per
  * branch, logical conversion keeps the extra 2px on the OUTER edge under RTL),
  * the `sticky` part (position + token offset; the default branch adds its
  * column flex + gap), the card bodies (`identity-card-body`, `custom-content`),
@@ -83,7 +88,13 @@
 
 /* roots — two mutually-exclusive trees, keyed on data-preview ---------------- */
 
+/* The track the rail occupies is identical on both branches and was the last
+   inline paint either root carried; in the skin a consumer can widen or pin
+   it, which an inline style refused. */
 .ds-structure.ds-selection-preview-rail[data-part='root'][data-preview='custom'] {
+  flex: 0 1 clamp(320px, 29vw, 380px);
+  inline-size: min(100%, 380px);
+  min-inline-size: min(100%, 320px);
   border-inline-start: 1px solid var(--ds-color-border-subtle);
   background: transparent;
   container-type: inline-size;
@@ -95,6 +106,9 @@
 }
 
 .ds-structure.ds-selection-preview-rail[data-part='root'][data-preview='default'] {
+  flex: 0 1 clamp(320px, 29vw, 380px);
+  inline-size: min(100%, 380px);
+  min-inline-size: min(100%, 320px);
   border-inline-start: 1px solid var(--ds-color-border-subtle);
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 94%, var(--ds-color-bg-elevated) 6%), var(--ds-surface-card));
   container-type: inline-size;
@@ -237,38 +251,50 @@
 }
 
 /* ---------------------------------------------------------------------------
-   WAVE R2+R3 — typography (skin-owned, never inline). Text parts repeat the
-   data-part x3 so type clears the Typography engine skin the same way color
-   does (0,5,0). Quiet Premium editorial: the identity title is the one
-   display moment (tight tracking, tight leading); eyebrows are tracked
-   uppercase; body copy keeps a relaxed 1.5 read.
+   TEXT PARTS — the root compound is ONE element. These eight rules were
+   authored with a space before `[data-part='root']`, which asks for a second
+   root-parted element nested inside the rail; nothing renders one, so none of
+   them has matched since it was written and the rail has been shipping its
+   editorial voice as browser defaults.
+
+   `[data-size]` is kept because it is exactly what the modern Typography
+   engine stamps, which scopes these rules to the engine that can honour them:
+   rustic and classic replace a composed Text's `data-part` with `root` and
+   stamp no `data-size`, so no part-keyed rule reaches their text. Size,
+   weight and colour stay unstated — the Typography skin sorts in
+   `rottay-engines`, after this file, so the layer would decide anyway.
+
+   Quiet Premium editorial: the identity title is the one display moment
+   (tight tracking, tight leading); eyebrows are tracked uppercase; body copy
+   keeps a relaxed 1.5 read; a missing value is italic so an empty cell never
+   reads as data.
 --------------------------------------------------------------------------- */
 
-.ds-structure.ds-selection-preview-rail [data-part='root'] [data-part='identity-title'][data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='identity-title'][data-size] {
   letter-spacing: -0.02em;
   line-height: 1.12;
 }
-.ds-structure.ds-selection-preview-rail [data-part='root'] [data-part='identity-subtitle'][data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='identity-subtitle'][data-size] {
   line-height: 1.4;
 }
-.ds-structure.ds-selection-preview-rail [data-part='root'] [data-part='match-reason-eyebrow'][data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='match-reason-eyebrow'][data-size] {
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
-.ds-structure.ds-selection-preview-rail [data-part='root'] [data-part='match-reason-body'][data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='match-reason-body'][data-size] {
   line-height: 1.5;
 }
-.ds-structure.ds-selection-preview-rail [data-part='root'] [data-part='snapshot-row-label'][data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-row-label'][data-size] {
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
-.ds-structure.ds-selection-preview-rail [data-part='root'] [data-part='snapshot-empty'][data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-empty'][data-size] {
   line-height: 1.45;
 }
-.ds-structure.ds-selection-preview-rail [data-part='root'] [data-part='fallback-empty'][data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='fallback-empty'][data-size] {
   font-style: italic;
 }
-.ds-structure.ds-selection-preview-rail [data-part='root'] [data-part='fallback-string'][data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='fallback-string'][data-size] {
   line-height: 1.45;
 }
 
