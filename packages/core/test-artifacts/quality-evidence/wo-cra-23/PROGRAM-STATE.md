@@ -529,6 +529,54 @@ fallback arm, and the declared-nowhere census. Those stand. But **the instrument
 evidence within its roster**, and a roster of six fixtures is not the component library. Any lane
 quoting `changedRows: 0` must state which fixtures could have moved.
 
+### THE DENOMINATOR, MEASURED — "bithire misses only 23" does not survive
+
+The third correction to my own headline finding, and the most consequential. Runtime census, 4,027
+names, 8 cells, tenant-less arm spliced from each vertical's own bundle:
+
+```
+                     STATIC     RUNTIME
+partial, bithire         23         461
+partial, rottay         485         569
+partial, evnto          585        1136
+channels each SPEAKS on   —   platform 1876 · bithire 1984 · evnto 1309
+```
+
+**Bithire and rottay are 6% apart on divergence, not 2×.** The "misses only 23" figure was the
+load-bearing evidence for *"BitHire diverges, the other two fall back toward the DS baseline"*, and the
+gap it implied is 20×. Measured, it is 1.2×.
+
+**The two numbers answer different questions and neither is wrong.** Static measures **authorship** —
+did this vertical literally redeclare the name. Runtime measures **divergence** — does it paint
+differently from a tenant-less document. A vertical diverges *without* redeclaring whenever the DS value
+is a formula over its own inputs, which is §6.0, and is why the static count over-reports silence so
+heavily. The contract-density argument is about the former and survives; the conclusion I drew from it
+does not.
+
+**What follows is the important part: whatever makes BitHire read as a product is NOT channel count.**
+Rottay already diverges on nearly as many channels. No counter can find the difference, so authoring
+another wave of channels cannot close it. That is a question for the sighted pass, and it is now the
+strongest argument for doing that pass before any further authoring wave.
+
+### Roles cut the adjudication target from 1,582 to 469
+
+Applied to the corrected census, every row carrying a paint role:
+
+```
+fully tenant-free (1,582)   ground 84 · ink 190 · edge 195 · type 246
+                            geometry 506 · motion 113 · internal 43 · other 205
+```
+
+Only **469 are paint roles** — ground, ink or edge, where a vertical opinion can change how the product
+looks. The 43 internal/`z`/composition names should be **struck rather than adjudicated**. Handing over
+the raw 1,582 would have set the next lane up to repeat tonight's mistake at four times the scale.
+
+Caveats that travel with these numbers: the corpus is 4,027 (every `--ds-*` in any bundle) versus the
+static 3,303 (bare `:root` outside tenant scope), so bucket totals are not name-for-name comparable —
+the per-vertical comparison is, being one corpus measured one way. Platform's figures include tonight's
+two commits and bithire's include its lane's +355 lines. **Re-run `harness/census.mjs` after the
+reconciliation build before quoting a density number.**
+
 ### A finding attributed to the WRONG INSTRUMENT gets fixed in the wrong place
 
 Fourth instance tonight, and this one is mine. I routed the portal-timing defect — surface mounts one
