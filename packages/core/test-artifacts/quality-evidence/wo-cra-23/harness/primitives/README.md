@@ -94,8 +94,34 @@ across themes (66.7→66.4, 67.0→67.8); evnto drops 60.5→57.2. It is the onl
 vertical that reaches materially less in dark than in light, which is a
 different defect from "evnto names fewer channels".
 
-**Five families no vertical reaches at all**: `carousel-compounds`,
-`oauth-transition`, `progress-compounds`, `stats-header-keyframes`, `watermark`.
+**Five families no vertical reaches at all** — and they split FOUR ways, not
+three. "Unreached" turned out to name four different things, only one of which
+is a tenant-reach question at all:
+
+| family | rows | why no vertical reaches it | verdict |
+|---|---|---|---|
+| **`oauth-transition`** | **156** | reads `--rh-*`, a namespace **nothing in the monorepo declares**, with **no fallback on any of the 156** | **DEAD PAINT — the largest single finding in this lane** |
+| `progress-compounds` | 4 | `--ds-progress-line-{trail,radius,fill}` undeclared, no fallback | dead paint, small |
+| `watermark` | 3 | 2 undeclared without fallback, 1 degrades | mixed |
+| `carousel-compounds` | 2 | `--ds-carousel-item-bg{,-image}` undeclared, **fallback fires** | degrades and paints; simply not tenant-reachable |
+| `stats-header-keyframes` | 3 | `--_ds-*` private composition variable, `opacity` inside a keyframe | **correct as-is** — theme-neutral by construction |
+
+**`oauth-transition` is not a reach defect, it is dead paint on a shipped
+surface.** 338 rules; 156 declarations read `--rh-glow`, `--rh-bg`, `--rh-ink`,
+`--rh-accent` and ten more. Zero of those names is declared anywhere — not in
+the CSS tree, not in the screen's own TSX, not in the composed bundles, which
+carry only reads. Every one of the 156 is a bare `var()` with no fallback, so
+each declaration is invalid at computed-value time and drops entirely:
+backgrounds, gradients, colours, shadows, borders. The surface is **publicly
+exported** from `entrypoints/public/surfaces/oauth-transition/` and its screen
+stamps the scope class 102 times.
+
+The reach census could only ever report this as "no vertical reaches it",
+because a vertical cannot reach a namespace the design system does not own.
+**The right question for an unreached family is not "which vertical should
+author it" but "is the channel a DS channel at all"** — and asking the first one
+first would have produced an authoring work order for paint that no value can
+switch on.
 **103 families** have a three-way spread of ≥4 declarations — that is the real
 divergence surface, and `collection-header` (200/173/178) and `card-compounds`
 (92/67/90) lead it.
