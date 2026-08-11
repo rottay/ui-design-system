@@ -1,9 +1,23 @@
-/** Static placeholder paint for the modern Input and searchable Select. */
-
-.rottay-input--modern::placeholder {
-  color: var(--ds-input-color-placeholder, var(--ds-color-text-muted));
-  opacity: 1;
-}
+/**
+ * Static placeholder paint for the searchable Select.
+ *
+ * The modern Input's placeholder rule that used to live here is gone, and it
+ * needed no relay: `engines/modern/skin/input.css:111-112` now paints it from
+ * `rottay-engines`, a LATER layer, on caller-proof selectors
+ * (`.rottay-input.rottay-input--modern > .rottay-input__control::placeholder`
+ * and the standalone-branch twin — neither carries a `[data-part]` predicate
+ * any more). It supersedes this file on both properties: its colour chain is
+ * a strict superset (`--ds-input-placeholder` ahead of the same
+ * `--ds-input-color-placeholder` → `--ds-color-text-muted` tail), and its
+ * opacity reads `--ds-input-placeholder-opacity`, which IS declared —
+ * `components/input.css:100` sets 1 and BitHire's artifact sets 0.9. So the
+ * removed rule's hardcoded `opacity: 1` was already losing to 0.9 on BitHire;
+ * deleting it changes nothing in any vertical and stops a second file
+ * claiming a paint it cannot deliver.
+ *
+ * The Select rule below is NOT redundant: `input.css` never selects
+ * `.rottay-select__search-input`, so this is the only paint that node has.
+ */
 
 .rottay-select__search-input::placeholder {
   color: var(--ds-color-text-muted);
