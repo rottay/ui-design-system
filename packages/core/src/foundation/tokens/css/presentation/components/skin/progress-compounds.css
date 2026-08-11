@@ -18,13 +18,19 @@
  */
 
 /* Progress.Line -------------------------------------------------------------- */
+/* `--ds-progress-line-*` was a spelling of channels that already exist under
+   `--ds-progress-*`; nothing declared the `-line-` variants, and with no
+   fallback all four declarations dropped. `-bg` and `-radius` are declared at
+   `:root` so they are in scope here. `-resolved-fill` is NOT: it is declared on
+   `.rottay-progress-shell`, and Line stamps `.rottay-progress-line`, so it is
+   carried with a fallback that keeps the fill live in either scope. */
 .rottay-progress-line [data-part='track'] {
-  background-color: var(--ds-progress-line-trail);
-  border-radius: var(--ds-progress-line-radius);
+  background-color: var(--ds-progress-bg);
+  border-radius: var(--ds-progress-radius);
 }
 .rottay-progress-line [data-part='fill'] {
-  background-color: var(--ds-progress-line-fill);
-  border-radius: var(--ds-progress-line-radius);
+  background-color: var(--ds-progress-resolved-fill, var(--ds-color-primary));
+  border-radius: var(--ds-progress-radius);
 }
 
 /* Progress.Circle ------------------------------------------------------------ */

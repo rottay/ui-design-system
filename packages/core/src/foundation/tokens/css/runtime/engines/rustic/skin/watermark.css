@@ -14,5 +14,5 @@
 
 .rottay-watermark--rustic[data-part='root'] > [data-part='pattern'] {
   background-repeat: repeat;
-  background-position: var(--ds-watermark-offset);
+  background-position: var(--ds-watermark-offset, 0 0);
 }

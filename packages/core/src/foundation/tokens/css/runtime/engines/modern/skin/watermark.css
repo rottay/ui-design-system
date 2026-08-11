@@ -62,7 +62,11 @@
      the source of truth and this multiplies it (never double-dims by default). */
   opacity: var(--ds-watermark-opacity, 1);
   background-repeat: repeat;
-  background-position: var(--ds-watermark-offset);
+  /* Same knob-with-a-default shape as the opacity above. Without the fallback
+     the name is undeclared, the declaration is invalid and drops, and the mark
+     silently uses the initial position — `0 0` states that outcome instead of
+     arriving at it by accident, and keeps the knob live for a tenant. */
+  background-position: var(--ds-watermark-offset, 0 0);
 }
 
 @media (forced-colors: active) {
