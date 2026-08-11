@@ -2103,6 +2103,41 @@ overridden in light but not dark still reads as overridden. bithire declaring
 `--ds-color-bg-primary: #ffffff` beside `--ds-color-bg-secondary: #151d2b` is the light/dark split,
 not an inconsistency. Resolving it properly is the same per-cell question the probe answers.
 
+### A correctly-named channel in the wrong SCOPE is still a dead read
+
+The best catch of the closing wave, and it was made one step before writing. `progress-compounds`
+looked trivial: the right channels already existed under `--ds-progress-*` and `-line-` was simply a
+wrong spelling. But **`--ds-progress-resolved-fill` is declared on `.rottay-progress-shell` while
+`Progress.Line` stamps `.rottay-progress-line`** — a different class. Wiring the read to the
+correctly-named channel would have left it **exactly as dead, with a better name.**
+
+> Renaming a dead read to the right channel does not revive it. Verify the declaring **scope**
+> reaches the reading element before calling the wiring done.
+
+Two residues from the same pass, neither of them the thing being fixed. `watermark` has **two** files
+and the rustic one carried the same bare read — repairing only modern would have left the census red
+while the report said green, the tier-lives-in-more-than-one-tree law collecting again. And
+`--rh-shadow` turned out to be a whole `box-shadow` value, not a colour, so a blind colour
+substitution would have produced an invalid declaration.
+
+### The repair that reads better than the ruling: 13 declarations, not 156 substitutions
+
+`oauth-transition` closed at **UNDECLARED 156 → 0**, resolving to a vertical channel in all three
+verticals. I ruled "derive glow from the accent with `color-mix`"; the execution did that and better:
+rather than substituting 156 reads, it renamed `--rh-*` → `--_ds-oauth-*` — the private composition
+namespace already classified as correct in `stats-header-keyframes` — and **declared the 13 once in
+the root rule**, mapped to DS channels. The 156 reads are untouched, the whole mapping is reviewable
+in 13 lines, and no public surface was minted. 338 rules before, 338 after.
+
+The derivation idiom was not invented either: the file's own `box-shadow` already used
+`color-mix(in srgb, var(--rh-accent) 8%, transparent)`, so `glow` 18%, `glow-soft` 8% and
+`accent-soft` 12% are the file's existing form rather than a new one.
+
+Declared and not verified, correctly: **that the result looks good.** The 156 declarations are now
+valid and follow the tenant; nobody has seen whether three accent-derived radial gradients make an
+ambience worth having. The before is "no colour at all", so there is no possible regression — but the
+after wants eyes, per vertical.
+
 ### THE ANSWER: reach is near-identical, and a third of the painted surface cannot diverge at all
 
 Measured 2026-08-11 by resolving every `var()` chain to its terminal, per cell — 381 skin files, 258
