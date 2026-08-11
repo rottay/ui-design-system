@@ -65,7 +65,6 @@ describe("semantic surface-role compiler", () => {
       "--ds-surface-card-shadow-hover":
         "var(--ds-material-card-shadow-hover)",
       "--ds-surface-raised": "#fefefe",
-      "--ds-color-surface-raised": "var(--ds-surface-raised)",
     });
   });
 

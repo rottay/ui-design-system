@@ -476,7 +476,7 @@ export const TokenizedModernFrames: Story = {
         <section
           style={
             {
-              "--ds-container-background": "var(--ds-color-surface-raised)",
+              "--ds-container-background": "var(--ds-surface-raised)",
               "--ds-container-border":
                 "1px solid var(--ds-color-border-subtle)",
               "--ds-container-radius": "var(--ds-radius-lg)",

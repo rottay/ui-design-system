@@ -466,9 +466,14 @@ export function semanticSurfaceRolesToCssVariables(
   const control = surfaceRoles.control;
   if (control?.background)
     vars["--ds-surface-control-bg"] = "var(--ds-surface-control)";
-  const raised = surfaceRoles.raised;
-  if (raised?.background)
-    vars["--ds-color-surface-raised"] = "var(--ds-surface-raised)";
+
+  /**
+   * `raised` gets no `-bg` alias. Its three siblings above alias inside
+   * `--ds-surface-*`; raised aliased into `--ds-color-*`, so a name in the
+   * colour family resolved to a surface role that a tenant may author as a
+   * gradient — bithire does. Its thirteen real consumers already read
+   * `--ds-surface-raised` directly, so the alias had one reader and no job.
+   */
 
   return vars;
 }

@@ -230,10 +230,6 @@
 
   --ds-color-surface: var(--ds-color-bg-primary);
   --ds-color-surface-secondary: var(--ds-color-bg-secondary);
-  --ds-color-surface-raised: var(
-    --ds-material-raised-background,
-    var(--ds-surface-raised, var(--ds-surface-card-bg))
-  );
   --ds-color-surface-subtle: var(--ds-surface-panel-bg);
   --ds-color-text-subtle: var(--ds-color-text-muted);
   --ds-color-shadow: var(--ds-color-alpha-black-20);
