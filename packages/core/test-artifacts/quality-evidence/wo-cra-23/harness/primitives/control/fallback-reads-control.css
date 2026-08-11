@@ -1,0 +1,51 @@
+/* Positive control for the class-B census.
+ *
+ * Seven shapes. Only THREE are class B. The other four are the exact false
+ * positives this census would otherwise manufacture, and two of them are real
+ * shapes lifted from the tree rather than invented — shape 2 is list-toolbar's
+ * and shape 1 is tag's, planted verbatim because the instrument that missed
+ * its own motivating case had a fully green control made only of shapes its
+ * author thought of. */
+
+/* ── 1. FIRES · wrong cell ───────────────────────────────────────────────
+   tag.css, verbatim. Five size rules each declare the channel to their own
+   height; the surviving close-button rule falls back to the md cell, so four
+   of the five sizes get md's number. The orphan is reached through a NESTED
+   fallback — `var(--a, var(--b, 1rem))` — which is the shape that made the
+   class-A instrument return a green control and miss this family. */
+.ctl-tag[data-part='root'][data-size='xs'] { --_ctl-tag-h: var(--ctl-tag-xs-height); block-size: var(--ctl-tag-xs-height); }
+.ctl-tag[data-part='root'][data-size='sm'] { --_ctl-tag-h: var(--ctl-tag-sm-height); }
+.ctl-tag[data-part='root'][data-size='md'] { --_ctl-tag-h: var(--ctl-tag-md-height); }
+.ctl-tag[data-part='root'][data-size='lg'] { --_ctl-tag-h: var(--ctl-tag-lg-height); }
+.ctl-tag > [data-part='close'] {
+  inline-size: min(var(--ctl-tag-close-size, 1rem), calc(var(--_ctl-tag-h, var(--ctl-tag-md-height, 1.75rem)) - 0.125rem));
+}
+
+/* ── 2. SILENT · declaration and read in the SAME root-keyed rule ─────────
+   list-toolbar's shape. Severance takes both together, so nothing is orphaned
+   and the fallback never fires. */
+.ctl-toolbar[data-part='root'][data-part='root'] {
+  --ctl-toolbar-radius: var(--ctl-radius-lg, 12px);
+  border-radius: var(--ctl-toolbar-radius, 8px);
+}
+
+/* ── 3. SILENT · no fallback — that is class A, not class B ───────────── */
+.ctl-a[data-part='root'] { --ctl-a-gap: 4px; }
+.ctl-a > [data-part='item'] { gap: var(--ctl-a-gap); }
+
+/* ── 4. SILENT · the channel is also declared outside a root-keyed rule ── */
+:root { --ctl-shared: 10px; }
+.ctl-shared[data-part='root'] { --ctl-shared: 12px; }
+.ctl-shared > [data-part='item'] { padding: var(--ctl-shared, 99px); }
+
+/* ── 5. FIRES · harmless — one declared cell and the fallback equals it ── */
+.ctl-same[data-part='root'] { --ctl-same-pad: 8px; }
+.ctl-same > [data-part='item'] { padding: var(--ctl-same-pad, 8px); }
+
+/* ── 6. FIRES · wrong value — one declared cell, fallback differs ──────── */
+.ctl-diff[data-part='root'] { --ctl-diff-bg: var(--ctl-color-danger); }
+.ctl-diff > [data-part='item'] { background: var(--ctl-diff-bg, var(--ctl-color-neutral)); }
+
+/* ── 7. SILENT · the READ sits in a root-keyed rule, so it dies too ────── */
+.ctl-inroot[data-part='root'] { --ctl-inroot-x: 3px; }
+.ctl-inroot[data-part='root'][data-state='open'] { margin: var(--ctl-inroot-x, 9px); }

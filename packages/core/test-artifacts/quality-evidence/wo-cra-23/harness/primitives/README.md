@@ -51,6 +51,50 @@ not a defect to schedule.
 
 ---
 
+## Orphan channels: class A disappears, class B lies
+
+```
+class A  reads the void       the declaration is severed · paint DISAPPEARS
+class B  reads the wrong one  the declaration is severed · paint STAYS and LIES
+```
+
+Same structural precondition — a property declared only in root-keyed rules,
+read from a rule that survives severance — differing on one bit: whether the
+read carries a fallback. `void-reads.mjs` censuses A, `fallback-reads.mjs`
+censuses B, and A's exclusion 2 is B's entry condition, so the two partition
+the population instead of overlapping.
+
+**35 class-B reads exist. 3 are reachable.**
+
+| | |
+|---|---|
+| structurally present | 35 across 13 families |
+| **reachable today** | **3** — `tag:250`, `tag:254`, `semantic-surface:257` |
+| latent | 32, in families that hardcode their root part |
+
+**Class B is not an independent backlog — it is the amplifier on the severance
+class.** A fallback fires only when the root-keyed declaration stops matching,
+and every discriminator here (`data-size`, `data-variant`) is stamped
+unconditionally, so the only trigger is a caller replacing the root
+`data-part`. Almost every family hardcodes it. The consequence is directional:
+**making a root part caller-replaceable drags that family's class-B rows live
+with it**, so any severance repair must sweep both classes for the family it
+touches. Both live Tag rows are downstream of the severance already adjudicated
+in task #26 and are fixed by that repair.
+
+The worst shape, and the reason severity is not a read count: `tag.css:250`
+reads `var(--_ds-tag-root-height, var(--ds-tag-md-height, 1.75rem))` from the
+close-button rule, while the five size rules each declare that channel to their
+own height. Severed, the close button caps against the **md** cell in every
+size — the pill loses its own `block-size` (class A) while the close button
+keeps a confident, wrong one (class B). Nothing looks broken.
+
+Severity is decided by comparing the fallback's **primary channel** against each
+declaration's, never by comparing declaration text: `var(--x, var(--y))` and
+`var(--x, 1rem)` differ as strings and resolve identically wherever `--x` is
+declared. It is still a floor on similarity, not a value proof, and every run
+prints that limit.
+
 ## The other three classes
 
 **Class 2 — style-prop drop.** Small and specific. `Input.Search` puts a
@@ -110,6 +154,7 @@ those names are gone.
 | `callsites.mjs` | Every JSX call site passing `data-part` to a component, across 5 corpora. `--control` runs 3 checks over 8 planted shapes. Writes `callsites.json`. |
 | `engine-pin.mjs` | Class 3: pinned engine props and single-engine imports. `--control` scans the planted fixture. |
 | `join.mjs` | Joins the rendered roots against the CSS and writes `FINDINGS.json`, deduped. |
+| `fallback-reads.mjs` | Class B: reads whose fallback fires on severance and delivers another cell. Carries the reachability gate. `--control` runs 7 shapes, 3 firing and 4 silent. Writes `FALLBACK-READS.json`. |
 | `void-reads.mjs` | The second-order class: a custom property declared inside a root-keyed rule and read from a rule that survives severance. `node void-reads.mjs <tree> <pkg-with-postcss>`; point the first argument at `control/void-reads` for the 7 planted shapes. |
 | `render-census.test.tsx` | The render harness. **Copy into `src/ui/primitives/tests/` to run, then delete** — the header carries the exact commands. |
 | `control/` | The three planted fixtures. They are the reason any zero here is reportable. |
@@ -190,6 +235,22 @@ The first join matched on the base class only, charging 27 rustic Input rules
 and 60 rustic Button rules to modern defects. Attribute by the explicit
 `--modern` / `--rustic` / `--classic` modifier first, then by the skin
 directory, then agnostic.
+
+**9b — "family X is a false positive" is a property of a READ, not of a family.**
+`list-toolbar` was handed to the class-B census as a known false positive of the
+class-A one — and it is, at `:101`, where the declaration and the read share the
+root-keyed rule at `:37` so severance takes both together. Nine **other**
+list-toolbar reads, from descendant rules that survive, are genuine class B.
+Dropping the family on the label would have dropped all nine. Check the row, not
+the name.
+
+**9c — an owner map that names a directory which does not exist prints as a fact about the code.**
+Three families in the reachability gate were mapped to paths that are not there,
+and the miss surfaced as `no root emission found` — indistinguishable from
+"this family hardcodes its root". It would have marked 13 rows unreachable
+without evidence. One of the three (`semantic-surface`) is in fact **severable**,
+so the error pointed the wrong way as well as being unfounded. Resolve owners by
+the scope class they stamp, and treat an unmapped owner as unknown, never as safe.
 
 **9 — a regex over quote pairs desynchronises on the first apostrophe in a comment.**
 Extracting scope classes with `/['"`]([^'"`]*)['"`]/g` returned **empty** for
