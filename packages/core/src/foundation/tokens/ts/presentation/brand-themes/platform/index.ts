@@ -667,7 +667,7 @@ export const rottayBrandTheme: BrandTheme = {
       fieldGeometry: {
         gap: 'var(--ds-spacing-2)',
         fontWeight: 'var(--ds-font-weight-normal)',
-        letterSpacing: 'var(--ds-letter-spacing-body)',
+        letterSpacing: 'var(--ds-letter-spacing-body, 0)',
         labelFontSize: 'var(--ds-font-size-xs)',
         labelFontWeight: 'var(--ds-font-weight-medium)',
         helperFontSize: 'var(--ds-font-size-xs)',
@@ -724,7 +724,7 @@ export const rottayBrandTheme: BrandTheme = {
        */
       buttonGeometry: {
         fontWeight: 'var(--ds-font-weight-medium)',
-        letterSpacing: 'var(--ds-letter-spacing-body)',
+        letterSpacing: 'var(--ds-letter-spacing-body, 0)',
         gap: 'calc(var(--ds-input-md-height) * 0.18)',
         xs: {
           height: 'var(--ds-input-xs-height)',
@@ -886,7 +886,7 @@ export const rottayBrandTheme: BrandTheme = {
        * columns, not as prose; three quarters of the eyebrow keeps the channel and
        * closes the letters up.
        */
-      headerLetterSpacing: 'calc(var(--ds-text-eyebrow-letter-spacing) * 0.75)',
+      headerLetterSpacing: 'calc(var(--ds-text-eyebrow-letter-spacing, 0.08em) * 0.75)',
       /** No sheen. The baseline gradient is transparent-to-transparent anyway. */
       sheen: 'none',
     },
