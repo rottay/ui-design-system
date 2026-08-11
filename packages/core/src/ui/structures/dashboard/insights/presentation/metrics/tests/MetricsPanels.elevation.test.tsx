@@ -45,6 +45,7 @@
  */
 
 import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 
 import React from 'react';
 import postcss, { type Root } from 'postcss';
@@ -160,7 +161,10 @@ describe('metrics panel elevation', () => {
     // Read from SOURCE, not from a rendered node: the shim drops this exact
     // value shape (see the file header), so the DOM cannot answer here.
     const source = readFileSync(
-      new URL(`../${name.replace('metrics-', '')}/index.tsx`, import.meta.url),
+      resolve(
+        process.cwd(),
+        `src/ui/structures/dashboard/insights/presentation/metrics/${name.replace('metrics-', '')}/index.tsx`,
+      ),
       'utf8',
     );
     expect(source).toContain("fontSize: 'var(--_ds-metric-value-size, 28px)'");
@@ -208,11 +212,12 @@ describe('metrics panel elevation', () => {
     el.style.setProperty('font-size', '28px');
     expect(el.style.getPropertyValue('font-size'), 'a plain length is kept').toBe('28px');
 
+    el.setAttribute('style', '');
     el.style.setProperty('font-size', 'var(--x,28px)');
     expect(el.style.getPropertyValue('font-size'), 'no comma-space: kept').not.toBe('');
 
     for (const dropped of ['var(--x, 28px)', 'clamp(1rem, 2vw, 2rem)', 'min(28px, 18cqi)']) {
-      el.style.setProperty('font-size', '28px');
+      el.setAttribute('style', '');
       el.style.setProperty('font-size', dropped);
       expect(
         el.style.getPropertyValue('font-size'),
@@ -220,5 +225,13 @@ describe('metrics panel elevation', () => {
           'metrics tests may assert them against a rendered node instead of against source.',
       ).toBe('');
     }
+
+    // And the rejection is not a reset: the shim leaves whatever was there
+    // before, so a probe that does not clear first reads a STALE value and
+    // concludes the opposite. That is how this defect first read as real.
+    el.setAttribute('style', '');
+    el.style.setProperty('font-size', '28px');
+    el.style.setProperty('font-size', 'var(--x, 99px)');
+    expect(el.style.getPropertyValue('font-size'), 'rejection keeps the prior value').toBe('28px');
   });
 });

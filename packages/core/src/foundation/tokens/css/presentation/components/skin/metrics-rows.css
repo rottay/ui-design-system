@@ -28,7 +28,9 @@
  * quantitative meter remains the sole bar-shaped data visualization.
  *
  * ENGINE REACH (measured 2026-08-11 by rendering all three engines, not by
- * reading source): `Text` forwards a caller's `data-part` under MODERN only —
+ * reading source; an earlier companion claim about `Text` dropping a `var()`
+ * `fontSize` was an artefact of the test DOM and is withdrawn — this one is
+ * about ATTRIBUTES and stands): `Text` forwards a caller's `data-part` under MODERN only —
  * classic and rustic stamp their own — so every `Text`-borne part rule here
  * (`title`, `live-label`, `metric-label`, `metric-value`, `metric-change`)
  * is live under modern and inert under the other two. The rules are correct
@@ -218,13 +220,16 @@
    falls under the title instead of squeezing it. The row keeps its icon, its
    label, its trend and its figure: nothing is hidden, the measure is just
    spent differently.
-   The FIGURE deliberately does not step here. Its size is an inline number on
-   a composed `Text`, and `Text` drops an inline `fontSize` whose value is a
-   `var()` string (measured, all three engines), so there is no channel a
-   container query can write. Writing one anyway would be a declaration that
-   reads as done and paints nothing — and would flip live the day the
-   primitive is repaired, unreviewed. Finding reported; not worked around. */
+   The figure steps through `--_ds-metric-value-size`, which the engine reads
+   inline as `var(--_ds-metric-value-size, 28px)` — unset it is byte-identical
+   to the previous literal. No unit test can observe the result: happy-dom
+   drops an inline length containing a comma-space inside a function, so the
+   channel is asserted from the engine source and from this file, never from
+   a rendered node. */
 @container ds-metrics-rows (inline-size < 20rem) {
+  .ds-metrics-rows.ds-metrics-rows[data-part='root'] {
+    --_ds-metric-value-size: 22px;
+  }
   .ds-metrics-rows.ds-metrics-rows [data-part='header'] {
     flex-wrap: wrap;
     row-gap: var(--ds-spacing-2, 8px);
