@@ -104,17 +104,43 @@ a document states about itself is enforced by whoever last edited it. This comma
 rest of the file is untouched byte-for-byte. The rule is enforced **on the intent**, before rendering
 — once a figure is in the document, nothing can tell whether it was derived or typed.
 
+#### Volatility — why `--check` is satisfiable
+
+Every derived fact carries a `volatility`, and it decides whether the fact may be written into the
+document at all.
+
+| | Meaning | Where it goes |
+|---|---|---|
+| **`pinned`** | changes only when somebody changes what §4 is *about* — ledger counts, `singleOwner.entries`, `plan.lanes` | rendered into the body, **byte-verified, full teeth** |
+| **`provenance`** | changes as a side effect of ordinary work — `head.*`, `tree.dirty`, `universe.files`, `plan.coveredFiles` | **never** in the body; HEAD lives in the stamp, the rest is reported live by `--check` |
+
+The first version pinned `head.short` into a byte-verified body. Committing the render moved HEAD
+past the value the render contained, so the document was stale the instant it was committed and no
+sequence of operations could make the check green again — `P5`, `P7` and `P8` all fired, all for the
+same reason. The cut is not "HEAD-sensitive": `universe.files` and `plan.coveredFiles` move whenever
+a lane does its job, and pinning them puts the check back where it started one commit later.
+
+Removing them does not weaken the check — it is what lets the check be **read**. While §4 was
+permanently red over HEAD drift, a real `ledger.families` disagreement was invisible underneath it.
+
+`P5` is gone as a violation. "Has HEAD moved?" was only ever a *proxy* for "is this document still
+true?", and `P7`/`P8` answer that directly by re-deriving every pinned fact and byte-comparing. The
+drift is still **reported**, with its distance and whether the file itself moved, so the signal
+survives without the unsatisfiable predicate.
+
 | Rule | What it catches |
 |---|---|
-| `P1-typed-figure` | a sha, or any integer equal to a figure the derivation just produced. Escape via `allowedLiterals`, each entry carrying a written reason |
+| `P1-typed-figure` | a sha, or any integer equal to a **pinned** figure. Escape via `allowedLiterals`, each entry carrying a written reason |
 | `P2-unknown-derivation` | a `{{derived.…}}` placeholder nothing produces |
 | `P4-unstamped` | §4 was hand-written, not transitioned |
-| `P5-head-moved` | §4 was written against a different HEAD, so its figures are stale |
 | `P6-intent-drift` | the intent changed and §4 was not re-rendered |
-| `P7`/`P8` | a fresh render disagrees with the file — hand-edited, or a figure no longer matches the repository |
+| `P7`/`P8` | a fresh render disagrees with the file — hand-edited, or a **pinned** figure no longer matches the repository |
+| `P9-provenance-pinned` | a provenance fact listed in `derivedFacts`, or interpolated into prose. **This is the guard that stops the defect returning**, and it closes both paths |
 
 Only strings the renderer actually reads are scanned for typed figures; a field that never reaches
-the document cannot put a figure in it.
+the document cannot put a figure in it. `P1` compares against pinned figures only — comparing prose
+against a volatile value would make this rule's verdict depend on unrelated repository activity,
+which is the same disease.
 
 ---
 

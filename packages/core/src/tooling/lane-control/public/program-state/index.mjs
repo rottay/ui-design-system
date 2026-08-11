@@ -35,7 +35,7 @@
  */
 import { createHash } from 'node:crypto';
 import { readFileSync, writeFileSync } from 'node:fs';
-import { headMeta, isDirty, repoRoot } from '../../foundation/git/index.mjs';
+import { distanceFrom, headMeta, isDirty, pathChangedSince, repoRoot } from '../../foundation/git/index.mjs';
 import { loadContext, readPlan, resolveLane } from '../../composition/plan/index.mjs';
 import { buildSingleOwnerSet } from '../../runtime/shared-files/index.mjs';
 import { conclude, createFindings, EXIT, parseArgs } from '../../foundation/report/index.mjs';
@@ -50,52 +50,112 @@ function digest(text) {
 }
 
 /**
- * Everything §4 is allowed to state as a figure. Each entry carries the
- * command that produces it, so the rendered table is auditable line by line
- * without trusting this file.
+ * VOLATILITY — the field that decides whether a figure may be written INTO the
+ * document, and the reason `--check` is satisfiable at all.
+ *
+ * The first version of this command pinned `head.short` into the rendered body
+ * and byte-verified the body. Committing the render moved HEAD past the value
+ * the render contained, so the document was stale the instant it was committed
+ * and no sequence of operations could make the check green again. P5, P7 and P8
+ * all fired, and all three were the same defect: a value that changes without
+ * anybody deciding anything had been frozen into a document that claims to
+ * state decisions.
+ *
+ * The cut is not "HEAD-sensitive" — it is:
+ *
+ *   PINNED      changes only when somebody changes what §4 is ABOUT.
+ *               Rendered into the body, byte-verified, full teeth. If one of
+ *               these moves, §4 genuinely needs rewriting and red is correct.
+ *
+ *   PROVENANCE  changes as a side effect of ordinary work — every commit, every
+ *               new file, every lane that writes anything. NEVER rendered into
+ *               the body. HEAD identity lives in the stamp, where it records
+ *               what the render was produced against rather than making a claim
+ *               about now; the rest is reported live by the check.
+ *
+ * `universe.files` and `plan.coveredFiles` are provenance for the same reason
+ * `head.short` is: they move when a lane does its job. Pinning them would put
+ * the check back where it started, one commit later.
+ *
+ * Removing these from the body does not weaken the check — it is what lets the
+ * check be READ. While §4 was permanently red over HEAD drift, a real
+ * `ledger.families` disagreement was invisible underneath it.
  */
+export const PINNED = 'pinned';
+export const PROVENANCE = 'provenance';
+
 export function derive({ root, planPath }) {
   const head = headMeta(root);
   const context = loadContext({ root });
   const ledger = context.rows.ledger;
 
   const derived = {
-    'head.short': { value: head.short, how: 'git rev-parse --short HEAD' },
-    'head.committedAt': { value: head.committedAt, how: 'git log -1 --format=%cI' },
-    'head.subject': { value: head.subject, how: 'git log -1 --format=%s' },
-    'tree.dirty': { value: isDirty(root) ? 'yes' : 'no', how: 'git status --porcelain' },
-    'ledger.families': { value: context.rows.familyRows.length, how: 'family-ledger.json rows.length' },
-    'ledger.syntheticRows': { value: context.rows.syntheticRows.length, how: 'synthetic-rows.json rows.length' },
+    // Provenance — never pinned into the body.
+    'head.short': { value: head.short, how: 'git rev-parse --short HEAD', volatility: PROVENANCE },
+    'head.committedAt': { value: head.committedAt, how: 'git log -1 --format=%cI', volatility: PROVENANCE },
+    'head.subject': { value: head.subject, how: 'git log -1 --format=%s', volatility: PROVENANCE },
+    'tree.dirty': { value: isDirty(root) ? 'yes' : 'no', how: 'git status --porcelain', volatility: PROVENANCE },
+    'universe.files': {
+      value: context.universe.length,
+      how: 'git ls-files --cached --others --exclude-standard',
+      volatility: PROVENANCE,
+    },
+
+    // Pinned — a claim about the programme, byte-verified on every check.
+    'ledger.families': { value: context.rows.familyRows.length, how: 'family-ledger.json rows.length', volatility: PINNED },
+    'ledger.syntheticRows': {
+      value: context.rows.syntheticRows.length,
+      how: 'synthetic-rows.json rows.length',
+      volatility: PINNED,
+    },
     'ledger.sharedSkinFiles': {
       value: context.rows.derivedSharedSkinFiles.size,
       how: 're-derived from rows[].skinFiles: files claimed by more than one family',
+      volatility: PINNED,
     },
-    'ledger.driftClean': { value: context.rows.drift.clean ? 'yes' : 'no', how: 'derived sharedSkinFiles vs the recorded map' },
+    'ledger.driftClean': {
+      value: context.rows.drift.clean ? 'yes' : 'no',
+      how: 'derived sharedSkinFiles vs the recorded map',
+      volatility: PINNED,
+    },
     'singleOwner.entries': {
       value: buildSingleOwnerSet(context.rows.derivedSharedSkinFiles).length,
       how: 'seeded single-owner regions + files derived as multi-owner from the ledger',
+      volatility: PINNED,
     },
-    'universe.files': { value: context.universe.length, how: 'git ls-files --cached --others --exclude-standard' },
   };
 
   for (const [state, count] of Object.entries(ledger.counts?.byState ?? {})) {
-    derived[`ledger.byState.${state}`] = { value: count, how: `family-ledger.json counts.byState.${state}` };
+    derived[`ledger.byState.${state}`] = {
+      value: count,
+      how: `family-ledger.json counts.byState.${state}`,
+      volatility: PINNED,
+    };
   }
   for (const [layer, count] of Object.entries(ledger.counts?.byLayer ?? {})) {
-    derived[`ledger.byLayer.${layer}`] = { value: count, how: `family-ledger.json counts.byLayer.${layer}` };
+    derived[`ledger.byLayer.${layer}`] = {
+      value: count,
+      how: `family-ledger.json counts.byLayer.${layer}`,
+      volatility: PINNED,
+    };
   }
 
   if (planPath) {
     const plan = readPlan(`${root}/${planPath}`);
     const lanes = plan.lanes.map((lane) => resolveLane(lane, context));
-    derived['plan.lanes'] = { value: lanes.length, how: `${planPath} lanes.length` };
+    derived['plan.lanes'] = { value: lanes.length, how: `${planPath} lanes.length`, volatility: PINNED };
     derived['plan.coveredFiles'] = {
       value: lanes.reduce((total, lane) => total + lane.files.length, 0),
       how: `${planPath} — files resolved by every lane's writeSet`,
+      volatility: PROVENANCE,
     };
   }
 
   return derived;
+}
+
+export function isProvenance(derived, key) {
+  return derived[key]?.volatility === PROVENANCE;
 }
 
 const SHA_SHAPED = /\b[0-9a-f]{7,40}\b/g;
@@ -134,8 +194,18 @@ export function collectRenderedStrings(intent) {
 export function auditIntentForTypedFigures(intent, derived) {
   const findings = [];
   const allowed = new Map((intent.allowedLiterals ?? []).map((entry) => [String(entry.value), entry.reason ?? '']));
+  // ONLY PINNED FIGURES PARTICIPATE.
+  //
+  // A provenance value is volatile, so comparing prose against it makes this
+  // rule's verdict depend on unrelated repository activity: the same intent
+  // passes this afternoon and fails after somebody adds a file. A check whose
+  // answer flips with work it does not describe is the disease the volatility
+  // model exists to cure, and it must not be reintroduced through the back
+  // door of the typed-figure audit. Shas remain refused unconditionally below,
+  // and P9 already stops a provenance value being placeheld into prose.
   const derivedNumbers = new Map();
   for (const [key, entry] of Object.entries(derived)) {
+    if (entry.volatility === PROVENANCE) continue;
     if (typeof entry.value === 'number') derivedNumbers.set(entry.value, key);
   }
 
@@ -170,11 +240,18 @@ export function auditIntentForTypedFigures(intent, derived) {
   return findings;
 }
 
-function interpolate(text, derived, missing) {
+function interpolate(text, derived, missing, pinnedProvenance) {
   return String(text).replace(PLACEHOLDER, (token) => {
     const key = token.slice('{{derived.'.length, -2);
     if (!(key in derived)) {
       missing.push(key);
+      return token;
+    }
+    if (isProvenance(derived, key)) {
+      // Interpolating a provenance value into prose freezes it into the body
+      // just as surely as listing it in derivedFacts. This is the hole the
+      // first version fell through, so it is closed on both paths.
+      pinnedProvenance.push(key);
       return token;
     }
     return String(derived[key].value);
@@ -184,7 +261,8 @@ function interpolate(text, derived, missing) {
 /** Render §4 exactly. The stamp is inserted separately, after digesting. */
 export function renderBody(intent, derived) {
   const missing = [];
-  const fill = (text) => interpolate(text, derived, missing);
+  const pinnedProvenance = [];
+  const fill = (text) => interpolate(text, derived, missing, pinnedProvenance);
   const lines = [];
 
   lines.push(SECTION_HEADING);
@@ -221,6 +299,11 @@ export function renderBody(intent, derived) {
   lines.push('');
   lines.push('*Produced by the command that wrote this section. Never typed, never edited.*');
   lines.push('');
+  lines.push('*These figures change only when somebody changes what this section is about, so a');
+  lines.push('disagreement between them and the repository is a real finding. Facts that move with');
+  lines.push('ordinary work — HEAD, the file count, what the lanes have written — are deliberately');
+  lines.push('absent: pinning them here would make this document stale the moment it was committed.*');
+  lines.push('');
   lines.push('| Fact | Value | Derivation |');
   lines.push('|---|---|---|');
   for (const key of intent.derivedFacts ?? []) {
@@ -228,11 +311,15 @@ export function renderBody(intent, derived) {
       missing.push(key);
       continue;
     }
+    if (isProvenance(derived, key)) {
+      pinnedProvenance.push(key);
+      continue;
+    }
     lines.push(`| \`${key}\` | ${derived[key].value} | ${derived[key].how} |`);
   }
   lines.push('');
 
-  return { body: `${lines.join('\n')}\n`, missing };
+  return { body: `${lines.join('\n')}\n`, missing, pinnedProvenance };
 }
 
 export function buildStamp({ head, writtenAt, intentDigest, renderDigest }) {
@@ -274,6 +361,28 @@ function loadIntent(path) {
   return { intent: JSON.parse(raw), digest: digest(raw) };
 }
 
+/**
+ * What the coordinator loses when HEAD drift stops being a violation: the
+ * distance, and whether the file itself moved with it. Both are reported so
+ * the signal survives without the unsatisfiable predicate.
+ */
+function describeDrift(root, stamp, head, targetPath) {
+  if (stamp.head === head) return [`written against HEAD ${stamp.head}, which is still HEAD`];
+  const distance = distanceFrom(root, stamp.head);
+  const touched = pathChangedSince(root, stamp.head, targetPath);
+  const lines = [
+    distance === null
+      ? `written against HEAD ${stamp.head}, which this clone cannot resolve (amended, rebased, or never here)`
+      : `written against HEAD ${stamp.head}; HEAD is now ${head} — ${distance} commit(s) since`,
+  ];
+  if (touched === true) {
+    lines.push(`${targetPath} has itself changed in a commit since the stamp — verified below by re-derivation, not by trust`);
+  } else if (touched === false) {
+    lines.push(`${targetPath} has not changed in any commit since the stamp`);
+  }
+  return lines;
+}
+
 function run(argv) {
   const { flags } = parseArgs(argv);
   const mode = flags.get('write') ? 'write' : flags.get('check') ? 'check' : null;
@@ -303,12 +412,20 @@ function run(argv) {
   }
 
   const { add, findings } = createFindings();
+  const provenanceReport = [];
 
   for (const finding of auditIntentForTypedFigures(intent, derived)) add(finding);
 
-  const { body, missing } = renderBody(intent, derived);
+  const { body, missing, pinnedProvenance } = renderBody(intent, derived);
   for (const key of [...new Set(missing)]) {
     add({ rule: 'P2-unknown-derivation', message: `the intent references {{derived.${key}}}, which no derivation produces` });
+  }
+  for (const key of [...new Set(pinnedProvenance)]) {
+    add({
+      rule: 'P9-provenance-pinned',
+      message: `"${key}" is a PROVENANCE fact and may not be written into §4. It moves with ordinary work, so pinning it would make this document stale the moment it is committed — which is exactly the defect that made --check unsatisfiable.`,
+      details: [`${key} is reported live by --check instead; HEAD identity is recorded in the stamp as provenance.`],
+    });
   }
 
   const split = splitSection(document);
@@ -346,12 +463,18 @@ function run(argv) {
       message: `§4 carries no stamp: it was hand-written rather than transitioned. Run --write to make it a command output.`,
     });
   } else {
-    if (stamp.head !== head) {
-      add({
-        rule: 'P5-head-moved',
-        message: `§4 was written against HEAD ${stamp.head}; HEAD is now ${head}. Every derived figure in it is stale until it is re-written.`,
-      });
-    }
+    // HEAD DRIFT IS REPORTED, NOT REFUSED.
+    //
+    // It was a violation in the first version, and it made the check
+    // unsatisfiable: committing the render moves HEAD past the stamp, so the
+    // file was stale the instant it was committed. It was also the wrong
+    // instrument. "Has HEAD moved?" is a PROXY for "is this document still
+    // true?", and P7/P8 answer that question directly by re-deriving every
+    // pinned fact and byte-comparing. With the volatile values out of the
+    // body, the proxy reports nothing the direct measurement misses — it only
+    // buried it. So the drift is printed, with its distance, and the
+    // coordinator decides what it means.
+    provenanceReport.push(...describeDrift(root, stamp, head, targetPath));
     if (stamp.intent !== intentDigest) {
       add({
         rule: 'P6-intent-drift',
@@ -381,6 +504,15 @@ function run(argv) {
         `fresh render: ${JSON.stringify(expectedLines[first] ?? '<end of section>')}`,
       ],
     });
+  }
+
+  if (!flags.get('json')) {
+    console.log('provenance (reported, never refused):');
+    for (const entry of provenanceReport) console.log(`  · ${entry}`);
+    for (const [key, entry] of Object.entries(derived)) {
+      if (entry.volatility !== PROVENANCE) continue;
+      console.log(`  · ${key} = ${entry.value}  (${entry.how})`);
+    }
   }
 
   return conclude({

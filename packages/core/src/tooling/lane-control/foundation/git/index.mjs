@@ -125,3 +125,26 @@ export function changedPaths(root, { mode = 'worktree', range = null } = {}) {
 export function isDirty(root) {
   return git(['status', '--porcelain=v1'], root).trim().length > 0;
 }
+
+/**
+ * How far the tree has moved past a commit, and whether one path moved with
+ * it. Both degrade to null rather than throwing: the recorded commit may have
+ * been amended, rebased away, or never have existed in this clone, and a
+ * provenance report that crashes is worse than one that says "unknown".
+ */
+export function distanceFrom(root, sha) {
+  try {
+    return Number(git(['rev-list', '--count', `${sha}..HEAD`], root).trim());
+  } catch {
+    return null;
+  }
+}
+
+export function pathChangedSince(root, sha, path) {
+  try {
+    const log = git(['log', '--oneline', `${sha}..HEAD`, '--', path], root).trim();
+    return log.length > 0;
+  } catch {
+    return null;
+  }
+}

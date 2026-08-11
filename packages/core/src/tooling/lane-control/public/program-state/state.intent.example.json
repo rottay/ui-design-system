@@ -47,18 +47,14 @@
     "`writeRoot` is enforced by `write-set-intersection`; a batch is admissible only when it passes. Disjointness is no longer prose.",
     "The lane table's model column is law from §1.2: a lane that cannot complete its reason is missing its pre-pass and must not be delegated."
   ],
+  "_derivedFactsNote": "PINNED facts only. head.*, tree.dirty, universe.files and plan.coveredFiles are PROVENANCE — they move with ordinary work, so the writer refuses to pin them and reports them live instead. Listing one here is a P9 violation, which is the guard that stops --check becoming unsatisfiable again.",
   "derivedFacts": [
-    "head.short",
-    "head.committedAt",
-    "tree.dirty",
     "ledger.families",
     "ledger.syntheticRows",
     "ledger.sharedSkinFiles",
     "ledger.driftClean",
     "singleOwner.entries",
-    "universe.files",
-    "plan.lanes",
-    "plan.coveredFiles"
+    "plan.lanes"
   ],
   "allowedLiterals": [
     {

@@ -168,7 +168,7 @@ and a static per-vertical resolution check for any substitution.
 
 <!-- lane-control:program-state v1 — DO NOT EDIT BY HAND. Rewrite it with:
      node packages/core/src/tooling/lane-control/program-state/index.mjs --write --intent <intent.json>
-     head=c0bd3ca6a written=2026-08-10T23:47:31.317Z intent=3ddff5c387244f46 render=faecf1eff1095f5d -->
+     head=7f1735923 written=2026-08-11T00:00:59.142Z intent=5477bd8baa12f764 render=5a716dbf91e54cdd -->
 
 *Everything in this section is intent. Anything derivable is derived by command, not typed here.*
 
@@ -202,19 +202,19 @@ A lane that cannot complete its model reason is missing its pre-pass and must no
 
 *Produced by the command that wrote this section. Never typed, never edited.*
 
+*These figures change only when somebody changes what this section is about, so a
+disagreement between them and the repository is a real finding. Facts that move with
+ordinary work — HEAD, the file count, what the lanes have written — are deliberately
+absent: pinning them here would make this document stale the moment it was committed.*
+
 | Fact | Value | Derivation |
 |---|---|---|
-| `head.short` | c0bd3ca6a | git rev-parse --short HEAD |
-| `head.committedAt` | 2026-08-10T19:34:02-04:00 | git log -1 --format=%cI |
-| `tree.dirty` | yes | git status --porcelain |
 | `ledger.families` | 252 | family-ledger.json rows.length |
 | `ledger.syntheticRows` | 4 | synthetic-rows.json rows.length |
 | `ledger.sharedSkinFiles` | 35 | re-derived from rows[].skinFiles: files claimed by more than one family |
 | `ledger.driftClean` | yes | derived sharedSkinFiles vs the recorded map |
 | `singleOwner.entries` | 39 | seeded single-owner regions + files derived as multi-owner from the ledger |
-| `universe.files` | 6095 | git ls-files --cached --others --exclude-standard |
 | `plan.lanes` | 6 | packages/core/src/tooling/lane-control/composition/plan/examples/plan.example.json lanes.length |
-| `plan.coveredFiles` | 129 | packages/core/src/tooling/lane-control/composition/plan/examples/plan.example.json — files resolved by every lane's writeSet |
 
 
 ## 5. DECISIONS TAKEN
