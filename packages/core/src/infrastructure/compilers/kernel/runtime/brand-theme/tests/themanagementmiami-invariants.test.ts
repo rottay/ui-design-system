@@ -97,22 +97,24 @@ const TIER1_DIVERGENCE_CHANNELS: readonly DivergenceChannel[] = [
     name: "1. typography: heading letter-spacing (serif tracking discipline)",
     extract: (c) => c.cssVariables["--ds-letter-spacing-heading"],
   },
-  // 2. Radius — deco-crisp 4/6/8/12 against bithire's 6/8/10/14.
+  // 2. Radius — deco-crisp 4/6/8/12 against bithire's 6/8/10/14, compared at the
+  // dial operand each theme emits (`-base`), which is where the authored corner
+  // geometry now lives.
   {
     name: "2. radius: sm step",
-    extract: (c) => c.cssVariables["--ds-radius-sm"],
+    extract: (c) => c.cssVariables["--ds-radius-sm-base"],
   },
   {
     name: "2. radius: md step",
-    extract: (c) => c.cssVariables["--ds-radius-md"],
+    extract: (c) => c.cssVariables["--ds-radius-md-base"],
   },
   {
     name: "2. radius: lg step",
-    extract: (c) => c.cssVariables["--ds-radius-lg"],
+    extract: (c) => c.cssVariables["--ds-radius-lg-base"],
   },
   {
     name: "2. radius: xl step",
-    extract: (c) => c.cssVariables["--ds-radius-xl"],
+    extract: (c) => c.cssVariables["--ds-radius-xl-base"],
   },
   // 3. Motion temperament — spring-settled slide-up against bithire's linear fade.
   {

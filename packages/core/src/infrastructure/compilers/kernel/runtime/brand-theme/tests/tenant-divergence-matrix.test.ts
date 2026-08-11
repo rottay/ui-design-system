@@ -84,11 +84,11 @@ const BOUNDED_CHANNELS: readonly string[] = [
   // colour
   '--ds-color-primary',
   '--ds-button-primary-bg',
-  // corner
-  '--ds-radius-sm',
-  '--ds-radius-md',
-  '--ds-radius-lg',
-  '--ds-radius-xl',
+  // corner — the dial operand, which is where authored corner geometry lives
+  '--ds-radius-sm-base',
+  '--ds-radius-md-base',
+  '--ds-radius-lg-base',
+  '--ds-radius-xl-base',
   // type
   '--ds-font-family-base',
   '--ds-font-family-heading',
@@ -131,7 +131,7 @@ describe('two tenants of the bithire vertical diverge on every bounded channel',
   it('the divergence is not a hue rotation', () => {
     // Colour alone is the cheap kind of different. A customer feels the corner
     // radius, the typeface and the shadow before they name the hue.
-    expect(themanagement.cssVariables['--ds-radius-md']).not.toBe(bithire.cssVariables['--ds-radius-md']);
+    expect(themanagement.cssVariables['--ds-radius-md-base']).not.toBe(bithire.cssVariables['--ds-radius-md-base']);
     expect(themanagement.cssVariables['--ds-font-family-heading']).not.toBe(
       bithire.cssVariables['--ds-font-family-heading']
     );

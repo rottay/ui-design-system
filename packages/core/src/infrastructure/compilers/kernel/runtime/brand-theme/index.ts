@@ -537,6 +537,9 @@ function setExtendedPaletteVariables(
   }
 }
 
+/** The radius steps themes/default.css routes through the tenant dial. */
+const RADIUS_DIAL_STEPS = ["sm", "md", "lg", "xl"] as const;
+
 function brandThemeToCssVariables(bt: BrandTheme): Record<string, string> {
   // C1b expressive expansion — resolved HERE (not in compileBrandTheme) so
   // compileModeBlocks, which re-invokes this function per authored mode
@@ -744,10 +747,29 @@ function brandThemeToCssVariables(bt: BrandTheme): Record<string, string> {
       semanticSurfaceRolesToCssVariables(su.surfaceRoles ?? su.materials)
     );
     if (su.borderRadius) {
-      if (su.borderRadius.sm) vars["--ds-radius-sm"] = su.borderRadius.sm;
-      if (su.borderRadius.md) vars["--ds-radius-md"] = su.borderRadius.md;
-      if (su.borderRadius.lg) vars["--ds-radius-lg"] = su.borderRadius.lg;
-      if (su.borderRadius.xl) vars["--ds-radius-xl"] = su.borderRadius.xl;
+      // sm/md/lg/xl are emitted as the `-base` OPERANDS of the foundation dial,
+      // never as resolved radii. themes/default.css computes each step as
+      // `calc(base * var(--ds-radius-scale, 1))`, and a flat `--ds-radius-*` at
+      // tenant scope replaces that calc entirely — sanctioned for a Pro tenant's
+      // token set ("explicit beats dial"), but when the static compiler takes
+      // that path for every code-owned vertical the dial can never move them.
+      //
+      // The divisor is the scale THIS theme emits, so the foundation calc
+      // reproduces the authored value at today's dial while leaving the dial
+      // live. The division is expressed in CSS rather than evaluated here: the
+      // browser then multiplies and divides in one pass, which is exact for any
+      // scale instead of correct only for the ones that divide evenly.
+      const radiusScale = Number(vars["--ds-radius-scale"] ?? "1");
+      const dialed =
+        Number.isFinite(radiusScale) && radiusScale > 0 && radiusScale !== 1;
+      for (const step of RADIUS_DIAL_STEPS) {
+        const authored = su.borderRadius[step];
+        if (!authored) continue;
+        vars[`--ds-radius-${step}-base`] = dialed
+          ? `calc(${authored} / ${radiusScale})`
+          : authored;
+      }
+      // `full` is a pill radius, outside the dial ramp (themes/default.css).
       if (su.borderRadius.full) vars["--ds-radius-full"] = su.borderRadius.full;
     }
     if (su.shadows) {

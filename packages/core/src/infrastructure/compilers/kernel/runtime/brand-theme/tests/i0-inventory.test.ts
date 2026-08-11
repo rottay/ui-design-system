@@ -798,11 +798,26 @@ describe("H3 contract: bithire", () => {
     const lightBlock = darkIdx > 0 ? artifact.slice(0, darkIdx) : artifact;
     const dark = modeEffective(artifact, "dark");
 
-    it("light: radius scale sm/md/lg/xl", () => {
-      expect(lightBlock).toContain("--ds-radius-sm: 7px");
-      expect(lightBlock).toContain("--ds-radius-md: 10px");
-      expect(lightBlock).toContain("--ds-radius-lg: 14px");
-      expect(lightBlock).toContain("--ds-radius-xl: 18px");
+    it("light: radius dial operands sm/md/lg/xl", () => {
+      // The vertical emits the `-base` OPERANDS of the foundation dial, not the
+      // resolved radii. themes/default.css computes
+      // `calc(base * var(--ds-radius-scale, 1))`, so dividing the authored value
+      // by this theme's scale reproduces 7/10/14/18 today while leaving the dial
+      // able to move them. A flat `--ds-radius-*` here would replace that calc.
+      const authored = bithireBrandTheme.surfaces!.borderRadius!;
+      expect(lightBlock).toContain("--ds-radius-scale: 1.25");
+      expect(lightBlock).toContain(
+        `--ds-radius-sm-base: calc(${authored.sm} / 1.25)`
+      );
+      expect(lightBlock).toContain(
+        `--ds-radius-md-base: calc(${authored.md} / 1.25)`
+      );
+      expect(lightBlock).toContain(
+        `--ds-radius-lg-base: calc(${authored.lg} / 1.25)`
+      );
+      expect(lightBlock).toContain(
+        `--ds-radius-xl-base: calc(${authored.xl} / 1.25)`
+      );
     });
     it("light: shadow scale matches authored source", () => {
       const authored = bithireBrandTheme.surfaces!.shadows!;
@@ -814,10 +829,10 @@ describe("H3 contract: bithire", () => {
     it("dark: radius scale matches light", () => {
       // Shape does not change with mode, so the overlay restates none of it and
       // dark inherits the base scale. Asserting inheritance is the point.
-      expect(dark("--ds-radius-sm")).toBe("7px");
-      expect(dark("--ds-radius-md")).toBe("10px");
-      expect(dark("--ds-radius-lg")).toBe("14px");
-      expect(dark("--ds-radius-xl")).toBe("18px");
+      expect(dark("--ds-radius-sm-base")).toBe("calc(7px / 1.25)");
+      expect(dark("--ds-radius-md-base")).toBe("calc(10px / 1.25)");
+      expect(dark("--ds-radius-lg-base")).toBe("calc(14px / 1.25)");
+      expect(dark("--ds-radius-xl-base")).toBe("calc(18px / 1.25)");
     });
     it("dark: shadow scale uses the authored dark elevation set", () => {
       // Elevation DOES change with mode: dark carries its own compact set on
