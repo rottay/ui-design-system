@@ -1891,10 +1891,19 @@ class B   reads the wrong thing   the fallback fires · the paint STAYS and lies
 
 `void-reads.mjs` counts A only, deliberately: it excludes any read carrying a fallback, because
 severance makes the property undeclared and the fallback correctly fires. That exclusion is sound
-about validity and blind about meaning. `tag.css:252` reads
-`var(--_ds-tag-root-height, var(--ds-tag-md-height, 1.75rem))`, and `--_ds-tag-root-height` is
-declared as `--ds-tag-xs-height` inside the root-keyed xs rule. Severed, **an `xs` tag renders at
-`md` height**. Nothing looks broken. The chip is there, painted, the wrong size.
+about validity and blind about meaning.
+
+**CORRECTED — I stated the tag case wrong twice and a lane caught it by reading the selector.** I
+wrote "an `xs` tag renders at `md` height". It does not. `tag.css:69` declares the pill's own
+`block-size: var(--ds-tag-xs-height)` inside the root-keyed xs rule, so severance **deletes the
+pill's height outright** — class A. The rule that survives and lies is
+`tag.css:240`, `… > [data-part='close'][data-part='close']`: the close button caps against
+`calc(var(--_ds-tag-root-height, var(--ds-tag-md-height, 1.75rem)) - 0.125rem)`, so at every one of
+the five sizes it sizes itself against the **`md`** cell.
+
+So the two classes land on the same family at once: the pill loses its height entirely while the
+close button keeps a confident, wrong one. That is a worse picture than the one I described and a
+sharper argument for B, and it was only visible to whoever read *which rule* the fallback sits in.
 
 **B is the harder class to find and the more expensive to leave**, because A announces itself as
 missing paint and B looks like a design decision. The damage in B is not the orphaning — it is *what
@@ -1919,10 +1928,40 @@ broke mine, but by accident — a global regex matches every `var(` including th
 accidental correctness is not a property.** Nothing in its control set holds it, so the next refactor
 removes it with every test still green.
 
-The reconciliation also produced one confirmed false positive on each side, which is the usual shape:
-`list-toolbar` declares and reads `--ds-list-toolbar-radius-shell` inside the same root-keyed rule
-(`:46` and `:101` both under the selector at `:37`), so both sides die together; and the narrower
-census missed `data-table` and `toast` inside its own denominator.
+**"Family X is a false positive" is a property of a READING, not a family.** I checked
+`--ds-list-toolbar-radius-shell`, found its declaration and its reads inside the same root-keyed rule
+(`:46` and `:101` both under the selector at `:37`), and struck the whole family. Two lanes
+independently corrected it: `--ds-list-toolbar-radius-control` is declared at `:47` in that same root
+rule and read from **four** rules that are not root-keyed, and `--ds-list-toolbar-radius-inner` falls
+from `max(calc(shell − 4px), control)` to a flat `--ds-radius-md` — the entire nesting relationship
+collapsing to a fixed token. Nine genuine class-B readings, dropped by a label derived from one.
+
+Verifying one channel and retiring the family is the same error as the single-spelling walk, one
+level up.
+
+### The reachable term is the only one that authorises work
+
+Class B was censused at **35 structurally present, 3 reachable** — the seventh instance of the
+collapse law, and the first where the instrument reported both terms in the same line. The one that
+made it collapse:
+
+**Class B is not an independent backlog. It is the AMPLIFIER on the severance class.** A fallback
+fires only when the root-keyed declaration stops matching, and every discriminator in the corpus
+(`data-size`, `data-variant`) is stamped unconditionally — so the sole trigger is a caller replacing
+the root part, and almost every family hardcodes it. The consequence is directional: **making a root
+part caller-replaceable drags that family's class-B rows live with it.** Every severance repair must
+therefore sweep both classes for the family it touches.
+
+The lane's own gate failed first in the dangerous direction and it said so: three families mapped to
+directories that did not exist, and the failure printed `no root emission found` — indistinguishable
+from "this family hardcodes its root". It would have marked 13 rows unreachable with no evidence.
+Resolving owners by the scope class they stamp turned one of the three (`semantic-surface`) out to be
+**severable**, so the error pointed the wrong way as well as resting on nothing. An unmapped owner is
+now `unknown`, never `safe`.
+
+Declared blind spot on both halves: they only examine declarations in rules keyed on `root`. Seven
+primitives carry default parts that are not `root` (`item`, `group`, `divider`, `meta`, `anchor`)
+with the same idiom, and neither census sees them.
 
 ### Two files named for the same vertical, and only one of them has the skins
 
@@ -1946,6 +1985,19 @@ rules after `ace62230d` had fixed them in source. Source and paint are separated
 repair in `src` is not a repair anyone renders, and **any measurement taken against `dist` is a
 measurement of whenever the build last ran**. Lanes commit source; the coordinator runs one build per
 wave, because the build is a machine singleton.
+
+**And `dist` is not one age.** Running `build:vertical-css` to land the retirement above rewrote
+`dist/*.css` at 05:38 while leaving `dist/**/*.js` at 01:44 — a four-hour split inside one directory.
+One half of that command bundles CSS from `src`, the other imports the compiler from `dist`, so the
+same invocation refreshed the paint and could not possibly refresh the emitter that produces it. A
+lane then reported "`dist` is no longer stale" from a CSS timestamp, correctly for CSS and not for
+anything else.
+
+Two consequences. Measuring "against `dist`" is meaningless without naming which half. And running
+`build:vertical-css` mid-wave **captures every in-flight source edit into the bundles** — mine pulled
+an uncommitted `button.css` into all five `styles/*.css` and into `dist/*.css`. Generated files, so
+nothing was lost, but a lane measuring the bundle in that window would have been reading another
+lane's half-finished work as shipped.
 
 ### A repeated-attribute specificity ladder is built on the step that breaks
 
