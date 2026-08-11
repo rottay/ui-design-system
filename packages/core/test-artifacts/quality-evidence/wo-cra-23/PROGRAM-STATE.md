@@ -437,6 +437,50 @@ under §1.4 is always no. Rows c–f above are all this shape.
 Corollary: idling for an answer is itself the defect. An hourly heartbeat now re-enters the programme
 if a lane has stalled waiting on a decision that was never the owner's to make.
 
+### A fixture derived from CSS can measure a rule nothing renders
+
+The probe's `button-modern-md` and `input-modern-md` fixtures matched `.ds-btn` / `.ds-input`, classes
+no component emits. Replaced with the DOM the engines actually produce, obtained by **rendering** them
+rather than reading it off the CSS. Comparing the two across 276 resting readings:
+
+**Exactly 4 changed.** All BitHire, all `border-top-left-radius`, `9px → 10px`. Every colour, border,
+shadow and font matched; platform and evnto matched entirely, because both chains resolve to
+`--ds-radius-md` wherever a vertical authors no control geometry. **A lie with 98.6% cover** — and it
+would have stayed hidden in any vertical that does not author control radii.
+
+Stranger still: **the lie was printing the intended design.** The fake element read
+`--ds-button-md-radius` directly — the channel the ramp was authored for — so the fixture showed 9px
+while the component painted 10px. The instrument was accidentally displaying the design the engine had
+stopped honouring.
+
+**The doctrine is what licensed it.** The roster said a fixture's element shape "is DERIVED FROM THE
+CSS". A selector states what an element must carry to be *matched*; it says nothing about whether any
+component emits it. So a CSS-derived fixture can measure a rule that never paints and still look green.
+Replaced: component fixtures take their shape from the component; synthetic fixtures standing for a
+dial rather than a component are explicitly exempt. Second rule added: **pin selectors and the paint
+statement, never a declaration's value** — otherwise a precedence ruling reads as a broken fixture.
+
+Gap stated rather than hidden: the new fixtures are a pasted snapshot. `requiresSelectors` catches a
+CSS-side rename; **nothing catches DOM-side drift**, so an engine changing its root anatomy makes the
+fixture stale silently — a quieter version of the bug just fixed. Closure is a test that re-renders
+both engines and compares against the fixture HTML [O].
+
+### Two correct changes can be order-dependent, and only one order is safe
+
+The precedence flip (family channel ahead of `--ds-radius-md`) was safe **only because** the dial fix
+landed first. Flipping while the family channel was still a flat literal would have pinned BitHire's
+controls at 9px at *every* dial position — trading a dead ramp for a dead dial, and the acceptance test
+for either change alone would have passed.
+
+Related, found in the same pass: `input.css` **contradicted itself.** Its root rule read
+`--ds-radius-input` ahead of the ramp while its size rules read the ramp ahead — and the size rules
+carry higher specificity, so they always won. A file can hold two mutually exclusive statements of its
+own law and paint consistently, which is why Input and Button disagreed about a rule they both claimed.
+
+Note also that the zero-delta gate went **red on purpose** here and must not be baselined away: it was
+refusing to wave through a deliberate retune, printing exactly the flipped `var()` order and nothing
+else, while the same gate at the pure baseline was green with `files=0`. That is §2 working.
+
 ### ⚠ NEVER run `build:vertical-css` without a full `pnpm build` first
 
 `build-vertical-artifacts.mjs` imports the compiler from **`dist/`**, which lags `src/`. A
