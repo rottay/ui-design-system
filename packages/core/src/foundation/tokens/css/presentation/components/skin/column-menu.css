@@ -8,6 +8,10 @@
  *
  * No coloured side rail is part of the anatomy.
  *
+ * RESPONSIVE: one inline-size container on the family's own `panel`, never a
+ * viewport query — the panel is portalled and its own width is the only thing
+ * the row grammar can measure. The narrow posture is at the foot of the file.
+ *
  * MATERIAL ROLE (overlay): the surface is a Popover-hosted floating panel, so
  * its keyline and depth chain through the governed `overlay` role after the
  * family channel and before the generic ramp —
@@ -95,6 +99,7 @@
 }
 
 .ds-structure.ds-column-menu-panel[data-part="surface"] [data-part="panel"] {
+  container: ds-column-menu-panel / inline-size;
   inline-size: 100%;
   min-inline-size: 0;
   outline: none;
@@ -394,6 +399,37 @@
   [data-part="footer-hint"][data-size] {
   color: var(--ds-color-text-muted);
   font-size: var(--ds-font-size-xs);
+}
+
+/* NARROW POSTURE — container, never viewport.
+ *
+ * The panel is capped at `calc(100vw - gutter)`, so on a phone it is ~336px
+ * wide while the row keeps a fixed trailing cluster of up to four icon
+ * controls. The copy column (`flex: 1 1 auto; min-inline-size: 0`) absorbs the
+ * whole deficit and collapses under 100px, so the caption reflows to three or
+ * four lines and the scroll region shows two rows instead of six.
+ *
+ * The threshold is px, not rem, deliberately: classic re-bases the root font
+ * size (`--ds-font-size-base`), so a rem threshold would fire at a different
+ * width per engine while the panel's own cap stays 432px. 420px sits below
+ * that cap and above every phone's `100vw - 24px`, so the posture is
+ * phone-only by construction. */
+@container ds-column-menu-panel (max-width: 420px) {
+  .ds-structure.ds-column-menu-panel[data-part="surface"]
+    [data-part="row-content"] {
+    flex-wrap: wrap;
+  }
+
+  .ds-structure.ds-column-menu-panel[data-part="surface"]
+    [data-part="row-main"] {
+    flex-basis: 100%;
+  }
+
+  .ds-structure.ds-column-menu-panel[data-part="surface"]
+    [data-part="row-actions"] {
+    flex-basis: 100%;
+    justify-content: flex-end;
+  }
 }
 
 @media (forced-colors: active) {

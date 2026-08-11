@@ -292,8 +292,10 @@ describe('ActionDock skin ownership (structured grammar)', () => {
     expect(NORMALIZED_ACTION_DOCK_SKIN).toContain(
       ".rottay-action-dock__actions > .rottay-action-dock__action[data-priority='danger'] { margin-inline-end: auto; }"
     );
+    // The shrink guard names the Dropdown root (`__overflow`), which is the
+    // row's flex item; keyed on the Button class it matched nothing.
     expect(NORMALIZED_ACTION_DOCK_SKIN).toContain(
-      ".rottay-action-dock__actions > .rottay-action-dock__overflow-trigger { flex: 0 0 auto; }"
+      ".rottay-action-dock__actions > .rottay-action-dock__overflow { flex: 0 0 auto; }"
     );
     // No physical-properties leak in the grammar (RTL mirrors for free).
     const grammarRules = ACTION_DOCK_SKIN.match(/\.rottay-action-dock__action[^{]*\{[^}]*\}/g) ?? [];

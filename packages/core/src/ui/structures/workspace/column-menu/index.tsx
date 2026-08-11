@@ -805,7 +805,10 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                           </Box>
                         </Flex>
 
-                        <Flex align="center" gap={4}>
+                        {/* Named so the narrow-container posture can drop the
+                            cluster onto its own line; without a part the copy
+                            column collapses under it at phone widths. */}
+                        <Flex data-part="row-actions" align="center" gap={4}>
                           {/* Pin left/right toggles (only when onPinChange provided) */}
                           {onPinChange && (
                             <>

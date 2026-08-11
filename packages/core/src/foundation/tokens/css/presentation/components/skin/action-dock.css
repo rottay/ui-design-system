@@ -5,9 +5,12 @@
  * which resolve through the engine system themselves. One skin file, no engine
  * modifier class.
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
- * base layer, so a layered rule cannot paint these elements at all. Unlayered
- * still yields to a caller's inline `style`.
+ * LAYER — `rottay-components`, in both entrypoints and in the built bundle.
+ * The header previously claimed this file was unlayered; it never was. The
+ * consequence is load-bearing: `rottay-engines` sorts LATER, so this file
+ * cannot outrank an engine skin for a property both declare, at any
+ * specificity. The composed Button therefore keeps its own paint by design,
+ * and the grammar below is layout the engine skins do not claim.
  *
  * SCOPE ROOT carries `rottay-action-dock` + `data-part='root'` +
  * `data-placement` + `data-mode`. Component variables deliberately fall back
@@ -139,7 +142,13 @@
   inset-inline: 0;
 }
 
-.rottay-action-dock[data-part='root'][data-mode='sticky'] {
+/* `[data-placement]` is carried for SPECIFICITY, not for matching: the root
+   rule above already sets `z-index` at (0,4,0), so a two-attribute mode rule
+   lost it outright — a sticky dock stacked in the fixed band and
+   `--ds-action-dock-sticky-z-index` never resolved. Tie on specificity, win on
+   source order. The family test pins that every mode rule outranks the root
+   rule for each property both declare. */
+.rottay-action-dock[data-part='root'][data-placement][data-mode='sticky'] {
   position: sticky;
   z-index: var(--ds-action-dock-sticky-z-index, var(--ds-z-index-sticky, 1100));
 }
@@ -230,7 +239,12 @@
   margin-inline-end: auto;
 }
 
-.rottay-action-dock__actions > .rottay-action-dock__overflow-trigger {
+/* The overflow affordance is a Dropdown, so the row's flex item is the
+ * Dropdown root, not the Button inside it. Keyed on the trigger class this
+ * rule matched nothing, and the more-actions control could be squeezed by the
+ * growing primary — `__overflow` names the item, `__overflow-trigger` stays on
+ * the Button for the coarse-pointer floor below. */
+.rottay-action-dock__actions > .rottay-action-dock__overflow {
   flex: 0 0 auto;
 }
 

@@ -6,6 +6,7 @@ import { fireEvent, waitFor } from "@testing-library/react";
 import { ColumnMenu } from "../index";
 import { renderWithEngine } from "../../../../../tooling/testing/helpers/engine";
 import {
+  readSkinDeclarations,
   readSkinRules,
   unreachableSelectors,
   waitForPortalContent,
@@ -98,6 +99,34 @@ describe("ColumnMenu skin reachability", () => {
         exempt: EXEMPT,
       })
     ).toEqual([]);
+  });
+
+  it("the narrow posture queries a container this file declares", () => {
+    // A `@container` block naming an undeclared container never fires and
+    // never errors — the whole posture would be silently absent. Both
+    // spellings are read: the shorthand and the `container-name` longhand.
+    const css = readSkinDeclarations("column-menu");
+    const declared = new Set<string>();
+    for (const [, name] of css.matchAll(/container-name:\s*([\w-]+)/g)) declared.add(name);
+    for (const [, name] of css.matchAll(/container:\s*([\w-]+)\s*\//g)) declared.add(name);
+
+    const queried = [...css.matchAll(/@container\s+([\w-]+)\s*\(/g)].map(([, name]) => name);
+    expect(queried.length).toBeGreaterThan(0);
+    for (const name of queried) expect(declared, name).toContain(name);
+
+    // Viewport queries would measure the document, not the portalled panel.
+    expect(css).not.toMatch(/@media[^{]*(min|max)-width/);
+  });
+
+  it("every part the narrow posture names is stamped by the family", async () => {
+    await openMenu();
+    const rules = readSkinRules("column-menu").filter((rule) =>
+      rule.conditions.includes("@container")
+    );
+    expect(rules.length).toBeGreaterThan(0);
+    for (const rule of rules) {
+      expect(document.querySelector(rule.selector), rule.selector).not.toBeNull();
+    }
   });
 
   it("panel rules are scoped to the panel, not nested under the trigger", () => {

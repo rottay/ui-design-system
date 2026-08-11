@@ -239,6 +239,9 @@ export function ActionDock({
   const renderOverflowTrigger = () => (
     <Dropdown
       key={OVERFLOW_FOCUS_KEY}
+      // The Dropdown root is the row's flex item; the Button is two levels in.
+      // The shrink guard has to name the item, not the control.
+      className="rottay-action-dock__overflow"
       trigger={['click']}
       placement={position === 'top' ? 'bottomRight' : 'topRight'}
       menu={{

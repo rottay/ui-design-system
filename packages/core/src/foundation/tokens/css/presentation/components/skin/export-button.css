@@ -1,8 +1,13 @@
 /**
- * ExportButton skin — engine-agnostic and deliberately unlayered so it beats
- * layered base/preflight paint (P-47).
+ * ExportButton skin — engine-agnostic.
  * The dropdown is portaled under document.body and therefore owns a standalone
  * two-class panel scope.
+ *
+ * LAYER — `rottay-components`, in both entrypoints and in the built bundle.
+ * The header previously claimed this file was unlayered; it never was, and the
+ * consequence is load-bearing: `rottay-engines` sorts LATER, so this file
+ * cannot outrank a primitive's own skin for a property both declare. That is
+ * why the menu-item rule below claims layout only.
  *
  * COMPOSITION LAW (S19): the trigger and the menu items are the Button
  * primitive (the interim menu while Dropdown P88 is blocked), so every item
@@ -95,8 +100,16 @@
 }
 
 /* ---- menu items: the composed ghost Buttons stretch to full rows (their
-        chrome, hover wash and focus ring are button.css-owned) ---- */
-.ds-structure.ds-export-button-panel[data-part='panel'] [data-part='menu-item'] {
+        chrome, hover wash and focus ring are button.css-owned).
+
+        Two arms, because `data-part` reaches this control under modern only:
+        `Button.passthrough-contract` pins the caller's part as winning in
+        modern and overridden to 'trigger' by classic and rustic. The class is
+        the hook for those two, and it is what let the family stop forcing
+        `engine="modern"` on its own composed controls to keep this rule
+        alive. ---- */
+.ds-structure.ds-export-button-panel[data-part='panel'] [data-part='menu-item'],
+.ds-structure.ds-export-button-panel[data-part='panel'] .ds-export-button-item {
   inline-size: 100%;
   justify-content: flex-start;
 }

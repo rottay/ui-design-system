@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import { fireEvent, waitFor } from "@testing-library/react";
 
 import { ExportButton } from "../index";
-import { renderWithEngine } from "../../../../../tooling/testing/helpers/engine";
+import { renderWithEngine, STABLE_ENGINES } from "../../../../../tooling/testing/helpers/engine";
 import {
   readSkinRules,
   unreachableSelectors,
@@ -61,6 +61,45 @@ describe("ExportButton skin reachability", () => {
       })
     ).toEqual([]);
   });
+
+  it.each(STABLE_ENGINES)(
+    "renders in the active engine and keeps the item hook under %s",
+    async (engine) => {
+      // The family used to pass `engine="modern"` to its own controls — the
+      // only such override in the structures tier — so an export control in a
+      // classic or rustic app was the one modern-looking button in the
+      // toolbar. It could not simply be dropped: `[data-part='menu-item']`
+      // reaches the item under modern alone, so the class arm is what makes
+      // the engine-agnostic rendering safe.
+      const { container } = renderWithEngine(
+        <ExportButton
+          data={[{ name: "a" }]}
+          columns={[{ key: "name", header: "Name" }]}
+          formats={["csv", "json"]}
+        />,
+        engine
+      );
+      const trigger = await waitFor(() => {
+        const node = container.querySelector(
+          `.rottay-button--${engine}`
+        ) as HTMLElement;
+        expect(node).not.toBeNull();
+        return node;
+      });
+      expect(container.querySelectorAll('[class*="rottay-button--"]:not(.rottay-button--' + engine + ')')).toHaveLength(0);
+
+      fireEvent.click(trigger);
+      await waitForPortalContent(
+        waitFor,
+        ".ds-export-button-panel",
+        ".ds-export-button-item",
+        1
+      );
+      for (const item of document.querySelectorAll(".ds-export-button-item")) {
+        expect(item.className).toContain(`rottay-button--${engine}`);
+      }
+    }
+  );
 
   it("panel rules are scoped to the panel's own class", () => {
     const rules = readSkinRules("export-button");

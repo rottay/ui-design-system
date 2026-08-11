@@ -134,14 +134,33 @@ export function ExportButton<T = unknown>({
   // -----------------------------------------------------------------------
   // Position the dropdown beneath the trigger
   // -----------------------------------------------------------------------
+  const positionPanel = useCallback(() => {
+    const trigger = triggerRef.current;
+    if (!trigger) return;
+    const rect = trigger.getBoundingClientRect();
+    setDropdownPos({ top: rect.bottom + 4, left: rect.right });
+  }, []);
+
   useEffect(() => {
-    if (!open || !triggerRef.current) return;
-    const rect = triggerRef.current.getBoundingClientRect();
-    setDropdownPos({
-      top: rect.bottom + 4,
-      left: rect.right,
-    });
-  }, [open]);
+    // Dropping the measurement on close is half the repair: it is what stops
+    // a reopen from painting one frame at the coordinates of wherever the
+    // trigger used to be.
+    if (!open) {
+      setDropdownPos(null);
+      return;
+    }
+    positionPanel();
+    // The panel is portaled and `position: fixed`, so its top/left are
+    // VIEWPORT coordinates measured once. Any scroll — of the window or of a
+    // scrolling ancestor, hence the capture phase, since scroll does not
+    // bubble — or any resize moves the trigger and strands the menu.
+    window.addEventListener('scroll', positionPanel, true);
+    window.addEventListener('resize', positionPanel);
+    return () => {
+      window.removeEventListener('scroll', positionPanel, true);
+      window.removeEventListener('resize', positionPanel);
+    };
+  }, [open, positionPanel]);
 
   // -----------------------------------------------------------------------
   // Close on outside click
@@ -274,7 +293,6 @@ export function ExportButton<T = unknown>({
         ref={setTriggerRef}
       >
         <Button
-          engine="modern"
           data-part="trigger"
           variant="ghost"
           size={size}
@@ -337,11 +355,15 @@ export function ExportButton<T = unknown>({
                    Buttons carrying the menu semantics (the pattern's arrow
                    contract queries `data-export-item`). */
                 <Button
-                  engine="modern"
                   key={fmt}
                   variant="ghost"
                   size="sm"
                   data-export-item
+                  // Part and class carry the same rule: only modern honours a
+                  // caller's `data-part`, so the class is what reaches the
+                  // item under classic and rustic. Without it the family had
+                  // to force `engine="modern"` here to keep its own layout.
+                  className="ds-export-button-item"
                   data-part="menu-item"
                   role="menuitem"
                   tabIndex={-1}
