@@ -500,6 +500,47 @@ a false reading — and it is why a lane that needed an after-arm artifact rende
 `src/`** and proved the harness with a null-arm control (byte-identical to the committed artifact on
 unedited sources) before trusting a single number.
 
+### ANSWERED: the untenanted default has no light theme at all
+
+The open [O] question — *"whether the untenanted default should deliberately be its own neutral identity
+rather than drifting toward whichever vertical was edited last"* — is closed, and it was never a
+preference. It is a **missing layer**.
+
+`foundation/themes/default.css` declares the neutral ground as **baked dark hex on bare `:root`**
+(`--ds-color-bg-primary: #0A0A0C`, `-bg-secondary: #0F0F12`, `-bg-elevated: #18181C`,
+`--ds-color-text-primary: #ECECEC`). A `.dark` block layers a *different* dark over them. And there is
+**no light block anywhere in the tenant-free bundle** — zero `[data-theme='light']` selectors, the only
+`.light` occurrence sitting inside a comment. An untenanted light document therefore falls through to
+dark. Those literals are Rottay's own values: the default drifted toward the vertical edited last,
+exactly as suspected, now with names.
+
+**The repair requires no colour decision**, which is what makes it safe: the neutral ramp is already
+correct in both themes (`--ds-color-neutral-0` light `#ffffff` / dark `#020617`). This is §1.4 read
+forward — a literal sitting where a channel belongs. Wire the **~10 seeds** to the ramp and both themes
+become correct by derivation; no new hex enters the tree.
+
+**Classify by paint role, not luminance.** 365 channels resolve to a dark solid in the tenant-free
+light cell; luminance alone would have called them all defects. By role: **ink 176 (correct)**, edge 80
+(mostly correct), **ground 104 — the defect class**, of which ~9 are semantic fills legitimately dark in
+light (`--ds-button-error-bg-active`). Genuine: ~95, and ~62 derive from the ten seeds. The same
+collapse from a frightening candidate count to a handful of causes that two other lanes hit from
+different directions.
+
+**Blast radius, and why the fix is one commit:** 71 grounds are inherited by **no** vertical — the
+untenanted surface nobody owns, repairable with provably zero movement. The other 53 are live defects
+in shipping products: **evnto's light theme paints a dark ground on 33 channels, bithire's on 20.** So
+the seed rewire must land together with value-preserving pins at each vertical's current resolved
+value, or there is a window where the base repaint hits two products unattributed.
+
+Two lanes measuring opposite directions of one defect — "dark leaks from light" and "dark ground in a
+light document" — converged on the same 20 bithire channels. That convergence is evidence precisely
+because the techniques were independent.
+
+Method note kept: a lane's own byte-identity assertion **refused its first run**, because bithire's
+font packs inject three `--ds-font-pack-*` names into the base. It narrowed the assertion (streams must
+match once font-pack names are removed) rather than relaxing it to a byte compare that would have
+passed by accident. **A font pack contributes `--ds-*` names to what everyone calls "the base."**
+
 ### Synthetic controls prove capability; historical replay proves relevance
 
 The fixture-drift test ships with both, and they are different claims. Six planted mutations prove the
