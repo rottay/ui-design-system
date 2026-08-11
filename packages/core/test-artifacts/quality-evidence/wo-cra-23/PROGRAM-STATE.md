@@ -500,6 +500,33 @@ a false reading — and it is why a lane that needed an after-arm artifact rende
 `src/`** and proved the harness with a null-arm control (byte-identical to the committed artifact on
 unedited sources) before trusting a single number.
 
+### WHEN AN EXECUTABLE CONTRACT EXISTS, IT IS THE AUTHORITY — three narratives, all wrong
+
+The single most expensive lesson of the programme, and the cheapest to have avoided.
+
+Three separate careful readings of source produced three different answers about whether a caller's
+`data-part` survives `Button`:
+
+| # | claim | wrong because |
+|---|---|---|
+| 1 | a test comment: "Button drops it in EVERY engine" | modern honours it |
+| 2 | a lane's correction: "Button honours it" | only modern does |
+| 3 | the same lane's retraction: "modern ✓ rustic ✓ classic ✗" | rustic overrides too |
+
+I recorded #2, then recorded #3 as its correction. **Both went into the state file as law.**
+
+`primitives/inputs/Button/tests/Button.passthrough-contract.test.tsx` pinned the answer the entire
+time and **passes green**: *modern — the caller's part wins; rustic — keeps `trigger`; classic —
+stamps `trigger`.* Five assertions, exit 0, run in seconds.
+
+**Read the contract before reasoning about the behaviour.** A test that asserts the thing outranks any
+number of readings of the implementation, and it outranks a comment absolutely — comments drift, tests
+fail when they drift. Every one of the three narratives came from reading source; none came from
+running the test that already existed.
+
+Consequence for the disposition: `ds-column-menu-control` is the anatomy hook for **two** engines, not
+one. Wired, one declaration.
+
 ### A one-engine answer is not a family answer — check all three engines by name
 
 A lane retracted its own correction before it propagated, and the retraction is the finding. It had
