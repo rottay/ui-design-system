@@ -220,6 +220,52 @@ export const evntoBrandTheme: BrandTheme = {
     warningColor: '#A16207',
     errorColor: '#B91C1C',
     infoColor: '#475569',
+
+    /**
+     * The six border channels this vertical used to leave silent, and so
+     * inherited from `themes/default.css` — the DS's own tenant-less DARK
+     * fallback set. This is a LEAK REPAIR, not a derivation: measured before
+     * this block existed, `--ds-color-border-subtle` and `-tertiary` painted
+     * #161619 hairlines on the WHITE light ground, and all four status borders
+     * painted DS hues rather than the seeds above. Repairing it moves pixels
+     * on purpose; it is not a value-preserving edit.
+     *
+     * The vertical's own #171717-on-#FFFFFF ink/surface pair is deliberate and
+     * is NOT the fault here — `deriveBorderSubtle` cannot even run on it (its
+     * `isHexColor` gate rejects the translucent light border), and composited
+     * first it lands ≈#F2F2F2. The seed was simply missing.
+     *
+     * Authored as formulas over this vertical's own channels, never as
+     * literals: a baked hex would freeze today's rendering as if it were a
+     * design choice and would leave the channels unreachable from the palette.
+     * Each string is mode-blind, so `compileModeBlocks` emits it once in the
+     * unconditional block and it re-resolves against whichever seed each mode
+     * declares.
+     *
+     * A 2/3 wash IS the DS's `BORDER_SUBTLE_GROUND_STEP` derivation — one
+     * third of the way from the border back to the ground — expressed without
+     * naming the ground, so it stays correct on cards and sunken regions
+     * rather than only on the page canvas, and it survives this vertical's
+     * translucent light border. The seed is `-primary` rather than
+     * `--ds-color-border` because the latter is itself unauthored here and
+     * still resolves to the DS dark fallback in dark mode.
+     *
+     * `-tertiary` repeats the formula rather than aliasing `-subtle`: the two
+     * are one value in `themes/default.css` and in the platform theme, so the
+     * equality this vertical already paints is preserved, but as two
+     * independent channels a tenant can still move apart.
+     *
+     * The status washes keep the 20% strength these channels already paint;
+     * only the hue moves, from the DS defaults onto the seeds above.
+     */
+    borderSubtleColor:
+      'color-mix(in srgb, var(--ds-color-border-primary) 66.667%, transparent)',
+    borderTertiaryColor:
+      'color-mix(in srgb, var(--ds-color-border-primary) 66.667%, transparent)',
+    successBorderColor: 'color-mix(in srgb, var(--ds-color-success) 20%, transparent)',
+    warningBorderColor: 'color-mix(in srgb, var(--ds-color-warning) 20%, transparent)',
+    errorBorderColor: 'color-mix(in srgb, var(--ds-color-error) 20%, transparent)',
+    infoBorderColor: 'color-mix(in srgb, var(--ds-color-info) 20%, transparent)',
   },
 
   typography: {
