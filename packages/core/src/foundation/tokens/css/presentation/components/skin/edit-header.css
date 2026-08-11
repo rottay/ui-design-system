@@ -8,6 +8,27 @@
  * `layer(rottay-components)` — this file does not control its own layering
  * (the older "deliberately unlayered" note predates that wiring).
  *
+ * RESPONSIVE: this family had NO container query and declared no container at
+ * all, while its byte-identical twin FormHeader has had a ladder since the last
+ * wave. The hero kept a 28px gutter, the h1 kept its display size and the
+ * Save/Cancel rail kept `margin-inline-start: auto` at EVERY width, so a 320px
+ * rendering was a squeezed desktop: the title wrapped to three or four lines
+ * against a full-width gutter and the action pair orphaned into a right-aligned
+ * row of its own. The root now declares `ds-edit-header` and the two steps
+ * below mirror FormHeader's rungs exactly — narrow is a simplified posture, not
+ * a compressed one. Every step is a CONTAINER query: a viewport breakpoint in a
+ * skin fails the build by design (WO-ARC-05, exact-0).
+ *
+ * TYPE ROLES: the h1 reads the governed `page-title` role chain instead of a
+ * hard 3xl/700/-0.03em triple. All three tenant artifacts declare all seven
+ * `--ds-type-page-title-*` properties with different values (bithire's display
+ * tracking is -0.005em against evnto/rottay's -0.03em, and each names its own
+ * heading family), so this is the channel through which one h1 reads as three
+ * companies. The family channel stays FIRST in the chain, so a tenant that
+ * already named `--ds-edit-header-title-font-size` keeps its exact size. The
+ * composed `Text` parts resolve their SIZE inline, so only family/tracking/
+ * transform are reachable for them — a font-size rule there would be dead paint.
+ *
  * SCOPE ROOT is the header's outer element, which carries the pair
  * `ds-structure ds-edit-header` + `data-part='root'` + ALWAYS-PRESENT
  * `data-loading` ('false' on the main root, 'true' on the early return — the
@@ -41,7 +62,16 @@
  * consumes at (0,5,0), because a `Text` will not inherit `color` past the
  * typography skin.
  *
- * GLASS LAW: the context card's `backdrop-filter: blur(8px)` was default-ON
+ * FORMS ARE NOT CARD STACKS (monorepo law). The `context-card` part is a legacy
+ * NAME — the §4 anatomy test in `headers/tests/` pins the string, so it stays —
+ * but its TREATMENT is a ruled section, not a card: one dominant top hairline,
+ * optical padding, no second frame, no second radius, no grid wallpaper. A
+ * bordered 18px-radius panel nested inside the bordered 20px-radius header card
+ * was a nested full frame with no owner, and an edit header that boxes its own
+ * context teaches every field below it to be a box too. The header sets the
+ * page's rhythm, so the rhythm it sets is rules-and-spacing.
+ *
+ * GLASS LAW: the context section's `backdrop-filter: blur(8px)` was default-ON
  * glass — it now rides `--ds-edit-header-context-card-filter` with a `none`
  * default; a tenant opts the blur back in through the channel.
  *
@@ -213,8 +243,16 @@
 
 /* ─── EDIT-SPECIFIC ───────────────────────────────────────────────────────── */
 
-/* root card (main + loading early-return share the class pair) */
+/* root card (main + loading early-return share the class pair). The room
+   channels are PRESET tiers, so the tenant `appearance.rhythm` axis mounts once
+   here and every consume site below stays a plain channel read (the
+   workbench-header precedent). */
 .ds-structure.ds-edit-header[data-part='root'] {
+  --ds-edit-header-hero-padding: calc(var(--ds-spacing-7, 28px) * var(--ds-rhythm-effective-scale, 1));
+  --ds-edit-header-top-bar-padding-block: calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1));
+  --ds-edit-header-top-bar-padding-inline: calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1));
+  --ds-edit-header-context-gap: calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1));
+  container: ds-edit-header / inline-size;
   inline-size: 100%;
   overflow: hidden;
   background: var(--ds-surface-card, var(--ds-color-bg-elevated));
@@ -239,8 +277,8 @@
 
 /* top bar */
 .ds-structure.ds-edit-header [data-part='top-bar'] {
-  padding-block: 12px;
-  padding-inline: 24px;
+  padding-block: var(--ds-edit-header-top-bar-padding-block, 12px);
+  padding-inline: var(--ds-edit-header-top-bar-padding-inline, 24px);
   background: var(--ds-color-bg-secondary);
 }
 .ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] {
@@ -284,7 +322,10 @@
   padding-inline: 10px;
   border-radius: 999px;
   background: color-mix(in srgb, var(--ds-color-bg-secondary) 64%, transparent);
-  font-family: var(--ds-font-family-mono, monospace);
+  /* an identifier is code, so it reads the `code` role's family and tabular
+     figures rather than a bare mono fallback */
+  font-family: var(--ds-type-code-font-family, var(--ds-font-family-mono, monospace));
+  font-variant-numeric: var(--ds-type-code-font-variant-numeric, normal);
 }
 .ds-structure.ds-edit-header[data-part='root'] [data-part='entity-id'] {
   border: 1px solid var(--ds-color-border-secondary);
@@ -295,29 +336,57 @@
 
 /* hero panel geometry + copy hierarchy */
 .ds-structure.ds-edit-header [data-part='hero-panel'] {
-  padding: 28px;
+  padding: var(--ds-edit-header-hero-padding, 28px);
 }
+/* the copy yields before the action rail does: the cluster may shrink, the
+   rail may not */
 .ds-structure.ds-edit-header [data-part='hero-copy'] {
+  flex: 1 1 auto;
   min-inline-size: 0;
+}
+/* the icon badge's tone and 52px box are the shared edit+form block above; the
+   box gets a channel here (0,4,0 beats the shared 0,3,0) so the ladder can step
+   it down, and the glyph size moves out of the engine's inline style */
+.ds-structure.ds-edit-header[data-part='root'] [data-part='icon-badge'] {
+  inline-size: var(--ds-edit-header-icon-badge-size, 52px);
+  block-size: var(--ds-edit-header-icon-badge-size, 52px);
+}
+.ds-structure.ds-edit-header [data-part='icon-badge-glyph'] {
+  inline-size: var(--ds-edit-header-icon-badge-glyph-size, 24px);
+  block-size: var(--ds-edit-header-icon-badge-glyph-size, 24px);
+}
+/* the shared-helper and Save/Cancel icons size from the skin (was an inline
+   14px on every one of them) — the FormHeader posture */
+.ds-structure.ds-edit-header[data-part='root'] [data-part='actions'] svg {
+  inline-size: var(--ds-edit-header-action-icon-size, 14px);
+  block-size: var(--ds-edit-header-action-icon-size, 14px);
 }
 .ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] [data-part='eyebrow'] {
   color: var(--ds-color-text-muted);
-  font-family: var(--ds-font-family-mono, monospace);
-  letter-spacing: 0.12em;
+  /* the eyebrow is a micro-label, so it reads the `code` role's family (the
+     tenant's mono choice) and the foundation tracking rung — the old literal
+     also letter-spaced Arabic, which the rung correctly collapses to 0 */
+  font-family: var(--ds-type-code-font-family, var(--ds-font-family-mono, monospace));
+  letter-spacing: var(--ds-letter-spacing-widest, 0.12em);
   text-transform: uppercase;
 }
 .ds-structure.ds-edit-header [data-part='title'] {
-  /* the title is a Box as="h1" (not typography) — this display type finally
-     paints: a composed Text resolved its size inline and left this rule dead */
+  /* the title is a Box as="h1" (not typography), so the full page-title role
+     chain reaches it; the family channel stays first so a tenant that already
+     named a size keeps it */
   margin: 0;
   color: var(--ds-color-text-primary);
-  font-size: var(--ds-edit-header-title-font-size, var(--ds-font-size-3xl));
-  font-weight: 700;
-  letter-spacing: -0.03em;
+  font-family: var(--ds-type-page-title-font-family, var(--ds-font-family-heading));
+  font-size: var(--ds-edit-header-title-font-size, var(--ds-type-page-title-font-size, var(--ds-font-size-2xl)));
+  font-weight: var(--ds-type-page-title-font-weight, var(--ds-font-weight-bold, 700));
+  line-height: var(--ds-type-page-title-line-height, 1.2);
+  letter-spacing: var(--ds-type-page-title-letter-spacing, var(--ds-letter-spacing-tight));
   overflow-wrap: break-word;
 }
 .ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] [data-part='subtitle'] {
   color: var(--ds-color-text-secondary);
+  font-family: var(--ds-type-supporting-font-family, var(--ds-font-family-base));
+  letter-spacing: var(--ds-type-supporting-letter-spacing, var(--ds-letter-spacing-normal));
 }
 
 /* status pill (hatch): the pre-step stamped no status attribute, so the tone
@@ -368,34 +437,66 @@
   margin-inline-start: auto;
 }
 
-/* context card below the hero */
+/* context section below the hero: a RULE, not a card (see the header's
+   "Forms are not card stacks" note) */
 .ds-structure.ds-edit-header [data-part='context-card'] {
-  margin-block-start: 22px;
-  padding: 16px 18px 18px;
-  border-radius: 18px;
-  background:
-    radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--ds-color-text-primary) 7%, transparent) 0%, transparent 34%),
-    radial-gradient(circle at 82% 100%, color-mix(in srgb, var(--ds-color-text-secondary) 6%, transparent) 0%, transparent 36%),
-    linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-secondary) 54%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-secondary) 74%, transparent) 100%),
-    linear-gradient(color-mix(in srgb, var(--ds-color-text-muted) 15%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in srgb, var(--ds-color-text-muted) 15%, transparent) 1px, transparent 1px);
-  background-size: 100% 100%, 100% 100%, 100% 100%, 24px 24px, 24px 24px;
-  background-position: 0 0, 0 0, 0 0, 0 0;
-  /* The context card is a RECESSED well inside the header card (darker ground,
-     own keyline, opt-in frost), so its optical top edge reads the governed
-     `inset` role's highlight facet. Declared by neither the default theme nor
-     any shipped artifact, so the pre-wave inset is what still renders. */
+  margin-block-start: var(--ds-edit-header-context-gap, 24px);
+  padding-block-start: var(--ds-edit-header-context-gap, 24px);
+  /* The context section is the RECESSED continuation of the hero, so its
+     optical top edge reads the governed `inset` role's highlight facet.
+     Declared by neither the default theme nor any shipped artifact, so the
+     pre-wave inset is what still renders. */
   box-shadow: var(
     --ds-material-inset-highlight,
     inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
   );
   backdrop-filter: var(--ds-edit-header-context-card-filter, none);
 }
+/* the single dominant boundary for the region */
 .ds-structure.ds-edit-header[data-part='root'] [data-part='context-card'] {
-  border: 1px solid var(--ds-color-border-secondary);
+  border-block-start: 1px solid var(--ds-color-border-secondary);
 }
 .ds-structure.ds-edit-header [data-part='context-rail'] + [data-part='context-card-children'] {
   margin-block-start: 18px;
+}
+
+/* ---- composition ladder. A skin adapts to its CONTAINER, never to the window
+        (WO-ARC-05: the first viewport breakpoint in a skin fails the build), so
+        every step below is a container query against the container the root
+        declares. Rungs mirror FormHeader's exactly — the twins step together. ---- */
+
+/* ~544px and below: the hero compacts instead of crushing, and the action rail
+   stops being a right-aligned appendix. */
+@container ds-edit-header (inline-size < 34rem) {
+  .ds-structure.ds-edit-header[data-part='root'] {
+    --ds-edit-header-hero-padding: calc(var(--ds-spacing-5, 20px) * var(--ds-rhythm-effective-scale, 1));
+    --ds-edit-header-context-gap: calc(var(--ds-spacing-5, 20px) * var(--ds-rhythm-effective-scale, 1));
+    --ds-edit-header-icon-badge-size: 44px;
+    --ds-edit-header-icon-badge-glyph-size: 20px;
+  }
+  .ds-structure.ds-edit-header [data-part='title'] {
+    font-size: var(--ds-edit-header-title-font-size-compact, var(--ds-type-section-title-font-size, var(--ds-font-size-xl)));
+  }
+  .ds-structure.ds-edit-header [data-part='actions'] {
+    inline-size: 100%;
+    margin-inline-start: 0;
+  }
+}
+
+/* ~384px and below: a single stacked column. The badge leaves the title's
+   baseline and Save/Cancel become full-width targets — a phone posture, not a
+   compressed desktop. */
+@container ds-edit-header (inline-size < 24rem) {
+  .ds-structure.ds-edit-header[data-part='root'] {
+    --ds-edit-header-top-bar-padding-inline: calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1));
+  }
+  .ds-structure.ds-edit-header [data-part='hero-copy'] {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .ds-structure.ds-edit-header [data-part='actions'] > * {
+    flex: 1 1 100%;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -37,10 +37,13 @@
  *   - Action rail: a single `action`, or `secondaryAction` + `action`
  *     pair, or a free-form `actions[]` array using
  *     `FormHeaderAction` with the SharedHeaderActionKind vocabulary
- *     from the shared header-actions helper
- *   - `mode` indicator (`'create' | 'edit' | 'view'`) -- carried as
- *     part of the API for consumer routing logic; not currently
- *     rendered visually
+ *     from the shared header-actions helper. The rail sits in the hero
+ *     row beside the title cluster (the EditHeader posture) -- the top
+ *     bar is navigation only
+ *   - `mode` indicator (`'create' | 'edit' | 'view'`) -- stamped on the
+ *     root as `data-mode` so a skin or a tenant sheet can key on it;
+ *     the DS paints no mode-specific rule (the meaning is the
+ *     consumer's, not the design system's)
  *   - Optional context-rail / children slot inside a card below the
  *     hero
  *   - 4 archetype variants (control, editorial, technical,
@@ -154,7 +157,7 @@ export function FormHeader({
   secondaryAction,
   actions,
   colorVariant = 'secondary',
-  mode: _mode = 'create',
+  mode = 'create',
   breadcrumb,
   children,
   archetype = 'control',
@@ -168,19 +171,14 @@ export function FormHeader({
   // Visible chrome copy rides the DS i18n channel with an English floor.
   const i18n = useOptionalTranslation('common');
   const resolvedBackLabel = backLabel ?? i18n?.tOr('back', 'Back') ?? 'Back';
-  const renderHrefAnchor = (href: string, content: ReactNode, style?: CSSProperties) => {
+  const actionsLabel = i18n?.tOr('actions', 'Actions') ?? 'Actions';
+  // The underline reset lives in the skin (`a:has(> [data-part='back-button'])`),
+  // so the anchor carries no inline style of its own.
+  const renderHrefAnchor = (href: string, content: ReactNode) => {
     if (NavLink) {
-      return (
-        <NavLink href={href} style={style}>
-          {content}
-        </NavLink>
-      );
+      return <NavLink href={href}>{content}</NavLink>;
     }
-    return (
-      <a href={href} style={style}>
-        {content}
-      </a>
-    );
+    return <a href={href}>{content}</a>;
   };
 
   const iconTone = getVariantTone(colorVariant);
@@ -194,95 +192,103 @@ export function FormHeader({
     <Box
       data-part="root"
       data-structure="form-header"
+      data-mode={mode}
       className="ds-structure ds-form-header"
     >
       <Box data-part="top-bar">
-        <Flex justify="between" align="center" wrap="wrap" gap={12}>
-          <Flex align="center" gap={16}>
-            {renderHrefAnchor(
-              backHref,
-              <Flex
-                data-part="back-button"
-                align="center"
-                gap={8}
-              >
-                {/* Governed semantic role (autoMirror: the arrow flips in
-                    RTL); the retired catalog ArrowLeftIcon carried no
-                    mirroring contract. */}
-                <NavigationBackIcon data-part="back-icon" decorative size={14} />
-                <Text data-part="back-label" size="xs" color="secondary">
-                  {resolvedBackLabel}
-                </Text>
-              </Flex>,
-              { textDecoration: 'none' },
-            )}
+        <Flex align="center" gap={16} wrap="wrap">
+          {renderHrefAnchor(
+            backHref,
+            <Flex
+              data-part="back-button"
+              align="center"
+              gap={8}
+            >
+              {/* Governed semantic role (autoMirror: the arrow flips in
+                  RTL); the retired catalog ArrowLeftIcon carried no
+                  mirroring contract. */}
+              <NavigationBackIcon data-part="back-icon" decorative size={14} />
+              <Text data-part="back-label" size="xs" color="secondary">
+                {resolvedBackLabel}
+              </Text>
+            </Flex>,
+          )}
 
-            {breadcrumbItems && breadcrumbItems.length > 0 ? (
-              <>
-                <Box data-part="breadcrumb-divider" />
-                <Breadcrumb items={breadcrumbItems} />
-              </>
-            ) : null}
-          </Flex>
-
-          <Flex data-part="actions" align="center" gap={12} wrap="wrap">
-            {resolvedActions.map((headerAction, index) => {
-              const ActionIcon = resolveSharedHeaderActionIcon(headerAction);
-
-              return (
-                <Tooltip key={`${headerAction.label}-${index}`} content={resolveSharedHeaderActionTooltip(headerAction)}>
-                  <Button
-                    variant={resolveSharedHeaderActionVariant(headerAction)}
-                    size="sm"
-                    icon={ActionIcon ? <ActionIcon data-part="action-icon" /> : undefined}
-                    onClick={headerAction.onClick}
-                    loading={headerAction.loading}
-                    disabled={headerAction.disabled}
-                  >
-                    {headerAction.label}
-                  </Button>
-                </Tooltip>
-              );
-            })}
-          </Flex>
+          {breadcrumbItems && breadcrumbItems.length > 0 ? (
+            <>
+              <Box data-part="breadcrumb-divider" />
+              <Breadcrumb items={breadcrumbItems} />
+            </>
+          ) : null}
         </Flex>
       </Box>
 
       <Box data-part="hero-panel" data-archetype={archetype}>
-        <Flex align="center" gap={16}>
-          <Box
-            data-part="icon-badge"
-            style={{
-              '--ds-header-icon-tone-bg': iconTone.bg,
-              '--ds-header-icon-tone-bd': iconTone.bd,
-              '--ds-header-icon-tone-fg': iconTone.fg,
-            } as CSSProperties}
-          >
-            <MainIcon data-part="icon-badge-glyph" />
-          </Box>
-          <Stack spacing="xs" data-part="hero-copy">
-            {eyebrow ? (
-              <Text
-                data-part="eyebrow"
-                size="xs"
-                weight="bold"
-                color="subtle"
-              >
-                {eyebrow}
-              </Text>
-            ) : null}
-            {/* Box as="h1" (the DetailHeader precedent): a composed Text
-                resolved its size inline, which left the skin's 28px display
-                type dead — the h1 is fully skin-owned now. */}
-            <Box data-part="title" as="h1">
-              {title}
+        <Flex data-part="hero-row" justify="between" align="start" gap={20} wrap="wrap">
+          <Flex align="center" gap={16} data-part="hero-cluster">
+            <Box
+              data-part="icon-badge"
+              style={{
+                '--ds-header-icon-tone-bg': iconTone.bg,
+                '--ds-header-icon-tone-bd': iconTone.bd,
+                '--ds-header-icon-tone-fg': iconTone.fg,
+              } as CSSProperties}
+            >
+              <MainIcon data-part="icon-badge-glyph" />
             </Box>
-            {subtitle && (
-              <Text data-part="subtitle" size="sm" color="secondary">
-                {subtitle}
-              </Text>
-            )}
-          </Stack>
+            <Stack spacing="xs" data-part="hero-copy">
+              {eyebrow ? (
+                <Text
+                  data-part="eyebrow"
+                  size="xs"
+                  weight="bold"
+                  color="subtle"
+                >
+                  {eyebrow}
+                </Text>
+              ) : null}
+              {/* Box as="h1" (the DetailHeader precedent): a composed Text
+                  resolved its size inline, which left the skin's display
+                  type dead — the h1 is fully skin-owned now. */}
+              <Box data-part="title" as="h1">
+                {title}
+              </Box>
+              {subtitle && (
+                <Text data-part="subtitle" size="sm" color="secondary">
+                  {subtitle}
+                </Text>
+              )}
+            </Stack>
+          </Flex>
+
+          {resolvedActions.length > 0 ? (
+            <Flex
+              data-part="actions"
+              role="group"
+              aria-label={actionsLabel}
+              align="center"
+              gap={12}
+              wrap="wrap"
+            >
+              {resolvedActions.map((headerAction, index) => {
+                const ActionIcon = resolveSharedHeaderActionIcon(headerAction);
+
+                return (
+                  <Tooltip key={`${headerAction.label}-${index}`} content={resolveSharedHeaderActionTooltip(headerAction)}>
+                    <Button
+                      variant={resolveSharedHeaderActionVariant(headerAction)}
+                      icon={ActionIcon ? <ActionIcon data-part="action-icon" /> : undefined}
+                      onClick={headerAction.onClick}
+                      loading={headerAction.loading}
+                      disabled={headerAction.disabled}
+                    >
+                      {headerAction.label}
+                    </Button>
+                  </Tooltip>
+                );
+              })}
+            </Flex>
+          ) : null}
         </Flex>
 
         {contextRail || children ? (

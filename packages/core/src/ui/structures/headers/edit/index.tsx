@@ -43,8 +43,9 @@
  *     header-actions helper), and an `extraActions` ReactNode slot
  *   - `saving` state on the Save button (the certified Button owns the
  *     width-stable loading posture — the ConfirmDialog precedent)
- *   - `loading` state for the entire header (renders a centered Spinner
- *     placeholder)
+ *   - `loading` state for the entire header (a centered Spinner inside a
+ *     named `status` live region, so the wait is announced rather than
+ *     rendering as an unlabelled spinning glyph)
  *   - Optional context-rail / children slot inside a card below the hero
  *   - 4 archetype variants (control, editorial, technical, governance)
  *     each with their own gradient + grid background pattern
@@ -61,10 +62,8 @@
 import { type CSSProperties, type ReactNode } from 'react';
 
 import { NavigationBackIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-back';
-import {
-  SaveIcon as Save,
-  XIcon as X,
-} from '../../../../graphics/icons';
+import { ActionSaveIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-save';
+import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
 import type { ComponentType } from 'react';
 type HeaderIcon = ComponentType<any>;
 
@@ -199,19 +198,15 @@ export function EditHeader({
   const saveLabel = i18n?.tOr('save_changes', 'Save Changes') ?? 'Save Changes';
   const entityIdLabel = i18n?.tOr('entity_id', 'ID') ?? 'ID';
   const dirtyLabel = i18n?.tOr('unsaved_changes', 'Unsaved changes') ?? 'Unsaved changes';
-  const renderHrefAnchor = (href: string, content: ReactNode, style?: CSSProperties) => {
+  const actionsLabel = i18n?.tOr('actions', 'Actions') ?? 'Actions';
+  const loadingLabel = i18n?.tOr('loading', 'Loading') ?? 'Loading';
+  // The underline reset lives in the skin (`a:has(> [data-part='back-button'])`),
+  // so the anchor carries no inline style of its own.
+  const renderHrefAnchor = (href: string, content: ReactNode) => {
     if (NavLink) {
-      return (
-        <NavLink href={href} style={style}>
-          {content}
-        </NavLink>
-      );
+      return <NavLink href={href}>{content}</NavLink>;
     }
-    return (
-      <a href={href} style={style}>
-        {content}
-      </a>
-    );
+    return <a href={href}>{content}</a>;
   };
 
   const iconTone = getVariantTone(colorVariant);
@@ -223,6 +218,9 @@ export function EditHeader({
         data-part="root"
         className="ds-structure ds-edit-header"
         data-loading="true"
+        role="status"
+        aria-busy="true"
+        aria-label={loadingLabel}
       >
         <Spinner size="lg" />
       </Box>
@@ -300,7 +298,7 @@ export function EditHeader({
       </Box>
 
       <Box data-part="hero-panel" data-archetype={archetype}>
-        <Flex justify="between" align="center" gap={20} wrap="wrap">
+        <Flex data-part="hero-row" justify="between" align="start" gap={20} wrap="wrap">
           <Flex align="center" gap={20} data-part="hero-copy">
             {Icon && (
               <Box
@@ -311,7 +309,9 @@ export function EditHeader({
                   '--ds-header-icon-tone-fg': iconTone.fg,
                 } as CSSProperties}
               >
-                <Icon data-part="icon-badge-glyph" style={{ width: 24, height: 24 }} />
+                {/* Glyph geometry is skin-owned (the FormHeader posture) so the
+                    container ladder can step it down without a prop. */}
+                <Icon data-part="icon-badge-glyph" />
               </Box>
             )}
             <Stack spacing="xs">
@@ -361,7 +361,14 @@ export function EditHeader({
             </Stack>
           </Flex>
 
-          <Flex data-part="actions" gap={12} wrap="wrap">
+          <Flex
+            data-part="actions"
+            role="group"
+            aria-label={actionsLabel}
+            align="center"
+            gap={12}
+            wrap="wrap"
+          >
             {actions.map((action, index) => {
               const ActionIcon = resolveSharedHeaderActionIcon(action);
 
@@ -369,7 +376,7 @@ export function EditHeader({
                 <Tooltip key={`${action.label}-${index}`} content={resolveSharedHeaderActionTooltip(action)}>
                   <Button
                     variant={resolveSharedHeaderActionVariant(action)}
-                    icon={ActionIcon ? <ActionIcon style={{ width: 14, height: 14 }} /> : undefined}
+                    icon={ActionIcon ? <ActionIcon data-part="action-icon" /> : undefined}
                     onClick={action.onClick}
                     href={action.href}
                     loading={action.loading}
@@ -384,7 +391,7 @@ export function EditHeader({
             {onCancel && (
               <Button
                 variant="secondary"
-                icon={<X style={{ width: 14, height: 14 }} />}
+                icon={<ActionCloseIcon data-part="action-icon" decorative />}
                 onClick={onCancel}
               >
                 {cancelLabel}
@@ -393,7 +400,7 @@ export function EditHeader({
             {onSave && (
               <Button
                 variant="primary"
-                icon={<Save style={{ width: 14, height: 14 }} />}
+                icon={<ActionSaveIcon data-part="action-icon" decorative />}
                 onClick={onSave}
                 loading={saving}
               >

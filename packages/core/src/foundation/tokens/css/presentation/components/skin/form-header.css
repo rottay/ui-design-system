@@ -6,7 +6,8 @@
  * LAYER: imported by `facade/entrypoints/base.css` into `layer(rottay-components)`
  * (the old "DELIBERATELY UNLAYERED (P-47)" note predates the wiring).
  *
- * SCOPE ROOT carries `ds-structure ds-form-header` + `data-part='root'`.
+ * SCOPE ROOT carries `ds-structure ds-form-header` + `data-part='root'` +
+ * ALWAYS-PRESENT `data-structure='form-header'` and `data-mode`.
  *
  * SPECIFICITY (P-48): the tenant `html[data-tenant]…*` border-color floor sits at
  * (0,3,1); a border-COLOR rule reaches (0,4,0) from the two root classes + the
@@ -16,9 +17,18 @@
  * rides the Text `color` prop (`secondary`/`subtle`) and the color rules
  * below remain as the declared intent (they still paint wherever the
  * typography skin is absent). The title is a `Box as="h1"` (DetailHeader
- * precedent): NOT typography, so its display type is fully skin-owned
- * (until the swap, a composed Text resolved its size inline and the
- * `--ds-form-header-title-font-size` rule below was dead paint).
+ * precedent): NOT typography, so its display type is fully skin-owned.
+ *
+ * TYPE ROLES: the h1 reads the governed `page-title` role chain rather than a
+ * hard 28px/700/-0.03em triple. Every tenant artifact declares all seven
+ * `--ds-type-page-title-*` properties (bithire ships `--ds-letter-spacing-display`
+ * at -0.005em against evnto/rottay's -0.03em, and each names its own heading
+ * family), so this is the channel through which the same h1 reads as a
+ * different company. The family channel stays FIRST in the chain, so a tenant
+ * that already named `--ds-form-header-title-font-size` keeps its exact size.
+ * The composed `Text` parts (eyebrow/subtitle) resolve their SIZE inline, so
+ * only family/tracking/transform are reachable from here — a font-size rule on
+ * them would be dead paint.
  *
  * SHARED WITH EditHeader: the archetype hero-panel gradient (`buildPatternStyle`)
  * and the icon-badge tone (`getVariantTone`) are proven byte-identical to
@@ -28,15 +38,37 @@
  * custom property, set inline by this component from `getVariantTone(colorVariant)`
  * because the pre-step stamped no variant attribute to key a CSS rule on.
  *
- * GLASS (S10 pre-flag): the context-card's backdrop blur is opt-in through the
+ * FORMS ARE NOT CARD STACKS (monorepo law). The `context-card` part is a legacy
+ * NAME — the §4 anatomy test in `headers/tests/` pins the string, so it stays —
+ * but its TREATMENT is a ruled section, not a card: one dominant top hairline,
+ * optical padding, no second frame, no second radius, no grid wallpaper. A
+ * bordered 18px-radius panel nested inside the bordered 20px-radius header card
+ * was a nested full frame with no owner, and it taught every create-form page
+ * below it that form context belongs in boxes. The header sets the page's
+ * rhythm, so the rhythm it sets is rules-and-spacing.
+ *
+ * GLASS (S10 pre-flag): the context section's backdrop blur is opt-in through the
  * `--ds-form-header-context-backdrop` channel (default `none`) — the retired
  * `blur(8px)` default-ON taxed every scroll frame and is not the sanctioned
  * glass contract (cockpit-header PT29 precedent, Sheet's `--ds-glass-*`).
  *
- * MATERIAL (structure-material wave). WIRED: the context card's optical top
- * edge reads the governed `inset` role highlight (see the rule below) — that
- * channel is undeclared by the default theme and by every shipped artifact, so
- * the rendered default is byte-identical.
+ * MOTION: the enter animation named `--ds-motion-calm` with NO fallback. That
+ * channel is declared only by tenant artifacts (evnto 350ms, bithire 200ms,
+ * rottay 300ms) and by the reduced-motion override — it is undeclared in
+ * foundation, so outside a tenant bundle the whole `animation` shorthand was
+ * invalid at computed-value time and this header simply appeared while its
+ * byte-identical twin EditHeader faded and lifted in. The chain now falls
+ * through to the real `--ds-motion-slow` rung; the tenant channel still wins
+ * wherever it is declared.
+ *
+ * RHYTHM: the padding channels are PRESET tiers, so the tenant `appearance.rhythm`
+ * axis mounts once at the declaration and every consume site stays a plain
+ * channel read (the workbench-header precedent).
+ *
+ * MATERIAL (structure-material wave). WIRED: the context section's optical top
+ * edge reads the governed `inset` role highlight — that channel is undeclared by
+ * the default theme and by every shipped artifact, so the rendered default is
+ * byte-identical.
  *
  * NOT WIRED, and this is a measurement, not a preference. The root's resting
  * depth (`box-shadow: 0 12px 28px …`) is the family's dominant material
@@ -45,15 +77,19 @@
  * THEME already declares (`var(--ds-shadow-sm)`). A `var()` fallback fires only
  * for an UNDECLARED name, so `var(--ds-material-card-shadow, 0 12px 28px …)`
  * would silently repaint the unbranded default from a 28px bloom to elevation-1
- * — a pixel change this lane is fenced against. The same block applies to the
- * sibling edit-header root and to the three SelectionPreviewRail cards. The
- * one-line change is ready in each file's note; adopting it is an owner call
+ * — a pixel change this lane is fenced against, and one the coordinator tracks
+ * as its own open item. The same block applies to the sibling edit-header root
+ * and to the three SelectionPreviewRail cards. Adopting it is an owner call
  * that needs a sighted before/after, because it moves the default and every
  * shipped artifact at once.
  */
 
 /* ---- root card (geometry drained from the component's inline styles) ---- */
 .ds-structure.ds-form-header[data-part='root'] {
+  --ds-form-header-hero-padding: calc(var(--ds-spacing-7, 28px) * var(--ds-rhythm-effective-scale, 1));
+  --ds-form-header-top-bar-padding-block: calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1));
+  --ds-form-header-top-bar-padding-inline: calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1));
+  --ds-form-header-context-gap: calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1));
   container: ds-form-header / inline-size;
   inline-size: 100%;
   margin-block-end: var(--ds-form-header-root-margin, 24px);
@@ -63,7 +99,8 @@
   box-shadow: 0 12px 28px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent);
   /* shared keyframes defined once in edit-header.css (this file already
      depends on it for the archetype gradients + icon-badge tone) */
-  animation: ds-header-enter var(--ds-motion-calm) var(--ds-motion-ease-out, ease-out) both;
+  animation: ds-header-enter var(--ds-motion-calm, var(--ds-motion-slow, 320ms))
+    var(--ds-motion-ease-out, ease-out) both;
 }
 /* The root's own border reaches (0,4,0) from the two classes + two DISTINCT
    attributes (the engine stamps `data-structure` for exactly this budget) —
@@ -73,31 +110,27 @@
   border: 1px solid var(--ds-color-border-secondary);
 }
 
-/* ---- top bar ---- */
+/* ---- top bar: navigation only (back + breadcrumb). The commit action used to
+        live here, on the Back link's baseline and a hero-panel away from the
+        title it commits; it now sits in the hero row, the EditHeader posture. ---- */
 .ds-structure.ds-form-header[data-part='root'] [data-part='top-bar'] {
-  padding: 12px 24px;
+  padding-block: var(--ds-form-header-top-bar-padding-block);
+  padding-inline: var(--ds-form-header-top-bar-padding-inline);
   border-bottom: 1px solid var(--ds-color-border-secondary);
   background: var(--ds-color-bg-secondary);
 }
 
-/* ---- back button — border token is --ds-color-border here (EditHeader uses -secondary) ---- */
+/* ---- back button. Padding, cursor, transition, the hover/active tint, the 1px
+        lift and the focus ring are the SHARED edit+form block in edit-header.css:
+        the flat `background: var(--ds-color-bg-primary)` override this file used
+        to carry beat that premium hover at (0,5,0), so the twins hovered
+        differently. Only the resting frame is form-specific — the border TOKEN
+        still differs from EditHeader's (-secondary), which is the border-naming
+        lane's call, not this one's. ---- */
 .ds-structure.ds-form-header[data-part='root'] [data-part='back-button'] {
-  padding: 8px 12px;
-  cursor: pointer;
   border: 1px solid var(--ds-color-border);
   border-radius: 10px;
   background: transparent;
-  transition:
-    background-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
-}
-@media (hover: hover) {
-  .ds-structure.ds-form-header[data-part='root'] [data-part='back-button']:hover {
-    background: var(--ds-color-bg-primary);
-  }
-}
-.ds-structure.ds-form-header[data-part='root'] [data-part='back-button']:active {
-  background: var(--ds-color-bg-secondary);
 }
 .ds-structure.ds-form-header[data-part='root'] [data-part='back-icon'] {
   color: var(--ds-color-text-secondary);
@@ -113,17 +146,27 @@
   background: var(--ds-color-border-secondary);
 }
 
-/* ---- actions rail: the shared-helper icons size from the skin (was an
-        inline 14px on every action icon) ---- */
-.ds-structure.ds-form-header[data-part='root'] [data-part='actions'] svg {
-  inline-size: 14px;
-  block-size: 14px;
-}
-
 /* ---- hero panel (padding drained; the gradient itself lives in
         edit-header.css, shared) ---- */
 .ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] {
-  padding: var(--ds-form-header-hero-padding, 28px);
+  padding: var(--ds-form-header-hero-padding);
+}
+/* The copy yields before the action rail does: the cluster may shrink, the
+   rail may not. */
+.ds-structure.ds-form-header[data-part='root'] [data-part='hero-cluster'] {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+
+/* ---- action rail (moved out of the utility strip) ---- */
+.ds-structure.ds-form-header[data-part='root'] [data-part='actions'] {
+  flex: 0 0 auto;
+  margin-inline-start: auto;
+}
+/* the shared-helper icons size from the skin (was an inline 14px per icon) */
+.ds-structure.ds-form-header[data-part='root'] [data-part='actions'] svg {
+  inline-size: var(--ds-form-header-action-icon-size, 14px);
+  block-size: var(--ds-form-header-action-icon-size, 14px);
 }
 
 /* ---- icon badge: the TONE rides the shared hatch (edit-header.css); the
@@ -137,52 +180,52 @@
   block-size: var(--ds-form-header-icon-badge-size, 52px);
 }
 .ds-structure.ds-form-header[data-part='root'] [data-part='icon-badge-glyph'] {
-  inline-size: 22px;
-  block-size: 22px;
+  inline-size: var(--ds-form-header-icon-badge-glyph-size, 22px);
+  block-size: var(--ds-form-header-icon-badge-glyph-size, 22px);
 }
 
-/* ---- hero copy: eyebrow / title / subtitle (typography drained from inline) ---- */
+/* ---- hero copy: eyebrow / title / subtitle ---- */
 .ds-structure.ds-form-header[data-part='root'] [data-part='hero-copy'] {
   min-inline-size: 0;
 }
 .ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] [data-part='eyebrow'] {
   color: var(--ds-color-text-muted);
-  font-family: var(--ds-font-family-mono, monospace);
-  letter-spacing: 0.12em;
+  /* the eyebrow is a micro-label, so it reads the `code` role's family (the
+     tenant's mono choice) and the foundation tracking rung — never a literal */
+  font-family: var(--ds-type-code-font-family, var(--ds-font-family-mono, monospace));
+  letter-spacing: var(--ds-letter-spacing-widest, 0.12em);
   text-transform: uppercase;
 }
 .ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] [data-part='title'] {
-  /* the title is a Box as="h1" (not typography) — this display type finally
-     paints: a composed Text resolved its size inline and left this rule dead */
+  /* the title is a Box as="h1" (not typography), so the full page-title role
+     chain reaches it; the family channel stays first so a tenant that already
+     named a size keeps it */
   margin: 0;
   color: var(--ds-color-text-primary);
-  font-size: var(--ds-form-header-title-font-size, 28px);
-  font-weight: var(--ds-font-weight-bold, 700);
-  letter-spacing: -0.03em;
+  font-family: var(--ds-type-page-title-font-family, var(--ds-font-family-heading));
+  font-size: var(--ds-form-header-title-font-size, var(--ds-type-page-title-font-size, var(--ds-font-size-2xl)));
+  font-weight: var(--ds-type-page-title-font-weight, var(--ds-font-weight-bold, 700));
+  line-height: var(--ds-type-page-title-line-height, 1.2);
+  letter-spacing: var(--ds-type-page-title-letter-spacing, var(--ds-letter-spacing-tight));
+  overflow-wrap: break-word;
 }
 .ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] [data-part='subtitle'] {
   color: var(--ds-color-text-secondary);
+  font-family: var(--ds-type-supporting-font-family, var(--ds-font-family-base));
+  letter-spacing: var(--ds-type-supporting-letter-spacing, var(--ds-letter-spacing-normal));
 }
 
-/* ---- context card below the hero (byte-identical gradients to EditHeader's,
-        duplicated per-file; glass now opt-in) ---- */
+/* ---- context section below the hero: a RULE, not a card (see the header's
+        "Forms are not card stacks" note). One dominant boundary, optical
+        padding, and the governed inset highlight for the optical top edge. ---- */
 .ds-structure.ds-form-header[data-part='root'] [data-part='context-card'] {
-  margin-block-start: 22px;
-  padding: 16px 18px 18px;
-  border-radius: 18px;
-  background:
-    radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--ds-color-text-primary) 7%, transparent) 0%, transparent 34%),
-    radial-gradient(circle at 82% 100%, color-mix(in srgb, var(--ds-color-text-secondary) 6%, transparent) 0%, transparent 36%),
-    linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-secondary) 54%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-secondary) 74%, transparent) 100%),
-    linear-gradient(color-mix(in srgb, var(--ds-color-text-muted) 15%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in srgb, var(--ds-color-text-muted) 15%, transparent) 1px, transparent 1px);
-  background-size: 100% 100%, 100% 100%, 100% 100%, 24px 24px, 24px 24px;
-  background-position: 0 0, 0 0, 0 0, 0 0, 0 0;
-  /* The context card is a RECESSED well inside the header card (darker ground,
-     own keyline, opt-in frost), so its optical top edge reads the governed
-     `inset` role's highlight facet — the edit-header sibling carries the same
-     chain. Declared by neither the default theme nor any shipped artifact, so
-     the pre-wave inset is what still renders. */
+  margin-block-start: var(--ds-form-header-context-gap);
+  padding-block-start: var(--ds-form-header-context-gap);
+  /* The context section is the RECESSED continuation of the hero, so its
+     optical top edge reads the governed `inset` role's highlight facet — the
+     edit-header sibling carries the same chain. Declared by neither the default
+     theme nor any shipped artifact, so the pre-wave inset is what still
+     renders. */
   box-shadow: var(
     --ds-material-inset-highlight,
     inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
@@ -192,24 +235,50 @@
      precedent, Sheet glass contract). */
   backdrop-filter: var(--ds-form-header-context-backdrop, none);
 }
-.ds-structure.ds-form-header[data-part='root'] [data-part='context-card'] {
-  border: 1px solid var(--ds-color-border-secondary);
+/* the single dominant boundary for the region */
+.ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] [data-part='context-card'] {
+  border-block-start: 1px solid var(--ds-color-border-secondary);
 }
 .ds-structure.ds-form-header[data-part='root'] [data-part='context-card-children'][data-has-rail='true'] {
   margin-block-start: 18px;
 }
 
-/* ---- narrow composition cut: the hero compacts instead of crushing ---- */
+/* ---- composition ladder. A skin adapts to its CONTAINER, never to the window
+        (WO-ARC-05: the first viewport breakpoint in a skin fails the build), so
+        every step below is a container query against the container the root
+        declares. Narrow is a simplified posture, not a squeezed one. ---- */
+
+/* ~544px and below: the hero compacts instead of crushing. */
 @container ds-form-header (inline-size < 34rem) {
-  .ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] {
-    padding: var(--ds-form-header-hero-padding-compact, 20px);
-  }
-  .ds-structure.ds-form-header[data-part='root'] [data-part='icon-badge'] {
-    inline-size: 44px;
-    block-size: 44px;
+  .ds-structure.ds-form-header[data-part='root'] {
+    --ds-form-header-hero-padding: var(--ds-form-header-hero-padding-compact, calc(var(--ds-spacing-5, 20px) * var(--ds-rhythm-effective-scale, 1)));
+    --ds-form-header-context-gap: calc(var(--ds-spacing-5, 20px) * var(--ds-rhythm-effective-scale, 1));
+    --ds-form-header-icon-badge-size: 44px;
+    --ds-form-header-icon-badge-glyph-size: 20px;
   }
   .ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] [data-part='title'] {
-    font-size: var(--ds-form-header-title-font-size-compact, 24px);
+    font-size: var(--ds-form-header-title-font-size-compact, var(--ds-type-section-title-font-size, var(--ds-font-size-xl)));
+  }
+  /* the rail stops being a right-aligned appendix and becomes its own band */
+  .ds-structure.ds-form-header[data-part='root'] [data-part='actions'] {
+    inline-size: 100%;
+    margin-inline-start: 0;
+  }
+}
+
+/* ~384px and below: a single stacked column. The badge leaves the title's
+   baseline and the actions become full-width targets — a phone posture, not a
+   compressed desktop. */
+@container ds-form-header (inline-size < 24rem) {
+  .ds-structure.ds-form-header[data-part='root'] {
+    --ds-form-header-top-bar-padding-inline: calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1));
+  }
+  .ds-structure.ds-form-header[data-part='root'] [data-part='hero-cluster'] {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .ds-structure.ds-form-header[data-part='root'] [data-part='actions'] > * {
+    flex: 1 1 100%;
   }
 }
 
@@ -221,12 +290,11 @@
   }
 }
 
-/* forced-colors: gradients, tones and shadows are forced away, so the cards
-   and controls re-assert in system colors. The icon badge keeps a framed
-   neutral boundary (its tone hatch is decorative); the back button keeps
-   its frame; hairlines degrade to ButtonText. The action rail is composed
-   Buttons with their own forced-colors contract; the breadcrumb is the
-   composed primitive's. */
+/* forced-colors: gradients, tones and shadows are forced away, so the regions
+   re-assert in system colors. The icon badge keeps a framed neutral boundary
+   (its tone hatch is decorative); the back button keeps its frame; hairlines
+   degrade to ButtonText. The action rail is composed Buttons with their own
+   forced-colors contract; the breadcrumb is the composed primitive's. */
 @media (forced-colors: active) {
   .ds-structure.ds-form-header[data-part='root'] {
     border-color: ButtonText;
