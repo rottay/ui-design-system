@@ -1,0 +1,60 @@
+diff --git a/packages/core/src/foundation/tokens/css/facade/artifacts/bithire/_source/extension.css b/packages/core/src/foundation/tokens/css/facade/artifacts/bithire/_source/extension.css
+index 350ebfc29..cb9495437 100644
+--- a/packages/core/src/foundation/tokens/css/facade/artifacts/bithire/_source/extension.css
++++ b/packages/core/src/foundation/tokens/css/facade/artifacts/bithire/_source/extension.css
+@@ -108,11 +108,6 @@ html[data-tenant="bithire"]:not([data-theme="dark"]):not(.dark) {
+     var(--ds-surface-card)
+   );
+   --ds-surface-chip-text: var(--ds-color-primary);
+-  --ds-card-border-hover: color-mix(
+-    in srgb,
+-    var(--ds-color-primary) 24%,
+-    var(--ds-color-border)
+-  );
+   --ds-card-side-accent-soft: color-mix(
+     in srgb,
+     var(--ds-color-primary) 7%,
+diff --git a/packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css b/packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css
+index 891e84863..7ca2deda7 100644
+--- a/packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css
++++ b/packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css
+@@ -1635,11 +1635,6 @@
+     var(--ds-surface-card)
+   );
+   --ds-surface-chip-text: var(--ds-color-primary);
+-  --ds-card-border-hover: color-mix(
+-    in srgb,
+-    var(--ds-color-primary) 24%,
+-    var(--ds-color-border)
+-  );
+   --ds-card-side-accent-soft: color-mix(
+     in srgb,
+     var(--ds-color-primary) 7%,
+diff --git a/packages/core/src/foundation/tokens/css/facade/artifacts/evnto/_source/extension.css b/packages/core/src/foundation/tokens/css/facade/artifacts/evnto/_source/extension.css
+index 7bbd0409f..814a87d60 100644
+--- a/packages/core/src/foundation/tokens/css/facade/artifacts/evnto/_source/extension.css
++++ b/packages/core/src/foundation/tokens/css/facade/artifacts/evnto/_source/extension.css
+@@ -51,8 +51,7 @@ html[data-tenant='evnto']:not([data-theme='dark']):not(.dark) {
+   --ds-color-text-muted: #737373;
+   --ds-color-text-disabled: #b3b3b3;
+ 
+-  /* Borders - Subtle on light */
+-  --ds-color-border: rgba(0, 0, 0, 0.08);
++  /* Borders - subtle on light; --ds-color-border is the BrandTheme's. */
+   --ds-color-border-primary: rgba(0, 0, 0, 0.08);
+   --ds-color-border-secondary: rgba(0, 0, 0, 0.12);
+   --ds-color-border-focus: #171717;
+diff --git a/packages/core/src/foundation/tokens/css/facade/artifacts/evnto/index.css b/packages/core/src/foundation/tokens/css/facade/artifacts/evnto/index.css
+index 0a347810e..d8aa0e38c 100644
+--- a/packages/core/src/foundation/tokens/css/facade/artifacts/evnto/index.css
++++ b/packages/core/src/foundation/tokens/css/facade/artifacts/evnto/index.css
+@@ -501,8 +501,7 @@
+   --ds-color-text-muted: #737373;
+   --ds-color-text-disabled: #b3b3b3;
+ 
+-  /* Borders - Subtle on light */
+-  --ds-color-border: rgba(0, 0, 0, 0.08);
++  /* Borders - subtle on light; --ds-color-border is the BrandTheme's. */
+   --ds-color-border-primary: rgba(0, 0, 0, 0.08);
+   --ds-color-border-secondary: rgba(0, 0, 0, 0.12);
+   --ds-color-border-focus: #171717;
