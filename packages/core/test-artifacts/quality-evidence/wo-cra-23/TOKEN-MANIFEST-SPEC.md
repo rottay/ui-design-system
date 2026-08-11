@@ -673,6 +673,13 @@ across 56 components — menu 28, upload 26, inputnumber 25, tooltip 23, switch 
 20, tag 20. A component channel in a theme file is a layering violation **regardless of its value**,
 and moving it is a **relocation to `presentation/components/`, not a deletion**.
 
+> ⚠ **Relocation is NOT safe by construction — an earlier revision of this line implied it was.**
+> `rottay-components` and `rottay-engines` **outrank** `rottay-tokens`, so moving a declaration from
+> the theme file into a component sheet **raises its layer rank** and it would then win against
+> declarations it currently loses to. Safe only for declarations that have no competitor in any cell,
+> or if the moved sheet is assigned to the tokens layer so rank is unchanged. **The count of
+> would-flip declarations is the real cost of that wave and must be established before it opens.**
+
 **The split-family rule.** The evnto border hole is not an isolate:
 
 > **Verticals author ramps and primaries; the DS silently supplies the derived roles.**
