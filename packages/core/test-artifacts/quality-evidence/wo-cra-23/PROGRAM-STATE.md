@@ -2103,6 +2103,54 @@ overridden in light but not dark still reads as overridden. bithire declaring
 `--ds-color-bg-primary: #ffffff` beside `--ds-color-bg-secondary: #151d2b` is the light/dark split,
 not an inconsistency. Resolving it properly is the same per-cell question the probe answers.
 
+### SIX CONTRACTS WERE RED ALL NIGHT AND NOBODY RAN THE SUITE THAT FINDS THEM
+
+The last finding, and it is about us. Running the token suites before a routine commit turned up
+**seven red files**. Attributed in two steps rather than assumed:
+
+```
+without the ramp rung (uncommitted)   7 red   → the rung is innocent
+without my fluid-ramp change          6 red   → I caused exactly one
+```
+
+The one I caused is `type-radius-scale-resolution`, reverted at `a9dede818`. `fluid-ramps` was
+**already red on a different assertion** — my change only moved which one fails, a shape that reads
+as "I broke it" when it is not and as "it was already broken" when it is.
+
+**The other six predate this session entirely.** Verified, 8 tests with their sites:
+
+```
+fluid-ramps:120,124 (+1)      3xl/4xl/5xl bounded by two values the static ramp declares
+tokens.contract:65            a public reference with no real custom property
+reduced-motion-guard:142      the previously-unguarded roster is no longer empty
+elevation-surface-lift:135    modal touches its bg fill composing the layer
+root-component-authority:166  a channel drained outside its declared owner
+bithire-motion-interaction:75 ledger tone channels not compiled
+```
+
+> **A green must name its scope — and I broke that law myself.** I validated the fluid-ramp change
+> with `typecheck` plus a `typography` filter, 148 green. Both contracts it broke live in other
+> directories. The command that finds this whole set is `vitest run src/foundation/tokens`, 40 files,
+> and it is in **no lane's routine, including mine**. A filtered green was read as a suite green all
+> night, by everyone.
+
+Two of the six — `tokens.contract` and `root-component-authority` — are exactly the contracts whose
+green was being assumed every time the gates were called clean. Both describe **ownership** rather
+than values, which makes them the likeliest to be live rather than aged, and they are attributed
+first.
+
+**Strong lead on three of the eight, to be tested and not assumed.** `fluid-ramps` claims the fluid
+3xl/4xl/5xl are bounded by two values the static ramp declares. But the static top rung is
+`--ds-font-size-5xl-base: 2.5rem`, measured when a lane refused to route collection-header's clamps
+through ramp tokens because those need **2.625–3.625rem, above the static top**. If the fluid ramp
+reaches sizes the static ramp cannot express, the contract cannot hold — and it is **not a live paint
+defect but a contract that aged past its ramp**. Two independent witnesses for one gap, from opposite
+ends: the clamps could not be expressed downward, and this contract cannot bound them upward. **The
+static ramp is missing rungs at the top.**
+
+Attribution is the deliverable, not repair: for each, *when did it go red* and *is it a live defect or
+an aged contract*. Different answers, different work. **None of them is baselined.**
+
 ### A family patch survives the real fix and UNDERCUTS it
 
 The last law of the programme, and the lane found it by re-reading its own earlier work rather than
