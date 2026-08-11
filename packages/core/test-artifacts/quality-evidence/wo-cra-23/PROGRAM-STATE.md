@@ -529,6 +529,55 @@ fallback arm, and the declared-nowhere census. Those stand. But **the instrument
 evidence within its roster**, and a roster of six fixtures is not the component library. Any lane
 quoting `changedRows: 0` must state which fixtures could have moved.
 
+### A finding attributed to the WRONG INSTRUMENT gets fixed in the wrong place
+
+Fourth instance tonight, and this one is mine. I routed the portal-timing defect — surface mounts one
+tick before content, 44 false dead rules — to `skin-orphan-scope-audit`. **It cannot be that gate's
+bug.** That gate is pure static analysis: `readFileSync` plus `postcss.parse`, no jsdom, no
+`document`, no render. **Mount timing cannot bias an instrument that never mounts anything.** Its
+sibling `skin-dead-part-audit` states in its own header that jsdom is not consulted either.
+
+The defect lives in the *reporting lane's own fixture*, which is where the fix belongs. Had it been
+"fixed" in the gate, the real instrument would have kept producing false findings behind a repair that
+looked done.
+
+Companion instances of the same shape tonight: three families triaged as "no skin" that each had one,
+and a `ds-sr-only` false positive attributed to a family when it belonged to the walk's scope.
+**Before routing a fix, verify the named instrument can exhibit the mechanism.**
+
+### CORRECTION: `0cdae6e2a` claims an a11y defect that does not exist
+
+The commit says the unmigrated glyph "emitted an SVG that is neither aria-hidden nor named". False:
+`runtime/factory/phosphor-compat/index.tsx:122` reads
+`"aria-hidden": hasAccessibleName ? undefined : ariaHidden ?? true`, so compatibility icons default to
+`aria-hidden="true"` and `<PinOff size={13} />` was correctly hidden all along.
+
+The `decorative` I added is harmless — it makes explicit what was defaulted — but the stated reason was
+wrong. **What survives is only the supplier-fence point**: one of seven glyphs in that file bypasses the
+governed facade, and there is no pin/unpin role in the corpus to migrate it to.
+
+The reporting lane caught its own over-claim and named the cause: it inferred runtime behaviour from a
+contract instead of checking it, for the third time in one session. Which is the same law already
+recorded two sections down — **an executable contract outranks reading source** — arriving as a
+near-miss rather than a defect, because I acted on the report before it self-corrected.
+
+### A control that CANNOT FAIL manufactures confidence
+
+Asked to add a portal family to its control set, a lane refused with the right reason: nothing in a
+static gate can be affected by mount order, so that control would pass unconditionally. **A control
+that cannot fail is the same defect as a gate that scans nothing and passes everything** — it looks
+like compliance and is its opposite.
+
+What it added instead spans a real second axis: its extractor reads `className=` **literals**, so every
+`clsx()`, `cn()`, conditional object or bare identifier is invisible. That floor was prose; it is now a
+measured number printed beside every run — **109 unreadable expressions in 78 files** — and the control
+plants a `clsx(...)` shape and **fails unless the gate counts it as unreadable**. A scan that cannot see
+something and does not say so is precisely the failure a control exists to prevent.
+
+Its output now states the epistemic limit in every run: a finding means no selector in the printed trees
+matches that class **by literal comparison**; it does not mean the element is unstyled; and the gate
+reaches no states at all, which is also why mount timing cannot bias it.
+
 ### An OUTCOME test survives a false premise; a MECHANISM argument does not
 
 The sharpest statement of method the programme has produced, and it explains why an over-broad belief
