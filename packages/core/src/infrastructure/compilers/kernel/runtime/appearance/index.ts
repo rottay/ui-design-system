@@ -60,6 +60,7 @@ import {
 } from '../../foundation/css/color-math';
 import { chromeToVariables } from '../../foundation/css/chrome-variables';
 import {
+  deriveBorderSubtle,
   deriveGroundLadder,
   derivePaletteSemantics,
   type GroundLadder,
@@ -464,6 +465,36 @@ export function appearanceGeneralToVariables(
     } else {
       const resolvedBg = mode === 'dark' ? darkBg ?? lightBg : lightBg;
       if (resolvedBg) emitSurfaces(deriveGroundLadder(resolvedBg));
+    }
+
+    // The quietest separator has no tenant field and does not need one: it is
+    // the authored border standing a third of the way back toward the canvas,
+    // so one border decision carries it. Emitted from here rather than from
+    // `derivePaletteSemantics` because two first-party extensions declare this
+    // channel by hand in a state their compiled base block reaches — on the
+    // static path that is an EXTENSION-CANNOT-BEAT-TENANT conflict, and the DB
+    // path, which has no extension, is where the channel is genuinely severed.
+    // Reads the grounds the surface tier just resolved, so the hairline and the
+    // surfaces it separates can never disagree about which canvas they are on.
+    const subtleOf = (border: string | undefined, ground: string | undefined) =>
+      border && ground ? deriveBorderSubtle(border, ground) : undefined;
+    const darkBorder = p.dark?.border?.primary ?? p.border?.primary;
+    if (mode === 'auto' && lightBg && darkBg) {
+      setResolvedColor(
+        vars,
+        '--ds-color-border-subtle',
+        subtleOf(p.border?.primary, lightBg),
+        subtleOf(darkBorder, darkBg),
+        mode,
+      );
+    } else {
+      setVar(
+        vars,
+        '--ds-color-border-subtle',
+        mode === 'dark'
+          ? subtleOf(darkBorder, darkBg ?? lightBg)
+          : subtleOf(p.border?.primary, lightBg),
+      );
     }
 
     if (mode === 'auto' && p.dark && Object.keys(p.dark).length > 0) {

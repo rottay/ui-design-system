@@ -231,6 +231,9 @@ describe("W4 first-class canvas, reading ink and separator emission", () => {
     expect(vars["--ds-color-border-primary"]).toBe(light.border.primary);
     expect(vars["--ds-color-border"]).toBe(light.border.primary);
     expect(vars["--ds-color-border-secondary"]).toBe(light.border.secondary);
+    // The hairline nobody authors: the border a third of the way back toward
+    // the canvas, so one authored border carries it.
+    expect(vars["--ds-color-border-subtle"]).toBe("#d9cdbd");
   });
 
   it("leaves the separator channels undeclared when the tenant authors none", () => {
@@ -240,6 +243,17 @@ describe("W4 first-class canvas, reading ink and separator emission", () => {
     expect(vars["--ds-color-border"]).toBeUndefined();
     expect(vars["--ds-color-border-primary"]).toBeUndefined();
     expect(vars["--ds-color-border-secondary"]).toBeUndefined();
+    expect(vars["--ds-color-border-subtle"]).toBeUndefined();
+  });
+
+  it("withholds the derived hairline when there is no canvas to step toward", () => {
+    const vars = appearanceToVariables({
+      general: {
+        palette: { border: { primary: "#C8B9A5" }, backgroundMode: "light" },
+      },
+    });
+    expect(vars["--ds-color-border-primary"]).toBe("#C8B9A5");
+    expect(vars["--ds-color-border-subtle"]).toBeUndefined();
   });
 
   it("selects the authored dark hierarchy in dark mode", () => {
@@ -251,6 +265,10 @@ describe("W4 first-class canvas, reading ink and separator emission", () => {
     expect(vars["--ds-color-text-muted"]).toBe(dark.foreground.muted);
     expect(vars["--ds-color-border-primary"]).toBe(dark.border.primary);
     expect(vars["--ds-color-border"]).toBe(dark.border.primary);
+    // Derived from the DARK border over the DARK canvas: under `dark` the
+    // authored light pair is inert, so a hairline built from it would be a
+    // light-mode value shipped into a dark artifact.
+    expect(vars["--ds-color-border-subtle"]).toBe("#4d4336");
   });
 
   it("emits mode-aware foundations under auto without pinning light ink", () => {
@@ -268,6 +286,11 @@ describe("W4 first-class canvas, reading ink and separator emission", () => {
     );
     expect(vars["--ds-color-border"]).toBe(
       `light-dark(${light.border.primary}, ${dark.border.primary})`
+    );
+    // Each half derives from its OWN border and its OWN canvas; pairing the
+    // two is the only mode-aware part.
+    expect(vars["--ds-color-border-subtle"]).toBe(
+      "light-dark(#d9cdbd, #4d4336)"
     );
     expect(vars["--ds-color-scheme"]).toBe("light dark");
   });
