@@ -21,9 +21,16 @@ import { renderWithEngine } from '../../../../tooling/testing/helpers/engine';
 // (P-79 / "a surface owns no DOM"), these five files are engine-free
 // structures that COMPOSE engine-switched primitives (Button, Badge,
 // Breadcrumb, Spinner, Tooltip) -- `Grid`/`Card` DROP a caller `data-part`
-// in BOTH engines and `Button` drops it in EVERY engine (each stamps its own
-// part last under the pass-through honesty law), so any anatomy this
-// file owns on a composed Button rides a className, never `data-part`. This
+// in BOTH engines and `Button` drops it in TWO of three. Per the executable
+// contract in `primitives/inputs/Button/tests/Button.passthrough-contract.test.tsx`,
+// MODERN honours a caller's `data-part` (falling back to 'trigger' only when none
+// is passed), while CLASSIC and RUSTIC both override it to 'trigger'. Classic's
+// override is imperative -- `stampDataPart(root, 'trigger')` in a layout effect
+// that re-runs after every commit -- so the attribute is removed from a live node
+// rather than never set, which makes any assertion racing that effect a flake.
+// Anatomy on a composed Button therefore still rides a className whenever it must
+// survive all three engines: that workaround is load-bearing for classic and
+// rustic and only LOOKS redundant when read from modern. This
 // file is the only thing in the chain that proves a stamp actually reached
 // the DOM (P-79's own lesson from CK-D: tsc accepts the stamp everywhere,
 // the paint counter does not read attributes, and a skin rule anchored on a
