@@ -141,9 +141,19 @@ guard against all five is not admissible.
 > is a written finding, not an edit.*
 
 **The mandatory build-free verification**, which every lane runs and nothing runs for them:
-`scripts/channel-wiring-zero-delta-gate.mjs --baseline <pinned>` — static, needs no `dist`, collapses
-every new `var()` read to its fallback and byte-compares. Plus selector-multiset equality on the diff,
-and a static per-vertical resolution check for any substitution.
+`scripts/channel-wiring-zero-delta-gate.mjs --baseline <pinned>` — static, needs no `dist`. Plus
+selector-multiset equality on the diff, and a static per-vertical resolution check for any
+substitution.
+
+> **The baseline is HEAD at the moment YOUR lane starts, on a clean tree.** Capture the sha before
+> your first edit. A fixed older commit measures accumulated prior-wave work, so the gate reports
+> files the lane never touched and **every lane inherits a red it cannot clear** — which is what
+> happened while a stale pin was the standing instruction.
+
+The gate certifies **deletions** positionally — was this declaration already losing, and does it
+still lose — and never by comparing values, because comparing values fails a file for an edit two
+files away. It no longer passes a silent retune: a wave that deliberately changes a value now goes
+red and must say so.
 
 ---
 
@@ -240,6 +250,18 @@ absent: pinning them here would make this document stale the moment it was commi
 
 | 16 | The hard forks | **Drift unless proven otherwise.** One name survives, the value unifies to the vertical that paints it, and any deliberate divergence is declared as a written exception per row. Turns 38 decisions into a sweep plus a short exception list |
 | 17 | `--ds-border-color` ~ `--ds-color-border` (625 reads, the largest in the corpus) | **`--ds-color-border` survives; platform's value is preserved** by rewriting its declaration onto the survivor in the same commit. Zero visible change in all three verticals |
+
+### A sixth unsafe class: the alias that bridges engines
+
+An alias whose only purpose is to carry a value **into a read-only engine**. The compiler emits one
+spelling; a vertical's extension declares the other as `var(first)` so tenant paint reaches Rustic.
+Retiring it cannot repoint the readers — Rustic is read-only by standing fence — so it **activates
+the hardcoded fallbacks** and strips that vertical's paint from the read-only engine.
+
+> **The pure-alias shape is precisely what makes it look safe.** Class 5 inverted: instead of
+> declaring a name and flipping fallbacks on, this deletes a name and flips fallbacks on.
+
+Before retiring any alias, check whether a read-only engine reads the losing spelling.
 
 ### The survivor rule — non-negotiable for every fork
 
