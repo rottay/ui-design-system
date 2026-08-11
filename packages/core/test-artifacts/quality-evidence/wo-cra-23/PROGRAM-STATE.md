@@ -431,6 +431,33 @@ under §1.4 is always no. Rows c–f above are all this shape.
 Corollary: idling for an answer is itself the defect. An hourly heartbeat now re-enters the programme
 if a lane has stalled waiting on a decision that was never the owner's to make.
 
+### A selector census must be PARSED, never grepped
+
+I reported that `form-header.css` and `edit-header.css` each claimed both scope classes, and called it
+a duplication finding. A family lane refuted it with postcss:
+
+```
+form-header.css   selectors touching .ds-edit-header : 0     raw string hits : 1  (a comment)
+edit-header.css   selectors compounding both classes : 0     raw string hits : 14 (13 real + 1 comment)
+```
+
+My instrument was `grep -oE '\.ds-[a-z0-9-]+'`, which counted the lane's own file-header prose. And the
+13 real cross-scope selectors were not duplication but its opposite — comma-grouped **pairs** sharing
+one declaration block, written once and consumed by both families.
+
+Two distinct errors, worth separating: a comment produced a phantom, and grouped selectors were read
+as compounded ones. Only a parser distinguishes `A, B { }` from `A.B { }`, and that distinction is the
+whole question. Related, from §3: two instruments agreeing is not evidence when they share a technique.
+The inverse bit here — one instrument, of the wrong kind, and no second reading to contradict it.
+
+Corrected numbers from the same pass: the tier has **25** real families (I had said 28, counting
+`tests/`, `contracts/` and `styles/` directories as families). The `.ds-structure` count of 18 files
+survives re-verification with all `/* */` blocks stripped.
+
+The real defect underneath, which the false one hid: shared paint for two families lives in a file
+**named after one of them**, so an agent editing "the edit header skin" silently repaints the form
+header. Extraction to a neutral third file is queued — a relocation, not a merge.
+
 ### Structures do not get engine splits — decided 2026-08-10
 
 A family lane asked for the `engine-token-audit` baseline to be cleared so it could split its two
