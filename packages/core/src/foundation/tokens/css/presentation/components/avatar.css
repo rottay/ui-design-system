@@ -57,9 +57,6 @@
      SHAPES - Avatar Border Radius
      Three shape variants: circle, square, rounded
      ======================================================================== */
-  --ds-avatar-circle-radius: 50%;                          /* Fully rounded */
-  --ds-avatar-square-radius: 0;                            /* No rounding */
-  --ds-avatar-rounded-radius: var(--ds-radius-md, 0.5rem);    /* 8px rounded corners */
 
   /* ========================================================================
      VARIANTS - Avatar Color Variants

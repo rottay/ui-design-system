@@ -105,14 +105,14 @@
   min-inline-size: calc(var(--ds-checkbox-md-size) * var(--ds-density-effective-scale));
 }
 .ds-checkbox.ds-checkbox--modern[data-part='root'][data-size='lg'] [data-part='box'] {
-  inline-size: calc(var(--ds-checkbox-lg-size) * var(--ds-density-effective-scale));
-  block-size: calc(var(--ds-checkbox-lg-size) * var(--ds-density-effective-scale));
-  min-inline-size: calc(var(--ds-checkbox-lg-size) * var(--ds-density-effective-scale));
+  inline-size: calc(var(--ds-checkbox-size-lg) * var(--ds-density-effective-scale));
+  block-size: calc(var(--ds-checkbox-size-lg) * var(--ds-density-effective-scale));
+  min-inline-size: calc(var(--ds-checkbox-size-lg) * var(--ds-density-effective-scale));
 }
 .ds-checkbox.ds-checkbox--modern[data-part='root'][data-size='xl'] [data-part='box'] {
-  inline-size: calc(var(--ds-checkbox-xl-size) * var(--ds-density-effective-scale));
-  block-size: calc(var(--ds-checkbox-xl-size) * var(--ds-density-effective-scale));
-  min-inline-size: calc(var(--ds-checkbox-xl-size) * var(--ds-density-effective-scale));
+  inline-size: calc(var(--ds-checkbox-size-xl) * var(--ds-density-effective-scale));
+  block-size: calc(var(--ds-checkbox-size-xl) * var(--ds-density-effective-scale));
+  min-inline-size: calc(var(--ds-checkbox-size-xl) * var(--ds-density-effective-scale));
 }
 
 /* Radius grammar: the prop picks a canonical channel, never a literal. */

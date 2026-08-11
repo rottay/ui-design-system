@@ -225,7 +225,6 @@
   /* Default variant */
   --ds-card-default-bg: var(--ds-card-bg);
   --ds-card-default-border-color: var(--ds-card-border-color);
-  --ds-card-default-shadow: var(--ds-card-shadow-default);
 
   /* Bordered variant (emphasized border, no shadow) */
   --ds-card-bordered-bg: var(--ds-card-bg);
@@ -608,7 +607,6 @@
      ======================================================================== */
   --ds-card-disabled-opacity: 0.5;
   --ds-card-disabled-cursor: not-allowed;
-  --ds-card-disabled-bg: var(--ds-card-bg-disabled);
 }
 
 .ds-card {

@@ -30,7 +30,7 @@ export const modalOverlay = {
 
 // Modal Container
 export const modalContainer = {
-  zIndex: 'var(--ds-modal-z-index)',
+  zIndex: 'var(--ds-z-index-modal)',
   margin: 'var(--ds-modal-margin)',
   marginMobile: 'var(--ds-modal-margin-mobile)',
 } as const;

@@ -164,7 +164,7 @@ export const cardVariant = {
   default: {
     bg: 'var(--ds-card-default-bg)',
     borderColor: 'var(--ds-card-default-border-color)',
-    shadow: 'var(--ds-card-default-shadow)',
+    shadow: 'var(--ds-card-shadow-default)',
   },
   bordered: {
     bg: 'var(--ds-card-bordered-bg)',
@@ -289,7 +289,7 @@ export const cardAccessibility = {
 export const cardDisabled = {
   opacity: 'var(--ds-card-disabled-opacity)',
   cursor: 'var(--ds-card-disabled-cursor)',
-  bg: 'var(--ds-card-disabled-bg)',
+  bg: 'var(--ds-card-bg-disabled)',
 } as const;
 
 // Combined card tokens

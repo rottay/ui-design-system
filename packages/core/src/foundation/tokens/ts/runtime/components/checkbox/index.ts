@@ -23,12 +23,12 @@ export const checkboxSize = {
     borderWidth: 'var(--ds-checkbox-md-border-width)',
   },
   lg: {
-    size: 'var(--ds-checkbox-lg-size)',
+    size: 'var(--ds-checkbox-size-lg)',
     fontSize: 'var(--ds-checkbox-lg-font-size)',
     borderWidth: 'var(--ds-checkbox-lg-border-width)',
   },
   xl: {
-    size: 'var(--ds-checkbox-xl-size)',
+    size: 'var(--ds-checkbox-size-xl)',
     fontSize: 'var(--ds-checkbox-xl-font-size)',
     borderWidth: 'var(--ds-checkbox-xl-border-width)',
   },

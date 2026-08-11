@@ -287,8 +287,8 @@ export const SIZE_MAP: Record<RadioSize, string> = {
   xs: 'var(--ds-radio-xs-size)',
   sm: 'var(--ds-radio-sm-size)',
   md: 'var(--ds-radio-md-size)',
-  lg: 'var(--ds-radio-lg-size)',
-  xl: 'var(--ds-radio-xl-size)',
+  lg: 'var(--ds-radio-size-lg)',
+  xl: 'var(--ds-radio-size-xl)',
 };
 
 /**

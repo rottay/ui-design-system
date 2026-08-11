@@ -23,12 +23,12 @@ export const radioSize = {
     borderWidth: 'var(--ds-radio-md-border-width)',
   },
   lg: {
-    size: 'var(--ds-radio-lg-size)',
+    size: 'var(--ds-radio-size-lg)',
     fontSize: 'var(--ds-radio-lg-font-size)',
     borderWidth: 'var(--ds-radio-lg-border-width)',
   },
   xl: {
-    size: 'var(--ds-radio-xl-size)',
+    size: 'var(--ds-radio-size-xl)',
     fontSize: 'var(--ds-radio-xl-font-size)',
     borderWidth: 'var(--ds-radio-xl-border-width)',
   },

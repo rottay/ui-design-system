@@ -301,8 +301,8 @@ export const SIZE_MAP: Record<CheckboxSize, string> = {
   xs: 'var(--ds-checkbox-xs-size)',
   sm: 'var(--ds-checkbox-sm-size)',
   md: 'var(--ds-checkbox-md-size)',
-  lg: 'var(--ds-checkbox-lg-size)',
-  xl: 'var(--ds-checkbox-xl-size)',
+  lg: 'var(--ds-checkbox-size-lg)',
+  xl: 'var(--ds-checkbox-size-xl)',
 };
 
 /**

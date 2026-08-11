@@ -86,14 +86,14 @@
   min-inline-size: calc(var(--ds-radio-md-size) * var(--ds-density-effective-scale));
 }
 .ds-radio.ds-radio--modern[data-part='root'][data-size='lg'] [data-part='circle'] {
-  inline-size: calc(var(--ds-radio-lg-size) * var(--ds-density-effective-scale));
-  block-size: calc(var(--ds-radio-lg-size) * var(--ds-density-effective-scale));
-  min-inline-size: calc(var(--ds-radio-lg-size) * var(--ds-density-effective-scale));
+  inline-size: calc(var(--ds-radio-size-lg) * var(--ds-density-effective-scale));
+  block-size: calc(var(--ds-radio-size-lg) * var(--ds-density-effective-scale));
+  min-inline-size: calc(var(--ds-radio-size-lg) * var(--ds-density-effective-scale));
 }
 .ds-radio.ds-radio--modern[data-part='root'][data-size='xl'] [data-part='circle'] {
-  inline-size: calc(var(--ds-radio-xl-size) * var(--ds-density-effective-scale));
-  block-size: calc(var(--ds-radio-xl-size) * var(--ds-density-effective-scale));
-  min-inline-size: calc(var(--ds-radio-xl-size) * var(--ds-density-effective-scale));
+  inline-size: calc(var(--ds-radio-size-xl) * var(--ds-density-effective-scale));
+  block-size: calc(var(--ds-radio-size-xl) * var(--ds-density-effective-scale));
+  min-inline-size: calc(var(--ds-radio-size-xl) * var(--ds-density-effective-scale));
 }
 
 /* press: the circle dips on pointer-press, mirroring the checkbox. */

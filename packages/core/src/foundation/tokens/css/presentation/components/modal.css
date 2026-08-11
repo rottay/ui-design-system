@@ -49,7 +49,6 @@
      CONTAINER
      Modal container positioning and appearance
      ======================================================================== */
-  --ds-modal-z-index: var(--ds-z-index-modal-content);
   --ds-modal-margin: 2rem;                 /* Margin from viewport edges */
   --ds-modal-margin-mobile: 1rem;
 

@@ -54,9 +54,9 @@ export const avatarSize = {
 
 // Avatar Shapes
 export const avatarShape = {
-  circle: 'var(--ds-avatar-circle-radius)',
-  square: 'var(--ds-avatar-square-radius)',
-  rounded: 'var(--ds-avatar-rounded-radius)',
+  circle: 'var(--ds-avatar-radius-circle)',
+  square: 'var(--ds-avatar-radius-square)',
+  rounded: 'var(--ds-avatar-radius-rounded)',
 } as const;
 
 // Avatar Variants
