@@ -740,10 +740,26 @@ function parseArgs(argv) {
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  try {
-    runChannelWiringZeroDeltaGate(parseArgs(process.argv.slice(2)));
-  } catch (error) {
-    process.stderr.write(`${error.message}\n`);
-    process.exitCode = 1;
+  const options = parseArgs(process.argv.slice(2));
+  /* A fixed default was the right call against a moving ref and the wrong call
+     once waves advanced past it: run bare, the gate certifies the whole
+     programme as delta and the red reads as a regression. Refusing is honest —
+     without a baseline there is nothing to certify against. Exit 2 is the
+     programme's "could not run", distinct from 1, "violation". */
+  if (options.baseline === undefined) {
+    process.stderr.write(
+      'channel-wiring-zero-delta-gate: --baseline=<ref> is required.\n' +
+        `  The pre-wave commit was ${DEFAULT_BASELINE}; every wave since then is\n` +
+        '  legitimate delta against it, so that ref no longer certifies anything.\n' +
+        '  Pass the commit your own change started from (HEAD on a clean tree).\n',
+    );
+    process.exitCode = 2;
+  } else {
+    try {
+      runChannelWiringZeroDeltaGate(options);
+    } catch (error) {
+      process.stderr.write(`${error.message}\n`);
+      process.exitCode = 1;
+    }
   }
 }
