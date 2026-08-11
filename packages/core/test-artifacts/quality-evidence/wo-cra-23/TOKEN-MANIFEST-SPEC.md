@@ -687,6 +687,49 @@ and moving it is a **relocation to `presentation/components/`, not a deletion**.
 evnto/dark alone splits nine further colour families — it owns the 50–900 ramps for
 success/warning/error/info while **the DS supplies every `-bg`, `-border` and `-ink`**.
 
+### 6.0-perimeter The contract's perimeter, measured by the only product that walked it [M]
+
+Channels whose sole author is hand CSS, partitioned by whether the typed contract could express them.
+Expressibility was measured **by execution** — the current compiler bundled in memory and run against
+a recursive Proxy so every optional branch fires — not by reading source. *`dist` was four commits
+stale on exactly these files, two of which ADD tenant channels; using it would have manufactured
+contract gaps that had been closed hours earlier.*
+
+| vertical | ext-only | (a) expressible | (c) family known, field not | (b) no such family |
+|---|---:|---:|---:|---:|
+| bithire | 194 | 45 | 105 | 44 |
+| evnto | 47 | 25 | 5 | **17** |
+| **rottay** | **574** | **17 (3%)** | **191** | **366** |
+
+> **rottay is different in kind, but not in the way it looks. It is not a vertical abusing its
+> extension — it is the only vertical that styles the FULL generic component library.** `BrandChrome`
+> covers roughly eleven component families; rottay paints about fifty. avatar, upload, radio,
+> checkbox, tag, alert, slider, steps, datepicker and toggle are ordinary DS components with **no
+> contract surface at all**, and not one of rottay's 366 is domain-specific.
+
+**The corollary is the finding.** *bithire and evnto look clean partly because they style less.* Any
+vertical reaching rottay's component coverage lands in the same place. This is not drift — **it is the
+contract's perimeter, measured for the first time by the only product that has walked it.**
+
+evnto's 17 are almost entirely the sanctioned domain carve-out: `--ds-ticket-*` and `--ds-event-*`
+belong to the consuming app by standing rule. **evnto's true contract gap is one channel.**
+
+**Debt versus disagreement, inside (a).** rottay's 17 split 14 / 3. The 14 are verbatim — proven by
+feeding rottay's exact extension literals through the current emitter and getting byte-identical
+output back, so a move is value-identical by construction. The 3 are `--ds-elevation-1/2/3` and they
+are a **disagreement, not debt**: the contract's elevation is a *posture* — bithire's contract-driven
+compile emits `--ds-elevation-1: none` — while rottay hand-writes a three-part shadow string the
+contract cannot carry. Moving them would be a class-1 repaint; they belong to the elevation-ramp
+ruling.
+
+**Error direction is stated and one-way**: chrome vocabulary and (a) are floors, (b) and (c) are
+ceilings, so the gap is over-reported and never under-reported. rottay's 3% can only move up.
+
+**Queued:** *WO-BRD-03a* — 84 channels (rottay 14 + evnto 25 + bithire 45) movable into the contract,
+value-identical, byte-diff gated; evnto's ten hand-written neutral-ramp steps are the cleanest block,
+since `palette.ramps.neutral` exists for exactly that. *WO-BRD-03b* — rottay's 366 across 42 generic
+families is a **contract design question, not a drain**.
+
 ### 6.0-leak Light values leak into dark, and it is one defect with §6.0-pal [M]
 
 DS-default values that **win a dark cell and resolve to a light colour**:
