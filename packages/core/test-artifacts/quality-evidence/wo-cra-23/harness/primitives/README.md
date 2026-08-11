@@ -126,6 +126,34 @@ switch on.
 divergence surface, and `collection-header` (200/173/178) and `card-compounds`
 (92/67/90) lead it.
 
+### For the sighted pass: `--ds-color-bg-canvas` is an alias in light and a literal in dark
+
+Not a defect to drain — a **deferred decision**, pinned deliberately and
+documented at `themes/default.css:2105-2107`: following `--ds-color-bg-primary`
+in dark would track `neutral-50` (`#0b1220`) instead of the `#0A0A0C` the cell
+resolves to today, so the pin exists to stop a light-side rewire repainting dark.
+
+```
+:root                      --ds-color-bg-canvas: var(--ds-color-bg-primary)   alias
+:root[data-theme='dark']   --ds-color-bg-canvas: #0A0A0C                      literal
+```
+
+Measured consequence, which is what makes it a question for eyes rather than a
+counter: only rottay declares the channel, and only in light.
+
+```
+             own canvas, light      own canvas, dark
+bithire      inherits (formula)     inherits #0A0A0C
+evnto        inherits (formula)     inherits #0A0A0C
+rottay       #FAFAF9                inherits #0A0A0C
+```
+
+So in light every vertical diverges without redeclaring — the formula carries
+their own `bg-primary` — and **in dark all three land on one fixed value**. The
+asymmetry is deliberate at the base and invisible in any naming table, because
+no vertical names the channel in dark. `oauth-transition` now consumes it, so
+its dark canvas is that fixed value in all three.
+
 **Method and its limits.** Termination obeys the fallback-inert law: `var(--a, X)`
 reaches `X` only where `--a` is undeclared *in that cell*, so the walk is a
 property of the cell and not of the text. Cells are binned by the **block
