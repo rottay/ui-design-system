@@ -370,12 +370,12 @@
   --ds-tabs-icon-padding: 4px;
   --ds-tabs-item-font-weight: 450;
   --ds-tabs-item-font-weight-active: 620;
-  --ds-tabs-item-radius: 6px;
+  --ds-tabs-item-radius: calc(6px * var(--ds-radius-scale, 1));
   --ds-tabs-list-bg: #141416;
   --ds-tabs-list-border: #2A2A2F;
   --ds-tabs-list-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.035);
   --ds-tabs-list-padding: 3px;
-  --ds-tabs-list-radius: 8px;
+  --ds-tabs-list-radius: calc(8px * var(--ds-radius-scale, 1));
   --ds-tabs-list-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
   --ds-tabs-list-texture: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.14) 0.5px, transparent 0.75px);
   --ds-tabs-list-texture-opacity: 0.12;
@@ -385,7 +385,7 @@
   --ds-tabs-overflow-control-shadow-hover: 0 6px 16px rgba(0, 0, 0, 0.30);
   --ds-tabs-panel-bg: #1A1A1E;
   --ds-tabs-panel-border: #2A2A2F;
-  --ds-tabs-panel-radius: 10px;
+  --ds-tabs-panel-radius: calc(10px * var(--ds-radius-scale, 1));
   --ds-tabs-panel-shadow: 0 14px 36px rgba(0, 0, 0, 0.18);
   --ds-tabs-panel-texture: linear-gradient(135deg, rgba(255, 255, 255, 0.025), transparent 42%);
   --ds-tabs-pressed-transform: translateY(0) scale(0.985);

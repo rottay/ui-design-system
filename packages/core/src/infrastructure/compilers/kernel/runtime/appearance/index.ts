@@ -58,7 +58,10 @@ import {
   isValidCssColor,
   normalizeHexColor,
 } from '../../foundation/css/color-math';
-import { chromeToVariables } from '../../foundation/css/chrome-variables';
+import {
+  chromeToVariables,
+  type ChromeVariableContext,
+} from '../../foundation/css/chrome-variables';
 import {
   deriveBorderSubtle,
   deriveGroundLadder,
@@ -647,7 +650,8 @@ export function appearanceGeneralToVariables(
  * Full chrome parity with BrandTheme: ~140 CSS variables across all categories.
  */
 export function appearanceAdvancedToVariables(
-  advanced: TenantAppearanceAdvanced
+  advanced: TenantAppearanceAdvanced,
+  context: ChromeVariableContext = {}
 ): Record<string, string> {
   const vars: Record<string, string> = {};
 
@@ -655,7 +659,17 @@ export function appearanceAdvancedToVariables(
     // Chrome mapping is shared with runtime/brand-theme via
     // kernel/css/chrome-variables — TenantAppearanceAdvanced.chrome and
     // BrandTheme.chrome are the same shape.
-    Object.assign(vars, chromeToVariables(advanced.chrome));
+    //
+    // The divisor must be the scale that WINS in the emitted block, and a raw
+    // override of the channel is applied below — after chrome — so it outranks
+    // whatever the General tier resolved and is read first here.
+    Object.assign(
+      vars,
+      chromeToVariables(advanced.chrome, {
+        radiusScale:
+          advanced.tokenOverrides?.['--ds-radius-scale'] ?? context.radiusScale,
+      }),
+    );
   }
 
   // ── Raw token overrides (allowlisted, capped by the schema limits object) ──
@@ -799,7 +813,15 @@ export function appearanceToVariables(
   }
 
   if (appearance.advanced) {
-    Object.assign(vars, appearanceAdvancedToVariables(appearance.advanced));
+    // The General tier has already lowered `shape.radiusScale` into the map,
+    // so this is the scale the emitted block declares — the divisor the chrome
+    // emitter needs to keep an authored radius literal at its authored pixel.
+    Object.assign(
+      vars,
+      appearanceAdvancedToVariables(appearance.advanced, {
+        radiusScale: vars['--ds-radius-scale'],
+      }),
+    );
   }
 
   // Typography safety is a final compiler invariant, not merely a General-tier

@@ -1360,7 +1360,34 @@ function buildModeCssString(
 export function brandThemeToChromeVariables(
   bt: BrandTheme
 ): Record<string, string> {
-  return chromeToVariables(bt.chrome);
+  return chromeToVariables(bt.chrome, {
+    radiusScale: brandThemeRadiusScale(bt),
+  });
+}
+
+/**
+ * The `--ds-radius-scale` this theme compiles to.
+ *
+ * Derived here rather than threaded from the caller so no call site can emit
+ * chrome against the wrong dial: the chrome emitter divides authored radius
+ * literals by this exact number, and a divisor that disagrees with the
+ * declared scale is a silent repaint rather than a failure. Same lowering, on
+ * the same input, as the assignment `brandThemeToCssVariables` makes before it
+ * reads the channel for the surface ramp's `-base` operands.
+ */
+function brandThemeRadiusScale(bt: BrandTheme): string {
+  const expansion = expandExpressiveProfiles(
+    resolveExpressiveAxes(
+      bt.expressive?.experienceProfile,
+      sanitizeExpressiveOverrides(bt.expressive?.profiles),
+      bt.expressive?.schemaVersion
+    )
+  );
+  return (
+    appearancePostureToVariables(expansion.fieldDefaults)[
+      "--ds-radius-scale"
+    ] ?? "1"
+  );
 }
 
 // ── Brand Compiler ──────────────────────────────────────
