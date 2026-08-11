@@ -30,16 +30,12 @@
   z-index: var(--ds-column-menu-trigger-open-z, var(--ds-z-index-popover));
 }
 
-/* OPEN OWNER QUESTION: the control also carries `ds-column-menu-control`, which
-   no rule targets. Per the executable contract in
-   `primitives/inputs/Button/tests/Button.passthrough-contract.test.tsx`, only
-   MODERN honours a caller's `data-part`; classic and rustic both override it to
-   'trigger'. So this part selector reaches the control under modern alone, and
-   the class is the only hook for the other two. Wiring it in gives the control
-   its layout under all three engines and repaints classic + rustic; deleting it
-   accepts that this trigger is styled under modern only. Both are product
-   decisions about engine parity, so neither is taken here. */
-.ds-structure.ds-column-menu [data-part="control"] {
+/* Two selectors, because `data-part` reaches this control under modern only:
+   `Button.passthrough-contract` pins the caller's part as winning in modern and
+   overridden to 'trigger' by classic and rustic. The class is the hook for
+   those two. */
+.ds-structure.ds-column-menu [data-part="control"],
+.ds-structure.ds-column-menu .ds-column-menu-control {
   flex: 0 0 auto;
 }
 
