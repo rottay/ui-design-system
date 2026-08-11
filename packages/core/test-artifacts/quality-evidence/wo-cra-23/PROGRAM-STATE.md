@@ -177,26 +177,26 @@ red and must say so.
 ## 4. STATE
 
 <!-- lane-control:program-state v1 — DO NOT EDIT BY HAND. Rewrite it with:
-     node packages/core/src/tooling/lane-control/program-state/index.mjs --write --intent <intent.json>
-     head=7f1735923 written=2026-08-11T00:00:59.142Z intent=5477bd8baa12f764 render=5a716dbf91e54cdd -->
+     node packages/core/src/tooling/lane-control/public/program-state/index.mjs --write --intent <intent.json>
+     head=b41611ddd written=2026-08-11T03:25:57.104Z intent=333361e5241bc27d render=794b5da73a60464f -->
 
 *Everything in this section is intent. Anything derivable is derived by command, not typed here.*
 
-**Current wave:** 0 — unblock. **`hooks:check` is green; lane A's change is with the auditors and is NOT committed.**
+**Current wave:** 2 — vertical identity. Wave 0 unblocked and wave 1 landed and reconciled; lane A is ratified and committed, so the day-one refusal on family CSS lanes is LIFTED.
 
-**Blocked on:** The two-auditor verdict on lane A. Nothing downstream of the hooks manifest may open until Fable and Kimi have both ruled.
+**Blocked on:** Nothing. The gating question is no longer permission, it is ordering: the identity wave changes painted pixels on purpose, so each lane owns exactly one vertical's brand theme and proves the other two did not move.
 
-**Day-one lanes.** No family CSS lane opens until lane A's change is ratified and committed:
+**Wave-2 lanes.** Family CSS lanes are open; brand-theme lanes are single-owner per vertical:
 
 | Lane | Work | Model | Reason for the model |
 |---|---|---|---|
-| A | Adjudicated the unadjudicated DS reads; regenerated the hooks manifest. **Done, in audit, uncommitted.** Now read-only, scoping the DB tint-ramp defect it found | opus | Adjudication decides what a published surface means; expensive to get wrong and impossible to pre-pass. |
-| B | Collapse the two-route registry read; regenerate the canon; re-derive the drifted ledger headers. **Held deliberately** — it regenerates the canon against the manifest lane A just changed | opus | Two routes disagreeing is a contract question, not a substitution. |
-| C | The resolution instrument — the long pole. Opens once lane A is committed | opus ×2 | The instrument is what every later wave's evidence depends on; a defect here is invisible and inherited by everything. |
-| D | Delivered the base-layer adjudication and the self-conflict census. Now producing the hard-fork list, per pair **per vertical** | opus | Fork classification changes between verticals, so a single-bundle answer is not adjudicable; this is judgement, not a sweep. |
-| E | **Delivered.** writeSet intersection, containment, work-order validator, state-file writer. Not registered in the CI manifest — that is a coordinator decision | sonnet | Greenfield tooling in its own folder, touching no family and no existing file, so the blast radius is bounded by construction. |
+| identity | Author a vertical's silent channels so it stops inheriting the DS default. One lane per vertical, never two — `platform` in flight, `evnto` queued behind the border lane, `bithire` last (it misses the fewest) | opus | Authoring a product's voice is judgement against a stated identity, not a substitution; a mechanical lane would copy a sibling and produce three identical products. |
+| family | Elevate a structure family in place: its existing skin under `presentation/components/skin/`, its own folder, its own tests. No engine split — that shape is refused outright | opus | Every delivered family found a defect the brief did not predict, and three of them refuted the brief itself; a lane that cannot argue back is the wrong instrument here. |
+| channel | Close a named runtime defect end to end — the radius dial's second emitter, evnto's silent border seeds. Owns compilers and one vertical's theme, never a family | opus | These sit where a compiler, an artifact and a skin disagree; the fix is only correct once all three are read together. |
+| census | Read-only measurement against a pinned ref, parser only. Delivered the bare-`:root` denominator; now adjudicating which silent channels are product surface versus properly internal | sonnet | Bounded by construction — it edits nothing — and its correctness is a method question a parser settles, not a taste question. |
+| audit | Adversarial refutation of a ruling before it is executed, and of a lane's evidence after. Fable and Kimi run it independently and are brokered, never merged | fable | An auditor that shares the author's technique cannot refute the author's blind spot; independence is the whole value. |
 
-**Refused until lane A is ratified and committed:** any family CSS lane · the base-layer rulings already taken — the dead spacing aliases, 14px canonical, the density hook, the dead-declaration sweep · wave 9 design, until its false new-axis premise is re-scoped against the existing weight and focus-ring token sets · two lanes on `themes/default.css` at once (single ownership, always)
+**Refused:** engine splits in the structures tier — three files delegating to one implementation add no divergence and `CLAUDE.md` forbids the shape · any new skin file under `runtime/engines/modern/skin/` for a structure — no structure stamps `ds-engine-modern`, so the file could never paint · two lanes inside one vertical's brand theme, or two inside `themes/default.css` (single ownership, always) · family-writer edits to `facade/entrypoints/*.css` — both must stay byte-synchronised, so the coordinator registers imports in one serialized pass · deleting a declaration until all four known scope holes are covered or excluded in writing — the DB/appearance path, the non-bundled tenant path, the read-only engines, and the tenant-free bundle · adopting a ruling that names a channel without first diffing it against the standing decision table
 
 `writeRoot` is enforced by `write-set-intersection`; a batch is admissible only when it passes. Disjointness is no longer prose.
 
@@ -207,6 +207,12 @@ Exit vocabulary is 0 clean · 1 violation · 2 could not run. Conflating 1 and 2
 Any future lane under `src/` must use folder/index with layer-named owners; `structure:check` reads `.mjs` and is decrease-only.
 
 A lane that cannot complete its model reason is missing its pre-pass and must not be delegated (§1.2).
+
+The identity wave is the first that changes painted pixels deliberately. Its bar is not zero-delta: every changed property must be one the lane intended, and any movement in a sibling vertical is a defect.
+
+A census is only as wide as the bundle it read. State which bundles were measured, or the claim is unbounded.
+
+Parse, never grep, for any claim about selectors, containers or declarations — and check both spellings of a property that has a shorthand and longhands.
 
 ### Derived at write time
 

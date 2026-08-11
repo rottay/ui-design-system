@@ -326,7 +326,7 @@ export function renderBody(intent, derived) {
 export function buildStamp({ head, writtenAt, intentDigest, renderDigest }) {
   return (
     `${STAMP_OPEN} — DO NOT EDIT BY HAND. Rewrite it with:\n` +
-    '     node packages/core/src/tooling/lane-control/program-state/index.mjs --write --intent <intent.json>\n' +
+    '     node packages/core/src/tooling/lane-control/public/program-state/index.mjs --write --intent <intent.json>\n' +
     `     head=${head} written=${writtenAt} intent=${intentDigest} render=${renderDigest} ${STAMP_CLOSE}`
   );
 }
