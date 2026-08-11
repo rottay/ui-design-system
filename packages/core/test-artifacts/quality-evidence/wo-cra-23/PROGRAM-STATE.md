@@ -712,6 +712,53 @@ Adjacent class, logged not chased: attribute repetition used as a specificity la
 (`[data-part='root']` written three or six times in one selector), which the skin tree's own header
 law already forbids.
 
+### CORRECTION to THE DENOMINATOR — the census asks a different question than the one that matters
+
+The section below stands as a measurement and **fails as an explanation**. An execution lane refuted it
+by resolving all 585 of evnto's "missing" names in four cells — evnto light, evnto dark, and a
+**tenant-less** document with the tenant artifact withheld — and calling a name silent only when
+evnto's resolved value **equals the tenant-less one**.
+
+```
+census says evnto-missing        585
+  already opinionated, both      249   <- false positives for PAINTING
+  genuinely silent (>=1 theme)   333
+  undeclared anywhere              3
+```
+
+The census asks *"is this name absent from the vertical's **unconditional block**"*. That is not
+*"does this vertical inherit the DS default when painted"* — a vertical declares plenty in its **dark
+block** and its **light extension**, neither of which the census counted. It is a runtime question and
+must be asked at runtime. (Baseline against the artifact rendered from CURRENT source, not the
+committed one: the committed artifact lags, so measuring against it re-discovers fixed defects.)
+
+**And coverage is not the identity lever.** Most of the genuine 333 is one of three things authoring
+cannot improve: *geometry* the DS rightly owns (`-height`, `-padding-x`, `-gap` — a ticketing product
+has no opinion about them); *already correct by default* (evnto/light resolves `#171717` ink on
+`#ffffff` grounds — the DS light default and Evnto's black-and-white identity **are the same thing**,
+so declaring them repaints nothing); or inexpressible from the contract.
+
+The real structural difference, compiled from the contract alone with extensions withheld:
+
+| vertical | channels emitted |
+|---|---|
+| bithire | 1107 |
+| rottay | 568 |
+| evnto | 374 |
+
+**BitHire reads as a product because its BrandTheme is populated roughly three times as densely**, not
+because the others are silent on particular names. The lever is `surfaces.surfaceRoles` facets and the
+`chrome.*` sections the other two leave empty — a design pass, not a sweep.
+
+The lane authored **four** channels rather than three hundred, and was right to: declarations that move
+zero pixels are churn that makes the next census dirtier without making the product look like itself.
+It also confirmed the warning it was given — `--ds-glass-*` looked like a gap and is a deliberate
+`none` in evnto's contract. **A sibling declaring a channel proves expressibility and nothing more.**
+
+Reported as inexpressible, not worked around: `--ds-badge-secondary-bg: #722ed1`, an Ant Design purple
+painting inside a black-and-white brand, unreachable from the contract [O]. 27 of the 333 are likewise
+unreachable, and 36 of the 41 half-leaks route only through a full `surfaceRoles` facet authoring pass.
+
 ### THE DENOMINATOR — why the three verticals do not read as different companies
 
 Censused 2026-08-11 at ref `17acb610c`, postcss on both sides, `base.css`'s full 439-file `@import`
