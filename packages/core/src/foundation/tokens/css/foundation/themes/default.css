@@ -163,12 +163,17 @@
   --ds-color-secondary-hover: var(--ds-color-secondary-600);
   --ds-color-secondary-rgb: 184, 168, 152;
 
-  --ds-color-success: var(--ds-color-success-500);
-  --ds-color-warning: var(--ds-color-warning-500);
-  /* Dark-first surface: status colors double as text on the page ground, so the
-     semantic channel sits on the 400 step (APCA |Lc| >= 45 on --ds-color-bg-primary;
-     the 500 step measured 37.6/37.7 — W8). Fills that need the deeper stop consume
-     the ramp directly. */
+  /* Status colors double as text on the page ground, so each semantic channel
+     sits on whichever ramp step clears APCA |Lc| >= 45 against
+     --ds-color-bg-primary. The step is per hue, not a blanket rule: the earlier
+     uniform 400 was chosen against a page ground that was contaminated to
+     #0A0A0C, and a near-black ground rewards the lighter step. On the corrected
+     #fafafa ground the relationship inverts for the high-luminance hues.
+     Measured, light: success-500 41.3 and warning-500 38.8 both failed; info-400
+     46.6 and error-400 49.8 pass and stay. Both fixes land on the 600 step: warning-700 also cleared, at 71.0, but overshoots the floor by more than the hue needs. Fills that need a different stop
+     consume the ramp directly. */
+  --ds-color-success: var(--ds-color-success-600);
+  --ds-color-warning: var(--ds-color-warning-600);
   --ds-color-error: var(--ds-color-error-400);
   --ds-color-danger: var(--ds-color-error);
   --ds-color-info: var(--ds-color-info-400);
