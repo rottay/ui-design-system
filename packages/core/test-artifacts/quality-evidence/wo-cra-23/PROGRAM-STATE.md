@@ -2103,6 +2103,37 @@ overridden in light but not dark still reads as overridden. bithire declaring
 `--ds-color-bg-primary: #ffffff` beside `--ds-color-bg-secondary: #151d2b` is the light/dark split,
 not an inconsistency. Resolving it properly is the same per-cell question the probe answers.
 
+### A family patch survives the real fix and UNDERCUTS it
+
+The last law of the programme, and the lane found it by re-reading its own earlier work rather than
+by being told.
+
+When the border authority was broken at 1.09, it shipped a narrow compensation:
+`--ds-segmented-border: var(--ds-color-border-secondary)` in rottay's dark block. Correct at the
+time — 1.09 → 1.21, the best available inside the ramp. **With the authority raised to `#28282C`,
+that same override pins segmented at `#252529` / 1.21 while every other bordered element in
+platform/dark reaches 1.26.** The compensation would have become the one place still below the band.
+
+> Family-level compensation does not merely fail to generalise. **It survives the real fix and
+> undercuts it** — silently, because nothing re-measures a patch that was green when it landed.
+
+Operative clause, and the part that outlives this instance: **removing the patch is part of the
+repair, and only its author remembers it exists.** Anyone inheriting a family-level compensation
+should treat it as **expiring the moment the underlying channel is fixed**, not as settled work.
+
+Same shape as the `search-command-bar` law arriving from the other side: that family was compensating
+for paint it never received; this one kept compensating after the paint arrived. **Removing the patch
+is part of the repair**, and only whoever wrote it is likely to remember it exists.
+
+Shipped: `#28282C`, chosen by walking up from `#252529` and stopping at the first value inside
+1.25–1.46 against **both** grounds (1.26 / 1.26), keeping the ramp's existing +4 blue cast. Raised at
+`--ds-color-border` and `--ds-color-border-primary` together, since they are identical today and
+splitting them would mint a fork. No selector touched, so no specificity cost.
+
+Result across all five cells: platform/dark **1.09 → 1.26** in band; bithire 1.46 / 1.48, evnto/dark
+1.34, evnto/light 1.20 thin and now the only remaining hairline below the band — the same shape,
+belonging to evnto's own ramp. Axis 2 unmoved at 1.00–1.07 everywhere, as scoped.
+
 ### A dark ramp spaced linearly in hex cannot express a boundary, and no step inside it can
 
 `#37` measured and stopped short of a repair, which is the correct outcome. Every neutral step rottay
@@ -2142,6 +2173,19 @@ still a track?"* — **yes, when the border is healthy**, and bithire demonstrat
 The value is chosen by rule, not given: the dimmest value landing in the healthy band against the
 `#131316` ground, verified in both families and both dark cells. Arithmetic sizes it near `#2E2E33`;
 that bounds the search rather than answering it.
+
+**The open diagnostic, and it decides who inherits what.** `evnto/light` at 1.20 is the last hairline
+below the band, the same shape in evnto's own light ramp. Whether its light ramp contains a usable
+step is the question that generalises:
+
+- **If it does** — the compression is specific to the **dark end**, where contrast flattens, and the
+  defect is a property of dark ramps generally. It then predicts the same failure in any vertical's
+  dark end regardless of author.
+- **If it does not** — linear-hex spacing is how these ramps are authored at **both** ends, and
+  rottay's dark ramp is merely where it surfaced first, because the dark end is where linear spacing
+  hurts soonest.
+
+Those are different work orders. Nobody should generalise from one rung before knowing which.
 
 ### THE CLOSING FINDING: one number, two families, two lanes — a theme defect with two witnesses
 
