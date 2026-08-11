@@ -1963,6 +1963,66 @@ Declared blind spot on both halves: they only examine declarations in rules keye
 primitives carry default parts that are not `root` (`item`, `group`, `divider`, `meta`, `anchor`)
 with the same idiom, and neither census sees them.
 
+### The counts are 6% apart because the DISTRIBUTION hides inside them
+
+The programme's central refutation stands and now has a shape. Runtime channel counts put bithire at
+1984 and rottay at 1876 — 6% apart, which killed the thesis that the verticals fail to diverge
+because they lack channels. What that number could not show is **where** the channels are.
+
+Measured 2026-08-11 across two repaired families, own-family prefixes only:
+
+| | Badge (132 channels) | Segmented (53) |
+|---|---|---|
+| bithire | **43 light / 11 dark** | **38 light / 0 dark** |
+| rottay/platform | 4 / 0 | 7 / 7 |
+| evnto | **0 / 0** | **0 / 0** |
+
+**evnto authors zero. Not few — zero, in both themes, across all 185 channels of both families.**
+
+The nuance that stops this being an overclaim, and the lane stated it before I could ask: evnto does
+author **430 `--ds-*` tokens, 146 of them generic** palette/surface/material, so the skins' inline
+fallback chains *do* reach evnto's own colours — its primary is `#171717` against bithire's
+`#3A6FB0`. evnto's badges will not look like bithire's. But they will differ **only by inherited
+palette**, with no badge- or segmented-specific identity of their own.
+
+So the working hypothesis, which is a hypothesis and not yet a finding: **bithire reads as a product
+because its authorship is concentrated per family; evnto's is palette-level only.** Equal totals,
+opposite distributions. If that generalises past these two families it is the answer the programme
+has been looking for, and it is measurable without a single pixel.
+
+Scope limit the lane declared and which matters for reading the table: it counts own-family prefixes,
+so a vertical that shapes a family *indirectly* through `--ds-surface-control` or `--ds-material-*`
+reads as "does not author" — true of the family, misleading about the intent. Flag 1 below is exactly
+that case.
+
+Three cells for the sighted pass, in value order:
+
+1. **bithire's Segmented has no dark authorship at all, 0 of 38.** Its track resolves
+   `var(--ds-surface-control, color-mix(in srgb, #EAF2FA 76%, #FFFFFF))` — a near-white literal. If
+   `--ds-surface-control` is dark-authored the mix never fires; if not, that is a near-white track on
+   a dark bithire page. A yes/no question, and the highest-value cell in the set.
+2. **bithire's Badge is 43 light / 11 dark**, and the 32 unauthored are *the same 32* as the surface
+   dark leak already fixed in this programme — one compiler gap is a likelier explanation than two
+   coincidences. Badge was severed at 10 sites that rendered as bare text, so dark bithire is exactly
+   where restored paint lands on values authored for light.
+3. Restoring Badge puts bithire's brand blue on more surfaces — the frame is primary at 16%, and two
+   of the ten restored sites are in the dense `list-toolbar`. Second family to carry that flag.
+
+Everything above is **declared authorship, printed as formulas rather than numbers** wherever a
+`color-mix`, `calc` or density multiplication is involved, because resolving those needs the cascade
+and the probe is a singleton that was not run.
+
+### A cell classifier that defaults to "light" mis-bins a dark-first vertical
+
+The lane's first pass had these numbers wrong and said so rather than shipping the fix quietly. Its
+classifier treated "not obviously dark" as light, which binned rottay's `:not([data-theme='light'])`
+**default** cell as light — and rottay/platform is dark-first. Segmented went 7 light / 0 dark to
+7 / 7, and every figure from before the correction is void.
+
+It was caught by noticing that a cell labelled light was declaring `#131316`. **The instrument's
+default branch encoded an assumption about the corpus that one of three verticals violates**, and no
+control containing a dark-first default cell would have passed it either.
+
 ### The law has a SIGN, and both repairs moved it the safe way
 
 The directional law as I first wrote it was incomplete. Verified by re-running the class-A census
