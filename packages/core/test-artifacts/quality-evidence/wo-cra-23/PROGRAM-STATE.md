@@ -1963,6 +1963,72 @@ Declared blind spot on both halves: they only examine declarations in rules keye
 primitives carry default parts that are not `root` (`item`, `group`, `divider`, `meta`, `anchor`)
 with the same idiom, and neither census sees them.
 
+### The dark gap is authorship, not the compiler — and the two-option framing was mine to check
+
+`#34` closed: **the compiler is innocent.** `brand-themes/bithire/index.ts` has `modes.dark` spanning
+`:38-629` with its `chrome:` block at `:296`; `badge:` is inside it and **`segmented:` appears once in
+the whole file, at `:1328` — past the close of `modes`, in the base chrome.** The compiler emits 11
+dark badge channels and 0 dark segmented channels because that is exactly what it was handed.
+
+Proved by running **both families through the same emitter**, which a single specimen could not have
+settled: `chrome-variables/index.ts` maps both and contains no occurrence of "dark" at all, while the
+mode split upstream demonstrably works — `--ds-badge-count-bg` is emitted twice for bithire, base and
+`[data-theme='dark']`.
+
+So the 3:1-to-8:1 ratios across bithire's 24 families are **the shape of a partially-populated
+`modes.dark.chrome`**, not a branch dropping values. That reframes the work entirely: a per-family
+authorship pass, and a genuinely sighted one, because someone must choose the dark values. The four
+families with zero dark authorship are the starting set; the other seventeen are gap-filling against
+an existing posture.
+
+And an honest caveat the lane raised: bithire's base `segmented` values are already semantic —
+`var(--ds-surface-control, …)`, `var(--ds-material-control-border, #C7D6E5)`. If those authorities
+resolve correctly in dark, some of the 38 may need **no** dark override at all. Measuring which
+actually change is the first step, and it is the same question as prediction flag 1.
+
+**The framing was mine and I did not check it.** I offered "compiler drops dark" and "source never
+authored it" as two live options; the chrome emitter has no dark path at all, so the first was never
+possible, and one grep would have established that before the task was written. A two-option question
+is a claim about the mechanism, and it needs the same evidence as any other.
+
+### A ratio threshold with no floor fires hardest where the denominator is smallest
+
+The authorship table's second bug, caught because the assignment named three families as correctly
+placed and the lane **checked its own output against them instead of assuming a match**. It had not
+matched: `approval-inbox`, `command-palette` and `moderation-gallery` each read 45, 25 and 45
+channels of which **2 are non-generic** — and a 50% dominance threshold fires on a single stray name
+when the denominator is 2. Adding an absolute floor of 3 alongside the share moved `unknown` from 2
+to 9 and put those three where they belonged.
+
+Same shape as the proximity grep discarded earlier tonight. Final table, and the ordering never moved:
+
+| | DIRECT families | own channels | per family | top-5 | median generic |
+|---|---|---|---|---|---|
+| rottay/platform | **48 / 113** | 593 | 12 | 51% | 11 |
+| bithire | 24 / 113 | 723 | **30** | 51% | 12 |
+| evnto | 13 / 113 | 113 | 9 | 76% | 10 |
+
+### Three more false zeros, and the sharpest rule yet for catching them
+
+**A control that mirrors the code cannot fail.** A cross-family census returned a clean 0 against a
+corpus with three known instances: its index was built only from the engine-suffixed class
+(`rottay-button--modern`) while **the corpus writes the base class**, because a composing family
+targets the primitive regardless of engine. Its 6-shape control passed straight through, having
+planted the engine-suffixed spelling too. The control validated compound attribution while sharing
+the implementation's assumption about which class to look for. Plant the corpus's shape, not the
+code's.
+
+**Verify a census's input before believing its output.** A second lane's check reported "HEAD: 0 dead
+selectors", which would have meant its own earlier report was invented. A `git show` had failed and
+written **0 bytes** — a repo-relative path passed against the cwd, `exit=128` — and postcss parsed the
+empty file into a spotless zero. Caught by checking the byte count before trusting the count. *When a
+census returns zero, check that its corpus is not empty: the input before the result.*
+
+**A module-scope side effect keyed on argv is contagious to every importer.** `selectors.mjs` fires
+its own control at module scope on `process.argv[2] === '--control'`, so a different module invoked
+with that flag printed **9 pass / 0 fail** — someone else's control, while the caller's never ran.
+Guard a census on `import.meta.url === argv[1]` and give each instrument its own flag name.
+
 ### Twenty headers repeating a premise are not twenty pieces of evidence
 
 The worst documentation finding of the programme, and it invalidates a justification carried in about
