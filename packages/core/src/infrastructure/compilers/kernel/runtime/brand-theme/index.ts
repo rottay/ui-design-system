@@ -537,8 +537,6 @@ function setExtendedPaletteVariables(
   }
 }
 
-/** The radius steps themes/default.css routes through the tenant dial. */
-const RADIUS_DIAL_STEPS = ["sm", "md", "lg", "xl"] as const;
 
 function brandThemeToCssVariables(bt: BrandTheme): Record<string, string> {
   // C1b expressive expansion — resolved HERE (not in compileBrandTheme) so
@@ -759,16 +757,24 @@ function brandThemeToCssVariables(bt: BrandTheme): Record<string, string> {
       // live. The division is expressed in CSS rather than evaluated here: the
       // browser then multiplies and divides in one pass, which is exact for any
       // scale instead of correct only for the ones that divide evenly.
+      //
+      // Written as explicit per-step assignments, not a loop: the typed graph
+      // both parity gates share seeds identifier domains from initializers, so
+      // a `for…of` binding has none and the template key degrades to a wildcard
+      // that resolves to no concrete channel.
       const radiusScale = Number(vars["--ds-radius-scale"] ?? "1");
       const dialed =
         Number.isFinite(radiusScale) && radiusScale > 0 && radiusScale !== 1;
-      for (const step of RADIUS_DIAL_STEPS) {
-        const authored = su.borderRadius[step];
-        if (!authored) continue;
-        vars[`--ds-radius-${step}-base`] = dialed
-          ? `calc(${authored} / ${radiusScale})`
-          : authored;
-      }
+      const radiusBase = (authored: string) =>
+        dialed ? `calc(${authored} / ${radiusScale})` : authored;
+      if (su.borderRadius.sm)
+        vars["--ds-radius-sm-base"] = radiusBase(su.borderRadius.sm);
+      if (su.borderRadius.md)
+        vars["--ds-radius-md-base"] = radiusBase(su.borderRadius.md);
+      if (su.borderRadius.lg)
+        vars["--ds-radius-lg-base"] = radiusBase(su.borderRadius.lg);
+      if (su.borderRadius.xl)
+        vars["--ds-radius-xl-base"] = radiusBase(su.borderRadius.xl);
       // `full` is a pill radius, outside the dial ramp (themes/default.css).
       if (su.borderRadius.full) vars["--ds-radius-full"] = su.borderRadius.full;
     }
