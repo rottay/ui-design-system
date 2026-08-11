@@ -437,6 +437,40 @@ under §1.4 is always no. Rows c–f above are all this shape.
 Corollary: idling for an answer is itself the defect. An hourly heartbeat now re-enters the programme
 if a lane has stalled waiting on a decision that was never the owner's to make.
 
+### The dead-selector class, and why the finder's own definition would have destroyed 81 good rules
+
+A family lane found that rules written `.ds-<family> [data-part='root'] …` — descendant, note the
+space — need a SECOND element carrying `data-part='root'` nested inside the family, and reported that
+there is only ever one. A different lane censused it, and the correction is the finding.
+
+**"There is only ever one root" is false.** 81 selectors legitimately target a nested root: every
+composed DS primitive stamps its own (`.rottay-input[data-part='root']`, a composed Text as
+`.<family>__muted-text[data-part='root']`). Acting on the broad definition would have swept all 81.
+
+The real defect is narrower: **a bare, UNCLASSED `[data-part='root']` in a non-first compound.** Such
+a compound can only match a nested root carrying no class of its own, and no family renders one.
+Classified on exactly that, the census is 26 rules / 59 declarations / 4 files with **zero** false
+positives — 25 of the 26 proven by running the FULL selector through `querySelectorAll` on a rendered
+tree, not by counting roots, which would have misled here for precisely the 81-selector reason.
+
+Two risk classes, and they must not be swept together:
+
+- `table-toolbar.css` (10 rules) is **high risk**: the dead rules carry layout on BEM classes nothing
+  else owns, so correcting them makes the whole arrangement live at every width plus a narrow posture
+  that has never once applied. Sighted check per vertical, never a sweep.
+- `field-filters-panel.css` + `selection-preview-rail.css` (15 hits) are probably **no-ops**: all are
+  typography on composed Text parts, and the typography skin owns those properties from
+  `rottay-engines`, a LATER layer than `rottay-components`, which wins on layer regardless of
+  specificity. Verify the layer before claiming a repaint in either direction.
+
+General law: **a rule that has been dead since it was written may encode an assumption the component
+outgrew.** Reviving it is not automatically a fix. Where the revived intent is clearly wrong, the
+correct action is to report, not to ship the correction.
+
+Adjacent class, logged not chased: attribute repetition used as a specificity ladder
+(`[data-part='root']` written three or six times in one selector), which the skin tree's own header
+law already forbids.
+
 ### THE DENOMINATOR — why the three verticals do not read as different companies
 
 Censused 2026-08-11 at ref `17acb610c`, postcss on both sides, `base.css`'s full 439-file `@import`
