@@ -1168,6 +1168,8 @@ export const bithireBrandTheme: BrandTheme = {
       colorMuted: "#728398",
       border: "var(--ds-premium-card-border)",
       borderColor: "var(--ds-premium-card-border)",
+      borderHover: "var(--ds-premium-card-border-hover)",
+      titleLetterSpacing: "0",
       // Resting cards sit at elevation level-1 (design-language §2.4).
       shadow: "var(--ds-surface-shadow, var(--ds-shadow-sm))",
       shadowHover:
@@ -1225,6 +1227,7 @@ export const bithireBrandTheme: BrandTheme = {
     },
     signalCard: {
       bg: "#ffffff",
+      topLineDisplay: "none",
       border: "#D4E0EA",
       borderHover: "color-mix(in srgb, #3A6FB0 18%, #D4E0EA)",
       shadow: "0 1px 2px rgba(20, 40, 59, 0.06)",
@@ -1326,6 +1329,33 @@ export const bithireBrandTheme: BrandTheme = {
       emptyBg: "#FBFCFE",
       emptyBorder: "#D4E0EA",
       skeletonBg: "#EEF3F8",
+    },
+    list: {
+      previewRailGap: "clamp(14px, 1.45vw, 22px)",
+      previewPanelBg:
+        "linear-gradient( 180deg, color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-primary) 2%), color-mix(in srgb, var(--ds-surface-panel) 36%, var(--ds-surface-card)) )",
+      previewPanelBorder:
+        "color-mix( in srgb, var(--ds-color-primary) 14%, var(--ds-color-border) )",
+      previewPanelShadow:
+        "0 10px 24px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ds-surface-card) 76%, transparent)",
+      previewMotionDuration: "180ms",
+      previewMotionEase: "cubic-bezier(0.2, 0.8, 0.2, 1)",
+      shellSectionGap: "14px",
+    },
+    detail: {
+      railWidth: "clamp(280px, 22vw, 340px)",
+      heroBg:
+        "linear-gradient( 180deg, color-mix( in srgb, var(--ds-control-surface) 98%, var(--ds-color-primary) 2% ), color-mix(in srgb, var(--ds-surface-panel) 54%, var(--ds-control-surface)) )",
+      heroBorder:
+        "color-mix( in srgb, var(--ds-color-text-primary) 9%, transparent )",
+      heroShadow:
+        "0 1px 2px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent), 0 12px 28px color-mix(in srgb, var(--ds-color-primary) 5%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ds-surface-card) 76%, transparent)",
+      sectionBg:
+        "linear-gradient( 180deg, var(--ds-surface-card) 0%, color-mix(in srgb, var(--ds-surface-panel) 34%, var(--ds-surface-card)) 100% )",
+      sectionBorder:
+        "color-mix( in srgb, var(--ds-surface-tone, var(--rt-surface-tone, var(--ds-color-primary))) 11%, var(--ds-color-border) )",
+      sectionShadow:
+        "0 1px 2px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent), 0 8px 20px color-mix(in srgb, var(--ds-color-text-primary) 3%, transparent)",
     },
     modal: {
       bg: "#FFFFFF",
