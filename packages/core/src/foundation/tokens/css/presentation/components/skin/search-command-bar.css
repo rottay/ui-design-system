@@ -203,11 +203,14 @@
   padding-inline-end: 278px;
 }
 
-/* ---- input paint per engine (P-88 rustic specificity ladder, unchanged) ---- */
+/* ---- input paint per engine (P-88 rustic specificity ladder, unchanged).
+        The modern predicate reads `[data-part='input']`, not `'root'`: Input
+        writes `data-part={caller ?? 'root'}` on its painted node, so passing a
+        part REPLACES the default and `'root'` can never hold here. ---- */
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
-  + .ds-search-command-bar__input:has(> .rottay-input.rottay-input--modern[data-part='root']),
+  + .ds-search-command-bar__input:has(> .rottay-input.rottay-input--modern[data-part='input']),
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
@@ -221,7 +224,7 @@
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-embedded='true']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
-  + .ds-search-command-bar__input:has(> .rottay-input.rottay-input--modern[data-part='root']),
+  + .ds-search-command-bar__input:has(> .rottay-input.rottay-input--modern[data-part='input']),
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-embedded='true']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
@@ -232,7 +235,7 @@
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-editorial-tech='true']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
-  + .ds-search-command-bar__input:has(> .rottay-input.rottay-input--modern[data-part='root']),
+  + .ds-search-command-bar__input:has(> .rottay-input.rottay-input--modern[data-part='input']),
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-editorial-tech='true']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
@@ -243,7 +246,7 @@
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-embedded='true'][data-editorial-tech='true']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
-  + .ds-search-command-bar__input:has(> .rottay-input.rottay-input--modern[data-part='root']),
+  + .ds-search-command-bar__input:has(> .rottay-input.rottay-input--modern[data-part='input']),
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-embedded='true'][data-editorial-tech='true']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
@@ -255,7 +258,7 @@
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-voice-status][data-voice-active='true']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
-  + .ds-search-command-bar__input:has(> .rottay-input.rottay-input--modern[data-part='root']),
+  + .ds-search-command-bar__input:has(> .rottay-input.rottay-input--modern[data-part='input']),
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-voice-status][data-voice-active='true']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
@@ -266,7 +269,7 @@
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-voice-status='error']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
-  + .ds-search-command-bar__input:has(> .rottay-input.rottay-input--modern[data-part='root']),
+  + .ds-search-command-bar__input:has(> .rottay-input.rottay-input--modern[data-part='input']),
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-voice-status='error']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
