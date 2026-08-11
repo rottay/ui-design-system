@@ -66,17 +66,14 @@ const DARK_REPOINTED_BEFORE = {
  * Semantic neutrals whose value matches no step of their scope's neutral
  * ramp. They must stay byte-identical literals: re-pointing them at a near
  * step would silently change rendered color.
+ *
+ * The bare `:root` block IS the light block, so a literal here is a literal
+ * light-mode value. Thirteen of these were Rottay's dark palette sitting in
+ * that block; they moved to `ROOT_REWIRED` below, where each carries three
+ * pins instead of this one.
  */
 const NO_EXACT_STEP_LITERALS: Record<string, Record<string, string>> = {
   root: {
-    "--ds-color-bg-primary": "#0A0A0C",
-    "--ds-color-bg-secondary": "#0F0F12",
-    "--ds-color-bg-tertiary": "#141417",
-    "--ds-color-bg-hover": "#18181C",
-    "--ds-color-bg-canvas": "#0A0A0C",
-    "--ds-color-bg-elevated": "#18181C",
-    "--ds-color-bg-input": "#0F0F12",
-    "--ds-color-text-primary": "#ECECEC",
     "--ds-color-text-secondary": "#A0A0A5",
     // W8 (APCA remediation, reviewed): tertiary lifted #8A8A90 → #9A9AA2 to
     // keep the secondary>tertiary>muted ladder coherent after the muted
@@ -88,11 +85,6 @@ const NO_EXACT_STEP_LITERALS: Record<string, Record<string, string>> = {
     "--ds-color-text-muted": "#96969E",
     "--ds-color-text-disabled": "#4A4A50",
     "--ds-color-text-on-primary": "#0C0C0E",
-    "--ds-color-border": "#1C1C20",
-    "--ds-color-border-primary": "#1C1C20",
-    "--ds-color-border-secondary": "#252529",
-    "--ds-color-border-subtle": "#161619",
-    "--ds-color-border-tertiary": "#161619",
   },
   dark: {
     "--ds-color-bg-tertiary": "#172033",
@@ -102,6 +94,106 @@ const NO_EXACT_STEP_LITERALS: Record<string, Record<string, string>> = {
     "--ds-color-text-primary": "#f3f4f6",
     "--ds-color-border-secondary": "#1e293b",
   },
+};
+
+/**
+ * The thirteen contaminated light seeds. Each carried a dark literal on bare
+ * `:root` — a ground that painted near-black under near-white ink on any
+ * untenanted light document — and now derives from the light neutral ramp,
+ * which `.dark` was already doing in its own text.
+ *
+ * This is NOT the value-preserving contract the dark table above encodes: the
+ * light value changed on purpose, because it was wrong. What is pinned is the
+ * derivation, the light value it now resolves to, and the dark literal it must
+ * never return to.
+ */
+const ROOT_REWIRED: Record<
+  string,
+  { derivation: string; retiredDarkLiteral: string; resolvesTo: string }
+> = {
+  "--ds-color-bg-primary": {
+    derivation: "var(--ds-color-neutral-50)",
+    retiredDarkLiteral: "#0A0A0C",
+    resolvesTo: "#fafafa",
+  },
+  "--ds-color-bg-secondary": {
+    derivation: "var(--ds-color-neutral-100)",
+    retiredDarkLiteral: "#0F0F12",
+    resolvesTo: "#f5f5f5",
+  },
+  "--ds-color-bg-tertiary": {
+    derivation: "var(--ds-color-neutral-200)",
+    retiredDarkLiteral: "#141417",
+    resolvesTo: "#e5e5e5",
+  },
+  "--ds-color-bg-hover": {
+    derivation: "var(--ds-color-neutral-100)",
+    retiredDarkLiteral: "#18181C",
+    resolvesTo: "#f5f5f5",
+  },
+  // Follows its own family head rather than a rung: canvas and bg-primary are
+  // one surface, and a vertical that overrides the head must carry the canvas.
+  "--ds-color-bg-canvas": {
+    derivation: "var(--ds-color-bg-primary)",
+    retiredDarkLiteral: "#0A0A0C",
+    resolvesTo: "#fafafa",
+  },
+  "--ds-color-bg-elevated": {
+    derivation: "var(--ds-color-neutral-0)",
+    retiredDarkLiteral: "#18181C",
+    resolvesTo: "#ffffff",
+  },
+  "--ds-color-bg-input": {
+    derivation: "var(--ds-color-neutral-0)",
+    retiredDarkLiteral: "#0F0F12",
+    resolvesTo: "#ffffff",
+  },
+  "--ds-color-text-primary": {
+    derivation: "var(--ds-color-neutral-900)",
+    retiredDarkLiteral: "#ECECEC",
+    resolvesTo: "#171717",
+  },
+  "--ds-color-border": {
+    derivation: "var(--ds-color-neutral-200)",
+    retiredDarkLiteral: "#1C1C20",
+    resolvesTo: "#e5e5e5",
+  },
+  "--ds-color-border-primary": {
+    derivation: "var(--ds-color-neutral-200)",
+    retiredDarkLiteral: "#1C1C20",
+    resolvesTo: "#e5e5e5",
+  },
+  "--ds-color-border-secondary": {
+    derivation: "var(--ds-color-neutral-300)",
+    retiredDarkLiteral: "#252529",
+    resolvesTo: "#d4d4d4",
+  },
+  "--ds-color-border-subtle": {
+    derivation: "var(--ds-color-neutral-100)",
+    retiredDarkLiteral: "#161619",
+    resolvesTo: "#f5f5f5",
+  },
+  "--ds-color-border-tertiary": {
+    derivation: "var(--ds-color-neutral-100)",
+    retiredDarkLiteral: "#161619",
+    resolvesTo: "#f5f5f5",
+  },
+};
+
+/**
+ * The six seeds `.dark` did not already override. Wiring them to the light
+ * ramp would have repainted dark too, so each is pinned at exactly what dark
+ * resolved to before the rewire — which is the retired `:root` literal itself.
+ * These are the value-preservation half of the rewire and nothing else asserts
+ * them: without this table the light repair could move dark unnoticed.
+ */
+const DARK_PINS_HOLDING_THE_LIGHT_REWIRE: Record<string, string> = {
+  "--ds-color-bg-hover": "#18181C",
+  "--ds-color-bg-canvas": "#0A0A0C",
+  "--ds-color-bg-input": "#0F0F12",
+  "--ds-color-border": "#1C1C20",
+  "--ds-color-border-subtle": "#161619",
+  "--ds-color-border-tertiary": "#161619",
 };
 
 /**
@@ -122,8 +214,12 @@ const ROOT_DERIVED = {
   "--ds-color-bg-subtle": {
     derivation: "var(--ds-color-bg-secondary, #0D0D10)",
     retiredLiteral: "#0D0D10",
-    /** bg-secondary is pinned byte-identical above, so this chain is anchored. */
-    resolvesTo: "#0F0F12",
+    /**
+     * bg-secondary is pinned in ROOT_REWIRED, so this chain is anchored. It
+     * terminates light now: following the family head was already the right
+     * shape, and the head was the thing that was wrong.
+     */
+    resolvesTo: "#f5f5f5",
   },
 } as const;
 
@@ -172,6 +268,29 @@ describe("default theme semantic neutral derivation (TOK-01)", () => {
       expect(resolveVarGraph(token, rootScope), `root ${token} chain`).toBe(
         pin.resolvesTo
       );
+    }
+  });
+
+  it("wires every contaminated light seed to the ramp, never back to its dark literal", () => {
+    for (const [token, pin] of Object.entries(ROOT_REWIRED)) {
+      const declared = rootScope.get(token);
+      expect(declared, `root ${token}`).toBe(pin.derivation);
+      expect(
+        declared,
+        `root ${token} regressed to ${pin.retiredDarkLiteral} — a dark value in the light block`
+      ).not.toBe(pin.retiredDarkLiteral);
+      expect(resolveVarGraph(token, rootScope), `root ${token} chain`).toBe(
+        pin.resolvesTo
+      );
+    }
+  });
+
+  it("keeps dark byte-identical where the light rewire would have repainted it", () => {
+    const darkOwnScope = parseDeclarations(css.slice(darkStart));
+    for (const [token, literal] of Object.entries(
+      DARK_PINS_HOLDING_THE_LIGHT_REWIRE
+    )) {
+      expect(darkOwnScope.get(token), `dark ${token}`).toBe(literal);
     }
   });
 

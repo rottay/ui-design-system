@@ -10,8 +10,21 @@
  *
  * The arithmetic is re-derived here rather than trusted. A ramp whose slope and
  * intercept do not reproduce its own bounds is a ramp that lies about where it
- * starts and stops, and nothing else in the system would notice: no component
- * consumes these tokens yet, so no pixel moves when they are wrong.
+ * starts and stops.
+ *
+ * THE CORPUS IS THE SHIPPED RAMP, NOT ONE FILE. `base/*.css` and
+ * `themes/default.css` land in the same `rottay-tokens` layer, default.css
+ * second, so where both declare a step the theme wins. Reading only the base
+ * file measured the LOSING ramp: it passed until `edf91a41f` deleted the inert
+ * base declarations, and the bounds it had been certifying turned out never to
+ * have been shipped magnitudes.
+ *
+ * `--ds-font-size-fluid-{3xl,4xl,5xl}` are red for that reason and the red is
+ * the finding: 1.875rem and 2.25rem are the base file's retired 3xl/4xl, which
+ * default.css has always overridden with 1.5rem and 2rem. Re-anchoring them is
+ * a repaint of the whole eight-ramp family across three verticals -- the five
+ * that pass do so on overlapping values, not on a convention the shipped ramp
+ * supports -- so it is a wave, not a test edit.
  */
 
 import { readFileSync } from 'node:fs';
@@ -20,9 +33,12 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 const FOUNDATION = join(__dirname, '../css/foundation/base');
+const THEME = join(__dirname, '../css/foundation/themes/default.css');
 
 const typography = readFileSync(join(FOUNDATION, 'typography.css'), 'utf-8');
 const spacing = readFileSync(join(FOUNDATION, 'spacing.css'), 'utf-8');
+/** The later declarer in the same layer, and therefore the winner. */
+const theme = readFileSync(THEME, 'utf-8');
 
 /** The widths the fluid ramps interpolate between, in rem. Mirrors WO-ENG-12's 360/1280. */
 const MIN_WIDTH_REM = 22.5;
@@ -71,26 +87,41 @@ function fluidRamps(css: string, prefix: string): FluidRamp[] {
 
 const TYPE_RAMPS = fluidRamps(typography, '--ds-font-size-fluid-');
 const SPACE_RAMPS = fluidRamps(spacing, '--ds-space-fluid-');
-const TYPE_STEPS = staticSteps(typography, '--ds-font-size-');
-const SPACE_STEPS = staticSteps(spacing, '--ds-spacing-');
+const TYPE_STEPS = staticSteps(`${typography}\n${theme}`, '--ds-font-size-');
+const SPACE_STEPS = staticSteps(`${spacing}\n${theme}`, '--ds-spacing-');
 
 const CASES = [
-  { label: 'type', ramps: TYPE_RAMPS, steps: TYPE_STEPS, expected: 8 },
-  { label: 'space', ramps: SPACE_RAMPS, steps: SPACE_STEPS, expected: 8 },
+  { label: 'type', ramps: TYPE_RAMPS, steps: TYPE_STEPS, expected: 8, floor: 14 },
+  { label: 'space', ramps: SPACE_RAMPS, steps: SPACE_STEPS, expected: 8, floor: 29 },
 ] as const;
 
-describe.each(CASES)('the $label fluid ramp', ({ ramps, steps, expected }) => {
+describe.each(CASES)('the $label fluid ramp', ({ ramps, steps, expected, floor }) => {
   it('parses every declared fluid token', () => {
     // A ramp the regex cannot read is a ramp this file is not checking. Pin the
     // count so a hand-written token in a shape nothing validates fails here.
     expect(ramps).toHaveLength(expected);
   });
 
+  it('reads a corpus that still holds the whole static ramp', () => {
+    // The membership check below gets EASIER as the corpus shrinks, so the
+    // corpus needs its own floor. Without one, deleting declarations silently
+    // narrows what "a magnitude the ramp declares" means -- which is how the
+    // type corpus fell from fifteen steps to five while this file stayed green.
+    expect(steps.size).toBeGreaterThanOrEqual(floor);
+  });
+
   it.each(ramps.map((ramp) => [ramp.name, ramp] as const))(
     '%s is bounded by two values the static ramp already declares',
     (_name, ramp) => {
-      expect(steps, `min ${ramp.min}rem is a new magnitude`).toContain(ramp.min);
-      expect(steps, `max ${ramp.max}rem is a new magnitude`).toContain(ramp.max);
+      const shipped = [...steps].sort((a, b) => a - b).join(', ');
+      expect(
+        steps,
+        `min ${ramp.min}rem is not a magnitude the shipped ramp declares (${shipped})`
+      ).toContain(ramp.min);
+      expect(
+        steps,
+        `max ${ramp.max}rem is not a magnitude the shipped ramp declares (${shipped})`
+      ).toContain(ramp.max);
       expect(ramp.max).toBeGreaterThan(ramp.min);
     }
   );

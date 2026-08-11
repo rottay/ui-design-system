@@ -208,12 +208,22 @@ describe('contested token channels', () => {
    * Counts were measured against the generated artifacts; personality-namespaced
    * variables (`--ds-personality-*`) never appear here because the artifacts
    * declare none of them -- the bridge is their sole emitter.
+   *
+   * Rottay's four badge/card-padding entries arrived with the control-plane
+   * lane, which authored the same channels BitHire already had. Reviewed and
+   * accepted: the artifact is unlayered, so the bridge stops deciding the
+   * control plane's padding and radius on the surface that authored them --
+   * which is the coverage model working, not a suppression.
    */
   const CONTESTED_BY_VERTICAL: Record<string, string[]> = {
     rottay: [
+      '--ds-badge-radius',
       '--ds-card-bg-hover',
+      '--ds-card-body-padding',
       '--ds-card-border',
       '--ds-card-border-hover',
+      '--ds-card-footer-padding',
+      '--ds-card-header-padding',
       '--ds-card-shadow',
       '--ds-card-shadow-hover',
       '--ds-divider-color',
