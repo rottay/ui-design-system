@@ -1056,7 +1056,7 @@ describe("Input modern skin -- shell/control paint contract (K1-B01, K1-B02)", (
   it("autofill paint still covers both structural branches", () => {
     expect(skinCss).toContain("> .rottay-input__control:-webkit-autofill");
     expect(skinCss).toContain(
-      "input.rottay-input.rottay-input--modern[data-part='root']:-webkit-autofill"
+      "input.rottay-input.rottay-input--modern:-webkit-autofill"
     );
   });
 
