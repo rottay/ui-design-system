@@ -265,10 +265,47 @@ if (CONTROL) {
   process.exit(fail === 0 ? 0 : 1);
 }
 
+/**
+ * IS THE READ ITSELF LIVE? — the cross-family question the gate above skips.
+ *
+ * The reachability gate asks whether the DECLARATION can be severed. It
+ * silently assumes the reading rule matches something, and for a cross-family
+ * row that assumption IS the question. When a family's skin keys on a COMPOSED
+ * PRIMITIVE's part (`.rottay-button[data-part='trigger']`) while the family's
+ * own TSX renders that button with a renamed part, the rule never matches, the
+ * channel is never read, and `reachable:false` is a confident answer to a
+ * question nobody asked.
+ *
+ * Measured on `list-toolbar`: 29 selectors demand `.rottay-button[data-part='trigger']`
+ * and all 8 of its Buttons rename the part. Every one is dead. A row whose read
+ * is dead is MOOT, and the dead rule is the real finding.
+ */
+const callSites = JSON.parse(
+  readFileSync(new URL('./callsites.json', import.meta.url).pathname, 'utf8')).sites;
+for (const r of rows) {
+  const demands = [...r.readingSelector.matchAll(/\.rottay-([a-z0-9-]+)[^\s,]*\[data-part='([^']+)'\]/g)]
+    .map((m) => ({ primitive: m[1].replace(/--.*$/, ''), part: m[2] }));
+  if (!demands.length) { r.readLive = null; continue; }
+  r.crossFamilyDemands = demands.map((d) => `${d.primitive}:${d.part}`);
+  const stamped = callSites.filter((s) => s.file.includes(`/${r.family}/`) && s.foreign === false);
+  r.readLive = demands.every((d) => {
+    const stem = d.primitive.replace(/^rottay-/, '').split('-')[0];
+    const here = stamped.filter((s) => s.tag.toLowerCase().includes(stem));
+    if (!here.length) return true;                    // nobody renames it here
+    return here.some((s) => s.value === d.part);      // at least one keeps the demanded part
+  });
+}
+const moot = rows.filter((r) => r.readLive === false);
+const crossFamily = rows.filter((r) => r.readLive !== null);
+
 writeFileSync(
   new URL('./FALLBACK-READS.json', import.meta.url).pathname,
   JSON.stringify({ filesParsed: files.length, rows }, null, 1)
 );
+
+console.log(`cross-family rows (read keys on a composed primitive's part)  ${crossFamily.length}`);
+console.log(`  of those, the READING RULE IS DEAD — row is moot            ${moot.length}`);
+for (const m of moot) console.log(`    ${m.family}:${m.line} ${m.channel} — needs ${m.crossFamilyDemands.join(' ')}`);
 
 console.log(`files parsed                                  ${files.length}`);
 console.log(`props declared ONLY in root-keyed rules        ${[...inRoot.keys()].filter((n) => !elsewhere.has(n)).length}`);

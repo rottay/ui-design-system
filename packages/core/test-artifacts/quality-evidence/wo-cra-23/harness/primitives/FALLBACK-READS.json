@@ -18,7 +18,8 @@
    "distinctValues": 1,
    "cellsMatchingFallback": 0,
    "cellsDifferingFromFallback": 1,
-   "severity": "wrong-cell"
+   "severity": "wrong-cell",
+   "readLive": null
   },
   {
    "family": "action-dock",
@@ -38,7 +39,8 @@
    "distinctValues": 2,
    "cellsMatchingFallback": 0,
    "cellsDifferingFromFallback": 2,
-   "severity": "wrong-literal"
+   "severity": "wrong-literal",
+   "readLive": null
   },
   {
    "family": "app-shell",
@@ -57,7 +59,8 @@
    "distinctValues": 1,
    "cellsMatchingFallback": 1,
    "cellsDifferingFromFallback": 0,
-   "severity": "no-op"
+   "severity": "no-op",
+   "readLive": null
   },
   {
    "family": "card-compounds",
@@ -76,7 +79,11 @@
    "distinctValues": 1,
    "cellsMatchingFallback": 0,
    "cellsDifferingFromFallback": 1,
-   "severity": "wrong-literal"
+   "severity": "wrong-literal",
+   "crossFamilyDemands": [
+    "card-header:header"
+   ],
+   "readLive": true
   },
   {
    "family": "card-compounds",
@@ -99,7 +106,11 @@
    "distinctValues": 5,
    "cellsMatchingFallback": 1,
    "cellsDifferingFromFallback": 4,
-   "severity": "wrong-cell"
+   "severity": "wrong-cell",
+   "crossFamilyDemands": [
+    "card-image:image"
+   ],
+   "readLive": true
   },
   {
    "family": "edit-header",
@@ -118,7 +129,8 @@
    "distinctValues": 1,
    "cellsMatchingFallback": 0,
    "cellsDifferingFromFallback": 1,
-   "severity": "wrong-literal"
+   "severity": "wrong-literal",
+   "readLive": null
   },
   {
    "family": "edit-header",
@@ -138,7 +150,8 @@
    "distinctValues": 2,
    "cellsMatchingFallback": 0,
    "cellsDifferingFromFallback": 2,
-   "severity": "wrong-literal"
+   "severity": "wrong-literal",
+   "readLive": null
   },
   {
    "family": "edit-header",
@@ -158,7 +171,8 @@
    "distinctValues": 2,
    "cellsMatchingFallback": 0,
    "cellsDifferingFromFallback": 2,
-   "severity": "wrong-literal"
+   "severity": "wrong-literal",
+   "readLive": null
   },
   {
    "family": "edit-header",
@@ -177,7 +191,8 @@
    "distinctValues": 1,
    "cellsMatchingFallback": 0,
    "cellsDifferingFromFallback": 1,
-   "severity": "wrong-literal"
+   "severity": "wrong-literal",
+   "readLive": null
   },
   {
    "family": "edit-header",
@@ -196,7 +211,8 @@
    "distinctValues": 1,
    "cellsMatchingFallback": 0,
    "cellsDifferingFromFallback": 1,
-   "severity": "wrong-literal"
+   "severity": "wrong-literal",
+   "readLive": null
   },
   {
    "family": "edit-header",
@@ -216,7 +232,8 @@
    "distinctValues": 2,
    "cellsMatchingFallback": 0,
    "cellsDifferingFromFallback": 2,
-   "severity": "wrong-literal"
+   "severity": "wrong-literal",
+   "readLive": null
   },
   {
    "family": "edit-header",
@@ -236,7 +253,8 @@
    "distinctValues": 2,
    "cellsMatchingFallback": 0,
    "cellsDifferingFromFallback": 2,
-   "severity": "wrong-literal"
+   "severity": "wrong-literal",
+   "readLive": null
   },
   {
    "family": "widget-board",
@@ -255,7 +273,8 @@
    "distinctValues": 1,
    "cellsMatchingFallback": 0,
    "cellsDifferingFromFallback": 1,
-   "severity": "wrong-literal"
+   "severity": "wrong-literal",
+   "readLive": null
   },
   {
    "family": "widget-board",
@@ -274,7 +293,8 @@
    "distinctValues": 1,
    "cellsMatchingFallback": 0,
    "cellsDifferingFromFallback": 1,
-   "severity": "wrong-literal"
+   "severity": "wrong-literal",
+   "readLive": null
   },
   {
    "family": "widget-board",
@@ -293,7 +313,8 @@
    "distinctValues": 1,
    "cellsMatchingFallback": 0,
    "cellsDifferingFromFallback": 1,
-   "severity": "wrong-literal"
+   "severity": "wrong-literal",
+   "readLive": null
   },
   {
    "family": "widget-board",
@@ -312,7 +333,8 @@
    "distinctValues": 1,
    "cellsMatchingFallback": 0,
    "cellsDifferingFromFallback": 1,
-   "severity": "wrong-literal"
+   "severity": "wrong-literal",
+   "readLive": null
   },
   {
    "family": "widget-board",
@@ -331,7 +353,8 @@
    "distinctValues": 1,
    "cellsMatchingFallback": 0,
    "cellsDifferingFromFallback": 1,
-   "severity": "wrong-literal"
+   "severity": "wrong-literal",
+   "readLive": null
   },
   {
    "family": "alert",
@@ -353,7 +376,11 @@
    "distinctValues": 4,
    "cellsMatchingFallback": 0,
    "cellsDifferingFromFallback": 4,
-   "severity": "wrong-cell"
+   "severity": "wrong-cell",
+   "crossFamilyDemands": [
+    "alert-shell:icon"
+   ],
+   "readLive": true
   },
   {
    "family": "callout",
@@ -375,7 +402,11 @@
    "distinctValues": 4,
    "cellsMatchingFallback": 0,
    "cellsDifferingFromFallback": 4,
-   "severity": "wrong-cell"
+   "severity": "wrong-cell",
+   "crossFamilyDemands": [
+    "callout-shell:icon"
+   ],
+   "readLive": true
   },
   {
    "family": "data-table",
@@ -395,7 +426,8 @@
    "distinctValues": 2,
    "cellsMatchingFallback": 0,
    "cellsDifferingFromFallback": 2,
-   "severity": "wrong-literal"
+   "severity": "wrong-literal",
+   "readLive": null
   },
   {
    "family": "data-table",
@@ -415,7 +447,8 @@
    "distinctValues": 2,
    "cellsMatchingFallback": 0,
    "cellsDifferingFromFallback": 2,
-   "severity": "wrong-literal"
+   "severity": "wrong-literal",
+   "readLive": null
   },
   {
    "family": "data-table",
@@ -434,7 +467,8 @@
    "distinctValues": 1,
    "cellsMatchingFallback": 0,
    "cellsDifferingFromFallback": 1,
-   "severity": "wrong-literal"
+   "severity": "wrong-literal",
+   "readLive": null
   },
   {
    "family": "form",
@@ -455,7 +489,8 @@
    "distinctValues": 3,
    "cellsMatchingFallback": 1,
    "cellsDifferingFromFallback": 2,
-   "severity": "wrong-cell"
+   "severity": "wrong-cell",
+   "readLive": null
   },
   {
    "family": "list-toolbar",
@@ -464,7 +499,7 @@
    "line": 214,
    "tree": "engine",
    "readingProp": "border-radius",
-   "readingSelector": ".ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__icon-button.rottay-button[data-part='trigger']",
+   "readingSelector": ".ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__icon-button.rottay-button[data-variant]",
    "channel": "--ds-list-toolbar-radius-control",
    "fallback": "var(--ds-radius-sm, 6px)",
    "fallbackIsChannel": true,
@@ -474,7 +509,8 @@
    "distinctValues": 1,
    "cellsMatchingFallback": 0,
    "cellsDifferingFromFallback": 1,
-   "severity": "wrong-cell"
+   "severity": "wrong-cell",
+   "readLive": null
   },
   {
    "family": "list-toolbar",
@@ -483,7 +519,7 @@
    "line": 402,
    "tree": "engine",
    "readingProp": "border-radius",
-   "readingSelector": ".ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__filter-trigger.rottay-button[data-part='trigger']",
+   "readingSelector": ".ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__filter-trigger.rottay-button[data-variant]",
    "channel": "--ds-list-toolbar-radius-control",
    "fallback": "var(--ds-radius-sm, 6px)",
    "fallbackIsChannel": true,
@@ -493,7 +529,8 @@
    "distinctValues": 1,
    "cellsMatchingFallback": 0,
    "cellsDifferingFromFallback": 1,
-   "severity": "wrong-cell"
+   "severity": "wrong-cell",
+   "readLive": null
   },
   {
    "family": "list-toolbar",
@@ -512,7 +549,8 @@
    "distinctValues": 1,
    "cellsMatchingFallback": 0,
    "cellsDifferingFromFallback": 1,
-   "severity": "wrong-cell"
+   "severity": "wrong-cell",
+   "readLive": null
   },
   {
    "family": "list-toolbar",
@@ -531,7 +569,8 @@
    "distinctValues": 1,
    "cellsMatchingFallback": 0,
    "cellsDifferingFromFallback": 1,
-   "severity": "wrong-cell"
+   "severity": "wrong-cell",
+   "readLive": null
   },
   {
    "family": "list-toolbar",
@@ -550,7 +589,8 @@
    "distinctValues": 1,
    "cellsMatchingFallback": 0,
    "cellsDifferingFromFallback": 1,
-   "severity": "wrong-cell"
+   "severity": "wrong-cell",
+   "readLive": null
   },
   {
    "family": "list-toolbar",
@@ -569,7 +609,8 @@
    "distinctValues": 1,
    "cellsMatchingFallback": 0,
    "cellsDifferingFromFallback": 1,
-   "severity": "wrong-cell"
+   "severity": "wrong-cell",
+   "readLive": null
   },
   {
    "family": "list-toolbar",
@@ -578,7 +619,7 @@
    "line": 1087,
    "tree": "engine",
    "readingProp": "border-radius",
-   "readingSelector": ".ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__clear-all.rottay-button[data-part='trigger']",
+   "readingSelector": ".ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__clear-all.rottay-button[data-variant]",
    "channel": "--ds-list-toolbar-radius-control",
    "fallback": "var(--ds-radius-sm, 6px)",
    "fallbackIsChannel": true,
@@ -588,7 +629,8 @@
    "distinctValues": 1,
    "cellsMatchingFallback": 0,
    "cellsDifferingFromFallback": 1,
-   "severity": "wrong-cell"
+   "severity": "wrong-cell",
+   "readLive": null
   },
   {
    "family": "list-toolbar",
@@ -607,7 +649,8 @@
    "distinctValues": 1,
    "cellsMatchingFallback": 0,
    "cellsDifferingFromFallback": 1,
-   "severity": "wrong-cell"
+   "severity": "wrong-cell",
+   "readLive": null
   },
   {
    "family": "list-toolbar",
@@ -626,7 +669,8 @@
    "distinctValues": 1,
    "cellsMatchingFallback": 0,
    "cellsDifferingFromFallback": 1,
-   "severity": "wrong-cell"
+   "severity": "wrong-cell",
+   "readLive": null
   },
   {
    "family": "mentions",
@@ -646,7 +690,8 @@
    "distinctValues": 2,
    "cellsMatchingFallback": 1,
    "cellsDifferingFromFallback": 1,
-   "severity": "wrong-literal"
+   "severity": "wrong-literal",
+   "readLive": null
   },
   {
    "family": "tag",
@@ -669,7 +714,8 @@
    "distinctValues": 5,
    "cellsMatchingFallback": 1,
    "cellsDifferingFromFallback": 4,
-   "severity": "wrong-cell"
+   "severity": "wrong-cell",
+   "readLive": null
   },
   {
    "family": "tag",
@@ -692,7 +738,8 @@
    "distinctValues": 5,
    "cellsMatchingFallback": 1,
    "cellsDifferingFromFallback": 4,
-   "severity": "wrong-cell"
+   "severity": "wrong-cell",
+   "readLive": null
   }
  ]
 }
