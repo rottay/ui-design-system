@@ -489,6 +489,10 @@ export interface BrandChrome {
   collectionCard?: BrandPremiumCardChrome;
   /** Listing grid chrome shared by collection cards and skeleton/empty states */
   listingGrid?: BrandListingGridChrome;
+  /** Collection list shell and preview-rail chrome */
+  list?: BrandListChrome;
+  /** Detail record surface chrome (hero header, section panels, rail width) */
+  detail?: BrandDetailChrome;
   /** Modal/dialog chrome */
   modal?: BrandModalChrome;
   /** Tooltip micro-overlay chrome */
@@ -1372,6 +1376,48 @@ export interface BrandListingGridChrome {
   emptyBg?: string;
   emptyBorder?: string;
   skeletonBg?: string;
+}
+
+/**
+ * Collection list shell and preview-rail chrome.
+ *
+ * The collection workspace renders one list shell and one preview rail; the
+ * tenant tunes the rail's material, the gutter it opens against the list, the
+ * choreography of its resize, and the band that separates the toolbar row from
+ * the section above it. Anatomy inside the rail belongs to the caller's own
+ * render slot, so nothing here names a lane, meter or quick-action part.
+ */
+export interface BrandListChrome {
+  /** Preview rail */
+  previewRailGap?: string;
+  previewPanelBg?: string;
+  previewPanelBorder?: string;
+  previewPanelShadow?: string;
+  previewMotionDuration?: string;
+  previewMotionEase?: string;
+  /** List shell */
+  shellSectionGap?: string;
+}
+
+/**
+ * Detail record surface chrome.
+ *
+ * A detail page is a hero header over a set of section panels beside a rail.
+ * The tenant owns the material of the two framed regions and the rail's resting
+ * width; the caller's `sidebarWidth` prop still outranks the rail channel, and
+ * the panel-level anatomy stays with the DetailPanel component.
+ */
+export interface BrandDetailChrome {
+  /** Hero header */
+  heroBg?: string;
+  heroBorder?: string;
+  heroShadow?: string;
+  /** Section panels (tab panel + sidebar) */
+  sectionBg?: string;
+  sectionBorder?: string;
+  sectionShadow?: string;
+  /** Rail */
+  railWidth?: string;
 }
 
 export interface BrandModalChrome {

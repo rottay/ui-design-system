@@ -1134,39 +1134,39 @@ function setTintScaleVariables(
   const palette = bt.palette;
   if (!palette) return;
 
-  const roles: Array<{
-    suffix: string;
-    color: string | undefined;
-    colorVar: string;
-  }> = [
-    { suffix: "", color: palette.primaryColor, colorVar: "--ds-color-primary" },
-    {
-      suffix: "success",
-      color: palette.successColor,
-      colorVar: "--ds-color-success",
-    },
-    {
-      suffix: "warning",
-      color: palette.warningColor,
-      colorVar: "--ds-color-warning",
-    },
-    {
-      suffix: "error",
-      color: palette.errorColor,
-      colorVar: "--ds-color-error",
-    },
-    { suffix: "info", color: palette.infoColor, colorVar: "--ds-color-info" },
-  ];
+  if (palette.primaryColor)
+    setTintRampVariables(vars, "--ds-tint", "--ds-color-primary");
+  if (palette.successColor)
+    setTintRampVariables(vars, "--ds-tint-success", "--ds-color-success");
+  if (palette.warningColor)
+    setTintRampVariables(vars, "--ds-tint-warning", "--ds-color-warning");
+  if (palette.errorColor)
+    setTintRampVariables(vars, "--ds-tint-error", "--ds-color-error");
+  if (palette.infoColor)
+    setTintRampVariables(vars, "--ds-tint-info", "--ds-color-info");
+}
 
-  for (const { suffix, color, colorVar } of roles) {
-    if (!color) continue;
-    for (const step of TINT_STEPS) {
-      const name = suffix ? `--ds-tint-${suffix}-${step}` : `--ds-tint-${step}`;
-      vars[
-        name
-      ] = `color-mix(in oklab, var(${colorVar}) ${step}%, var(--ds-color-bg-primary))`;
-    }
-  }
+/**
+ * One role's five-step ramp. The scale prefix arrives as a literal at every
+ * call site and each step is spelled in its own key, so the emitted names are
+ * enumerable from source: ownership derivations read this file, and a family
+ * assembled behind an interpolated variable is invisible to them — a channel
+ * the compiler writes at :root would then be classified as an unowned read.
+ */
+function setTintRampVariables(
+  vars: Record<string, string>,
+  scale: string,
+  colorVar: string
+): void {
+  vars[`${scale}-4`] = tintStep(colorVar, 4);
+  vars[`${scale}-8`] = tintStep(colorVar, 8);
+  vars[`${scale}-12`] = tintStep(colorVar, 12);
+  vars[`${scale}-16`] = tintStep(colorVar, 16);
+  vars[`${scale}-24`] = tintStep(colorVar, 24);
+}
+
+function tintStep(colorVar: string, step: (typeof TINT_STEPS)[number]): string {
+  return `color-mix(in oklab, var(${colorVar}) ${step}%, var(--ds-color-bg-primary))`;
 }
 
 // ── Mode overlays ───────────────────────────────────────

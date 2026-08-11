@@ -16,6 +16,8 @@ import type {
   BrandBadgeChrome,
   BrandButtonVariantChrome,
   BrandControlSizeChrome,
+  BrandDetailChrome,
+  BrandListChrome,
   BrandPremiumCardChrome,
   BrandListingGridChrome,
   BrandPopoverChrome,
@@ -510,6 +512,47 @@ function setListingGridVars(
   if (grid.emptyBorder)
     vars["--ds-listing-grid-empty-border"] = grid.emptyBorder;
   if (grid.skeletonBg) vars["--ds-listing-grid-skeleton-bg"] = grid.skeletonBg;
+}
+
+/** Map collection list shell + preview-rail chrome. */
+function setListVars(
+  vars: Record<string, string>,
+  list: Partial<BrandListChrome> | undefined
+): void {
+  if (!list) return;
+
+  if (list.previewRailGap)
+    vars["--ds-list-preview-rail-gap"] = list.previewRailGap;
+  if (list.previewPanelBg)
+    vars["--ds-list-preview-panel-bg"] = list.previewPanelBg;
+  if (list.previewPanelBorder)
+    vars["--ds-list-preview-panel-border"] = list.previewPanelBorder;
+  if (list.previewPanelShadow)
+    vars["--ds-list-preview-panel-shadow"] = list.previewPanelShadow;
+  if (list.previewMotionDuration)
+    vars["--ds-list-preview-motion-duration"] = list.previewMotionDuration;
+  if (list.previewMotionEase)
+    vars["--ds-list-preview-motion-ease"] = list.previewMotionEase;
+  if (list.shellSectionGap)
+    vars["--ds-list-shell-section-gap"] = list.shellSectionGap;
+}
+
+/** Map detail record surface chrome (hero header, section panels, rail). */
+function setDetailVars(
+  vars: Record<string, string>,
+  detail: Partial<BrandDetailChrome> | undefined
+): void {
+  if (!detail) return;
+
+  if (detail.heroBg) vars["--ds-detail-hero-bg"] = detail.heroBg;
+  if (detail.heroBorder) vars["--ds-detail-hero-border"] = detail.heroBorder;
+  if (detail.heroShadow) vars["--ds-detail-hero-shadow"] = detail.heroShadow;
+  if (detail.sectionBg) vars["--ds-detail-section-bg"] = detail.sectionBg;
+  if (detail.sectionBorder)
+    vars["--ds-detail-section-border"] = detail.sectionBorder;
+  if (detail.sectionShadow)
+    vars["--ds-detail-section-shadow"] = detail.sectionShadow;
+  if (detail.railWidth) vars["--ds-detail-rail-width"] = detail.railWidth;
 }
 
 /**
@@ -1619,6 +1662,8 @@ export function chromeToVariables(
   setPremiumCardVars(vars, "tall-card", chrome.tallCard);
   setPremiumCardVars(vars, "collection-card", chrome.collectionCard);
   setListingGridVars(vars, chrome.listingGrid);
+  setListVars(vars, chrome.list);
+  setDetailVars(vars, chrome.detail);
 
   // Modal chrome
   if (chrome.modal) {

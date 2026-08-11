@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "generatedBy": "FASE K + Codex C1 reconciliation 2026-08-03 — rows that gained productive writers removed from the orphan-read ledger",
-  "basedOnManifestDigest": "09b9c025d6e8e00f06070725d8886b1bddd95b8fd89dee1e5e642905fb9c5c5c",
+  "basedOnManifestDigest": "ec694dac906d8755625fdb29aacdefbda2d615c476688d0086b901297487b6de",
   "laws": [
     "a read without an owner classification cannot ship: every name in hooks-manifest.unadjudicatedReads has exactly one row here",
     "MODERN_PRIVATE includes engine-agnostic private channels (fallback-governed, single owning reader) — the non-modern-reader:foundation-tokens flag preserves the distinction without widening the closed vocabulary",
@@ -17,15 +17,16 @@
     "postExecRederive": "2026-08-02 re-derive tras K-EXEC: 5 nombres salieron del set por retarget ejecutado (--ds-color-bg-success, --ds-color-text-on-success, --ds-font-family-sans, --ds-input-disabled-bg, --ds-motion-duration-fast); cero nombres nuevos.",
     "remediationRederive": "2026-08-02 F-final: overlays fase2 (bare-sites per-site + frozen jurisdiction) y fase3-4 (phantoms resueltos, 46 tenant-facing ruteados) aplicados; 9 nombres salieron por ejecución/declaración (--ds-checkbox-size, --ds-color-background-subtle, --ds-color-bg-success, --ds-color-text-on-success, --ds-control-height-md, --ds-font-family-sans, --ds-input-disabled-bg, --ds-motion-duration-fast, --ds-radio-size); leadAdjusted×0.",
     "remediationRederiveFix": "v2: density×31 re-aplicado (v1 los pisó al reconstruir de slices — ley: overlays del lead se re-aplican tras todo rebuild), fase4 destinos×46, fase3b×2.",
-    "c1Reconciliation": "Five reads left this ledger after gaining productive writers: dropdown hover shadow, shell/sidebar spacing, and the two DataTable minimum-height channels. No baseline widening."
+    "c1Reconciliation": "Five reads left this ledger after gaining productive writers: dropdown hover shadow, shell/sidebar spacing, and the two DataTable minimum-height channels. No baseline widening.",
+    "tintScaleOwnership": "2026-08-10: --ds-tint-24 left this ledger. Its row named a GENERATED artifact (facade/artifacts/bithire/index.css) as owner, which is the circularity the hook manifest excludes artifacts to prevent. The real writer is setTintRampVariables in the BrandTheme compiler; once that emitter spelled its keys, the whole five-step scale classified as a tenant channel and the orphan row had nothing left to record. No baseline widening: rows only left."
   },
   "counts": {
-    "total": 2676,
+    "total": 2675,
     "byClass": {
       "MODERN_PRIVATE": 2034,
       "FROZEN_ENGINE_SCOPED": 525,
       "TENANT_FACING_CANDIDATE": 76,
-      "FOUNDATION_SHARED": 39,
+      "FOUNDATION_SHARED": 38,
       "ALIAS_READ": 2
     }
   },
@@ -34486,18 +34487,6 @@
         "foundation/tokens/css/runtime/engines/modern/skin/time-picker.css"
       ],
       "evidence": "undeclared internal channel; 1 read(s) in modern, 1 with a governing fallback"
-    },
-    {
-      "name": "--ds-tint-24",
-      "family": "tint",
-      "class": "FOUNDATION_SHARED",
-      "owner": "foundation/tokens/css/facade/artifacts/bithire/index.css",
-      "readSites": [
-        "foundation/tokens/css/facade/artifacts/bithire/index.css",
-        "foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-        "foundation/tokens/ts/presentation/brand-themes/fixtures/themanagementmiami/index.ts"
-      ],
-      "evidence": "declared in an existing foundation owner (foundation+foundation-tokens); 9 read(s) across foundation-tokens+foundation-css+showroom"
     },
     {
       "name": "--ds-toast-action-padding",
