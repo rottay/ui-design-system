@@ -1963,6 +1963,80 @@ Declared blind spot on both halves: they only examine declarations in rules keye
 primitives carry default parts that are not `root` (`item`, `group`, `divider`, `meta`, `anchor`)
 with the same idiom, and neither census sees them.
 
+### Twenty headers repeating a premise are not twenty pieces of evidence
+
+The worst documentation finding of the programme, and it invalidates a justification carried in about
+twenty skin files.
+
+Those headers justify their specificity ballast by citing a **P-48 floor** — a tenant rule at
+`html[data-tenant]:not([data-theme]):not(.light) *`, `(0,3,1)`. Grep the shipped bithire bundle and it
+appears **47 times**. Parse it and there are **zero rules**: all 47 occurrences are *comments*, this
+header and its siblings, carried into the bundle by the bundler. The floor exists in none of the
+three corpora anyone here can read.
+
+> A grep finds 47 and confirms. A parser finds 0 and refutes. Prose replicated across twenty files
+> may be describing the other nineteen rather than the tree.
+
+**The ballast stays, and the reasoning for keeping it is stronger than the premise it replaces.**
+Tenant paint is genuinely unlayered — 9 such rules in the bithire bundle — so it outranks every
+layer including `rottay-engines`, and the non-bundled DB tenant path is the one corpus no instrument
+in this programme reads. An unlayered tenant `*` there would be settled by specificity alone.
+Weight preservation is therefore the only choice that **needs no premise about the corpus nobody can
+see**. That is the correct way to reason under a declared unknown, and it is now what the header says,
+along with an instruction not to cite the floor as measured.
+
+Same class, still open: `segmented.css` opens with *"DELIBERATELY UNLAYERED (P-47)"*, and in the
+shipped bundle it sits inside `@layer rottay-engines` because the bundler wraps it. The authored file
+carries no `@layer`, so **P-47 describes the source file, not the shipped cascade position.** Every
+header repeating either law needs checking against a parse rather than against its siblings.
+
+### Reachability is a property of a COMPONENT, not of a part name
+
+`#30` closed at 4 orphan rows present and **0 reachable**, and the headline moved from 4 to 0 because
+of an instrument defect the lane found in its own output: **`trigger` is the default part of ten
+primitives**, and grouping reachability by part name let `Button` — the only caller-replaceable one —
+lend its severability to `Popover` and `HoverCard`, which are not. Reachability is now attributed to
+the owner of the *file* the row lives in.
+
+Two more from the same census, both pointing the dangerous way. Searching `[data-part='group']`
+tree-wide loaded **16 rows of `edit-fields`** onto `InputNumber`, because `edit-fields` writes that
+part for its own anatomy — the third instance tonight of a shared identifier treated as unique.
+And scoping only by rendered class printed a clean zero while **dropping 28 implementations**: portal
+families render an unclassed trigger wrapper, so class-scoping excluded them wholesale, and a zero
+missing a quarter of its corpus looks exactly like a zero.
+
+The census also **refuted its own motivating hypothesis**, which is the result worth keeping: `Menu`
+and `List` do stamp `root`, render-proved in both engines, so their large latent counts (83/300 and
+72/132) were measured against the correct anchor all along and their zeros mean what they appear to.
+There was no eighth false absence there. And the **12 implementations across 5 anchors that cannot be
+tied to any selector are printed every run** rather than folded into the zero.
+
+### evnto themes at the foundation layer, not the component layer
+
+The evnto null is two-sided, and the second side changes what it means. Across the 13 rewired
+`default.css` seeds:
+
+| vertical | overrides | inherits the rewired seed |
+|---|---|---|
+| rottay/platform | **13 / 13** | none |
+| bithire | 11 / 13 | `bg-hover`, `bg-canvas` |
+| evnto | 11 / 13 | `bg-hover`, `bg-canvas` |
+
+So the seed rewiring **changes nothing at all on platform**, and reaches the other two through
+exactly two channels each — the same two. 37 of the 39 vertical×seed cells are overridden downstream.
+That is the "repaired a channel this vertical does not use" outcome, and it is nearly total.
+
+Put beside the component-layer figures: evnto authors **zero of 185** Badge and Segmented channels
+but **11 of 13** foundation seeds. evnto is not an un-themed tenant — **it themes at the foundation
+layer and not at the component layer.** Its badges will differ from bithire's by inherited palette
+only, and that is a deliberate-looking authorship shape rather than an omission. It is a question for
+whoever owns evnto's brand, not a gap to file.
+
+Caveat the lane attached to its own table: the override counts are per name, not per cell, so a name
+overridden in light but not dark still reads as overridden. bithire declaring
+`--ds-color-bg-primary: #ffffff` beside `--ds-color-bg-secondary: #151d2b` is the light/dark split,
+not an inconsistency. Resolving it properly is the same per-cell question the probe answers.
+
 ### The counts are 6% apart because the DISTRIBUTION hides inside them
 
 The programme's central refutation stands and now has a shape. Runtime channel counts put bithire at
