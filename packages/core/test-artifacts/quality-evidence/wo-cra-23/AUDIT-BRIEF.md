@@ -45,6 +45,100 @@ What replaced it is in §2.1 and is the programme's central claim.
 
 ---
 
+## 1A. The inherited programme, and why it was replaced
+
+**This work did not start from nothing. It replaced a formal programme mid-flight, and an auditor
+should judge whether that replacement was justified or convenient.**
+
+### What was inherited
+
+A rounds-based plan, **R0 through R7**, with sealed evidence per round, hashed manifests, admission
+packets, per-batch status notes and round report templates. Its governing artifacts:
+`visual-craft-contract.json` (20 categories / 120 checks / 12 hard-veto incidents),
+`tenant-art-direction.json` (≥8 observable axes, ≥6 of them non-colour, on the same tree),
+`customization-model.json`, `quality-rubric.json`, and the lane classes and `reservedPaths` from
+`agent-orchestration.json`.
+
+### The state it was actually in
+
+**The formal programme had stalled at R1 Cohort 1 with a NO-GO, while the tree ran ~67 commits of
+R2/R3/R4 work with zero filed status and no sealed evidence.** Two hard vetoes were never cleared —
+responsive overflow (`scrollWidth` 332 against 320/280 viewports, both tenants) and focus not proven
+— plus five capture-harness defects including Next's dev-tools badge in every capture and
+reduced-motion captures that were not distinct.
+
+So the ceremony had stopped producing evidence while the work continued producing changes. That gap
+is the reason for the replacement, and it is the first thing to check.
+
+### What was kept and what was dropped
+
+```
+KEPT   the binding quality law: visual-craft-contract, tenant-art-direction,
+       customization-model, quality-rubric, the lane classes, reservedPaths,
+       and every fence — no tenant selector or tenant-conditional TSX, no second
+       compiler/engine/icon supplier, no public --ds-* minted by a family lane,
+       no hand-edited styles/** or dist/**, no test or baseline weakened to
+       preserve a defect.
+
+DROPPED  per-round seals · hashed evidence manifests · admission packets ·
+         per-batch roadmap:status notes · round report templates.
+         Replaced by ONE durable ledger and ONE status note per block.
+```
+
+### What each round became
+
+| round | disposition |
+|---|---|
+| R0 | sealed and valid; the instrumentation stands |
+| R1 | **NO-GO still standing** — its canaries became verification for the new programme |
+| R2–R4 | **executed, unsealed** — families touched, none reviewed. That unfinished content *is* the plumbing work |
+| R5 | was "canon closure" — became the manifest programme, much larger than planned |
+| R6 | was Codex certification — **replaced by the Fable ↔ Kimi loop** (§1B) |
+| R7 | customization depth — became the sixteen-control set |
+
+### The reason the change was made, stated as a claim you can attack
+
+> The R-rounds measured from the **family** side. This programme measures from the **tenant** side.
+> Both are needed, and **the R-rounds can pass while two tenants still read as one product — which is
+> what happened.**
+
+**Audit targets.** (a) Is that framing correct, or was the family-side measurement abandoned because
+it was failing? (b) **R1's NO-GO is still standing and was never cleared** — responsive overflow and
+focus remain unproven, and no new gate was built for them this session. (c) The five capture-harness
+defects were never repaired; the sighted capture in §2.6 used a different harness built from the
+resolution probe. (d) Was dropping the seals a loss of auditability, or of ceremony? This brief and
+`PROGRAM-STATE.md` are the replacement — judge whether they carry the same weight.
+
+---
+
+## 1B. How the two auditors were used
+
+Codex certification (R6) was replaced by a **brokered two-auditor loop**. It is not a redundancy
+scheme and should not be judged as one.
+
+| auditor | sees | answers |
+|---|---|---|
+| **Fable** | the diff | *does this change do what it claims?* |
+| **Kimi** | the repository | *is what it claims true against the code?* |
+
+Both audit every wave. **They are never merged into one review and never replaced by a single
+model.** They cannot address each other directly — Fable is a subagent, Kimi is a separate CLI — so
+the coordinator brokers: each audits independently, then **Kimi receives Fable's verdict as input and
+must explicitly refute or confirm it.**
+
+> The point of two auditors is not redundancy. Where they agree, the information is low. **Where they
+> disagree is the finding.** A brokered loop preserves that; letting them converge destroys it.
+
+A wave does not close while either auditor holds an unrefuted hard finding.
+
+**Audit targets.** (a) The coordinator is the broker, so **the coordinator is a single point of
+failure in the loop** — check whether any verdict was softened in transit. (b) At least one recorded
+adjudication has both auditors wrong in opposite directions; find whether that pattern recurs.
+(c) Model routing was Opus for delicate work, Sonnet for mechanical, Fable read-only as adversarial
+reviewer — check whether anything delicate was routed cheaply.
+
+---
+
 ## 2. Claims, with their evidence and how to break them
 
 ### 2.1 CENTRAL — reach is near-identical; ~⅓ of painted surface cannot diverge
@@ -154,6 +248,100 @@ root attribute and primary per cell.
 
 **Attack it:** one variant family of four, one provider, one phase, resting states only. Is the
 conclusion robust to the other three variant families?
+
+---
+
+## 2A. The manifest — families, layers, and where a token is allowed to live
+
+Two artifacts carry this and **both are living documents**. The brief summarises; the files are the
+authority.
+
+### `family-ledger.json` — 252 rows, the completion ledger
+
+Row shape: `id · layer · category · family · sourceOwner · layerProfile · state · sourceCommits ·
+lastCommit · lastCommitDate`. Seven `layerProfile` values.
+
+```
+layer      primitive 100 · pattern 56 · surface 36 · structure 27 · chart 18 · commercial 11 · surface-composition 4
+state      SOURCE_TOUCHED 206 · UNTOUCHED 35 · TESTS_ONLY 11
+```
+
+**Its `stateVocabulary` is deliberately negative and you should hold it to that.** `SOURCE_TOUCHED`
+means only that a non-test file under `sourceOwner` was edited — *not* done, elevated, reviewed or
+compliant. `UNTOUCHED` does *not* mean unstyled. `TESTS_ONLY` does *not* mean covered. The verdict
+column (`reviewVerdict`) **is not set by this file and was never populated**.
+
+> **Audit target.** The state column was not reconciled against the work actually done in this
+> session. Treat all 252 rows as stale, and check whether `SOURCE_TOUCHED` 206 is being read anywhere
+> as progress.
+
+### `TOKEN-MANIFEST-SPEC.md` — 867 lines, 45 sections, the token law
+
+It tags every figure by evidence class, and **revision 2 downgraded several of its own revision-1
+numbers** from measured to unverified:
+
+```
+[M] MEASURED     reproducible from a COMMITTED script over a stated corpus
+[U] UNVERIFIED   asserted from an ad-hoc script never committed —
+                 directionally load-bearing, NUMERICALLY UNUSABLE
+[D] DECLARED     a human wrote it; a gate checks it against measurement
+[O] OPEN         owner decision required; nothing downstream may assume an answer
+```
+
+**Audit target: every `[U]` figure below is quoted in the spec and must not be consumed by any gate
+or target until re-derived.** Check whether any has leaked into one.
+
+### The nine declaration layers — where a token may be declared
+
+| # | layer | distinct names | declared in |
+|---|---|---:|---|
+| 1 | raw ramps | **453** [M] | `foundation/base/*` |
+| 2 | semantic role channels | 1,075 [M] | **one file** — `foundation/themes/default.css` |
+| 3 | component channels | 1,949 **[U]** | `presentation/components/*.css` |
+| 4 | family skin | 124 names / 30 declaring files [M] | `presentation/components/skin/` (146 files) |
+| 5 | engine skin | 214 modern / 4 rustic [M] | `runtime/engines/*/skin/` |
+| 6 | generated vertical artifacts | 1,910 total, **605 exclusive** [M] | `facade/artifacts/*` |
+| 7 | private `--_ds-*` | **99 declared**, 310 mentions [M] | co-located with the family |
+| 8 | framework projection | 28 [M] | `framework-token-projection.css` |
+| 9 | runtime TS channels | ~356 **[U]** | `tokens/ts/`, `ui/**` |
+
+**Total distinct declared across `src/**/*.css`: 4,164 [M].**
+
+Two structural facts the spec names, both of which an auditor should press on:
+
+- **The engine skin layer AUTHORS.** 182 of 214 modern-skin names are declared in **no other layer**.
+  A family lane mints public channels, and **there is no guard against it today.**
+- **Layers 3–5 are unreachable through `tokenOverrides`** but ARE reachable through `chrome`, which
+  kebab-cases chrome objects into `--ds-*` names. So the documented tenant surface and the real one
+  differ.
+
+### Where a token is allowed to live — the rule this programme applied
+
+```
+foundation/base/*                      raw ramp steps. Values, not roles.
+foundation/themes/default.css          semantic roles. The ONLY file for layer 2.
+                                       Light block + dark block; a value belonging to one
+                                       theme must not sit unconditional.
+presentation/components/*.css          component channels — the DECLARED OWNER of a family's
+                                       public channels. A channel found elsewhere has left
+                                       its owner; return it, do not move the contract.
+presentation/components/skin/*.css     STRUCTURES — .ds-structure .ds-<family>
+runtime/engines/<engine>/skin/*.css    PRIMITIVES + PATTERNS. An engine with richer
+                                       vocabulary DECLARES its own value here rather than
+                                       smuggling it through a fallback arm.
+facade/artifacts/<v>/_source/*.css     ONE vertical's palette. Hand-authored. Costs no
+                                       client bytes — prefer this over the brand-theme TS.
+facade/artifacts/<v>/index.css         GENERATED. Never hand-edit; lint:artifacts fails.
+tokens/ts/…/brand-themes/<v>/index.ts  the vertical's typed theme. 43% of a "use client"
+                                       entrypoint. Even a one-line comment can breach the
+                                       byte budget — put the why in the commit.
+--_ds-<family>-*                       family-private. Correct for composition internals,
+                                       and a COUNTER-DODGE when used to hide a literal that
+                                       should be tenant-reachable.
+```
+
+**Audit target:** that last distinction is a judgement call the programme made repeatedly. Check
+whether any `--_ds-*` introduced this session is hiding paint a tenant should reach.
 
 ---
 
