@@ -140,6 +140,51 @@ export function deriveGroundLadder(background: string): GroundLadder {
 }
 
 /**
+ * How far the quietest separator sits from the default one, as a fraction of
+ * the distance from the border to the ground it is drawn on.
+ *
+ * Measured, not chosen. Of the five shipped `-subtle` values only three are a
+ * mechanical step at all — the DS default `:root`, rottay dark and rottay
+ * light preserve hue (ΔH ≤ 0.1°) and solve to 0.333 / 0.333 / 0.381. The two
+ * bithire cells move hue by 7.7° and 37.5°, so they are hand-picked colors
+ * rather than a ramp and do not constrain a fraction. One third reproduces the
+ * first two byte-exactly (#1C1C20 over #0A0A0C → #161619) and lands within
+ * 2/255 per channel of the third, which is authored anyway.
+ */
+export const BORDER_SUBTLE_GROUND_STEP = 1 / 3;
+
+/**
+ * The quietest separator implied by the default one: a hairline that reads as
+ * texture rather than structure, because it stands a third of the way back
+ * toward the surface it is drawn on. The direction is a property of the
+ * ground, so this darkens on a dark canvas and lightens on a light one without
+ * being told which it is.
+ *
+ * Deliberately NOT part of `derivePaletteSemantics`, and the reason is the one
+ * `deriveGroundSemantics` already documents for the surface ladder: two of the
+ * three first-party extensions declare `--ds-color-border-subtle` by hand in a
+ * state their compiled base block can reach, so emitting it on the static path
+ * would put a compiled channel under an extension that outranks it —
+ * EXTENSION-CANNOT-BEAT-TENANT, whose inventory is decrease-only. The DB path
+ * has no extension and is where the channel is genuinely severed, so it calls
+ * this directly.
+ *
+ * Returns nothing for a border or ground hex math cannot read, so an
+ * unauthored seed never claims the channel against a lower-precedence writer.
+ */
+export function deriveBorderSubtle(
+  borderPrimary: string,
+  background: string
+): string | undefined {
+  if (!isHexColor(borderPrimary) || !isHexColor(background)) return undefined;
+  return mixColor(
+    normalizeHexColor(borderPrimary),
+    normalizeHexColor(background),
+    BORDER_SUBTLE_GROUND_STEP
+  );
+}
+
+/**
  * Semantic channels derived from the PRIMARY seed: button primary chrome and
  * the focused-control treatment, both keyed to the one seed a tenant reliably
  * sets. `--ds-color-text-on-primary` is not among them — each compile path
