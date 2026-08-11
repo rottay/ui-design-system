@@ -24,8 +24,9 @@ is eighth by count.
 | 4 | `display/Tag` | modern + rustic | 70 | 122 | **3** | **LIVE**, adjudicated (task #26) |
 | 5 | `feedback/Spinner` | modern | 1 | 4 | 12 | LIVE |
 | 6 | `display/Avatar` | modern | 1 | 7 | 4 | LIVE |
-| — | `feedback/Skeleton`, `display/QRCode` | modern | 1 / 3 | 2 / 8 | 2 / 1 | LIVE, marginal |
+| — | `feedback/Skeleton` | modern | 1 | 2 | 2 | LIVE, marginal |
 | — | `navigation/Link` | modern + rustic | 30 | 51 | **0** | **LATENT** — see trap 9d |
+| — | `display/QRCode` | modern | 3 | 8 | **0** | **LATENT** — see trap 9d |
 | — | `navigation/Menu` | modern | **83** | **300** | **0** | LATENT |
 | — | `display/List` | modern | 72 | 132 | 0 | LATENT |
 | — | `display/Descriptions` | modern | 40 | 129 | 0 | LATENT |
@@ -317,7 +318,34 @@ default part of **ten** primitives, so pooling their reachability let `Button`
 `HoverCard`, which are not. That alone moved the headline from 4 reachable to 0.
 Attribute reachability to the owner whose FILE the row is in.
 
-**9d — the call-site census matches a TAG NAME, and `Link` is usually `next/link`.**
+**9d — a tag name is not a component identity. Two rows shipped as false LIVE.**
+`callsites.mjs` now records the **module each JSX name is bound to** and marks
+it ours or foreign, and every ranking row has been resolved through it:
+
+```
+resolved 100% ours   Button 127 · Badge 16 · Spinner 12 · Tag 4 · Avatar 4
+                     Skeleton 2 · Segmented 2
+FALSE LIVE           navigation/Link   the one site binds Link to `next/link`
+                     display/QRCode    the one site is antd's QRCode, inside our
+                                       own primitive's internals, stamping a part
+                                       on the AntD element rather than on our root
+```
+
+Both were LIVE on a single site and both are LATENT. Across production the sweep
+finds 38 foreign bindings and 35 locally-declared components with no import —
+neither is assumed to be ours. Operative rule: **a verdict resting on one or two
+call sites needs those sites' imports resolved before it is quoted.** It does not
+contradict *zero importers is not dead code*; the claim is narrower and exact —
+Link's and QRCode's exposure to severance is zero, not Link and QRCode.
+
+Note the two failure directions are not symmetric. This programme spent the
+night cataloguing **false zeros** — a broken matcher, a regex skipping nested
+fallbacks, a hook pointed at the wrong part. These are the first false
+**positives**: a false LIVE spends a lane on a defect that does not exist and
+announces itself the moment someone looks; a false zero licenses duplication and
+blindness and is found by accident. Both need fixing; only one asks.
+
+**9d(i) — the call-site census matches a TAG NAME, and `Link` is usually `next/link`.**
 `navigation/Link` shipped in this ranking as LIVE on the strength of one call
 site — `app-bithire/.../public-header/index.tsx:61`, `data-part="public-header-brand"`.
 That file imports `Link` from **`next/link`**. The DS `navigation/Link` has

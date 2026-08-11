@@ -9,3 +9,9 @@ export const C = () => <Badge data-part={dynamic} />;       // COUNT, flagged dy
 export const D = () => <span data-part="root" />;           // trap: host element, not a call
 export const E = () => <Badge aria-describedby="data-part" />; // trap: the string in another attr
 declare const Badge: any; declare const dynamic: string;
+
+// --- import resolution: the tag name is not the component identity ---------
+import Link from 'next/link';                     // trap: a foreign default import
+import { Tag } from '../../../primitives/display/Tag';
+export const F = () => <Link data-part="brand" />;  // COUNT, but module=next/link
+export const G = () => <Tag data-part="chip" />;    // COUNT, module=ours

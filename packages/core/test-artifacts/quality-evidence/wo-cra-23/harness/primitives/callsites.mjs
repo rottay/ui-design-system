@@ -58,6 +58,31 @@ for (const [label, dir] of CORPORA) {
     const text = readFileSync(file, 'utf8');
     if (!text.includes('data-part')) continue;
     const sf = ts.createSourceFile(file, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+
+    /**
+     * Which module each JSX name is bound to.
+     *
+     * A tag name is not a component identity. `navigation/Link` shipped in the
+     * ranking as LIVE on one call site that binds `Link` to **`next/link`**, and
+     * a verdict resting on a single site is exactly where that costs a lane.
+     * `Tag`, `Card`, `Badge`, `Input`, `Select` and `Button` are all names other
+     * libraries use too, so the module is recorded beside every site and the
+     * consumer decides whether it is ours.
+     */
+    const bindings = new Map();
+    sf.forEachChild((n) => {
+      if (!ts.isImportDeclaration(n) || !n.importClause) return;
+      const spec = n.moduleSpecifier.getText().replace(/['"]/g, '');
+      const clause = n.importClause;
+      if (clause.name) bindings.set(clause.name.text, spec);           // default import
+      const named = clause.namedBindings;
+      if (named && ts.isNamedImports(named)) {
+        for (const e of named.elements) bindings.set(e.name.text, spec);
+      } else if (named && ts.isNamespaceImport(named)) {
+        bindings.set(named.name.text, spec);
+      }
+    });
+
     const visit = (n) => {
       if (ts.isJsxOpeningElement(n) || ts.isJsxSelfClosingElement(n)) {
         const tag = n.tagName.getText();
@@ -73,8 +98,15 @@ for (const [label, dir] of CORPORA) {
             : init ? init.getText().slice(0, 40) : 'true';
           const dynamic = !(init && (ts.isStringLiteral(init) ||
             (ts.isJsxExpression(init) && init.expression && ts.isStringLiteral(init.expression))));
+          // A member expression (`Card.Header`) binds on its leftmost name.
+          const rootName = tag.split('.')[0];
+          const module = bindings.get(rootName) ?? null;
           sites.push({
             corpus: label, file: file.replace(dir + '/', ''), tag, value, dynamic,
+            module,
+            // Locally declared components have no import and are neither ours
+            // nor a third party's — reported as unresolved, never assumed.
+            foreign: module === null ? null : !/design-system|primitives|patterns|structures|surfaces|facade|\.\./.test(module),
             line: sf.getLineAndCharacterOfPosition(n.getStart()).line + 1,
           });
           corpusStats[label].sites++;
@@ -91,7 +123,7 @@ if (CONTROL) {
   // a selector string, prose, a host element, and the name inside another attribute.
   const tags = sites.map((s) => `${s.tag}:${s.value}`).sort();
   // A dynamic value is stored as its source text, not as a resolved value.
-  const want = ['Badge:count-badge', 'Badge:wip-badge', 'Badge:{dynamic}'];
+  const want = ['Badge:count-badge', 'Badge:wip-badge', 'Badge:{dynamic}', 'Link:brand', 'Tag:chip'];
   const okCount = JSON.stringify(tags) === JSON.stringify(want);
   const okDynamic = sites.filter((s) => s.dynamic).length === 1;
   const okHost = !sites.some((s) => /^[a-z]/.test(s.tag));
@@ -99,6 +131,10 @@ if (CONTROL) {
     [okCount, 'counts exactly the three component data-part attributes, ignoring the selector string, the prose and the aria-describedby value'],
     [okDynamic, 'flags exactly one dynamic value'],
     [okHost, 'never counts a host element (<span data-part>)'],
+    [sites.find((s) => s.tag === 'Link')?.foreign === true,
+      'resolves <Link> to next/link and marks it foreign — the defect that shipped a false LIVE'],
+    [sites.find((s) => s.tag === 'Tag')?.foreign === false,
+      'resolves <Tag> to our own primitive and marks it ours'],
   ];
   for (const [ok, what] of checks) console.log(`${ok ? 'ok  ' : 'FAIL'} ${what}`);
   console.log(`\ncall-site control: ${checks.filter(([o]) => o).length} pass / ${checks.filter(([o]) => !o).length} fail`);
