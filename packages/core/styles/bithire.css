@@ -1350,10 +1350,6 @@
 
   --ds-color-surface: var(--ds-color-bg-primary);
   --ds-color-surface-secondary: var(--ds-color-bg-secondary);
-  --ds-color-surface-raised: var(
-    --ds-material-raised-background,
-    var(--ds-surface-raised, var(--ds-surface-card-bg))
-  );
   --ds-color-surface-subtle: var(--ds-surface-panel-bg);
   --ds-color-text-subtle: var(--ds-color-text-muted);
   --ds-color-shadow: var(--ds-color-alpha-black-20);
@@ -22341,13 +22337,50 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
  * owns paint and geometry exclusively through public --ds-button-* channels.
  * Product code can compose the primitive, but it never needs to restyle its
  * internals for hover, press, focus, busy, touch, RTL or high contrast.
+ *
+ * THE ROOT ANCHOR IS `[data-variant]`, NOT `data-part`, AND THE DIFFERENCE IS
+ * REACHABILITY. P-79 makes the caller's part win on modern (asserted in
+ * `Button.passthrough-contract.test.tsx`; classic and rustic keep `trigger`, so
+ * only this file was exposed). The 7 root rules here were keyed on
+ * `[data-part='trigger']`, and 123 production call sites pass a part of their
+ * own — every one of them lost all 47 declarations: layout, geometry, the
+ * typography channels, `appearance`, `isolation`, `overflow`, the whole
+ * transition list, `forced-color-adjust`, and the print and forced-colors
+ * contracts.
+ *
+ * `data-variant` is written into `anatomyProps`, which the engine spreads AFTER
+ * the caller's props, so the caller cannot reach it; `effectiveVariant` is total
+ * (`variant || 'primary'` and three exhaustive branches), so it is never absent.
+ * `data-size` and `data-shape` share both properties. The class pair is written
+ * after the spread too — a caller's `className` is appended, never substituted.
+ * Anatomy parts stay selectable as DESCENDANTS of the root; those are the
+ * engine's, not the caller's.
+ *
+ * TWO SECOND-ORDER LOSSES the property count does not show, because the rules
+ * that suffer them stay alive and matching:
+ *   - `--ds-button-surface-highlight: none` at the reduced-transparency block
+ *     below was the ONLY suppressor of the `::before` overlay, whose base value
+ *     is a `:root` literal in `presentation/components/button.css`. Severed, the
+ *     suppressor never matched and `prefers-reduced-transparency: reduce` was
+ *     silently not honoured.
+ *   - the four `--ds-button-resolved-*` defaults are re-declared by the five
+ *     `[data-size='…']:not([data-size-responsive])` rules, so severance was
+ *     invisible EXCEPT under a responsive size, where those rules also drop out
+ *     and the reads in `[data-part='icon']`, `[data-full-width]` and
+ *     `[data-shape='circle']` were left with no declaration at all.
+ *
+ * SPECIFICITY IS UNCHANGED BY THAT SUBSTITUTION and deliberately so: (0,3,0) at
+ * six selectors and (0,3,1) at the `::before`, exactly as before. The pure-class
+ * form specified earlier drops all 7 by one weight unit, which is a cascade
+ * question jsdom cannot adjudicate and is why that repair was deferred; an
+ * attribute-for-attribute swap is inert in the cascade and needs no browser pass.
  */
 
 /* -------------------------------------------------------------------------
    Anatomy and geometry
    ------------------------------------------------------------------------- */
 
-.rottay-button.rottay-button--modern[data-part='trigger'] {
+.rottay-button.rottay-button--modern[data-variant] {
   --ds-button-resolved-icon-size: var(--ds-button-md-icon-size);
   /* The CONTROL step first, the surface ramp as fallback. R1 Cohort 1 had this
      inverted for a reason that has since been removed: the family channel was
@@ -23310,7 +23343,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
    exists inside the `@media (hover: hover)` block above, and the pressed
    posture is the tactile feedback on these devices. */
 @media (hover: none), (pointer: coarse) {
-  .rottay-button.rottay-button--modern[data-part='trigger'] {
+  .rottay-button.rottay-button--modern[data-variant] {
     min-block-size: var(--ds-button-touch-target-min);
   }
 
@@ -23325,7 +23358,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rottay-button.rottay-button--modern[data-part='trigger'],
+  .rottay-button.rottay-button--modern[data-variant],
   .rottay-button.rottay-button--modern [data-part='icon'] {
     transition: none;
   }
@@ -23343,7 +23376,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
    state channels, which are solid already. State opacity rules on ::before
    keep running harmlessly against an empty layer. */
 @media (prefers-reduced-transparency: reduce) {
-  .rottay-button.rottay-button--modern[data-part='trigger'] {
+  .rottay-button.rottay-button--modern[data-variant] {
     --ds-button-surface-highlight: none;
   }
 
@@ -23359,7 +23392,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 }
 
 @media (forced-colors: active) {
-  .rottay-button.rottay-button--modern[data-part='trigger'] {
+  .rottay-button.rottay-button--modern[data-variant] {
     forced-color-adjust: auto;
     background: ButtonFace;
     color: ButtonText;
@@ -23367,7 +23400,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
     box-shadow: none;
   }
 
-  .rottay-button.rottay-button--modern[data-part='trigger']::before {
+  .rottay-button.rottay-button--modern[data-variant]::before {
     display: none;
   }
 
@@ -23410,7 +23443,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 }
 
 @media print {
-  .rottay-button.rottay-button--modern[data-part='trigger'] {
+  .rottay-button.rottay-button--modern[data-variant] {
     background: transparent;
     color: CanvasText;
     border-color: CanvasText;
@@ -25572,6 +25605,14 @@ input.rottay-input.rottay-input--modern[type='number'] {
  * Modern compact-label family: Badge / Chip / Pill.
  *
  * Unlayered by design so it clears reset/preflight without `!important`.
+ *
+ * Keyed on the SCOPE CLASS, never on `data-part='root'`. The engine writes
+ * `rottay-badge rottay-badge--modern` itself and appends the caller's
+ * `className`, but a caller `data-part` REPLACES the default part, so a
+ * part-keyed base died at every call site that named its own part. The class
+ * cannot be replaced, so the base reaches all of them. This deliberately sits
+ * at (0,2,0), below a pattern's `.ds-pattern-x.ds-engine-modern [data-part]`
+ * at (0,3,0): a family that repaints a badge part keeps winning.
  * Every material, geometry, type and motion decision is a `--ds-badge-*`
  * channel with a semantic/global fallback. Tenant CSS therefore changes the
  * same component tree; product code never supplies paint.
@@ -25584,7 +25625,7 @@ input.rottay-input.rottay-input--modern[type='number'] {
   vertical-align: middle;
 }
 
-.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'] {
+.rottay-badge.rottay-badge--modern {
   --ds-badge-logical-start-offset: -50%;
   --ds-badge-logical-end-offset: 50%;
   position: relative;
@@ -25641,35 +25682,35 @@ input.rottay-input.rottay-input--modern[type='number'] {
 /* Compact sizes render at 9–10px: at that scale the shared 500 weight reads
    faint, so xs/sm step up one weight notch (channel-owned, tenant-flattenable).
    md+ keep the single family weight. */
-.rottay-badge.rottay-badge--modern[data-part='root'][data-size='xs'],
-.rottay-badge.rottay-badge--modern[data-part='root'][data-size='sm'] {
+.rottay-badge.rottay-badge--modern[data-size='xs'],
+.rottay-badge.rottay-badge--modern[data-size='sm'] {
   font-weight: var(--ds-badge-compact-font-weight, 600);
 }
 
-.rottay-badge.rottay-badge--modern[data-part='root'][data-kind='chip'] {
+.rottay-badge.rottay-badge--modern[data-kind='chip'] {
   --ds-badge-max-inline-size: var(--ds-badge-chip-max-inline-size);
   min-block-size: var(--ds-badge-chip-min-height, var(--ds-badge-resolved-height));
   border-radius: var(--ds-badge-chip-radius, var(--ds-badge-radius, var(--ds-radius-md)));
 }
-.rottay-badge.rottay-badge--modern[data-part='root'][data-kind='pill'] {
+.rottay-badge.rottay-badge--modern[data-kind='pill'] {
   --ds-badge-max-inline-size: var(--ds-badge-pill-max-inline-size);
   min-block-size: var(--ds-badge-pill-min-height, var(--ds-badge-resolved-height));
   border-radius: var(--ds-badge-pill-radius, var(--ds-badge-radius, var(--ds-radius-full)));
 }
 
-.rottay-badge.rottay-badge--modern[data-part='root'][data-radius='none'] {
+.rottay-badge.rottay-badge--modern[data-radius='none'] {
   border-radius: var(--ds-badge-radius-none);
 }
-.rottay-badge.rottay-badge--modern[data-part='root'][data-radius='sm'] {
+.rottay-badge.rottay-badge--modern[data-radius='sm'] {
   border-radius: var(--ds-badge-radius-sm, var(--ds-radius-sm));
 }
-.rottay-badge.rottay-badge--modern[data-part='root'][data-radius='md'] {
+.rottay-badge.rottay-badge--modern[data-radius='md'] {
   border-radius: var(--ds-badge-radius-md, var(--ds-radius-md));
 }
-.rottay-badge.rottay-badge--modern[data-part='root'][data-radius='lg'] {
+.rottay-badge.rottay-badge--modern[data-radius='lg'] {
   border-radius: var(--ds-badge-radius-lg, var(--ds-radius-lg));
 }
-.rottay-badge.rottay-badge--modern[data-part='root'][data-radius='full'] {
+.rottay-badge.rottay-badge--modern[data-radius='full'] {
   border-radius: var(--ds-badge-radius-full);
 }
 
@@ -25926,49 +25967,49 @@ input.rottay-input.rottay-input--modern[type='number'] {
 }
 
 /* Semantic tones: structure stays tenant-owned; colour meaning remains global. */
-.rottay-badge.rottay-badge--modern[data-part='root'][data-variant='default'] {
+.rottay-badge.rottay-badge--modern[data-variant='default'] {
   --ds-badge-tone-solid-bg: var(--ds-color-neutral-200);
   --ds-badge-tone-solid-color: var(--ds-color-text-primary);
   --ds-badge-tone-soft-bg: var(--ds-color-alpha-black-100, color-mix(in srgb, var(--ds-color-text-primary) 20%, transparent));
   --ds-badge-tone-soft-color: var(--ds-color-text-secondary);
   --ds-badge-tone-outline: var(--ds-color-border);
 }
-.rottay-badge.rottay-badge--modern[data-part='root'][data-variant='primary'] {
+.rottay-badge.rottay-badge--modern[data-variant='primary'] {
   --ds-badge-tone-solid-bg: var(--ds-color-primary);
   --ds-badge-tone-solid-color: var(--ds-color-primary-foreground);
   --ds-badge-tone-soft-bg: var(--ds-color-alpha-primary-10);
   --ds-badge-tone-soft-color: var(--ds-color-primary);
   --ds-badge-tone-outline: var(--ds-color-primary-400, var(--ds-color-primary));
 }
-.rottay-badge.rottay-badge--modern[data-part='root'][data-variant='secondary'] {
+.rottay-badge.rottay-badge--modern[data-variant='secondary'] {
   --ds-badge-tone-solid-bg: var(--ds-color-secondary);
   --ds-badge-tone-solid-color: var(--ds-color-text-on-primary);
   --ds-badge-tone-soft-bg: var(--ds-color-alpha-secondary-10);
   --ds-badge-tone-soft-color: var(--ds-color-secondary-600);
   --ds-badge-tone-outline: var(--ds-color-secondary-300, var(--ds-color-secondary));
 }
-.rottay-badge.rottay-badge--modern[data-part='root'][data-variant='success'] {
+.rottay-badge.rottay-badge--modern[data-variant='success'] {
   --ds-badge-tone-solid-bg: var(--ds-color-success);
   --ds-badge-tone-solid-color: var(--ds-color-text-on-primary);
   --ds-badge-tone-soft-bg: var(--ds-color-alpha-success-10);
   --ds-badge-tone-soft-color: var(--ds-color-success-700);
   --ds-badge-tone-outline: var(--ds-color-success-border, var(--ds-color-success));
 }
-.rottay-badge.rottay-badge--modern[data-part='root'][data-variant='warning'] {
+.rottay-badge.rottay-badge--modern[data-variant='warning'] {
   --ds-badge-tone-solid-bg: var(--ds-color-warning);
   --ds-badge-tone-solid-color: var(--ds-color-text-on-primary);
   --ds-badge-tone-soft-bg: var(--ds-color-alpha-warning-10);
   --ds-badge-tone-soft-color: var(--ds-color-warning-700);
   --ds-badge-tone-outline: var(--ds-color-warning-border, var(--ds-color-warning));
 }
-.rottay-badge.rottay-badge--modern[data-part='root'][data-variant='error'] {
+.rottay-badge.rottay-badge--modern[data-variant='error'] {
   --ds-badge-tone-solid-bg: var(--ds-color-error);
   --ds-badge-tone-solid-color: var(--ds-color-text-on-primary);
   --ds-badge-tone-soft-bg: var(--ds-color-alpha-error-10);
   --ds-badge-tone-soft-color: var(--ds-color-error-700);
   --ds-badge-tone-outline: var(--ds-color-error-border, var(--ds-color-error));
 }
-.rottay-badge.rottay-badge--modern[data-part='root'][data-variant='info'] {
+.rottay-badge.rottay-badge--modern[data-variant='info'] {
   --ds-badge-tone-solid-bg: var(--ds-color-info);
   --ds-badge-tone-solid-color: var(--ds-color-text-on-primary);
   --ds-badge-tone-soft-bg: var(--ds-color-alpha-info-10);
@@ -25976,39 +26017,39 @@ input.rottay-input.rottay-input--modern[type='number'] {
   --ds-badge-tone-outline: var(--ds-color-info-border, var(--ds-color-info));
 }
 
-.rottay-badge.rottay-badge--modern[data-part='root'][data-badge-style='solid'] {
+.rottay-badge.rottay-badge--modern[data-badge-style='solid'] {
   background: var(--ds-badge-solid-bg, var(--ds-badge-tone-solid-bg));
   color: var(--ds-badge-solid-color, var(--ds-badge-tone-solid-color));
   border-color: var(--ds-badge-solid-border, transparent);
 }
 
-.rottay-badge.rottay-badge--modern[data-part='root'][data-badge-style='soft'] {
+.rottay-badge.rottay-badge--modern[data-badge-style='soft'] {
   background: var(--ds-badge-soft-bg, var(--ds-badge-tone-soft-bg));
   color: var(--ds-badge-soft-color, var(--ds-badge-tone-soft-color));
   border-color: var(--ds-badge-soft-border, color-mix(in srgb, currentColor 14%, transparent));
 }
 
-.rottay-badge.rottay-badge--modern[data-part='root'][data-badge-style='ghost'] {
+.rottay-badge.rottay-badge--modern[data-badge-style='ghost'] {
   background: var(--ds-badge-ghost-bg, transparent);
   color: var(--ds-badge-ghost-color, var(--ds-badge-tone-soft-color));
   border-color: var(--ds-badge-ghost-border, transparent);
   box-shadow: var(--ds-badge-ghost-shadow, none);
 }
 
-.rottay-badge.rottay-badge--modern[data-part='root'][data-badge-style='outline'] {
+.rottay-badge.rottay-badge--modern[data-badge-style='outline'] {
   background: var(--ds-badge-outline-bg, transparent);
   color: var(--ds-badge-outline-color, var(--ds-badge-tone-soft-color));
   border-color: var(--ds-badge-outline-border, var(--ds-badge-tone-outline));
   box-shadow: var(--ds-badge-outline-shadow, inset 0 0 0 1px color-mix(in srgb, currentColor 5%, transparent));
 }
 
-.rottay-badge.rottay-badge--modern[data-part='root'][data-bordered='true'] {
+.rottay-badge.rottay-badge--modern[data-bordered='true'] {
   box-shadow: var(--ds-badge-bordered-ring, 0 0 0 2px var(--ds-surface-card));
 }
 
 /* Selection is an interaction state, so it intentionally wins after the
    structural style (`solid`/`soft`/`ghost`/`outline`) has resolved. */
-.rottay-badge.rottay-badge--modern[data-part='root'][data-selected='true'] {
+.rottay-badge.rottay-badge--modern[data-selected='true'] {
   background: var(
     --ds-badge-selected-surface,
     var(--ds-filter-pill-active-bg, var(--ds-color-alpha-primary-10))
@@ -26032,16 +26073,16 @@ input.rottay-input.rottay-input--modern[type='number'] {
    The hover/pressed channels fall back to per-treatment mixes of the resolved
    tone tokens, so a tenant that never configures `chrome.badge` still gets a
    legible, treatment-faithful hover instead of an unpainted (transparent) one. */
-.rottay-badge.rottay-badge--modern[data-part='root'][data-badge-style='solid'] {
+.rottay-badge.rottay-badge--modern[data-badge-style='solid'] {
   --_ds-badge-hover-bg-fallback: color-mix(in srgb, var(--ds-badge-tone-solid-bg) 90%, var(--ds-color-neutral-900) 10%);
   --ds-badge-hover-ink-fallback: var(--ds-badge-tone-solid-color);
 }
-.rottay-badge.rottay-badge--modern[data-part='root'][data-badge-style='soft'] {
+.rottay-badge.rottay-badge--modern[data-badge-style='soft'] {
   --_ds-badge-hover-bg-fallback: color-mix(in srgb, var(--ds-badge-tone-soft-bg) 80%, var(--ds-badge-tone-soft-color) 20%);
   --ds-badge-hover-ink-fallback: var(--ds-badge-tone-soft-color);
 }
-.rottay-badge.rottay-badge--modern[data-part='root'][data-badge-style='outline'],
-.rottay-badge.rottay-badge--modern[data-part='root'][data-badge-style='ghost'] {
+.rottay-badge.rottay-badge--modern[data-badge-style='outline'],
+.rottay-badge.rottay-badge--modern[data-badge-style='ghost'] {
   --_ds-badge-hover-bg-fallback: color-mix(in srgb, currentColor 8%, transparent);
   --ds-badge-hover-ink-fallback: var(--ds-badge-tone-soft-color);
 }
@@ -26133,7 +26174,7 @@ input.rottay-input.rottay-input--modern[type='number'] {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rottay-badge.rottay-badge--modern[data-part='root'],
+  .rottay-badge.rottay-badge--modern,
   .rottay-badge.rottay-badge--modern > [data-part='close'] {
     transition-duration: 0.01ms;
   }
@@ -26149,7 +26190,7 @@ input.rottay-input.rottay-input--modern[type='number'] {
 }
 
 @media (forced-colors: active) {
-  .rottay-badge.rottay-badge--modern[data-part='root'] {
+  .rottay-badge.rottay-badge--modern {
     border: 1px solid ButtonText;
     background: Canvas;
     color: CanvasText;
@@ -27300,7 +27341,10 @@ input.rottay-input.rottay-input--modern[type='number'] {
  * FieldFiltersPanel skin — engine-agnostic.
  * Home: foundation/tokens/css/presentation/components/skin/field-filters-panel.css — the structures/
  * shared-file home of the WO-ARC-09 contract; no --modern/--rustic
- * discriminator because the component renders one DOM under every engine.
+ * discriminator, because the family's OWN elements (Box/Flex) render one DOM
+ * under every engine. Its composed Text parts do not: rustic and classic
+ * replace the caller's `data-part` with `root`, so every text rule at the
+ * end of this file reaches modern only.
  *
  * LAYER: imported by `facade/entrypoints/base.css` and
  * `facade/entrypoints/styles.css` into `layer(rottay-components)` (the old
@@ -27311,8 +27355,10 @@ input.rottay-input.rottay-input--modern[type='number'] {
  * `border-color` on every element. Border paint reaches (0,4,0) through the
  * always-stamped root `data-part` ancestor — repeating a class or attribute
  * is forbidden (the source-gated contract bans role/aria-label/placeholder
- * as the fourth unit and audits this file's specificity). Text rules add the
- * always-stamped `data-size` for b>=5 over Typography's `[data-color]`.
+ * as the fourth unit and audits this file's specificity). Against the
+ * Typography engine skin no specificity ladder is available at all: it sorts
+ * in `rottay-engines`, after this file, so the layer decides — which is why
+ * the text rules below declare no colour, size or weight.
  *
  * CONTROL LANDINGS: `.ds-field-filters-panel__control` is passed as
  * `className` to the panel's Select/Input controls and lands on the element
@@ -27588,56 +27634,61 @@ input.rottay-input.rottay-input--modern[type='number'] {
 }
 
 /* ---------------------------------------------------------------------------
-   WAVE R2+R3 — typography + microinteractions (skin-owned, never inline).
-   Text parts carry the repeated data-part x3 so typography clears the
-   Typography engine skin the same way color does (0,5,0).
+   TEXT PARTS — the root compound is ONE element. These rules were authored
+   with a space before `[data-part='root']`, which asks for a second
+   root-parted element nested inside the family; nothing renders one, so all
+   seven matched nothing since they were written. Three of the declarations
+   they carry (`display: block` twice, the description offset) and the
+   control-slot floor below were live INLINE styles before the geometry
+   drain, so the drain silently deleted painted layout.
+
+   `[data-size]` is kept because it is exactly what the modern Typography
+   engine stamps, which scopes these rules to the engine that can honour
+   them: rustic and classic replace a composed Text's `data-part` with
+   `root` and stamp no `data-size`, so no part-keyed rule reaches their text.
+   Font size and weight are NOT declared here — modern paints both inline
+   from the type-role channels, so a skin literal could only ever lose to
+   them, and reviving one would trade a tenant channel for a literal.
 --------------------------------------------------------------------------- */
 
 /* header eyebrow + subtitle */
-.ds-structure.ds-field-filters-panel [data-part='root'] [data-part='title-pill'][data-size] {
-  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
-  font-weight: 700;
+.ds-structure.ds-field-filters-panel[data-part='root'] [data-part='title-pill'][data-size] {
   letter-spacing: 0.11em;
   text-transform: uppercase;
 }
-.ds-structure.ds-field-filters-panel [data-part='root'] [data-part='subtitle'][data-size] {
-  font-size: var(--ds-font-size-xs);
+.ds-structure.ds-field-filters-panel[data-part='root'] [data-part='subtitle'][data-size] {
   line-height: 1.45;
 }
-.ds-structure.ds-field-filters-panel [data-part='root'] [data-part='presets-pill'][data-size] {
-  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
-  font-weight: 700;
+.ds-structure.ds-field-filters-panel[data-part='root'] [data-part='presets-pill'][data-size] {
   letter-spacing: 0.11em;
   text-transform: uppercase;
 }
 
 /* inline signal — tabular-nums so the live count never jitters */
-.ds-structure.ds-field-filters-panel [data-part='root'] [data-part='signal-label'][data-size] {
-  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
-  font-weight: 700;
+.ds-structure.ds-field-filters-panel[data-part='root'] [data-part='signal-label'][data-size] {
   letter-spacing: 0.09em;
   line-height: 1;
   text-transform: uppercase;
   font-variant-numeric: tabular-nums;
 }
 
-/* filter card eyebrow + description */
-.ds-structure.ds-field-filters-panel [data-part='root'] [data-part='filter-card-label'][data-size] {
+/* filter card eyebrow + description: two composed Texts render as inline
+   spans, so without the block reads they set on ONE line. */
+.ds-structure.ds-field-filters-panel[data-part='root'] [data-part='filter-card-label'][data-size] {
   display: block;
-  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
-  font-weight: 700;
   letter-spacing: 0.11em;
   text-transform: uppercase;
 }
-.ds-structure.ds-field-filters-panel [data-part='root'] [data-part='filter-card-description'][data-size] {
+.ds-structure.ds-field-filters-panel[data-part='root'] [data-part='filter-card-description'][data-size] {
   display: block;
   margin-block-start: 3px;
-  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
   line-height: 1.35;
 }
 
-/* control slot: pins the control to the card floor (drained from inline) */
-.ds-structure.ds-field-filters-panel [data-part='root'] [data-part='control-slot'] {
+/* control slot: pins the control to the card floor, so every card in the
+   auto-fit grid lands its Select/Input on one line regardless of how far
+   its description wraps. */
+.ds-structure.ds-field-filters-panel[data-part='root'] [data-part='control-slot'] {
   margin-block-start: auto;
 }
 
@@ -28138,8 +28189,10 @@ input.rottay-input.rottay-input--modern[type='number'] {
  * SelectionPreviewRail skin — engine-agnostic.
  * Home: foundation/tokens/css/presentation/components/skin/selection-preview-rail.css — the second
  * consumer of the structures/ shared-file home after field-filters-panel.css;
- * no --modern/--rustic discriminator because the component renders one DOM
- * under every engine.
+ * no --modern/--rustic discriminator, because the rail's OWN elements
+ * (Box/Flex) render one DOM under every engine. Its composed Text parts do
+ * not: rustic and classic replace the caller's `data-part` with `root`, so
+ * every text rule near the end of this file reaches modern only.
  *
  * LAYER: imported by `facade/entrypoints/base.css` and
  * `facade/entrypoints/styles.css` into `layer(rottay-components)` (the old
@@ -28158,8 +28211,9 @@ input.rottay-input.rottay-input--modern[type='number'] {
  * `border-color` on every element. Border paint reaches (0,4,0) through the
  * always-stamped root `data-part` + contract `data-preview` on the roots, and
  * the root ancestor on descendants — repeating a class or attribute is
- * forbidden. Text rules add the always-stamped `data-size` for b>=5 over
- * Typography's `[data-color]` rule.
+ * forbidden. Against the Typography engine skin no specificity ladder is
+ * available at all: it sorts in `rottay-engines`, after this file, so the
+ * layer decides — which is why the text rules declare no colour.
  *
  * CLOSE-BUTTON RULE (source-gated): the customPreview close is a
  * `variant="ghost"` Button whose historical inline style froze `background` +
@@ -28182,7 +28236,9 @@ input.rottay-input.rottay-input--modern[type='number'] {
  *
  * WAVE S617B (geometry drain + landmark): both roots render as `aside` with an
  * aria-label (the rail is a complementary landmark), and the rail's own static
- * geometry moved here from the engines' inline styles: root paddings (keyed per
+ * geometry moved here from the engines' inline styles: the root track (flex
+ * basis plus the inline-size floor and ceiling, identical on both branches),
+ * root paddings (keyed per
  * branch, logical conversion keeps the extra 2px on the OUTER edge under RTL),
  * the `sticky` part (position + token offset; the default branch adds its
  * column flex + gap), the card bodies (`identity-card-body`, `custom-content`),
@@ -28219,7 +28275,13 @@ input.rottay-input.rottay-input--modern[type='number'] {
 
 /* roots — two mutually-exclusive trees, keyed on data-preview ---------------- */
 
+/* The track the rail occupies is identical on both branches and was the last
+   inline paint either root carried; in the skin a consumer can widen or pin
+   it, which an inline style refused. */
 .ds-structure.ds-selection-preview-rail[data-part='root'][data-preview='custom'] {
+  flex: 0 1 clamp(320px, 29vw, 380px);
+  inline-size: min(100%, 380px);
+  min-inline-size: min(100%, 320px);
   border-inline-start: 1px solid var(--ds-color-border-subtle);
   background: transparent;
   container-type: inline-size;
@@ -28231,6 +28293,9 @@ input.rottay-input.rottay-input--modern[type='number'] {
 }
 
 .ds-structure.ds-selection-preview-rail[data-part='root'][data-preview='default'] {
+  flex: 0 1 clamp(320px, 29vw, 380px);
+  inline-size: min(100%, 380px);
+  min-inline-size: min(100%, 320px);
   border-inline-start: 1px solid var(--ds-color-border-subtle);
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 94%, var(--ds-color-bg-elevated) 6%), var(--ds-surface-card));
   container-type: inline-size;
@@ -28373,38 +28438,50 @@ input.rottay-input.rottay-input--modern[type='number'] {
 }
 
 /* ---------------------------------------------------------------------------
-   WAVE R2+R3 — typography (skin-owned, never inline). Text parts repeat the
-   data-part x3 so type clears the Typography engine skin the same way color
-   does (0,5,0). Quiet Premium editorial: the identity title is the one
-   display moment (tight tracking, tight leading); eyebrows are tracked
-   uppercase; body copy keeps a relaxed 1.5 read.
+   TEXT PARTS — the root compound is ONE element. These eight rules were
+   authored with a space before `[data-part='root']`, which asks for a second
+   root-parted element nested inside the rail; nothing renders one, so none of
+   them has matched since it was written and the rail has been shipping its
+   editorial voice as browser defaults.
+
+   `[data-size]` is kept because it is exactly what the modern Typography
+   engine stamps, which scopes these rules to the engine that can honour them:
+   rustic and classic replace a composed Text's `data-part` with `root` and
+   stamp no `data-size`, so no part-keyed rule reaches their text. Size,
+   weight and colour stay unstated — the Typography skin sorts in
+   `rottay-engines`, after this file, so the layer would decide anyway.
+
+   Quiet Premium editorial: the identity title is the one display moment
+   (tight tracking, tight leading); eyebrows are tracked uppercase; body copy
+   keeps a relaxed 1.5 read; a missing value is italic so an empty cell never
+   reads as data.
 --------------------------------------------------------------------------- */
 
-.ds-structure.ds-selection-preview-rail [data-part='root'] [data-part='identity-title'][data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='identity-title'][data-size] {
   letter-spacing: -0.02em;
   line-height: 1.12;
 }
-.ds-structure.ds-selection-preview-rail [data-part='root'] [data-part='identity-subtitle'][data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='identity-subtitle'][data-size] {
   line-height: 1.4;
 }
-.ds-structure.ds-selection-preview-rail [data-part='root'] [data-part='match-reason-eyebrow'][data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='match-reason-eyebrow'][data-size] {
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
-.ds-structure.ds-selection-preview-rail [data-part='root'] [data-part='match-reason-body'][data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='match-reason-body'][data-size] {
   line-height: 1.5;
 }
-.ds-structure.ds-selection-preview-rail [data-part='root'] [data-part='snapshot-row-label'][data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-row-label'][data-size] {
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
-.ds-structure.ds-selection-preview-rail [data-part='root'] [data-part='snapshot-empty'][data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-empty'][data-size] {
   line-height: 1.45;
 }
-.ds-structure.ds-selection-preview-rail [data-part='root'] [data-part='fallback-empty'][data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='fallback-empty'][data-size] {
   font-style: italic;
 }
-.ds-structure.ds-selection-preview-rail [data-part='root'] [data-part='fallback-string'][data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='fallback-string'][data-size] {
   line-height: 1.45;
 }
 
@@ -60547,16 +60624,50 @@ html[data-ds-motion="reduced"]
  * against; this is a clean greenfield skin.
  *
  * SCOPE ROOT carries `rottay-segmented rottay-segmented--modern` +
- * `data-part='root'`; each option button carries `data-part='option'` +
+ * `role='radiogroup'`; each option button carries `data-part='option'` +
  * `data-selected` + `data-disabled`. Option rules are anchored under the root
  * scope — `option` is shared vocabulary and must never be matched bare.
  *
- * SPECIFICITY (P-48): the root's `border` shorthand carries a real color, so it
- * must clear the tenant's unlayered `* { border-color }` floor at (0,3,1) — it
- * reaches (0,4,0) via the two scope classes + a repeated `data-part`, and stays
- * a SHORTHAND. The option's `border: none` is a color-free reset, exempt. The
- * option rules inherit the root's two classes through the descendant combinator,
- * so their `background`/`color` clear (0,3,0) comfortably.
+ * THE ROOT ANCHOR IS NOT `data-part`, AND THAT IS THE WHOLE POINT. The engine
+ * writes `data-part={caller ?? 'root'}` onto the same node that carries the two
+ * scope classes (P-79: the caller's part wins), so a `[data-part='root']`
+ * predicate is a predicate the CALLER can delete. All 29 selectors here were
+ * anchored on it and every one of them stopped matching for the two shipped
+ * structures that name the composed control — `view-mode-switcher` and
+ * `scope-switcher` both pass `data-part='switcher'`, and both retired their own
+ * frame paint in writing on the strength of the composition that severed. 26
+ * rules, 97 declarations (100 counted per selector), including the entire track
+ * frame and every option state. `role='radiogroup'` is stamped unconditionally
+ * by an engine that spreads no props, so no caller can suppress or replace it;
+ * `data-size` is the other attribute of that kind, which is why the size rules
+ * compound the two. The option / icon / label parts stay selectable as
+ * DESCENDANTS of that root — those are the engine's, not the caller's.
+ *
+ * SPECIFICITY (P-48), UNCHANGED BY THAT SUBSTITUTION and deliberately so: the
+ * root's `border` shorthand carries a real color, so it must clear a tenant's
+ * unlayered `* { border-color }` floor at (0,3,1) — it reaches (0,4,0) via the
+ * two scope classes + a repeated `role`, and stays a SHORTHAND. The option's
+ * `border: none` is a color-free reset, exempt. The option rules inherit the
+ * root's two classes through the descendant combinator, so their
+ * `background`/`color` clear (0,3,0) comfortably. Keying on the bare class pair
+ * instead would have dropped every one of the 29 selectors by one weight unit,
+ * which is a cascade question jsdom cannot adjudicate; an attribute-for-
+ * attribute swap is inert in the cascade and needs no browser pass.
+ *
+ * THE FLOOR ABOVE IS UNVERIFIED, and the ballast is kept BECAUSE it is. Measured
+ * across the token source tree (13,621 rules), `styles/` (68,324) and `dist/`
+ * (54,898): NO rule of that shape exists. Its 47 appearances in the shipped
+ * bundle are all comments — this header and its ~20 siblings, carried in by the
+ * bundler. The one universal border rule that does exist is Tailwind preflight
+ * (`*, ::after, ::before, ::backdrop, ::file-selector-button { border: 0 solid }`),
+ * and it cannot arbitrate by specificity at all: it sits in `@layer
+ * rottay-framework` while this file lands in `@layer rottay-engines`, which the
+ * entrypoint declares LATER — layer order decides first and specificity never
+ * runs. What keeps the ballast is the corpus no instrument here can read: tenant
+ * paint is UNLAYERED (9 such rules in the bithire bundle), so it outranks every
+ * layer, and an unlayered tenant `*` would be answerable by specificity alone.
+ * Do not cite this floor as measured; cite it as the reason weight is preserved
+ * rather than argued about.
  *
  * PASS-2 LAW (batch-28): hover paint (root frame lift, option wash/lift) is
  * gated to `@media (hover: hover)`; the option `:active` dip is the touch
@@ -60575,7 +60686,7 @@ html[data-ds-motion="reduced"]
  * single-axis-reading verdict) is removed.
  */
 
-.rottay-segmented.rottay-segmented--modern[data-part='root'] {
+.rottay-segmented.rottay-segmented--modern[role='radiogroup'] {
   display: inline-flex;
   align-items: center;
   gap: var(--ds-segmented-gap, 2px);
@@ -60628,19 +60739,19 @@ html[data-ds-motion="reduced"]
     background-position var(--ds-motion-normal) var(--ds-motion-ease-out);
 }
 
-.rottay-segmented.rottay-segmented--modern[data-part='root'][data-part='root'] {
+.rottay-segmented.rottay-segmented--modern[role='radiogroup'][role='radiogroup'] {
   border: var(--ds-edge-standard-width, 1px) var(--ds-edge-standard-style, solid)
     var(--ds-segmented-border, var(--ds-material-control-border, var(--ds-color-border)));
 }
 
-.rottay-segmented.rottay-segmented--modern[data-part='root']::-webkit-scrollbar {
+.rottay-segmented.rottay-segmented--modern[role='radiogroup']::-webkit-scrollbar {
   display: none;
 }
 
 /* Root hover is gated to hover-capable pointers (lane law); the option-level
    `:active` press below is the touch counterpart of the hover treatment. */
 @media (hover: hover) {
-  .rottay-segmented.rottay-segmented--modern[data-part='root'][data-part='root']:hover {
+  .rottay-segmented.rottay-segmented--modern[role='radiogroup'][role='radiogroup']:hover {
     border-color: var(
       --ds-segmented-border-hover,
       var(--ds-material-control-border-hover, color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border)))
@@ -60704,11 +60815,11 @@ html[data-ds-motion="reduced"]
   }
 }
 
-.rottay-segmented.rottay-segmented--modern[data-part='root'][data-block='true'] {
+.rottay-segmented.rottay-segmented--modern[role='radiogroup'][data-block='true'] {
   width: 100%;
 }
 
-.rottay-segmented.rottay-segmented--modern[data-part='root'][data-size='small'] {
+.rottay-segmented.rottay-segmented--modern[role='radiogroup'][data-size='small'] {
   --ds-segmented-current-height: var(--ds-segmented-sm-height, var(--ds-button-sm-height));
   --ds-segmented-current-padding-x: var(--ds-segmented-sm-padding-x, var(--ds-button-sm-padding-x));
   --ds-segmented-current-font-size: var(--ds-segmented-sm-font-size, var(--ds-button-sm-font-size));
@@ -60718,7 +60829,7 @@ html[data-ds-motion="reduced"]
   --ds-segmented-current-radius: var(--ds-segmented-sm-radius, var(--ds-segmented-item-radius, var(--ds-radius-sm)));
 }
 
-.rottay-segmented.rottay-segmented--modern[data-part='root'][data-size='middle'] {
+.rottay-segmented.rottay-segmented--modern[role='radiogroup'][data-size='middle'] {
   --ds-segmented-current-height: var(--ds-segmented-md-height, var(--ds-button-md-height));
   --ds-segmented-current-padding-x: var(--ds-segmented-md-padding-x, var(--ds-button-md-padding-x));
   --ds-segmented-current-font-size: var(--ds-segmented-md-font-size, var(--ds-button-md-font-size));
@@ -60728,7 +60839,7 @@ html[data-ds-motion="reduced"]
   --ds-segmented-current-radius: var(--ds-segmented-md-radius, var(--ds-segmented-item-radius, var(--ds-radius-sm)));
 }
 
-.rottay-segmented.rottay-segmented--modern[data-part='root'][data-size='large'] {
+.rottay-segmented.rottay-segmented--modern[role='radiogroup'][data-size='large'] {
   --ds-segmented-current-height: var(--ds-segmented-lg-height, var(--ds-button-lg-height));
   --ds-segmented-current-padding-x: var(--ds-segmented-lg-padding-x, var(--ds-button-lg-padding-x));
   --ds-segmented-current-font-size: var(--ds-segmented-lg-font-size, var(--ds-button-lg-font-size));
@@ -60738,7 +60849,7 @@ html[data-ds-motion="reduced"]
   --ds-segmented-current-radius: var(--ds-segmented-lg-radius, var(--ds-segmented-item-radius, var(--ds-radius-sm)));
 }
 
-.rottay-segmented--modern[data-part='root'] [data-part='option'] {
+.rottay-segmented--modern[role='radiogroup'] [data-part='option'] {
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
@@ -60766,18 +60877,18 @@ html[data-ds-motion="reduced"]
     transform var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
-.rottay-segmented--modern[data-part='root'] [data-part='option'][data-part='option'] {
+.rottay-segmented--modern[role='radiogroup'] [data-part='option'][data-part='option'] {
   border: 1px solid transparent;
 }
 
-.rottay-segmented--modern[data-part='root'][data-block='true'] [data-part='option'] {
+.rottay-segmented--modern[role='radiogroup'][data-block='true'] [data-part='option'] {
   flex: 1 1 0;
   /* Block mode fills the track: the 16rem truncation cap (a scroll-mode
      bound) must not keep two options from stretching a wide container. */
   max-inline-size: none;
 }
 
-.rottay-segmented--modern[data-part='root'] [data-part='icon'] {
+.rottay-segmented--modern[role='radiogroup'] [data-part='icon'] {
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
@@ -60791,20 +60902,20 @@ html[data-ds-motion="reduced"]
      transform/background-color transition was dead weight. */
 }
 
-.rottay-segmented--modern[data-part='root'] [data-part='label'] {
+.rottay-segmented--modern[role='radiogroup'] [data-part='label'] {
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.rottay-segmented--modern[data-part='root'] [data-part='option'][data-selected='false'] {
+.rottay-segmented--modern[role='radiogroup'] [data-part='option'][data-selected='false'] {
   background: var(--ds-segmented-item-bg);
   color: var(--ds-segmented-item-color, var(--ds-color-text-secondary));
 }
 
 @media (hover: hover) {
-  .rottay-segmented--modern[data-part='root'] [data-part='option'][data-selected='false']:hover {
+  .rottay-segmented--modern[role='radiogroup'] [data-part='option'][data-selected='false']:hover {
     /* `--ds-color-bg-hover` is a dark inset under both first-party themes
        (#18181c) — dark-on-dark with the hover ink. The hover surface mixes
        from the paired card chrome instead (measured: text-primary on
@@ -60823,11 +60934,11 @@ html[data-ds-motion="reduced"]
 }
 
 /* A held press settles the option back onto the track with a tactile dip. */
-.rottay-segmented--modern[data-part='root'] [data-part='option']:not([data-disabled='true']):active {
+.rottay-segmented--modern[role='radiogroup'] [data-part='option']:not([data-disabled='true']):active {
   transform: translateY(0) scale(var(--ds-state-press-scale));
 }
 
-.rottay-segmented--modern[data-part='root'] [data-part='option'][data-selected='true'] {
+.rottay-segmented--modern[role='radiogroup'] [data-part='option'][data-selected='true'] {
   background: var(
     --ds-segmented-item-bg-selected,
     linear-gradient(
@@ -60856,18 +60967,18 @@ html[data-ds-motion="reduced"]
   transform: var(--ds-segmented-item-transform-selected, none);
 }
 
-.rottay-segmented--modern[data-part='root'] [data-part='option']:focus-visible {
+.rottay-segmented--modern[role='radiogroup'] [data-part='option']:focus-visible {
   box-shadow: var(--ds-segmented-focus-ring, var(--ds-focus-ring));
 }
 
-.rottay-segmented--modern[data-part='root'] [data-part='option'][data-disabled='true'] {
+.rottay-segmented--modern[role='radiogroup'] [data-part='option'][data-disabled='true'] {
   opacity: var(--ds-button-disabled-opacity);
   cursor: not-allowed;
 }
 
 /* ---- coarse pointers: physical 44px floor, never a rem floor. ---- */
 @media (hover: none), (pointer: coarse) {
-  .rottay-segmented--modern[data-part='root'] [data-part='option'] {
+  .rottay-segmented--modern[role='radiogroup'] [data-part='option'] {
     min-block-size: var(--ds-segmented-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 }
@@ -60877,36 +60988,36 @@ html[data-ds-motion="reduced"]
         Opacity is stripped in this mode: disabled options remap to the
         GrayText system color so the track itself keeps its ButtonText frame. ---- */
 @media (forced-colors: active) {
-  .rottay-segmented.rottay-segmented--modern[data-part='root'][data-part='root'] {
+  .rottay-segmented.rottay-segmented--modern[role='radiogroup'][role='radiogroup'] {
     border-color: ButtonText;
   }
 
-  .rottay-segmented--modern[data-part='root'] [data-part='option'][data-part='option'] {
+  .rottay-segmented--modern[role='radiogroup'] [data-part='option'][data-part='option'] {
     forced-color-adjust: auto;
     border-color: ButtonText;
   }
 
-  .rottay-segmented--modern[data-part='root'] [data-part='option'][data-selected='true'] {
+  .rottay-segmented--modern[role='radiogroup'] [data-part='option'][data-selected='true'] {
     background: Highlight;
     color: HighlightText;
   }
 
-  .rottay-segmented--modern[data-part='root'] [data-part='option'][data-disabled='true'] {
+  .rottay-segmented--modern[role='radiogroup'] [data-part='option'][data-disabled='true'] {
     color: GrayText;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rottay-segmented.rottay-segmented--modern[data-part='root'],
-  .rottay-segmented--modern[data-part='root'] [data-part='option'],
-  .rottay-segmented--modern[data-part='root'] [data-part='icon'] {
+  .rottay-segmented.rottay-segmented--modern[role='radiogroup'],
+  .rottay-segmented--modern[role='radiogroup'] [data-part='option'],
+  .rottay-segmented--modern[role='radiogroup'] [data-part='icon'] {
     transition: none;
   }
 
   /* The lifts/dips are motion too: without their transitions they would fire
      instantly on every hover/press, which is worse than a calm frame. */
-  .rottay-segmented--modern[data-part='root'] [data-part='option'][data-selected='false']:hover,
-  .rottay-segmented--modern[data-part='root'] [data-part='option']:not([data-disabled='true']):active {
+  .rottay-segmented--modern[role='radiogroup'] [data-part='option'][data-selected='false']:hover,
+  .rottay-segmented--modern[role='radiogroup'] [data-part='option']:not([data-disabled='true']):active {
     transform: none;
   }
 }
@@ -64524,9 +64635,12 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
  * which resolve through the engine system themselves. One skin file, no engine
  * modifier class.
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
- * base layer, so a layered rule cannot paint these elements at all. Unlayered
- * still yields to a caller's inline `style`.
+ * LAYER — `rottay-components`, in both entrypoints and in the built bundle.
+ * The header previously claimed this file was unlayered; it never was. The
+ * consequence is load-bearing: `rottay-engines` sorts LATER, so this file
+ * cannot outrank an engine skin for a property both declare, at any
+ * specificity. The composed Button therefore keeps its own paint by design,
+ * and the grammar below is layout the engine skins do not claim.
  *
  * SCOPE ROOT carries `rottay-action-dock` + `data-part='root'` +
  * `data-placement` + `data-mode`. Component variables deliberately fall back
@@ -64658,7 +64772,13 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
   inset-inline: 0;
 }
 
-.rottay-action-dock[data-part='root'][data-mode='sticky'] {
+/* `[data-placement]` is carried for SPECIFICITY, not for matching: the root
+   rule above already sets `z-index` at (0,4,0), so a two-attribute mode rule
+   lost it outright — a sticky dock stacked in the fixed band and
+   `--ds-action-dock-sticky-z-index` never resolved. Tie on specificity, win on
+   source order. The family test pins that every mode rule outranks the root
+   rule for each property both declare. */
+.rottay-action-dock[data-part='root'][data-placement][data-mode='sticky'] {
   position: sticky;
   z-index: var(--ds-action-dock-sticky-z-index, var(--ds-z-index-sticky, 1100));
 }
@@ -64749,7 +64869,12 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
   margin-inline-end: auto;
 }
 
-.rottay-action-dock__actions > .rottay-action-dock__overflow-trigger {
+/* The overflow affordance is a Dropdown, so the row's flex item is the
+ * Dropdown root, not the Button inside it. Keyed on the trigger class this
+ * rule matched nothing, and the more-actions control could be squeezed by the
+ * growing primary — `__overflow` names the item, `__overflow-trigger` stays on
+ * the Button for the coarse-pointer floor below. */
+.rottay-action-dock__actions > .rottay-action-dock__overflow {
   flex: 0 0 auto;
 }
 
@@ -64840,9 +64965,34 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
  * PAGE-RESERVATION HOOK: the bar is fixed chrome, so pages must keep their
  * content clear of it — the root publishes
  * `--ds-bottom-tab-bar-reserved-block-end` (content geometry + the live
- * `env(safe-area-inset-bottom)`) for a page container's `padding-block-end`.
+ * safe-area inset) for a page container's `padding-block-end`.
  * The bar never covers content that consumes the hook; AppShell S01 owns
  * the app-level chrome coordination (integration documented, not edited).
+ * The base is DERIVED from the same private channels the tab geometry reads
+ * (`--_ds-bottom-tab-bar-content-block-size`) rather than hand-summed: the
+ * retired `50px` literal carried an "update it if that geometry changes"
+ * contract, and the label term of that sum is type-scale-relative, so a
+ * tenant scaling its type grew the bar and left the reservation behind.
+ * Every term is authored in THIS file, so the derivation bakes no value the
+ * file does not state.
+ *
+ * SAFE AREA travels on `--ds-safe-area-bottom` (the DS channel `action-dock`,
+ * `chat-surface` and `page-shell` already read) with the `env()` as its
+ * fallback, not bare `env()`. Bare, an app that moves the DS inset — the
+ * documented way to reserve for player chrome or a simulated device frame —
+ * moved every other piece of bottom chrome on the screen and not this bar.
+ *
+ * RESPONSIVE POSTURE (container queries only; the tier's viewport-MQ count is
+ * exact-0): the root is a named inline-size container. It is fixed with
+ * `inset-inline: 0`, so its own inline size IS the viewport width — the bar
+ * gets a viewport-scaled posture without a single viewport media query.
+ *   · wide (>= 600px): the list stops spreading. `justify: evenly` across a
+ *     tablet width strands five 44px islands over 100px+ of dead ground and
+ *     the bar stops reading as one control; the list caps at its own measure
+ *     and centres while the ground and hairline stay full-bleed.
+ *   · narrow (<= 360px): five columns leave ~64px each, so the pill's inline
+ *     padding and the label's tracking give room back before the label starts
+ *     ellipsizing to two characters.
  *
  * ELEMENT-LEVEL CLASSES, NOT BARE `data-part` DESCENDANTS: `data-part='icon'` /
  * `'label'` / `'badge'` are shared vocabulary across the component fleet, and
@@ -64883,21 +65033,45 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
 /* ---- root: fixed navigation bar, safe-area aware. Positioning was inline
         in the engine pre-R2+R3; the skin owns it now. ---- */
 .rottay-bottom-tab-bar[data-part='root'] {
+  /* family-private geometry — the single place the bar's block rhythm is
+     stated. The tab rule, the pill, the label and the reservation all read
+     these, so the published hook cannot drift from the painted bar. */
+  --_ds-bottom-tab-bar-tab-lead: 6px;
+  --_ds-bottom-tab-bar-tab-trail: 2px;
+  --_ds-bottom-tab-bar-pill-block-size: 26px;
+  --_ds-bottom-tab-bar-pill-inline-padding: 10px;
+  --_ds-bottom-tab-bar-label-gap: 2px;
+  --_ds-bottom-tab-bar-label-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
+  /* 14/11 reproduces the retired `line-height: 14px` exactly at type scale 1
+     and, unlike the literal, follows the scale instead of clipping under it. */
+  --_ds-bottom-tab-bar-label-leading: calc(14 / 11);
+  --_ds-bottom-tab-bar-safe-area: var(--ds-safe-area-bottom, env(safe-area-inset-bottom, 0px));
+  /* the bar's own measure at wide container widths: five touch columns */
+  --_ds-bottom-tab-bar-list-measure: 30rem;
+
+  --_ds-bottom-tab-bar-content-block-size: calc(
+    var(--_ds-bottom-tab-bar-tab-lead) + var(--_ds-bottom-tab-bar-pill-block-size) +
+      var(--_ds-bottom-tab-bar-label-gap) +
+      var(--_ds-bottom-tab-bar-label-size) * var(--_ds-bottom-tab-bar-label-leading) +
+      var(--_ds-bottom-tab-bar-tab-trail)
+  );
+
   /* Public reservation hook: pages keep their content clear of the fixed bar
-     with `padding-block-end: var(--ds-bottom-tab-bar-reserved-block-end)`.
-     The 50px base tracks the bar's content geometry (6+26+2+14+2) — update
-     it if that geometry changes. */
-  --ds-bottom-tab-bar-reserved-block-end: calc(50px + env(safe-area-inset-bottom, 0px));
+     with `padding-block-end: var(--ds-bottom-tab-bar-reserved-block-end)`. */
+  --ds-bottom-tab-bar-reserved-block-end: calc(
+    var(--_ds-bottom-tab-bar-content-block-size) + var(--_ds-bottom-tab-bar-safe-area)
+  );
 
   position: fixed;
   inset-inline: 0;
   inset-block-end: 0;
   z-index: var(--ds-bottom-tab-bar-z, 40);
-  padding-block-end: env(safe-area-inset-bottom, 0px);
+  padding-block-end: var(--_ds-bottom-tab-bar-safe-area);
   background: var(--ds-color-bg-primary);
   box-shadow: var(--ds-bottom-tab-bar-shadow, var(--ds-elevation-2));
   animation: ds-bottom-tab-bar-enter var(--ds-motion-reveal, var(--ds-motion-slow))
     var(--ds-motion-ease-out, ease-out) both;
+  container: ds-bottom-tab-bar / inline-size;
 }
 
 /* The root's `border-top` must reach (0,4,0) to clear the tenant floor;
@@ -64923,9 +65097,9 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-inline-size: 44px;
-  min-block-size: 44px;
-  padding-block: 6px 2px;
+  min-inline-size: var(--ds-touch-target-min, 44px);
+  min-block-size: var(--ds-touch-target-min, 44px);
+  padding-block: var(--_ds-bottom-tab-bar-tab-lead) var(--_ds-bottom-tab-bar-tab-trail);
   padding-inline: 2px;
   background: none;
   border: none;
@@ -64985,8 +65159,8 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
   display: flex;
   align-items: center;
   justify-content: center;
-  block-size: 26px;
-  padding-inline: 10px;
+  block-size: var(--_ds-bottom-tab-bar-pill-block-size);
+  padding-inline: var(--_ds-bottom-tab-bar-pill-inline-padding);
   border-radius: var(--ds-radius-full, 9999px);
   transition:
     background var(--ds-motion-feedback, var(--ds-motion-fast)) var(--ds-motion-ease-out, ease-out),
@@ -65055,20 +65229,49 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
 /* ---- label: typography migrated from the engine's inline Text style; the
         selected weight was a JS ternary, now keyed on data-selected. ---- */
 .rottay-bottom-tab-bar__label[data-part='label'] {
-  margin-block-start: 2px;
+  margin-block-start: var(--_ds-bottom-tab-bar-label-gap);
   max-inline-size: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
+  font-size: var(--_ds-bottom-tab-bar-label-size);
   font-weight: 400;
-  letter-spacing: 0.01em;
-  line-height: 14px;
+  letter-spacing: var(--_ds-bottom-tab-bar-label-tracking, 0.01em);
+  line-height: var(--_ds-bottom-tab-bar-label-leading);
   transition: color var(--ds-motion-feedback, var(--ds-motion-fast)) var(--ds-motion-ease-out, ease-out);
 }
 
 .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__label {
   font-weight: 600;
+}
+
+/* ---- responsive posture. The root is fixed with `inset-inline: 0`, so its
+        own inline size is the viewport width and these queries carry the
+        posture a viewport media query would have — which the tier forbids. ---- */
+
+/* Wide: stop spreading. `justify: evenly` across a tablet width puts the five
+   tabs at 1/10, 3/10, 5/10 … of the bar with 100px+ between them, and the
+   group stops reading as one control. The ground, the hairline and the
+   safe-area padding stay full-bleed — only the row of tabs is measured. */
+@container ds-bottom-tab-bar (min-width: 600px) {
+  .rottay-bottom-tab-bar__list[data-part='list'] {
+    max-inline-size: var(--_ds-bottom-tab-bar-list-measure);
+    margin-inline: auto;
+  }
+}
+
+/* Narrow: at 320px each of five columns is ~64px. The pill's inline padding
+   and the label's tracking are the two places to give width back before the
+   label ellipsizes to two characters — the icon and the touch floor do not
+   move, and the full label survives in `aria-label` either way. */
+@container ds-bottom-tab-bar (max-width: 360px) {
+  .rottay-bottom-tab-bar__icon-wrap[data-part='icon-wrap'] {
+    --_ds-bottom-tab-bar-pill-inline-padding: 6px;
+  }
+
+  .rottay-bottom-tab-bar__label[data-part='label'] {
+    --_ds-bottom-tab-bar-label-tracking: 0;
+  }
 }
 
 @keyframes ds-bottom-tab-bar-enter {
@@ -65520,12 +65723,43 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
  * component the caller drops into a slot. Each painted element therefore carries
  * its own class and is matched by a COMPOUND selector.
  *
- * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
- * border-color floor at (0,3,1). The root's `border-bottom` carries a real
- * color, so it must reach (0,4,0); with only ONE root class that is bought by
- * `data-sticky`, which the engine always stamps ('true'|'false') — repeating
- * an attribute is forbidden. The back button's `border: none` is a color-free
- * reset, exempt from the floor.
+ * SPECIFICITY (P-48): the root's `border-bottom` carries a real colour, so it
+ * must clear the unlayered border floor at (0,3,1). The previous note claimed
+ * `data-sticky` bought (0,4,0); it does not — one class plus `data-part` plus
+ * `data-sticky` is (0,3,0), a unit SHORT of the floor and short of what the
+ * sibling fixed-chrome family (bottom-tab-bar) buys for the identical claim.
+ * The fourth unit now rides `data-testid`, which the engine stamps on every
+ * render — the same idiom, and repetition stays prohibited. The forced-colors
+ * override is raised in step: a specificity raise that leaves an override
+ * behind hands forced-colors mode to the rule it was written to beat.
+ * Measured scope, stated rather than implied: the composed `styles/platform.css`
+ * bundle carries ZERO unlayered border-colour rules today, so the floor does
+ * not reproduce there; the unit is bought because the consuming app's own
+ * preflight is outside that bundle and outside anything this lane can read.
+ * The back button's `border: none` is a color-free reset, exempt from the floor.
+ *
+ * BOX MODEL + SAFE AREA: the family owns `box-sizing` (action-dock precedent)
+ * instead of inheriting whichever reset the host ships. It has to: the bar
+ * declared a flat `block-size: 56px` and then padded by the top safe-area
+ * inset INSIDE it, so under a border-box host — every app with a preflight —
+ * a notch subtracted itself from the bar and crushed the back button and
+ * title into what was left, on exactly the devices this family names. The
+ * 56px is now the BAR ROW and the inset is added to the root's box, so the
+ * row survives the notch. Off-device (inset 0) the computed height is
+ * unchanged. The inset travels on `--ds-safe-area-top` — the channel
+ * `page-shell` already reads — with `env()` as its fallback, never bare.
+ *
+ * RESPONSIVE POSTURE (container queries only; the tier's viewport-MQ count is
+ * exact-0): the root is a named inline-size container, so the bar reads its
+ * own slot rather than the viewport. The equal-share partition that puts the
+ * title on the true centerline is a WIDE posture, not a universal one: the
+ * side slots take `flex: 1 0 0` with an explicit 44px floor, and an explicit
+ * min-inline-size REPLACES a flex item's automatic minimum size — so a
+ * two-button action cluster does not shrink and does not stop at the slot
+ * edge either; it overflows a 44px slot and runs under the title. Below the
+ * cut the sides claim their natural width and the centre takes the gap, so
+ * the title is centred in the space that is actually free and truncates
+ * there. Nothing overlaps at 320px, and the centerline returns above it.
  *
  * GLASS: the sticky posture's `backdrop-filter` is opt-in through the
  * `--ds-mobile-header-sticky-backdrop` channel (default `none`) — a default-ON
@@ -65557,15 +65791,27 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
  */
 
 .rottay-mobile-header[data-part='root'] {
+  /* family-private geometry — the bar row and the notch inset are stated once
+     here, so the root box, the bar's own 100% and the safe-area padding
+     cannot disagree about which of the two the 56px describes. */
+  --_ds-mobile-header-bar-block-size: 56px;
+  --_ds-mobile-header-safe-area: var(--ds-safe-area-top, env(safe-area-inset-top, 0px));
+
   background: var(--ds-color-bg-primary);
   inline-size: 100%;
-  /* 56px mobile bar height: no governed rung adopted — kept literal and
-     density-neutral (see GEOMETRY above); byte-identical to the retired
-     inline height/minHeight. The block-start inset pads the bar under the
-     notch/status area. */
-  block-size: 56px;
-  min-block-size: 56px;
-  padding-block-start: env(safe-area-inset-top, 0px);
+  /* 56px mobile BAR ROW: no governed rung adopted — kept literal and
+     density-neutral (see GEOMETRY above). The notch inset is added to the
+     root's box rather than taken out of the row (see BOX MODEL above); with
+     no inset the computed height is the retired 56px exactly. */
+  box-sizing: border-box;
+  block-size: calc(
+    var(--_ds-mobile-header-bar-block-size) + var(--_ds-mobile-header-safe-area)
+  );
+  min-block-size: calc(
+    var(--_ds-mobile-header-bar-block-size) + var(--_ds-mobile-header-safe-area)
+  );
+  padding-block-start: var(--_ds-mobile-header-safe-area);
+  container: ds-mobile-header / inline-size;
 }
 
 /* sticky posture: the bar floats over scrolling content; the frosted glass is
@@ -65588,7 +65834,10 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
   box-shadow: var(--ds-elevation-2);
 }
 
-.rottay-mobile-header[data-part='root'][data-sticky] {
+/* The colored hairline clears the P-48 floor at (0,4,0); the fourth unit is
+   the always-present `data-testid` (see SPECIFICITY above — if the engine ever
+   stops stamping it, this rule silently drops back under the floor). */
+.rottay-mobile-header[data-part='root'][data-sticky][data-testid='mobile-header'] {
   border-bottom: 1px solid var(--ds-color-border);
 }
 
@@ -65710,10 +65959,35 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
   letter-spacing: -0.01em;
 }
 
+/* ---- responsive posture: the bar reads its OWN slot, not the viewport, so a
+        header composed into a narrow rail adapts the same way one on a 320px
+        phone does. Container queries only — the tier's viewport-MQ count is
+        exact-0. ---- */
+
+/* Below the cut the equal-share partition cannot hold two action clusters and
+   a readable title at once. The sides take their natural width (they can no
+   longer overflow a 44px slot and run under the title) and the centre takes
+   whatever gap is left, so the title is centred in the space that is actually
+   free and truncates there instead of being overlapped. The touch floor is
+   unchanged — it is the floor for an EMPTY slot, never a cap on a full one. */
+@container ds-mobile-header (max-width: 380px) {
+  .rottay-mobile-header__left[data-part='left'],
+  .rottay-mobile-header__right[data-part='right'] {
+    flex: 0 0 auto;
+  }
+
+  .rottay-mobile-header__center[data-part='center'] {
+    flex: 1 1 auto;
+  }
+}
+
 /* ---- forced colors: the bar's hairline reads as ButtonText and the back
         action earns a frame (it is borderless at rest). ---- */
 @media (forced-colors: active) {
-  .rottay-mobile-header[data-part='root'][data-sticky] {
+  /* Raised in step with the hairline above: a media query adds no specificity,
+     so leaving this at (0,3,0) would hand forced-colors mode back to the very
+     rule this override exists to beat. */
+  .rottay-mobile-header[data-part='root'][data-sticky][data-testid='mobile-header'] {
     border-bottom-color: ButtonText;
   }
 
@@ -93060,6 +93334,18 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * inline-start (the former physical `left: 0` was LTR-only); the chevron
  * mirrors under RTL. This file also adds the reduced-motion and
  * forced-colors contracts for its own parts.
+ *
+ * ENGINE REACH (measured 2026-08-11 by rendering all three engines, not by
+ * reading source; an earlier companion claim about `Text` dropping a `var()`
+ * `fontSize` was an artefact of the test DOM and is withdrawn — this one is
+ * about ATTRIBUTES and stands): `Text` forwards a caller's `data-part` under MODERN only —
+ * classic and rustic stamp their own — so every `Text`-borne part rule here
+ * (`title`, `live-label`, `metric-label`, `metric-value`, `metric-change`, `subtitle`)
+ * is live under modern and inert under the other two. The rules are correct
+ * as written and become universal when the primitive is repaired; the
+ * SPECIFICITY notes above describe the modern case. Box-borne parts (`root`,
+ * `header`, the icon wells, the meter, the rows/cards) reach every engine,
+ * which is why the well repair is universal and the caption repair is not.
  */
 
 /* panel chrome -------------------------------------------------------------- */
@@ -93071,6 +93357,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-metrics-minimal.ds-metrics-minimal[data-part='root'] {
   display: flex;
   flex-direction: column;
+  /* The panel is its own responsive frame — every cut in this file is keyed on
+     the PANEL's inline size, never the viewport. */
+  container: ds-metrics-minimal / inline-size;
   block-size: var(--_ds-dashboard-panel-block-size, calc(415px * var(--ds-rhythm-effective-scale, 1)));
   /* Panel frame rides the tenant density plane (metrics-cards idiom). */
   padding: calc(16px * var(--ds-density-effective-scale, 1));
@@ -93093,7 +93382,12 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   border-bottom: 1px solid var(--ds-signal-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary)));
 }
 .ds-metrics-minimal.ds-metrics-minimal [data-part='panel-icon-box'] {
-  /* 32px icon well drained from the engine. */
+  /* 32px icon well drained from the engine. `flex-shrink: 0` is the well's
+     SHAPE: it sits in a flex cluster beside the title/subtitle stack, and
+     without it a narrow panel squeezes the square into an oval that still
+     carries its border and glyph. The row well below already pins it; this
+     one did not. */
+  flex-shrink: 0;
   inline-size: 32px;
   block-size: 32px;
   display: flex;
@@ -93175,6 +93469,21 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-label'][data-part='metric-label'][data-part='metric-label'] {
   color: var(--ds-metric-card-label-color, var(--ds-color-text-muted));
+}
+/* The CAPTION yields; the FIGURE never does. The label and the tabular figure
+   share one `justify-content: space-between` line inside a row that clips, so
+   the label truncates with an ellipsis rather than pushing the datum past the
+   clip edge.
+   ENGINE REACH: this rule keys on a part carried by a composed `Text`, and
+   only MODERN forwards a caller's `data-part` (classic and rustic stamp their
+   own) — measured by rendering. So the truncation is live under modern and
+   inert, never harmful, under the other two; it becomes universal the day the
+   primitive honours a caller part. */
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-label'] {
+  min-inline-size: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='true'] [data-part='trend-icon'] {
   color: var(--ds-metric-card-trend-color, var(--ds-color-success));
@@ -93266,6 +93575,27 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   overflow-y: auto;
 }
 
+/* narrow posture — SIMPLIFIED, not compressed. Below 20rem of panel measure
+   the row keeps every element it has (well, label, trend, figure, meter,
+   chevron) and spends the measure differently: the well drops a rung and the
+   header stops competing for one line, dropping the LIVE badge under the
+   title. The chevron stays: it is the row's only affordance cue.
+   The figure steps through `--_ds-metric-value-size` — see the twin note in
+   `metrics-rows.css` for why no unit test can read the result back. */
+@container ds-metrics-minimal (inline-size < 20rem) {
+  .ds-metrics-minimal.ds-metrics-minimal[data-part='root'] {
+    --_ds-metric-value-size: 22px;
+  }
+  .ds-metrics-minimal.ds-metrics-minimal [data-part='header'] {
+    flex-wrap: wrap;
+    row-gap: var(--ds-spacing-2, 8px);
+  }
+  .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-icon-box'] {
+    inline-size: 36px;
+    block-size: 36px;
+  }
+}
+
 /* reduced motion: every hover cadence and fade goes quiet; the slide-in and
    live-glow loops are silenced in the interactions skin. */
 @media (prefers-reduced-motion: reduce) {
@@ -93335,6 +93665,18 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * unset state stays byte-identical; `body-color` falls back to `inherit`.
  * `action-*` stays unlit: the KPI anatomy has no action element and minting an
  * empty one is dishonest — BLOCKED(owner: Codex) in the roadmap.
+ *
+ * ENGINE REACH (measured 2026-08-11 by rendering all three engines, not by
+ * reading source; an earlier companion claim about `Text` dropping a `var()`
+ * `fontSize` was an artefact of the test DOM and is withdrawn — this one is
+ * about ATTRIBUTES and stands): `Text` forwards a caller's `data-part` under MODERN only —
+ * classic and rustic stamp their own — so every `Text`-borne part rule here
+ * (`title`, `live-label`, `metric-label`, `metric-value`, `metric-change`)
+ * is live under modern and inert under the other two. The rules are correct
+ * as written and become universal when the primitive is repaired; the
+ * SPECIFICITY notes above describe the modern case. Box-borne parts (`root`,
+ * `header`, the icon wells, the meter, the rows/cards) reach every engine,
+ * which is why the well repair is universal and the caption repair is not.
  */
 
 /* panel chrome -------------------------------------------------------------- */
@@ -93347,6 +93689,11 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-metrics-cards.ds-metrics-cards[data-part='root'] {
   display: flex;
   flex-direction: column;
+  /* The panel is its own responsive frame — every cut in this file is keyed on
+     the PANEL's inline size, never the viewport. The card grid was already
+     intrinsic (`auto-fit` over a private track floor); the container is what
+     lets the panel CHROME answer its own measure too. */
+  container: ds-metrics-cards / inline-size;
   block-size: var(--_ds-dashboard-panel-block-size, calc(415px * var(--ds-rhythm-effective-scale, 1)));
   /* Panel frame rides the tenant density plane (Button-skin idiom); the
      density suite pins its own channels inline on this same root. */
@@ -93371,7 +93718,12 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   border-bottom: 1px solid var(--ds-signal-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary)));
 }
 .ds-metrics-cards.ds-metrics-cards [data-part='panel-icon-box'] {
-  /* 32px icon well drained from the engine. */
+  /* 32px icon well drained from the engine. `flex-shrink: 0` is the well's
+     SHAPE: it sits in a flex cluster beside the title, and without it a
+     narrow panel squeezes the square into an oval that still carries its
+     border and glyph — degraded rather than absent, which is why it survived
+     review. */
+  flex-shrink: 0;
   inline-size: 32px;
   block-size: 32px;
   display: flex;
@@ -93595,6 +93947,28 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 .ds-metrics-cards.ds-metrics-cards [data-part='cards-grid'] {
   position: relative;
+}
+
+/* narrow posture — SIMPLIFIED, not compressed. The CARD GRID needs no cut: it
+   is already intrinsic (`auto-fit` over `--_ds-metric-card-track-min`), so it
+   reflows 3→2→1 on its own. What could not answer its own measure is the
+   panel CHROME: the header stops competing for one line and the LIVE badge
+   falls under the title. The two-line eyebrow clamp is deliberate (K-7
+   cross-card value alignment) and stays.
+   The figure steps through `--_ds-metric-value-size`, the channel this leaf
+   already read inline before the lane. No unit test can observe it:
+   happy-dom drops an inline length containing a comma-space inside a
+   function, which is a property of the TEST DOM and not of the browser or of
+   `Text` — an earlier note here claimed the channel had never painted, and
+   that claim was an instrument artefact, now withdrawn. */
+@container ds-metrics-cards (inline-size < 20rem) {
+  .ds-metrics-cards.ds-metrics-cards[data-part='root'] {
+    --_ds-metric-value-size: 22px;
+  }
+  .ds-metrics-cards.ds-metrics-cards [data-part='header'] {
+    flex-wrap: wrap;
+    row-gap: var(--ds-spacing-2, 8px);
+  }
 }
 
 /* forced-colors: the panel, cards, wells and badge keep system frames; the
@@ -93913,6 +94287,18 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  *
  * STATE: `data-positive` drives the 2-tone trend treatment while the
  * quantitative meter remains the sole bar-shaped data visualization.
+ *
+ * ENGINE REACH (measured 2026-08-11 by rendering all three engines, not by
+ * reading source; an earlier companion claim about `Text` dropping a `var()`
+ * `fontSize` was an artefact of the test DOM and is withdrawn — this one is
+ * about ATTRIBUTES and stands): `Text` forwards a caller's `data-part` under MODERN only —
+ * classic and rustic stamp their own — so every `Text`-borne part rule here
+ * (`title`, `live-label`, `metric-label`, `metric-value`, `metric-change`)
+ * is live under modern and inert under the other two. The rules are correct
+ * as written and become universal when the primitive is repaired; the
+ * SPECIFICITY notes above describe the modern case. Box-borne parts (`root`,
+ * `header`, the icon wells, the meter, the rows/cards) reach every engine,
+ * which is why the well repair is universal and the caption repair is not.
  */
 
 /* panel chrome -------------------------------------------------------------- */
@@ -93924,6 +94310,11 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-metrics-rows.ds-metrics-rows[data-part='root'] {
   display: flex;
   flex-direction: column;
+  /* The panel is its own responsive frame: every cut in this file is keyed on
+     the PANEL's inline size, never the viewport, so a dashboard column, a
+     beside-chat strip and a full-width page all get the posture their own
+     measure earns. */
+  container: ds-metrics-rows / inline-size;
   block-size: var(--_ds-dashboard-panel-block-size, calc(415px * var(--ds-rhythm-effective-scale, 1)));
   /* Panel frame rides the tenant density plane (metrics-cards idiom). */
   padding: calc(16px * var(--ds-density-effective-scale, 1));
@@ -93946,7 +94337,12 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   border-bottom: 1px solid var(--ds-signal-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary)));
 }
 .ds-metrics-rows.ds-metrics-rows [data-part='panel-icon-box'] {
-  /* 32px icon well drained from the engine. */
+  /* 32px icon well drained from the engine. `flex-shrink: 0` is the well's
+     SHAPE, not padding: it sits in a flex cluster beside the title, and
+     without it a long title (or a narrow panel) squeezes the square into an
+     oval that still has its border and its glyph — visibly wrong, and the
+     kind of wrong that survives review because the element is still there. */
+  flex-shrink: 0;
   inline-size: 32px;
   block-size: 32px;
   display: flex;
@@ -94011,6 +94407,10 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    the engine --------------------------------- */
 
 .ds-metrics-rows.ds-metrics-rows [data-part='metric-icon-box'] {
+  /* Same shape law as the panel well — and here it was the live defect: the
+     sibling `metrics-minimal` already pins its well and this one did not, so
+     the same anatomy squashed in one variant and held in the other. */
+  flex-shrink: 0;
   inline-size: 40px;
   block-size: 40px;
   display: flex;
@@ -94030,6 +94430,22 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 .ds-metrics-rows.ds-metrics-rows [data-part='metric-label'][data-part='metric-label'][data-part='metric-label'] {
   color: var(--ds-metric-card-value-color, var(--ds-color-text-primary));
+}
+/* The CAPTION yields; the FIGURE never does. The row is a fixed-rhythm
+   `justify-content: space-between` band with `overflow: hidden`, so something
+   has to give when the panel narrows — and the datum must not be the thing
+   that gives. The label truncates with an ellipsis instead of wrapping the
+   row taller or pushing the tabular figure past the clip edge.
+   ENGINE REACH: this rule keys on a part carried by a composed `Text`, and
+   only MODERN forwards a caller's `data-part` (classic and rustic stamp their
+   own) — measured by rendering. So the truncation is live under modern and
+   inert, never harmful, under the other two; it becomes universal the day the
+   primitive honours a caller part. */
+.ds-metrics-rows.ds-metrics-rows [data-part='metric-label'] {
+  min-inline-size: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .ds-metrics-rows.ds-metrics-rows [data-part='metric-row'][data-positive='true'] [data-part='trend-icon'] {
   color: var(--ds-metric-card-trend-color, var(--ds-color-success));
@@ -94057,6 +94473,32 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   flex: 1;
   min-block-size: 0;
   overflow-y: auto;
+}
+
+/* narrow posture — SIMPLIFIED, not compressed. Below 20rem of panel measure
+   the row stops being a wide band and becomes a compact readout: the well
+   drops a rung and the header stops competing for one line — the LIVE badge
+   falls under the title instead of squeezing it. The row keeps its icon, its
+   label, its trend and its figure: nothing is hidden, the measure is just
+   spent differently.
+   The figure steps through `--_ds-metric-value-size`, which the engine reads
+   inline as `var(--_ds-metric-value-size, 28px)` — unset it is byte-identical
+   to the previous literal. No unit test can observe the result: happy-dom
+   drops an inline length containing a comma-space inside a function, so the
+   channel is asserted from the engine source and from this file, never from
+   a rendered node. */
+@container ds-metrics-rows (inline-size < 20rem) {
+  .ds-metrics-rows.ds-metrics-rows[data-part='root'] {
+    --_ds-metric-value-size: 22px;
+  }
+  .ds-metrics-rows.ds-metrics-rows [data-part='header'] {
+    flex-wrap: wrap;
+    row-gap: var(--ds-spacing-2, 8px);
+  }
+  .ds-metrics-rows.ds-metrics-rows [data-part='metric-icon-box'] {
+    inline-size: 32px;
+    block-size: 32px;
+  }
 }
 
 /* reduced motion: the row value's colour fade and every transition go quiet;
@@ -94507,6 +94949,21 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  *  - the interactive card's hover/press reads are pure CSS now
  *    (`[data-clickable='true']` gates both) — the JS hover/pressed state and
  *    its two custom-property channels are retired.
+ *  - `data-columns` mirrors `--ds-stats-header-columns` as an attribute so the
+ *    container cuts can cap the track count without widening a one-stat
+ *    header; the grid reads the channel, the cuts write it.
+ *
+ * SCOPE ROOT — one class, not two. Every other `.ds-structure` family in this
+ * tier compounds the tier marker; this one does not, and it is left that way
+ * DELIBERATELY. Adding the marker is a repaint, not a rename: it moves every
+ * rule here from (0,2,0) to (0,3,0), so rules that currently lose a tie start
+ * winning. What it would NOT change is tenant paint — the three generated
+ * artifacts declare custom properties on the document root only and carry no
+ * element-level rule at all (measured 2026-08-11: 5/4/4 distinct selectors,
+ * every one of them a `:is(html[data-tenant=…], …)` root scope), so the
+ * competing floor is DS-side and vertical-independent. The flip therefore
+ * needs one measurement, not three, and it belongs to whichever lane owns the
+ * tier-wide marker rather than to a single family.
  */
 
 /* ---- root: named container; the wide-column count rides the channel ---- */
@@ -94515,10 +94972,14 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   min-inline-size: 0;
 }
 
-/* ---- card grid: N wide (channel), 2 mid, 1 narrow — re-stack without gaps ---- */
+/* ---- card grid: N wide (channel), capped to 2 mid and 1 narrow by the
+        container cuts at the foot of this file ---- */
 .ds-stats-header[data-part='root'] [data-part='card-grid'] {
   display: grid;
-  grid-template-columns: repeat(var(--ds-stats-header-columns, 4), minmax(0, 1fr));
+  grid-template-columns: repeat(
+    var(--_ds-stats-header-track-count, var(--ds-stats-header-columns, 4)),
+    minmax(0, 1fr)
+  );
   gap: var(--ds-spacing-3, 12px);
   inline-size: 100%;
 }
@@ -94705,15 +95166,27 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   border: 1px solid color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent);
 }
 
-/* ---- container cuts: 2 columns mid, 1 narrow + compact measure ---- */
+/* ---- container cuts: 2 columns mid, 1 narrow + compact measure.
+        The cuts CAP the track count instead of replacing the grid, and they
+        cap it on a private channel rather than on a second `card-grid` rule —
+        one grid declaration, two channel writes on the same element, so the
+        narrow cut wins below 30rem by source order and no specificity ladder
+        is needed.
+        `:not([data-columns='1'])` is the cap's floor: a single-stat header
+        stays one full-measure card instead of being WIDENED to a half-measure
+        card beside an empty track, which is what the old unconditional
+        `repeat(2, …)` did between 30rem and 48rem. The engine stamps
+        `data-columns` with the same number it publishes on
+        `--ds-stats-header-columns`, because a container query cannot read a
+        custom property from a selector. ---- */
 @container ds-stats-header (inline-size < 48rem) {
-  .ds-stats-header[data-part='root'] [data-part='card-grid'] {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .ds-stats-header[data-part='root']:not([data-columns='1']) {
+    --_ds-stats-header-track-count: 2;
   }
 }
 @container ds-stats-header (inline-size < 30rem) {
-  .ds-stats-header[data-part='root'] [data-part='card-grid'] {
-    grid-template-columns: minmax(0, 1fr);
+  .ds-stats-header[data-part='root']:not([data-columns='1']) {
+    --_ds-stats-header-track-count: 1;
   }
   .ds-stats-header[data-part='root'] [data-part='stat-card'],
   .ds-stats-header[data-part='root'] [data-part='skeleton-card'] {
@@ -94765,20 +95238,28 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * (ds-skeleton-shimmer / ds-skeleton-pulse). Only the sparkline hover ping
  * remains — it is driven purely from CSS (`:hover` on the parent card,
  * staggered on the `--ds-stats-header-ping-duration` channel).
+ *
+ * The ping is RELATIVE to each dot's own opacity, never absolute. A spark dot
+ * encodes its series value in `--_ds-stats-header-spark-dot-opacity`
+ * (`0.15 + normalized * 0.85`); an animation origin outranks the declared
+ * value, so absolute `opacity: 1` frames flattened the whole series to one
+ * tone for as long as the card was hovered — and `both` held it there. The
+ * dip multiplies the dot's own opacity instead, so the amplitude survives the
+ * hover and the rest state is byte-identical at 0% and 100%.
  */
 
 @keyframes pulse-dot-ping {
   0% {
     transform: scale(1);
-    opacity: 1;
+    opacity: var(--_ds-stats-header-spark-dot-opacity, 1);
   }
   50% {
     transform: scale(1.8);
-    opacity: 0.4;
+    opacity: calc(var(--_ds-stats-header-spark-dot-opacity, 1) * 0.4);
   }
   100% {
     transform: scale(1);
-    opacity: 1;
+    opacity: var(--_ds-stats-header-spark-dot-opacity, 1);
   }
 }
 
@@ -94840,6 +95321,13 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  *   - `--ds-dtc-radius` — ProgressBar's `border-radius: height / 2` is
  *     computed from a runtime `height` prop; the track sets it and both
  *     track + fill read it.
+ *
+ * RESPONSIVE POSTURE: both roots are named inline-size CONTAINERS and every
+ * cut is a `@container` query — this family is a tile, and the viewport says
+ * nothing about how wide the tile is. Two private caps
+ * (`--_ds-dtc-value-cap`, `--_ds-dtc-stat-value-cap`) bound the hero figure
+ * against the tile's own measure; see the hero-value section for why a
+ * `min()` cap and not a breakpoint.
  *
  * SAME-PART STATIC SIBLINGS: the three terminal-dots and the corner-brackets
  * share one `data-part` each with no distinguishing stamp, so they are
@@ -95477,11 +95965,19 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   text-decoration: none;
 }
 
-/* ---- roots: frame geometry (paint stays in the ROOT section above) ---- */
+/* ---- roots: frame geometry (paint stays in the ROOT section above).
+        Both roots are named inline-size containers: this family is a tile
+        dropped into a dashboard grid or a widget slot, so its own measure —
+        never the viewport — is what its posture must answer. Containment is
+        safe on both because each already sizes from its parent
+        (`block-size: 100%` inside a link that fills its cell) and each is
+        already the containing block for its absolutely positioned decorative
+        layers. ---- */
 .ds-data-terminal-card[data-part='root'] {
   position: relative;
   display: flex;
   flex-direction: column;
+  container: ds-data-terminal-card / inline-size;
   block-size: 100%;
   min-block-size: 240px;
   overflow: hidden;
@@ -95490,6 +95986,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   position: relative;
   display: flex;
   flex-direction: column;
+  container: ds-data-terminal-stat / inline-size;
   block-size: 100%;
   min-block-size: 120px;
   padding: 14px;
@@ -95552,29 +96049,58 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   align-items: center;
 }
 
-/* ---- hero value: shared display grammar + per-variant scale (Text) ---- */
+/* ---- hero value: shared display grammar + per-variant scale (Text).
+ *
+ * THE FIGURE IS BOUNDED BY THE TILE, and it was not. The value is a single
+ * unbreakable mono token in a root that declares `overflow: hidden`, so a
+ * six-figure number simply DISAPPEARED past the clip edge once the tile grew
+ * narrower than the type demanded — symmetrically on both sides in variants 2
+ * and 4, whose value section centres. Nothing about the render said "too
+ * small": the card kept its frame, its chrome and its instrument layers, and
+ * only the datum was gone.
+ *
+ * The cap is a `min()` against a container-relative measure, so it is INERT
+ * at the widths each variant was drawn for (v1/v3 above ~311px, v2 above
+ * ~356px, v4 above ~378px of tile measure) and takes over only below them.
+ * Below the crossover the four variants converge on one figure measure —
+ * which is the point: a narrow tile is a simplified posture, and variant
+ * identity is carried by the terminal chrome, the HUD brackets, the circuit
+ * traces and the matrix texture, not by three points of type scale on a
+ * number nobody can read. The cap is a private channel so an embedding can
+ * retune it; `cqi` resolves against the root's own container, declared above.
+ *
+ * ENGINE REACH, measured by rendering rather than argued: the hero value is a
+ * composed `Text`, and only MODERN forwards a caller's `data-part` — classic
+ * and rustic stamp their own. So this whole hero-value block, cap included,
+ * is live under modern and reaches nothing under the other two. That is not a
+ * hole in the cap: under classic and rustic the size, weight, family and
+ * tracking rules here were ALREADY unreachable, so the figure renders at
+ * inherited body size and never clipped in the first place. The cap lands
+ * exactly where the defect lives, and becomes universal the day the primitive
+ * honours a caller part.
+ * ---- */
 .ds-data-terminal-card[data-part='root'][data-variant][data-trend] [data-part='value'] {
   font-family: var(--ds-font-family-mono, monospace);
   font-weight: 900;
   line-height: 1;
 }
 .ds-data-terminal-card[data-part='root'][data-variant='1'] [data-part='value'] {
-  font-size: calc(var(--ds-font-size-6xl) * 1.166667);
+  font-size: min(calc(var(--ds-font-size-6xl) * 1.166667), var(--_ds-dtc-value-cap, 18cqi));
   letter-spacing: -0.02em;
 }
 .ds-data-terminal-card[data-part='root'][data-variant='2'] [data-part='value'] {
-  font-size: calc(var(--ds-font-size-6xl) * 1.333333);
+  font-size: min(calc(var(--ds-font-size-6xl) * 1.333333), var(--_ds-dtc-value-cap, 18cqi));
 }
 .ds-data-terminal-card[data-part='root'][data-variant='3'] [data-part='value'] {
-  font-size: calc(var(--ds-font-size-6xl) * 1.166667);
+  font-size: min(calc(var(--ds-font-size-6xl) * 1.166667), var(--_ds-dtc-value-cap, 18cqi));
 }
 .ds-data-terminal-card[data-part='root'][data-variant='4'] [data-part='value'] {
-  font-size: calc(var(--ds-font-size-6xl) * 1.416667);
+  font-size: min(calc(var(--ds-font-size-6xl) * 1.416667), var(--_ds-dtc-value-cap, 18cqi));
   letter-spacing: -0.03em;
 }
 .ds-data-terminal-stat[data-part='root'][data-trend][data-band] [data-part='value'] {
   font-family: var(--ds-font-family-mono, monospace);
-  font-size: calc(var(--ds-font-size-3xl) * 1.166667);
+  font-size: min(calc(var(--ds-font-size-3xl) * 1.166667), var(--_ds-dtc-stat-value-cap, 16cqi));
   font-weight: 800;
   line-height: 1;
 }
@@ -96025,6 +96551,31 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   font-family: var(--ds-font-family-mono, monospace);
   font-weight: 600;
   letter-spacing: 0.1em;
+}
+
+/* ============================================================================
+ * NARROW POSTURE — SIMPLIFIED, not compressed. Keyed on the tile's own
+ * measure (the roots are named containers), never the viewport.
+ *
+ * Below 20rem the tile stops pretending to be a three-across readout. The
+ * CHANGE / PERIOD / TARGET grid folds to two tracks — three mono columns
+ * under 20rem give each stat about 85px, which breaks "This week" mid-word —
+ * and the HUD's completion strip stops reserving a fixed 120px slot with
+ * 20px shoulders for a progress bar that no longer has room for them. Every
+ * readout survives; only the arrangement changes. The hero figure needs no
+ * cut here: its `min()` cap above is continuous, so it is already correct at
+ * every measure rather than at two.
+ * ==========================================================================*/
+@container ds-data-terminal-card (inline-size < 20rem) {
+  .ds-data-terminal-card[data-variant='1'] [data-part='stats-grid'],
+  .ds-data-terminal-card[data-variant='3'] [data-part='stats-grid'],
+  .ds-data-terminal-card[data-variant='4'] [data-part='stats-grid'] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .ds-data-terminal-card[data-variant='2'] [data-part='progress-slot'] {
+    max-inline-size: none;
+    margin-inline: 10px;
+  }
 }
 
 /* ============================================================================
@@ -97129,7 +97680,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* Shared controls --------------------------------------------------------- */
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__icon-button.rottay-button[data-part='trigger'] {
+  .ds-list-toolbar__icon-button.rottay-button[data-variant] {
   flex: 0 0 auto;
   min-inline-size: var(--ds-button-sm-height, 2rem);
   min-block-size: var(--ds-button-sm-height, 2rem);
@@ -97160,7 +97711,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__icon-button.rottay-button[data-part='trigger']:hover {
+    .ds-list-toolbar__icon-button.rottay-button[data-variant]:hover {
     background: var(
       --ds-filter-pill-hover-bg,
       var(
@@ -97180,7 +97731,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    aria-expanded onto the IconButton, and the trigger reads as 'pressed' for
    as long as its panel lives. */
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__icon-button.rottay-button[data-part='trigger'][aria-expanded='true'] {
+  .ds-list-toolbar__icon-button.rottay-button[data-variant][aria-expanded='true'] {
   background: var(
     --ds-filter-pill-hover-bg,
     var(
@@ -97205,7 +97756,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     .ds-list-toolbar__clear-all,
     .ds-list-toolbar__primary-action,
     .ds-list-toolbar__primary-action-mobile
-  ).rottay-button[data-part='trigger']:focus-visible {
+  ).rottay-button[data-variant]:focus-visible {
   outline: none;
   box-shadow: var(
     --ds-toolbar-control-focus-ring,
@@ -97226,7 +97777,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     .ds-list-toolbar__clear-all,
     .ds-list-toolbar__primary-action,
     .ds-list-toolbar__primary-action-mobile
-  ).rottay-button[data-part='trigger']:active:not(:disabled) {
+  ).rottay-button[data-variant]:active:not(:disabled) {
   transform: scale(var(--ds-toolbar-control-pressed-scale, 0.975));
 }
 
@@ -97323,7 +97874,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger.rottay-button[data-part='trigger'] {
+  .ds-list-toolbar__filter-trigger.rottay-button[data-variant] {
   flex: 0 0 auto;
   white-space: nowrap;
   border-radius: var(
@@ -97359,7 +97910,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger.rottay-button[data-part='trigger'][data-active='true'] {
+  .ds-list-toolbar__filter-trigger.rottay-button[data-variant][data-active='true'] {
   border: 1px solid var(--ds-filter-pill-active-border, var(--ds-color-primary));
   background: var(
     --ds-filter-pill-active-bg,
@@ -97377,19 +97928,19 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    dash; an invalid value needs repair, so its frame tightens to a dotted rule
    and the ink shifts to the semantic error role. */
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger.rottay-button[data-part='trigger'][data-state='draft'] {
+  .ds-list-toolbar__filter-trigger.rottay-button[data-variant][data-state='draft'] {
   border-style: dashed;
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger.rottay-button[data-part='trigger'][data-state='invalid'] {
+  .ds-list-toolbar__filter-trigger.rottay-button[data-variant][data-state='invalid'] {
   border-style: dotted;
   border-color: var(--ds-color-error);
   color: var(--ds-color-error);
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger.rottay-button[data-part='trigger'][data-open='true'] {
+  .ds-list-toolbar__filter-trigger.rottay-button[data-variant][data-open='true'] {
   border-color: var(
     --ds-filter-pill-active-border,
     var(--ds-material-control-border-hover, var(--ds-color-primary))
@@ -97402,7 +97953,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-trigger.rottay-button[data-part='trigger']:hover:not(
+    .ds-list-toolbar__filter-trigger.rottay-button[data-variant]:hover:not(
     [data-active='true']
   ) {
     border-color: var(
@@ -97421,7 +97972,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger.rottay-button[data-part='trigger']:focus-visible {
+  .ds-list-toolbar__filter-trigger.rottay-button[data-variant]:focus-visible {
   box-shadow: var(
     --ds-filter-pill-focus-ring,
     0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 22%, transparent)
@@ -97450,7 +98001,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-dropdown-item.rottay-button[data-part='trigger'] {
+  .ds-list-toolbar__filter-dropdown-item.rottay-button[data-variant] {
   justify-content: flex-start;
   text-align: start;
   border: none;
@@ -97465,7 +98016,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-dropdown-item.rottay-button[data-part='trigger'][data-selected='true'] {
+  .ds-list-toolbar__filter-dropdown-item.rottay-button[data-variant][data-selected='true'] {
   background: var(
     --ds-filter-pill-active-bg,
     color-mix(in srgb, var(--ds-color-primary) 8%, transparent)
@@ -97482,7 +98033,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-dropdown-item.rottay-button[data-part='trigger']:hover:not(
+    .ds-list-toolbar__filter-dropdown-item.rottay-button[data-variant]:hover:not(
     [data-selected='true']
   ) {
     background: var(
@@ -97501,7 +98052,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__density-option.rottay-button[data-part='trigger'] {
+  .ds-list-toolbar__density-option.rottay-button[data-variant] {
   justify-content: flex-start;
   text-align: start;
   border-radius: var(
@@ -97515,7 +98066,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__density-option.rottay-button[data-part='trigger'][data-active='true'] {
+  .ds-list-toolbar__density-option.rottay-button[data-variant][data-active='true'] {
   border: 1px solid var(--ds-filter-pill-active-border, var(--ds-color-primary));
   background: var(
     --ds-filter-pill-active-bg,
@@ -97526,7 +98077,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__density-option.rottay-button[data-part='trigger']:hover:not(
+    .ds-list-toolbar__density-option.rottay-button[data-variant]:hover:not(
     [data-active='true']
   ) {
     border-color: var(
@@ -97569,7 +98120,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__mobile-overflow-item.rottay-button[data-part='trigger'] {
+  .ds-list-toolbar__mobile-overflow-item.rottay-button[data-variant] {
   justify-content: flex-start;
   text-align: start;
   border: none;
@@ -97580,7 +98131,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__mobile-overflow-item.rottay-button[data-part='trigger']:hover {
+    .ds-list-toolbar__mobile-overflow-item.rottay-button[data-variant]:hover {
     background: var(
       --ds-filter-pill-hover-bg,
       var(
@@ -97730,9 +98281,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__primary-action.rottay-button[data-part='trigger'],
+  .ds-list-toolbar__primary-action.rottay-button[data-variant],
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__primary-action-mobile.rottay-button[data-part='trigger'] {
+  .ds-list-toolbar__primary-action-mobile.rottay-button[data-variant] {
   flex: 0 0 auto;
   min-block-size: var(--ds-button-sm-height, 2rem);
   max-inline-size: var(--ds-toolbar-primary-action-max-width, 18rem);
@@ -98008,7 +98559,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__clear-all.rottay-button[data-part='trigger'] {
+  .ds-list-toolbar__clear-all.rottay-button[data-variant] {
   border: 1px solid
     var(--ds-toolbar-control-border, var(--ds-toolbar-border, var(--ds-color-border)));
   border-radius: var(
@@ -98033,7 +98584,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__clear-all.rottay-button[data-part='trigger']:hover {
+    .ds-list-toolbar__clear-all.rottay-button[data-variant]:hover {
     background: var(
       --ds-filter-pill-hover-bg,
       var(
@@ -98215,7 +98766,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
       .ds-list-toolbar__clear-all,
       .ds-list-toolbar__primary-action,
       .ds-list-toolbar__primary-action-mobile
-    ).rottay-button[data-part='trigger'],
+    ).rottay-button[data-variant],
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__segmented-control
     > [data-part='option'] {
@@ -98309,7 +98860,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
       .ds-list-toolbar__clear-all,
       .ds-list-toolbar__primary-action,
       .ds-list-toolbar__primary-action-mobile
-    ).rottay-button[data-part='trigger'] {
+    ).rottay-button[data-variant] {
     animation: none;
     transition: none;
   }
@@ -98328,24 +98879,24 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
      the dropdown selection rely on primary-tinted fills, so remap them to the
      system highlight pair and let every control keep a visible border. */
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-trigger.rottay-button[data-part='trigger'],
+    .ds-list-toolbar__filter-trigger.rottay-button[data-variant],
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-part='filter-chip'],
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__icon-button.rottay-button[data-part='trigger'],
+    .ds-list-toolbar__icon-button.rottay-button[data-variant],
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__clear-all.rottay-button[data-part='trigger'] {
+    .ds-list-toolbar__clear-all.rottay-button[data-variant] {
     forced-color-adjust: auto;
     border-color: ButtonText;
     box-shadow: none;
   }
 
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-trigger.rottay-button[data-part='trigger'][data-active='true'],
+    .ds-list-toolbar__filter-trigger.rottay-button[data-variant][data-active='true'],
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-dropdown-item.rottay-button[data-part='trigger'][data-selected='true'],
+    .ds-list-toolbar__filter-dropdown-item.rottay-button[data-variant][data-selected='true'],
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__density-option.rottay-button[data-part='trigger'][data-active='true'] {
+    .ds-list-toolbar__density-option.rottay-button[data-variant][data-active='true'] {
     background: Highlight;
     color: HighlightText;
   }
@@ -98361,7 +98912,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
      rule (wide enough to render both lines) plus the wavy value underline,
      which forced colors preserves by remapping it to CanvasText. */
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-trigger.rottay-button[data-part='trigger'][data-state='draft'],
+    .ds-list-toolbar__filter-trigger.rottay-button[data-variant][data-state='draft'],
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-part='filter-chip'][data-state='draft'] {
     border-style: dashed;
@@ -98370,7 +98921,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   }
 
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-trigger.rottay-button[data-part='trigger'][data-state='invalid'],
+    .ds-list-toolbar__filter-trigger.rottay-button[data-variant][data-state='invalid'],
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-part='filter-chip'][data-state='invalid'] {
     border-color: ButtonText;
@@ -99748,6 +100299,10 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  *
  * No coloured side rail is part of the anatomy.
  *
+ * RESPONSIVE: one inline-size container on the family's own `panel`, never a
+ * viewport query — the panel is portalled and its own width is the only thing
+ * the row grammar can measure. The narrow posture is at the foot of the file.
+ *
  * MATERIAL ROLE (overlay): the surface is a Popover-hosted floating panel, so
  * its keyline and depth chain through the governed `overlay` role after the
  * family channel and before the generic ramp —
@@ -99835,6 +100390,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-structure.ds-column-menu-panel[data-part="surface"] [data-part="panel"] {
+  container: ds-column-menu-panel / inline-size;
   inline-size: 100%;
   min-inline-size: 0;
   outline: none;
@@ -100136,6 +100692,37 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   font-size: var(--ds-font-size-xs);
 }
 
+/* NARROW POSTURE — container, never viewport.
+ *
+ * The panel is capped at `calc(100vw - gutter)`, so on a phone it is ~336px
+ * wide while the row keeps a fixed trailing cluster of up to four icon
+ * controls. The copy column (`flex: 1 1 auto; min-inline-size: 0`) absorbs the
+ * whole deficit and collapses under 100px, so the caption reflows to three or
+ * four lines and the scroll region shows two rows instead of six.
+ *
+ * The threshold is px, not rem, deliberately: classic re-bases the root font
+ * size (`--ds-font-size-base`), so a rem threshold would fire at a different
+ * width per engine while the panel's own cap stays 432px. 420px sits below
+ * that cap and above every phone's `100vw - 24px`, so the posture is
+ * phone-only by construction. */
+@container ds-column-menu-panel (max-width: 420px) {
+  .ds-structure.ds-column-menu-panel[data-part="surface"]
+    [data-part="row-content"] {
+    flex-wrap: wrap;
+  }
+
+  .ds-structure.ds-column-menu-panel[data-part="surface"]
+    [data-part="row-main"] {
+    flex-basis: 100%;
+  }
+
+  .ds-structure.ds-column-menu-panel[data-part="surface"]
+    [data-part="row-actions"] {
+    flex-basis: 100%;
+    justify-content: flex-end;
+  }
+}
+
 @media (forced-colors: active) {
   .ds-structure.ds-column-menu-panel[data-part="surface"],
   .ds-structure.ds-column-menu-panel[data-part="surface"] [data-part="header"],
@@ -100168,10 +100755,15 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 @layer rottay-components {
 /**
- * ExportButton skin — engine-agnostic and deliberately unlayered so it beats
- * layered base/preflight paint (P-47).
+ * ExportButton skin — engine-agnostic.
  * The dropdown is portaled under document.body and therefore owns a standalone
  * two-class panel scope.
+ *
+ * LAYER — `rottay-components`, in both entrypoints and in the built bundle.
+ * The header previously claimed this file was unlayered; it never was, and the
+ * consequence is load-bearing: `rottay-engines` sorts LATER, so this file
+ * cannot outrank a primitive's own skin for a property both declare. That is
+ * why the menu-item rule below claims layout only.
  *
  * COMPOSITION LAW (S19): the trigger and the menu items are the Button
  * primitive (the interim menu while Dropdown P88 is blocked), so every item
@@ -100264,8 +100856,16 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 /* ---- menu items: the composed ghost Buttons stretch to full rows (their
-        chrome, hover wash and focus ring are button.css-owned) ---- */
-.ds-structure.ds-export-button-panel[data-part='panel'] [data-part='menu-item'] {
+        chrome, hover wash and focus ring are button.css-owned).
+
+        Two arms, because `data-part` reaches this control under modern only:
+        `Button.passthrough-contract` pins the caller's part as winning in
+        modern and overridden to 'trigger' by classic and rustic. The class is
+        the hook for those two, and it is what let the family stop forcing
+        `engine="modern"` on its own composed controls to keep this rule
+        alive. ---- */
+.ds-structure.ds-export-button-panel[data-part='panel'] [data-part='menu-item'],
+.ds-structure.ds-export-button-panel[data-part='panel'] .ds-export-button-item {
   inline-size: 100%;
   justify-content: flex-start;
 }
@@ -101013,6 +101613,18 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * (tabular figures, active tint by data-active), the scroll region for
  * narrow compositions, and the forced-colors contract for those owned
  * pieces.
+ *
+ * WHAT THE COMPOSITION IS STAKED ON, recorded because it was false in the
+ * shipped tree. The component passes `data-part='switcher'` to the composed
+ * Segmented and the engine writes `data-part={caller ?? 'root'}`, so while
+ * `segmented.css` was anchored on `[data-part='root']` that one prop deleted
+ * all 29 of its selectors and 97 declarations — the track frame, the active fill,
+ * the forced-colors contract — while this file had already retired its own
+ * pill paint in exchange. `segmented.css` is now anchored on
+ * `role='radiogroup'`, stamped unconditionally by an engine that spreads no
+ * props, so S22 holds by construction instead of by the call site's restraint.
+ * The count-badge rules below are unaffected either way: they hang off THIS
+ * file's own wrapper root, which the family stamps itself.
  *
  * SPECIFICITY (P-48): the root's hairline reaches the tenant floor from the
  * two scope classes + the root's own `data-part` + `data-inline` — two
@@ -102265,6 +102877,18 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * only layout (inline-flex + the 100% scroll cap that lets the primitive's
  * own overflow affordance engage). No capability is lost: every visual
  * channel the wrapper carried exists on the primitive's root, governed.
+ *
+ * WHAT THE RETIREMENT IS STAKED ON, recorded because it was false in the
+ * shipped tree. The component passes `data-part='switcher'` to the composed
+ * Segmented and the engine writes `data-part={caller ?? 'root'}`, so while
+ * `segmented.css` was anchored on `[data-part='root']` that one prop deleted
+ * all 29 of its selectors and 97 declarations — the track frame, the selected
+ * state, the forced-colors contract — while this file had already given away
+ * its own frame in exchange. `segmented.css` is now anchored on
+ * `role='radiogroup'`, stamped unconditionally by an engine that spreads no
+ * props, so the composition above holds by construction instead of by the call
+ * site's restraint. Naming the composed control is vocabulary and stays;
+ * anchoring paint on a name the caller owns was the defect.
  *
  * SPECIFICITY (P-48): no painting border remains in this file, so the
  * (0,3,1) tenant floor is moot here; the two scope classes + the root's own
@@ -113649,7 +114273,40 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 @layer rottay-components {
 /**
- * LoadingOverlay skin — engine-agnostic and deliberately unlayered.
+ * LoadingOverlay skin — engine-agnostic.
+ *
+ * LAYER: imported by `facade/entrypoints/base.css` AND
+ * `facade/entrypoints/styles.css` into `layer(rottay-components)`. The header
+ * previously said "deliberately unlayered", which was false in both
+ * entrypoints — and a false unlayered claim is expensive, because it makes
+ * "raise the specificity" look like the fix for losing to a later layer,
+ * where specificity never wins.
+ *
+ * THE VEIL IS A PSEUDO-ELEMENT, NOT THE ROOT. `--ds-loading-overlay-scrim-opacity`
+ * was applied as `opacity` on the root, and element opacity composites the
+ * WHOLE subtree: the channel that makes the scrim see-through was equally
+ * dimming the message and the dots painted on top of it, and the dots
+ * multiply it by their own 0.3 keyframe floor — so the one element on screen
+ * that is supposed to say "working" was the faintest thing on it. The veil
+ * (ground, blur, scrim opacity) moved to `::before`; the content stack is
+ * `position: relative`, so it paints above the positioned pseudo in DOM order
+ * without a negative z-index. Host bleed-through is unchanged; only the
+ * overlay's own ink stops being dimmed by it.
+ *
+ * RHYTHM: the content column and the message row had no anatomy and no
+ * skin-owned spacing — their gaps were raw numeric `gap` props, which land
+ * inline and outrank every layer permanently. They are parts now and the
+ * rhythm is owned here. DELIBERATE DIVERGENCE, stated: the column gap reads
+ * `--ds-spacing-3` and is therefore density-scaled, so it is 12px at scale 1
+ * (the retired inline value) and moves per vertical. That is the point of
+ * elevating it; it is not a value-preserving edit.
+ *
+ * RESPONSIVE POSTURE (container queries only; the tier's viewport-MQ count is
+ * exact-0): the root is `inset: 0` on its host, so its size IS the host's and
+ * it is a `size` container. A scrim over a short host — an inline card, a
+ * toolbar strip — cannot afford a pulsing mark stacked above its message; the
+ * column becomes a row there instead of overflowing the thing it covers.
+ *
  * The two animation vocabularies (logo pulse, trailing dots) are owned HERE
  * — keyframes, durations and stagger transcribed verbatim from the retired
  * inline shorthands. The move fixes a real defect: an inline `animation`
@@ -113715,6 +114372,12 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-loading-overlay[data-part='root'] {
+  /* The column rhythm the retired inline `gap` props owned. The dot gap is
+     optical spacing between a word and its trailing ellipsis, not a rhythm
+     step, so it stays a literal with this note (the 17px-title precedent). */
+  --_ds-loading-overlay-stack-gap: var(--ds-spacing-3, 12px);
+  --_ds-loading-overlay-dot-gap: 2px;
+
   /* Geometry drained from the component's inline styles. */
   position: absolute;
   inset: 0;
@@ -113724,12 +114387,33 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Scrim see-through by channel (dims the whole overlay, content included,
-     exactly as the drained inline 0.92 did). */
+  border-radius: inherit;
+  container: ds-loading-overlay / size;
+}
+
+/* The veil. Scrim see-through stays on the family channel and keeps its
+   default, but it now dims only the ground it is a veil for — see the header
+   for why applying it to the root dimmed the overlay's own message and dots. */
+.ds-loading-overlay[data-part='root']::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
   opacity: var(--ds-loading-overlay-scrim-opacity, 0.92);
   background: var(--ds-color-bg-primary, rgba(15,23,42,0.85));
   backdrop-filter: blur(2px);
-  border-radius: inherit;
+}
+
+/* Content sits above the veil by paint order: both are in the root's stacking
+   context and a positioned in-flow box paints after a positioned pseudo that
+   precedes it, so no z-index is needed here. */
+.ds-loading-overlay[data-part='root'] [data-part='content'] {
+  position: relative;
+  gap: var(--_ds-loading-overlay-stack-gap);
+}
+
+.ds-loading-overlay[data-part='root'] [data-part='status'] {
+  gap: var(--_ds-loading-overlay-dot-gap);
 }
 
 /* Animation assignment drained from the component's inline styles — same
@@ -113771,13 +114455,25 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   }
 }
 
-/* forced-colors: the scrim background and the backdrop blur are forced
-   away, so the overlay re-asserts as a full system-canvas layer -- the
-   message and dots stay readable (text auto-maps) and the animations stop
-   with the pulse vocabulary halted. */
+/* Short host: a scrim over an inline card or a toolbar strip has no room to
+   stack a pulsing mark above its message, and overflowing the thing it covers
+   is worse than dropping the axis. The column becomes a row and the same
+   rhythm channel spaces it. */
+@container ds-loading-overlay (max-height: 200px) {
+  .ds-loading-overlay[data-part='root'] [data-part='content'] {
+    flex-direction: row;
+  }
+}
+
+/* forced-colors: the scrim ground and the backdrop blur are forced away, so
+   the overlay re-asserts as a full system-canvas layer -- the message and dots
+   stay readable (text auto-maps) and the animations stop with the pulse
+   vocabulary halted. The blur is dropped explicitly: forced-colors does not
+   remove `backdrop-filter` on its own, which the previous note assumed. */
 @media (forced-colors: active) {
-  .ds-loading-overlay[data-part='root'] {
+  .ds-loading-overlay[data-part='root']::before {
     background: Canvas;
+    backdrop-filter: none;
     opacity: 1;
   }
 }
@@ -122912,7 +123608,6 @@ html[lang]:lang(ar) {
   --ds-color-success-700: #003D5B;
   --ds-color-success-800: #002539;
   --ds-color-success-900: #000F1A;
-  --ds-color-surface-raised: var(--ds-surface-raised);
   --ds-color-text-disabled: #b2b6c5;
   --ds-color-text-muted: #8a9aaa;
   --ds-color-text-on-primary: #ffffff;
@@ -124278,11 +124973,6 @@ html[lang]:lang(ar) {
     var(--ds-surface-card)
   );
   --ds-surface-chip-text: var(--ds-color-primary);
-  --ds-card-border-hover: color-mix(
-    in srgb,
-    var(--ds-color-primary) 24%,
-    var(--ds-color-border)
-  );
   --ds-card-side-accent-soft: color-mix(
     in srgb,
     var(--ds-color-primary) 7%,
