@@ -95,6 +95,24 @@ declaration's, never by comparing declaration text: `var(--x, var(--y))` and
 declared. It is still a floor on similarity, not a value proof, and every run
 prints that limit.
 
+### Reconciling the two halves
+
+The two censuses partition one population, so a family appearing in one and not
+the other is the partition working — not a denominator difference. Every case
+where the counts looked inconsistent resolves:
+
+| family | class A | class B | resolution |
+|---|---|---|---|
+| `switch` / `toggle` | 16 / 22 reads | **0** | the identical `track-w` / `track-h` / `thumb` triplet, every read WITHOUT a fallback. Pure A, and one repair pattern covers both families. |
+| `data-table` | 36 | **3** | both classes in one family; the 39 split, it did not move. |
+| `toast` | 2 | **0** | both reads are bare. |
+| `form`, `mentions` | — | **1 each** | previously unresolved; they are **class B**. `--_ds-form-control-height` falls to `var(--ds-input-md-height)` (2 of 3 cells differ), `--_ds-mentions-dropdown-enter-offset` to `0.25rem` (1 of 2). Both latent — roots hardcoded. |
+| `list-toolbar` | 1 at `:101` | **9** | the false positive is one READ, not the family. See trap 9b. |
+
+Line numbers differ by convention between the halves: this census reports a
+declaration's **start** line, so `list-toolbar`'s inner-radius read shows as
+`:48` where a text scan sees the `var()` on `:49`. Same declaration.
+
 ## The other three classes
 
 **Class 2 — style-prop drop.** Small and specific. `Input.Search` puts a
