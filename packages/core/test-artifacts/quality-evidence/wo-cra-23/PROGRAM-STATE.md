@@ -569,6 +569,39 @@ consequence is that **they can never be asserted against in this environment**.
 Standing rule: **before reporting a primitive defect, reproduce it on a bare `document.createElement`.**
 If the DS-free element does it too, the defect is the environment.
 
+**Confirmed independently, in a browser, with the line named.**
+`happy-dom/lib/css/declaration/property-manager/CSSStyleDeclarationValueParser.js:10`:
+
+```js
+const CSS_VARIABLE_REGEXP = /^var\(\s*(--[^)\s]+)\)$/;   // [^)\s]+ forbids whitespace
+```
+
+so a fallback never matches, `getFontSize` falls through to `getMeasurement`, and the declaration is
+**discarded rather than stored raw**. And "specific to `fontSize`" was also wrong: the split is
+**whether the setter runs a typed parser at all**. Dropped: `fontSize`, `lineHeight`, `color`,
+`background*`, `border*`, `padding`, `margin*`, `width`, `height`, `letterSpacing`, `borderRadius`,
+`flexBasis`, `fontWeight`. Kept: `minWidth`, `maxWidth`, `gap`, `opacity`, `transform`, `boxShadow`,
+`fontFamily`. `var(--a,9px)` **without the space** is kept; `calc(1rem * var(--a, 1))` is dropped — so
+the trigger is a comma-space inside a function, which is the DS's own documented component-variable
+idiom.
+
+Four instruments: happy-dom + `react-dom/client` **drops**; `renderToStaticMarkup` keeps; jsdom 27
+keeps; **Chromium computes 28px**. And all 740 shipping drops were triaged against Chromium — **444
+distinct property/value pairs, 444 accepted, 0 refused.** There is no real dead paint in this class.
+
+**The finding that survives is an instrument blind spot with a direction.** Every gate or test that
+renders client-side under happy-dom and reads back inline paint **under-reports** it, and the miss
+reads as *"this channel never painted"* — which is exactly how this was filed. **740 shipping
+declarations are invisible to that class of instrument**, so any inline-paint census written that way
+needs a `boxShadow`/`minWidth` control or it is silently measuring a subset.
+
+That lane's own census was corrected twice by its controls: it first read `getAttribute('style')`,
+which never enters the CSS parser, and then inflated to 2,551 because happy-dom's style object accepts
+an unknown key as a plain JS property, so one probe seeded the next. **798** is the corrected number.
+
+Two cheap workarounds for a lane that must assert on these: read the SSR string, or author
+`var(--a,9px)` without the space.
+
 ### THE SIGHTED PASS — what it must answer, and why no counter can
 
 Not a nice-to-have. After the runtime census it is **the only instrument left that can answer the
