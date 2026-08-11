@@ -2103,6 +2103,111 @@ overridden in light but not dark still reads as overridden. bithire declaring
 `--ds-color-bg-primary: #ffffff` beside `--ds-color-bg-secondary: #151d2b` is the light/dark split,
 not an inconsistency. Resolving it properly is the same per-cell question the probe answers.
 
+### THE ANSWER: reach is near-identical, and a third of the painted surface cannot diverge at all
+
+Measured 2026-08-11 by resolving every `var()` chain to its terminal, per cell — 381 skin files, 258
+families, **14,666 painted declarations**, six cells. This is the question the programme has been
+circling since the runtime census refuted the original thesis, and it is answered without a pixel.
+
+```
+CELL             VERTICAL   DS-LITERAL   FALLBACK   UNDECLARED
+bithire/light        9787        2506       1980         393
+bithire/dark         9739        2545       1989         393
+evnto/light          8880        3148       2227         410
+evnto/dark           8386        3565       2304         410
+rottay/light         9830        2347       2093         396
+rottay/dark          9943        2266       2061         396
+```
+
+**Families reached: 253 / 252 / 253 of 258** — a spread of ONE family, against a naming table where
+bithire misses 23 and evnto misses 585.
+
+> **The asymmetry is in NAMING, not in REACH.**
+
+And the consequence that decides what work is worth doing:
+
+> A declaration terminating in a DS literal, an inline fallback, or nothing is **identical across all
+> three verticals by construction**. No amount of authorship moves it. bithire 33.3% light / 33.6%
+> dark, rottay 33.0% / 32.2%, evnto 39.5% / 42.8%.
+
+**A third of the painted surface is pinned to the generic layer.** The divergence this design system
+can produce is bounded there, not by family authorship — so another wave of channel authoring does
+not move it. That is what the naming table could not say, and it is what the sighted pass should be
+checked against.
+
+Three actionable rows beneath the headline: **evnto is the outlier and its gap is DARK** (bithire and
+rottay are flat between themes at 66.7→66.4 and 67.0→67.8; evnto falls 60.5→57.2); **five families no
+vertical reaches at all** — `carousel-compounds`, `oauth-transition`, `progress-compounds`,
+`stats-header-keyframes`, `watermark`; and **103 families carry a spread of ≥4 declarations**, led by
+`collection-header` (200/173/178) and `card-compounds` (92/67/90). That 103 is the real divergence
+surface.
+
+Declared limits: it does not model cascade between rules competing for one property, nor
+`@media`/container conditions. It resolves each declaration's chain as written.
+
+The control lifts its four terminals from the tree, and the decisive one is `--ds-font-family-base`,
+which rottay authors **only in its dark-default block** — so the same declaration must read `VERTICAL`
+in rottay/dark and `DS-LITERAL` in rottay/light. A control that does not invert on the dark-first
+vertical cannot catch the trap this census exists for. Confirmed with a number: rottay's default block
+is `:not([data-theme='light'])` carrying **646 declarations** that a light-else classifier would bin
+backwards.
+
+### CORRECTED AGAIN: segmented's 38 channels are UNCONDITIONAL, and I recorded the wrong mechanism
+
+Both of my earlier accounts of "0 of 38 dark authorship" were wrong about the mechanism, and the
+second was mine.
+
+Measured directly — which block do the 38 live in? **Unconditional 38, light-only 0, dark-only 0.**
+An unconditional channel paints in *both* themes, and the reach census shows bithire/light and
+bithire/dark landing on identical 34 VERTICAL / 3 DS-LITERAL / 6 FALLBACK.
+
+So the correct reading of "0 dark channels" is not *"it inherits in dark"* and not *"a formula one
+level down delivers it"* — it is ***"it is declared once, for both themes."*** The authorship table
+was counting the dark **block**, and a declaration outside both blocks is a declaration in both.
+
+I recorded the `--ds-surface-control` explanation as the correction; that channel is indeed
+dark-authored, but it is not what delivers segmented's dark paint. The defect is simpler than either
+account: **the table does not count as dark what paints in dark.** Nothing is missing from
+`segmented`'s dark authorship — the binning is wrong.
+
+Same trap as rottay's dark-first block, from the other side: there the risk was classifying dark as
+light; here it is classifying unconditional as neither.
+
+### The sighted pass inverted its own target: bithire/dark is the healthiest cell
+
+Chromium 149, drills 18/18, bundles sha-pinned, fixture captured from a real render of the shipped
+composition rather than hand-written. Resting states, five cells.
+
+```
+cell             track/page  border/track  selected/track  selInk  restInk
+bithire/dark        1.00         1.46           1.21        12.32    7.86
+bithire/light       1.00         1.48           1.10 weak   13.65    4.76
+evnto/light         1.00         1.20           1.00 FAIL   17.93    7.81
+evnto/dark          1.00         1.34          18.72        17.93    2.40 FAIL
+platform/dark       1.07         1.09 FAIL      1.17        13.42    3.51 FAIL
+```
+
+**The cell we suspected is the top of the healthy band.** Two real defects, neither predicted:
+
+1. **evnto/dark unselected labels at 2.40:1** — below AA and below even 3:1, on a shipped control.
+2. **platform/dark unselected labels at 3.51:1**, and it is also **the one cell with neither fill nor
+   edge** — track/page 1.07 *and* border/track 1.09, under the calibrated 1.15 cut. No boundary at all.
+3. evnto/light's selected chip is *exactly* the track colour (1.00) on a 1.20 hairline: selection
+   carried by ink weight alone.
+
+And `track/page` is **1.00 in four of five cells**, so "the track is the page ground" was never a
+bithire quirk — it is universal, and the reformulated question *"is a border-only track still a
+track?"* is a whole-DS question. Answer per cell: yes where the hairline is healthy, **no on
+platform/dark**, marginal on evnto/light.
+
+Mechanism, and it is an existing backlog row rather than a new finding:
+`--ds-segmented-item-bg-selected: #ffffff` is declared once at `default.css:1968` **with no dark
+counterpart**. rottay declares both arms, bithire routes through `--ds-material-control-*`, **evnto
+declares neither** and inherits the base literal in both themes — a white chip on a near-black dark
+track, and white-on-white in light. Identical shape to the recorded `--ds-menu-bg` row, and
+`background-image: none` in the reading proves the authored gradient never fires, because the base
+declaration satisfies the family var before the fallback arm is reached.
+
 ### The counts are 6% apart because the DISTRIBUTION hides inside them
 
 The programme's central refutation stands and now has a shape. Runtime channel counts put bithire at
