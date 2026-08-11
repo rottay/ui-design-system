@@ -529,6 +529,21 @@ fallback arm, and the declared-nowhere census. Those stand. But **the instrument
 evidence within its roster**, and a roster of six fixtures is not the component library. Any lane
 quoting `changedRows: 0` must state which fixtures could have moved.
 
+### OPEN, SEVERE: 26 inherited channels unreadable on BitHire's dark ground
+
+Corrected upward from the 6 I first recorded. The blind-spot probe found **26** DS-inherited channels
+sitting at near-zero contrast on bithire/dark — **5 grounds and 21 ink** — all `#171717`/`#000000` from
+`foundation/themes/default.css`, none contract-writable.
+
+**The 21 ink ones are body copy at 1.02:1**: `--ds-form-label-color`, `--ds-notification-title-color`,
+`--ds-popover-title-color`. Effectively invisible text, and a far harder failure than the unreadable
+focus ring the first count described. Base-layer lane; no vertical can reach these.
+
+**They are one population, not two backlogs.** The 9 neutral candidates found from the *light* mirror
+direction overlap this 26 by 6 — the focus borders. Two lanes measuring opposite directions found the
+same channels twice, and merging the lists before anyone works them is the difference between one work
+order and two that half-collide.
+
 ### A ROLE RULE HAS TWO SIDES — testing one is half a test
 
 A lane's edge rule fired only on **light-valued** edges, so it structurally could not see a flat edge
