@@ -258,6 +258,15 @@ export const evntoBrandTheme: BrandTheme = {
      * The status washes keep the 20% strength these channels already paint;
      * only the hue moves, from the DS defaults onto the seeds above.
      */
+    /**
+     * The seventh channel of the same leak: unauthored here, so dark resolved
+     * `themes/default.css`'s `#1C1C20` — a cool grey on this vertical's warm
+     * `#131210` ground. Mode-blind on purpose: the light extension declares
+     * `--ds-color-border` at a higher specificity and keeps winning there, so
+     * this reaches only the mode that had no author.
+     */
+    borderColor: 'var(--ds-color-border-primary)',
+
     borderSubtleColor:
       'color-mix(in srgb, var(--ds-color-border-primary) 66.667%, transparent)',
     borderTertiaryColor:
@@ -291,7 +300,30 @@ export const evntoBrandTheme: BrandTheme = {
     },
   },
 
-  surfaces: EVNTO_CANONICAL_SURFACES,
+  /**
+   * The shared baseline, plus the two semantic surface roles whose HOVER
+   * ground this vertical never authored. Measured: both resolved `#18181C`,
+   * so a card or control on the white canvas turned near-black under the
+   * cursor. `glass` stays `none` from the baseline — that is this vertical's
+   * deliberate choice, not a gap.
+   *
+   * The wash is the grammar `card.css` already falls back to, so the repaired
+   * value is the one the DS itself intends, and it tracks the tenant's own
+   * primary and elevated ground instead of a literal.
+   */
+  surfaces: {
+    ...EVNTO_CANONICAL_SURFACES,
+    surfaceRoles: {
+      card: {
+        backgroundHover:
+          'color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-color-bg-elevated))',
+      },
+      control: {
+        backgroundHover:
+          'color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-color-bg-elevated))',
+      },
+    },
+  },
 
   motion: EVNTO_CANONICAL_MOTION,
 
@@ -322,6 +354,10 @@ export const evntoBrandTheme: BrandTheme = {
     },
     sidebar: {
       bg: '#fafafa',
+      // Unauthored, so the sidebar edge resolved #404040 — a mid-grey rule
+      // against a #fafafa rail. Points at the tenant's own border channel
+      // rather than restating the layout block's literal.
+      border: 'var(--ds-color-border)',
       text: '#171717',
       textMuted: '#525252',
       groupFontSize: '11px',
