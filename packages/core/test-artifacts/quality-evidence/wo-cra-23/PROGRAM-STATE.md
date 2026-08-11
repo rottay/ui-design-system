@@ -1901,10 +1901,51 @@ missing paint and B looks like a design decision. The damage in B is not the orp
 the fallback delivers*, so any census of B that does not report the fallen-to value has not measured
 the defect.
 
+**Both classes were then re-derived independently, from different families, by the other lane** —
+`--ds-badge-tone-soft-color` at `badge.css:243` falls to `currentColor` and takes a success chip's
+ink from `rgb(21,128,61)` to `rgb(0,0,0)`, measured in Chromium. Two instruments, two families, the
+same split. That convergence is stronger evidence than either census alone.
+
+Two disciplines from that lane belong with the taxonomy. It went to **check** the third channel
+rather than accept my correction as retiring it — and was right: six of its seven reads are
+root-keyed, but the seventh sits on `[data-part='count']`, an internal part the caller cannot
+replace. My correction would have destroyed a real finding. And it **refused the neater story**: it
+expected the degraded read to re-create the R0 contrast failure, found it does not (the severed
+badge's own ink is black, so the pairing stays legible), and said so. Fidelity defect, not an
+accessibility one.
+
+A companion note on instruments: that lane's parser survived the nested-fallback blind spot that
+broke mine, but by accident — a global regex matches every `var(` including the inner one. **An
+accidental correctness is not a property.** Nothing in its control set holds it, so the next refactor
+removes it with every test still green.
+
 The reconciliation also produced one confirmed false positive on each side, which is the usual shape:
 `list-toolbar` declares and reads `--ds-list-toolbar-radius-shell` inside the same root-keyed rule
 (`:46` and `:101` both under the selector at `:37`), so both sides die together; and the narrower
 census missed `data-table` and `toast` inside its own denominator.
+
+### Two files named for the same vertical, and only one of them has the skins
+
+My error, 2026-08-11. Asked where the cascade layers were, I searched
+`src/foundation/tokens/css/facade/artifacts/bithire/index.css`, found no `@layer` and no component
+rules, and reported that ordering could not be decided by layers. The conclusion was right and the
+file was wrong.
+
+```
+src/…/facade/artifacts/<vertical>/index.css     2,196 lines · 0 badge rules   TOKENS
+dist/<vertical>.css                           124,844 lines · 89 badge rules  THE SHIPPED BUNDLE
+```
+
+The lane I was answering had reached the same conclusion from `dist`, which is the file that
+actually carries skins. **I agreed with a correct finding by looking at the wrong evidence**, which
+is indistinguishable from confirming it until someone checks.
+
+The operational half is sharper and has bitten this programme before: `dist/bithire.css` was
+**3.5 hours stale** while three lanes measured against it — it still carried the 32 severed Segmented
+rules after `ace62230d` had fixed them in source. Source and paint are separated by a build, so a
+repair in `src` is not a repair anyone renders, and **any measurement taken against `dist` is a
+measurement of whenever the build last ran**. Lanes commit source; the coordinator runs one build per
+wave, because the build is a machine singleton.
 
 ### A repeated-attribute specificity ladder is built on the step that breaks
 
