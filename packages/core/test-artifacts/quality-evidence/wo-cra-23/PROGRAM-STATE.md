@@ -2103,6 +2103,46 @@ overridden in light but not dark still reads as overridden. bithire declaring
 `--ds-color-bg-primary: #ffffff` beside `--ds-color-bg-secondary: #151d2b` is the light/dark split,
 not an inconsistency. Resolving it properly is the same per-cell question the probe answers.
 
+### A dark ramp spaced linearly in hex cannot express a boundary, and no step inside it can
+
+`#37` measured and stopped short of a repair, which is the correct outcome. Every neutral step rottay
+declares in dark, against both grounds:
+
+```
+bg-primary/page #0A0A0C 1.07 · bg-subtle #0D0D10 1.05 · bg-input #0F0F12 1.03
+border-subtle   #161619 1.03 · bg-surface #18181B 1.05 · bg-hover  #18181C 1.05
+border TODAY    #1C1C20 1.09 · border-secondary #252529 1.21   ← the only one above the cut
+```
+
+**Eight declared steps; seven below the 1.15 cut and the eighth reaching only 1.21.** There is no
+repair available inside the ramp — re-pointing the authority to `border-secondary` buys 1.09 → 1.21,
+above the cut and below the 1.25–1.46 healthy band.
+
+> The ramp is spaced **linearly in hex where perception is not.** `#0A0A0C` to `#252529` is the whole
+> dark neutral range, and eight steps inside it produce **0.19 of spread in contrast terms**. A
+> perceptually even dark ramp needs steps that *accelerate*; this one does not, which is why no
+> existing step works and a new rung is required rather than a re-point.
+
+**And the lane declined the thin win, which is the judgement worth keeping.** `border-secondary` at
+1.21 clears the cut and closes both tickets on paper. It is the `info-400` shape exactly — the step
+judgement would take, sitting just under where it needs to be — and shipping it would have retired
+the finding by moving it from FAIL to *thin*, losing the real one.
+
+**Adjudicated: the rung exists. The second axis is not a defect.** The lane reported ground-vs-page at
+1.07 as part of the problem. Cross-checked against its own measurements of the other verticals:
+**bithire/dark is 1.00 — literally identical — and reads healthy, because its hairline is 1.34–1.46.**
+Across all five cells `track/page` runs 1.00–1.07. Nobody separates by fill.
+
+> The fill is not supposed to separate. **The edge is.** rottay's defect is that its edge is quiet too.
+
+So it is one repair, not two, and the surface steps stay untouched — 1.07 is the system's posture, not
+the failure. That also settles the question left open as a design matter: *"is a border-only track
+still a track?"* — **yes, when the border is healthy**, and bithire demonstrates it in both cells.
+
+The value is chosen by rule, not given: the dimmest value landing in the healthy band against the
+`#131316` ground, verified in both families and both dark cells. Arithmetic sizes it near `#2E2E33`;
+that bounds the search rather than answering it.
+
 ### THE CLOSING FINDING: one number, two families, two lanes — a theme defect with two witnesses
 
 I looked at two captures side by side and reported an element that appeared in `evnto/light` and not
