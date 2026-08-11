@@ -48,6 +48,35 @@
  * allowance is offered to every file, so a socket that is legitimate in one
  * sheet would otherwise have to be legitimate in all of them.
  *
+ * DELETIONS
+ * ---------
+ * The collapse-and-compare drill above judges what a change ADDED. It cannot
+ * represent a REMOVAL: deleting a declaration is a byte difference that no
+ * amount of collapsing restores, so a deletion wave reads red no matter how
+ * inert it is. That is not a small gap — the drain waves are deletion-heavy,
+ * and an instrument that cannot express the dominant operation gets routed
+ * around, or teaches its readers to ignore its red.
+ *
+ * So a removal is adjudicated instead of diffed, on one principle:
+ *
+ *     deleting a declaration that LOSES today changes nothing;
+ *     deleting a declaration that WINS today changes what renders.
+ *
+ * Deciding which requires resolving the cascade, so this file resolves it —
+ * see `resolveWinners`. The resolution is deliberately narrow and FAILS
+ * CLOSED, because the blind spot here has a direction: a false "this loses"
+ * licenses the deletion of a live declaration, while a false "this wins" only
+ * costs an argument. It therefore compares LIKE WITH LIKE and nothing else —
+ * same cascade layer, same at-rule context, identical selector text — so no
+ * specificity arithmetic is ever performed. Anything outside that model
+ * (`!important` in the group, a file no entrypoint imports, a selector that
+ * appears only once) is refused rather than guessed.
+ *
+ * The byte comparison is not weakened to buy this. A file with removals must
+ * still match its baseline EXACTLY once those removals are accounted for; only
+ * then is each removal put to the winner test. A retyped fallback sitting
+ * beside a legitimate deletion still fails, which is the whole point.
+ *
  * NOT a CI gate. This is a lane instrument, invoked against a specific wave by
  * whoever is doing the wiring; it is deliberately absent from
  * `ci-gates.manifest.mjs`.
@@ -57,11 +86,14 @@
  *   node scripts/channel-wiring-zero-delta-gate.mjs --check --baseline=9c8f1030c
  *   node scripts/channel-wiring-zero-delta-gate.mjs --check \
  *     --file=src/.../collection-workspace.css --allow-new=box-shadow:none
+ *   node scripts/channel-wiring-zero-delta-gate.mjs --check --entrypoint=src/.../base.css
  */
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+
+import postcss from 'postcss';
 
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const DEFAULT_ROOT = path.resolve(SCRIPT_DIR, '..');
@@ -228,6 +260,271 @@ function firstDivergence(a, b) {
   };
 }
 
+/* ==========================================================================
+   DELETION CERTIFICATION
+   ========================================================================== */
+
+/** Every shipped bundle. A removal must be inert in ALL of them, not one. */
+export const DEFAULT_ENTRYPOINT_DIR = 'src/foundation/tokens/css/facade/entrypoints';
+
+const IMPORT_RE = /@import\s+(['"])([^'"]+)\1\s*(?:layer\(([^)]*)\))?\s*;/g;
+
+/** The layer an entrypoint puts a file in; `null` means UNLAYERED, which is a
+ *  real and distinct cascade position, not "unknown". */
+const UNLAYERED = '(unlayered)';
+
+/**
+ * Files an entrypoint pulls in, in document order, each with its cascade layer.
+ *
+ * `@import` inlines at its own position and CSS requires every import to
+ * precede the importing file's own rules, so depth-first pre-order IS document
+ * order. A nested import inherits the layer its parent import declared, which
+ * is how `base/index.css` puts all six base sheets in `rottay-tokens`.
+ *
+ * Non-relative specifiers (`antd/dist/reset.css`) are not resolved and are
+ * reported, never silently treated as empty.
+ */
+export function bundleOrder(entrypoint, { layer = UNLAYERED, seen = new Set(), out = [], unresolved = [] } = {}) {
+  const full = path.resolve(entrypoint);
+  if (seen.has(full)) return { files: out, unresolved };
+  seen.add(full);
+  if (!fs.existsSync(full)) {
+    unresolved.push(full);
+    return { files: out, unresolved };
+  }
+  const css = fs.readFileSync(full, 'utf8');
+  for (const match of css.matchAll(IMPORT_RE)) {
+    const specifier = match[2];
+    const declared = match[3]?.trim();
+    if (!specifier.startsWith('.')) {
+      unresolved.push(specifier);
+      continue;
+    }
+    /* An inner import cannot escape the layer its outer import assigned. */
+    const childLayer = layer === UNLAYERED ? (declared || UNLAYERED) : layer;
+    bundleOrder(path.resolve(path.dirname(full), specifier), { layer: childLayer, seen, out, unresolved });
+  }
+  out.push({ path: full, layer });
+  return { files: out, unresolved };
+}
+
+/** At-rule ancestry of a node, as a stable string. `''` means unconditional. */
+function atRuleContext(node) {
+  const chain = [];
+  for (let n = node.parent; n && n.type !== 'root'; n = n.parent) {
+    if (n.type === 'atrule') chain.unshift(`@${n.name} ${n.params}`.replace(/\s+/g, ' ').trim());
+  }
+  return chain.join(' && ');
+}
+
+/**
+ * Custom-property declarations of one stylesheet, in document order.
+ *
+ * `astKey` identifies the physical node (whole selector list, plus an ordinal so
+ * a property declared twice at one selector stays two distinct rows). The
+ * per-selector `winnerKeys` are what the cascade is resolved on.
+ */
+export function indexDeclarations(css, from) {
+  const rows = [];
+  const ordinals = new Map();
+  let root;
+  try {
+    root = postcss.parse(css, { from });
+  } catch {
+    return null; // unparseable: the caller must fail closed, never assume empty
+  }
+  root.walkDecls((decl) => {
+    if (!decl.prop.startsWith('--')) return;
+    if (decl.parent?.type !== 'rule') return;
+    const atRule = atRuleContext(decl);
+    const selector = decl.parent.selector.replace(/\s+/g, ' ').trim();
+    const stem = `${atRule}||${selector}||${decl.prop}`;
+    const ordinal = ordinals.get(stem) ?? 0;
+    ordinals.set(stem, ordinal + 1);
+    rows.push({
+      astKey: `${stem}||#${ordinal}`,
+      winnerKeys: decl.parent.selectors.map(
+        (s) => `${atRule}||${s.replace(/\s+/g, ' ').trim()}||${decl.prop}`,
+      ),
+      prop: decl.prop,
+      selector,
+      atRule,
+      value: decl.value.replace(/\s+/g, ' ').trim(),
+      important: decl.important === true,
+    });
+  });
+  return rows;
+}
+
+/**
+ * Last-writer-wins per (layer, at-rule context, selector, property).
+ *
+ * Only ever compares declarations that share all four, so document order alone
+ * decides and no specificity is computed. A group containing `!important` is
+ * POISONED: order no longer decides it, and this resolver will not pretend to
+ * know. An unparseable file poisons every key it could have touched, by
+ * poisoning the whole map.
+ */
+export function resolveWinners(orderedFiles, readSource) {
+  const winners = new Map();
+  const poisoned = new Set();
+  let fatal = null;
+  orderedFiles.forEach(({ path: filePath, layer }, fileIndex) => {
+    const source = readSource(filePath);
+    if (source === null) return; // not in this bundle's baseline; nothing to resolve
+    const rows = indexDeclarations(source, filePath);
+    if (rows === null) {
+      fatal = `unparseable stylesheet in the bundle: ${filePath}`;
+      return;
+    }
+    rows.forEach((row, declIndex) => {
+      for (const key of row.winnerKeys) {
+        const full = `${layer}||${key}`;
+        if (row.important) poisoned.add(full);
+        winners.set(full, { value: row.value, file: filePath, layer, fileIndex, declIndex });
+      }
+    });
+  });
+  return { winners, poisoned, fatal };
+}
+
+/**
+ * Declarations present in the baseline and absent from the working tree.
+ * `null` when either side will not parse — the caller must fail closed.
+ */
+export function removalsBetween(before, after, from) {
+  const b = indexDeclarations(before, from);
+  const a = indexDeclarations(after, from);
+  if (b === null || a === null) return null;
+  const survived = new Set(a.map((row) => row.astKey));
+  return b
+    .map((row, index) => ({
+      ...row,
+      /* Keys this declaration ALREADY lost within its own sheet. Needed because
+         a same-file winner cannot be ranked against it by file order alone. */
+      lostInFile: new Set(
+        row.winnerKeys.filter((key) =>
+          b.slice(index + 1).some((later) => later.winnerKeys.includes(key))),
+      ),
+    }))
+    .filter((row) => !survived.has(row.astKey));
+}
+
+/**
+ * The baseline with exactly `removed` taken out, normalised.
+ *
+ * Matching this proves the ONLY byte differences are those removals — which is
+ * what keeps the strict comparison strict. `null` if a plain re-stringify of
+ * the baseline does not already normalise back to itself, since then the
+ * reconstruction is not trustworthy and must not be used to excuse anything.
+ */
+export function baselineMinusRemovals(before, removed, from) {
+  let root;
+  try {
+    root = postcss.parse(before, { from });
+  } catch {
+    return null;
+  }
+  if (normalise(root.toString()) !== normalise(before)) return null;
+
+  const doomed = new Set(removed.map((row) => row.astKey));
+  const ordinals = new Map();
+  const nodes = [];
+  root.walkDecls((decl) => {
+    if (!decl.prop.startsWith('--')) return;
+    if (decl.parent?.type !== 'rule') return;
+    const stem = `${atRuleContext(decl)}||${decl.parent.selector.replace(/\s+/g, ' ').trim()}||${decl.prop}`;
+    const ordinal = ordinals.get(stem) ?? 0;
+    ordinals.set(stem, ordinal + 1);
+    if (doomed.has(`${stem}||#${ordinal}`)) nodes.push(decl);
+  });
+  for (const node of nodes) node.remove();
+  return normalise(root.toString());
+}
+
+/**
+ * Decide each removal. Returns `[]` when every one is inert.
+ *
+ * The test is POSITIONAL, never a comparison of winning values, and that
+ * distinction is the whole correctness of this function. Comparing values asks
+ * "did the winner move?" — but in a mixed wave the winner routinely moves for a
+ * reason that has nothing to do with this removal (a re-alias, a retune, a hook
+ * wrapped around the winner two files away), and blaming the removal for it
+ * reports a defect in the wrong file. The first cut of this gate did exactly
+ * that: it failed `spacing.css` and `typography.css` for edits that lived in
+ * `default.css`, which then correctly failed on its own account.
+ *
+ * The question a removal must answer is narrower: *was this declaration already
+ * losing, and is it still losing?* Both halves are required. "Already losing"
+ * rules out deleting something live. "Still losing" rules out the case where
+ * the declaration that used to outrank it is being deleted in the same wave,
+ * which would silently promote this one. Neither half looks at a value, so an
+ * unrelated retune elsewhere cannot make a genuinely inert deletion read red.
+ */
+export function certifyRemovals({ removed, filePath, bundles }) {
+  const objections = [];
+  const covering = bundles.filter((b) => b.orderedFiles.some((f) => f.path === filePath));
+  if (covering.length === 0) {
+    return [
+      `${path.basename(filePath)}: no entrypoint imports this file, so its cascade winners cannot be `
+        + 'resolved — a removal here is UNCERTIFIABLE, not innocent',
+    ];
+  }
+
+  for (const bundle of covering) {
+    if (bundle.before.fatal) { objections.push(`${bundle.name}: ${bundle.before.fatal}`); continue; }
+    if (bundle.after.fatal) { objections.push(`${bundle.name}: ${bundle.after.fatal}`); continue; }
+
+    const ownIndex = bundle.orderedFiles.findIndex((f) => f.path === filePath);
+
+    for (const row of removed) {
+      for (const key of row.winnerKeys) {
+        const full = `${bundle.layerOf.get(filePath)}||${key}`;
+        if (bundle.before.poisoned.has(full) || bundle.after.poisoned.has(full)) {
+          objections.push(
+            `${row.prop} at \`${row.selector}\` carries !important somewhere in its cascade group `
+              + `(${bundle.name}) — order no longer decides the winner, so the removal is not certifiable`,
+          );
+          continue;
+        }
+
+        /* Outranked iff the winner sits in a LATER file, or in this same file
+           after this declaration. Anything else means the removal is the thing
+           that decides the value. */
+        const outranks = (winner) => {
+          if (!winner) return false;
+          if (winner.fileIndex !== ownIndex) return winner.fileIndex > ownIndex;
+          return row.lostInFile.has(key);
+        };
+
+        if (!outranks(bundle.before.winners.get(full))) {
+          objections.push(
+            `${row.prop} at \`${row.selector}\` WON in ${bundle.name} before this change — `
+              + 'deleting it deletes a live value',
+          );
+          continue;
+        }
+        const after = bundle.after.winners.get(full);
+        if (!after) {
+          objections.push(
+            `${row.prop} at \`${row.selector}\` WON in ${bundle.name}: nothing declares it after the `
+              + 'removal, so this deletes a live value',
+          );
+          continue;
+        }
+        if (!outranks(after)) {
+          objections.push(
+            `${row.prop} at \`${row.selector}\` is PROMOTED in ${bundle.name}: the declaration that `
+              + `outranked it is gone too, so the surviving winner is now `
+              + `${path.relative(process.cwd(), after.file)} — this removal is not inert`,
+          );
+        }
+      }
+    }
+  }
+  return objections;
+}
+
 /**
  * @param {object}   options
  * @param {string}   [options.root]      package root (defaults to packages/core)
@@ -236,6 +533,8 @@ function firstDivergence(a, b) {
  *                                       working tree changed since `baseline`
  * @param {string[]} [options.allowNew]  normalised declarations legitimately
  *                                       added with no prior expression
+ * @param {string[]} [options.entrypoints] bundles a removal must be inert in;
+ *                                       defaults to every entrypoint stylesheet
  * @param {boolean}  [options.silent]
  */
 export function runChannelWiringZeroDeltaGate({
@@ -243,6 +542,7 @@ export function runChannelWiringZeroDeltaGate({
   baseline = DEFAULT_BASELINE,
   files,
   allowNew = [],
+  entrypoints,
   silent = false,
 } = {}) {
   const top = fs.realpathSync(git(root, ['rev-parse', '--show-toplevel']).trim());
@@ -253,6 +553,51 @@ export function runChannelWiringZeroDeltaGate({
       .filter(Boolean)
       .filter((repoPath) => !DEFAULT_EXCLUDES.some((fragment) => `/${repoPath}`.includes(fragment)))
       .map((repoPath) => path.resolve(top, repoPath));
+
+  /* Files whose working content may differ from the baseline. Everything else
+     is byte-identical to it, so the bundle's baseline can be read straight off
+     disk instead of paying `git show` for ~420 stylesheets. */
+  const maybeChanged = new Set(
+    [
+      ...git(root, ['diff', '--name-only', baseline]).split('\n'),
+      ...git(root, ['ls-files', '--others', '--exclude-standard']).split('\n'),
+    ].filter(Boolean),
+  );
+  const readBaselineFor = (filePath) => {
+    const repoPath = repoRelative(top, filePath);
+    if (!maybeChanged.has(repoPath)) {
+      return fs.existsSync(filePath) ? fs.readFileSync(filePath, 'utf8') : null;
+    }
+    return baselineSource(root, baseline, repoPath);
+  };
+  const readWorkingFor = (filePath) =>
+    (fs.existsSync(filePath) ? fs.readFileSync(filePath, 'utf8') : null);
+
+  /* Built only when a removal actually needs adjudicating: resolving every
+     bundle costs real time, and the common wiring-only run must not pay it. */
+  let bundleCache = null;
+  const getBundles = () => {
+    if (bundleCache) return bundleCache;
+    const entryPaths =
+      entrypoints
+      ?? (() => {
+        const dir = path.resolve(root, DEFAULT_ENTRYPOINT_DIR);
+        if (!fs.existsSync(dir)) return [];
+        return fs.readdirSync(dir).filter((f) => f.endsWith('.css')).map((f) => path.join(dir, f));
+      })();
+    bundleCache = entryPaths.map((entry) => {
+      const { files: orderedFiles } = bundleOrder(entry);
+      const layerOf = new Map(orderedFiles.map((f) => [f.path, f.layer]));
+      return {
+        name: path.basename(entry),
+        orderedFiles,
+        layerOf,
+        before: resolveWinners(orderedFiles, readBaselineFor),
+        after: resolveWinners(orderedFiles, readWorkingFor),
+      };
+    });
+    return bundleCache;
+  };
 
   /* `<path-suffix>#<declaration>`, or a bare declaration offered to every file.
    * Consumption is counted so an allowance nothing used still fails below. */
@@ -281,8 +626,19 @@ export function runChannelWiringZeroDeltaGate({
        minutes. */
     const baselineReads = channelReads(before);
     const added = [...channelReads(after)].filter((name) => !baselineReads.has(name));
-    if (added.length === 0) {
-      report.push({ file: repoPath, added: 0 });
+
+    /* The byte comparison now runs unconditionally.
+     *
+     * It used to be reached only when the file ADDED a channel, so two whole
+     * classes of change were reported as "no channel added" and exited green
+     * without being inspected at all: a pure deletion wave, and a pure retune.
+     * Both are precisely what this gate claims to rule out, and the second was
+     * found by a drill in this file asserting the first. A file that changed at
+     * all is now compared; only a file that normalises back to its baseline
+     * passes without an argument. */
+    const removed = removalsBetween(before, after, absolute);
+    if (removed === null) {
+      failures.push(`${repoPath}: could not be parsed on both sides, so nothing about it is certified`);
       continue;
     }
     channelsChecked += added.length;
@@ -305,13 +661,39 @@ export function runChannelWiringZeroDeltaGate({
     }
 
     if (collapsed === expected) {
-      report.push({ file: repoPath, added: added.length, channels: added });
+      report.push({ file: repoPath, added: added.length, channels: added, removed: 0 });
       continue;
     }
+
+    /* The bytes differ. Before reporting that, find out whether the difference
+       IS the removals and nothing else — `expectedAfterRemovals` is the
+       baseline with exactly those declarations taken out, so matching it proves
+       no other byte moved. Only then is each removal put to the winner test. */
+    if (removed.length > 0) {
+      const expectedAfterRemovals = baselineMinusRemovals(before, removed, absolute);
+      if (expectedAfterRemovals !== null && collapsed === expectedAfterRemovals) {
+        const objections = certifyRemovals({ removed, filePath: absolute, bundles: getBundles() });
+        if (objections.length === 0) {
+          report.push({
+            file: repoPath, added: added.length, channels: added, removed: removed.length,
+          });
+          continue;
+        }
+        failures.push(
+          `${repoPath}: ${removed.length} removal(s), ${objections.length} NOT certifiable as inert\n`
+            + objections.map((o) => `    - ${o}`).join('\n'),
+        );
+        continue;
+      }
+    }
+
     const where = firstDivergence(expected, collapsed);
     failures.push(
-      `${repoPath}: collapsing ${added.length} added channel(s) does NOT restore the baseline\n`
-        + `    first divergence at char ${where.index}\n`
+      `${repoPath}: collapsing ${added.length} added channel(s) does NOT restore the baseline`
+        + (removed.length > 0
+          ? `\n    (${removed.length} removal(s) present, but the remaining bytes diverge beyond them)`
+          : '')
+        + `\n    first divergence at char ${where.index}\n`
         + `    baseline : ...${where.baseline}\n`
         + `    collapsed: ...${where.collapsed}`,
     );
@@ -328,17 +710,21 @@ export function runChannelWiringZeroDeltaGate({
   if (failures.length > 0) {
     throw new Error(`Channel wiring is not zero-delta:\n- ${failures.join('\n- ')}`);
   }
+  const removalsCertified = report.reduce((sum, row) => sum + (row.removed ?? 0), 0);
   if (!silent) {
     for (const row of report) {
+      const inert = row.removed ? `, ${row.removed} removal(s) certified inert` : '';
       if (row.skipped) console.log(`SKIP ${row.file} (${row.skipped})`);
-      else if (row.added === 0) console.log(`OK   ${row.file} (no channel added)`);
-      else console.log(`OK   ${row.file} (${row.added}: ${row.channels.join(', ')})`);
+      else if (row.added === 0 && !row.removed) console.log(`OK   ${row.file} (no channel added)`);
+      else if (row.added === 0) console.log(`OK   ${row.file} (${row.removed} removal(s) certified inert)`);
+      else console.log(`OK   ${row.file} (${row.added}: ${row.channels.join(', ')}${inert})`);
     }
     console.log(
-      `PASS channel-wiring-zero-delta baseline=${baseline} files=${targets.length} channels=${channelsChecked}`,
+      `PASS channel-wiring-zero-delta baseline=${baseline} files=${targets.length} `
+        + `channels=${channelsChecked} removals-certified=${removalsCertified}`,
     );
   }
-  return { files: targets.length, channelsChecked, report };
+  return { files: targets.length, channelsChecked, removalsCertified, report };
 }
 
 function parseArgs(argv) {
@@ -348,6 +734,7 @@ function parseArgs(argv) {
     else if (token.startsWith('--baseline=')) options.baseline = token.slice('--baseline='.length);
     else if (token.startsWith('--file=')) (options.files ??= []).push(path.resolve(token.slice('--file='.length)));
     else if (token.startsWith('--allow-new=')) options.allowNew.push(token.slice('--allow-new='.length));
+    else if (token.startsWith('--entrypoint=')) (options.entrypoints ??= []).push(path.resolve(token.slice('--entrypoint='.length)));
   }
   return options;
 }
