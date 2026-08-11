@@ -437,6 +437,33 @@ under §1.4 is always no. Rows c–f above are all this shape.
 Corollary: idling for an answer is itself the defect. An hourly heartbeat now re-enters the programme
 if a lane has stalled waiting on a decision that was never the owner's to make.
 
+### Enumerate inline paint WITH its anatomy, or the one site that matters hides among the twenty that do not
+
+An inline-style census finds sites; it does not tell you which ones matter. In a 34-site drain, the
+site that mattered was a scroll region carrying `max-height` and `overflow-y` and **no `data-part` at
+all** — the one element in the family owning a scroll frame was invisible to its skin. In a flat list
+it was indistinguishable from twenty `display: block` and `min-width: 0` rows.
+
+It surfaced only because the lane printed, beside each site, the host element and its nearest
+`data-part`, and looked for the row reading `part=(none)` on a **structural** element rather than a
+leaf. Add that column to any inline-drain pass.
+
+Coordination fact from the same lane, for whoever drains next: a file whose paint counters are already
+`0` cannot trip the audit, because its lexer does not count geometry as paint. A file whose counter is
+**positive** will go red on completion until the baseline is tightened in the same change — and only
+the coordinator can do that half.
+
+### Load-bearing headers are also a maintenance surface
+
+Recorded against the law two sections below, which it qualifies. *"A file that looks unfinished may be
+finished on purpose, and the header is the evidence"* holds only while the headers stay true. Two of
+three files read in one lane carried notes that were accurate when written and are now stale in the
+opposite direction: the `HeadersBatch` claim that `Button` drops a caller `data-part` (it no longer
+does), and a family comment citing a zero-local-SVG migration that then stopped at one icon of ten.
+
+A stale header is worse than none: it is evidence that reads as current. When a lane's work falsifies
+a header anywhere in its blast radius, correcting that header is part of the work.
+
 ### A census number without a POSITIVE CONTROL is not evidence
 
 The most generalizable finding of the programme, and a lane found it by catching **its own** instrument
