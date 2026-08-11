@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "generatedBy": "FASE K + Codex C1 reconciliation 2026-08-03 — rows that gained productive writers removed from the orphan-read ledger",
-  "basedOnManifestDigest": "6089ae03ad10620b81c070f0fd82a0080cb57963b499991c58a527106429a98e",
+  "basedOnManifestDigest": "0914afc32f82aba498a6923fdf985ed8de519d558af9255e12216750ae537920",
   "laws": [
     "a read without an owner classification cannot ship: every name in hooks-manifest.unadjudicatedReads has exactly one row here",
     "MODERN_PRIVATE includes engine-agnostic private channels (fallback-governed, single owning reader) — the non-modern-reader:foundation-tokens flag preserves the distinction without widening the closed vocabulary",
@@ -21,9 +21,9 @@
     "tintScaleOwnership": "2026-08-10: --ds-tint-24 left this ledger. Its row named a GENERATED artifact (facade/artifacts/bithire/index.css) as owner, which is the circularity the hook manifest excludes artifacts to prevent. The real writer is setTintRampVariables in the BrandTheme compiler; once that emitter spelled its keys, the whole five-step scale classified as a tenant channel and the orphan row had nothing left to record. No baseline widening: rows only left."
   },
   "counts": {
-    "total": 2675,
+    "total": 2662,
     "byClass": {
-      "MODERN_PRIVATE": 2034,
+      "MODERN_PRIVATE": 2021,
       "FROZEN_ENGINE_SCOPED": 525,
       "TENANT_FACING_CANDIDATE": 76,
       "FOUNDATION_SHARED": 38,
@@ -266,24 +266,6 @@
       }
     },
     {
-      "name": "--ds-active-filters-bar-count-background",
-      "family": "--ds-active-filters",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:91  background: var(",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "foundation-tokens": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
       "name": "--ds-active-filters-bar-count-block-size",
       "family": "--ds-active-filters",
       "class": "MODERN_PRIVATE",
@@ -302,66 +284,12 @@
       }
     },
     {
-      "name": "--ds-active-filters-bar-count-border",
-      "family": "--ds-active-filters",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:97  border: var(",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "foundation-tokens": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
       "name": "--ds-active-filters-bar-count-color",
       "family": "--ds-active-filters",
       "class": "MODERN_PRIVATE",
       "owner": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:90  color: var(--ds-active-filters-bar-count-color, var(--ds-color-primary));",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "foundation-tokens": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-active-filters-bar-count-padding-inline",
-      "family": "--ds-active-filters",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:80  padding-inline: var(--ds-active-filters-bar-count-padding-inline, 9px);",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "foundation-tokens": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-active-filters-bar-count-radius",
-      "family": "--ds-active-filters",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:81  border-radius: var(",
       "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
       "_audit": {
         "readBuckets": {
@@ -11011,24 +10939,6 @@
       }
     },
     {
-      "name": "--ds-dashboard-header-shadow-hover",
-      "family": "--ds-dashboard-header",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-header.css",
-      "readSites": 2,
-      "evidence": "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-header.css:82  var(--ds-dashboard-header-shadow-hover, var(--ds-elevation-2));",
-      "flag": "undeclared by design: 2 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "foundation-tokens": 2
-        },
-        "declBuckets": {},
-        "withFallback": 2,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
       "name": "--ds-dashboard-header-sheen-duration",
       "family": "--ds-dashboard-header",
       "class": "MODERN_PRIVATE",
@@ -13665,24 +13575,6 @@
       }
     },
     {
-      "name": "--ds-detail-header-metadata-card-padding",
-      "family": "--ds-detail-header",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/presentation/components/skin/detail-header.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/presentation/components/skin/detail-header.css:264  padding: var(--ds-detail-header-metadata-card-padding, 16px 18px 18px);",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "foundation-tokens": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
       "name": "--ds-detail-header-metadata-card-padding-compact",
       "family": "--ds-detail-header",
       "class": "MODERN_PRIVATE",
@@ -13707,24 +13599,6 @@
       "owner": "packages/core/src/foundation/tokens/css/presentation/components/skin/detail-header.css",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/presentation/components/skin/detail-header.css:304  letter-spacing: var(--ds-detail-header-metadata-chip-label-tracking, 0.12em);",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "foundation-tokens": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-detail-header-metadata-chip-padding",
-      "family": "--ds-detail-header",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/presentation/components/skin/detail-header.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/presentation/components/skin/detail-header.css:289  padding: var(--ds-detail-header-metadata-chip-padding, 9px 12px);",
       "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
       "_audit": {
         "readBuckets": {
@@ -13899,24 +13773,6 @@
       }
     },
     {
-      "name": "--ds-detail-header-tab-strip-padding",
-      "family": "--ds-detail-header",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/presentation/components/skin/detail-header.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/presentation/components/skin/detail-header.css:328  padding: var(--ds-detail-header-tab-strip-padding, 10px 18px 0);",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "foundation-tokens": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
       "name": "--ds-detail-header-title-leading",
       "family": "--ds-detail-header",
       "class": "MODERN_PRIVATE",
@@ -14049,42 +13905,6 @@
       "owner": "packages/core/src/foundation/tokens/css/presentation/components/skin/detail-header.css",
       "readSites": 1,
       "evidence": "packages/core/src/foundation/tokens/css/presentation/components/skin/detail-header.css:225  font-weight: var(--ds-detail-header-title-weight, 720);",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "foundation-tokens": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-detail-header-top-bar-padding",
-      "family": "--ds-detail-header",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/presentation/components/skin/detail-header.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/presentation/components/skin/detail-header.css:119  padding: var(--ds-detail-header-top-bar-padding, 12px 24px);",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "foundation-tokens": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-detail-header-top-bar-padding-compact",
-      "family": "--ds-detail-header",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/presentation/components/skin/detail-header.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/presentation/components/skin/detail-header.css:437  padding: var(--ds-detail-header-top-bar-padding-compact, 10px 16px);",
       "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
       "_audit": {
         "readBuckets": {
@@ -17766,24 +17586,6 @@
       }
     },
     {
-      "name": "--ds-form-header-hero-padding",
-      "family": "--ds-form-header",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-header.css",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-header.css:100  padding: var(--ds-form-header-hero-padding, 28px);",
-      "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "foundation-tokens": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
       "name": "--ds-form-header-hero-padding-compact",
       "family": "--ds-form-header",
       "class": "MODERN_PRIVATE",
@@ -17797,24 +17599,6 @@
         },
         "declBuckets": {},
         "withFallback": 1,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-form-header-icon-badge-size",
-      "family": "--ds-form-header",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-header.css",
-      "readSites": 2,
-      "evidence": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-header.css:110  inline-size: var(--ds-form-header-icon-badge-size, 52px);",
-      "flag": "undeclared by design: 2 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "foundation-tokens": 2
-        },
-        "declBuckets": {},
-        "withFallback": 2,
         "bare": 0,
         "testStoryReads": 0
       }
@@ -25318,18 +25102,6 @@
         "foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css"
       ],
       "evidence": "undeclared internal channel; 1 read(s) in modern, 1 with a governing fallback"
-    },
-    {
-      "name": "--ds-motion-ease-spring",
-      "family": "motion",
-      "class": "MODERN_PRIVATE",
-      "owner": "foundation/tokens/css/presentation/components/skin/dashboard-header.css",
-      "readSites": [
-        "foundation/tokens/css/presentation/components/skin/dashboard-header.css",
-        "foundation/tokens/css/presentation/components/skin/detail-header.css"
-      ],
-      "evidence": "undeclared internal channel; 2 read(s) in foundation-tokens, 2 with a governing fallback",
-      "flag": "non-modern-reader:foundation-tokens"
     },
     {
       "name": "--ds-motion-ease-standard",
