@@ -529,6 +529,54 @@ fallback arm, and the declared-nowhere census. Those stand. But **the instrument
 evidence within its roster**, and a roster of six fixtures is not the component library. Any lane
 quoting `changedRows: 0` must state which fixtures could have moved.
 
+### An OUTCOME test survives a false premise; a MECHANISM argument does not
+
+The sharpest statement of method the programme has produced, and it explains why an over-broad belief
+I recorded as law cost nothing.
+
+I recorded *".dark is a complete override"* from one lane's reading. It is false of the file (66 names
+against 1059). The lane executing on it did **not** reason from the premise — its four-cell run measured
+`dark: 0 moved` in all four scopes across the full 4,027-name corpus. Had any of the seven seeds it
+believed covered actually been uncovered, dark would have moved and the run would have said so.
+
+**A mechanism argument built on the same premise would have shipped the defect silently.** Prefer the
+test that observes the outcome to the derivation that predicts it, especially when the derivation rests
+on a claim about a file rather than a measurement of one.
+
+Companion, and the only agreement in this programme that carries real information: two instruments built
+independently — neither derived from the other — read `html.dark` as **66** and **72**, and overrides as
+**48** and **54**. Deltas of exactly +6 and +6, exactly the six dark pins one of them had added. Every
+other "two instruments agree" recorded here turned out to share a module. This one did not.
+
+### The pin that would have frozen the bug
+
+Ruled: **do not pin.** A pin at the currently-resolved value is value-preserving by construction — which
+is why I ordered it — but where the current value **is** the defect, pinning converts an *inherited*
+defect into an **authored** one. It then reads as intentional and the next auditor loses the reason to
+question it.
+
+The evidence, not the principle, is what settled it: `--ds-color-bg-canvas` and `--ds-color-bg-hover`
+are the only two near-black members of a family whose every other member is white in both verticals'
+light themes, and neither vertical declares either name anywhere. `--ds-menu-item-hover-bg: #18181C`
+means hovering a menu item in Evnto's light theme paints near-black. Nobody chose that.
+
+The fence existed to stop an **unattributed** repaint. This one is attributed, measured and a fix.
+Conflating those two is what produced the wrong order.
+
+Consequence worth noting: the ruling **dissolved the atomicity problem** that had blocked the lane. The
+window existed because pins in TypeScript do not paint until the build; with no pins, the change lives
+entirely in source CSS and takes effect consistently.
+
+Two more from the same execution. **After a rewire makes two blocks textually identical, any
+line-anchored edit is ambiguous by construction** — a fail-closed anchor aborted rather than inserting
+six dark pins into the light block, which would have been the defect being fixed, doubled. And
+**re-deriving at write time paid for itself**: three of the thirteen seed names had been authored by
+another lane since the measurement.
+
+**The sizing law, now with five instances:** 585→333, 365→104, 129→13, 53→2, 44→5. Every scope in this
+programme that was re-measured at execution time came back an order of magnitude smaller. That is the
+expectation, not the surprise.
+
 ### A PORTAL FAMILY MOUNTS ITS SURFACE ONE TICK BEFORE ITS CONTENT
 
 A reachability instrument reported **44 dead rules** in `column-menu`. All false. The Popover mounts
