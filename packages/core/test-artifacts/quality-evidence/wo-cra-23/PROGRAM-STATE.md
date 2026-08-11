@@ -437,6 +437,51 @@ under §1.4 is always no. Rows c–f above are all this shape.
 Corollary: idling for an answer is itself the defect. An hourly heartbeat now re-enters the programme
 if a lane has stalled waiting on a decision that was never the owner's to make.
 
+### A formula may only bake a value the same file authors
+
+The rule that settled where the radius-dial fix belonged, and it generalises. BitHire's `1.25` divisor
+comes from `expressive.experienceProfile` lowered through `appearancePostureToVariables` — **not** from
+the `surfaces` block beside the radii. Authoring `calc(9px / 1.25 * …)` into the brand theme would pin
+a number that file never states, and a later profile change would silently mis-resolve all 31 radii.
+The fix belonged in the compiler, where the scale is **derived** rather than threaded, so no call site
+can pass a wrong divisor — a wrong divisor is a silent repaint, not a failure.
+
+Companion ruling: **a partial dial is worse than a uniformly inert one.** Fixing only control radii
+would have left buttons and inputs rounding while tables, tabs, badges and cards stayed pinned, which
+reads as a design decision rather than a bug. Scope widened to all 31 emitted radius channels.
+
+### The instrument's own fixtures were measuring something no component can render
+
+`button-modern-md` and `input-modern-md` in the resolution probe match `.ds-btn` / `.ds-input` — class
+names **no DS component emits**. The modern Button emits `rottay-button--modern`, the rustic one
+`rottay-button--rustic`. The fixtures are labelled "modern" and are structurally rustic, so every
+conclusion drawn from them about the modern button was measuring a different thing.
+
+The defect they exposed was nonetheless real, and **that is the dangerous part**: a lying instrument
+that produces a true finding teaches you to trust it. Queued for repair against the real components.
+
+Related, same session: **`getComputedStyle` is not a cascade oracle in the unit suite.**
+`src/tooling/testing/setup/index.ts:141-178` monkey-patches it under happy-dom to prefer inline
+styles, and it reported values for provably dead rules — including a `30rem` that could not have come
+from the rule it appeared to confirm, since the only declaration anywhere in the tree is `476px`. Use
+`querySelectorAll` against a rendered tree to ask whether a rule is live. Note the lane built a
+control (an unsatisfiable middle compound with `order: 42`), the control **disproved** its own
+explanation, and it reported the narrower supportable claim instead of the tidy one.
+
+### A dead ramp is a designed relationship existing only as source
+
+BitHire authors a control radius ramp 7/8/9/10/11 paired with heights 26/32/36/40/46 — deliberately
+tighter than the surface ramp. It does not paint. The R1 Cohort 1 repair made the family literal the
+**fallback** arm of `var(--ds-radius-md, var(--ds-button-md-radius))`, and `--ds-radius-md` is declared
+at `:root`, so by the fallback-inert law the family value is unreachable and every modern button paints
+10px where 9px was designed.
+
+Ruled: **flip the precedence back.** R1's rationale was that the family literal was not dial-reachable;
+the compiler fix made it reachable *and* it carries the design value, so the rationale has expired.
+This moves resting pixels and is therefore a deliberate visual change wanting sighted capture — and
+the stale rationale comment must be rewritten, or the next reader re-derives R1's reasoning from a
+premise that is no longer true.
+
 ### `probe run` is BLIND to a brand-theme edit — it will null-measure the identity wave
 
 Established by measurement, and it invalidates the verification instruction I had given two identity
