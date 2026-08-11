@@ -1811,6 +1811,64 @@ The real convention, verified: one engine-agnostic rendering, skin at
 Divergence arrives through the skin and the channels, not through per-engine branches. The forwarder
 files remain a (minor) `CLAUDE.md` violation; do not create more.
 
+### A severance repair is ATOMIC, so "fix the broken ones" is not a plan
+
+Measured 2026-08-11 on Badge, and the finding is a correction to a lane's recommendation that was
+otherwise the best adjudication of the night.
+
+Badge severs at 16 shipped sites. The lane render-proved the damage in Chromium against all three
+vertical bundles — an uncompensated severed badge loses **12 of 14** measured properties, every
+colour-bearing one among them, and paints as bare text. It then did the thing a census usually
+skips: it asked whether the owning pattern repaints the replacement part, and found **6 of the 16
+compensated**. Its recommendation followed naturally — repair the 10 bare, stage the 6 behind the
+sighted pass.
+
+**That partition is not implementable, and the reason generalises.** The repair is a change to the
+*selector* in `badge.css`, and the class it keys on is written by the engine, not the caller. Every
+badge carries it, severed or not. The instant the selector is class-keyed, 41 root-keyed properties
+return at all 16 sites simultaneously. There is no per-site switch.
+
+**The law: when the defect is per-site but the repair is per-selector, the decision is binary.** A
+census that partitions sites into repair-now and repair-later has answered a question the repair
+cannot act on. The question that *is* actionable is different and sharper: *do the compensated sites
+survive the base returning?* At a compensated site the engine's restored rule and the pattern's own
+rule land on the same element, so the risk is not merely "new properties appear" — it is the shipped
+pattern **losing paint it deliberately authored**. `display: inline → inline-flex` is the specific
+one to fear, because those patterns were authored against bare text.
+
+Corollary on where such an ordering fight is settled: neither the source skins nor the built
+`bithire` artifact contains a single `@layer` declaration — the artifact is tokens only. Whatever
+decides the winner, it is not the layer ladder in those files, and it must be **read from a render**
+rather than argued from specificity. This programme has punished the mechanism argument every time.
+
+### A token declared in a severed rule and read from a surviving one paints from the void
+
+Second-order defect, found in the same adjudication and invisible to both instruments that ran.
+
+Badge's tone tokens (`--ds-badge-tone-*`) are **declared** inside the `[data-part='root']` rules and
+**consumed** by the class-keyed hover / pressed / selected rules. Severance kills the declaring rules
+and leaves the consuming ones matching. The result is not lost paint: it is live paint reading
+custom properties nothing declared.
+
+**No "properties lost" measurement can count this, because the rule that suffers it is alive.** Both
+the property census and the Chromium render proof scored those rules intact — correctly, by their
+own definitions. The defect lives in the gap between the two questions they ask.
+
+The shape is not plausibly unique to Badge. Wherever a skin declares custom properties in its root
+rule and reads them from state rules keyed elsewhere, severance produces the same silent hole; that
+census is task #27.
+
+### A single-spelling walk finds a defect at a third of its size
+
+Badge has 218 JSX call sites across four spellings — `Badge` 160, `ModernBadge` 38, `RusticBadge`
+11, `ClassicBadge` 9. Of the 16 severed sites, **9 are `ModernBadge` and 7 are `Badge`**: a walk on
+the bare name finds 7 of 16, **44%**.
+
+This is the fifth disguise of the false zero, and the first that is a false *fraction* rather than a
+false absence — more dangerous, because a partial number looks like a measurement and gets reported
+as one. A primitive re-exported under an engine-qualified alias must have every spelling enumerated
+before any site count is quoted.
+
 ---
 
 ## 6. WHAT R0–R7 BECAME
