@@ -222,8 +222,8 @@
 /* the shared-helper and Save/Cancel icons size from the skin (was an inline
    14px on every one of them) — the FormHeader posture */
 .ds-structure.ds-edit-header[data-part='root'] [data-part='actions'] svg {
-  inline-size: var(--ds-edit-header-action-icon-size, 14px);
-  block-size: var(--ds-edit-header-action-icon-size, 14px);
+  inline-size: 14px;
+  block-size: 14px;
 }
 .ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] [data-part='eyebrow'] {
   color: var(--ds-color-text-muted);
@@ -339,7 +339,7 @@
     --ds-edit-header-icon-badge-glyph-size: 20px;
   }
   .ds-structure.ds-edit-header [data-part='title'] {
-    font-size: var(--ds-edit-header-title-font-size-compact, var(--ds-type-section-title-font-size, var(--ds-font-size-xl)));
+    font-size: var(--ds-type-section-title-font-size, var(--ds-font-size-xl));
   }
   .ds-structure.ds-edit-header [data-part='actions'] {
     inline-size: 100%;

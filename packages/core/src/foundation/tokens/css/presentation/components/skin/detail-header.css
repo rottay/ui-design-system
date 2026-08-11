@@ -86,6 +86,32 @@
  * tracking follows the role.
  */
 
+/* ─── the family's tenant-free baseline ───────────────────────────────────────
+   The seven channels below are authored by a vertical extension and read bare by
+   app-bithire's detail chrome, so they are product surface — but only BitHire
+   declares them, which left the DS with no stated default and the other two
+   verticals resolving values that existed nowhere but a fallback arm.
+
+   Each value is the fallback arm of its read site, verbatim. Scope is dual
+   because a consumer may stamp `data-ds-root` on a div instead of `html`, and
+   the vertical's palette is declared on whichever of the two it is; computing
+   at only one of them would resolve the chains against the wrong palette.
+   Zero specificity, and `rottay-components` is layered while the vertical
+   artifacts import unlayered — so a vertical still wins on both paths. */
+:where(:root, [data-ds-root]) {
+  --ds-detail-continuous-surface: var(--ds-surface-card, var(--ds-color-bg-elevated));
+  --ds-detail-continuous-boundary: var(--ds-color-border-subtle, var(--ds-color-border-secondary));
+  --ds-detail-control-bg: transparent;
+  --ds-detail-control-border: var(--ds-color-border-secondary);
+  --ds-detail-control-border-hover: color-mix(
+    in srgb,
+    var(--ds-color-primary) 22%,
+    var(--ds-color-border-secondary)
+  );
+  --ds-detail-control-shadow: none;
+  --ds-detail-hero-spine: color-mix(in srgb, var(--ds-color-primary) 20%, transparent);
+}
+
 /* ─── root card: the single dominant frame + the family channel mount ─────── */
 
 .ds-structure.ds-detail-header[data-part='root'] {

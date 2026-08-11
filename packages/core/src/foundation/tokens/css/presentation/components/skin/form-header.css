@@ -171,8 +171,8 @@
 }
 /* the shared-helper icons size from the skin (was an inline 14px per icon) */
 .ds-structure.ds-form-header[data-part='root'] [data-part='actions'] svg {
-  inline-size: var(--ds-form-header-action-icon-size, 14px);
-  block-size: var(--ds-form-header-action-icon-size, 14px);
+  inline-size: 14px;
+  block-size: 14px;
 }
 
 /* ---- icon badge: the TONE rides the shared hatch (edit-header.css); the
