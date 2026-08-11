@@ -437,6 +437,27 @@ under §1.4 is always no. Rows c–f above are all this shape.
 Corollary: idling for an answer is itself the defect. An hourly heartbeat now re-enters the programme
 if a lane has stalled waiting on a decision that was never the owner's to make.
 
+### THE LARGEST DEFECT: a primitive's whole skin dies wherever a caller names a part
+
+`runtime/engines/modern/skin/input.css` opens **82 rules** with
+`.rottay-input.rottay-input--modern[data-part='root']`. `Input`'s modern engine writes
+`data-part={dataPart ?? 'root'}` — the caller's part **replaces** the default. So **every consumer that
+passes a `data-part` to `<Input>` silently loses the entire modern Input skin.** Measured: **46 call
+sites across 6 files**. One is render-proven (`.rottay-input[data-part='root']` matches zero nodes in a
+rendered `SearchCommandBar`); the rest are candidates, and the discovering lane correctly refused to
+call them findings.
+
+**The way it surfaced is the lesson.** `search-command-bar.css` was hand-painting a field surface to
+compensate for primitive paint it was silently losing — **and its compensation was dead too**, by the
+same mechanism, one token off. Repairing six arms in a family skin restored a workaround; it did not
+touch the cause. Expect other families to have compensated the same way.
+
+Generalisation: **a family hand-painting something a primitive should own is a symptom, not a style
+choice.** Ask what the primitive stopped delivering before improving the compensation.
+
+This is class A of the reachability model at scale, and it is why that model matters: reachability is a
+property of the CALL SITE, so a primitive can be perfectly correct and its skin still dead at 46 places.
+
 ### "Has no skin file" is not a defect signal — it has at least three innocent causes
 
 I offered a lane three families as "no skin at all". **All three were false positives**, each for a
