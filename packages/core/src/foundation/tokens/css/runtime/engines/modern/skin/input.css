@@ -236,12 +236,16 @@ input.rottay-input.rottay-input--modern[data-part='root']::selection {
    control can grow past its step when type scales (zoom posture) while the
    coarse block recomputes the touch floor against the SAME relay. */
 .rottay-input.rottay-input--modern[data-part='root'][data-size='xs']:not([data-size-responsive]) {
-  /* R1 Cohort 1: tenant ramp first — same leak class as Button. The vertical
-     baseline emits --ds-input-{size}-radius as a literal at vertical scope, so
-     every tenant in the vertical inherited it and Input stayed rounded while
-     Select (which already reached --ds-radius-md) went square under the same
-     tenant. --ds-radius-* is the allowlisted exact-geometry route. */
-  --ds-input-resolved-radius: var(--ds-radius-sm, var(--ds-input-xs-radius, var(--ds-input-xs-border-radius)));
+  /* Control step first for every size, matching Button and the root rule above
+     — which already read --ds-radius-input ahead of the ramp, so these size
+     rules were also contradicting their own file. R1 Cohort 1 put the ramp
+     first because the family channel was a flat literal the radius dial could
+     not reach; the chrome compiler now emits it as a dial product, so the
+     reason is gone and the cost stayed: field radius is authored against field
+     HEIGHT, and the ramp step belongs to surfaces. Where a vertical authors no
+     field geometry the base layer resolves --ds-input-{size}-border-radius to
+     that same ramp step, so nothing is lost by ordering the control first. */
+  --ds-input-resolved-radius: var(--ds-input-xs-radius, var(--ds-input-xs-border-radius, var(--ds-radius-sm)));
   --_ds-input-resolved-gap: var(--ds-input-xs-gap, var(--ds-input-affix-gap));
   --_ds-input-resolved-height: calc(
     var(--ds-input-xs-height) * var(--ds-density-effective-scale)
@@ -252,12 +256,7 @@ input.rottay-input.rottay-input--modern[data-part='root']::selection {
 }
 
 .rottay-input.rottay-input--modern[data-part='root'][data-size='sm']:not([data-size-responsive]) {
-  /* R1 Cohort 1: tenant ramp first — same leak class as Button. The vertical
-     baseline emits --ds-input-{size}-radius as a literal at vertical scope, so
-     every tenant in the vertical inherited it and Input stayed rounded while
-     Select (which already reached --ds-radius-md) went square under the same
-     tenant. --ds-radius-* is the allowlisted exact-geometry route. */
-  --ds-input-resolved-radius: var(--ds-radius-sm, var(--ds-input-sm-radius, var(--ds-input-sm-border-radius)));
+  --ds-input-resolved-radius: var(--ds-input-sm-radius, var(--ds-input-sm-border-radius, var(--ds-radius-sm)));
   --_ds-input-resolved-gap: var(--ds-input-sm-gap, var(--ds-input-affix-gap));
   --_ds-input-resolved-height: calc(
     var(--ds-input-sm-height) * var(--ds-density-effective-scale)
@@ -268,12 +267,7 @@ input.rottay-input.rottay-input--modern[data-part='root']::selection {
 }
 
 .rottay-input.rottay-input--modern[data-part='root'][data-size='md']:not([data-size-responsive]) {
-  /* R1 Cohort 1: tenant ramp first — same leak class as Button. The vertical
-     baseline emits --ds-input-{size}-radius as a literal at vertical scope, so
-     every tenant in the vertical inherited it and Input stayed rounded while
-     Select (which already reached --ds-radius-md) went square under the same
-     tenant. --ds-radius-* is the allowlisted exact-geometry route. */
-  --ds-input-resolved-radius: var(--ds-radius-md, var(--ds-input-md-radius, var(--ds-input-md-border-radius)));
+  --ds-input-resolved-radius: var(--ds-input-md-radius, var(--ds-input-md-border-radius, var(--ds-radius-md)));
   --_ds-input-resolved-gap: var(--ds-input-md-gap, var(--ds-input-affix-gap));
   --_ds-input-resolved-height: calc(
     var(--ds-input-md-height) * var(--ds-density-effective-scale)
@@ -284,12 +278,7 @@ input.rottay-input.rottay-input--modern[data-part='root']::selection {
 }
 
 .rottay-input.rottay-input--modern[data-part='root'][data-size='lg']:not([data-size-responsive]) {
-  /* R1 Cohort 1: tenant ramp first — same leak class as Button. The vertical
-     baseline emits --ds-input-{size}-radius as a literal at vertical scope, so
-     every tenant in the vertical inherited it and Input stayed rounded while
-     Select (which already reached --ds-radius-md) went square under the same
-     tenant. --ds-radius-* is the allowlisted exact-geometry route. */
-  --ds-input-resolved-radius: var(--ds-radius-lg, var(--ds-input-lg-radius, var(--ds-input-lg-border-radius)));
+  --ds-input-resolved-radius: var(--ds-input-lg-radius, var(--ds-input-lg-border-radius, var(--ds-radius-lg)));
   --_ds-input-resolved-gap: var(--ds-input-lg-gap, var(--ds-input-affix-gap));
   --_ds-input-resolved-height: calc(
     var(--ds-input-lg-height) * var(--ds-density-effective-scale)
@@ -300,12 +289,7 @@ input.rottay-input.rottay-input--modern[data-part='root']::selection {
 }
 
 .rottay-input.rottay-input--modern[data-part='root'][data-size='xl']:not([data-size-responsive]) {
-  /* R1 Cohort 1: tenant ramp first — same leak class as Button. The vertical
-     baseline emits --ds-input-{size}-radius as a literal at vertical scope, so
-     every tenant in the vertical inherited it and Input stayed rounded while
-     Select (which already reached --ds-radius-md) went square under the same
-     tenant. --ds-radius-* is the allowlisted exact-geometry route. */
-  --ds-input-resolved-radius: var(--ds-radius-xl, var(--ds-input-xl-radius, var(--ds-input-xl-border-radius)));
+  --ds-input-resolved-radius: var(--ds-input-xl-radius, var(--ds-input-xl-border-radius, var(--ds-radius-xl)));
   --_ds-input-resolved-gap: var(--ds-input-xl-gap, var(--ds-input-affix-gap));
   --_ds-input-resolved-height: calc(
     var(--ds-input-xl-height) * var(--ds-density-effective-scale)

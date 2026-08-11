@@ -24,6 +24,8 @@ import type {
   BrandTooltipChrome,
 } from "@/foundation/contracts/composition/tenants/themes";
 
+import { applyRadiusDial } from "@/foundation/kernel/geometry/radius-dial";
+
 /** Compile-time context this emitter needs beyond the chrome object itself. */
 export interface ChromeVariableContext {
   /**
@@ -33,62 +35,6 @@ export interface ChromeVariableContext {
    * declares no scale, so the baseline is the channel's own identity of 1.
    */
   radiusScale?: string | number;
-}
-
-/**
- * A corner radius this emitter owns. Every one is a `shape.radius-scale`
- * subject, and two spellings reach a painted corner: the `--ds-<family>-radius`
- * suffix and the `--ds-radius-<family>` alias the control families publish —
- * `--ds-radius-input` is what BitHire's input actually paints through, so a
- * suffix-only match leaves it pinned.
- */
-const RADIUS_CHANNEL = /-radius$|^--ds-radius-[a-z0-9-]+$/;
-
-/**
- * Never folded into the dial: the dial itself, which is a ratio and would
- * become self-referential, and the `-base` operands the foundation already
- * multiplies by it, which would apply the scale twice.
- */
-const NOT_A_RADIUS_LENGTH = /^--ds-radius-scale$|-base$/;
-
-/**
- * One authored length, the only value shape that can be folded into the dial
- * product. Anything else — a `var()`, a `calc()`, a multi-corner shorthand, a
- * keyword — is left exactly as authored: it either already reads a dial-driven
- * token or is not a single length to multiply.
- */
-const SINGLE_LENGTH =
-  /^-?(?:\d+\.?\d*|\.\d+)(?:px|rem|em|%|ch|ex|vh|vw|vmin|vmax|pt|pc|cm|mm|in|q)?$/i;
-
-/**
- * Re-express every authored radius literal as its own product with the radius
- * dial.
- *
- * A literal emitted here lands in the tenant block, which is unlayered and
- * therefore outranks the foundation's `calc(base * var(--ds-radius-scale, 1))`
- * arithmetic. The dial then moves the surface ramp while every control, table,
- * tab and card corner the tenant authored stays pinned — the defect measured
- * on BitHire, whose button and input painted 9px at every dial position.
- *
- * Dividing by the scale this compilation emits makes the product reproduce the
- * authored value at rest, so no resting pixel moves. The division is expressed
- * for the browser rather than evaluated here, exactly as the surface ramp's
- * `-base` operands are: one multiply-divide pass is exact for any scale
- * instead of correct only for the scales that divide evenly.
- */
-function applyRadiusDial(
-  vars: Record<string, string>,
-  radiusScale: string | number | undefined
-): void {
-  const parsed = Number(radiusScale ?? 1);
-  const scale = Number.isFinite(parsed) && parsed > 0 ? parsed : 1;
-  for (const [channel, authored] of Object.entries(vars)) {
-    if (!RADIUS_CHANNEL.test(channel)) continue;
-    if (NOT_A_RADIUS_LENGTH.test(channel)) continue;
-    if (!SINGLE_LENGTH.test(authored.trim())) continue;
-    const operand = scale === 1 ? authored : `${authored} / ${scale}`;
-    vars[channel] = `calc(${operand} * var(--ds-radius-scale, 1))`;
-  }
 }
 
 const chromeVariableMap = <T extends object>(

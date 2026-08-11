@@ -13,12 +13,19 @@
 
 .rottay-button.rottay-button--modern[data-part='trigger'] {
   --ds-button-resolved-icon-size: var(--ds-button-md-icon-size);
-  /* R1 Cohort 1: the TENANT ramp step first, the family literal as fallback.
-     The vertical baseline artifact emits --ds-button-md-radius as a LITERAL
-     at vertical scope, which every tenant in that vertical inherits, so the
-     literal silently outranked the --ds-radius-* ramp a tenant CAN author.
-     --ds-radius-md is in TENANT_THEME_OVERRIDE_TOKENS; the family literal is not. */
-  --_ds-button-resolved-radius: var(--ds-radius-md, var(--ds-button-md-radius));
+  /* The CONTROL step first, the surface ramp as fallback. R1 Cohort 1 had this
+     inverted for a reason that has since been removed: the family channel was
+     emitted as a flat literal at vertical scope, so it was unreachable by the
+     radius dial and putting it first pinned the control. The chrome compiler
+     now emits it as a dial product, so the family channel is both reachable
+     and the authored value — and the inversion had a cost, because it made the
+     control ramp dead source. A vertical pairs control radius with control
+     HEIGHT (BitHire: 7/8/9/10/11 against 26/32/36/40/46), deliberately tighter
+     than the surface ramp; reading --ds-radius-md here painted a 36px-tall
+     button with a card's corner. A tenant still reaches this through
+     --ds-radius-* wherever it authors no control geometry, because the base
+     layer resolves --ds-button-{size}-radius to that same ramp step. */
+  --_ds-button-resolved-radius: var(--ds-button-md-radius, var(--ds-radius-md));
   --ds-button-resolved-height: var(--ds-button-md-height);
   --ds-button-resolved-padding-y: var(--ds-button-md-padding-y);
 
@@ -283,12 +290,7 @@
 
 .rottay-button.rottay-button--modern[data-size='xs']:not([data-size-responsive]) {
   --ds-button-resolved-icon-size: var(--ds-button-xs-icon-size);
-  /* R1 Cohort 1: the TENANT ramp step first, the family literal as fallback.
-     The vertical baseline artifact emits --ds-button-xs-radius as a LITERAL
-     at vertical scope, which every tenant in that vertical inherits, so the
-     literal silently outranked the --ds-radius-* ramp a tenant CAN author.
-     --ds-radius-sm is in TENANT_THEME_OVERRIDE_TOKENS; the family literal is not. */
-  --_ds-button-resolved-radius: var(--ds-radius-sm, var(--ds-button-xs-radius));
+  --_ds-button-resolved-radius: var(--ds-button-xs-radius, var(--ds-radius-sm));
   --ds-button-resolved-height: var(--ds-button-xs-height);
   --ds-button-resolved-padding-y: var(--ds-button-xs-padding-y);
   padding-inline: calc(
@@ -301,12 +303,7 @@
 
 .rottay-button.rottay-button--modern[data-size='sm']:not([data-size-responsive]) {
   --ds-button-resolved-icon-size: var(--ds-button-sm-icon-size);
-  /* R1 Cohort 1: the TENANT ramp step first, the family literal as fallback.
-     The vertical baseline artifact emits --ds-button-sm-radius as a LITERAL
-     at vertical scope, which every tenant in that vertical inherits, so the
-     literal silently outranked the --ds-radius-* ramp a tenant CAN author.
-     --ds-radius-sm is in TENANT_THEME_OVERRIDE_TOKENS; the family literal is not. */
-  --_ds-button-resolved-radius: var(--ds-radius-sm, var(--ds-button-sm-radius));
+  --_ds-button-resolved-radius: var(--ds-button-sm-radius, var(--ds-radius-sm));
   --ds-button-resolved-height: var(--ds-button-sm-height);
   --ds-button-resolved-padding-y: var(--ds-button-sm-padding-y);
   padding-inline: calc(
@@ -319,7 +316,7 @@
 
 .rottay-button.rottay-button--modern[data-size='md']:not([data-size-responsive]) {
   --ds-button-resolved-icon-size: var(--ds-button-md-icon-size);
-  --_ds-button-resolved-radius: var(--ds-radius-md, var(--ds-button-md-radius));
+  --_ds-button-resolved-radius: var(--ds-button-md-radius, var(--ds-radius-md));
   --ds-button-resolved-height: var(--ds-button-md-height);
   --ds-button-resolved-padding-y: var(--ds-button-md-padding-y);
   padding-inline: calc(
@@ -332,12 +329,7 @@
 
 .rottay-button.rottay-button--modern[data-size='lg']:not([data-size-responsive]) {
   --ds-button-resolved-icon-size: var(--ds-button-lg-icon-size);
-  /* R1 Cohort 1: the TENANT ramp step first, the family literal as fallback.
-     The vertical baseline artifact emits --ds-button-lg-radius as a LITERAL
-     at vertical scope, which every tenant in that vertical inherits, so the
-     literal silently outranked the --ds-radius-* ramp a tenant CAN author.
-     --ds-radius-lg is in TENANT_THEME_OVERRIDE_TOKENS; the family literal is not. */
-  --_ds-button-resolved-radius: var(--ds-radius-lg, var(--ds-button-lg-radius));
+  --_ds-button-resolved-radius: var(--ds-button-lg-radius, var(--ds-radius-lg));
   --ds-button-resolved-height: var(--ds-button-lg-height);
   --ds-button-resolved-padding-y: var(--ds-button-lg-padding-y);
   padding-inline: calc(
@@ -350,12 +342,7 @@
 
 .rottay-button.rottay-button--modern[data-size='xl']:not([data-size-responsive]) {
   --ds-button-resolved-icon-size: var(--ds-button-xl-icon-size);
-  /* R1 Cohort 1: the TENANT ramp step first, the family literal as fallback.
-     The vertical baseline artifact emits --ds-button-xl-radius as a LITERAL
-     at vertical scope, which every tenant in that vertical inherits, so the
-     literal silently outranked the --ds-radius-* ramp a tenant CAN author.
-     --ds-radius-xl is in TENANT_THEME_OVERRIDE_TOKENS; the family literal is not. */
-  --_ds-button-resolved-radius: var(--ds-radius-xl, var(--ds-button-xl-radius));
+  --_ds-button-resolved-radius: var(--ds-button-xl-radius, var(--ds-radius-xl));
   --ds-button-resolved-height: var(--ds-button-xl-height);
   --ds-button-resolved-padding-y: var(--ds-button-xl-padding-y);
   padding-inline: calc(

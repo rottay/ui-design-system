@@ -1,6 +1,6 @@
 {
   "$schema": "./schema.md",
-  "note": "Every fixture's element shape is DERIVED FROM THE CSS. `requiresSelectors` is not documentation: the harness asserts each string occurs verbatim in the CSS it is about to measure, and marks the fixture `unmatched` if it does not. A fixture that stops being matched is therefore reported, never silently measured as zero.",
+  "note": "A fixture that names a real component takes its element shape FROM THAT COMPONENT — rendered, then pasted — never from the CSS. Deriving the shape from the CSS is what let `button-modern-md` and `input-modern-md` sit on `.ds-btn`/`.ds-input` for months: a selector states what an element must carry to be MATCHED, and says nothing about whether any component emits it, so a CSS-derived fixture can measure a rule that never paints and still look green. Regenerate a component shape by rendering the engine implementation with `renderToStaticMarkup` and pasting the result, minus React-generated ids, plus `data-probe`. The synthetic fixtures (the two skeleton controls and the token readout) are exempt: they exist to read a dial, not to stand for a component. `requiresSelectors` is not documentation either: the harness asserts each string occurs verbatim in the CSS it is about to measure and marks the fixture `unmatched` if it does not, so a fixture that stops being matched is reported, never silently measured as zero. Pin selectors and the paint statement, never a declaration's VALUE — a precedence ruling would then read as a broken fixture.",
   "fixtures": [
     {
       "id": "card-modern-md",
@@ -31,12 +31,14 @@
     },
     {
       "id": "button-modern-md",
-      "why": "Second derived-radius consumer on a different chain: border-radius <- --ds-button-md-radius <- --ds-button-md-border-radius <- --ds-radius-md. Two consumers on two chains rule out a per-component accident.",
+      "why": "The modern Button as the engine actually renders it. Until 2026-08-11 this fixture carried `.ds-btn`, a RUSTIC theme rule no component can produce (both engines render `rottay-button--{modern,rustic}`), so every reading attributed to 'the modern button' measured a rule that never paints. The token defect it exposed happened to be real, which is the dangerous case: a lying instrument that returns a true finding teaches you to trust it. Chain: border-radius <- --_ds-button-resolved-radius <- the size rule's precedence between --ds-button-md-radius and --ds-radius-md.",
       "requiresSelectors": [
-        ".ds-btn {",
-        "--ds-button-md-border-radius: var(--ds-radius-md)"
+        ".rottay-button.rottay-button--modern[data-part='trigger']",
+        "border-radius: var(--_ds-button-resolved-radius)",
+        ".rottay-button.rottay-button--modern[data-size='md']:not([data-size-responsive])",
+        "--_ds-button-resolved-radius: var("
       ],
-      "html": "<button class=\"ds-btn ds-btn--primary\" data-part=\"root\" data-size=\"md\" data-probe=\"button-modern-md\">button</button>",
+      "html": "<button data-recipe=\"feedback.press\" data-recipe-state=\"final\" data-variant=\"primary\" data-size=\"md\" data-shape=\"default\" data-part=\"trigger\" type=\"button\" class=\"rottay-button rottay-button--modern rottay-button--primary rottay-button--md rottay-button--default\" style=\"--ds-recipe-enter:0ms;--ds-recipe-exit:0ms;--ds-recipe-settle:0ms;--ds-recipe-cycle:0ms;--ds-recipe-x:0px;--ds-recipe-y:0px;--ds-recipe-scale-from:1;--ds-recipe-curve:var(--ds-motion-ease-out)\" aria-disabled=\"false\" aria-busy=\"false\" data-probe=\"button-modern-md\"><span data-part=\"content\" data-state=\"visible\"><span data-part=\"label\">button</span></span></button>",
       "targets": [
         {
           "id": "root",
@@ -57,12 +59,14 @@
     },
     {
       "id": "input-modern-md",
-      "why": "Third derived-radius consumer (--ds-input-md-border-radius <- --ds-radius-md), and a distinct chrome family for the colour channels.",
+      "why": "The modern Input as the engine actually renders it, inside the field wrapper it always ships with — the root IS the input element, not a container. Carried `.ds-input` until 2026-08-11 for the same reason the button did, and was wrong the same way. A distinct chrome family for the colour channels, and a third radius chain: border-radius <- --ds-input-resolved-radius <- the size rule's precedence between --ds-input-md-radius and --ds-radius-md.",
       "requiresSelectors": [
-        ".ds-input {",
-        "--ds-input-md-border-radius: var(--ds-radius-md)"
+        ".rottay-input.rottay-input--modern[data-part='root']",
+        "border-radius: var(--ds-input-resolved-radius)",
+        ".rottay-input.rottay-input--modern[data-part='root'][data-size='md']:not([data-size-responsive])",
+        "--ds-input-resolved-radius: var("
       ],
-      "html": "<input class=\"ds-input\" data-part=\"root\" data-size=\"md\" data-probe=\"input-modern-md\" value=\"input\" />",
+      "html": "<div class=\"rottay-input-field\" data-part=\"field\"><input id=\"probe-input-modern-md\" type=\"text\" class=\"rottay-input rottay-input--modern\" data-part=\"root\" data-variant=\"outline\" data-size=\"md\" data-filled=\"true\" value=\"input\" data-probe=\"input-modern-md\" /></div>",
       "targets": [
         {
           "id": "root",
