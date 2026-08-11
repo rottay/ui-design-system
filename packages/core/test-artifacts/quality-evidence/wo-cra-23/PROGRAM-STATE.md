@@ -431,6 +431,41 @@ under §1.4 is always no. Rows c–f above are all this shape.
 Corollary: idling for an answer is itself the defect. An hourly heartbeat now re-enters the programme
 if a lane has stalled waiting on a decision that was never the owner's to make.
 
+### Structures do not get engine splits — decided 2026-08-10
+
+A family lane asked for the `engine-token-audit` baseline to be cleared so it could split its two
+families into `contracts/` + `runtime/rendering/` + three `engines/*/index.tsx`. **Refused.**
+
+In this tier three engine files delegating to one implementation contributes **zero divergence**, and
+`CLAUDE.md` forbids creating fake forwarding engines when one is absent. The four that already exist
+(`stats-header`, `mobile-header`, `bottom-tab-bar`, `action-dock`) are a pre-existing violation, not a
+precedent. Divergence here arrives through channels and the skin. Binding for every structure lane.
+
+Worth noting how the gate behaved: the split would have deleted 3 baselined `fleet.*` counters and
+added ~30 new ones, and `--update-baseline` cannot repair either shape (it only tightens existing
+counters). The gate was right to block; the work was in the wrong place.
+
+### A tenant-only channel with no fallback kills its whole shorthand off-tenant
+
+Found by a family lane, independently confirmed. `--ds-motion-calm` is declared in `foundation/`
+exactly once — `animations/transitions.css:396`, as the reduced-motion `0s !important` — and otherwise
+only by the three artifacts. `form-header.css` wrote `animation: ds-header-enter var(--ds-motion-calm) …`
+with **no fallback**, so on any untenanted page (showroom, default theme) the undeclared var made the
+entire `animation` shorthand invalid at computed-value time and the entrance simply did not run, while
+its byte-identical twin animated.
+
+This is the inverse face of the fallback-inert law, and both must be checked: a fallback never fires
+when the name IS declared in scope; and a **missing** fallback takes the whole shorthand down when the
+name is declared only in the tenant tier. Auditing one direction proves nothing about the other.
+
+### Wrong tree is not untidiness — it is permanently inert CSS
+
+Same lane, and a sharper statement of the census error recorded above. A structure skin authored under
+`runtime/engines/modern/skin/` would be scoped `.ds-engine-modern`, a class **no structure stamps**, so
+it would never match anything. Not a misfiled file: a file that cannot paint. It would also have forced
+edits to the two shared `facade/entrypoints/*.css` (`skins.unwired` is exact-0, both entrypoints
+required), dragging a reserved shared file into five concurrent lanes.
+
 ### A ruling that names a channel must be diffed against the decision table first
 
 Fable's fifth finding, adopted as law. D2 below and standing Decision 13 commanded **opposite**
