@@ -1858,6 +1858,77 @@ The shape is not plausibly unique to Badge. Wherever a skin declares custom prop
 rule and reads them from state rules keyed elsewhere, severance produces the same silent hole; that
 census is task #27.
 
+### The third repair option: an anchor the caller cannot take
+
+Shipped 2026-08-11 as `ace62230d`, and it is the pattern to reach for first from here on.
+
+Severance had two known answers, both bad. Stop severing at the call site — treats a symptom, and the
+next composer re-breaks it by accident. Rekey onto the scope class — works, but **drops one weight
+unit at every selector**, which is why the Button repair is still deferred waiting on a browser pass.
+
+Segmented took a third: rekey onto `[role='radiogroup']`. The engine stamps it unconditionally and
+**spreads no props** (fixed destructure), so no caller can suppress it, and the swap is
+weight-identical at all 29 selectors — `(0,3,0)` stays `(0,3,0)`. Nothing changes hands in the
+cascade, so no sighted adjudication is owed and it ships the same night.
+
+**The law: prefer an anchor the caller cannot reach over one the caller merely happens not to use.**
+The test is not "is this attribute present" but "can a caller remove it" — which is a question about
+the engine's prop handling, not about the CSS. A component that spreads props has no such anchor and
+must take the specificity hit or the call-site fix.
+
+The lane also proved the negative properly: it ran the bare-class form as a control and got **29/29
+drifts**. A repair that claims to preserve weight must be able to show the form that does not.
+
+### Two classes of orphaned channel, and no single instrument names both
+
+Reconciled 2026-08-11 from two censuses that disagreed — 16 families / 252 reads against 12 families
+/ 29 channels. Neither was wrong; they asked different questions.
+
+```
+class A   reads the void          the declaration is invalidated · the paint DISAPPEARS
+class B   reads the wrong thing   the fallback fires · the paint STAYS and lies
+```
+
+`void-reads.mjs` counts A only, deliberately: it excludes any read carrying a fallback, because
+severance makes the property undeclared and the fallback correctly fires. That exclusion is sound
+about validity and blind about meaning. `tag.css:252` reads
+`var(--_ds-tag-root-height, var(--ds-tag-md-height, 1.75rem))`, and `--_ds-tag-root-height` is
+declared as `--ds-tag-xs-height` inside the root-keyed xs rule. Severed, **an `xs` tag renders at
+`md` height**. Nothing looks broken. The chip is there, painted, the wrong size.
+
+**B is the harder class to find and the more expensive to leave**, because A announces itself as
+missing paint and B looks like a design decision. The damage in B is not the orphaning — it is *what
+the fallback delivers*, so any census of B that does not report the fallen-to value has not measured
+the defect.
+
+The reconciliation also produced one confirmed false positive on each side, which is the usual shape:
+`list-toolbar` declares and reads `--ds-list-toolbar-radius-shell` inside the same root-keyed rule
+(`:46` and `:101` both under the selector at `:37`), so both sides die together; and the narrower
+census missed `data-table` and `toast` inside its own denominator.
+
+### A repeated-attribute specificity ladder is built on the step that breaks
+
+`rustic/tag.css` carries `[data-part='root'][data-part='root']` on **31 rules**; `list-toolbar` does
+the same in modern. The skin tree's own header law forbids the shape, but the sharper reason is
+mechanical: repeating an attribute to buy weight **couples the specificity to the one hook a caller
+can replace**. When the part is replaced the rule does not lose one level, it loses both at once —
+`(0,4,0) → (0,2,0)`, against `(0,4,0) → (0,3,0)` where the ladder is built from classes.
+
+Recovering the lost weight by doubling the class instead is the same ladder in another spelling, so
+it is a decision, not a mechanical fix.
+
+### P-79 and the skins contradict each other, and the family that documented it best got hurt
+
+Three independent instances tonight — Segmented's two switchers, `active-filters-bar`, `TagInput`.
+The mechanism is one sentence: **P-79 says the caller's `data-part` wins the root anatomy hook, and
+every skin is written against the literal string `root`. Winning the hook is what kills the paint.**
+
+`active-filters-bar.css` states both halves in its own header — the caller's part wins per P-79, and
+each primitive's own skin owns its paint — and retired its hand-rolled chip chrome as duplication on
+that basis. Both halves are true; together they are the defect. `TagInput` delegates the same way in
+its own comment. The families that reasoned most carefully about ownership are the ones that removed
+their fallback before the paint arrived.
+
 ### A single-spelling walk finds a defect at a third of its size
 
 Badge has 218 JSX call sites across four spellings — `Badge` 160, `ModernBadge` 38, `RusticBadge`
