@@ -1,75 +1,103 @@
 /**
  * DashboardHeader skin.
- * A framed operational header with clear identity, action and metric zones.
- * All chroma and intensity resolve through tenant-owned tokens.
  *
  * LAYER: imported by `facade/entrypoints/base.css` and
  * `facade/entrypoints/styles.css` into `layer(rottay-components)`.
  *
- * SPECIFICITY (P-48): the tenant `html[data-tenant]…*` border-color floor sits
- * at (0,3,1); border paint reaches (0,4,0) through the always-stamped root
- * `data-part` ancestor (the rule ON the root uses `data-compact`, always
- * stamped 'true'|'false'). A `color` on a composed Text can never win — the
- * typography skin lives in the LATER `rottay-engines` layer — so Text ink
- * rides the Text `color` prop; the `[data-size]` / `data-direction` /
- * `data-state` qualifiers below remain for the rules that do NOT compete with
- * the engine layer (numeric variants, chip chrome). Repeating a class or
- * attribute is forbidden. The `Box as="h1"` title is NOT typography: its
- * display type is fully skin-owned.
+ * SCOPE ROOT is the structure's `<header>`, which carries
+ * `ds-structure ds-dashboard-header` + `data-part='root'`. This file is the
+ * family's sole owner: nothing else in the CSS tree selects
+ * `ds-dashboard-header`. Neighbours in this directory own adjacent scopes and
+ * are out of bounds — `dashboard.css` is `.ds-surface.ds-dashboard`,
+ * `stats-header.css` is `.ds-stats-header`, and the two `*-interactions.css`
+ * files are `.ds-metrics-*` / `.ds-activity-*`.
+ *
+ * SPECIFICITY (P-48): the compiled tenant artifact is unlayered, so its
+ * `html[data-tenant]…*` border-color floor at (0,3,1) beats any layered rule.
+ * A rule painting `border` / `border-color` must therefore reach (0,4,0).
+ * With two scope classes that fourth unit comes from an attribute: rules ON
+ * the root buy it from `data-compact` (always stamped 'true'|'false'),
+ * descendant rules from the always-stamped root `data-part` ancestor.
+ * Repeating a class or attribute on one element is forbidden.
+ *
+ * OWNERSHIP: the structure stamps anatomy + state only and renders plain
+ * elements, so 100% of layout and paint — typography and every posture cut
+ * included — lives here. There is no `[data-size]` qualifier to lean on and no
+ * competing engine-layer file.
+ *
+ * QUIET PREMIUM, three deliberate withdrawals from the previous skin:
+ *
+ *  1. No card affordance. Nothing in a page header is clickable, so the root
+ *     grows no hover/active treatment. It previously slid its gradient,
+ *     deepened its shadow, tinted its border and lifted + scaled the title
+ *     icon on pointer-over — a fake affordance on every dashboard.
+ *  2. One arrival sweep, not a 16s infinite sheen. Ambient perpetual motion in
+ *     page chrome is distraction, not material.
+ *  3. One dominant boundary per region. The action cluster, each metric and
+ *     the status marker were each a bordered, rounded, shadowed box nested
+ *     inside the root's own frame — three nested frames with no owner, and a
+ *     row of micro-pills used as the KPI readout. Now: the root card bounds
+ *     identity + actions, one hairline bounds the readout, and the metric
+ *     cells are separated by a rule rather than framed.
+ *
+ * RESPONSIVE: container-driven. The root declares the `ds-dashboard-header`
+ * container and every cut targets DESCENDANTS, because an element is never
+ * styled by its own container query. Root padding stays fluid through
+ * `clamp()` instead. `data-compact='true'` is the consumer-forced floor and
+ * applies the same posture at any width.
  *
  * GLASS: `backdrop-filter` is opt-in through the
  * `--ds-dashboard-header-actions-backdrop` channel (default `none`) — a
- * default-ON blur taxes every scroll frame (PT29/PT32/S06 fix, Sheet glass
- * precedent).
+ * default-ON blur taxes every scroll frame (Sheet glass precedent).
  */
 
+/* ---- root: one boundary, one material, no affordance ---- */
 .ds-structure.ds-dashboard-header[data-part='root'] {
+  /* RHYTHM: the room axis mounts once here so every consume site stays a plain
+     channel read. `--ds-rhythm-effective-scale` is the tenant density dial;
+     each literal is a fallback, inert wherever its token is declared. */
+  --_ds-dashboard-header-room: calc(
+    clamp(var(--ds-spacing-4, 16px), 2.2vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1)
+  );
+  --_ds-dashboard-header-room-tight: calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1));
+  --_ds-dashboard-header-gap: calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1));
+  --_ds-dashboard-header-gap-tight: calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1));
+  --_ds-dashboard-header-gap-hair: calc(var(--ds-spacing-1, 4px) * var(--ds-rhythm-effective-scale, 1));
+  --_ds-dashboard-header-rule: 1px;
+  --_ds-dashboard-header-rule-color: var(--ds-dashboard-header-border, var(--ds-color-border-subtle));
+  --_ds-dashboard-header-highlight: color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent);
+
   position: relative;
   isolation: isolate;
+  padding: var(--_ds-dashboard-header-room);
   overflow: hidden;
+  /* A quiet top-down wash: material, not a diagonal that has to move to read
+     as premium. */
   background: var(
     --ds-dashboard-header-bg,
     linear-gradient(
-      118deg,
-      color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)),
-      var(--ds-surface-card) 52%,
-      color-mix(in srgb, var(--ds-surface-panel) 82%, var(--ds-surface-card))
+      180deg,
+      color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-surface-card)),
+      var(--ds-surface-card) 58%,
+      color-mix(in srgb, var(--ds-surface-panel) 34%, var(--ds-surface-card))
     )
   );
-  background-position: 0% 50%;
-  background-size: 180% 180%;
-  border-radius: var(--ds-dashboard-header-radius, var(--ds-radius-xl, 16px));
+  border-radius: var(--ds-dashboard-header-radius, var(--ds-radius-xl));
   box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 90%, transparent),
+    inset 0 1px 0 var(--_ds-dashboard-header-highlight),
     var(--ds-dashboard-header-shadow, var(--ds-elevation-1));
-  transition:
-    background-position var(--ds-motion-slow, 320ms) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease-out);
-  animation: ds-dashboard-header-enter var(--ds-motion-calm) var(--ds-motion-ease-out, ease-out) both;
+  /* `--ds-motion-calm` is declared ONLY by the three tenant artifacts — in
+     foundation it exists solely as the reduced-motion `0s !important`. Read
+     bare it is the guaranteed-invalid value on an untenanted page, which kills
+     the whole shorthand; `--ds-motion-slow` is the declared `:root` floor. */
+  animation: ds-dashboard-header-enter var(--ds-motion-calm, var(--ds-motion-slow))
+    var(--ds-motion-ease-out, ease-out) both;
   container-type: inline-size;
   container-name: ds-dashboard-header;
 }
 
 .ds-structure.ds-dashboard-header[data-part='root'][data-compact] {
-  border: 1px solid var(--ds-dashboard-header-border, var(--ds-color-border-primary));
-}
-
-.ds-structure.ds-dashboard-header[data-part='root']::after {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  content: '';
-  opacity: var(--ds-dashboard-header-sheen-opacity, 0.24);
-  background: linear-gradient(
-    108deg,
-    transparent 24%,
-    color-mix(in srgb, var(--ds-color-bg-elevated) 76%, var(--ds-color-primary) 6%) 48%,
-    transparent 72%
-  );
-  background-position: 130% 50%;
-  background-size: 240% 100%;
-  animation: ds-dashboard-header-sheen var(--ds-dashboard-header-sheen-duration, 16s) var(--ds-motion-ease-in-out, ease-in-out) infinite;
+  border: var(--_ds-dashboard-header-rule) solid var(--_ds-dashboard-header-rule-color);
 }
 
 .ds-structure.ds-dashboard-header[data-part='root'] > * {
@@ -77,263 +105,399 @@
   z-index: var(--ds-z-index-relative-above, 1);
 }
 
-.ds-structure.ds-dashboard-header[data-part='root']:active {
-  background-position: 100% 50%;
-  border-color: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-dashboard-header-border, var(--ds-color-border-primary)));
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 92%, transparent),
-    var(--ds-dashboard-header-shadow-hover, var(--ds-elevation-2));
+/* ---- arrival sheen: one sweep, then still ---- */
+.ds-structure.ds-dashboard-header[data-part='root']::after {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  content: '';
+  opacity: var(--ds-dashboard-header-sheen-opacity, 0.2);
+  background: linear-gradient(
+    104deg,
+    transparent 28%,
+    color-mix(in srgb, var(--ds-color-bg-elevated) 74%, var(--ds-color-primary) 8%) 50%,
+    transparent 72%
+  );
+  background-position: 130% 50%;
+  background-size: 220% 100%;
+  animation: ds-dashboard-header-sheen
+    var(--ds-dashboard-header-sheen-duration, var(--ds-motion-calm, var(--ds-motion-slow)))
+    var(--ds-motion-ease-out, ease-out) 1 both;
 }
 
+/* ---- header row: identity | actions ---- */
 .ds-structure.ds-dashboard-header [data-part='header-row'] {
-  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: var(--_ds-dashboard-header-gap);
 }
 
 .ds-structure.ds-dashboard-header [data-part='identity'] {
+  display: flex;
+  align-items: flex-start;
   min-width: 0;
+  gap: var(--_ds-dashboard-header-gap-tight);
 }
 
+.ds-structure.ds-dashboard-header [data-part='copy'] {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: var(--_ds-dashboard-header-gap-hair);
+}
+
+/* ---- identity mark: a material object, not a region frame ---- */
 .ds-structure.ds-dashboard-header [data-part='icon'] {
   display: inline-grid;
+  flex: 0 0 auto;
   width: var(--ds-dashboard-header-icon-size, 42px);
   height: var(--ds-dashboard-header-icon-size, 42px);
   place-items: center;
-  border-radius: var(--ds-radius-lg, 12px);
   color: var(--ds-dashboard-header-icon-color, var(--ds-color-primary));
-  background: var(--ds-dashboard-header-icon-bg, color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card)));
+  background: var(
+    --ds-dashboard-header-icon-bg,
+    color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card))
+  );
+  border-radius: var(--ds-radius-lg);
   box-shadow:
     inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 62%, transparent),
-    0 8px 20px -15px color-mix(in srgb, var(--ds-color-primary) 72%, transparent);
-  transition: transform var(--ds-motion-fast) var(--ds-motion-ease-spring, ease-out);
+    0 8px 20px -16px color-mix(in srgb, var(--ds-color-primary) 70%, transparent);
 }
 
 .ds-structure.ds-dashboard-header[data-part='root'] [data-part='icon'] {
-  border: 1px solid var(--ds-dashboard-header-icon-border, color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border-subtle)));
+  border: var(--_ds-dashboard-header-rule) solid
+    var(
+      --ds-dashboard-header-icon-border,
+      color-mix(in srgb, var(--ds-color-primary) 20%, var(--ds-color-border-subtle))
+    );
 }
 
-.ds-structure.ds-dashboard-header[data-part='root']:active [data-part='icon'] {
-  transform: translateY(-1px) scale(1.025);
+/* ---- title row: display type + the operational state beside it ---- */
+.ds-structure.ds-dashboard-header [data-part='title-row'] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  min-width: 0;
+  gap: var(--_ds-dashboard-header-gap-tight);
 }
 
-/* The title is a Box as="h1" (one per page) — NOT typography — so its display
-   type lives here and no engine-layer rule can outrank it. Sizes mirror the
-   retired Text inline resolutions exactly (xl full / base compact). */
-.ds-structure.ds-dashboard-header[data-part='root'] [data-part='title'] {
+/* TYPE ROLES: every text part consumes a `--ds-type-<role>-*` set rather than
+   reassembling one from raw scale tokens. The role is where the tenant reaches
+   the type — the same byte-identical declaration resolves to three different
+   families, sizes and letter-spacings across the artifacts, because each role
+   is a formula over `--ds-font-family-*` / `--ds-letter-spacing-*` /
+   `--ds-type-scale`. An `<h1>` that is one per page is a page title, not a
+   display hero. */
+.ds-structure.ds-dashboard-header [data-part='title'] {
   margin: 0;
+  min-width: 0;
   color: var(--ds-color-text-primary);
-  font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
-  font-size: var(--ds-font-size-xl);
-  font-weight: var(--ds-font-weight-semibold, 600);
-  letter-spacing: var(--ds-dashboard-header-title-tracking, -0.025em);
+  font-family: var(--ds-type-page-title-font-family);
+  font-size: var(--ds-type-page-title-font-size);
+  font-weight: var(--ds-type-page-title-font-weight);
+  /* The family channel overrides the role; undeclared today, so the role wins. */
+  letter-spacing: var(--ds-dashboard-header-title-tracking, var(--ds-type-page-title-letter-spacing));
+  line-height: var(--ds-type-page-title-line-height);
+  text-transform: var(--ds-type-page-title-text-transform);
   text-wrap: balance;
 }
 
-.ds-structure.ds-dashboard-header[data-part='root'][data-compact='true'] [data-part='title'] {
-  font-size: var(--ds-font-size-base);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.ds-structure.ds-dashboard-header[data-part='root'] [data-part='subtitle'][data-size] {
+.ds-structure.ds-dashboard-header [data-part='subtitle'] {
   max-width: 68ch;
+  margin: 0;
   color: var(--ds-color-text-secondary);
-  line-height: 1.5;
+  font-family: var(--ds-type-supporting-font-family);
+  font-size: var(--ds-type-supporting-font-size);
+  font-weight: var(--ds-type-supporting-font-weight);
+  letter-spacing: var(--ds-type-supporting-letter-spacing);
+  line-height: var(--ds-type-supporting-line-height);
   text-wrap: pretty;
 }
 
-.ds-structure.ds-dashboard-header [data-part='actions'] {
-  min-height: calc(var(--ds-control-height-sm, 32px) + 8px);
-  padding: 3px;
-  border-radius: var(--ds-toolbar-radius, var(--ds-radius-lg));
-  background: color-mix(in srgb, var(--ds-toolbar-control-bg, var(--ds-surface-card)) 88%, transparent);
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 90%, transparent),
-    0 8px 18px -16px color-mix(in srgb, var(--ds-color-text-primary) 28%, transparent);
-  /* Glass is opt-in (default none): PT29/PT32/S06 fix, Sheet glass precedent. */
-  backdrop-filter: var(--ds-dashboard-header-actions-backdrop, none);
-}
-
-.ds-structure.ds-dashboard-header[data-part='root'] [data-part='actions'] {
-  border: 1px solid var(--ds-toolbar-border, var(--ds-color-border-primary));
-}
-
-.ds-structure.ds-dashboard-header [data-part='metrics-row'][data-compact='false'] {
-  padding-top: var(--ds-spacing-3, 12px);
-}
-
-/* Compact metrics: a snap-scrolling rail — each chip lands aligned instead of
-   resting half-clipped, and the scrollbar stays out of the mobile chrome. */
-.ds-structure.ds-dashboard-header [data-part='metrics-row'][data-compact='true'] {
-  scroll-snap-type: x proximity;
-  scrollbar-width: none;
-}
-
-.ds-structure.ds-dashboard-header [data-part='metrics-row'][data-compact='true']::-webkit-scrollbar {
-  display: none;
-}
-
-.ds-structure.ds-dashboard-header [data-part='metrics-row'][data-compact='true'] [data-part='metric-chip'] {
-  scroll-snap-align: start;
-}
-
-.ds-structure.ds-dashboard-header[data-part='root'] [data-part='metrics-row'][data-compact='false'] {
-  border-top: 1px solid var(--ds-toolbar-divider, var(--ds-color-border-subtle));
-}
-
-.ds-structure.ds-dashboard-header [data-part='metric-chip'] {
-  min-height: 48px;
-  border-radius: var(--ds-dashboard-metric-radius, var(--ds-radius-lg, 12px));
-  background: var(
-    --ds-dashboard-metric-bg,
-    linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 94%, var(--ds-color-primary) 6%), var(--ds-surface-card))
-  );
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 86%, transparent);
-  transition:
-    transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
-}
-
-.ds-structure.ds-dashboard-header[data-part='root'] [data-part='metric-chip'] {
-  border: 1px solid var(--ds-dashboard-metric-border, var(--ds-color-border-subtle));
-}
-
-.ds-structure.ds-dashboard-header [data-part='metric-chip']:active {
-  transform: translateY(-1px);
-  border-color: color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border-subtle));
-  box-shadow: var(--ds-elevation-1);
-}
-
-.ds-structure.ds-dashboard-header [data-part='metric-chip-icon'] {
-  display: inline-grid;
-  width: 26px;
-  height: 26px;
-  place-items: center;
-  border-radius: var(--ds-radius-md, 10px);
-  color: var(--ds-dashboard-metric-icon-color, var(--ds-color-primary));
-  background: color-mix(in srgb, currentColor 8%, transparent);
-}
-
-.ds-structure.ds-dashboard-header[data-part='root'] [data-part='metric-chip-label'][data-size] {
-  color: var(--ds-color-text-muted);
-  font-family: var(--ds-font-family-mono, var(--ds-font-family-base));
-  font-size: var(--ds-font-size-xs, 12px);
-  letter-spacing: 0.055em;
-  text-transform: uppercase;
-}
-
-.ds-structure.ds-dashboard-header[data-part='root'] [data-part='metric-chip-value'][data-size] {
-  color: var(--ds-color-text-primary);
-  font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
-  font-variant-numeric: tabular-nums;
-}
-
-.ds-structure.ds-dashboard-header[data-part='root'] [data-part='metric-chip-change'][data-size] {
-  padding: 1px 5px;
-  border-radius: var(--ds-radius-full);
-  background: color-mix(in srgb, currentColor 7%, transparent);
-  font-variant-numeric: tabular-nums;
-}
-
-.ds-structure.ds-dashboard-header[data-part='root'] [data-part='metric-chip-change'][data-direction='up'] {
-  color: var(--ds-color-success);
-}
-
-.ds-structure.ds-dashboard-header[data-part='root'] [data-part='metric-chip-change'][data-direction='down'] {
-  color: var(--ds-color-error);
-}
-
-.ds-structure.ds-dashboard-header[data-part='root'] [data-part='metric-chip-change'][data-direction='flat'] {
-  color: var(--ds-color-text-muted);
-}
-
+/* ---- status marker: dot + label, no pill ---- */
 .ds-structure.ds-dashboard-header [data-part='status-dot'] {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: var(--_ds-dashboard-header-gap-hair);
+}
+
+.ds-structure.ds-dashboard-header [data-part='status-dot-glyph'] {
+  flex: 0 0 auto;
+  width: var(--ds-spacing-2, 8px);
+  height: var(--ds-spacing-2, 8px);
+  background: currentColor;
   border-radius: var(--ds-radius-full);
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 50%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, currentColor 14%, transparent);
 }
 
-.ds-structure.ds-dashboard-header[data-part='root'] [data-part='status-dot'] {
-  border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+.ds-structure.ds-dashboard-header [data-part='status-dot-text'] {
+  color: currentColor;
+  font-family: var(--ds-type-label-font-family);
+  font-size: var(--ds-type-caption-font-size);
+  font-weight: var(--ds-type-label-font-weight);
+  letter-spacing: var(--ds-type-label-letter-spacing);
+  line-height: var(--ds-type-label-line-height);
+  white-space: nowrap;
 }
 
+/* Tone rides one tinted ancestor so the dot and its label can never disagree;
+   the label text is what carries the meaning. */
 .ds-structure.ds-dashboard-header [data-part='status-dot'][data-state='live'],
 .ds-structure.ds-dashboard-header [data-part='status-dot'][data-state='connected'] {
-  background: color-mix(in srgb, var(--ds-color-success) 10%, var(--ds-surface-card));
+  color: var(--ds-color-success);
 }
 
 .ds-structure.ds-dashboard-header [data-part='status-dot'][data-state='syncing'],
 .ds-structure.ds-dashboard-header [data-part='status-dot'][data-state='warning'] {
-  background: color-mix(in srgb, var(--ds-color-warning) 10%, var(--ds-surface-card));
+  color: var(--ds-color-warning);
 }
 
 .ds-structure.ds-dashboard-header [data-part='status-dot'][data-state='offline'] {
-  background: color-mix(in srgb, var(--ds-color-error) 10%, var(--ds-surface-card));
+  color: var(--ds-color-error);
 }
 
-.ds-structure.ds-dashboard-header [data-part='status-dot-glyph'] {
-  border-radius: 50%;
-  box-shadow: 0 0 0 3px color-mix(in srgb, currentColor 10%, transparent);
-}
-
-.ds-structure.ds-dashboard-header [data-part='status-dot-glyph'][data-state='live'],
-.ds-structure.ds-dashboard-header [data-part='status-dot-glyph'][data-state='connected'] {
-  background: var(--ds-color-success);
-  color: var(--ds-color-success);
-}
-
-/* live/syncing pulse — moved out of the engine's inline `animation` so the
-   reduced-motion guard below can neutralize it. */
+/* The live/syncing pulse is skin-owned so the reduced-motion guard reaches it. */
 .ds-structure.ds-dashboard-header [data-part='status-dot-glyph'][data-state='live'],
 .ds-structure.ds-dashboard-header [data-part='status-dot-glyph'][data-state='syncing'] {
-  animation: ds-foundation-pulse var(--ds-motion-attention, 2s) var(--ds-motion-ease-in-out, ease-in-out) infinite;
+  animation: ds-foundation-pulse var(--ds-motion-attention) var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
 
-.ds-structure.ds-dashboard-header [data-part='status-dot-glyph'][data-state='syncing'],
-.ds-structure.ds-dashboard-header [data-part='status-dot-glyph'][data-state='warning'] {
-  background: var(--ds-color-warning);
-  color: var(--ds-color-warning);
+/* ---- actions: a cluster, not a framed toolbar ---- */
+.ds-structure.ds-dashboard-header [data-part='actions'] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 0;
+  gap: var(--_ds-dashboard-header-gap-tight);
+  /* Glass is opt-in (default none): a default-ON blur taxes every scroll frame. */
+  backdrop-filter: var(--ds-dashboard-header-actions-backdrop, none);
 }
 
-.ds-structure.ds-dashboard-header [data-part='status-dot-glyph'][data-state='offline'] {
-  background: var(--ds-color-error);
-  color: var(--ds-color-error);
+.ds-structure.ds-dashboard-header [data-part='time-range'],
+.ds-structure.ds-dashboard-header [data-part='search'] {
+  display: flex;
+  min-width: 0;
+  align-items: center;
 }
 
-.ds-structure.ds-dashboard-header[data-part='root'] [data-part='status-dot-text'][data-state='live'],
-.ds-structure.ds-dashboard-header[data-part='root'] [data-part='status-dot-text'][data-state='connected'] {
+.ds-structure.ds-dashboard-header [data-part='search'] {
+  flex: 1 1 auto;
+  max-width: 32ch;
+}
+
+.ds-structure.ds-dashboard-header [data-part='action-label'] {
+  white-space: nowrap;
+}
+
+/* ---- metric readout: one hairline owns the region ---- */
+.ds-structure.ds-dashboard-header [data-part='metrics-row'] {
+  display: flex;
+  align-items: stretch;
+  margin-top: var(--_ds-dashboard-header-gap);
+  padding-top: var(--_ds-dashboard-header-gap-tight);
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+}
+
+.ds-structure.ds-dashboard-header[data-part='root'] [data-part='metrics-row'] {
+  border-top: var(--_ds-dashboard-header-rule) solid var(--_ds-dashboard-header-rule-color);
+}
+
+.ds-structure.ds-dashboard-header [data-part='metrics-row']::-webkit-scrollbar {
+  display: none;
+}
+
+.ds-structure.ds-dashboard-header [data-part='metrics-row']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+}
+
+.ds-structure.ds-dashboard-header [data-part='metric-chip'] {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  min-width: 0;
+  padding: 0 var(--_ds-dashboard-header-gap);
+  /* The chip-frame channels stay reachable but default to nothing: a tenant
+     that declares them gets a framed chip back; the default is the cell. */
+  border-radius: var(--ds-dashboard-metric-radius, 0);
+  background: var(--ds-dashboard-metric-bg, none);
+  gap: var(--_ds-dashboard-header-gap-hair);
+  scroll-snap-align: start;
+}
+
+.ds-structure.ds-dashboard-header [data-part='metric-chip']:first-child {
+  padding-inline-start: 0;
+}
+
+/* One rule between cells — the readout is a rhythm, not a row of boxes. */
+.ds-structure.ds-dashboard-header[data-part='root'] [data-part='metric-chip'] + [data-part='metric-chip'] {
+  border-inline-start: var(--_ds-dashboard-header-rule) solid
+    var(--ds-dashboard-metric-border, var(--_ds-dashboard-header-rule-color));
+}
+
+.ds-structure.ds-dashboard-header [data-part='metric-chip-icon'] {
+  display: inline-grid;
+  width: var(--ds-spacing-6, 24px);
+  height: var(--ds-spacing-6, 24px);
+  place-items: center;
+  color: var(--ds-dashboard-metric-icon-color, var(--ds-color-primary));
+  background: color-mix(in srgb, currentColor 10%, transparent);
+  border-radius: var(--ds-radius-md);
+}
+
+/* The one deliberate deviation from a role: a KPI label rail reads as
+   micro-caps. `text-transform` is the only property that carries that, so
+   every other property still comes from the role and still diverges. */
+.ds-structure.ds-dashboard-header [data-part='metric-chip-label'] {
+  color: var(--ds-color-text-muted);
+  font-family: var(--ds-type-caption-font-family);
+  font-size: var(--ds-type-caption-font-size);
+  font-weight: var(--ds-type-caption-font-weight);
+  letter-spacing: var(--ds-type-label-letter-spacing);
+  line-height: var(--ds-type-caption-line-height);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.ds-structure.ds-dashboard-header [data-part='metric-chip-readout'] {
+  display: flex;
+  align-items: baseline;
+  min-width: 0;
+  gap: var(--_ds-dashboard-header-gap-hair);
+}
+
+.ds-structure.ds-dashboard-header [data-part='metric-chip-value'] {
+  color: var(--ds-color-text-primary);
+  font-family: var(--ds-type-numeric-font-family);
+  font-size: var(--ds-type-numeric-font-size);
+  font-weight: var(--ds-type-numeric-font-weight);
+  font-variant-numeric: var(--ds-type-numeric-font-variant-numeric);
+  letter-spacing: var(--ds-type-numeric-letter-spacing);
+  line-height: var(--ds-type-numeric-line-height);
+  white-space: nowrap;
+}
+
+.ds-structure.ds-dashboard-header [data-part='metric-chip-change'] {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--ds-type-caption-font-family);
+  font-size: var(--ds-type-caption-font-size);
+  font-weight: var(--ds-type-caption-font-weight);
+  font-variant-numeric: var(--ds-type-numeric-font-variant-numeric);
+  line-height: var(--ds-type-caption-line-height);
+  gap: var(--_ds-dashboard-header-gap-hair);
+  white-space: nowrap;
+}
+
+.ds-structure.ds-dashboard-header [data-part='metric-chip-trend'] {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+}
+
+.ds-structure.ds-dashboard-header [data-part='metric-chip-change'][data-direction='up'] {
   color: var(--ds-color-success);
 }
 
-.ds-structure.ds-dashboard-header[data-part='root'] [data-part='status-dot-text'][data-state='syncing'],
-.ds-structure.ds-dashboard-header[data-part='root'] [data-part='status-dot-text'][data-state='warning'] {
-  color: var(--ds-color-warning);
-}
-
-.ds-structure.ds-dashboard-header[data-part='root'] [data-part='status-dot-text'][data-state='offline'] {
+.ds-structure.ds-dashboard-header [data-part='metric-chip-change'][data-direction='down'] {
   color: var(--ds-color-error);
 }
 
-@container ds-dashboard-header (max-width: 720px) {
+.ds-structure.ds-dashboard-header [data-part='metric-chip-change'][data-direction='flat'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ============================================================================
+   POSTURE CUTS — container-driven. Mobile is a simpler header, not a squeezed
+   desktop one: the actions stop competing with the identity for one row, the
+   display type steps down, secondary copy yields before the operational
+   signal does, and the readout becomes a snapping rail.
+   ============================================================================ */
+
+@container ds-dashboard-header (max-width: 900px) {
   .ds-structure.ds-dashboard-header [data-part='header-row'] {
-    align-items: stretch;
-    flex-direction: column;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .ds-structure.ds-dashboard-header [data-part='actions'] {
-    width: 100%;
-    overflow-x: auto;
-  }
-
-  .ds-structure.ds-dashboard-header [data-part='metrics-row'] {
     flex-wrap: nowrap;
+    justify-content: flex-start;
     overflow-x: auto;
     scrollbar-width: none;
   }
 
-  .ds-structure.ds-dashboard-header [data-part='metric-chip'] {
-    flex: 0 0 min(72vw, 220px);
+  .ds-structure.ds-dashboard-header [data-part='search'] {
+    max-width: none;
   }
+}
+
+/* Icon-bearing actions go glyph-only; the accessible name lives on the
+   button's aria-label, never on the span this hides. */
+@container ds-dashboard-header (max-width: 640px) {
+  .ds-structure.ds-dashboard-header [data-part='title'] {
+    font-size: var(--ds-type-section-title-font-size);
+  }
+
+  .ds-structure.ds-dashboard-header [data-part='subtitle'] {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .ds-structure.ds-dashboard-header [data-part='action-label'][data-has-icon='true'] {
+    display: none;
+  }
+
+  .ds-structure.ds-dashboard-header [data-part='metric-chip'] {
+    padding: 0 var(--_ds-dashboard-header-gap-tight);
+  }
+}
+
+/* The phone posture: secondary copy yields, and the readout snaps one cell at
+   a time so a KPI is never left half-clipped. */
+@container ds-dashboard-header (max-width: 420px) {
+  .ds-structure.ds-dashboard-header [data-part='subtitle'] {
+    display: none;
+  }
+
+  .ds-structure.ds-dashboard-header [data-part='metrics-row'] {
+    scroll-snap-type: x mandatory;
+  }
+
+  .ds-structure.ds-dashboard-header [data-part='metric-chip'] {
+    min-width: 40cqi;
+  }
+}
+
+/* ---- consumer-forced compact: the same posture at any width ---- */
+.ds-structure.ds-dashboard-header[data-part='root'][data-compact='true'] {
+  padding: var(--_ds-dashboard-header-room-tight) var(--_ds-dashboard-header-room);
+}
+
+.ds-structure.ds-dashboard-header[data-part='root'][data-compact='true'] [data-part='header-row'] {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.ds-structure.ds-dashboard-header[data-part='root'][data-compact='true'] [data-part='title'] {
+  font-size: var(--ds-type-section-title-font-size);
+}
+
+.ds-structure.ds-dashboard-header[data-part='root'][data-compact='true'] [data-part='subtitle'] {
+  display: none;
+}
+
+.ds-structure.ds-dashboard-header[data-part='root'][data-compact='true'] [data-part='actions'] {
+  justify-content: flex-start;
+}
+
+.ds-structure.ds-dashboard-header[data-part='root'][data-compact='true'] [data-part='metric-chip'] {
+  padding: 0 var(--_ds-dashboard-header-gap-tight);
 }
 
 @keyframes ds-dashboard-header-enter {
@@ -348,50 +512,33 @@
 }
 
 @keyframes ds-dashboard-header-sheen {
-  0%, 72%, 100% { background-position: 130% 50%; }
-  86% { background-position: -130% 50%; }
-}
-
-/* ---- hover is pointer-fine only; every treatment keeps an unguarded
-        `:active` twin at its original cascade position. ---- */
-@media (hover: hover) {
-  .ds-structure.ds-dashboard-header[data-part='root']:hover {
-    background-position: 100% 50%;
-    border-color: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-dashboard-header-border, var(--ds-color-border-primary)));
-    box-shadow:
-      inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 92%, transparent),
-      var(--ds-dashboard-header-shadow-hover, var(--ds-elevation-2));
+  from {
+    opacity: 0;
+    background-position: 130% 50%;
   }
-
-  .ds-structure.ds-dashboard-header[data-part='root']:hover [data-part='icon'] {
-    transform: translateY(-1px) scale(1.025);
-  }
-
-  .ds-structure.ds-dashboard-header [data-part='metric-chip']:hover {
-    transform: translateY(-1px);
-    border-color: color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border-subtle));
-    box-shadow: var(--ds-elevation-1);
+  to {
+    background-position: -30% 50%;
   }
 }
 
-/* ---- forced colors: the structure-owned frames read as ButtonText; status
-        reads by glyph + label text, metric direction by its +/- sign. ---- */
+/* ---- forced colors: every structure-owned rule reads as ButtonText; state
+        reads by its label text, direction by its +/- sign. ---- */
 @media (forced-colors: active) {
   .ds-structure.ds-dashboard-header[data-part='root'][data-compact],
   .ds-structure.ds-dashboard-header[data-part='root'] [data-part='icon'],
-  .ds-structure.ds-dashboard-header[data-part='root'] [data-part='actions'],
-  .ds-structure.ds-dashboard-header[data-part='root'] [data-part='metrics-row'][data-compact='false'],
-  .ds-structure.ds-dashboard-header[data-part='root'] [data-part='metric-chip'],
-  .ds-structure.ds-dashboard-header[data-part='root'] [data-part='status-dot'] {
+  .ds-structure.ds-dashboard-header[data-part='root'] [data-part='metrics-row'],
+  .ds-structure.ds-dashboard-header[data-part='root'] [data-part='metric-chip'] + [data-part='metric-chip'] {
     border-color: ButtonText;
+  }
+
+  .ds-structure.ds-dashboard-header [data-part='metrics-row']:focus-visible {
+    outline-color: Highlight;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .ds-structure.ds-dashboard-header[data-part='root'],
   .ds-structure.ds-dashboard-header[data-part='root']::after,
-  .ds-structure.ds-dashboard-header [data-part='icon'],
-  .ds-structure.ds-dashboard-header [data-part='metric-chip'],
   .ds-structure.ds-dashboard-header [data-part='status-dot-glyph'] {
     animation: none;
     transition: none;
