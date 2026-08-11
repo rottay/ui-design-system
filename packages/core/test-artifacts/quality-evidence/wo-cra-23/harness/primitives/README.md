@@ -52,6 +52,71 @@ not a defect to schedule.
 
 ---
 
+## REACH, not naming — and reach is nearly identical
+
+The authorship table counts which families a vertical **names**. `reach.mjs`
+resolves every painted `var()` chain through one cell's declaration order until
+it terminates, which answers the different and load-bearing question: **does the
+resolved value actually differ?** 381 skin files, 258 families, 14,666 painted
+`var()` declarations, six cells.
+
+```
+CELL            VERTICAL   DS-LITERAL   FALLBACK   UNDECLARED
+bithire/light       9787       2506       1980        393
+bithire/dark        9739       2545       1989        393
+evnto/light         8880       3148       2227        410
+evnto/dark          8386       3565       2304        410
+rottay/light        9830       2347       2093        396
+rottay/dark         9943       2266       2061        396
+```
+
+**Families reached: 253 / 252 / 253 of 258.** A spread of ONE family, against a
+naming table where bithire misses 23 and evnto misses 585. **The asymmetry is in
+naming, not in reach** — which is the finding, and it is bigger than the table
+it corrects.
+
+**The divergence ceiling.** A declaration terminating in a DS literal, an inline
+fallback, or nothing is identical in all three verticals *by construction*: no
+amount of authoring moves it.
+
+```
+bithire   33.3% light · 33.6% dark      cannot differ, whatever anyone authors
+rottay    33.0% light · 32.2% dark
+evnto     39.5% light · 42.8% dark
+```
+
+So roughly **a third of the painted surface is pinned to the generic layer**.
+The divergence we can produce is bounded there, not by family authorship — and
+another wave of channel authoring cannot move it.
+
+**Evnto is the outlier, and its gap is dark.** bithire and rottay are flat
+across themes (66.7→66.4, 67.0→67.8); evnto drops 60.5→57.2. It is the only
+vertical that reaches materially less in dark than in light, which is a
+different defect from "evnto names fewer channels".
+
+**Five families no vertical reaches at all**: `carousel-compounds`,
+`oauth-transition`, `progress-compounds`, `stats-header-keyframes`, `watermark`.
+**103 families** have a three-way spread of ≥4 declarations — that is the real
+divergence surface, and `collection-header` (200/173/178) and `card-compounds`
+(92/67/90) lead it.
+
+**Method and its limits.** Termination obeys the fallback-inert law: `var(--a, X)`
+reaches `X` only where `--a` is undeclared *in that cell*, so the walk is a
+property of the cell and not of the text. Cells are binned by the **block
+opener**, tested negations-first — `:not([data-theme="dark"])` contains the
+substring `[data-theme="dark"]`, and **rottay is dark-first**, its default block
+being `:not([data-theme='light'])`; a classifier defaulting to light mis-bins 646
+of its declarations. What this does *not* model: cascade between competing rules
+for the same property, and `@media`/container conditions. It resolves each
+declaration's chain as written, which is the question asked.
+
+Control: four terminals separated on shapes lifted from the tree, not invented —
+`--ds-surface-control` (bithire authors it), `--ds-surface-card` → a DS literal,
+an undeclared name, and `--ds-font-family-base`, which rottay authors **only in
+its dark default block**, so the same declaration must read VERTICAL in
+rottay/dark and DS-LITERAL in rottay/light. A control that cannot invert with the
+dark-first vertical cannot catch the trap this census exists to avoid.
+
 ## Orphan channels: class A disappears, class B lies
 
 ```
@@ -221,6 +286,7 @@ those names are gone.
 | `callsites.mjs` | Every JSX call site passing `data-part` to a component, across 5 corpora. `--control` runs 3 checks over 8 planted shapes. Writes `callsites.json`. |
 | `engine-pin.mjs` | Class 3: pinned engine props and single-engine imports. `--control` scans the planted fixture. |
 | `join.mjs` | Joins the rendered roots against the CSS and writes `FINDINGS.json`, deduped. |
+| `reach.mjs` | Resolves every painted `var()` chain per vertical x theme to the channel that terminates it. `--control` runs 5 assertions on shapes lifted from the tree. Writes `REACH.json`. |
 | `nonroot-parts.mjs` | The same orphan-channel question on anchors that are not `root`, with the anchor set taken from the DOM. `--control` runs 6 shapes, 3 firing and 3 silent. Writes `NONROOT-PARTS.json`. |
 | `fallback-reads.mjs` | Class B: reads whose fallback fires on severance and delivers another cell. Carries the reachability gate. `--control` runs 7 shapes, 3 firing and 4 silent. Writes `FALLBACK-READS.json`. |
 | `void-reads.mjs` | The second-order class: a custom property declared inside a root-keyed rule and read from a rule that survives severance. `node void-reads.mjs <tree> <pkg-with-postcss>`; point the first argument at `control/void-reads` for the 7 planted shapes. |

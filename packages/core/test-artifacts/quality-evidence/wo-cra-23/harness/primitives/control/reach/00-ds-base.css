@@ -1,0 +1,10 @@
+/* DS base, lifted shape: bare :root plus a .dark override. */
+:root {
+  --ds-color-neutral-0: #ffffff;
+  --ds-surface-card: var(--ds-color-neutral-0);
+  --ds-font-family-base: Inter, sans-serif;
+  --ds-button-default-bg: var(--ds-surface-card);
+}
+html.dark {
+  --ds-color-neutral-0: #020617;
+}

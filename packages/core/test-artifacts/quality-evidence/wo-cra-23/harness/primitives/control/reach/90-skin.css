@@ -1,0 +1,7 @@
+/* A family skin reading four chains. */
+.ctl-fam[data-part='root'] {
+  color: var(--ds-surface-control, #000);          /* bithire authors it -> VERTICAL */
+  background: var(--ds-surface-card);              /* -> neutral-0 -> DS literal */
+  border-color: var(--ds-not-declared-anywhere, #abcdef); /* undeclared -> FALLBACK */
+  outline-color: var(--ds-font-family-base);       /* rottay: dark yes, light no */
+}
