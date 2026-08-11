@@ -263,6 +263,29 @@ the hardcoded fallbacks** and strips that vertical's paint from the read-only en
 
 Before retiring any alias, check whether a read-only engine reads the losing spelling.
 
+### A seventh unsafe class: tier relocation changes SCOPE
+
+> **Expressibility is a property of the contract. Movability is a property of the contract AND the
+> block the old declaration lived in.**
+
+The authoring tiers do not share a scope: a `BrandTheme` base body emits into the **unconditional**
+tenant block, `modes.<mode>` into that mode's block, and a hand extension into whatever block it was
+written in — and extension blocks are usually theme-scoped. Tenant paint is unlayered, so an
+unconditional declaration outranks the theme layer **in both themes**.
+
+So a move that is **value-identical by construction is still a repaint** wherever the two tiers'
+scopes differ. Measured: of the channels in the three extensions, **evnto has exactly ONE that is
+scope-safe**; platform has three, and 559 of its 645 are theme-split pairs.
+
+**And it interacts with the leak.** Moving a light-authored extension value into the unconditional
+contract block manufactures another light-value-winning-a-dark-cell — in the two verticals where that
+defect was already measured at 151 and 112. A drain scoped on expressibility alone would **deepen the
+leak rather than drain debt**.
+
+Before moving any channel between tiers, establish what the other theme does with it: differs,
+undefined, or agrees. Only *agrees* is movable. "Undefined in the other theme" is class 5 run
+backwards — the move defines a name that today falls to its fallback arm.
+
 ### Tenant-paintable is NOT "declared in an artifact"
 
 A name the **chrome compiler can write** is tenant-paintable even when no first-party theme populates
