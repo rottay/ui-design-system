@@ -263,6 +263,26 @@ the hardcoded fallbacks** and strips that vertical's paint from the read-only en
 
 Before retiring any alias, check whether a read-only engine reads the losing spelling.
 
+### An eighth unsafe class: a rename can silently disable the guard that watches it
+
+A guard that reconciles two emitters of one channel identifies them **by name**. Change the name one
+emitter writes — even for a correct reason — and the guard stops seeing the pair. It does not fail; it
+**stops covering that channel**, silently, while continuing to report green on everything else.
+
+Observed: a repair moved one emitter from `--ds-radius-md` to `--ds-radius-md-base` while a second
+emitter kept writing the flat name from the same authored value. The two landed in the same block, the
+unlayered flat beat the layered calc so the repair was defeated outright — and because the names no
+longer matched, the single-emitter guard's coverage of that channel lapsed without a single red.
+
+**After any rename, re-check every guard that keys on the old name.** A guard's silence is not
+evidence that its subject is still in scope.
+
+### The probe cannot see the non-bundled tenant path
+
+The resolution probe measures the three bundled verticals. The provider's brand-chrome path runs
+**only for tenants that are not bundled**, so the instrument is blind exactly where white-label
+tenants live. Any claim about that path needs a different proof.
+
 ### A seventh unsafe class: tier relocation changes SCOPE
 
 > **Expressibility is a property of the contract. Movability is a property of the contract AND the
