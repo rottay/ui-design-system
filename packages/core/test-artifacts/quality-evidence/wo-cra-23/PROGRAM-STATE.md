@@ -500,6 +500,35 @@ a false reading — and it is why a lane that needed an after-arm artifact rende
 `src/`** and proved the harness with a null-arm control (byte-identical to the committed artifact on
 unedited sources) before trusting a single number.
 
+### Classic RE-BASES rem — a rem ladder is not engine-stable
+
+A lane deferred two icon literals to the canonical ladder (`12px → --ds-icon-xs-size`,
+`16px → --ds-icon-sm-size`), then caught itself: classic sets
+`html[data-tenant] { font-size: var(--ds-font-size-base) }` and `--ds-font-size-base-base` is
+**0.9375rem = 15px**. So `--ds-icon-xs-size` is 12px under modern and **11.25px under classic**. Both
+reverted, because the skin in question is engine-agnostic.
+
+Companion hazard in the same pass: **`--ds-spacing-*` is density-scaled and the verticals differ** —
+bithire 0.9, evnto 1.125, platform 1. Mapping a `12px` literal to `--ds-spacing-3` yields 10.8px on one
+vertical and 13.5px on another. Unsafe class 1.
+
+Operative form: **"defer to the canonical ladder" is not free in an engine-agnostic skin.** Before
+replacing a literal with a ladder token, ask what re-bases rem and what scales the ladder — and answer
+per engine and per vertical, not once.
+
+### `changedRows: 0` from the probe is a NEGATIVE CONTROL, not coverage
+
+Volunteered by the lane whose earlier evidence it weakens, which is why it is trustworthy. The probe's
+fixture roster is card / button / input / two skeleton dial controls / token readout. **No fixture
+renders a detail header or a saved-views panel**, and the artifact contains no `saved-views`, no
+`--ds-icon-*`, no `--ds-spacing-*`. So a `changedRows: 0` on such a lane proves its added **root** rules
+caused no collateral movement — it says nothing about the component's own geometry.
+
+The load-bearing proofs in both those lanes were the **static** ones: token identity against the
+fallback arm, and the declared-nowhere census. Those stand. But **the instrument's silence is only
+evidence within its roster**, and a roster of six fixtures is not the component library. Any lane
+quoting `changedRows: 0` must state which fixtures could have moved.
+
 ### ANSWERED: the untenanted default has no light theme at all
 
 The open [O] question — *"whether the untenanted default should deliberately be its own neutral identity
