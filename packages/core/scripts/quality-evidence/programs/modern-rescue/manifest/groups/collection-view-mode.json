@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "groupId": "collection-view-mode",
+  "kind": "RECIPE_AND_ANATOMY",
+  "implementationState": "OPERATIONAL_SOURCE_BOUND",
+  "sourceBindings": [
+    {
+      "path": "packages/core/src/ui/surfaces/foundation/contracts/adaptive/collection/index.ts",
+      "symbol": "CollectionViewMode"
+    },
+    {
+      "path": "packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+      "symbol": "effectiveViewMode"
+    }
+  ],
+  "selectionAuthority": "Controlled or uncontrolled CollectionWorkspace viewMode, overridden by the active AdaptiveConfig posture when configured",
+  "variants": [
+    {
+      "id": "table",
+      "publicSelection": "viewMode=table"
+    },
+    {
+      "id": "cards",
+      "publicSelection": "viewMode=cards"
+    },
+    {
+      "id": "grid",
+      "publicSelection": "viewMode=grid"
+    },
+    {
+      "id": "kanban",
+      "publicSelection": "viewMode=kanban"
+    },
+    {
+      "id": "gallery",
+      "publicSelection": "viewMode=gallery"
+    },
+    {
+      "id": "calendar",
+      "publicSelection": "viewMode=calendar"
+    }
+  ],
+  "invariants": [
+    "View changes preserve item identity, controlled state, selection, actions and permissions.",
+    "Adaptive posture has one renderer authority and cannot disagree with the toolbar's selected mode.",
+    "Page and embed hosts use the same collection contract; embed only changes shell chrome defaults."
+  ],
+  "deprecatedAliases": []
+}

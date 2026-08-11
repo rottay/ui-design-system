@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "controlId": "token-overrides",
+  "lifecycleState": "OPERATIONAL",
+  "tier": "pro",
+  "scope": "tenant",
+  "semanticOwner": {
+    "owner": "design-system",
+    "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+    "registryDigest": "ed06c5a7fb7dc7e90ff04eef914c94a48a2f6eaff749c1e8ed7995639e2319f3"
+  },
+  "title": "Bounded raw channel overrides",
+  "valueType": "token-map",
+  "domain": {
+    "kind": "token-map",
+    "enumValues": [],
+    "bounds": null,
+    "defaultBehavior": "none; closed allowlist, max 200 entries, fails closed"
+  },
+  "ingress": {
+    "staticBrandThemePath": "tokenOverrides",
+    "dbTenantThemePath": "visualFoundation.advanced.tokenOverrides"
+  },
+  "declaredOutputs": {
+    "channels": [
+      "--ds-color-error",
+      "--ds-surface-card",
+      "--ds-color-bg-overlay"
+    ],
+    "rootAttributes": [],
+    "representativeOnly": true
+  },
+  "dependsOn": [],
+  "compatibility": "escape hatch, not the model: every recurring override is a candidate for a real capability",
+  "productiveConsumerWitness": {
+    "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts",
+    "symbol": "tokenOverrides"
+  },
+  "calibration": {
+    "assessmentState": "UNKNOWN",
+    "representativeFamilyIds": [],
+    "normalizedStops": [],
+    "staticDbParityEvidenceIds": [],
+    "exactRestoreEvidenceIds": [],
+    "negativeControls": [],
+    "nextAction": "CALIBRATE_LOWERERS_COMPUTED_DELTAS_NEGATIVES_AND_EXACT_RESTORE"
+  },
+  "retiredAliases": []
+}

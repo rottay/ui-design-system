@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "controlId": "palette.seeds",
+  "lifecycleState": "OPERATIONAL",
+  "tier": "standard",
+  "scope": "tenant",
+  "semanticOwner": {
+    "owner": "design-system",
+    "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+    "registryDigest": "ed06c5a7fb7dc7e90ff04eef914c94a48a2f6eaff749c1e8ed7995639e2319f3"
+  },
+  "title": "Brand palette seeds",
+  "valueType": "color-set",
+  "domain": {
+    "kind": "color-set",
+    "enumValues": [],
+    "bounds": null,
+    "defaultBehavior": "vertical baseline palette"
+  },
+  "ingress": {
+    "staticBrandThemePath": "palette.{primaryColor,secondaryColor,accentColor,backgroundColor}",
+    "dbTenantThemePath": "appearance.general.palette.{primary,secondary,accent,background}"
+  },
+  "declaredOutputs": {
+    "channels": [
+      "--ds-color-primary",
+      "--ds-color-primary-500",
+      "--ds-button-primary-bg",
+      "--ds-chart-series-1",
+      "--ds-color-text-on-primary"
+    ],
+    "rootAttributes": [],
+    "representativeOnly": true
+  },
+  "dependsOn": [],
+  "compatibility": "additive, unset-to-rollback",
+  "productiveConsumerWitness": {
+    "consumer": "src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+    "symbol": "var(--ds-button-primary-bg"
+  },
+  "calibration": {
+    "assessmentState": "UNKNOWN",
+    "representativeFamilyIds": [],
+    "normalizedStops": [],
+    "staticDbParityEvidenceIds": [],
+    "exactRestoreEvidenceIds": [],
+    "negativeControls": [],
+    "nextAction": "CALIBRATE_LOWERERS_COMPUTED_DELTAS_NEGATIVES_AND_EXACT_RESTORE"
+  },
+  "retiredAliases": []
+}

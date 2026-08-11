@@ -1,378 +1,340 @@
-# Modern rescue — WO-CRA-23 execution program
+# Modern Rescue — START HERE
 
-This folder is the executable specification for `WO-CRA-23`. It is not a
-second roadmap and it does not own status.
+This is the only human entry point for WO-CRA-23. A new agent starts here,
+follows the linked machine contracts, checks the repository, and continues the
+active packet. No other Markdown file may redefine this programme, its status,
+its denominator, its control model, or its acceptance law.
 
-## Authority
+## Product promise
 
-- Status authority: `ui-design-system/roadmap/registry.json`.
-- Work-order contract: `ui-design-system/roadmap/craft.md#wo-cra-23-claude-multi-agent-ds-normalization-and-world-class-family-elevation`.
-- Architecture authority: active documents under
-  `docs-engineering/engineering/design-system/**`.
-- Token/control truth: generated catalogs and productive contracts under
-  `packages/core/src/foundation/**`.
-- Round evidence: `packages/core/test-artifacts/quality-evidence/wo-cra-23/**`.
-- Final machine and sighted acceptance: Codex.
+A small set of understandable public customization controls must produce a
+large, coherent and observable change across the design system. A control is
+not complete because a token exists, a file changed, a selector mentions it, or
+a screenshot was taken. It is complete only when the same semantic input:
 
-Files in this directory describe inputs, metrics and evidence requirements.
-They may not contain a competing `status`, percentage complete or acceptance
-claim.
+1. is accepted by the static `BrandTheme` and DB `TenantTheme` paths;
+2. is normalized by one authority into governed semantic channels;
+3. reaches every declared canonical family, stable part and property group;
+4. moves the intended computed properties and leaves negative controls fixed;
+5. restores the exact baseline when removed; and
+6. survives applicable responsive, RTL, accessibility, input and motion stress.
 
-## Files
+There may be many internal tokens. There must not be many product dials for the
+same concept. A replacement retires its predecessor in the same completed
+migration; aliases are not a second product model.
 
-| File | Purpose |
+## Authority tree
+
+The tree is deliberately small:
+
+| File | Authority |
 |---|---|
-| `program.json` | Closed identity, denominators and invariants |
-| `family-inventory.json` | Exact 252-family planning denominator |
-| `quality-rubric.json` | Binary eligibility, 100-point craft rubric, hard vetoes and stress matrix |
-| `customization-model.json` | Standard/Pro/Expert composition, propagation KPIs and creative-to-canon protocol |
-| `tenant-art-direction.json` | Binding deep divergence contract for BitHire and The Management |
-| `TENANT-ART-DIRECTION.md` | Human-readable product direction and current profile contradictions |
-| `visual-craft-contract.json` | Hard visual vetoes, mechanical floors, reference incidents and Codex checkpoint cohorts |
-| `VISUAL-CRAFT-CONTRACT.md` | Human-readable integrated/subtle/adaptive craft standard |
-| `rounds.json` | R0–R7 entry, scope, exits and Codex stop/go boundaries |
-| `R7-CUSTOMIZATION-10-10.md` | Post-R6 customization depth, tenant distinctiveness, external benchmark and catalog-parity execution contract |
-| `agent-orchestration.json` | Dynamic conflict-graph parallelization and reserved ownership |
-| `evidence-contract.json` | Required manifests, receipts, hashes and reports |
-| `ROUND-REPORT-TEMPLATE.md` | Consolidated coordinator report per round |
-| `CLAUDE-PROMPT.md` | Bootstrap prompt; the JSON contracts remain binding |
-| `KIMI-ANNOTATIONS/` | Temporary full-program advisory inbox; Codex folds useful findings into canon and deletes the raw submission before Claude reads the program |
+| `README.md` | human entry, laws, resume algorithm and execution order |
+| `program.json` | programme identity, fences and source authorities |
+| `checkpoint.intent.json` | machine-rendered current packet intent |
+| `manifest/index.json` | generated index of the segmented control, recipe and 252-family customization manifest |
+| `rounds.json` | R0–R6 execution boundaries; R7 is future and disabled |
+| `family-inventory.json` | canonical 252-family identity and ownership |
+| `customization-model.json` | operational controls, proposed target model and control-to-family evidence contract |
+| `quality-rubric.json` | DONE, test-truth and acceptance vocabulary |
+| `evidence-contract.json` | source binding, computed, restore and sighted receipts |
+| `tenant-art-direction.json` | same-tree tenant outcomes, not another compiler |
+| `visual-craft-contract.json` | sighted criteria and checkpoint bounds |
+| `agent-orchestration.json` | disjoint ownership and advisory roles |
 
-## Canonical DS reference lab
+`roadmap/registry.json` is the machine status index and points here.
+`roadmap/craft.md` contains only the short WO pointer. Historical sealed
+evidence remains under
+`packages/core/test-artifacts/quality-evidence/wo-cra-23/`; evidence is not a
+roadmap and never overrides this tree.
 
-R1 visual truth lives at `http://localhost:7001/probe/ds-reference`. It is a
-showroom-owned, hardcoded, deterministic lab over the existing exhaustive
-`whitelabel-torture` substrate. Its scenes cover primitives, forms, data,
-workflow, dashboards/charts, shell/structures, surfaces/long-tail and a
-coverage atlas. Coverage is the union of the focused scenes; the atlas does not
-mount all 252 families in one DOM because that would make the tool itself
-non-iterable. It never imports a product application, product route, API, database
-reader or app stylesheet.
+The segmented manifest is the future assessment and acceptance authority.
+`family-ledger.json` remains an immutable historical/source-visitation input:
+its `SOURCE_TOUCHED`, `TESTS_ONLY` and old review fields are never updated or
+read as current programme progress. A generated manifest rollup is the only
+place that may aggregate current family/control state.
 
-The two panes render the same DS tree and content in distinct document roots:
+Architecture documentation remains authoritative for architecture. If an
+execution finding changes architecture, update its owning contract rather than
+writing another programme.
 
-- BitHire resolves the canonical static `BrandTheme`;
-- The Management resolves the published DB canary document through the real
-  tenant-theme validator/compiler and then the normal provider path.
+## Fixed scope and honest progress
 
-This route is the authority for R1 craft, responsiveness and tenant divergence.
-BitHire Candidates and other application features are later integration
-consumers: their legacy CSS, domain layout or stale build can reveal adoption
-defects, but may neither certify nor reject the underlying DS grammar.
+The closure universe is the 252 canonical IDs in `family-inventory.json`.
+Static reach, CSS basename spread, files touched, tests present, capture counts
+and source commits are prioritization signals only. They cannot shrink the
+denominator or award progress.
 
-The initial implementation deliberately reuses the existing 5,796-line probe
-to preserve one tree, and that exposed two R0 blockers rather than hiding them:
-the monolithic route has a multi-minute cold compile under webpack, and its
-server first frame paints the default dark ground before the light tenant
-authority hydrates. R0 owns scene-level module boundaries and first-paint
-authority. Neither issue may be waved away as showroom-only because both make
-visual evidence misleading.
+In particular:
 
-## Product objective
+- `SOURCE_TOUCHED` means only that a source path changed.
+- A null `reviewVerdict` is not acceptance.
+- The former 103-family rescope is retracted: it mixed CSS basenames with
+  canonical families and used a selector-unaware, first-`var()` reach model.
+- Reach reports may order work, but no reach report decides DONE.
+- Historical acceptance claims remain historical until reconciled against this
+  contract; they are not silently discarded or promoted.
 
-Make the existing Modern engine a reference-grade Rottay default while keeping
-one design system:
+Every one of the 252 families eventually receives an explicit disposition for
+every governed control: `APPLICABLE`, `INVARIANT_WITH_REASON`,
+`NOT_APPLICABLE_WITH_REASON`, or `UNKNOWN`. Absence is never interpreted as not
+applicable.
 
-1. A small set of tenant-facing decisions creates broad, coherent changes.
-2. BitHire and The Management use the same React tree and implement the exact
-   deep directions in `tenant-art-direction.json`: BitHire as a BitHire-original
-   professional-network hiring OS; The Management as a monochrome, square,
-   editorial and rustic executive ledger. They differ materially in type,
-   shape, edge, material, density, rhythm, icon, motion, motif, navigation,
-   responsive composition and anatomy/recipe — never only color.
-3. Responsive behavior is intrinsic and container-aware. Changing type scale,
-   spacing, density, radius or content must not create overlap, clipping,
-   per-character wrapping or unjustified internal holes.
-4. Mobile is a simplified product posture, not compressed desktop.
-5. Every visible string participates in i18n; EN, ES and AR/RTL are runtime
-   stresses, while FR/PT retain key parity.
-6. Motion, state, keyboard, focus, forced colors, reduced motion and reduced
-   transparency are part of quality, not cleanup.
-7. Only the DS semantic icon supplier is allowed.
-8. Useful Kimi capacity is preserved and connected, derived or promoted. A
-   dead-writer census is never deletion permission.
+## Operational controls versus the target model
 
-## Owner-authorized R7 extension
+The capability registry is the only operational product-control authority.
+`customization-model.json` records the current 13 Standard controls and seven
+Pro capabilities from that source. The proposed 9 Standard + 7 Pro model is a
+design target, not implemented product truth.
 
-R0-R6 establish and independently certify the quality of the fixed 252-family
-Modern inventory. R7 begins only after that accepted frozen-tree baseline and
-deepens the same system: complete family anatomy/control dispositions, full
-token and CSS ownership closure, expansion from six current recipe families to
-the fourteen target semantic groups, five coherent non-product art-direction
-postures, product-editor ergonomics and a capability-level catalog comparison.
+Only one model is operational at a time. A target control becomes operational
+through an atomic migration that proves a unique owner, static/DB lowering,
+consumer propagation, exact restore and predecessor retirement. A proposed
+name never counts toward coverage and must not be added beside an equivalent
+operational control.
 
-External systems are benchmark inputs, not implementation or naming
-authorities. Existing Rottay names win when they already own the same semantic
-decision. R7 does not copy visual identity or whole components, add a second
-compiler/engine, or silently grow the 252 denominator. Genuine missing-family
-proposals leave R7 as separately owner-approved follow-ons. The binding detail,
-waves, parallelization budget and exit equation are in
-`R7-CUSTOMIZATION-10-10.md` and the machine-readable R7 entry in `rounds.json`.
+For each operational control the trace must end in exactly 252 dispositions.
+An `APPLICABLE` row names canonical family ID, stable part, property group,
+computed CSS properties, source bindings and evidence IDs. A
+`NOT_APPLICABLE_WITH_REASON` row carries negative reach proof. `UNKNOWN`
+blocks certification.
 
-## Inventory sources Claude must use
+## Segmented customization manifest
 
-The execution pack records stable denominators; it does not copy thousands of
-generated token rows. Claude reads the complete live inventories from:
+`manifest/index.json` is the generated pivot. It points to:
 
-- `packages/core/tokens/controls/README.md` — generated Standard/Pro/Expert
-  control catalog;
-- `packages/core/customization-surface-report.json` — productive token/writer/
-  reader/lifecycle census;
-- `packages/core/hooks-manifest.json` — the 93 public application hooks and
-  fenced reads;
-- `packages/core/src/foundation/contracts/composition/tenants/capabilities/`
-  — capability IDs, tiers, validators and bounds;
-- `packages/core/src/foundation/contracts/composition/tenants/themes/` —
-  BrandTheme/TenantTheme and exact Expert allowlist contracts;
-- `packages/core/src/foundation/tokens/ts/presentation/brand-themes/` —
-  BitHire, Evnto and Platform static authored sources;
-- `packages/core/src/tooling/testing/fixtures/tenants/` — DB-path canaries,
-  including The Management;
-- `packages/core/src/foundation/tokens/prototype-ledger.json` and
-  `KIMI-CUSTOMIZATION-PRESERVATION-MANIFEST.json` — creative decisions and
-  no-loss law;
-- `docs-engineering/engineering/design-system/tokens/**` — generated
-  navigable catalog, impact, tiers, profiles and lifecycle views.
+- `manifest/controls/<control-id>.json`, which exclusively owns public domain,
+  tier, static/DB ingress, declared outputs and calibration;
+- `manifest/groups/<group-id>.json`, which exclusively owns a finite recipe or
+  anatomy vocabulary and its invariants; and
+- `manifest/families/<canonical-family-id>.json`, which exclusively owns
+  control applicability, output-to-part bindings, public props/slots, host
+  adaptation, states, invariants, evidence and premium proposals for one
+  canonical family.
 
-If a copied count disagrees with a generated/live authority, the live
-authority wins and R0 records the drift. Family writers never browse these
-inventories as a menu of arbitrary public variables.
+No control or group file hand-lists consumer families. The family file owns the
+edge, and the index derives reverse views and rollups. This keeps one semantic
+owner with many consumers without duplicating the relationship in two files.
 
-## Round protocol
+The first bootstrap contains 252 `INVENTORIED_ONLY` family records and 5,040
+`UNKNOWN` control/family cells. It awards zero progress. A proposed premium
+feature has `countsAsCapability: false` until it is adopted through an existing
+authority or an owner-approved additive API.
 
-The program is evolutionary. Claude executes exactly one owner-authorized
-round at a time.
+Theme controls, recipes/anatomy and instance APIs are different mechanisms. A
+theme control changes paint or bounded metrics through the tenant pipeline. A
+recipe or anatomy variant selects a finite structure through typed data, props
+or root attributes. Instance props and slots configure one usage. Structural
+choices such as table versus cards, the presence of actions, card anatomy or
+preview rails must not be encoded as CSS tokens.
 
-1. Read the current worktree and the selected round contract.
-2. Build a conflict graph from exact file ownership.
-3. Select the largest safe independent set of family writers. The number of
-   agents may be 3, 8, 20 or another safe value.
-4. Writers implement family code only. They do not edit shared contracts,
-   tests, i18n catalogs, manifests, docs, generated artifacts or baselines.
-5. The architecture integrator reconciles creative proposals and shared
-   changes once.
-6. The quality integrator updates observable contracts, i18n, focused tests and
-   negative drills for the round. Tests do not preserve obsolete private
-   anatomy.
-7. The coordinator creates hashed evidence and one consolidated round report.
-8. Record progress through `roadmap:status progress WO-CRA-23`.
-9. Stop at `IMPLEMENTED_PENDING_CODEX_AUDIT`. Codex audits and either opens
-   the next round or sends the same round back with corrections.
+## Completion state machines
 
-Model routing is economical rather than ceremonial. When the aliases exist,
-Opus (or the strongest coordinator-capable Claude) is MAIN and owns
-architecture, control, integration and ambiguous product composition; Fable
-may challenge architecture, parity and visual coherence read-only; Sonnet (or
-the most efficient reliable model) owns deterministic census, wiring, i18n and
-evidence work. MAIN may adapt that routing to availability and observed
-quality. Agents receive bounded family packets and return structured receipts,
-never long progress narratives.
+Control lifecycle:
 
-For R1, every family lane targets the canonical reference-lab tree. Do not use
-Candidates, another BitHire feature, copied app markup or app CSS as the visual
-canvas. Product adoption starts only after Codex accepts the R1 grammar and the
-relevant propagation round.
+`PROPOSED → LOWERED → CANARY_VERIFIED → PROPAGATED → ACCEPTED`
 
-No broad propagation is allowed from a reference grammar that still has a hard
-veto or misses its layer threshold.
+Family/control lifecycle:
 
-No broad propagation is allowed without the human checkpoints in
-`visual-craft-contract.json`. Each new layer/grammar calibrates exactly three
-representative families first. Named cohorts contain at most twenty-five families
-and stop for Codex again. A later shared palette/recipe/anatomy change restarts
-the dependent checkpoint rather than inheriting stale approval.
+`UNKNOWN → IMPLEMENTED → COMPUTED_VERIFIED → SIGHTED_ACCEPTED`
 
-Visual closure is exhaustive rather than screenshot-driven: every family must
-answer the twenty-category, 120-check taxonomy in the visual craft contract.
-The twelve reproduced incidents are calibration evidence only. Any applicable
-FAIL — including raw chart geometry, outline-only surfaces, generic micro-pills,
-strip-built headers, semantic-icon bypass or intrinsic layout collapse — keeps
-the family in the active cohort.
+`NOT_APPLICABLE_WITH_REASON` is terminal only with a source-bound negative
+proof. `SOURCE_TOUCHED`, `TESTS_ONLY`, a green unit test or a screenshot is
+never a lifecycle state.
 
-## R0 known truth defects
+A family is DONE only when:
 
-R0 starts from named defects, not a blank audit:
+- identity and ownership resolve to one canonical family ID;
+- every applicable public control has one unique causal path;
+- expected parts, states and property groups are explicit;
+- static and DB stops produce equivalent normalized outputs;
+- computed evidence proves intended deltas and negative controls;
+- baseline → mutation → removal restores variables, root attributes and
+  computed values exactly;
+- applicable viewport/container, locale/RTL, content, input, forced-colors and
+  reduced-motion cases pass;
+- evidence is bound to the frozen source and artifact hashes; and
+- Codex performs final sighted acceptance.
 
-- quality-evidence v1 is historical baseline only and covers 89 primitives,
-  not the 252-family denominator;
-- its current score composition over-rewards contract checks and can allow
-  visually ordinary craft to pass;
-- the reference torture probe reuses `TagIcon` 34 times for unrelated roles and
-  includes at least seven functional unicode/span stand-ins even though the DS
-  already owns a generated semantic corpus; R0 must drain these placeholders
-  through the semantic role facade before screenshots become admissible;
-- receipts are not yet proven fresh against source digests;
-- the generated lifecycle view says “80 prototype ledger entries” without
-  making clear that all 80 are retired historical decisions;
-- the expressive-profile source comment still calls the icon profile frontier
-  although registry, schema and runtime treat it as active Pro;
-- the public primitive inventory used a deprecated `OverlayModal` alias as a
-  family while omitting canonical public `SemanticSurface`; the denominator
-  remains 100 after replacing the alias row;
-- the main appearance compiler silently truncates Advanced token overrides
-  above the documented cap of 200 while the skin-pack path fails closed;
-- `OverlayModal`, `BrandTheme.engineBridge` and
-  `ComponentExtensions`/`EngineAwareProps.extensions` need consumer censuses
-  before R5 can retire any compatibility path;
-- the generated impact map has only 38 EXACT and 836 INFERRED impacts out of
-  4,398 operational tokens, leaving 3,524 UNKNOWN, and currently
-  mischaracterizes some layout-affecting reach;
-- static/DB mutation equivalence is not yet proven control-by-control for every
-  active capability;
-- the Showroom family registry omits public families and swaps Onboarding for
-  OAuthTransition in the surface projection.
+Programme closure requires an honest disposition for all 252 families. A family
+may be assessed as not elevated only when the evidence says why; it may not be
+called accepted to improve a percentage.
 
-R0 must measure and repair these claims before using the tooling to assign
-visual work.
+## Test truth policy
 
-## Quality equation
+A red test is an observation, not permission to change source or expectations.
+Before action, classify it:
 
-```text
-ELIGIBLE(family) =
-  all_applicable_binary_contracts_pass
-  AND hard_veto_count == 0
-  AND craft_score >= layer_threshold
-  AND every_critical_dimension >= 4/5
-  AND resilience == 1
-  AND canon_closure_for_round == 1
-  AND fresh_hashed_evidence
-  AND CODEX_SIGHTED_APPROVAL
-```
+| Class | Meaning | Allowed action |
+|---|---|---|
+| `CURRENT_CONTRACT` | current authority, correct scope, positive control and source binding | fix source |
+| `AGED_EXPECTATION` | mechanism is valid but expected architecture/value is retired | update expectation with counterfactual control |
+| `INVALID_MECHANISM` | instrument cannot measure its claim | fix the instrument only |
+| `UNVERIFIED` | important but missing authority or reliable evidence | no source or expectation change |
 
-Tests establish eligibility; they do not award visual-quality points. Claude
-may propose sighted scores, but every scored dimension requires one concrete
-observable evidence item; without it the dimension scores zero. Only Codex can
-approve sighted quality.
+Every failure record requires `authorityRef`, `measuredScope`, `sourceSha`,
+`positiveControl` and `allowedAction`. A missing field makes the action
+`NONE`. Tests do not award visual quality points.
 
-### Family completion is not file visitation
+The first frozen full-suite reconciliation at
+`fb1e200ca7544e4b373bff28f50731fdb8a1609b` exited 1 after 2,375.66 seconds:
+17 files and 25 tests failed, while 1,176 files and 13,046 tests passed and 16
+tests were skipped. This is a baseline observation, not a repair queue. Each
+failure must enter the truth policy above before it can authorize any edit.
 
-`quality-rubric.json#familyCompletionContract` is binding. A family is not
-complete because a writer edited it, added a token read, changed two selectors
-or produced a green test. Claude must retain a partial family in the active
-round as `ASSESSED_NOT_ELEVATED`.
+Execution gates are ordered and non-overlapping:
 
-An `ELEVATED_PENDING_CODEX_AUDIT` claim requires a paired, source-bound before
-and after scorecard over every applicable dimension, a material-delta table,
-the full applicable stress/state floor, causal tenant mutation and exact
-restore, no P0/P1 defect, no veto and the layer threshold. The configured
-minimum number of materially improved dimensions applies unless every other
-applicable dimension is independently proven at the premium floor already.
-`ALREADY_REFERENCE_GRADE_PENDING_CODEX_AUDIT` permits no make-work source edit
-and requires the same full proof. Neither pending state counts as progress
-until Codex accepts it.
+1. schema, source census and exact 252-family partition;
+2. one-control static/DB calibration, negative controls and exact restore;
+3. representative recipe/anatomy calibration on three families;
+4. family-once focal and computed cohorts of at most 25 families;
+5. complete control/family edges, recipe groups and channel liveness;
+6. one frozen reconciliation suite plus responsive, RTL, accessibility,
+   motion and sighted browser evidence.
 
-### CSS ownership and customization reachability
+Source regexes and tests that merely prove fixture readiness cannot satisfy a
+computed or sighted gate. A later gate consumes lower-level receipts; it does
+not rerun an implementation loop for every earlier assertion.
 
-`quality-rubric.json#cssOwnershipContract` is binding. Every productive rule,
-selector and custom-property edge in round scope has one family or named
-foundation/runtime owner. Every tenant-variable rendered property is reachable
-through the single static BrandTheme and DB TenantTheme model, directly for
-bounded brand/Advanced values or indirectly through capabilities, profiles,
-semantic channels, recipes/anatomy/emphasis and family-private values.
-Structural invariants may remain local; they may not encode a hidden tenant
-identity or pretend to be customizable.
+## Current checkpoint
 
-Unimported sheets, unreachable selectors/states, unread writers, unresolved
-reads, rules always superseded, unreachable engine mirrors and generated-only
-remnants are dead CSS. Accepted round scope has zero; R5/R6 establish the
-census over the full productive Modern corpus and R7 repeats it after its
-changes. Retirement requires ownership,
-consumer evidence, preservation/successor adjudication and source/generated
-reconciliation.
+<!-- lane-control:program-state v1 — DO NOT EDIT BY HAND. Rewrite it with:
+     node packages/core/src/tooling/lane-control/public/program-state/index.mjs --write --intent <intent.json>
+     head=fb1e200ca written=2026-08-11T16:07:29.797Z intent=844c708999d73cfd render=005234c890201039 -->
 
-## Customization equation
+*Everything in this section is intent. Anything derivable is derived by command, not typed here.*
 
-```text
-tenant inputs
-  -> capability validation
-  -> experience/profile resolution
-  -> semantic foundation channels
-  -> group recipe/anatomy/emphasis
-  -> family-private --_ds-* values
-  -> stable DOM part
-  -> observable property
-```
+**Current wave:** Roadmap reconciliation and first control calibration
 
-A public control is real only when the chain is causal, bounded, covered in the
-static BrandTheme and DB TenantTheme paths, and restores the exact default.
+**Blocked on:** No external blocker. Competing human authorities must be retired and the spacing rhythm trace must be source-bound before broad family propagation.
 
-The target is not more public tokens. It is higher leverage:
+Active packets:
 
-```text
-coverage(control) = observed expected family/part/property triples
-                    / declared expected triples
+| Lane | Work | Model | Reason for the model |
+|---|---|---|---|
+| authority | Keep one human entry point, machine contracts and honest derived status; retire competing prompts, roadmaps and checkpoints after their unique facts are migrated. | codex | This packet changes programme authority and deletion boundaries, so it requires source audit, dependency analysis and final local commit ownership. |
+| control-calibration | Close spacing rhythm from both tenant inputs through normalized channels, canonical family parts, computed deltas, negative controls and exact restore. | strong-implementation | The packet spans schemas, both compiler paths, CSS ownership and browser evidence; it is bounded but not a mechanical substitution. |
+| family-closure | After the control matrix stabilizes, enrich each family once against every applicable control, state and stress case recorded in the manifest. | disjoint-family-writers | A family packet becomes mechanical only after applicability, stops, parts, invariants and evidence commands are closed by the calibration work. |
+| advisory-audit | Independently try to refute control semantics, family applicability, evidence mechanisms and retirement proofs without editing the programme. | fable-and-kimi-read-only | Independent methods expose shared assumptions; advisory prose is never authority and only reproduced source findings enter the canonical tree. |
 
-leverage(control) = productive triples moved / product-editor fields
+**Refused:** the retracted CSS-basename rescope · SOURCE_TOUCHED as progress · a second product control for an existing concept · family-private customization outside the manifest · full-suite repair loops before failure classification · broad family propagation before static DB and restore calibration · R7 execution
 
-depth(family) = proven independent customization axes / eligible axes
+The operational traversal is two-axis: calibrate each public control on representative families, then close each canonical family once against the stabilized full applicability matrix.
 
-resilience(family) = passed geometry/content/state cases
-                     / applicable stressMatrix floor plus lane-added cases
+The full suite is a reconciliation signal. Packet gates are causal and focal; every red test is classified before source or expectation changes.
 
-canonClosure(round) = adjudicated proposals / proposals created
+Historical receipts remain immutable evidence. Historical Markdown is not an active authority.
 
-pathParity = equivalent normalized outputs / active controls in scope
-```
+### Derived at write time
 
-For every control and family touched in a round: coverage, resilience,
-canonClosure and pathParity must equal 1. Unknown targeted impacts must equal
-zero. A lane may add stress cases but may never remove an applicable case from
-the canonical floor.
+*Produced by the command that wrote this section. Never typed, never edited.*
 
-Evidence is progressive rather than multiplied mechanically: R0 produces
-manifests, impact baselines and drills without captures; R1 produces complete
-evidence for the twelve canaries; R2-R4 retain fresh family scorecards but use
-one representative capture set per ownership lane; R5/R6 carry the complete
-canon and sighted matrices; R7 replays the complete customization, posture,
-ownership and sighted matrices only after its post-certification changes.
-`evidence-contract.json` is the exact authority.
+*These figures change only when somebody changes what this section is about, so a
+disagreement between them and the repository is a real finding. Facts that move with
+ordinary work — HEAD, the file count, what the lanes have written — are deliberately
+absent: pinning them here would make this document stale the moment it was committed.*
 
-## Creativity contract
+| Fact | Value | Derivation |
+|---|---|---|
+| `ledger.families` | 252 | family-ledger.json rows.length |
+| `adjudication.accepted` | 0 | packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/index.json rollups.familyReviews.accepted |
+| `adjudication.assessedNotElevated` | 0 | packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/index.json rollups.familyReviews.assessedNotElevated |
+| `adjudication.unreviewed` | 252 | packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/index.json rollups.familyReviews.unreviewed |
 
-Claude and visual agents retain creative freedom, but a new capability starts
-as a proposal, not as public API. Each proposal must contain:
 
-- observable product problem;
-- at least three considered solutions;
-- searches proving the current canon is insufficient;
-- proposed private/prototype/recipe destination;
-- two plausible tenant values;
-- responsive, mobile, i18n, accessibility and motion consequences;
-- exact fallback preserving current default;
-- real consumer and stable DOM part;
-- promotion and retirement criteria.
+## Active packet: spacing.rhythm
 
-The integrator adjudicates exactly one outcome:
+`spacing.rhythm` is the first calibration slice because it already exists as
+a Standard public control, both ingress paths share the same factor table, its
+stops are falsable (`tight=0.85`, `normal=1`, `airy=1.2`), and it needs no
+new name or tier decision.
 
-- `DERIVE_FROM_EXISTING`
-- `KEEP_COMPONENT_PRIVATE`
-- `RECIPE_AXIS`
-- `PROMOTE_STANDARD`
-- `PROMOTE_PRO`
-- `ADD_TO_EXPERT_ALLOWLIST`
-- `PUBLIC_APP_HOOK`
-- `MERGE_ALIAS`
-- `RETIRE_WITH_DEATH_PROOF`
+The slice must:
 
-Every proposal created in a round is adjudicated before the next round.
+1. freeze the operational registry, compiler table and 252-family inventory;
+2. produce all 252 family dispositions without treating absence as N/A;
+3. run a fail-closed property classifier that proves the complete current set
+   of forbidden capacity, size and touch-target readers, then remove every
+   confirmed off-contract DashboardInsights `block-size` rhythm read (eight
+   are currently known) so rhythm changes spacing rather than cropping;
+4. prove static/DB equivalence for all three stops;
+5. prove computed gap deltas first on canonical Flex, Grid, Stack and Space;
+6. prove numeric gaps, control height, touch targets, icon size, typography,
+   color, border and motion remain fixed;
+7. prove monotonicity and the density × rhythm × type-scale responsive matrix;
+8. prove exact restore for normalized output, variables, root attributes and
+   computed properties; and
+9. obtain Codex sighted acceptance before propagation is credited.
 
-Kimi has a temporary advisory boundary under `KIMI-ANNOTATIONS/inbox/`. Kimi
-may create new proposal files there and nowhere else. Raw annotations are not
-canon or durable evidence and Claude must never read or implement them. Codex
-reproduces useful observations, records accepted amendments in the owning
-art-direction/customization/program contracts and then deletes the raw
-submission. The reconciled parent program is the only input to Claude.
+Valid enum stops currently share `TENANT_THEME_RHYTHM_FACTORS`, but invalid
+input handling, effective CSS clamping and exact static/DB parity remain claims
+to prove in this slice. They are not inherited acceptance.
 
-## Non-negotiable fences
+Second slice is the `edge` axis inside the existing Pro
+`profiles.expressive` capability, not a capability ID named
+`profiles.expressive.edge` and not a new `surface.edge` API. Its stop semantics
+and tier must be adjudicated before any rename or promotion. `palette.seeds` is
+the global high-leverage closure after the method is calibrated.
+`motion.character` stays proposed until the existing motion authorities are
+consolidated.
 
-- No tenant selector or tenant conditional TSX.
-- No second token compiler, CSS authority, icon provider or component engine.
-- No public `--ds-*` from a family lane.
-- No app repair of DS-private anatomy.
-- No manual editing of generated `styles/**` or `dist/**`.
-- No test or baseline weakening to preserve a defect.
-- No direct device haptics in core; the DS may expose semantic intent for an
-  app-owned bridge.
-- No visual acceptance by the writer or Claude coordinator.
-- No commit before Codex accepts the round. This program never pushes,
-  publishes or tags.
+## Resume algorithm
+
+1. Read this file.
+2. Run `git status --short`, `git rev-parse HEAD`, the programme check and
+   the checkpoint check.
+3. Read `program.json`, `checkpoint.intent.json`,
+   `customization-model.json`, and only the active round/slice records.
+4. Verify the 252-family inventory and current control registry from source.
+5. Inspect the latest source-bound receipts; never trust a prose percentage.
+6. Classify any red test before changing it.
+7. Work one control slice at a time with disjoint file ownership.
+8. Update the machine records and this generated checkpoint, audit the cached
+   diff, then create a local commit.
+
+Do not restart historical waves, infer status from filenames, or create a new
+handoff document. A successor updates this tree.
+
+## Mechanical-lane safety law
+
+Make only the edits enumerated in the substitution table. Never declare a token name that is not in
+your table — above all, never declare a name that currently appears only inside `var()` fallbacks.
+Do not reorder, reformat, dedupe, rename, or fix anything adjacent; every out-of-scope observation
+is a written finding, not an edit.
+
+A lane is mechanical only after value parity is proven across all applicable
+verticals. Cheap, build-free source and differential checks run per lane.
+Builds, servers and browsers are serialized at reconciliation points.
+
+## Roles
+
+- Codex is the final source, evidence and sighted auditor, stager and local
+  committer.
+- Claude may coordinate architecture and implementation in a bounded packet.
+- Fable and Kimi are independent read-only advisors. Their narratives are
+  ephemeral inputs; accepted findings are reproduced and recorded here or in
+  the owning JSON. Neither creates programme authority.
+- Mechanical writers receive disjoint, pre-proven ownership only.
+
+Disagreement is recorded as a finding and resolved against source. Model names
+never override evidence.
+
+## Fences
+
+- Modern Rescue executes R0–R6 only. R7 remains machine-documented with
+  `enabled: false` until a future explicit owner authorization.
+- Never push.
+- Local commits are allowed after an audited packet. Publication requires an
+  explicit release window and authorization.
+- Classic and Rustic are read-only.
+- No tenant selector, tenant-conditional component tree, second compiler,
+  second icon supplier or application-private DS patch.
+- No family writer mints public `--ds-*` channels.
+- No generated artifact, baseline or evidence receipt is hand-edited.
+- No test is weakened to preserve a defect.
+- No destructive Git operation, broad staging or unrelated cleanup.
+- Files=0, stale source, wrong scenario, root fallback, unresolved sentinel,
+  nondeterminism, overflow, incomplete binding or missing artifact is FAIL.
+
+Historical evidence may remain immutable. Historical human roadmaps, prompts,
+checkpoints and handoffs do not.

@@ -2,11 +2,14 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { validateCustomizationManifest } from "./manifest/generator.mjs";
+
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const REPOSITORY_ROOT = path.resolve(HERE, "../../../../../..");
 
 const CONTRACT_FILES = Object.freeze({
   program: "program.json",
+  checkpoint: "checkpoint.intent.json",
   inventory: "family-inventory.json",
   rubric: "quality-rubric.json",
   customization: "customization-model.json",
@@ -70,6 +73,7 @@ export function validateModernRescueContracts(contracts) {
 
   const {
     program,
+    checkpoint,
     inventory,
     rubric,
     customization,
@@ -90,11 +94,22 @@ export function validateModernRescueContracts(contracts) {
   if (program?.denominators?.visibleFamilies !== 252) {
     errors.push("program visible family denominator must be 252");
   }
+  if (checkpoint?.schemaVersion !== 1 || !checkpoint?.currentWave) {
+    errors.push("checkpoint intent must be a versioned non-empty machine contract");
+  }
+  if (!(checkpoint?.lanes ?? []).some((lane) => lane.id === "authority")) {
+    errors.push("checkpoint intent must retain the authority reconciliation lane");
+  }
+  if (!(checkpoint?.refused ?? []).includes("R7 execution")) {
+    errors.push("checkpoint intent must explicitly refuse R7 execution");
+  }
   for (const contractPath of [
+    program?.humanEntry,
+    program?.checkpointIntent,
+    program?.customizationManifest,
     program?.artDirectionContract,
     program?.visualCraftContract,
     program?.r7CustomizationContract,
-    program?.creativeProposalInbox,
     program?.referenceLab?.page,
     program?.referenceLab?.substrate
   ]) {
@@ -210,10 +225,16 @@ export function validateModernRescueContracts(contracts) {
     errors.push("deprecated OverlayModal alias must not count as an independent family");
   }
 
-  const workOrderPath = path.join(REPOSITORY_ROOT, "roadmap/craft.md");
+  if (program?.r7Enabled !== false) {
+    errors.push("program R7 execution must remain disabled");
+  }
+  const workOrderPath = path.join(
+    REPOSITORY_ROOT,
+    program?.workOrderAuthority ?? "",
+  );
   const workOrderSource = fs.readFileSync(workOrderPath, "utf8");
-  if (!workOrderSource.includes("### WO-CRA-23 ")) {
-    errors.push("WO-CRA-23 is missing from roadmap/craft.md");
+  if (!workOrderSource.includes("# Modern Rescue — START HERE")) {
+    errors.push("workOrderAuthority must be the Modern Rescue START HERE contract");
   }
   const registry = JSON.parse(
     fs.readFileSync(path.join(REPOSITORY_ROOT, "roadmap/registry.json"), "utf8")
@@ -650,6 +671,14 @@ export function validateModernRescueContracts(contracts) {
   const r4 = rounds?.rounds?.find((round) => round.id === "R4");
   const r6 = rounds?.rounds?.find((round) => round.id === "R6");
   const r7 = rounds?.rounds?.find((round) => round.id === "R7");
+  for (const round of rounds?.rounds ?? []) {
+    if (round.id === "R7" && round.enabled !== false) {
+      errors.push("R7 round must remain disabled");
+    }
+    if (round.id !== "R7" && round.enabled !== true) {
+      errors.push(`${round.id} must remain enabled inside the authorized R0-R6 scope`);
+    }
+  }
   if (r2?.scope?.primitives !== 100) errors.push("R2 must cover 100 primitives");
   if (r1?.scope?.referenceLab !== "/probe/ds-reference") {
     errors.push("R1 must execute through the canonical DS reference lab");
@@ -830,6 +859,10 @@ export function validateModernRescueContracts(contracts) {
   if (evidenceRounds !== "R0,R1,R2,R3,R4,R5,R6,R7") {
     errors.push("minimum reliable evidence must be declared for every round R0..R7");
   }
+
+  for (const manifestError of validateCustomizationManifest()) {
+    errors.push(`customization manifest: ${manifestError}`);
+  }
   if (!evidence?.minimumReliableEvidenceByRound?.R0?.includes("no captures")) {
     errors.push("R0 evidence must remain capture-free");
   }
@@ -846,7 +879,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     process.exitCode = 1;
   } else {
     console.log(
-      "modern-rescue program contract OK — 252 families, 100 rubric points, two deep tenant directions, R0..R7"
+      "modern-rescue program contract OK — 252 families, 20 active public controls, R0-R6 enabled, R7 disabled"
     );
   }
 }

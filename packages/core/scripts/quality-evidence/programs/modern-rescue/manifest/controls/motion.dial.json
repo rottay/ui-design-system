@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "controlId": "motion.dial",
+  "lifecycleState": "OPERATIONAL",
+  "tier": "standard",
+  "scope": "tenant",
+  "semanticOwner": {
+    "owner": "design-system",
+    "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+    "registryDigest": "ed06c5a7fb7dc7e90ff04eef914c94a48a2f6eaff749c1e8ed7995639e2319f3"
+  },
+  "title": "Motion intensity and duration",
+  "valueType": "scale",
+  "domain": {
+    "kind": "scale",
+    "enumValues": [],
+    "bounds": null,
+    "defaultBehavior": "engine cadence unchanged"
+  },
+  "ingress": {
+    "staticBrandThemePath": "motion.*",
+    "dbTenantThemePath": "appearance.general.motion.{intensity,durationScale,ambient}"
+  },
+  "declaredOutputs": {
+    "channels": [
+      "--ds-motion-intensity",
+      "--ds-motion-duration-scale"
+    ],
+    "rootAttributes": [],
+    "representativeOnly": true
+  },
+  "dependsOn": [],
+  "compatibility": "additive, unset-to-rollback; never authors keyframes",
+  "productiveConsumerWitness": {
+    "consumer": "src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+    "symbol": "var(--ds-motion"
+  },
+  "calibration": {
+    "assessmentState": "UNKNOWN",
+    "representativeFamilyIds": [],
+    "normalizedStops": [],
+    "staticDbParityEvidenceIds": [],
+    "exactRestoreEvidenceIds": [],
+    "negativeControls": [],
+    "nextAction": "CALIBRATE_LOWERERS_COMPUTED_DELTAS_NEGATIVES_AND_EXACT_RESTORE"
+  },
+  "retiredAliases": []
+}

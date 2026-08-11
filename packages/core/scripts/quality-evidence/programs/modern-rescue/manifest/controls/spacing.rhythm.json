@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "controlId": "spacing.rhythm",
+  "lifecycleState": "OPERATIONAL",
+  "tier": "standard",
+  "scope": "tenant",
+  "semanticOwner": {
+    "owner": "design-system",
+    "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+    "registryDigest": "ed06c5a7fb7dc7e90ff04eef914c94a48a2f6eaff749c1e8ed7995639e2319f3"
+  },
+  "title": "Layout rhythm",
+  "valueType": "enum",
+  "domain": {
+    "kind": "closed-enum",
+    "enumValues": [
+      "tight",
+      "normal",
+      "airy"
+    ],
+    "bounds": {
+      "min": 0.8,
+      "max": 1.25
+    },
+    "defaultBehavior": "normal (factor 1) — byte-identical to the pre-rhythm cascade in every vertical, because the DS floor already resolves --ds-rhythm-effective-scale to 1"
+  },
+  "ingress": {
+    "staticBrandThemePath": "surfaces.rhythm",
+    "dbTenantThemePath": "appearance.general.rhythm"
+  },
+  "declaredOutputs": {
+    "channels": [
+      "--ds-rhythm-scale",
+      "--ds-rhythm-effective-scale"
+    ],
+    "rootAttributes": [],
+    "representativeOnly": true
+  },
+  "dependsOn": [],
+  "compatibility": "additive, unset-to-rollback. ORTHOGONAL to density.mode by construction and never a second spelling of it: density scales control SIZES through --ds-density-effective-scale, rhythm scales the LAYOUT RELATIONSHIPS between controls (gap, layout padding) through --ds-rhythm-effective-scale. A chain carrying both factors is correct rather than double-scaled — the control keeps its density size while the room around it breathes. Rhythm is applied at the PRESET rungs, never at a consume site, so a consumer numeric gap stays exact geometry exactly as it does under density; and it never reaches a control height, touch target or icon box, which is what keeps the coarse-pointer touch floors intact by construction rather than by clamping. The 0.8-1.25 envelope is enforced in the derived channel, so it binds the compiler artifact, the BrandTheme lowering and a raw tokenOverride alike.",
+  "productiveConsumerWitness": {
+    "consumer": "src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
+    "symbol": "var(--ds-rhythm-effective-scale"
+  },
+  "calibration": {
+    "assessmentState": "UNKNOWN",
+    "representativeFamilyIds": [
+      "primitive/layout/flex",
+      "primitive/layout/grid",
+      "primitive/layout/stack",
+      "primitive/layout/space"
+    ],
+    "mountClassIds": [
+      "ds-flex",
+      "ds-grid",
+      "ds-stack",
+      "ds-space"
+    ],
+    "normalizedStops": [
+      {
+        "id": "tight",
+        "value": 0.85
+      },
+      {
+        "id": "normal",
+        "value": 1
+      },
+      {
+        "id": "airy",
+        "value": 1.2
+      }
+    ],
+    "sourceBindings": {
+      "factorTable": "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts#TENANT_THEME_RHYTHM_FACTORS",
+      "bounds": "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts#TENANT_THEME_RHYTHM_SCALE_BOUNDS",
+      "staticLowerer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+      "dbLowerer": "packages/core/src/infrastructure/compilers/kernel/runtime/appearance/index.ts",
+      "effectiveClamp": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+      "computedMounts": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
+      "existingFivePlaneHarness": "packages/showroom/e2e/whitelabel/density-authority-matrix.spec.ts"
+    },
+    "staticDbParityEvidenceIds": [],
+    "exactRestoreEvidenceIds": [],
+    "negativeControls": [
+      "numeric instance gaps remain exact",
+      "control height remains fixed",
+      "touch target remains fixed",
+      "icon size remains fixed",
+      "font metrics remain fixed",
+      "color remains fixed",
+      "border remains fixed",
+      "motion remains fixed"
+    ],
+    "knownDefects": [
+      {
+        "familyId": "structure/dashboard/dashboard-insights",
+        "finding": "Eight current block-size fallbacks multiply 415px by rhythm and therefore change panel capacity instead of spacing.",
+        "sourceCensusRequired": true
+      }
+    ],
+    "openContractQuestions": [
+      "Prove static and DB invalid-input behavior, not merely equal valid enum output.",
+      "Generalize the existing density five-plane harness instead of creating a second authority harness.",
+      "Add a fail-closed census that rejects every block-size, height, touch-target and icon-size read of the effective rhythm channel."
+    ],
+    "nextAction": "BUILD_FAIL_CLOSED_CONSUMER_CLASSIFIER_THEN_CALIBRATE_STATIC_DB_COMPUTED_NEGATIVES_AND_EXACT_RESTORE"
+  },
+  "retiredAliases": []
+}

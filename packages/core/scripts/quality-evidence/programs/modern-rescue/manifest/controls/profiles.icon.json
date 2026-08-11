@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "controlId": "profiles.icon",
+  "lifecycleState": "OPERATIONAL",
+  "tier": "pro",
+  "scope": "tenant",
+  "semanticOwner": {
+    "owner": "design-system",
+    "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+    "registryDigest": "ed06c5a7fb7dc7e90ff04eef914c94a48a2f6eaff749c1e8ed7995639e2319f3"
+  },
+  "title": "Icon posture profile",
+  "valueType": "enum",
+  "domain": {
+    "kind": "closed-enum",
+    "enumValues": [
+      "linear",
+      "strong-outline",
+      "duotone",
+      "solid-active"
+    ],
+    "bounds": null,
+    "defaultBehavior": "baseline role/state weight tables. A posture only selects among the governed PROFILE_ROLE_WEIGHT tables in the icon policy — never a supplier, glyph or local SVG; state weights stay supreme (feedback over decoration). Literal two-hue duotone stays out: the pinned supplier is single-hue/two-opacity by design."
+  },
+  "ingress": {
+    "staticBrandThemePath": "expressive.profiles.icon",
+    "dbTenantThemePath": "visualFoundation.advanced.profiles.icon"
+  },
+  "declaredOutputs": {
+    "channels": [],
+    "rootAttributes": [],
+    "representativeOnly": true
+  },
+  "dependsOn": [
+    "profiles.expressive"
+  ],
+  "compatibility": "additive, unset-to-rollback; the posture travels as DATA (document → schema → artifact normalizedAppearance) and selects governed weight tables. RENDER application is LIVE (C2c): generated icons call useActiveIconExpressiveProfile() unconditionally — a real context hook in the client/SSR worlds, a plain per-request React.cache box read under RSC; the world is picked by capability detection (react-server exports no createContext). Servers provide the profile via provideServerIconExpressiveProfile at the same seam that mounts the compiled CSS (app-bithire: src/app/layout.tsx). Absent profile → the pre-profile role/state weight tables apply unchanged.",
+  "productiveConsumerWitness": {
+    "consumer": "src/graphics/icons/runtime/semantic/create-icon/index.tsx",
+    "symbol": "useActiveIconExpressiveProfile"
+  },
+  "calibration": {
+    "assessmentState": "UNKNOWN",
+    "representativeFamilyIds": [],
+    "normalizedStops": [],
+    "staticDbParityEvidenceIds": [],
+    "exactRestoreEvidenceIds": [],
+    "negativeControls": [],
+    "nextAction": "CALIBRATE_LOWERERS_COMPUTED_DELTAS_NEGATIVES_AND_EXACT_RESTORE"
+  },
+  "retiredAliases": []
+}

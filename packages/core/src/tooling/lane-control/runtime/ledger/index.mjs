@@ -91,7 +91,15 @@ export function loadRows({ root, ledgerPath = DEFAULT_LEDGER_PATH, syntheticPath
   }
 
   const index = new Map();
-  for (const row of familyRows) index.set(row.id, row);
+  for (const row of familyRows) {
+    if (typeof row.id !== 'string' || row.id.length === 0) {
+      throw new Error('lane-control: family row is missing a non-empty id');
+    }
+    if (index.has(row.id)) {
+      throw new Error(`lane-control: duplicate family row id "${row.id}"`);
+    }
+    index.set(row.id, row);
+  }
   for (const row of syntheticRows) {
     if (index.has(row.id)) {
       throw new Error(`lane-control: synthetic row id "${row.id}" collides with a family row id`);

@@ -1,6 +1,14 @@
 {
   "schemaVersion": 1,
   "principle": "Few governed product inputs compose many semantic, recipe and family-private outputs.",
+  "cardinalityLaw": "One public control has one semantic lowering authority, emits many governed internal channels, and reaches many canonical families, parts and states. Internal channels may have many productive consumers but never competing semantic owners.",
+  "executionTraversal": {
+    "strategy": "control-calibration-then-family-once",
+    "designFirst": "Materialize every active Standard and Pro control against all 252 canonical family IDs before broad propagation. Every certifying cell is APPLICABLE, INVARIANT_WITH_REASON, NOT_APPLICABLE_WITH_REASON or UNKNOWN; UNKNOWN blocks family completion. Proposed controls live only in the target model and never create certifying cells or block R0-R6.",
+    "controlCalibration": "For each operational control, prove domain, stops, static and DB lowering, representative family computed deltas, negative controls and exact restore before treating propagation as mechanical.",
+    "familyClosure": "After the control matrix and harness are stable, visit each family once and close every applicable control, part, state, property group and stress case in one packet.",
+    "testCadence": "Run focal causal gates per control or family packet. Run the full suite only at reconciliation boundaries and classify every red result before changing source or expectations."
+  },
   "resolutionOrder": [
     "accessibility-and-resilience-floors",
     "explicit-pro-and-expert-authorship",
@@ -37,10 +45,11 @@
       "recipe-and-anatomy"
     ],
     "migrationLaw": "Published profile ids keep their meaning. A new art direction either composes existing axes without semantic mutation or adds a reviewed versioned registry entry through the same static and DB lowering path.",
-    "advisorLaw": "Kimi may propose in KIMI-ANNOTATIONS; only Codex-adjudicated ideas enter this model or an owning canonical contract."
+    "advisorLaw": "Fable and Kimi may advise read-only. Their narratives are ephemeral; only a Codex-reproduced source finding enters this model or an owning canonical contract."
   },
   "r7Execution": {
-    "contract": "R7-CUSTOMIZATION-10-10.md",
+    "enabled": false,
+    "contract": "rounds.json#R7",
     "entryLaw": "R7 begins only from a Codex-accepted R6 frozen baseline and cannot silently reclassify R0-R6 history.",
     "familyDispositionDenominator": 252,
     "benchmarkLaw": "External systems provide ideas, edge cases and capability comparisons only. Existing Rottay semantic names and authorities win; no wholesale source, styling, markup, naming or trade-dress copy.",
@@ -144,6 +153,56 @@
       "status-palette-when-open"
     ]
   },
+  "targetControlModel": {
+    "implementationState": "PROPOSED_NOT_IMPLEMENTED",
+    "law": "These names are a target taxonomy only. They never count as operational coverage and may not coexist with an equivalent operational control. Each adoption is an atomic migration with predecessor retirement.",
+    "standard": [
+      "brand.color-seeds",
+      "shape.geometry",
+      "layout.density",
+      "spacing.rhythm",
+      "surface.edge",
+      "surface.depth",
+      "type.voice",
+      "type.weight",
+      "focus.identity"
+    ],
+    "pro": [
+      "motion.energy",
+      "motion.character",
+      "type.foundations",
+      "iconography.style",
+      "chrome.suite",
+      "surface.motif",
+      "control.size"
+    ],
+    "migrationOrder": [
+      {
+        "control": "spacing.rhythm",
+        "migrationState": "ACTIVE_CALIBRATION",
+        "predecessor": "spacing.rhythm",
+        "note": "Existing Standard control; calibrate without renaming."
+      },
+      {
+        "control": "surface.edge",
+        "migrationState": "BLOCKED_ON_PRODUCT_ADJUDICATION",
+        "predecessor": "profiles.expressive.edge",
+        "note": "Do not create this public ID beside the existing Pro expressive axis."
+      },
+      {
+        "control": "brand.color-seeds",
+        "migrationState": "PENDING_GLOBAL_CLOSURE",
+        "predecessor": "palette.seeds",
+        "note": "High-leverage global slice after the evidence method is calibrated."
+      },
+      {
+        "control": "motion.character",
+        "migrationState": "PROPOSED_ONLY",
+        "predecessor": "MotionProfile plus motion.dial plus deprecated BrandMotion",
+        "note": "No lowering or stop table exists; consolidate authority before adoption."
+      }
+    ]
+  },
   "pro": {
     "maximumCapabilityIdsWithoutOwnerDecision": 12,
     "capabilities": [
@@ -225,6 +284,15 @@
     "admissionRule": "Add a group only when at least two productive families share it and two plausible tenant postures require it."
   },
   "controlImpactContract": {
+    "familyDispositionAuthority": "family-inventory.json rows[].id",
+    "requiredFamilyDispositionCountPerControl": 252,
+    "familyDispositionVocabulary": [
+      "APPLICABLE",
+      "INVARIANT_WITH_REASON",
+      "NOT_APPLICABLE_WITH_REASON",
+      "UNKNOWN"
+    ],
+    "unknownBlocksCertification": true,
     "requiredFields": [
       "controlId",
       "tier",
@@ -240,6 +308,29 @@
       "restoreDigest",
       "causalProbes",
       "editorMetadata"
+    ],
+    "applicableFamilyFields": [
+      "familyId",
+      "stableParts",
+      "states",
+      "propertyGroups",
+      "computedProperties",
+      "staticSourceBindings",
+      "dbSourceBindings",
+      "internalChannels",
+      "negativeControls",
+      "stressCases",
+      "evidenceIds",
+      "nextAction"
+    ],
+    "internalChannelFields": [
+      "channelId",
+      "semanticOwner",
+      "producer",
+      "fallbackAuthority",
+      "productiveConsumerFamilyIds",
+      "sourceBindings",
+      "replacementDisposition"
     ],
     "editorMetadata": [
       "group",

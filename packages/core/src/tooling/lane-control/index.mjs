@@ -10,7 +10,7 @@
  *   write-set-intersection  before the work — can these lanes collide?
  *   containment             after the work  — did this lane stay inside?
  *   work-order              the delegable unit, validated rather than trusted
- *   program-state           §4 as a command output, never a hand edit
+ *   program-state           README checkpoint as a command output, never a hand edit
  *
  * EVERYTHING HERE RUNS WITHOUT A BUILD. No `dist` import, no dependency the
  * repository has not already paid for, no install step. That is not a style

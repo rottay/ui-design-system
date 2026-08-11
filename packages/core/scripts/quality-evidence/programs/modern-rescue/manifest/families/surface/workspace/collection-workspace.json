@@ -1,0 +1,406 @@
+{
+  "schemaVersion": 1,
+  "familyId": "surface/workspace/collection-workspace",
+  "identity": {
+    "layer": "surface",
+    "category": "workspace",
+    "name": "CollectionWorkspaceSurface",
+    "components": [
+      "CollectionWorkspaceSurface"
+    ],
+    "sourceRoot": "packages/core/src/ui/surfaces/presentation/pages/workspace",
+    "sourceOwner": "packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace",
+    "publicComponents": [
+      "CollectionWorkspaceSurface"
+    ],
+    "unresolvedPublicComponents": [],
+    "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
+    "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
+    "inventoryRowDigest": "5397170e49f418e69fa0cf8fd84378dcb7f9825a81d6402dd7e8399964ca6d70"
+  },
+  "maximumClaim": "SOURCE_BOUND",
+  "review": {
+    "verdict": null,
+    "acceptedSourceDigest": null,
+    "evidenceIds": [],
+    "decisionReason": null
+  },
+  "anatomy": {
+    "assessmentState": "SOURCE_BOUND",
+    "partCensusCompleteness": "PARTIAL_REQUIRES_GENERATED_LITERAL_AND_DYNAMIC_PART_CENSUS",
+    "sourceBindings": [
+      "packages/core/src/ui/surfaces/foundation/contracts/adaptive/collection/index.ts",
+      "packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx"
+    ],
+    "stableParts": [
+      "root",
+      "masthead",
+      "header",
+      "context-slot",
+      "stats-slot",
+      "toolbar-row",
+      "controls-row",
+      "filters-strip",
+      "collection",
+      "preview-rail",
+      "preview-rail-resize",
+      "preview-sheet-content",
+      "preview-accordion",
+      "body",
+      "content"
+    ],
+    "states": [
+      "loading",
+      "empty",
+      "error",
+      "ready",
+      "selection-active",
+      "preview-open",
+      "filter-sheet-open"
+    ],
+    "propertyGroups": [
+      "shell-and-chrome",
+      "toolbar-and-controls",
+      "filters-and-saved-views",
+      "collection-renderer",
+      "selection",
+      "preview-rail",
+      "responsive-panes"
+    ],
+    "invariants": [
+      "All view modes share canonical item identity, controlled state, selection, actions and permissions.",
+      "Page and embed hosts use one surface and differ only through explicit shell/chrome posture.",
+      "Adaptive posture is the single authority for renderer and preview-pane posture when configured."
+    ],
+    "evidenceIds": [],
+    "nextAction": "GENERATE_EXHAUSTIVE_PART_CENSUS_AND_BIND_EACH_PROPERTY_GROUP"
+  },
+  "themeControls": [
+    {
+      "controlId": "palette.seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    },
+    {
+      "controlId": "typography.pairing",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    },
+    {
+      "controlId": "typography.families",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    },
+    {
+      "controlId": "typography.scale",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    },
+    {
+      "controlId": "shape.radius-scale",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    },
+    {
+      "controlId": "shape.button-style",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    },
+    {
+      "controlId": "density.mode",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    },
+    {
+      "controlId": "spacing.rhythm",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    },
+    {
+      "controlId": "motion.dial",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    },
+    {
+      "controlId": "surfaces.elevation-posture",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    },
+    {
+      "controlId": "surfaces.effect-intensity",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    },
+    {
+      "controlId": "navigation.sidebar-tone",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    },
+    {
+      "controlId": "experience.profile",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    },
+    {
+      "controlId": "chrome.families",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    },
+    {
+      "controlId": "chrome.anatomy",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    },
+    {
+      "controlId": "token-overrides",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    },
+    {
+      "controlId": "recipe-profile",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    },
+    {
+      "controlId": "profiles.expressive",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    },
+    {
+      "controlId": "profiles.icon",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    },
+    {
+      "controlId": "responsive.posture",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    }
+  ],
+  "retiredThemeControls": [],
+  "recipeAnatomy": {
+    "assessmentState": "SOURCE_BOUND",
+    "groupBindings": [
+      {
+        "groupId": "collection-view-mode",
+        "variantIds": [
+          "table",
+          "cards",
+          "grid",
+          "kanban",
+          "gallery",
+          "calendar"
+        ],
+        "selectionApi": "WorkspaceViewModeConfig and AdaptiveConfig collection posture"
+      }
+    ],
+    "variants": [
+      "table",
+      "cards",
+      "grid",
+      "kanban",
+      "gallery",
+      "calendar"
+    ],
+    "deprecatedAliases": [],
+    "evidenceIds": [],
+    "nextAction": "PROVE_RENDERER_PARITY_SELECTION_CONTINUITY_AND_EXACT_HOST_RESTORE"
+  },
+  "instanceApi": {
+    "assessmentState": "SOURCE_BOUND",
+    "contractSymbols": [
+      "CollectionWorkspaceProps<T>",
+      "CollectionWorkspaceConfig<T>",
+      "CollectionViewModeConfigs<T>",
+      "CollectionWorkspaceChromeConfig"
+    ],
+    "props": [
+      "surfaceMode",
+      "chrome",
+      "columns",
+      "rowKey",
+      "mobileCard",
+      "adaptive",
+      "presentation",
+      "controls",
+      "viewModes",
+      "behavior"
+    ],
+    "slots": [
+      "header",
+      "context",
+      "stats",
+      "primaryAction",
+      "emptyState",
+      "errorState",
+      "previewRail.render"
+    ],
+    "callbacks": [
+      "search.onChange",
+      "savedViews callbacks",
+      "viewMode.onChange",
+      "density.onChange",
+      "selection callbacks",
+      "column settings callbacks",
+      "previewRail.onWidthChange"
+    ],
+    "controlledState": [
+      "search",
+      "filters",
+      "saved views",
+      "density",
+      "view mode",
+      "selection",
+      "column visibility/order/pinning/widths",
+      "preview item"
+    ],
+    "evidenceIds": [],
+    "nextAction": "VERIFY_EXPORT_CENSUS_AND_EVERY_CONTROLLED_UNCONTROLLED_PRECEDENCE_RULE"
+  },
+  "hostAdaptation": {
+    "assessmentState": "SOURCE_BOUND",
+    "contexts": [
+      "page",
+      "embed",
+      "browser-page",
+      "ai-workbench",
+      "narrow-container-inside-wide-viewport"
+    ],
+    "containerRules": [
+      "A ResizeObserver measures the collection region and resolves the active named posture from container width.",
+      "The active posture exclusively selects table/cards and toolbar mode.",
+      "Preview rail resolves inline, sheet or accordion without forking item state.",
+      "embed suppresses duplicate page chrome through explicit defaults rather than app CSS."
+    ],
+    "invariants": [
+      "Viewport size cannot override a narrower measured host.",
+      "No application min-width is required to keep the collection usable.",
+      "Page and Workbench reuse the same component, data, state and permissions."
+    ],
+    "sourceTests": [
+      "packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/tests/CollectionWorkspace.test.tsx#resolves adaptive posture from a narrow collection inside a wide viewport",
+      "packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/tests/CollectionWorkspace.test.tsx#surfaceMode embed"
+    ],
+    "evidenceIds": [],
+    "nextAction": "PRODUCE_BROWSER_COMPUTED_KEYBOARD_AND_RESTORE_EVIDENCE_FOR_PAGE_AND_EMBED"
+  },
+  "statesMotion": {
+    "assessmentState": "UNKNOWN",
+    "states": [],
+    "transitions": [],
+    "inputModes": [],
+    "reducedMotion": [],
+    "evidenceIds": [],
+    "nextAction": "CENSUS_STATES_TRANSITIONS_INPUTS_AND_REDUCED_MOTION"
+  },
+  "invariants": {
+    "assessmentState": "SOURCE_BOUND",
+    "entries": [
+      "Adaptive posture owns both renderer and toolbar view state.",
+      "View changes preserve selection, focus, actions and preview identity.",
+      "Custom cards receive DataTableMobileCardContext instead of rebuilding behavior.",
+      "Structural choices are props and data, never CSS tokens.",
+      "Tenant theme controls paint shared stable parts without introducing host-specific markup."
+    ],
+    "evidenceIds": [],
+    "nextAction": "BIND_INVARIANTS_TO_FOCAL_TESTS_NEGATIVE_CONTROLS_AND_SIGHTED_RECEIPTS"
+  },
+  "premiumCandidates": [
+    {
+      "id": "bounded-collection-card-anatomy",
+      "proposalState": "PROPOSAL",
+      "countsAsCapability": false,
+      "groupId": "collection-card-anatomy",
+      "gap": "renderCard provides canonical behavior but no shared finite icon, media, metadata, status and action anatomy",
+      "mechanism": "typed card recipe and bounded slots shared with PatternDataTable mobile cards",
+      "candidateVariants": [
+        "compact",
+        "standard",
+        "media"
+      ],
+      "blockedBy": [
+        "two-consumer-demand",
+        "cross-family-slot-contract",
+        "container-stress",
+        "a11y-and-action-priority"
+      ]
+    },
+    {
+      "id": "preview-pane-posture-presets",
+      "proposalState": "PROPOSAL",
+      "countsAsCapability": false,
+      "gap": "preview rail is flexible and resizable but its default proportions and disclosure posture are low-level configuration",
+      "mechanism": "bounded surface recipe composing existing rail widths and pane modes",
+      "candidateVariants": [
+        "compact-inspector",
+        "balanced-detail",
+        "media-detail"
+      ],
+      "blockedBy": [
+        "no-new-css-authority",
+        "keyboard-resize-contract",
+        "page-embed-equivalence"
+      ]
+    }
+  ]
+}

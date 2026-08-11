@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "controlId": "experience.profile",
+  "lifecycleState": "OPERATIONAL",
+  "tier": "standard",
+  "scope": "tenant",
+  "semanticOwner": {
+    "owner": "design-system",
+    "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+    "registryDigest": "ed06c5a7fb7dc7e90ff04eef914c94a48a2f6eaff749c1e8ed7995639e2319f3"
+  },
+  "title": "Experience profile",
+  "valueType": "profile-id",
+  "domain": {
+    "kind": "profile-id",
+    "enumValues": [],
+    "bounds": null,
+    "defaultBehavior": "baseline identity; a selection composes closed per-axis postures whose expansion always loses to any authored field or channel"
+  },
+  "ingress": {
+    "staticBrandThemePath": "expressive.experienceProfile",
+    "dbTenantThemePath": "appearance.general.experienceProfile"
+  },
+  "declaredOutputs": {
+    "channels": [
+      "--ds-experience-profile",
+      "--ds-letter-spacing-heading",
+      "--ds-edge-standard-width",
+      "--ds-material-canvas-texture",
+      "--ds-elevation-lift-strength"
+    ],
+    "rootAttributes": [],
+    "representativeOnly": true
+  },
+  "dependsOn": [],
+  "compatibility": "closed versioned registry (expressive-profiles); ids permanent, superseded by @N+1; unset-to-rollback",
+  "productiveConsumerWitness": {
+    "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx",
+    "symbol": "resolveExpressiveAxes"
+  },
+  "calibration": {
+    "assessmentState": "UNKNOWN",
+    "representativeFamilyIds": [],
+    "normalizedStops": [],
+    "staticDbParityEvidenceIds": [],
+    "exactRestoreEvidenceIds": [],
+    "negativeControls": [],
+    "nextAction": "CALIBRATE_LOWERERS_COMPUTED_DELTAS_NEGATIVES_AND_EXACT_RESTORE"
+  },
+  "retiredAliases": []
+}

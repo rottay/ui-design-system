@@ -2,12 +2,12 @@
 /**
  * @fileoverview DELIVERABLE 4 — the state-file writer.
  *
- * `PROGRAM-STATE.md` opens by declaring its own rule: *nothing in this file
- * may be a number a command could produce*. A rule a document states about
+ * The Modern Rescue README declares its own rule: *nothing in its generated
+ * checkpoint may be a number a command could produce*. A rule a document states about
  * itself is enforced by whoever last edited it, which is to say by nobody.
  * This command is the enforcement.
  *
- * THE TRANSITION IS THE WRITE. §4 is not edited; it is RENDERED, from an
+ * THE TRANSITION IS THE WRITE. The checkpoint is not edited; it is RENDERED, from an
  * intent file plus a derivation performed at write time. The intent file
  * holds only what a human decides — which wave, what blocks it, which lane
  * gets which model and why. Every figure comes from the derivation and is
@@ -20,16 +20,17 @@
  * instead. That is why the rule is checkable at all — by the time a figure
  * reaches the document, nothing can tell whether it was derived or typed.
  *
- * `--check` FAILS ON FOUR DIFFERENT THINGS, and says which:
- *   · §4 carries no stamp — it was hand-written, not transitioned
- *   · HEAD has moved since the stamp, so every derived figure is stale
- *   · the intent file changed and §4 was not re-rendered
- *   · a fresh render disagrees with the file byte-for-byte — either §4 was
+ * `--check` reports provenance and FAILS ON THREE different contract drifts:
+ *   · the checkpoint carries no stamp — it was hand-written, not transitioned
+ *   · the intent file changed and the checkpoint was not re-rendered
+ *   · a fresh render disagrees with the file byte-for-byte — either the checkpoint was
  *     hand-edited, or a derived figure no longer matches the repository
+ * HEAD movement is reported as provenance but does not make the checkpoint
+ * unsatisfiable after its own commit.
  *
  * USAGE
- *   node .../program-state/index.mjs --write --intent <intent.json> [--target <PROGRAM-STATE.md>]
- *   node .../program-state/index.mjs --check --intent <intent.json> [--target <PROGRAM-STATE.md>]
+ *   node .../program-state/index.mjs --write --intent <intent.json> [--target <README.md>]
+ *   node .../program-state/index.mjs --check --intent <intent.json> [--target <README.md>]
  *
  * EXIT 0 clean · 1 refused / drifted · 2 could not run.
  */
@@ -41,8 +42,9 @@ import { loadContext, readPlan, resolveLane } from '../../composition/plan/index
 import { buildSingleOwnerSet } from '../../runtime/shared-files/index.mjs';
 import { conclude, createFindings, EXIT, parseArgs } from '../../foundation/report/index.mjs';
 
-export const DEFAULT_TARGET = 'packages/core/test-artifacts/quality-evidence/wo-cra-23/PROGRAM-STATE.md';
-const SECTION_HEADING = '## 4. STATE';
+export const DEFAULT_TARGET = 'packages/core/scripts/quality-evidence/programs/modern-rescue/README.md';
+export const MANIFEST_INDEX_PATH = 'packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/index.json';
+const SECTION_HEADING = '## Current checkpoint';
 const STAMP_OPEN = '<!-- lane-control:program-state v1';
 const STAMP_CLOSE = '-->';
 
@@ -64,9 +66,9 @@ function digest(text) {
  *
  * The cut is not "HEAD-sensitive" — it is:
  *
- *   PINNED      changes only when somebody changes what §4 is ABOUT.
+ *   PINNED      changes only when somebody changes what the checkpoint is ABOUT.
  *               Rendered into the body, byte-verified, full teeth. If one of
- *               these moves, §4 genuinely needs rewriting and red is correct.
+ *               these moves, the checkpoint genuinely needs rewriting and red is correct.
  *
  *   PROVENANCE  changes as a side effect of ordinary work — every commit, every
  *               new file, every lane that writes anything. NEVER rendered into
@@ -79,7 +81,7 @@ function digest(text) {
  * the check back where it started, one commit later.
  *
  * Removing these from the body does not weaken the check — it is what lets the
- * check be READ. While §4 was permanently red over HEAD drift, a real
+ * check be READ. While the checkpoint was permanently red over HEAD drift, a real
  * `ledger.families` disagreement was invisible underneath it.
  */
 export const PINNED = 'pinned';
@@ -89,6 +91,21 @@ export function derive({ root, planPath }) {
   const head = headMeta(root);
   const context = loadContext({ root });
   const ledger = context.rows.ledger;
+  const manifestIndex = JSON.parse(readFileSync(`${root}/${MANIFEST_INDEX_PATH}`, 'utf8'));
+  const familyReviews = manifestIndex?.rollups?.familyReviews;
+  if (!familyReviews || manifestIndex?.denominators?.canonicalFamilies !== 252) {
+    throw new Error('lane-control: customization manifest index is missing the canonical 252-family review rollup');
+  }
+  const reviewTotal =
+    familyReviews.unreviewed
+    + familyReviews.accepted
+    + familyReviews.assessedNotElevated
+    + familyReviews.blockedOwnerDecision;
+  if (reviewTotal !== manifestIndex.denominators.canonicalFamilies) {
+    throw new Error(
+      `lane-control: customization manifest family review rollup totals ${reviewTotal}, expected ${manifestIndex.denominators.canonicalFamilies}`,
+    );
+  }
 
   const derived = {
     // Provenance — never pinned into the body.
@@ -126,13 +143,21 @@ export function derive({ root, planPath }) {
     },
   };
 
-  for (const [state, count] of Object.entries(ledger.counts?.byState ?? {})) {
-    derived[`ledger.byState.${state}`] = {
-      value: count,
-      how: `family-ledger.json counts.byState.${state}`,
-      volatility: PINNED,
-    };
-  }
+  derived['adjudication.accepted'] = {
+    value: familyReviews.accepted,
+    how: `${MANIFEST_INDEX_PATH} rollups.familyReviews.accepted`,
+    volatility: PINNED,
+  };
+  derived['adjudication.assessedNotElevated'] = {
+    value: familyReviews.assessedNotElevated,
+    how: `${MANIFEST_INDEX_PATH} rollups.familyReviews.assessedNotElevated`,
+    volatility: PINNED,
+  };
+  derived['adjudication.unreviewed'] = {
+    value: familyReviews.unreviewed,
+    how: `${MANIFEST_INDEX_PATH} rollups.familyReviews.unreviewed`,
+    volatility: PINNED,
+  };
   for (const [layer, count] of Object.entries(ledger.counts?.byLayer ?? {})) {
     derived[`ledger.byLayer.${layer}`] = {
       value: count,
@@ -167,7 +192,7 @@ const PLACEHOLDER = /\{\{derived\.[a-zA-Z0-9_.]+\}\}/g;
  * The strings that actually reach the document, with the path each came from.
  *
  * The typed-figure rule is scoped to these and only these, because a field
- * the renderer never reads cannot put a figure into §4. Scoping it this way
+ * the renderer never reads cannot put a figure into the checkpoint. Scoping it this way
  * removes the noise from annotations without licensing a single false
  * negative: everything rendered is scanned.
  */
@@ -190,7 +215,7 @@ export function collectRenderedStrings(intent) {
 
 /**
  * Refuse any figure in the intent that the derivation could have produced.
- * This is the rule §4 states about itself, made executable.
+ * This is the rule the checkpoint states about itself, made executable.
  */
 export function auditIntentForTypedFigures(intent, derived) {
   const findings = [];
@@ -259,7 +284,7 @@ function interpolate(text, derived, missing, pinnedProvenance) {
   });
 }
 
-/** Render §4 exactly. The stamp is inserted separately, after digesting. */
+/** Render the checkpoint exactly. The stamp is inserted separately, after digesting. */
 export function renderBody(intent, derived) {
   const missing = [];
   const pinnedProvenance = [];
@@ -341,7 +366,7 @@ export function parseStamp(section) {
   return { text, head: read('head'), writtenAt: read('written'), intent: read('intent'), render: read('render') };
 }
 
-/** Split a document into everything before §4, §4 itself, and everything after. */
+/** Split a document around the generated checkpoint. */
 export function splitSection(document) {
   const start = document.indexOf(SECTION_HEADING);
   if (start === -1) return null;
@@ -390,7 +415,7 @@ function run(argv) {
   const intentPath = flags.get('intent');
   if (!mode || !intentPath || intentPath === true) {
     console.error(
-      'usage: program-state --write|--check --intent <intent.json> [--target <PROGRAM-STATE.md>] [--plan <plan.json>] [--json]',
+      'usage: program-state --write|--check --intent <intent.json> [--target <README.md>] [--plan <plan.json>] [--json]',
     );
     return EXIT.USAGE;
   }
@@ -424,7 +449,7 @@ function run(argv) {
   for (const key of [...new Set(pinnedProvenance)]) {
     add({
       rule: 'P9-provenance-pinned',
-      message: `"${key}" is a PROVENANCE fact and may not be written into §4. It moves with ordinary work, so pinning it would make this document stale the moment it is committed — which is exactly the defect that made --check unsatisfiable.`,
+      message: `"${key}" is a PROVENANCE fact and may not be written into the checkpoint. It moves with ordinary work, so pinning it would make this document stale the moment it is committed — which is exactly the defect that made --check unsatisfiable.`,
       details: [`${key} is reported live by --check instead; HEAD identity is recorded in the stamp as provenance.`],
     });
   }
@@ -452,7 +477,7 @@ function run(argv) {
     const stamp = buildStamp({ head, writtenAt, intentDigest, renderDigest });
     const stamped = body.replace(`${SECTION_HEADING}\n\n`, `${SECTION_HEADING}\n\n${stamp}\n\n`);
     writeFileSync(targetPath, `${split.before}${stamped}\n${split.after.replace(/^\n+/, '')}`);
-    console.log(`✓ program-state: §4 written against HEAD ${head} (intent ${intentDigest}, render ${renderDigest})`);
+    console.log(`✓ program-state: checkpoint written against HEAD ${head} (intent ${intentDigest}, render ${renderDigest})`);
     console.log(`  target: ${targetPath}`);
     return EXIT.OK;
   }
@@ -461,7 +486,7 @@ function run(argv) {
   if (!stamp) {
     add({
       rule: 'P4-unstamped',
-      message: `§4 carries no stamp: it was hand-written rather than transitioned. Run --write to make it a command output.`,
+      message: `the checkpoint carries no stamp: it was hand-written rather than transitioned. Run --write to make it a command output.`,
     });
   } else {
     // HEAD DRIFT IS REPORTED, NOT REFUSED.
@@ -479,13 +504,13 @@ function run(argv) {
     if (stamp.intent !== intentDigest) {
       add({
         rule: 'P6-intent-drift',
-        message: `the intent file has changed (stamp ${stamp.intent}, now ${intentDigest}) and §4 was not re-rendered`,
+        message: `the intent file has changed (stamp ${stamp.intent}, now ${intentDigest}) and the checkpoint was not re-rendered`,
       });
     }
     if (stamp.render !== renderDigest) {
       add({
         rule: 'P7-render-drift',
-        message: `a fresh render digests to ${renderDigest}; the stamp says ${stamp.render}. Either §4 was hand-edited, or a derived figure no longer matches the repository.`,
+        message: `a fresh render digests to ${renderDigest}; the stamp says ${stamp.render}. Either the checkpoint was hand-edited, or a derived figure no longer matches the repository.`,
       });
     }
   }
@@ -498,7 +523,7 @@ function run(argv) {
     const first = actualLines.findIndex((line, index) => line !== expectedLines[index]);
     add({
       rule: 'P8-body-mismatch',
-      message: '§4 does not byte-match a fresh render from the intent',
+      message: 'the checkpoint does not byte-match a fresh render from the intent',
       details: [
         `first difference at line ${first + 1} of the section`,
         `in the file : ${JSON.stringify(actualLines[first] ?? '<end of section>')}`,

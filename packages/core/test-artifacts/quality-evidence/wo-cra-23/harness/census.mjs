@@ -1,9 +1,9 @@
 /**
  * The census, re-derived at RUNTIME.
  *
- * `BARE-ROOT-CENSUS.md` splits 3,303 names into three buckets by STATIC analysis
- * — "is this name absent from the vertical's unconditional block". That is not
- * the question that matters, and it has now been measured wrong twice: evnto's
+ * An earlier static census split 3,303 names into three buckets by asking
+ * whether a name was absent from the vertical's unconditional block. That is
+ * not the question that matters, and it was measured wrong twice: evnto's
  * partial bucket was 43% false-positive, rottay's 61%.
  *
  * The question that matters is a runtime one: does this vertical resolve to the

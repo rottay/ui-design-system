@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "groupId": "data-table-presentation",
+  "kind": "RECIPE_AND_ANATOMY",
+  "implementationState": "OPERATIONAL_SOURCE_BOUND",
+  "sourceBindings": [
+    {
+      "path": "packages/core/src/ui/patterns/data/data-table/contracts/index.ts",
+      "symbol": "DataTableRecipe"
+    },
+    {
+      "path": "packages/core/src/ui/patterns/data/data-table/presentation/table/index.tsx",
+      "symbol": "resolvedRecipe"
+    }
+  ],
+  "selectionAuthority": "PatternDataTable recipe prop, then recipe-profile default, then deprecated compatibility aliases, then minimal",
+  "variants": [
+    {
+      "id": "minimal",
+      "publicSelection": "recipe=minimal"
+    },
+    {
+      "id": "ruled",
+      "publicSelection": "recipe=ruled"
+    },
+    {
+      "id": "grid",
+      "publicSelection": "recipe=grid"
+    },
+    {
+      "id": "zebra",
+      "publicSelection": "recipe=zebra"
+    },
+    {
+      "id": "editorial",
+      "publicSelection": "recipe=editorial"
+    }
+  ],
+  "invariants": [
+    "Recipe changes presentation but never data identity, semantic table ownership, selection, keyboard behavior or row actions.",
+    "Recipe selection is typed data; CSS channels paint the selected stable parts but never choose the recipe.",
+    "An explicit recipe wins over recipe-profile defaults and compatibility aliases."
+  ],
+  "deprecatedAliases": [
+    {
+      "api": "bordered",
+      "replacedBy": "recipe=grid"
+    },
+    {
+      "api": "striped",
+      "replacedBy": "recipe=zebra"
+    },
+    {
+      "api": "compact",
+      "replacedBy": "density=compact"
+    }
+  ]
+}

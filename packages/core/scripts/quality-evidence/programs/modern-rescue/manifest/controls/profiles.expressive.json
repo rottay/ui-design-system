@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "controlId": "profiles.expressive",
+  "lifecycleState": "OPERATIONAL",
+  "tier": "pro",
+  "scope": "tenant",
+  "semanticOwner": {
+    "owner": "design-system",
+    "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+    "registryDigest": "ed06c5a7fb7dc7e90ff04eef914c94a48a2f6eaff749c1e8ed7995639e2319f3"
+  },
+  "title": "Explicit expressive axes",
+  "valueType": "enum",
+  "domain": {
+    "kind": "enum",
+    "enumValues": [],
+    "bounds": null,
+    "defaultBehavior": "each axis independently overrides the experience composition; an unset axis falls back to it, then to baseline"
+  },
+  "ingress": {
+    "staticBrandThemePath": "expressive.profiles.*",
+    "dbTenantThemePath": "visualFoundation.advanced.profiles.{type,geometry,edge,material,elevation,motif}"
+  },
+  "declaredOutputs": {
+    "channels": [
+      "--ds-type-label-text-transform",
+      "--ds-edge-emphasis-width",
+      "--ds-material-card-highlight",
+      "--ds-table-header-text-transform"
+    ],
+    "rootAttributes": [],
+    "representativeOnly": true
+  },
+  "dependsOn": [
+    "experience.profile"
+  ],
+  "compatibility": "closed per-axis vocabularies; both compilers sanitize fail-closed; unset-to-rollback per axis",
+  "productiveConsumerWitness": {
+    "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx",
+    "symbol": "sanitizeExpressiveOverrides"
+  },
+  "calibration": {
+    "assessmentState": "UNKNOWN",
+    "representativeFamilyIds": [],
+    "normalizedStops": [],
+    "staticDbParityEvidenceIds": [],
+    "exactRestoreEvidenceIds": [],
+    "negativeControls": [],
+    "nextAction": "CALIBRATE_LOWERERS_COMPUTED_DELTAS_NEGATIVES_AND_EXACT_RESTORE"
+  },
+  "retiredAliases": []
+}

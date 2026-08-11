@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "controlId": "density.mode",
+  "lifecycleState": "OPERATIONAL",
+  "tier": "standard",
+  "scope": "tenant",
+  "semanticOwner": {
+    "owner": "design-system",
+    "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+    "registryDigest": "ed06c5a7fb7dc7e90ff04eef914c94a48a2f6eaff749c1e8ed7995639e2319f3"
+  },
+  "title": "Density posture",
+  "valueType": "enum",
+  "domain": {
+    "kind": "closed-enum",
+    "enumValues": [
+      "compact",
+      "normal",
+      "spacious"
+    ],
+    "bounds": null,
+    "defaultBehavior": "normal (structural density scale is a separate channel)"
+  },
+  "ingress": {
+    "staticBrandThemePath": "surfaces.density / surfaces.densityScale",
+    "dbTenantThemePath": "appearance.general.density"
+  },
+  "declaredOutputs": {
+    "channels": [
+      "--ds-density-mode-factor",
+      "--ds-density-scale"
+    ],
+    "rootAttributes": [],
+    "representativeOnly": true
+  },
+  "dependsOn": [],
+  "compatibility": "additive; the three density vocabularies (contracts/tokens/schema) are recorded debt — unification is a breaking alignment owned by a future wave",
+  "productiveConsumerWitness": {
+    "consumer": "src/ui/patterns/data/widget-board/runtime/solver/react/index.ts",
+    "symbol": "useDensity"
+  },
+  "calibration": {
+    "assessmentState": "UNKNOWN",
+    "representativeFamilyIds": [],
+    "normalizedStops": [],
+    "staticDbParityEvidenceIds": [],
+    "exactRestoreEvidenceIds": [],
+    "negativeControls": [],
+    "nextAction": "CALIBRATE_LOWERERS_COMPUTED_DELTAS_NEGATIVES_AND_EXACT_RESTORE"
+  },
+  "retiredAliases": []
+}

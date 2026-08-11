@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "controlId": "responsive.posture",
+  "lifecycleState": "OPERATIONAL",
+  "tier": "pro",
+  "scope": "tenant",
+  "semanticOwner": {
+    "owner": "design-system",
+    "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+    "registryDigest": "ed06c5a7fb7dc7e90ff04eef914c94a48a2f6eaff749c1e8ed7995639e2319f3"
+  },
+  "title": "Responsive posture profile",
+  "valueType": "profile-id",
+  "domain": {
+    "kind": "closed-enum",
+    "enumValues": [
+      "compact",
+      "balanced",
+      "expansive"
+    ],
+    "bounds": null,
+    "defaultBehavior": "the balanced ladder, whose container thresholds (compact ≤639px, standard ≤839px) and `preferred` span resolution ARE the constants the adaptive runtime and pure solver used before this axis opened — so an absent selection is byte-for-byte the pre-capability layout, and \"unset it\" is a true rollback rather than an approximate one"
+  },
+  "ingress": {
+    "staticBrandThemePath": "responsive.posture",
+    "dbTenantThemePath": "visualFoundation.advanced.responsivePosture"
+  },
+  "declaredOutputs": {
+    "channels": [],
+    "rootAttributes": [],
+    "representativeOnly": true
+  },
+  "dependsOn": [],
+  "compatibility": "additive, unset-to-rollback; the ladder travels as DATA (document → schema → artifact normalizedAppearance) and selects a published threshold pair plus a span bias — never authored thresholds, never a viewport read, never a CSS channel. It reaches geometry ONLY through solver door 2 (`AdaptiveLayoutEnv.spanBias`) and through container-posture bucketing, both bounded by each item's own min/max contract and by the tier capacity, so no selection can overflow, reorder DOM/focus, or open an avoidable hole — drilled by the property sweep under all three profiles. WidgetBoard's collapse TIER is deliberately NOT tenant-driven: widget-board.css mirrors 639/839 as container queries that repoint the grid tracks, so the tier is CSS-co-authored and a JS-only move would manufacture implicit columns. A live swap invalidates measurements and saved layouts for free, because the environment epoch already folds artifactRevision.",
+  "productiveConsumerWitness": {
+    "consumer": "src/ui/patterns/data/widget-board/runtime/solver/react/index.ts",
+    "symbol": "resolveActiveResponsivePosture"
+  },
+  "calibration": {
+    "assessmentState": "UNKNOWN",
+    "representativeFamilyIds": [],
+    "normalizedStops": [],
+    "staticDbParityEvidenceIds": [],
+    "exactRestoreEvidenceIds": [],
+    "negativeControls": [],
+    "nextAction": "CALIBRATE_LOWERERS_COMPUTED_DELTAS_NEGATIVES_AND_EXACT_RESTORE"
+  },
+  "retiredAliases": []
+}

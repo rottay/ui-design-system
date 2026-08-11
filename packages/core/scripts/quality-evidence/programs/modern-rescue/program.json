@@ -2,14 +2,17 @@
   "schemaVersion": 1,
   "programId": "modern-rescue",
   "workOrderId": "WO-CRA-23",
+  "humanEntry": "packages/core/scripts/quality-evidence/programs/modern-rescue/README.md",
+  "checkpointIntent": "packages/core/scripts/quality-evidence/programs/modern-rescue/checkpoint.intent.json",
+  "customizationManifest": "packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/index.json",
   "statusAuthority": "roadmap/registry.json",
-  "workOrderAuthority": "roadmap/craft.md#wo-cra-23-claude-multi-agent-ds-normalization-and-world-class-family-elevation",
+  "workOrderAuthority": "packages/core/scripts/quality-evidence/programs/modern-rescue/README.md",
   "qualityTooling": "packages/core/scripts/quality-evidence",
   "evidenceRoot": "packages/core/test-artifacts/quality-evidence/wo-cra-23",
   "artDirectionContract": "packages/core/scripts/quality-evidence/programs/modern-rescue/tenant-art-direction.json",
   "visualCraftContract": "packages/core/scripts/quality-evidence/programs/modern-rescue/visual-craft-contract.json",
-  "r7CustomizationContract": "packages/core/scripts/quality-evidence/programs/modern-rescue/R7-CUSTOMIZATION-10-10.md",
-  "creativeProposalInbox": "packages/core/scripts/quality-evidence/programs/modern-rescue/KIMI-ANNOTATIONS/inbox",
+  "r7CustomizationContract": "packages/core/scripts/quality-evidence/programs/modern-rescue/customization-model.json",
+  "r7Enabled": false,
   "referenceLab": {
     "route": "/probe/ds-reference",
     "page": "packages/showroom/src/app/probe/ds-reference/page.tsx",
@@ -81,7 +84,7 @@
     "no tenant selectors or tenant conditional component trees",
     "BitHire and The Management comply with the binding tenant art direction on the same tree",
     "R1 visual evidence comes only from the hardcoded DS reference lab with zero product application CSS routes APIs or domain fixtures",
-    "raw Kimi annotations are temporary non-canonical input and are deleted after Codex incorporates accepted observations",
+    "advisor narratives are ephemeral non-canonical input; accepted findings are reproduced against source and incorporated into the owning contract",
     "no public token creation by family writers",
     "every productive CSS rule has one family or foundation-runtime owner",
     "zero dead orphaned or causally disconnected CSS at accepted round scope, full Modern corpus closure in R5/R6 and complete replay after R7 customization changes",
@@ -91,7 +94,7 @@
     "only Codex may accept sighted quality",
     "new layer grammars stop after three calibration families and every cohort stops after at most twenty-five families for Codex review",
     "each round stops before the next owner-authorized round",
-    "no commit before Codex acceptance",
-    "this program never pushes publishes or tags"
+    "local commits follow Codex audit of the bounded packet",
+    "this program never pushes; publication requires an explicit owner-authorized release window"
   ]
 }

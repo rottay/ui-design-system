@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "controlId": "surfaces.effect-intensity",
+  "lifecycleState": "OPERATIONAL",
+  "tier": "standard",
+  "scope": "tenant",
+  "semanticOwner": {
+    "owner": "design-system",
+    "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+    "registryDigest": "ed06c5a7fb7dc7e90ff04eef914c94a48a2f6eaff749c1e8ed7995639e2319f3"
+  },
+  "title": "Decoration intensity",
+  "valueType": "scale",
+  "domain": {
+    "kind": "bounded",
+    "enumValues": [],
+    "bounds": {
+      "min": 0,
+      "max": 1
+    },
+    "defaultBehavior": "1 for the DS default; verticals author their own floor"
+  },
+  "ingress": {
+    "staticBrandThemePath": "surfaces.effectIntensity",
+    "dbTenantThemePath": "appearance.general.surfaces.effectIntensity"
+  },
+  "declaredOutputs": {
+    "channels": [
+      "--ds-effect-intensity"
+    ],
+    "rootAttributes": [],
+    "representativeOnly": true
+  },
+  "dependsOn": [],
+  "compatibility": "additive; 0 removes decoration, never hierarchy",
+  "productiveConsumerWitness": {
+    "consumer": "src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
+    "symbol": "var(--ds-glass"
+  },
+  "calibration": {
+    "assessmentState": "UNKNOWN",
+    "representativeFamilyIds": [],
+    "normalizedStops": [],
+    "staticDbParityEvidenceIds": [],
+    "exactRestoreEvidenceIds": [],
+    "negativeControls": [],
+    "nextAction": "CALIBRATE_LOWERERS_COMPUTED_DELTAS_NEGATIVES_AND_EXACT_RESTORE"
+  },
+  "retiredAliases": []
+}

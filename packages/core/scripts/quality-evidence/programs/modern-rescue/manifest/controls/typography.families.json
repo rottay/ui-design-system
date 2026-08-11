@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "controlId": "typography.families",
+  "lifecycleState": "OPERATIONAL",
+  "tier": "standard",
+  "scope": "tenant",
+  "semanticOwner": {
+    "owner": "design-system",
+    "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+    "registryDigest": "ed06c5a7fb7dc7e90ff04eef914c94a48a2f6eaff749c1e8ed7995639e2319f3"
+  },
+  "title": "Explicit font stacks",
+  "valueType": "font-stack",
+  "domain": {
+    "kind": "font-stack",
+    "enumValues": [],
+    "bounds": null,
+    "defaultBehavior": "pairing (or vertical baseline) decides"
+  },
+  "ingress": {
+    "staticBrandThemePath": "typography.{fontFamilyBase,fontFamilyHeading,fontFamilyMono,fontFamilyDisplay}",
+    "dbTenantThemePath": "appearance.general.typography.{fontFamilyBase,fontFamilyHeading}"
+  },
+  "declaredOutputs": {
+    "channels": [
+      "--ds-font-family-base",
+      "--ds-font-family-heading"
+    ],
+    "rootAttributes": [],
+    "representativeOnly": true
+  },
+  "dependsOn": [],
+  "compatibility": "additive; Arabic-safe tail is a compiler invariant either way",
+  "productiveConsumerWitness": {
+    "consumer": "src/foundation/tokens/css/foundation/themes/default.css",
+    "symbol": "--ds-font-family-mono"
+  },
+  "calibration": {
+    "assessmentState": "UNKNOWN",
+    "representativeFamilyIds": [],
+    "normalizedStops": [],
+    "staticDbParityEvidenceIds": [],
+    "exactRestoreEvidenceIds": [],
+    "negativeControls": [],
+    "nextAction": "CALIBRATE_LOWERERS_COMPUTED_DELTAS_NEGATIVES_AND_EXACT_RESTORE"
+  },
+  "retiredAliases": []
+}

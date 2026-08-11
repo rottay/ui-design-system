@@ -6,7 +6,7 @@
   "model": {
     "name": "sonnet",
     "reason": "The pre-pass resolved every name in the substitution table in all three shipped bundles and found the same value in each, so no vertical's scale diverges on these six channels and the edit cannot become a repaint in one product only. The table is closed at six pairs, all inside one family's own skin CSS, with no declaration added and no name declared that today appears only inside a var() fallback.",
-    "prePassEvidence": "packages/core/test-artifacts/quality-evidence/wo-cra-23/PROGRAM-STATE.md"
+    "prePassEvidence": "packages/core/scripts/quality-evidence/programs/modern-rescue/README.md"
   },
   "writeSet": ["packages/core/src/ui/primitives/display/Avatar/**"],
   "writeExcludes": [],

@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "controlId": "typography.pairing",
+  "lifecycleState": "OPERATIONAL",
+  "tier": "standard",
+  "scope": "tenant",
+  "semanticOwner": {
+    "owner": "design-system",
+    "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+    "registryDigest": "ed06c5a7fb7dc7e90ff04eef914c94a48a2f6eaff749c1e8ed7995639e2319f3"
+  },
+  "title": "Type pairing personality",
+  "valueType": "enum",
+  "domain": {
+    "kind": "closed-enum",
+    "enumValues": [
+      "sober",
+      "editorial",
+      "geometric",
+      "technical"
+    ],
+    "bounds": null,
+    "defaultBehavior": "vertical baseline families"
+  },
+  "ingress": {
+    "staticBrandThemePath": "typography.{fontFamilyBase,fontFamilyHeading}",
+    "dbTenantThemePath": "appearance.general.typography.typePairing"
+  },
+  "declaredOutputs": {
+    "channels": [
+      "--ds-font-family-base",
+      "--ds-font-family-heading"
+    ],
+    "rootAttributes": [],
+    "representativeOnly": true
+  },
+  "dependsOn": [],
+  "compatibility": "additive, unset-to-rollback",
+  "productiveConsumerWitness": {
+    "consumer": "src/foundation/tokens/css/runtime/engines/modern/skin/typography.css",
+    "symbol": "var(--ds-font-family"
+  },
+  "calibration": {
+    "assessmentState": "UNKNOWN",
+    "representativeFamilyIds": [],
+    "normalizedStops": [],
+    "staticDbParityEvidenceIds": [],
+    "exactRestoreEvidenceIds": [],
+    "negativeControls": [],
+    "nextAction": "CALIBRATE_LOWERERS_COMPUTED_DELTAS_NEGATIVES_AND_EXACT_RESTORE"
+  },
+  "retiredAliases": []
+}

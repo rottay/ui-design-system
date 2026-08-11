@@ -1,7 +1,7 @@
 {
-  "_comment": "INTENT ONLY. Everything here is a decision a human made. Every figure is a {{derived.…}} placeholder, and the writer refuses to render if a figure that a command could produce is typed into any prose field. This example mirrors the §4 that PROGRAM-STATE.md carries today, so a --write against a copy produces a recognisable section.",
+  "_comment": "INTENT ONLY. Everything here is a decision a human made. Every figure is a {{derived.…}} placeholder, and the writer refuses to render if a figure that a command could produce is typed into any prose field. This example renders a recognizable checkpoint into the Modern Rescue README.",
   "plan": "packages/core/src/tooling/lane-control/composition/plan/examples/plan.example.json",
-  "currentWave": "0 — unblock. **Build is red.**",
+  "currentWave": "Unblock. **Build is red.**",
   "blockedOn": "`hooks:check` — unadjudicated DS reads plus a stale hooks manifest.",
   "laneTableCaption": "**Day-one lanes** (per the execution audit; none may open a family CSS lane while the build is red):",
   "lanes": [
@@ -54,6 +54,9 @@
     "ledger.sharedSkinFiles",
     "ledger.driftClean",
     "singleOwner.entries",
+    "adjudication.accepted",
+    "adjudication.assessedNotElevated",
+    "adjudication.unreviewed",
     "plan.lanes"
   ],
   "allowedLiterals": [

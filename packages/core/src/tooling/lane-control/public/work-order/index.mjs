@@ -10,7 +10,7 @@
  * and that the commit pathspecs cannot reach another lane's files.
  *
  * WHY THE VALIDATOR READS THE LAW INSTEAD OF QUOTING IT. §2's mandatory
- * sentence is checked against the copy in `PROGRAM-STATE.md`, not only
+ * sentence is checked against the copy in the Modern Rescue README, not only
  * against the constant below. If the law is amended and this file is not, the
  * validator says so rather than enforcing a sentence the programme has
  * retired. A gate that quietly enforces a stale law is worse than no gate.
@@ -36,7 +36,7 @@ import { conclude, createFindings, EXIT, parseArgs } from '../../foundation/repo
 const HERE = dirname(fileURLToPath(import.meta.url));
 export const SCHEMA_PATH = resolve(HERE, 'schema.json');
 
-export const PROGRAM_STATE_PATH = 'packages/core/test-artifacts/quality-evidence/wo-cra-23/PROGRAM-STATE.md';
+export const PROGRAM_STATE_PATH = 'packages/core/scripts/quality-evidence/programs/modern-rescue/README.md';
 
 /** §2 of the programme law, verbatim. Compared, never assumed. */
 export const MANDATORY_SENTENCE =

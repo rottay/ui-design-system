@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "controlId": "recipe-profile",
+  "lifecycleState": "OPERATIONAL",
+  "tier": "pro",
+  "scope": "tenant",
+  "semanticOwner": {
+    "owner": "design-system",
+    "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+    "registryDigest": "ed06c5a7fb7dc7e90ff04eef914c94a48a2f6eaff749c1e8ed7995639e2319f3"
+  },
+  "title": "Family recipe profile",
+  "valueType": "profile-id",
+  "domain": {
+    "kind": "profile-id",
+    "enumValues": [],
+    "bounds": null,
+    "defaultBehavior": "no profile: family recipe defaults apply"
+  },
+  "ingress": {
+    "staticBrandThemePath": "recipeProfile",
+    "dbTenantThemePath": "visualFoundation.recipeProfile"
+  },
+  "declaredOutputs": {
+    "channels": [
+      "--ds-recipe-profile"
+    ],
+    "rootAttributes": [],
+    "representativeOnly": true
+  },
+  "dependsOn": [],
+  "compatibility": "closed registry of typed per-family axes (recipe-profiles); caller props always win",
+  "productiveConsumerWitness": {
+    "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx",
+    "symbol": "RecipeProfileProvider"
+  },
+  "calibration": {
+    "assessmentState": "UNKNOWN",
+    "representativeFamilyIds": [],
+    "normalizedStops": [],
+    "staticDbParityEvidenceIds": [],
+    "exactRestoreEvidenceIds": [],
+    "negativeControls": [],
+    "nextAction": "CALIBRATE_LOWERERS_COMPUTED_DELTAS_NEGATIVES_AND_EXACT_RESTORE"
+  },
+  "retiredAliases": []
+}

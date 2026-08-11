@@ -14,8 +14,8 @@
  * check — and the check must be GREEN. Every other drill here is protecting
  * the teeth while that one protects the satisfiability.
  *
- * The real `PROGRAM-STATE.md` is never written by a drill. The coordinator
- * holds that transition.
+ * The real Modern Rescue README is never written by a drill. The coordinator
+ * holds its checkpoint transition.
  */
 import { pathToFileURL } from 'node:url';
 import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -26,7 +26,7 @@ import { createDrillSuite, run, withTempDir } from '../../../foundation/harness/
 const ROOT = execFileSync('git', ['rev-parse', '--show-toplevel'], { encoding: 'utf8' }).trim();
 const CHECKER = `${ROOT}/packages/core/src/tooling/lane-control/public/program-state/index.mjs`;
 
-const STATE_FILE = 'packages/core/test-artifacts/quality-evidence/wo-cra-23/PROGRAM-STATE.md';
+const STATE_FILE = 'packages/core/scripts/quality-evidence/programs/modern-rescue/README.md';
 const INTENT_FILE = 'packages/core/src/tooling/lane-control/public/program-state/state.intent.example.json';
 
 /** Everything `derive()` reads, copied at its repo-relative path. */
@@ -34,6 +34,7 @@ const CARRIED = [
   STATE_FILE,
   INTENT_FILE,
   'packages/core/test-artifacts/quality-evidence/wo-cra-23/family-ledger.json',
+  'packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/index.json',
   'packages/core/src/tooling/lane-control/public/work-order/synthetic-rows.json',
   'packages/core/src/tooling/lane-control/composition/plan/examples/plan.example.json',
 ];
@@ -43,17 +44,17 @@ function git(repo, args) {
 }
 
 /**
- * A deterministic hand-written §4, installed over whatever the real document
+ * A deterministic hand-written checkpoint, installed over whatever the real document
  * currently carries.
  *
- * The real `PROGRAM-STATE.md` is live — the coordinator transitions it, and
- * its §4 is now a rendered section against the coordinator's own intent. A
+ * The real README is live — the coordinator transitions it, and
+ * its checkpoint is now a rendered section against the coordinator's own intent. A
  * drill that asserted against that content would go red every time the
  * programme made progress, which is a drill measuring the wrong thing. The
- * sections OUTSIDE §4 are still the real ones, so the byte-preservation drill
+ * sections OUTSIDE the checkpoint are still the real ones, so the byte-preservation drill
  * keeps its meaning.
  */
-const HAND_WRITTEN_SECTION = `## 4. STATE
+const HAND_WRITTEN_SECTION = `## Current checkpoint
 
 *Everything in this section is intent.*
 
@@ -65,7 +66,7 @@ const HAND_WRITTEN_SECTION = `## 4. STATE
 
 function installHandWrittenSection(path) {
   const document = readFileSync(path, 'utf8');
-  const start = document.indexOf('## 4. STATE');
+  const start = document.indexOf('## Current checkpoint');
   const rest = document.slice(start + 1);
   const next = rest.indexOf('\n## ');
   const end = next === -1 ? document.length : start + 1 + next + 1;
@@ -92,7 +93,7 @@ function commitAll(repo, message) {
 }
 
 function sectionOf(document) {
-  const start = document.indexOf('## 4. STATE');
+  const start = document.indexOf('## Current checkpoint');
   const rest = document.slice(start + 1);
   const next = rest.indexOf('\n## ');
   return next === -1 ? document.slice(start) : document.slice(start, start + 1 + next);
@@ -110,7 +111,7 @@ export function runDrills() {
     const call = (...args) => run(process.execPath, [CHECKER, ...args, '--intent', intent, '--target', target], { cwd: dir });
 
     suite.expectRefusal({
-      label: 'P4 — a §4 that was hand-written, not transitioned, is refused',
+      label: 'P4 — a checkpoint that was hand-written, not transitioned, is refused',
       rule: 'P4-unstamped',
       result: call('--check'),
     });
@@ -119,7 +120,7 @@ export function runDrills() {
     suite.expectPass({ label: 'ROUND TRIP (2/2) — --check passes immediately afterwards', result: call('--check') });
 
     // ── THE REGRESSION DRILL ────────────────────────────────────────────────
-    const renderCommit = commitAll(dir, 'docs: transition PROGRAM-STATE §4');
+    const renderCommit = commitAll(dir, 'docs: transition programme checkpoint');
     const afterCommit = call('--check');
     suite.expectPass({
       label: `REGRESSION — --check is GREEN after the render is COMMITTED (this was permanently red: committing moved HEAD past the stamp)`,
@@ -148,7 +149,7 @@ export function runDrills() {
       label: 'ROOT CAUSE — no HEAD-varying value is pinned in the rendered body any more',
       ok: !section.replace(/<!--[\s\S]*?-->/g, '').includes(headNow) && !section.includes('| `head.short` |'),
       details: [
-        `current HEAD ${headNow} does not appear in the §4 body`,
+        `current HEAD ${headNow} does not appear in the checkpoint body`,
         'HEAD identity now lives in the stamp as provenance — a record of what the render was produced against, not a claim about now',
       ],
     });
@@ -161,12 +162,12 @@ export function runDrills() {
       ],
     });
     suite.expectFact({
-      label: 'ROUND TRIP — the rest of the document is untouched (§1, §2, §3, §5, §6 survive byte-for-byte)',
+      label: 'ROUND TRIP — the rest of the document is untouched byte-for-byte',
       ok: (() => {
-        const cut = (text) => text.slice(0, text.indexOf('## 4. STATE')) + text.slice(text.indexOf('## 5. DECISIONS TAKEN'));
+        const cut = (text) => text.replace(sectionOf(text), '');
         return cut(pristine) === cut(written);
       })(),
-      details: ['everything outside §4 is compared byte-for-byte before and after the write'],
+      details: ['everything outside the checkpoint is compared byte-for-byte before and after the write'],
     });
 
     // ── TEETH, all preserved across commits ─────────────────────────────────
@@ -193,6 +194,24 @@ export function runDrills() {
     });
     ledger.rows.push(removed);
     writeFileSync(ledgerPath, JSON.stringify(ledger, null, 2));
+
+    const manifestPath = join(
+      dir,
+      'packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/index.json',
+    );
+    const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
+    manifest.rollups.familyReviews.blockedOwnerDecision += 1;
+    manifest.rollups.familyReviews.unreviewed -= 1;
+    writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
+    suite.expectRefusal({
+      label: 'P8 — a REAL manifest adjudication change goes red until the checkpoint is re-rendered',
+      rule: 'P8-body-mismatch',
+      showOutput: true,
+      result: call('--check'),
+    });
+    manifest.rollups.familyReviews.blockedOwnerDecision -= 1;
+    manifest.rollups.familyReviews.unreviewed += 1;
+    writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
 
     // ── P9: the guard that stops the defect coming back ─────────────────────
     const intentBody = JSON.parse(readFileSync(intent, 'utf8'));

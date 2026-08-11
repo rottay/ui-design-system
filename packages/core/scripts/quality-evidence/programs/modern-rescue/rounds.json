@@ -18,6 +18,7 @@
   "rounds": [
     {
       "id": "R0",
+      "enabled": true,
       "name": "Truth, instrumentation and baseline",
       "scope": {
         "families": 252,
@@ -65,6 +66,7 @@
     },
     {
       "id": "R1",
+      "enabled": true,
       "name": "Reference grammar and causal customization canaries",
       "scope": {
         "referenceLab": "/probe/ds-reference",
@@ -302,6 +304,7 @@
     },
     {
       "id": "R2",
+      "enabled": true,
       "name": "Primitive depth and resilience",
       "scope": {
         "primitives": 100
@@ -324,6 +327,7 @@
     },
     {
       "id": "R3",
+      "enabled": true,
       "name": "Patterns and chart grammar",
       "scope": {
         "patterns": 56,
@@ -346,6 +350,7 @@
     },
     {
       "id": "R4",
+      "enabled": true,
       "name": "Structures, surfaces, composition and commercial",
       "scope": {
         "structures": 27,
@@ -372,6 +377,7 @@
     },
     {
       "id": "R5",
+      "enabled": true,
       "name": "Cross-system canon and propagation closure",
       "scope": {
         "families": 252,
@@ -399,6 +405,7 @@
     },
     {
       "id": "R6",
+      "enabled": true,
       "name": "Independent Codex certification",
       "scope": {
         "families": 252,
@@ -425,8 +432,9 @@
     },
     {
       "id": "R7",
+      "enabled": false,
       "name": "Customization depth, tenant distinctiveness and catalog parity",
-      "contract": "R7-CUSTOMIZATION-10-10.md",
+      "contract": "customization-model.json#r7Execution",
       "entry": [
         "R6 has a local Codex-accepted frozen-tree result",
         "the 252-family R6 baseline remains immutable and source-bound",

@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "groupId": "collection-card-anatomy",
+  "kind": "RECIPE_AND_ANATOMY",
+  "implementationState": "PROPOSED_NOT_OPERATIONAL",
+  "countsAsCapability": false,
+  "sourceBindings": [],
+  "selectionAuthority": null,
+  "variants": [
+    {
+      "id": "compact",
+      "intent": "Dense identity, two or three facts, optional selection and trailing overflow actions."
+    },
+    {
+      "id": "standard",
+      "intent": "Identity, status, bounded metadata, selection and visible primary actions."
+    },
+    {
+      "id": "media",
+      "intent": "Leading image or expressive icon, identity, metadata and actions with bounded media geometry."
+    }
+  ],
+  "invariants": [
+    "The card renderer receives canonical selection, open and row-action behavior rather than rebuilding app state.",
+    "Anatomy is selected by a typed recipe or instance configuration, never by a CSS custom property.",
+    "Theme channels may paint and space stable card parts but cannot add, remove or reorder content."
+  ],
+  "admissionRequirements": [
+    "A shared typed anatomy is needed by both standalone DataTable mobile cards and CollectionWorkspace cards.",
+    "At least two real product consumers need each admitted variant.",
+    "Public slots remain bounded and accessible in page and embed hosts.",
+    "No existing recipe, mobileCard or renderCard contract can express the need without app-private duplication."
+  ]
+}

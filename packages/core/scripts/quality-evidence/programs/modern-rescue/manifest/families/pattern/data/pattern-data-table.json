@@ -1,0 +1,423 @@
+{
+  "schemaVersion": 1,
+  "familyId": "pattern/data/pattern-data-table",
+  "identity": {
+    "layer": "pattern",
+    "category": "data",
+    "name": "PatternDataTable",
+    "components": [
+      "PatternDataTable"
+    ],
+    "sourceRoot": "packages/core/src/ui/patterns",
+    "sourceOwner": "packages/core/src/ui/patterns/data",
+    "publicComponents": [
+      "PatternDataTable"
+    ],
+    "unresolvedPublicComponents": [],
+    "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
+    "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
+    "inventoryRowDigest": "0c449dfcf0ccea665be5267e9342d36e0fbd2da0f1f5a2fcfd0889adbeb2b526"
+  },
+  "maximumClaim": "SOURCE_BOUND",
+  "review": {
+    "verdict": null,
+    "acceptedSourceDigest": null,
+    "evidenceIds": [],
+    "decisionReason": null
+  },
+  "anatomy": {
+    "assessmentState": "SOURCE_BOUND",
+    "partCensusCompleteness": "PARTIAL_REQUIRES_GENERATED_LITERAL_AND_DYNAMIC_PART_CENSUS",
+    "sourceBindings": [
+      "packages/core/src/ui/patterns/data/data-table/contracts/index.ts",
+      "packages/core/src/ui/patterns/data/data-table/presentation/table/index.tsx",
+      "packages/core/src/ui/patterns/data/data-table/presentation/table/mobile-cards/index.tsx",
+      "packages/core/src/ui/patterns/data/data-table/engines/modern/index.tsx"
+    ],
+    "stableParts": [
+      "root",
+      "responsive-root",
+      "toolbar",
+      "table",
+      "table-head",
+      "header-row",
+      "header-cell",
+      "body-row",
+      "data-cell",
+      "selection-cell",
+      "actions-cell",
+      "expand-cell",
+      "expanded-row",
+      "bulk-bar",
+      "pagination-bar",
+      "mobile-root",
+      "card",
+      "loading-overlay",
+      "empty-state",
+      "error-state"
+    ],
+    "states": [
+      "ready",
+      "loading",
+      "empty",
+      "error",
+      "selected",
+      "expanded",
+      "editable",
+      "editing",
+      "sorted",
+      "filtered",
+      "grouped",
+      "dragging",
+      "pinned"
+    ],
+    "propertyGroups": [
+      "table-shell",
+      "header",
+      "rows-and-cells",
+      "selection-and-actions",
+      "editing",
+      "states",
+      "pagination-and-bulk",
+      "mobile-cards"
+    ],
+    "invariants": [
+      "Data and row identity do not change across recipes or responsive presentations.",
+      "The table keeps semantic grid ownership, keyboard behavior and accessible selection labels.",
+      "Stable parts are engine-owned and product applications do not restyle private selectors."
+    ],
+    "evidenceIds": [],
+    "nextAction": "GENERATE_EXHAUSTIVE_PART_CENSUS_AND_BIND_EACH_PROPERTY_GROUP"
+  },
+  "themeControls": [
+    {
+      "controlId": "palette.seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    },
+    {
+      "controlId": "typography.pairing",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    },
+    {
+      "controlId": "typography.families",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    },
+    {
+      "controlId": "typography.scale",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    },
+    {
+      "controlId": "shape.radius-scale",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    },
+    {
+      "controlId": "shape.button-style",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    },
+    {
+      "controlId": "density.mode",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    },
+    {
+      "controlId": "spacing.rhythm",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    },
+    {
+      "controlId": "motion.dial",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    },
+    {
+      "controlId": "surfaces.elevation-posture",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    },
+    {
+      "controlId": "surfaces.effect-intensity",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    },
+    {
+      "controlId": "navigation.sidebar-tone",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    },
+    {
+      "controlId": "experience.profile",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    },
+    {
+      "controlId": "chrome.families",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    },
+    {
+      "controlId": "chrome.anatomy",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    },
+    {
+      "controlId": "token-overrides",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    },
+    {
+      "controlId": "recipe-profile",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    },
+    {
+      "controlId": "profiles.expressive",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    },
+    {
+      "controlId": "profiles.icon",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    },
+    {
+      "controlId": "responsive.posture",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+    }
+  ],
+  "retiredThemeControls": [],
+  "recipeAnatomy": {
+    "assessmentState": "SOURCE_BOUND",
+    "groupBindings": [
+      {
+        "groupId": "data-table-presentation",
+        "variantIds": [
+          "minimal",
+          "ruled",
+          "grid",
+          "zebra",
+          "editorial"
+        ],
+        "selectionApi": "DataTablePatternProps.recipe"
+      }
+    ],
+    "variants": [
+      "minimal",
+      "ruled",
+      "grid",
+      "zebra",
+      "editorial"
+    ],
+    "deprecatedAliases": [
+      "bordered -> recipe=grid",
+      "striped -> recipe=zebra",
+      "compact -> density=compact"
+    ],
+    "evidenceIds": [],
+    "nextAction": "PROVE_COMPUTED_RECIPE_OUTCOMES_AND_EXACT_RESTORE_WITH_IDENTICAL_DOM"
+  },
+  "instanceApi": {
+    "assessmentState": "SOURCE_BOUND",
+    "contractSymbol": "DataTablePatternProps<T>",
+    "props": [
+      "data",
+      "columns",
+      "rowKey",
+      "recipe",
+      "density",
+      "selectable",
+      "actions",
+      "bulkActions",
+      "expandedRow",
+      "renderRow",
+      "mobileCard",
+      "mobileBreakpoint",
+      "autoMobileCards",
+      "stickyHeader",
+      "maxHeight",
+      "hoverable",
+      "virtualized",
+      "virtualRowHeight"
+    ],
+    "slots": [
+      "header",
+      "toolbar",
+      "footer",
+      "emptyState",
+      "errorState"
+    ],
+    "callbacks": [
+      "onSelectionChange",
+      "onSortChange",
+      "onFilterChange",
+      "onRowClick",
+      "onRowDoubleClick",
+      "onColumnReorder",
+      "onColumnResize",
+      "onPinChange",
+      "onVisibleColumnsChange"
+    ],
+    "controlledState": [
+      "selectedKeys",
+      "sorting",
+      "filters",
+      "pagination",
+      "columnOrder",
+      "columnWidths",
+      "pinnedColumns",
+      "visibleColumns"
+    ],
+    "evidenceIds": [],
+    "nextAction": "VERIFY_EXPORT_CENSUS_AND_EVERY_CONTROLLED_UNCONTROLLED_PRECEDENCE_RULE"
+  },
+  "hostAdaptation": {
+    "assessmentState": "SOURCE_BOUND",
+    "contexts": [
+      "standalone-page",
+      "embedded-workbench",
+      "collection-workspace-owned-posture"
+    ],
+    "containerRules": [
+      "ResizeObserver measures the responsive root and wins over viewport fallback.",
+      "Below mobileBreakpoint, a standalone table may render mobileCard.",
+      "CollectionWorkspace sets autoMobileCards=false and remains the single active posture authority.",
+      "The ds-table named container hides low-priority unpinned columns at bounded widths."
+    ],
+    "invariants": [
+      "Wide viewport plus narrow host resolves from host width.",
+      "Selection, open behavior and actions use DataTableMobileCardContext in cards.",
+      "Pinned context is not silently hidden by low-priority collapse."
+    ],
+    "sourceTests": [
+      "packages/core/src/ui/patterns/data/data-table/tests/PatternDataTable.responsive.test.tsx",
+      "packages/core/src/ui/patterns/data/data-table/tests/DataTable.pass2-craft-contract.test.ts"
+    ],
+    "evidenceIds": [],
+    "nextAction": "PRODUCE_BROWSER_COMPUTED_AND_KEYBOARD_EVIDENCE_FOR_PAGE_AND_EMBED_HOSTS"
+  },
+  "statesMotion": {
+    "assessmentState": "UNKNOWN",
+    "states": [],
+    "transitions": [],
+    "inputModes": [],
+    "reducedMotion": [],
+    "evidenceIds": [],
+    "nextAction": "CENSUS_STATES_TRANSITIONS_INPUTS_AND_REDUCED_MOTION"
+  },
+  "invariants": {
+    "assessmentState": "SOURCE_BOUND",
+    "entries": [
+      "Recipes never fork the data or interaction model.",
+      "Responsive mode changes the renderer without duplicating controlled state.",
+      "Custom cards receive canonical behavior context.",
+      "Apps own content and i18n; the DS owns anatomy, semantics and interaction mechanics.",
+      "Theme tokens paint stable parts but never select table versus cards or add actions."
+    ],
+    "evidenceIds": [],
+    "nextAction": "BIND_INVARIANTS_TO_FOCAL_TESTS_NEGATIVE_CONTROLS_AND_SIGHTED_RECEIPTS"
+  },
+  "premiumCandidates": [
+    {
+      "id": "bounded-card-anatomy",
+      "proposalState": "PROPOSAL",
+      "countsAsCapability": false,
+      "groupId": "collection-card-anatomy",
+      "gap": "mobileCard is behaviorally complete but leaves icon, title, metadata, status and action anatomy entirely app-authored",
+      "mechanism": "typed recipe and bounded slots, not a CSS token",
+      "candidateVariants": [
+        "compact",
+        "standard",
+        "media"
+      ],
+      "blockedBy": [
+        "two-consumer-demand",
+        "slot-and-role-contract",
+        "page-embed-evidence",
+        "recipe-precedence-decision"
+      ]
+    },
+    {
+      "id": "row-action-posture",
+      "proposalState": "PROPOSAL",
+      "countsAsCapability": false,
+      "gap": "actions accepts arbitrary content but has no bounded inline, overflow or hover-reveal posture shared with cards",
+      "mechanism": "family prop or recipe axis with keyboard and touch invariants",
+      "candidateVariants": [
+        "inline",
+        "primary-plus-overflow",
+        "contextual-reveal"
+      ],
+      "blockedBy": [
+        "touch-and-keyboard-contract",
+        "reduced-motion-posture",
+        "action-priority-model"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "rottay://modern-rescue/customization-manifest/v1",
+  "title": "Modern Rescue segmented customization manifest",
+  "schemaVersion": 1,
+  "authorityLaw": "Controls own public semantics, groups own closed recipe vocabularies, families own applicability edges, and the generated index owns rollups. No edge is hand-authored in two segments.",
+  "segments": {
+    "control": {
+      "required": [
+        "controlId",
+        "lifecycleState",
+        "tier",
+        "domain",
+        "ingress",
+        "declaredOutputs",
+        "calibration"
+      ],
+      "forbidden": [
+        "families",
+        "familyIds",
+        "consumerFamilyIds"
+      ]
+    },
+    "recipeGroup": {
+      "required": [
+        "groupId",
+        "implementationState",
+        "variants",
+        "invariants"
+      ],
+      "forbidden": [
+        "families",
+        "familyIds",
+        "themeControls"
+      ]
+    },
+    "family": {
+      "required": [
+        "familyId",
+        "identity",
+        "maximumClaim",
+        "review",
+        "anatomy",
+        "themeControls",
+        "recipeAnatomy",
+        "instanceApi",
+        "hostAdaptation",
+        "statesMotion",
+        "invariants",
+        "premiumCandidates"
+      ]
+    }
+  },
+  "vocabulary": {
+    "familyMaximumClaims": [
+      "INVENTORIED_ONLY",
+      "SOURCE_BOUND",
+      "ASSESSED",
+      "COMPUTED_VERIFIED",
+      "SIGHTED_ACCEPTED"
+    ],
+    "assessmentStates": [
+      "UNKNOWN",
+      "SOURCE_BOUND",
+      "IMPLEMENTED",
+      "COMPUTED_VERIFIED",
+      "SIGHTED_ACCEPTED"
+    ],
+    "controlDispositions": [
+      "UNKNOWN",
+      "APPLICABLE",
+      "INVARIANT_WITH_REASON",
+      "NOT_APPLICABLE_WITH_REASON"
+    ],
+    "reviewVerdicts": [
+      null,
+      "ACCEPTED",
+      "ASSESSED_NOT_ELEVATED",
+      "BLOCKED_OWNER_DECISION"
+    ],
+    "premiumCandidateStates": [
+      "PROPOSAL",
+      "REJECTED",
+      "ADOPTED_IN_EXISTING_AUTHORITY"
+    ]
+  },
+  "progressLaw": {
+    "skeletonsCountAsProgress": false,
+    "unknownBlocksCertification": true,
+    "premiumProposalCountsAsCapability": false,
+    "rollupsAreGeneratedOnly": true,
+    "acceptanceAuthority": "Codex",
+    "structuralCheckAllowsUnknown": true,
+    "certificationRequiresUnknownZero": true,
+    "bootstrapNeverOverwrites": true,
+    "syncNeverDeletes": true
+  }
+}

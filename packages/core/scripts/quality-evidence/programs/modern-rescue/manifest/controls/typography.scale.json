@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "controlId": "typography.scale",
+  "lifecycleState": "OPERATIONAL",
+  "tier": "standard",
+  "scope": "tenant",
+  "semanticOwner": {
+    "owner": "design-system",
+    "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+    "registryDigest": "ed06c5a7fb7dc7e90ff04eef914c94a48a2f6eaff749c1e8ed7995639e2319f3"
+  },
+  "title": "Type scale dial",
+  "valueType": "scale",
+  "domain": {
+    "kind": "bounded",
+    "enumValues": [],
+    "bounds": {
+      "min": 0.9,
+      "max": 1.1
+    },
+    "defaultBehavior": "1 (vertical envelope may clamp tighter)"
+  },
+  "ingress": {
+    "staticBrandThemePath": "typography (ramp channels)",
+    "dbTenantThemePath": "appearance.general.typography.scale"
+  },
+  "declaredOutputs": {
+    "channels": [
+      "--ds-type-scale"
+    ],
+    "rootAttributes": [],
+    "representativeOnly": true
+  },
+  "dependsOn": [],
+  "compatibility": "additive, unset-to-rollback",
+  "productiveConsumerWitness": {
+    "consumer": "src/ui/patterns/data/widget-board/runtime/solver/react/index.ts",
+    "symbol": "--ds-type-scale"
+  },
+  "calibration": {
+    "assessmentState": "UNKNOWN",
+    "representativeFamilyIds": [],
+    "normalizedStops": [],
+    "staticDbParityEvidenceIds": [],
+    "exactRestoreEvidenceIds": [],
+    "negativeControls": [],
+    "nextAction": "CALIBRATE_LOWERERS_COMPUTED_DELTAS_NEGATIVES_AND_EXACT_RESTORE"
+  },
+  "retiredAliases": []
+}

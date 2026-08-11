@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "controlId": "chrome.anatomy",
+  "lifecycleState": "OPERATIONAL",
+  "tier": "pro",
+  "scope": "tenant",
+  "semanticOwner": {
+    "owner": "design-system",
+    "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+    "registryDigest": "ed06c5a7fb7dc7e90ff04eef914c94a48a2f6eaff749c1e8ed7995639e2319f3"
+  },
+  "title": "Anatomy variants",
+  "valueType": "enum",
+  "domain": {
+    "kind": "enum",
+    "enumValues": [],
+    "bounds": null,
+    "defaultBehavior": "default anatomy; fails closed unless the vertical envelope opts in"
+  },
+  "ingress": {
+    "staticBrandThemePath": "chrome.{cardComponent,table,sidebar,layout}.anatomy",
+    "dbTenantThemePath": "visualFoundation.advanced.chrome.{cardComponent,table,sidebar,layout}.anatomy"
+  },
+  "declaredOutputs": {
+    "channels": [],
+    "rootAttributes": [
+      "data-anatomy-card",
+      "data-anatomy-table",
+      "data-anatomy-sidebar",
+      "data-anatomy-layout"
+    ],
+    "representativeOnly": true
+  },
+  "dependsOn": [
+    "chrome.families"
+  ],
+  "compatibility": "additive; envelope-gated (allowAnatomyVariants)",
+  "productiveConsumerWitness": {
+    "consumer": "src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
+    "symbol": "[data-anatomy-card='framed']"
+  },
+  "calibration": {
+    "assessmentState": "UNKNOWN",
+    "representativeFamilyIds": [],
+    "normalizedStops": [],
+    "staticDbParityEvidenceIds": [],
+    "exactRestoreEvidenceIds": [],
+    "negativeControls": [],
+    "nextAction": "CALIBRATE_LOWERERS_COMPUTED_DELTAS_NEGATIVES_AND_EXACT_RESTORE"
+  },
+  "retiredAliases": []
+}

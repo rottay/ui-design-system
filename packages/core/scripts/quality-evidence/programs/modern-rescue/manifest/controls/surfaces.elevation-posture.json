@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "controlId": "surfaces.elevation-posture",
+  "lifecycleState": "OPERATIONAL",
+  "tier": "standard",
+  "scope": "tenant",
+  "semanticOwner": {
+    "owner": "design-system",
+    "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+    "registryDigest": "ed06c5a7fb7dc7e90ff04eef914c94a48a2f6eaff749c1e8ed7995639e2319f3"
+  },
+  "title": "Elevation posture",
+  "valueType": "enum",
+  "domain": {
+    "kind": "closed-enum",
+    "enumValues": [
+      "flat",
+      "soft",
+      "elevated"
+    ],
+    "bounds": null,
+    "defaultBehavior": "soft (DS shadow ramp untouched)"
+  },
+  "ingress": {
+    "staticBrandThemePath": "surfaces.shadows.*",
+    "dbTenantThemePath": "appearance.general.surfaces.elevation"
+  },
+  "declaredOutputs": {
+    "channels": [
+      "--ds-elevation-1",
+      "--ds-elevation-2",
+      "--ds-elevation-3"
+    ],
+    "rootAttributes": [],
+    "representativeOnly": true
+  },
+  "dependsOn": [],
+  "compatibility": "additive, unset-to-rollback",
+  "productiveConsumerWitness": {
+    "consumer": "src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
+    "symbol": "var(--ds-elevation"
+  },
+  "calibration": {
+    "assessmentState": "UNKNOWN",
+    "representativeFamilyIds": [],
+    "normalizedStops": [],
+    "staticDbParityEvidenceIds": [],
+    "exactRestoreEvidenceIds": [],
+    "negativeControls": [],
+    "nextAction": "CALIBRATE_LOWERERS_COMPUTED_DELTAS_NEGATIVES_AND_EXACT_RESTORE"
+  },
+  "retiredAliases": []
+}

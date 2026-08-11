@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "currentWave": "Roadmap reconciliation and first control calibration",
+  "blockedOn": "No external blocker. Competing human authorities must be retired and the spacing rhythm trace must be source-bound before broad family propagation.",
+  "laneTableCaption": "Active packets:",
+  "lanes": [
+    {
+      "id": "authority",
+      "work": "Keep one human entry point, machine contracts and honest derived status; retire competing prompts, roadmaps and checkpoints after their unique facts are migrated.",
+      "model": "codex",
+      "modelReason": "This packet changes programme authority and deletion boundaries, so it requires source audit, dependency analysis and final local commit ownership."
+    },
+    {
+      "id": "control-calibration",
+      "work": "Close spacing rhythm from both tenant inputs through normalized channels, canonical family parts, computed deltas, negative controls and exact restore.",
+      "model": "strong-implementation",
+      "modelReason": "The packet spans schemas, both compiler paths, CSS ownership and browser evidence; it is bounded but not a mechanical substitution."
+    },
+    {
+      "id": "family-closure",
+      "work": "After the control matrix stabilizes, enrich each family once against every applicable control, state and stress case recorded in the manifest.",
+      "model": "disjoint-family-writers",
+      "modelReason": "A family packet becomes mechanical only after applicability, stops, parts, invariants and evidence commands are closed by the calibration work."
+    },
+    {
+      "id": "advisory-audit",
+      "work": "Independently try to refute control semantics, family applicability, evidence mechanisms and retirement proofs without editing the programme.",
+      "model": "fable-and-kimi-read-only",
+      "modelReason": "Independent methods expose shared assumptions; advisory prose is never authority and only reproduced source findings enter the canonical tree."
+    }
+  ],
+  "refusedCaption": "Refused",
+  "refused": [
+    "the retracted CSS-basename rescope",
+    "SOURCE_TOUCHED as progress",
+    "a second product control for an existing concept",
+    "family-private customization outside the manifest",
+    "full-suite repair loops before failure classification",
+    "broad family propagation before static DB and restore calibration",
+    "R7 execution"
+  ],
+  "notes": [
+    "The operational traversal is two-axis: calibrate each public control on representative families, then close each canonical family once against the stabilized full applicability matrix.",
+    "The full suite is a reconciliation signal. Packet gates are causal and focal; every red test is classified before source or expectation changes.",
+    "Historical receipts remain immutable evidence. Historical Markdown is not an active authority."
+  ],
+  "derivedFacts": [
+    "ledger.families",
+    "adjudication.accepted",
+    "adjudication.assessedNotElevated",
+    "adjudication.unreviewed"
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "controlId": "shape.radius-scale",
+  "lifecycleState": "OPERATIONAL",
+  "tier": "standard",
+  "scope": "tenant",
+  "semanticOwner": {
+    "owner": "design-system",
+    "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+    "registryDigest": "ed06c5a7fb7dc7e90ff04eef914c94a48a2f6eaff749c1e8ed7995639e2319f3"
+  },
+  "title": "Radius scale dial",
+  "valueType": "scale",
+  "domain": {
+    "kind": "bounded",
+    "enumValues": [],
+    "bounds": {
+      "min": 0.75,
+      "max": 1.25
+    },
+    "defaultBehavior": "1 (vertical envelope may clamp tighter)"
+  },
+  "ingress": {
+    "staticBrandThemePath": "surfaces.borderRadius.*",
+    "dbTenantThemePath": "appearance.general.shape.radiusScale"
+  },
+  "declaredOutputs": {
+    "channels": [
+      "--ds-radius-scale",
+      "--ds-radius-md"
+    ],
+    "rootAttributes": [],
+    "representativeOnly": true
+  },
+  "dependsOn": [],
+  "compatibility": "additive, unset-to-rollback",
+  "productiveConsumerWitness": {
+    "consumer": "src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
+    "symbol": "var(--ds-radius"
+  },
+  "calibration": {
+    "assessmentState": "UNKNOWN",
+    "representativeFamilyIds": [],
+    "normalizedStops": [],
+    "staticDbParityEvidenceIds": [],
+    "exactRestoreEvidenceIds": [],
+    "negativeControls": [],
+    "nextAction": "CALIBRATE_LOWERERS_COMPUTED_DELTAS_NEGATIVES_AND_EXACT_RESTORE"
+  },
+  "retiredAliases": []
+}
