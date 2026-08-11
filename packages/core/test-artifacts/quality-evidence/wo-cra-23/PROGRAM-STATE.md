@@ -529,6 +529,44 @@ fallback arm, and the declared-nowhere census. Those stand. But **the instrument
 evidence within its roster**, and a roster of six fixtures is not the component library. Any lane
 quoting `changedRows: 0` must state which fixtures could have moved.
 
+### CORRECTION TO A COMMIT MESSAGE: `d5c255a1d` is NOT repaint-neutral
+
+I committed the toolbar repair claiming "the repaint is provably identical across all six
+vertical×theme cells", on a sibling lane's analysis of the *geometry* rules. The owning lane corrected
+it: **that is true for evnto and rottay and false for bithire.** The change also adds 8 colour-bearing
+declarations reading `--ds-toolbar-*` and `--ds-search-*`; bithire's artifact declares all 12 and 20 of
+those, evnto and rottay declare none, so the fallback is inert for bithire and live for the other two.
+BitHire's toolbar gains a ground it never had, plus its own rule, divider, glyph and search-shell paint.
+
+**That divergence is the assignment, not a defect** — same tree, different companies. But the record
+said neutral, and a BitHire capture would then have read as an unexplained regression. Corrected here
+because the commit message cannot be.
+
+Second colour-bearing change in the same commit, hitting **every** vertical and theme: the
+active-filters count eyebrow moved from `--ds-color-primary` to `--ds-color-text-muted` and lost its
+primary-tinted background and border. That is the de-pilling, and it is not tenant-conditional.
+
+**Standing rule this earns:** a repaint claim inherited from another lane's analysis covers only the
+slice that lane examined. Geometry-neutral is not paint-neutral, and the owning lane is the one that
+knows which is which.
+
+### `.dark` is NOT a complete override — it is 4.5% of the `:root` surface
+
+Also a correction to something I recorded as law from a single lane's reading. Measured:
+
+```
+:root declares                            1059 names
+html.dark declares                          66
+  of which override a :root name            48   → 4.5% of :root
+  dark-only                                 18
+:root names html.dark does NOT touch      1011
+```
+
+The 48 are 26 `--ds-color-*` plus ground/ink/edge families. **So "`:root` is the light block" holds
+precisely for the colour seeds being rewired and fails as a statement about the file.** For the other
+1011 names `:root` is theme-neutral, not light-mode: the type-role block is the demonstrated case —
+0 of its 65 names has a dark counterpart, and a tenant-less **dark** cell measured the `:root` value.
+
 ### CORRECTED: the light block is not missing, it is CONTAMINATED — 13 seeds
 
 Replaces the section below, which I recorded from a first measurement. The bare `:root` **is** the
