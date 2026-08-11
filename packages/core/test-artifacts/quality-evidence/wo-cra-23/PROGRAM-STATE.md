@@ -265,17 +265,32 @@ Before retiring any alias, check whether a read-only engine reads the losing spe
 
 ### Two instruments agreeing is not evidence when they share a technique
 
-Two blocking gates neither of which imports the other still derived their answers **from the same
-typed graph** — both computing a variable name from a typed field name. So an emitter writing a
-*derived* name is invisible to both, and the same technique that caught a rename mis-classified its
-result.
+Two blocking gates were treated as corroborating each other. **They import the same module** — one
+gate's manifest builder imports the other's parser outright. Their agreement carried **literally zero**
+independent information, not merely low information.
 
-> **Not independent confirmation: one shared blind spot, reported twice.**
+> **Concurring instruments must be shown not to share a derivation module before their agreement
+> counts as anything.**
 
-Before treating concurrence as cross-validation, establish that the two instruments key on different
-things. For the typed-graph class, a genuinely independent check reads the **executed emitter
-output** rather than the typed declaration — which is what three separate lanes reached for
-independently when they wanted certainty.
+Known shared-derivation pairs, and their agreement must not be cited as confirmation:
+
+| pair | shares |
+|---|---|
+| theme-channel-parity + app-ds-hook-contract | the typed-graph parser — **this is the one that cost us** |
+| engine-token-audit + gat-07-exact-proof | **three** libraries — paint counter, zero-lock policy, token governance |
+| engine-token-audit + literal-ownership-gate | corpus selection — a file the shared module fails to enumerate is invisible to both |
+
+*(A writer and its checker sharing a hash module is not this defect — that is one mechanism, not two
+confirmations.)*
+
+**The genuinely independent check for this class reads the EXECUTED emitter output, not the parsed
+declaration.** Run the compiler, read the variable map it returns, compare against what the graph
+claims. That corpus already exists: the generated artifacts *are* executed output, and a check
+diffing "names in the artifacts" against "names the graph resolves" would have caught this on day
+one while sharing no code with either gate.
+
+It is the same move the resolution probe made for CSS — **stop parsing the source, run the thing and
+read the result** — arrived at independently by three lanes wanting certainty.
 
 *This is why the auditor law (§1.1) pairs a diff reader with a repository reader rather than two of
 either: the value is in the difference of technique, not in the second opinion.*
