@@ -437,6 +437,55 @@ under §1.4 is always no. Rows c–f above are all this shape.
 Corollary: idling for an answer is itself the defect. An hourly heartbeat now re-enters the programme
 if a lane has stalled waiting on a decision that was never the owner's to make.
 
+### A census number without a POSITIVE CONTROL is not evidence
+
+The most generalizable finding of the programme, and a lane found it by catching **its own** instrument
+lying. Its functional-pseudo parser returned a **false zero** on first run: the regex required a
+trailing `(` but was tested against the text *before* the paren, so it never matched and the real tree
+reported "no further defects". A clean result that was pure instrument failure.
+
+It was caught only because the lane built a control fixture of seven known shapes before trusting the
+number. The control caught **2 of 7**; after the repair, 7/7 with correct classification. Had the first
+run been reported, the programme would have recorded a false all-clear.
+
+**Every census in this programme is now suspect unless it shipped with a positive control.** That
+includes the v1 dead-selector census and, by the same standard, several counts recorded above. A census
+must plant known instances of what it hunts and prove it finds them; a count that only ever returned
+"found N" has never demonstrated it can find anything.
+
+### `data-part` reachability is a property of the CALL SITE, and only rendering settles it
+
+Three classes, not two:
+
+| class | shape | sites |
+|---|---|---|
+| **REPLACE** | `data-part={dataPart ?? 'root'}` — says `root` ONLY if the caller passes nothing | 26 (19 defaulting to `root`) |
+| **HARDCODED** | `data-part="root"` written literally; caller cannot change it | 179 |
+| **NONE** | `Box` stamps no part at all, by explicit design | — |
+
+`Box`'s own source names the hazard it is avoiding: *"a default part would put `data-part='root'` on
+every nested Box in the fleet: a skin rule of the form `.rottay-x [data-part='root']` would then reach
+into X's Boxes."*
+
+So two families using the same primitive differ, and **reading the primitive is not sufficient.**
+Worse, reading the call site is not sufficient either: `Input/modern` routes the caller's two
+attributes to **different elements** — the painted shell at `:331` takes `data-part`, while `:443`
+takes `className`. So `.caller-class:has(> .rottay-input[data-part='root'])` is wrong twice over, and
+measurement confirms it matches zero in the whole rendered tree.
+
+**Operative law: a `[data-part='X']` predicate against a composed primitive can only be settled by
+RENDERING.**
+
+Open total across both dead-selector classes: 22 rules / 48 declarations. The 6 in
+`search-command-bar.css` are the exact twin of the table-toolbar defect already repaired. One hit in
+`app-shell.css:421` is a **false positive and must not be touched** — `BottomTabBar` explicitly passes
+`data-part="root"`, so the predicate is live.
+
+Blind spots the lane stated rather than leaving implied: only `[data-part='root']` is censused, though
+seven primitives default to non-root parts (`item`, `group`, `divider`, `meta`, `anchor`) with the same
+idiom; only exact `=` is matched, not `~=` or `^=`; reachability was adjudicated for two families only;
+and the tree drifted 146→147 files mid-run, so counts are as-of-now rather than stable.
+
 ### The governed icon drops every `data-*` except `data-part`, silently
 
 `createSemanticIcon` forwards an **allowlist**, not a rest spread. `data-part` is passed explicitly and
