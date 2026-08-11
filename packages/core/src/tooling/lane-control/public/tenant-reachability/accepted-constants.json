@@ -1,0 +1,5 @@
+{
+  "_comment": "Accepted constants for the converse ratchet. A name here is declared as a resolved literal in a vertical artifact with no tenant route, and that is DELIBERATE. Every entry needs a written reason of at least 25 characters: silence is not acceptance, and an empty string is silence with extra steps. Same shape as the adoption entries in theme-channel-parity-gate.baseline.json.",
+  "_shape": { "--ds-example-name": "Why no tenant may write this, written by a person." },
+  "names": {}
+}

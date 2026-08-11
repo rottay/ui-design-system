@@ -33,6 +33,7 @@
  *
  * EXIT 0 clean · 1 refused / drifted · 2 could not run.
  */
+import { pathToFileURL } from 'node:url';
 import { createHash } from 'node:crypto';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { distanceFrom, headMeta, isDirty, pathChangedSince, repoRoot } from '../../foundation/git/index.mjs';
@@ -523,7 +524,19 @@ function run(argv) {
   });
 }
 
-if (process.argv[1]?.endsWith('program-state/index.mjs')) {
+/**
+ * Exact entrypoint identity.
+ *
+ * A suffix test (`argv[1].endsWith("x/index.mjs")`) matches ANY path ending
+ * that way. The drill folder for this module ends the same way, so importing
+ * this file from its own drill ran main() and exited the process before a
+ * single drill executed. Compare the resolved URL instead.
+ */
+function isEntrypoint(moduleUrl) {
+  return process.argv[1] !== undefined && moduleUrl === pathToFileURL(process.argv[1]).href;
+}
+
+if (isEntrypoint(import.meta.url)) {
   process.exit(run(process.argv.slice(2)));
 }
 

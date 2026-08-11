@@ -8,6 +8,7 @@
  * where other agents are writing is exactly the accident this whole folder
  * exists to prevent.
  */
+import { pathToFileURL } from 'node:url';
 import { mkdirSync, writeFileSync, renameSync } from 'node:fs';
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
@@ -126,6 +127,18 @@ export function runDrills() {
   });
 }
 
-if (process.argv[1]?.endsWith('drills/containment/index.mjs')) {
+/**
+ * Exact entrypoint identity.
+ *
+ * A suffix test (`argv[1].endsWith("x/index.mjs")`) matches ANY path ending
+ * that way. The drill folder for this module ends the same way, so importing
+ * this file from its own drill ran main() and exited the process before a
+ * single drill executed. Compare the resolved URL instead.
+ */
+function isEntrypoint(moduleUrl) {
+  return process.argv[1] !== undefined && moduleUrl === pathToFileURL(process.argv[1]).href;
+}
+
+if (isEntrypoint(import.meta.url)) {
   process.exit(runDrills() ? 0 : 1);
 }

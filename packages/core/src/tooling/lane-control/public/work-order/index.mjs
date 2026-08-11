@@ -27,7 +27,7 @@
  */
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { isUnderOrEqual, normalizePath } from '../../foundation/glob/index.mjs';
 import { repoRoot } from '../../foundation/git/index.mjs';
 import { loadContext, resolveLane } from '../../composition/plan/index.mjs';
@@ -391,6 +391,18 @@ function main(argv) {
   return conclude({ name: 'work-order', findings: result.findings, json: flags.get('json'), summary: result.summary });
 }
 
-if (process.argv[1]?.endsWith('work-order/index.mjs')) {
+/**
+ * Exact entrypoint identity.
+ *
+ * A suffix test (`argv[1].endsWith("x/index.mjs")`) matches ANY path ending
+ * that way. The drill folder for this module ends the same way, so importing
+ * this file from its own drill ran main() and exited the process before a
+ * single drill executed. Compare the resolved URL instead.
+ */
+function isEntrypoint(moduleUrl) {
+  return process.argv[1] !== undefined && moduleUrl === pathToFileURL(process.argv[1]).href;
+}
+
+if (isEntrypoint(import.meta.url)) {
   process.exit(main(process.argv.slice(2)));
 }

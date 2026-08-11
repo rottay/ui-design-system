@@ -9,6 +9,7 @@
  * that today's intersection really is empty (so the drill is not accidentally
  * proving the easy thing), and that the checker refuses the pair anyway.
  */
+import { pathToFileURL } from 'node:url';
 import { writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
@@ -163,6 +164,18 @@ export function runDrills() {
   });
 }
 
-if (process.argv[1]?.endsWith('drills/intersection/index.mjs')) {
+/**
+ * Exact entrypoint identity.
+ *
+ * A suffix test (`argv[1].endsWith("x/index.mjs")`) matches ANY path ending
+ * that way. The drill folder for this module ends the same way, so importing
+ * this file from its own drill ran main() and exited the process before a
+ * single drill executed. Compare the resolved URL instead.
+ */
+function isEntrypoint(moduleUrl) {
+  return process.argv[1] !== undefined && moduleUrl === pathToFileURL(process.argv[1]).href;
+}
+
+if (isEntrypoint(import.meta.url)) {
   process.exit(runDrills() ? 0 : 1);
 }

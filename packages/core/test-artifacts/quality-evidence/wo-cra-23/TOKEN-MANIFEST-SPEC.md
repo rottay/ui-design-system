@@ -593,9 +593,21 @@ self-correcting; the same channel baked as a hex is frozen to the vertical forev
 The codebase already knew this — `brand-theme/index.ts:400` documents the alias remedy verbatim. **It
 was applied to one channel per surface role and left off the other twenty.**
 
-**Measured consequence [M]:** across the three artifacts, **606 names carrying 3,084 DS-internal reads
+**Measured consequence [M]:** across the three artifacts, **548 names carrying 2,553 DS-internal reads
 are baked literals with no tenant dial at all** — not typed appearance field, not chrome family, not
-raw override. Per vertical: bithire 213 frozen (59 painting), evnto 83 (49), rottay 625 (573).
+raw override. Per vertical: **bithire 53 · evnto 34 · rottay 501**. **rottay carries 501 of the 548 —
+an order of magnitude more frozen paint than the other two verticals combined.** Largest holders: the
+neutral ramp (`--ds-color-neutral-200` at 119 reads, `-900` at 112, `-100` at 95) and elevation
+(`--ds-elevation-1` at 87, `-2` at 70).
+
+*A first scoping pass reported 606 / 3,084. That figure was **arithmetically impossible** — a union
+cannot be smaller than one of its members, and it claimed 606 against a rottay member of 625. Its
+error also ran opposite to its own caveat: it under-reported REACH, because **302 literal-declared
+names are reachable only through an interpolated emitter** and appear nowhere as literal text. A
+grep-based reach set flags all 302 and yields 850; 606 is where a partially-enumerated reach set
+lands. The gate now enumerates twelve emitter families from source rather than by pattern, refuses to
+report any number while an emitter template is unattributed, and asserts union ≥ max member as a
+standing drill.*
 
 **The headline is a NAME MISMATCH, not a missing emitter.** The DS reads four border channels; the DB
 compiler emits two, and not the two most read:

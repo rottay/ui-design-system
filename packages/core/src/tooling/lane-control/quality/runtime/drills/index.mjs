@@ -12,12 +12,14 @@ import { runDrills as intersection } from './intersection/index.mjs';
 import { runDrills as containment } from './containment/index.mjs';
 import { runDrills as workOrder } from './work-order/index.mjs';
 import { runDrills as programState } from './program-state/index.mjs';
+import { runDrills as tenantReachability } from './tenant-reachability/index.mjs';
 
 const SUITES = [
   ['write-set intersection', intersection],
   ['containment', containment],
   ['work-order', workOrder],
   ['program-state', programState],
+  ['tenant-reachability', tenantReachability],
 ];
 
 const results = [];
