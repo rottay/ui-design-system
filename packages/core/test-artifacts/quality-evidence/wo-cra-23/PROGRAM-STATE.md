@@ -529,6 +529,45 @@ fallback arm, and the declared-nowhere census. Those stand. But **the instrument
 evidence within its roster**, and a roster of six fixtures is not the component library. Any lane
 quoting `changedRows: 0` must state which fixtures could have moved.
 
+### DEGRADED, NOT UNSTYLED — why the Button defect survived every review
+
+Adjudicated, repair specified, **execution deliberately deferred**. `button.css` keys 7 selectors on
+`[data-part='trigger']` and modern lets the caller's part win, so **73 call sites lose them** — 0 of
+them dynamic, so the census is the answer and the fix is fully static.
+
+The blast radius is why nobody saw it:
+
+```
+22 properties SURVIVE from class-only rules   size, shape, colour, padding,
+                                              border, shadow, gap, transition
+18 are LOST at all 73 sites                   justify-content (the sighted one),
+                                              font-family/weight/letter-spacing,
+                                              text-align/transform, appearance,
+                                              position, isolation, overflow,
+                                              forced-color-adjust
+```
+
+A button still has its size, shape, colour and padding. It still looks like a button. What it loses is
+content centering, its typography (falling back to UA/inherited), `appearance` — so **native browser
+button styling can leak back** — and `forced-color-adjust`, which drops **73 buttons out of the
+forced-colors contract**.
+
+**A defect that leaves the thing recognisable is exactly the one that survives every review.** Third
+instance tonight: a partial hover regression that looked fine because the border still warmed, a
+fixture wrong in 4 of 276 readings, and this.
+
+**The deferral is upheld and is the point.** The repair is the same single-token change made to Input,
+and the lane refused to ship it because it drops specificity (0,3,0)→(0,2,0) and **jsdom cannot
+adjudicate cascade** — its static scan found no competing rule, but that is a mechanism argument, and
+§ *an outcome test survives a false premise, a mechanism argument does not* applies to it directly. It
+goes to the browser pass with the gate the lane specified: variants × sizes × shapes × disabled ×
+focus-visible.
+
+**Two of the 73 were introduced this session by the lane that adjudicated it**, stamping parts for skin
+targeting exactly as instructed. Not a mistake to apologise for — the strongest available evidence that
+the mechanism is **invisible at the point of use**, since it caught someone who had spent hours inside
+it.
+
 ### THE BASE-LAYER BACKLOG: one mechanism, 270 live rows, two waves
 
 Supersedes the 189 and the 26 — both were measured on a pre-rewire tree with a looser rule, and
