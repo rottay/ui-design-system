@@ -351,6 +351,22 @@ blocks may carry the same `@ds-family` header provided the gate is theme-scope a
 an owner decision, not a sweep. It remains the blocking prerequisite for family headers, but its
 content and its risk are different from what revision 2 scheduled.
 
+**EXECUTED — the population was 164, not ~49** [M]. Measured with postcss keyed on
+(file, canonical selector, prop), bare `:root` only: spacing 26 · typography 106 · shadows 10 ·
+borders 11 · z-index 11; density contributes **zero**, because none of its declarations is at root.
+Split 100 value-identical / 64 value-differing. *The earlier "~49" reconciles exactly to
+`typography.css` value-differs — one sub-slice of one file, reported as the population.*
+
+159 were deleted; **5 were held back because their values disagree and the disagreement is live
+design, not debt** — including a focus ring that narrows 3px → 2px, which is accessibility-relevant
+and would have been swept silently.
+
+Neutrality was proven by a **resolved `:root` winner map replayed in real import order**: 1,344
+properties before and after, none appearing or disappearing, 32 values moving of which 31 are hook
+wraps collapsing to identity, leaving exactly one intended delta. **That is now the standard for any
+deletion wave** — the mandated zero-delta gate cannot express a deletion at all, which is a
+limitation of the instrument rather than a defect in the change.
+
 Multi-layer declarations resolve by scope precedence; an unresolvable pair within a layer is a gate
 failure.
 
