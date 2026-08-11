@@ -25,9 +25,34 @@
  * PAGE-RESERVATION HOOK: the bar is fixed chrome, so pages must keep their
  * content clear of it — the root publishes
  * `--ds-bottom-tab-bar-reserved-block-end` (content geometry + the live
- * `env(safe-area-inset-bottom)`) for a page container's `padding-block-end`.
+ * safe-area inset) for a page container's `padding-block-end`.
  * The bar never covers content that consumes the hook; AppShell S01 owns
  * the app-level chrome coordination (integration documented, not edited).
+ * The base is DERIVED from the same private channels the tab geometry reads
+ * (`--_ds-bottom-tab-bar-content-block-size`) rather than hand-summed: the
+ * retired `50px` literal carried an "update it if that geometry changes"
+ * contract, and the label term of that sum is type-scale-relative, so a
+ * tenant scaling its type grew the bar and left the reservation behind.
+ * Every term is authored in THIS file, so the derivation bakes no value the
+ * file does not state.
+ *
+ * SAFE AREA travels on `--ds-safe-area-bottom` (the DS channel `action-dock`,
+ * `chat-surface` and `page-shell` already read) with the `env()` as its
+ * fallback, not bare `env()`. Bare, an app that moves the DS inset — the
+ * documented way to reserve for player chrome or a simulated device frame —
+ * moved every other piece of bottom chrome on the screen and not this bar.
+ *
+ * RESPONSIVE POSTURE (container queries only; the tier's viewport-MQ count is
+ * exact-0): the root is a named inline-size container. It is fixed with
+ * `inset-inline: 0`, so its own inline size IS the viewport width — the bar
+ * gets a viewport-scaled posture without a single viewport media query.
+ *   · wide (>= 600px): the list stops spreading. `justify: evenly` across a
+ *     tablet width strands five 44px islands over 100px+ of dead ground and
+ *     the bar stops reading as one control; the list caps at its own measure
+ *     and centres while the ground and hairline stay full-bleed.
+ *   · narrow (<= 360px): five columns leave ~64px each, so the pill's inline
+ *     padding and the label's tracking give room back before the label starts
+ *     ellipsizing to two characters.
  *
  * ELEMENT-LEVEL CLASSES, NOT BARE `data-part` DESCENDANTS: `data-part='icon'` /
  * `'label'` / `'badge'` are shared vocabulary across the component fleet, and
@@ -68,21 +93,45 @@
 /* ---- root: fixed navigation bar, safe-area aware. Positioning was inline
         in the engine pre-R2+R3; the skin owns it now. ---- */
 .rottay-bottom-tab-bar[data-part='root'] {
+  /* family-private geometry — the single place the bar's block rhythm is
+     stated. The tab rule, the pill, the label and the reservation all read
+     these, so the published hook cannot drift from the painted bar. */
+  --_ds-bottom-tab-bar-tab-lead: 6px;
+  --_ds-bottom-tab-bar-tab-trail: 2px;
+  --_ds-bottom-tab-bar-pill-block-size: 26px;
+  --_ds-bottom-tab-bar-pill-inline-padding: 10px;
+  --_ds-bottom-tab-bar-label-gap: 2px;
+  --_ds-bottom-tab-bar-label-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
+  /* 14/11 reproduces the retired `line-height: 14px` exactly at type scale 1
+     and, unlike the literal, follows the scale instead of clipping under it. */
+  --_ds-bottom-tab-bar-label-leading: calc(14 / 11);
+  --_ds-bottom-tab-bar-safe-area: var(--ds-safe-area-bottom, env(safe-area-inset-bottom, 0px));
+  /* the bar's own measure at wide container widths: five touch columns */
+  --_ds-bottom-tab-bar-list-measure: 30rem;
+
+  --_ds-bottom-tab-bar-content-block-size: calc(
+    var(--_ds-bottom-tab-bar-tab-lead) + var(--_ds-bottom-tab-bar-pill-block-size) +
+      var(--_ds-bottom-tab-bar-label-gap) +
+      var(--_ds-bottom-tab-bar-label-size) * var(--_ds-bottom-tab-bar-label-leading) +
+      var(--_ds-bottom-tab-bar-tab-trail)
+  );
+
   /* Public reservation hook: pages keep their content clear of the fixed bar
-     with `padding-block-end: var(--ds-bottom-tab-bar-reserved-block-end)`.
-     The 50px base tracks the bar's content geometry (6+26+2+14+2) — update
-     it if that geometry changes. */
-  --ds-bottom-tab-bar-reserved-block-end: calc(50px + env(safe-area-inset-bottom, 0px));
+     with `padding-block-end: var(--ds-bottom-tab-bar-reserved-block-end)`. */
+  --ds-bottom-tab-bar-reserved-block-end: calc(
+    var(--_ds-bottom-tab-bar-content-block-size) + var(--_ds-bottom-tab-bar-safe-area)
+  );
 
   position: fixed;
   inset-inline: 0;
   inset-block-end: 0;
   z-index: var(--ds-bottom-tab-bar-z, 40);
-  padding-block-end: env(safe-area-inset-bottom, 0px);
+  padding-block-end: var(--_ds-bottom-tab-bar-safe-area);
   background: var(--ds-color-bg-primary);
   box-shadow: var(--ds-bottom-tab-bar-shadow, var(--ds-elevation-2));
   animation: ds-bottom-tab-bar-enter var(--ds-motion-reveal, var(--ds-motion-slow))
     var(--ds-motion-ease-out, ease-out) both;
+  container: ds-bottom-tab-bar / inline-size;
 }
 
 /* The root's `border-top` must reach (0,4,0) to clear the tenant floor;
@@ -108,9 +157,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-inline-size: 44px;
-  min-block-size: 44px;
-  padding-block: 6px 2px;
+  min-inline-size: var(--ds-touch-target-min, 44px);
+  min-block-size: var(--ds-touch-target-min, 44px);
+  padding-block: var(--_ds-bottom-tab-bar-tab-lead) var(--_ds-bottom-tab-bar-tab-trail);
   padding-inline: 2px;
   background: none;
   border: none;
@@ -170,8 +219,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  block-size: 26px;
-  padding-inline: 10px;
+  block-size: var(--_ds-bottom-tab-bar-pill-block-size);
+  padding-inline: var(--_ds-bottom-tab-bar-pill-inline-padding);
   border-radius: var(--ds-radius-full, 9999px);
   transition:
     background var(--ds-motion-feedback, var(--ds-motion-fast)) var(--ds-motion-ease-out, ease-out),
@@ -240,20 +289,49 @@
 /* ---- label: typography migrated from the engine's inline Text style; the
         selected weight was a JS ternary, now keyed on data-selected. ---- */
 .rottay-bottom-tab-bar__label[data-part='label'] {
-  margin-block-start: 2px;
+  margin-block-start: var(--_ds-bottom-tab-bar-label-gap);
   max-inline-size: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
+  font-size: var(--_ds-bottom-tab-bar-label-size);
   font-weight: 400;
-  letter-spacing: 0.01em;
-  line-height: 14px;
+  letter-spacing: var(--_ds-bottom-tab-bar-label-tracking, 0.01em);
+  line-height: var(--_ds-bottom-tab-bar-label-leading);
   transition: color var(--ds-motion-feedback, var(--ds-motion-fast)) var(--ds-motion-ease-out, ease-out);
 }
 
 .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__label {
   font-weight: 600;
+}
+
+/* ---- responsive posture. The root is fixed with `inset-inline: 0`, so its
+        own inline size is the viewport width and these queries carry the
+        posture a viewport media query would have — which the tier forbids. ---- */
+
+/* Wide: stop spreading. `justify: evenly` across a tablet width puts the five
+   tabs at 1/10, 3/10, 5/10 … of the bar with 100px+ between them, and the
+   group stops reading as one control. The ground, the hairline and the
+   safe-area padding stay full-bleed — only the row of tabs is measured. */
+@container ds-bottom-tab-bar (min-width: 600px) {
+  .rottay-bottom-tab-bar__list[data-part='list'] {
+    max-inline-size: var(--_ds-bottom-tab-bar-list-measure);
+    margin-inline: auto;
+  }
+}
+
+/* Narrow: at 320px each of five columns is ~64px. The pill's inline padding
+   and the label's tracking are the two places to give width back before the
+   label ellipsizes to two characters — the icon and the touch floor do not
+   move, and the full label survives in `aria-label` either way. */
+@container ds-bottom-tab-bar (max-width: 360px) {
+  .rottay-bottom-tab-bar__icon-wrap[data-part='icon-wrap'] {
+    --_ds-bottom-tab-bar-pill-inline-padding: 6px;
+  }
+
+  .rottay-bottom-tab-bar__label[data-part='label'] {
+    --_ds-bottom-tab-bar-label-tracking: 0;
+  }
 }
 
 @keyframes ds-bottom-tab-bar-enter {

@@ -27,6 +27,12 @@
  * visible. Making the covered CONTENT inert while the overlay is visible is
  * the consumer's side of the contract (the structure cannot reach its
  * siblings — see the family report).
+ *
+ * Anatomy: the two composed `Flex` wrappers carry `data-part='content'` and
+ * `data-part='status'`. They had none, and their only spacing was a raw
+ * numeric `gap` prop, which lands inline — the one place no skin, layer or
+ * tenant can reach. The rhythm is skin-owned now; the parts are what makes
+ * that possible.
  */
 
 import type { ReactNode } from 'react';
@@ -63,13 +69,13 @@ export function LoadingOverlay({ visible, message: messageProp, logo }: LoadingO
       aria-live="polite"
       aria-busy="true"
     >
-      <Flex direction="column" align="center" gap={12}>
+      <Flex direction="column" align="center" data-part="content">
         {logo && (
           <Box data-part="logo">
             {logo}
           </Box>
         )}
-        <Flex align="center" gap={2}>
+        <Flex align="center" data-part="status">
           <Text
             data-part="message"
             size="sm"
