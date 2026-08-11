@@ -418,6 +418,56 @@ New defect class found: **a within-file self-conflict** — `--ds-divider-text-c
 | e | `--ds-type-code-font-variant-numeric` `tabular-nums` → `normal`, and numeric weight 600 → 500 — probable accidents of a re-alias sweep, not decisions | sighted check before the §15 sweep |
 | f | Hardcoded hexes at `:root` in the theme layer (`#e5e5e5`, `#737373`) — they cannot follow a tenant palette | with the §15 sweep |
 
+### An aesthetic question escalated to the owner is a mis-framed architecture question
+
+Owner ruling, 2026-08-10, after four decisions were wrongly put to him as choices of colour and
+typeface. He does not pick values. A value is either the **tenant's** (it belongs in a channel) or
+**ours** (it is an architecture decision, decided here and audited by Fable and Kimi).
+
+The tell: if a question can be phrased "which colour / which font / which size", it has been framed
+wrongly. Re-read it as **"should a literal exist where a tenant channel belongs?"** and the answer
+under §1.4 is always no. Rows c–f above are all this shape.
+
+Corollary: idling for an answer is itself the defect. An hourly heartbeat now re-enters the programme
+if a lane has stalled waiting on a decision that was never the owner's to make.
+
+### The four rulings that unblocked the wave
+
+| | Ruling |
+|---|---|
+| **D1** evnto's 5 silent border slots | Never author a literal. **Derive** the slot from the tenant's own ink/surface relationship, using the formula the other two verticals already use. If the derived value lands near-black on white, evnto's ink/surface pair is itself wrong — that is the fix, not a hand-picked hex. |
+| **D2** 19 typography rows, builder vs theme | **One authority.** The builder wins; it is the layer the tenant reaches. The 63 dead theme channels are deleted, not retuned. Deletion is only legal if the theme layer loses in EVERY scope — Fable and Kimi are both attacking exactly that. |
+| **D3** the 38 hard forks | Collapse to the surviving name; where both are tenant-painted (6), the tenant channel survives. Guarded by the survivor rule above. **Refutable**: collapsing two names a tenant moves independently REMOVES a degree of freedom, which is the opposite of the goal. |
+| **D4** the DS default palette | It stays (sole authority for the 37/63/77% ramp) but **stops being a paint authority**. The 547 component channels relocate to formulas over tenant-reachable names, leaving the palette as pure ramp mathematics. Constrained by §2 clause 7 — relocation changes scope, and 17 channels were previously measured to flip. |
+
+### The structures tier has no engine, and the four that claim one are forwarders
+
+Measured 2026-08-10. Of 28 real structure families, **zero** have a genuine modern engine. The four
+that appeared to — `stats-header`, `mobile-header`, `bottom-tab-bar`, `action-dock` — are nine-line
+files doing `export { default } from '../../runtime/rendering'`, with no skin CSS, no scope class and
+no `--ds-*` read. `CLAUDE.md` forbids exactly this shape. There are **zero** `.ds-structure-*`
+selectors in the skin tree; the five files that look like structure skins (`cockpit-header`,
+`workbench-header`, `list-toolbar`, `filter-panel`, `filter-builder`) are all scoped `.ds-pattern-*`
+and belong to patterns.
+
+Consequence for the goal: structures are page chrome, so they are where product identity is most
+visible. A structure that merely stacks primitives gives every tenant the same layout with different
+paint — which is precisely the measured disease (66 of 512 leaves written, 31% of them moving ≤2
+files). Chrome that cannot be restructured cannot make two tenants read as different companies.
+
+**The convention, set here because none existed:**
+
+1. No TSX fork per engine. Structures compose primitives that already resolve through engines; three
+   near-identical engine files IS the forwarder defect.
+2. The rendering declares a stable scope class `ds-structure-<family>` on its root and stable
+   `data-part` attributes on every meaningful region. CSS anchors to the **scope class**, never to a
+   `data-part` alone — that mistake has drawn blood seven times here.
+3. The skin lives at `runtime/engines/modern/skin/structure-<family>.css`, scoped
+   `.ds-engine-modern .ds-structure-<family>`, one owner per file, registered through the existing
+   aggregator and never a second loading mechanism.
+
+Divergence therefore arrives through the skin and the channels, not through per-engine branches.
+
 ---
 
 ## 6. WHAT R0–R7 BECAME
