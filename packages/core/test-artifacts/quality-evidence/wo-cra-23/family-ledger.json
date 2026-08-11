@@ -20,7 +20,8 @@
     "hasFocusedTests": "True if <sourceOwner>/tests/ exists on disk and contains at least one *.test.* or *.spec.* file.",
     "hasProbeScene": "True if the family or component name appears as a case slug in one of the 5 sections that use the cases.ts convention (commercial, compositions, r4-structures, r5-charts, r6-surfaces), OR as a literal PascalCase identifier anywhere in the combined source of packages/showroom/src/app/probe/ds-reference/sections/**/*.{ts,tsx}. The other 17 section folders (control, display-*, feedback, field, inputs-material, microbatch-material, overlay*, r2-*, r3-evidence, transient-material) have NO cases.ts -- they compose DS components directly by import, so identifier search is the only detection method for them. False is a real 'not found by this search', not a guess, but can still miss an aliased import (e.g. `import { Button as Btn }`).",
     "batch/reviewVerdict/openDefects": "Reserved for the review/adjudication pass this ledger exists to make resumable. Untouched by this generation; a later pass owns writing to them.",
-    "writeRoot": "The exclusive directory a single lane may write for this family, derived from the folder that DECLARES the component and then widened only while no other family declares inside it. It is NOT sourceOwner: that field is a resolution pointer and 18 rows share 5 of its paths (structures/headers is claimed by DetailHeader and EditHeader, patterns/visualization/charts by five chart families), so using it as a write set would have put two concurrent lanes in the same directory. writeExcludes carves out a nested family that legitimately lives inside another - HeaderSurface sits under PageShellSurface."
+    "writeRoot": "The exclusive directory a single lane may write for this family, derived from the folder that DECLARES the component and then widened only while no other family declares inside it. It is NOT sourceOwner: that field is a resolution pointer and 18 rows share 5 of its paths (structures/headers is claimed by DetailHeader and EditHeader, patterns/visualization/charts by five chart families), so using it as a write set would have put two concurrent lanes in the same directory. writeExcludes carves out a nested family that legitimately lives inside another - HeaderSurface sits under PageShellSurface.",
+    "elevationCommits": "Commits that elevated this family in wave 2. Presence here does NOT set reviewVerdict: no adversarial review has been run on any wave-2 family, which is why each carries the openDefect saying so."
   },
   "counts": {
     "total": 252,
@@ -3962,18 +3963,23 @@
       "layerProfile": "structure",
       "state": "SOURCE_TOUCHED",
       "sourceCommits": 1,
-      "lastCommit": "fa0efd3b6",
-      "lastCommitDate": "2026-08-10",
+      "lastCommit": "0c6990f4f",
+      "lastCommitDate": "2026-08-11",
       "skinFiles": [
         "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-header.css"
       ],
       "hasFocusedTests": false,
       "hasProbeScene": true,
-      "batch": null,
+      "batch": "wave-2-structures",
       "reviewVerdict": null,
-      "openDefects": [],
+      "openDefects": [
+        "adversarial review not run"
+      ],
       "writeRoot": "packages/core/src/ui/structures/headers/collection",
-      "writeExcludes": []
+      "writeExcludes": [],
+      "elevationCommits": [
+        "0c6990f4f"
+      ]
     },
     {
       "id": "structure/headers/dashboard-header",
@@ -3984,62 +3990,78 @@
       "layerProfile": "structure",
       "state": "SOURCE_TOUCHED",
       "sourceCommits": 1,
-      "lastCommit": "fa0efd3b6",
-      "lastCommitDate": "2026-08-10",
+      "lastCommit": "e79e54bc9",
+      "lastCommitDate": "2026-08-11",
       "skinFiles": [
         "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-header.css"
       ],
       "hasFocusedTests": false,
       "hasProbeScene": true,
-      "batch": null,
+      "batch": "wave-2-structures",
       "reviewVerdict": null,
-      "openDefects": [],
+      "openDefects": [
+        "adversarial review not run"
+      ],
       "writeRoot": "packages/core/src/ui/structures/headers/dashboard",
-      "writeExcludes": []
+      "writeExcludes": [],
+      "elevationCommits": [
+        "e79e54bc9"
+      ]
     },
     {
       "id": "structure/headers/detail-header",
       "layer": "structure",
       "category": "headers",
       "family": "DetailHeader",
-      "sourceOwner": "packages/core/src/ui/structures/headers",
+      "sourceOwner": "packages/core/src/ui/structures/headers/detail",
       "layerProfile": "structure",
       "state": "SOURCE_TOUCHED",
       "sourceCommits": 1,
-      "lastCommit": "fa0efd3b6",
-      "lastCommitDate": "2026-08-10",
+      "lastCommit": "561ff5eaf",
+      "lastCommitDate": "2026-08-11",
       "skinFiles": [
         "packages/core/src/foundation/tokens/css/presentation/components/skin/detail-header.css"
       ],
       "hasFocusedTests": true,
       "hasProbeScene": true,
-      "batch": null,
+      "batch": "wave-2-structures",
       "reviewVerdict": null,
-      "openDefects": [],
+      "openDefects": [
+        "adversarial review not run"
+      ],
       "writeRoot": "packages/core/src/ui/structures/headers/detail",
-      "writeExcludes": []
+      "writeExcludes": [],
+      "elevationCommits": [
+        "561ff5eaf"
+      ]
     },
     {
       "id": "structure/headers/edit-header",
       "layer": "structure",
       "category": "headers",
       "family": "EditHeader",
-      "sourceOwner": "packages/core/src/ui/structures/headers",
+      "sourceOwner": "packages/core/src/ui/structures/headers/edit",
       "layerProfile": "structure",
       "state": "SOURCE_TOUCHED",
       "sourceCommits": 1,
-      "lastCommit": "fa0efd3b6",
-      "lastCommitDate": "2026-08-10",
+      "lastCommit": "ba4d72e41",
+      "lastCommitDate": "2026-08-11",
       "skinFiles": [
         "packages/core/src/foundation/tokens/css/presentation/components/skin/edit-header.css"
       ],
       "hasFocusedTests": true,
       "hasProbeScene": true,
-      "batch": null,
+      "batch": "wave-2-structures",
       "reviewVerdict": null,
-      "openDefects": [],
+      "openDefects": [
+        "adversarial review not run"
+      ],
       "writeRoot": "packages/core/src/ui/structures/headers/edit",
-      "writeExcludes": []
+      "writeExcludes": [],
+      "elevationCommits": [
+        "e023b80c5",
+        "ba4d72e41"
+      ]
     },
     {
       "id": "structure/headers/form-header",
@@ -4050,19 +4072,24 @@
       "layerProfile": "structure",
       "state": "UNTOUCHED",
       "sourceCommits": 0,
-      "lastCommit": null,
-      "lastCommitDate": null,
+      "lastCommit": "e023b80c5",
+      "lastCommitDate": "2026-08-11",
       "skinFiles": [
         "packages/core/src/foundation/tokens/css/presentation/components/skin/edit-header.css",
         "packages/core/src/foundation/tokens/css/presentation/components/skin/form-header.css"
       ],
       "hasFocusedTests": false,
       "hasProbeScene": true,
-      "batch": null,
+      "batch": "wave-2-structures",
       "reviewVerdict": null,
-      "openDefects": [],
+      "openDefects": [
+        "adversarial review not run"
+      ],
       "writeRoot": "packages/core/src/ui/structures/headers/form",
-      "writeExcludes": []
+      "writeExcludes": [],
+      "elevationCommits": [
+        "e023b80c5"
+      ]
     },
     {
       "id": "structure/headers/mobile-header",
@@ -4253,18 +4280,24 @@
       "layerProfile": "structure",
       "state": "UNTOUCHED",
       "sourceCommits": 0,
-      "lastCommit": null,
-      "lastCommitDate": null,
+      "lastCommit": "c0cd804fd",
+      "lastCommitDate": "2026-08-11",
       "skinFiles": [
         "packages/core/src/foundation/tokens/css/presentation/components/skin/saved-views-menu.css"
       ],
       "hasFocusedTests": false,
       "hasProbeScene": true,
-      "batch": null,
+      "batch": "wave-2-structures",
       "reviewVerdict": null,
-      "openDefects": [],
+      "openDefects": [
+        "adversarial review not run"
+      ],
       "writeRoot": "packages/core/src/ui/structures/workspace/saved-views-menu",
-      "writeExcludes": []
+      "writeExcludes": [],
+      "elevationCommits": [
+        "127a00cf9",
+        "c0cd804fd"
+      ]
     },
     {
       "id": "structure/workspace/scope-switcher",
@@ -4365,18 +4398,23 @@
       "layerProfile": "structure",
       "state": "SOURCE_TOUCHED",
       "sourceCommits": 1,
-      "lastCommit": "fa0efd3b6",
-      "lastCommitDate": "2026-08-10",
+      "lastCommit": "1ab2c56fd",
+      "lastCommitDate": "2026-08-11",
       "skinFiles": [
         "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css"
       ],
       "hasFocusedTests": false,
       "hasProbeScene": true,
-      "batch": null,
+      "batch": "wave-2-structures",
       "reviewVerdict": null,
-      "openDefects": [],
+      "openDefects": [
+        "adversarial review not run"
+      ],
       "writeRoot": "packages/core/src/ui/structures/record/content",
-      "writeExcludes": []
+      "writeExcludes": [],
+      "elevationCommits": [
+        "1ab2c56fd"
+      ]
     },
     {
       "id": "structure/record/form-sections",
@@ -4387,18 +4425,23 @@
       "layerProfile": "structure",
       "state": "UNTOUCHED",
       "sourceCommits": 0,
-      "lastCommit": null,
-      "lastCommitDate": null,
+      "lastCommit": "1ab2c56fd",
+      "lastCommitDate": "2026-08-11",
       "skinFiles": [
         "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css"
       ],
       "hasFocusedTests": false,
       "hasProbeScene": true,
-      "batch": null,
+      "batch": "wave-2-structures",
       "reviewVerdict": null,
-      "openDefects": [],
+      "openDefects": [
+        "adversarial review not run"
+      ],
       "writeRoot": "packages/core/src/ui/structures/record/form-sections",
-      "writeExcludes": []
+      "writeExcludes": [],
+      "elevationCommits": [
+        "1ab2c56fd"
+      ]
     },
     {
       "id": "structure/record/edit-fields",
@@ -4409,18 +4452,23 @@
       "layerProfile": "structure",
       "state": "UNTOUCHED",
       "sourceCommits": 0,
-      "lastCommit": null,
-      "lastCommitDate": null,
+      "lastCommit": "1ab2c56fd",
+      "lastCommitDate": "2026-08-11",
       "skinFiles": [
         "packages/core/src/foundation/tokens/css/presentation/components/skin/edit-fields.css"
       ],
       "hasFocusedTests": true,
       "hasProbeScene": true,
-      "batch": null,
+      "batch": "wave-2-structures",
       "reviewVerdict": null,
-      "openDefects": [],
+      "openDefects": [
+        "adversarial review not run"
+      ],
       "writeRoot": "packages/core/src/ui/structures/record/edit-fields",
-      "writeExcludes": []
+      "writeExcludes": [],
+      "elevationCommits": [
+        "1ab2c56fd"
+      ]
     },
     {
       "id": "structure/dashboard/stats-header",
