@@ -127,7 +127,11 @@ describe('Badge hover transform (P-43)', () => {
         'utf-8'
       );
 
-      expect(skin).toContain(".rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'] {");
+      // The base is keyed on the scope class, not on `data-part='root'`: a
+      // caller part replaces the default one, which killed the base wherever a
+      // family named its own part.
+      expect(skin).toContain('.rottay-badge.rottay-badge--modern {');
+      expect(skin).not.toContain(".rottay-badge.rottay-badge--modern[data-part='root']");
       expect(skin).toContain('transform: var(--ds-badge-position-transform, translateY(0));');
       expect(skin).toContain(".rottay-badge.rottay-badge--modern[data-state~='hovered'] {");
       expect(skin).toContain(
