@@ -203,9 +203,8 @@ export function FormSections({
         /* Shell/header/content geometry is skin-owned off data-appearance. */
         const sectionContentId = `${sectionsBaseId}-${section.key}-content`;
 
-        const sectionHeader = (
-          <Flex align="center" justify="between" gap={14}>
-            <Flex align="start" gap={14} data-part="section-lead">
+        const sectionLead = (
+          <Flex align="start" gap={14} data-part="section-lead">
               <Box data-part="section-index">
                 {String(index + 1).padStart(2, '0')}
               </Box>
@@ -251,8 +250,15 @@ export function FormSections({
                   </Text>
                 ) : null}
               </Stack>
-            </Flex>
+          </Flex>
+        );
 
+        // `summary` and `extra` are consumer ReactNode and routinely hold
+        // controls, so they are siblings of the disclosure button, never
+        // descendants of it — interactive content nested inside a <button> is
+        // invalid and the inner control cannot be reached.
+        const sectionTrailing =
+          section.summary || section.extra ? (
             <Flex align="center" gap={10} data-part="section-trailing">
               {section.summary ? (
                 <Box data-part="section-summary">
@@ -267,18 +273,8 @@ export function FormSections({
               ) : null}
 
               {section.extra ? section.extra : null}
-
-              {collapsible ? (
-                <Box
-                  data-part="section-toggle"
-                  data-open={isOpen}
-                >
-                  <NavigationDownIcon size={15} decorative data-part="section-toggle-icon" />
-                </Box>
-              ) : null}
             </Flex>
-          </Flex>
-        );
+          ) : null;
 
         return (
           <Box
@@ -289,21 +285,27 @@ export function FormSections({
             data-open={isOpen}
             data-error={section.error ? 'true' : undefined}
           >
-            {collapsible ? (
-              <button
-                type="button"
-                data-part="section-header"
-                aria-expanded={isOpen}
-                aria-controls={sectionContentId}
-                onClick={() => toggleSection(section.key)}
-              >
-                {sectionHeader}
-              </button>
-            ) : (
-              <Box data-part="section-header">
-                {sectionHeader}
-              </Box>
-            )}
+            {/* The header is always a plain element; only the disclosure is a
+                button, so the trailing slot stays outside the control. */}
+            <Box data-part="section-header" data-collapsible={collapsible}>
+              {collapsible ? (
+                <button
+                  type="button"
+                  data-part="section-disclosure"
+                  aria-expanded={isOpen}
+                  aria-controls={sectionContentId}
+                  onClick={() => toggleSection(section.key)}
+                >
+                  {sectionLead}
+                  <Box data-part="section-toggle" data-open={isOpen}>
+                    <NavigationDownIcon size={15} decorative data-part="section-toggle-icon" />
+                  </Box>
+                </button>
+              ) : (
+                sectionLead
+              )}
+              {sectionTrailing}
+            </Box>
 
             {/* Collapse cadence is skin-owned (grid-rows + opacity/transform
                 keyed on the section's data-open, reduced-motion reachable);

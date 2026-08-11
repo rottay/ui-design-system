@@ -271,19 +271,45 @@
   background-color: color-mix(in srgb, var(--ds-color-bg-secondary) 52%, transparent);
 }
 
-/* See the P-78 note in this file's header: the collapsible header is a <button>
-   and has NEVER had a bottom border. These two rules are not interchangeable —
-   the div branch is matched by `:not([aria-expanded])` because the collapsible
-   button ALWAYS stamps aria-expanded (no attribute is ever repeated). The rule
-   itself rides the tenant divider grammar (floors 1px solid). */
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > div[data-part='section-header']:not([aria-expanded]) {
+/* See the P-78 note in this file's header: the collapsible header has NEVER had
+   a bottom border. The branch is now stated, not inferred — the header stamps
+   `data-collapsible`, so this no longer keys on `:not([aria-expanded])`, which
+   only worked while the header itself was the button. The rule rides the tenant
+   divider grammar (floors 1px solid). */
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'][data-collapsible='false'] {
   border-bottom: var(--ds-divider-width, 1px) var(--ds-divider-style, solid) var(--ds-form-sections-divider);
 }
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > button[data-part='section-header'] {
+/* The header is a row: the disclosure takes the measure, the trailing cluster
+   sits beside it and OUTSIDE the button. */
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] {
+  display: flex;
+  align-items: center;
+  gap: calc(14px * var(--_ds-form-sections-density, 1));
+}
+
+/* The disclosure is the only control in the header. It carries the button
+   reset the header used to carry, plus the keyboard ring the header never had
+   (the section was reachable by Tab but showed nothing on focus). */
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] > [data-part='section-disclosure'] {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: calc(14px * var(--_ds-form-sections-density, 1));
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
   border: none;
+  border-radius: var(--ds-radius-sm, 6px);
+  background: none;
+  color: inherit;
+  font: inherit;
   text-align: start;
   cursor: pointer;
+}
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] > [data-part='section-disclosure']:focus-visible {
+  outline: none;
+  box-shadow: var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent));
 }
 
 /* The header's two engine-owned layout regions (drained inline flex hooks). */

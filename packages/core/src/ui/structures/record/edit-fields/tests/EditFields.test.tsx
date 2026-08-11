@@ -115,17 +115,42 @@ describe('InlineEditField', () => {
     expect(screen.queryByText('Optional')).toBeNull();
   });
 
-  it('renders the error message and wires aria-describedby when hasError is set', async () => {
+  it('renders the error message with a referencable id and keeps invalid ARIA off the label', async () => {
     renderSurface(
-      <InlineEditField label="Email" htmlFor="email-input" hasError errorMessage="Enter a valid email.">
-        <input id="email-input" />
+      <InlineEditField
+        label="Email"
+        htmlFor="email-input"
+        hasError
+        errorMessageId="email-error"
+        errorMessage="Enter a valid email."
+      >
+        <input id="email-input" aria-invalid="true" aria-describedby="email-error" />
       </InlineEditField>,
     );
 
-    expect(await screen.findByText('Enter a valid email.')).toBeTruthy();
+    const message = await screen.findByText('Enter a valid email.');
+    expect(message.id).toBe('email-error');
+
+    // `aria-invalid` is not a label attribute and `aria-describedby` on a label
+    // describes the label, not the control: neither ever reached the input.
     const label = screen.getByText('Email');
-    expect(label.getAttribute('aria-invalid')).toBe('true');
-    expect(label.getAttribute('aria-describedby')).toContain('error');
+    expect(label.getAttribute('aria-invalid')).toBeNull();
+    expect(label.getAttribute('aria-describedby')).toBeNull();
+
+    // The control is what carries the wiring, and it resolves to the message.
+    const control = screen.getByLabelText('Email');
+    expect(control.getAttribute('aria-describedby')).toBe('email-error');
+  });
+
+  it('gives the hint a referencable id so a control can describe itself with it', async () => {
+    renderSurface(
+      <InlineEditField label="Bio" htmlFor="bio-input" hintId="bio-hint" hint="Shown on the public profile.">
+        <input id="bio-input" aria-describedby="bio-hint" />
+      </InlineEditField>,
+    );
+
+    const hint = await screen.findByText('Shown on the public profile.');
+    expect(hint.id).toBe('bio-hint');
   });
 
   it('maps span to the expected grid-column value', async () => {

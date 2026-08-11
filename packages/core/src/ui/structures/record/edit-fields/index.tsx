@@ -141,6 +141,9 @@ export interface InlineEditGridProps {
   /** CSS `grid-template-columns` value. @default 'repeat(3, minmax(0, 1fr))' */
   columns?: string;
   gap?: number;
+  /** Id for `MoreFieldsToggle`'s `controls`. Without it the toggle's
+   *  `aria-controls` has no target to name. */
+  id?: string;
   className?: string;
   style?: CSSProperties;
 }
@@ -180,6 +183,10 @@ export interface InlineEditFieldProps {
   /** Id of the associated form control, for the label's `htmlFor`. */
   htmlFor?: string;
   hasError?: boolean;
+  /** Id given to the hint node. Supply it, together with `errorMessageId`, to
+   *  wire `aria-describedby` on your own control — describing text belongs to
+   *  the control, and this family does not render it. */
+  hintId?: string;
   errorMessageId?: string;
   errorMessage?: ReactNode;
   className?: string;
@@ -309,6 +316,7 @@ export function InlineEditGrid({
   unmountWhenCollapsed = true,
   columns = 'repeat(3, minmax(0, 1fr))',
   gap = 14,
+  id,
   className,
   style,
 }: InlineEditGridProps): React.ReactElement | null {
@@ -318,6 +326,7 @@ export function InlineEditGrid({
 
   return (
     <Box
+      id={id}
       className={['ds-structure', 'ds-edit-fields', className].filter(Boolean).join(' ')}
       data-part="grid"
       data-kind={kind}
@@ -458,6 +467,7 @@ export function InlineEditField({
   controlWidth = 'full',
   htmlFor,
   hasError,
+  hintId,
   errorMessageId,
   errorMessage,
   className,
@@ -466,9 +476,8 @@ export function InlineEditField({
 }: InlineEditFieldProps): React.ReactElement {
   const copy = useEditFieldsCopy();
   const autoId = useId();
-  const hintId = hint ? `${autoId}-hint` : undefined;
+  const resolvedHintId = hint ? hintId ?? `${autoId}-hint` : hintId;
   const resolvedErrorId = hasError && errorMessage ? errorMessageId ?? `${autoId}-error` : errorMessageId;
-  const describedBy = [hintId, hasError ? resolvedErrorId : undefined].filter(Boolean).join(' ') || undefined;
   const shouldShowRequirement = showRequirement ?? requirement !== 'optional';
   const requirementCopy =
     requirementLabel ??
@@ -507,13 +516,15 @@ export function InlineEditField({
               <Icon size={14} />
             </Box>
           ) : null}
+          {/* `aria-invalid` has no meaning on a <label>, and `aria-describedby`
+              here describes the label rather than the control — the hint and the
+              error never reached a user on the input. Both belong on the
+              consumer's control, wired from `hintId` / `errorMessageId`. */}
           <Box
             as="label"
             data-part="field-label"
             data-linked={Boolean(htmlFor)}
             htmlFor={htmlFor}
-            {...(hasError ? { 'aria-invalid': 'true' as const } : {})}
-            {...(describedBy ? { 'aria-describedby': describedBy } : {})}
           >
             {label}
           </Box>
@@ -534,7 +545,7 @@ export function InlineEditField({
           ) : null}
         </Flex>
         {hint ? (
-          <Text data-part="field-hint" id={hintId} size="xs">
+          <Text data-part="field-hint" id={resolvedHintId} size="xs">
             {hint}
           </Text>
         ) : null}

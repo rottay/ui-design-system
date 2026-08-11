@@ -116,8 +116,9 @@
 }
 
 .ds-structure.ds-record[data-part='summary-strip'] {
+  container: ds-record-summary / inline-size;
   inline-size: 100%;
-  padding: calc(18px * var(--_ds-record-density, 1));
+  padding: var(--_ds-record-summary-padding, calc(18px * var(--_ds-record-density, 1)));
   border-radius: var(--ds-radius-xl, 18px);
 }
 
@@ -240,8 +241,9 @@
 /* --- RecordFieldGrid -------------------------------------------------------- */
 
 .ds-structure.ds-record[data-part='field-grid'] {
+  container: ds-record-fields / inline-size;
   display: grid;
-  gap: calc(14px * var(--_ds-record-density, 1));
+  gap: var(--_ds-record-field-grid-gap, calc(14px * var(--_ds-record-density, 1)));
   inline-size: 100%;
   align-items: start;
 }
@@ -519,6 +521,7 @@
    belongs to the app shell, not this rail. Ancestors with `overflow: hidden`
    (a collapsible section shell) simply degrade the dock to static. */
 .ds-structure.ds-record[data-part='action-bar'] {
+  container: ds-record-actions / inline-size;
   position: sticky;
   inset-block-end: 0;
   z-index: 1;
@@ -579,6 +582,49 @@
   .ds-structure.ds-record[data-part='field'][data-mono],
   .ds-structure.ds-record[data-part='field'] .ds-record__field-link {
     transition: none;
+  }
+}
+
+/* --- Composition ladder ------------------------------------------------------
+   This family had no container and no container query, alone among the three
+   record families: the grid reflowed its column COUNT through intrinsic tracks,
+   but the posture never changed — cell padding, strip padding and the action
+   rail held desktop values at 320px. Each block root is its own inline-size
+   container (they are independent roots; the family has no shared root), so a
+   field grid in a narrow rail compacts while the same grid on a wide page does
+   not. Container queries only: a viewport breakpoint in a skin fails the build
+   (WO-ARC-05, exact-0). ------------------------------------------------------ */
+
+@container ds-record-fields (inline-size < 30rem) {
+  .ds-structure.ds-record[data-part='field-grid'] {
+    --_ds-record-field-grid-gap: calc(10px * var(--_ds-record-density, 1));
+  }
+  .ds-structure.ds-record[data-part='field-grid'] > .ds-structure.ds-record[data-part='field'] {
+    padding: calc(10px * var(--_ds-record-density, 1)) calc(12px * var(--_ds-record-density, 1));
+  }
+}
+
+@container ds-record-summary (inline-size < 30rem) {
+  .ds-structure.ds-record[data-part='summary-strip'] {
+    --_ds-record-summary-padding: calc(14px * var(--_ds-record-density, 1));
+  }
+  .ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-grid'] {
+    gap: calc(12px * var(--_ds-record-density, 1));
+  }
+}
+
+/* The rail is a commit surface: when the measure will not hold meta and actions
+   side by side, the actions take their own full-width row rather than
+   right-aligning under the meta copy. */
+@container ds-record-actions (inline-size < 24rem) {
+  .ds-structure.ds-record[data-part='action-bar'] [data-part='action-bar-meta'] {
+    inline-size: 100%;
+  }
+  .ds-structure.ds-record[data-part='action-bar'] [data-part='action-bar-actions'] {
+    inline-size: 100%;
+  }
+  .ds-structure.ds-record[data-part='action-bar'] [data-part='action-bar-actions'] > * {
+    flex: 1 1 100%;
   }
 }
 
