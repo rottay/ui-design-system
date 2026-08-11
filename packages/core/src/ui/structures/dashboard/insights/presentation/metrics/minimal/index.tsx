@@ -93,6 +93,11 @@ function MetricRow({
             <Text
               data-part="metric-value"
               style={{
+                // Stays a NUMBER. `Text` drops an inline `fontSize` whose
+                // value is a `var()` string — measured in all three engines —
+                // so channelizing this would not make the figure retunable, it
+                // would delete it and leave the number at inherited body size.
+                // See the metrics elevation test for the probe.
                 fontSize: 28,
                 fontWeight: 800,
                 // Numeric role voice (C-08/C1): the tenant's authored figure

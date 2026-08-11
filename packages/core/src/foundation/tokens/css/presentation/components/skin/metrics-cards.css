@@ -28,6 +28,16 @@
  * unset state stays byte-identical; `body-color` falls back to `inherit`.
  * `action-*` stays unlit: the KPI anatomy has no action element and minting an
  * empty one is dishonest — BLOCKED(owner: Codex) in the roadmap.
+ *
+ * ENGINE REACH (measured 2026-08-11 by rendering all three engines, not by
+ * reading source): `Text` forwards a caller's `data-part` under MODERN only —
+ * classic and rustic stamp their own — so every `Text`-borne part rule here
+ * (`title`, `live-label`, `metric-label`, `metric-value`, `metric-change`)
+ * is live under modern and inert under the other two. The rules are correct
+ * as written and become universal when the primitive is repaired; the
+ * SPECIFICITY notes above describe the modern case. Box-borne parts (`root`,
+ * `header`, the icon wells, the meter, the rows/cards) reach every engine,
+ * which is why the well repair is universal and the caption repair is not.
  */
 
 /* panel chrome -------------------------------------------------------------- */
@@ -40,6 +50,11 @@
 .ds-metrics-cards.ds-metrics-cards[data-part='root'] {
   display: flex;
   flex-direction: column;
+  /* The panel is its own responsive frame — every cut in this file is keyed on
+     the PANEL's inline size, never the viewport. The card grid was already
+     intrinsic (`auto-fit` over a private track floor); the container is what
+     lets the panel CHROME answer its own measure too. */
+  container: ds-metrics-cards / inline-size;
   block-size: var(--_ds-dashboard-panel-block-size, calc(415px * var(--ds-rhythm-effective-scale, 1)));
   /* Panel frame rides the tenant density plane (Button-skin idiom); the
      density suite pins its own channels inline on this same root. */
@@ -64,7 +79,12 @@
   border-bottom: 1px solid var(--ds-signal-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary)));
 }
 .ds-metrics-cards.ds-metrics-cards [data-part='panel-icon-box'] {
-  /* 32px icon well drained from the engine. */
+  /* 32px icon well drained from the engine. `flex-shrink: 0` is the well's
+     SHAPE: it sits in a flex cluster beside the title, and without it a
+     narrow panel squeezes the square into an oval that still carries its
+     border and glyph — degraded rather than absent, which is why it survived
+     review. */
+  flex-shrink: 0;
   inline-size: 32px;
   block-size: 32px;
   display: flex;
@@ -288,6 +308,27 @@
 
 .ds-metrics-cards.ds-metrics-cards [data-part='cards-grid'] {
   position: relative;
+}
+
+/* narrow posture — SIMPLIFIED, not compressed. The CARD GRID needs no cut: it
+   is already intrinsic (`auto-fit` over `--_ds-metric-card-track-min`), so it
+   reflows 3→2→1 on its own. What could not answer its own measure is the
+   panel CHROME: the header stops competing for one line and the LIVE badge
+   falls under the title. The two-line eyebrow clamp is deliberate (K-7
+   cross-card value alignment) and stays.
+   The FIGURE deliberately does not step here, and the reason is a live
+   defect rather than a design choice: the engine already reads
+   `var(--_ds-metric-value-size, 28px)` inline for it, and `Text` DROPS an
+   inline `fontSize` whose value is a `var()` string — measured in all three
+   engines — so that channel has never painted and the card's hero number is
+   rendering at inherited body size, not at 28px. Repairing it changes the
+   KPI hierarchy on three shipped dashboards, so it is reported for the
+   sighted pass, not slipped into a posture cut. */
+@container ds-metrics-cards (inline-size < 20rem) {
+  .ds-metrics-cards.ds-metrics-cards [data-part='header'] {
+    flex-wrap: wrap;
+    row-gap: var(--ds-spacing-2, 8px);
+  }
 }
 
 /* forced-colors: the panel, cards, wells and badge keep system frames; the

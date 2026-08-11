@@ -55,6 +55,13 @@
  *     computed from a runtime `height` prop; the track sets it and both
  *     track + fill read it.
  *
+ * RESPONSIVE POSTURE: both roots are named inline-size CONTAINERS and every
+ * cut is a `@container` query — this family is a tile, and the viewport says
+ * nothing about how wide the tile is. Two private caps
+ * (`--_ds-dtc-value-cap`, `--_ds-dtc-stat-value-cap`) bound the hero figure
+ * against the tile's own measure; see the hero-value section for why a
+ * `min()` cap and not a breakpoint.
+ *
  * SAME-PART STATIC SIBLINGS: the three terminal-dots and the corner-brackets
  * share one `data-part` each with no distinguishing stamp, so they are
  * selected by scope-anchored `:nth-child` — byte-exact for these hardcoded,
@@ -691,11 +698,19 @@
   text-decoration: none;
 }
 
-/* ---- roots: frame geometry (paint stays in the ROOT section above) ---- */
+/* ---- roots: frame geometry (paint stays in the ROOT section above).
+        Both roots are named inline-size containers: this family is a tile
+        dropped into a dashboard grid or a widget slot, so its own measure —
+        never the viewport — is what its posture must answer. Containment is
+        safe on both because each already sizes from its parent
+        (`block-size: 100%` inside a link that fills its cell) and each is
+        already the containing block for its absolutely positioned decorative
+        layers. ---- */
 .ds-data-terminal-card[data-part='root'] {
   position: relative;
   display: flex;
   flex-direction: column;
+  container: ds-data-terminal-card / inline-size;
   block-size: 100%;
   min-block-size: 240px;
   overflow: hidden;
@@ -704,6 +719,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
+  container: ds-data-terminal-stat / inline-size;
   block-size: 100%;
   min-block-size: 120px;
   padding: 14px;
@@ -766,29 +782,58 @@
   align-items: center;
 }
 
-/* ---- hero value: shared display grammar + per-variant scale (Text) ---- */
+/* ---- hero value: shared display grammar + per-variant scale (Text).
+ *
+ * THE FIGURE IS BOUNDED BY THE TILE, and it was not. The value is a single
+ * unbreakable mono token in a root that declares `overflow: hidden`, so a
+ * six-figure number simply DISAPPEARED past the clip edge once the tile grew
+ * narrower than the type demanded — symmetrically on both sides in variants 2
+ * and 4, whose value section centres. Nothing about the render said "too
+ * small": the card kept its frame, its chrome and its instrument layers, and
+ * only the datum was gone.
+ *
+ * The cap is a `min()` against a container-relative measure, so it is INERT
+ * at the widths each variant was drawn for (v1/v3 above ~311px, v2 above
+ * ~356px, v4 above ~378px of tile measure) and takes over only below them.
+ * Below the crossover the four variants converge on one figure measure —
+ * which is the point: a narrow tile is a simplified posture, and variant
+ * identity is carried by the terminal chrome, the HUD brackets, the circuit
+ * traces and the matrix texture, not by three points of type scale on a
+ * number nobody can read. The cap is a private channel so an embedding can
+ * retune it; `cqi` resolves against the root's own container, declared above.
+ *
+ * ENGINE REACH, measured by rendering rather than argued: the hero value is a
+ * composed `Text`, and only MODERN forwards a caller's `data-part` — classic
+ * and rustic stamp their own. So this whole hero-value block, cap included,
+ * is live under modern and reaches nothing under the other two. That is not a
+ * hole in the cap: under classic and rustic the size, weight, family and
+ * tracking rules here were ALREADY unreachable, so the figure renders at
+ * inherited body size and never clipped in the first place. The cap lands
+ * exactly where the defect lives, and becomes universal the day the primitive
+ * honours a caller part.
+ * ---- */
 .ds-data-terminal-card[data-part='root'][data-variant][data-trend] [data-part='value'] {
   font-family: var(--ds-font-family-mono, monospace);
   font-weight: 900;
   line-height: 1;
 }
 .ds-data-terminal-card[data-part='root'][data-variant='1'] [data-part='value'] {
-  font-size: calc(var(--ds-font-size-6xl) * 1.166667);
+  font-size: min(calc(var(--ds-font-size-6xl) * 1.166667), var(--_ds-dtc-value-cap, 18cqi));
   letter-spacing: -0.02em;
 }
 .ds-data-terminal-card[data-part='root'][data-variant='2'] [data-part='value'] {
-  font-size: calc(var(--ds-font-size-6xl) * 1.333333);
+  font-size: min(calc(var(--ds-font-size-6xl) * 1.333333), var(--_ds-dtc-value-cap, 18cqi));
 }
 .ds-data-terminal-card[data-part='root'][data-variant='3'] [data-part='value'] {
-  font-size: calc(var(--ds-font-size-6xl) * 1.166667);
+  font-size: min(calc(var(--ds-font-size-6xl) * 1.166667), var(--_ds-dtc-value-cap, 18cqi));
 }
 .ds-data-terminal-card[data-part='root'][data-variant='4'] [data-part='value'] {
-  font-size: calc(var(--ds-font-size-6xl) * 1.416667);
+  font-size: min(calc(var(--ds-font-size-6xl) * 1.416667), var(--_ds-dtc-value-cap, 18cqi));
   letter-spacing: -0.03em;
 }
 .ds-data-terminal-stat[data-part='root'][data-trend][data-band] [data-part='value'] {
   font-family: var(--ds-font-family-mono, monospace);
-  font-size: calc(var(--ds-font-size-3xl) * 1.166667);
+  font-size: min(calc(var(--ds-font-size-3xl) * 1.166667), var(--_ds-dtc-stat-value-cap, 16cqi));
   font-weight: 800;
   line-height: 1;
 }
@@ -1239,6 +1284,31 @@
   font-family: var(--ds-font-family-mono, monospace);
   font-weight: 600;
   letter-spacing: 0.1em;
+}
+
+/* ============================================================================
+ * NARROW POSTURE — SIMPLIFIED, not compressed. Keyed on the tile's own
+ * measure (the roots are named containers), never the viewport.
+ *
+ * Below 20rem the tile stops pretending to be a three-across readout. The
+ * CHANGE / PERIOD / TARGET grid folds to two tracks — three mono columns
+ * under 20rem give each stat about 85px, which breaks "This week" mid-word —
+ * and the HUD's completion strip stops reserving a fixed 120px slot with
+ * 20px shoulders for a progress bar that no longer has room for them. Every
+ * readout survives; only the arrangement changes. The hero figure needs no
+ * cut here: its `min()` cap above is continuous, so it is already correct at
+ * every measure rather than at two.
+ * ==========================================================================*/
+@container ds-data-terminal-card (inline-size < 20rem) {
+  .ds-data-terminal-card[data-variant='1'] [data-part='stats-grid'],
+  .ds-data-terminal-card[data-variant='3'] [data-part='stats-grid'],
+  .ds-data-terminal-card[data-variant='4'] [data-part='stats-grid'] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .ds-data-terminal-card[data-variant='2'] [data-part='progress-slot'] {
+    max-inline-size: none;
+    margin-inline: 10px;
+  }
 }
 
 /* ============================================================================

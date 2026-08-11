@@ -34,6 +34,16 @@
  * inline-start (the former physical `left: 0` was LTR-only); the chevron
  * mirrors under RTL. This file also adds the reduced-motion and
  * forced-colors contracts for its own parts.
+ *
+ * ENGINE REACH (measured 2026-08-11 by rendering all three engines, not by
+ * reading source): `Text` forwards a caller's `data-part` under MODERN only —
+ * classic and rustic stamp their own — so every `Text`-borne part rule here
+ * (`title`, `live-label`, `metric-label`, `metric-value`, `metric-change`, `subtitle`)
+ * is live under modern and inert under the other two. The rules are correct
+ * as written and become universal when the primitive is repaired; the
+ * SPECIFICITY notes above describe the modern case. Box-borne parts (`root`,
+ * `header`, the icon wells, the meter, the rows/cards) reach every engine,
+ * which is why the well repair is universal and the caption repair is not.
  */
 
 /* panel chrome -------------------------------------------------------------- */
@@ -45,6 +55,9 @@
 .ds-metrics-minimal.ds-metrics-minimal[data-part='root'] {
   display: flex;
   flex-direction: column;
+  /* The panel is its own responsive frame — every cut in this file is keyed on
+     the PANEL's inline size, never the viewport. */
+  container: ds-metrics-minimal / inline-size;
   block-size: var(--_ds-dashboard-panel-block-size, calc(415px * var(--ds-rhythm-effective-scale, 1)));
   /* Panel frame rides the tenant density plane (metrics-cards idiom). */
   padding: calc(16px * var(--ds-density-effective-scale, 1));
@@ -67,7 +80,12 @@
   border-bottom: 1px solid var(--ds-signal-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary)));
 }
 .ds-metrics-minimal.ds-metrics-minimal [data-part='panel-icon-box'] {
-  /* 32px icon well drained from the engine. */
+  /* 32px icon well drained from the engine. `flex-shrink: 0` is the well's
+     SHAPE: it sits in a flex cluster beside the title/subtitle stack, and
+     without it a narrow panel squeezes the square into an oval that still
+     carries its border and glyph. The row well below already pins it; this
+     one did not. */
+  flex-shrink: 0;
   inline-size: 32px;
   block-size: 32px;
   display: flex;
@@ -149,6 +167,21 @@
 
 .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-label'][data-part='metric-label'][data-part='metric-label'] {
   color: var(--ds-metric-card-label-color, var(--ds-color-text-muted));
+}
+/* The CAPTION yields; the FIGURE never does. The label and the tabular figure
+   share one `justify-content: space-between` line inside a row that clips, so
+   the label truncates with an ellipsis rather than pushing the datum past the
+   clip edge.
+   ENGINE REACH: this rule keys on a part carried by a composed `Text`, and
+   only MODERN forwards a caller's `data-part` (classic and rustic stamp their
+   own) — measured by rendering. So the truncation is live under modern and
+   inert, never harmful, under the other two; it becomes universal the day the
+   primitive honours a caller part. */
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-label'] {
+  min-inline-size: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='true'] [data-part='trend-icon'] {
   color: var(--ds-metric-card-trend-color, var(--ds-color-success));
@@ -238,6 +271,26 @@
   flex: 1;
   min-block-size: 0;
   overflow-y: auto;
+}
+
+/* narrow posture — SIMPLIFIED, not compressed. Below 20rem of panel measure
+   the row keeps every element it has (well, label, trend, figure, meter,
+   chevron) and spends the measure differently: the well drops a rung and the
+   header stops competing for one line, dropping the LIVE badge under the
+   title. The chevron stays: it is the row's only affordance cue.
+   The FIGURE deliberately does not step here — see the twin note in
+   `metrics-rows.css`: `Text` drops an inline `fontSize` carrying a `var()`,
+   so no channel a container query could write reaches it. Reported, not
+   worked around. */
+@container ds-metrics-minimal (inline-size < 20rem) {
+  .ds-metrics-minimal.ds-metrics-minimal [data-part='header'] {
+    flex-wrap: wrap;
+    row-gap: var(--ds-spacing-2, 8px);
+  }
+  .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-icon-box'] {
+    inline-size: 36px;
+    block-size: 36px;
+  }
 }
 
 /* reduced motion: every hover cadence and fade goes quiet; the slide-in and

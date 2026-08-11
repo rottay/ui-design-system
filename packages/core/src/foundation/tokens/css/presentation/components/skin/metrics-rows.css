@@ -26,6 +26,16 @@
  *
  * STATE: `data-positive` drives the 2-tone trend treatment while the
  * quantitative meter remains the sole bar-shaped data visualization.
+ *
+ * ENGINE REACH (measured 2026-08-11 by rendering all three engines, not by
+ * reading source): `Text` forwards a caller's `data-part` under MODERN only —
+ * classic and rustic stamp their own — so every `Text`-borne part rule here
+ * (`title`, `live-label`, `metric-label`, `metric-value`, `metric-change`)
+ * is live under modern and inert under the other two. The rules are correct
+ * as written and become universal when the primitive is repaired; the
+ * SPECIFICITY notes above describe the modern case. Box-borne parts (`root`,
+ * `header`, the icon wells, the meter, the rows/cards) reach every engine,
+ * which is why the well repair is universal and the caption repair is not.
  */
 
 /* panel chrome -------------------------------------------------------------- */
@@ -37,6 +47,11 @@
 .ds-metrics-rows.ds-metrics-rows[data-part='root'] {
   display: flex;
   flex-direction: column;
+  /* The panel is its own responsive frame: every cut in this file is keyed on
+     the PANEL's inline size, never the viewport, so a dashboard column, a
+     beside-chat strip and a full-width page all get the posture their own
+     measure earns. */
+  container: ds-metrics-rows / inline-size;
   block-size: var(--_ds-dashboard-panel-block-size, calc(415px * var(--ds-rhythm-effective-scale, 1)));
   /* Panel frame rides the tenant density plane (metrics-cards idiom). */
   padding: calc(16px * var(--ds-density-effective-scale, 1));
@@ -59,7 +74,12 @@
   border-bottom: 1px solid var(--ds-signal-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary)));
 }
 .ds-metrics-rows.ds-metrics-rows [data-part='panel-icon-box'] {
-  /* 32px icon well drained from the engine. */
+  /* 32px icon well drained from the engine. `flex-shrink: 0` is the well's
+     SHAPE, not padding: it sits in a flex cluster beside the title, and
+     without it a long title (or a narrow panel) squeezes the square into an
+     oval that still has its border and its glyph — visibly wrong, and the
+     kind of wrong that survives review because the element is still there. */
+  flex-shrink: 0;
   inline-size: 32px;
   block-size: 32px;
   display: flex;
@@ -124,6 +144,10 @@
    the engine --------------------------------- */
 
 .ds-metrics-rows.ds-metrics-rows [data-part='metric-icon-box'] {
+  /* Same shape law as the panel well — and here it was the live defect: the
+     sibling `metrics-minimal` already pins its well and this one did not, so
+     the same anatomy squashed in one variant and held in the other. */
+  flex-shrink: 0;
   inline-size: 40px;
   block-size: 40px;
   display: flex;
@@ -143,6 +167,22 @@
 
 .ds-metrics-rows.ds-metrics-rows [data-part='metric-label'][data-part='metric-label'][data-part='metric-label'] {
   color: var(--ds-metric-card-value-color, var(--ds-color-text-primary));
+}
+/* The CAPTION yields; the FIGURE never does. The row is a fixed-rhythm
+   `justify-content: space-between` band with `overflow: hidden`, so something
+   has to give when the panel narrows — and the datum must not be the thing
+   that gives. The label truncates with an ellipsis instead of wrapping the
+   row taller or pushing the tabular figure past the clip edge.
+   ENGINE REACH: this rule keys on a part carried by a composed `Text`, and
+   only MODERN forwards a caller's `data-part` (classic and rustic stamp their
+   own) — measured by rendering. So the truncation is live under modern and
+   inert, never harmful, under the other two; it becomes universal the day the
+   primitive honours a caller part. */
+.ds-metrics-rows.ds-metrics-rows [data-part='metric-label'] {
+  min-inline-size: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .ds-metrics-rows.ds-metrics-rows [data-part='metric-row'][data-positive='true'] [data-part='trend-icon'] {
   color: var(--ds-metric-card-trend-color, var(--ds-color-success));
@@ -170,6 +210,29 @@
   flex: 1;
   min-block-size: 0;
   overflow-y: auto;
+}
+
+/* narrow posture — SIMPLIFIED, not compressed. Below 20rem of panel measure
+   the row stops being a wide band and becomes a compact readout: the well
+   drops a rung and the header stops competing for one line — the LIVE badge
+   falls under the title instead of squeezing it. The row keeps its icon, its
+   label, its trend and its figure: nothing is hidden, the measure is just
+   spent differently.
+   The FIGURE deliberately does not step here. Its size is an inline number on
+   a composed `Text`, and `Text` drops an inline `fontSize` whose value is a
+   `var()` string (measured, all three engines), so there is no channel a
+   container query can write. Writing one anyway would be a declaration that
+   reads as done and paints nothing — and would flip live the day the
+   primitive is repaired, unreviewed. Finding reported; not worked around. */
+@container ds-metrics-rows (inline-size < 20rem) {
+  .ds-metrics-rows.ds-metrics-rows [data-part='header'] {
+    flex-wrap: wrap;
+    row-gap: var(--ds-spacing-2, 8px);
+  }
+  .ds-metrics-rows.ds-metrics-rows [data-part='metric-icon-box'] {
+    inline-size: 32px;
+    block-size: 32px;
+  }
 }
 
 /* reduced motion: the row value's colour fade and every transition go quiet;

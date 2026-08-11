@@ -474,10 +474,18 @@ const KEYFRAME_FRAME_SEMANTICS = {
     '0%, 100%': { 'text-shadow': '0 0 10px currentColor' },
     '50%': { 'text-shadow': '0 0 20px currentColor, 0 0 30px currentColor' },
   },
+  // The ping's opacity is RELATIVE to each dot's own series opacity. Pinned
+  // absolute (`1` / `0.4` / `1`) it flattened the sparkline for the whole
+  // hover, because an animation origin outranks the declared value and `both`
+  // held the final frame. The transforms — the three declarations the paint
+  // reconcile counts — are unchanged.
   'pulse-dot-ping': {
-    '0%': { transform: 'scale(1)', opacity: '1' },
-    '50%': { transform: 'scale(1.8)', opacity: '0.4' },
-    '100%': { transform: 'scale(1)', opacity: '1' },
+    '0%': { transform: 'scale(1)', opacity: 'var(--_ds-stats-header-spark-dot-opacity, 1)' },
+    '50%': {
+      transform: 'scale(1.8)',
+      opacity: 'calc(var(--_ds-stats-header-spark-dot-opacity, 1) * 0.4)',
+    },
+    '100%': { transform: 'scale(1)', opacity: 'var(--_ds-stats-header-spark-dot-opacity, 1)' },
   },
 } satisfies Record<(typeof EXPECTED_KEYFRAMES)[number], Record<string, Record<string, string>>>;
 

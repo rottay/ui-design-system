@@ -32,6 +32,21 @@
  *  - the interactive card's hover/press reads are pure CSS now
  *    (`[data-clickable='true']` gates both) — the JS hover/pressed state and
  *    its two custom-property channels are retired.
+ *  - `data-columns` mirrors `--ds-stats-header-columns` as an attribute so the
+ *    container cuts can cap the track count without widening a one-stat
+ *    header; the grid reads the channel, the cuts write it.
+ *
+ * SCOPE ROOT — one class, not two. Every other `.ds-structure` family in this
+ * tier compounds the tier marker; this one does not, and it is left that way
+ * DELIBERATELY. Adding the marker is a repaint, not a rename: it moves every
+ * rule here from (0,2,0) to (0,3,0), so rules that currently lose a tie start
+ * winning. What it would NOT change is tenant paint — the three generated
+ * artifacts declare custom properties on the document root only and carry no
+ * element-level rule at all (measured 2026-08-11: 5/4/4 distinct selectors,
+ * every one of them a `:is(html[data-tenant=…], …)` root scope), so the
+ * competing floor is DS-side and vertical-independent. The flip therefore
+ * needs one measurement, not three, and it belongs to whichever lane owns the
+ * tier-wide marker rather than to a single family.
  */
 
 /* ---- root: named container; the wide-column count rides the channel ---- */
@@ -40,10 +55,14 @@
   min-inline-size: 0;
 }
 
-/* ---- card grid: N wide (channel), 2 mid, 1 narrow — re-stack without gaps ---- */
+/* ---- card grid: N wide (channel), capped to 2 mid and 1 narrow by the
+        container cuts at the foot of this file ---- */
 .ds-stats-header[data-part='root'] [data-part='card-grid'] {
   display: grid;
-  grid-template-columns: repeat(var(--ds-stats-header-columns, 4), minmax(0, 1fr));
+  grid-template-columns: repeat(
+    var(--_ds-stats-header-track-count, var(--ds-stats-header-columns, 4)),
+    minmax(0, 1fr)
+  );
   gap: var(--ds-spacing-3, 12px);
   inline-size: 100%;
 }
@@ -230,15 +249,27 @@
   border: 1px solid color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent);
 }
 
-/* ---- container cuts: 2 columns mid, 1 narrow + compact measure ---- */
+/* ---- container cuts: 2 columns mid, 1 narrow + compact measure.
+        The cuts CAP the track count instead of replacing the grid, and they
+        cap it on a private channel rather than on a second `card-grid` rule —
+        one grid declaration, two channel writes on the same element, so the
+        narrow cut wins below 30rem by source order and no specificity ladder
+        is needed.
+        `:not([data-columns='1'])` is the cap's floor: a single-stat header
+        stays one full-measure card instead of being WIDENED to a half-measure
+        card beside an empty track, which is what the old unconditional
+        `repeat(2, …)` did between 30rem and 48rem. The engine stamps
+        `data-columns` with the same number it publishes on
+        `--ds-stats-header-columns`, because a container query cannot read a
+        custom property from a selector. ---- */
 @container ds-stats-header (inline-size < 48rem) {
-  .ds-stats-header[data-part='root'] [data-part='card-grid'] {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .ds-stats-header[data-part='root']:not([data-columns='1']) {
+    --_ds-stats-header-track-count: 2;
   }
 }
 @container ds-stats-header (inline-size < 30rem) {
-  .ds-stats-header[data-part='root'] [data-part='card-grid'] {
-    grid-template-columns: minmax(0, 1fr);
+  .ds-stats-header[data-part='root']:not([data-columns='1']) {
+    --_ds-stats-header-track-count: 1;
   }
   .ds-stats-header[data-part='root'] [data-part='stat-card'],
   .ds-stats-header[data-part='root'] [data-part='skeleton-card'] {

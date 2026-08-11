@@ -5,19 +5,27 @@
  * (ds-skeleton-shimmer / ds-skeleton-pulse). Only the sparkline hover ping
  * remains — it is driven purely from CSS (`:hover` on the parent card,
  * staggered on the `--ds-stats-header-ping-duration` channel).
+ *
+ * The ping is RELATIVE to each dot's own opacity, never absolute. A spark dot
+ * encodes its series value in `--_ds-stats-header-spark-dot-opacity`
+ * (`0.15 + normalized * 0.85`); an animation origin outranks the declared
+ * value, so absolute `opacity: 1` frames flattened the whole series to one
+ * tone for as long as the card was hovered — and `both` held it there. The
+ * dip multiplies the dot's own opacity instead, so the amplitude survives the
+ * hover and the rest state is byte-identical at 0% and 100%.
  */
 
 @keyframes pulse-dot-ping {
   0% {
     transform: scale(1);
-    opacity: 1;
+    opacity: var(--_ds-stats-header-spark-dot-opacity, 1);
   }
   50% {
     transform: scale(1.8);
-    opacity: 0.4;
+    opacity: calc(var(--_ds-stats-header-spark-dot-opacity, 1) * 0.4);
   }
   100% {
     transform: scale(1);
-    opacity: 1;
+    opacity: var(--_ds-stats-header-spark-dot-opacity, 1);
   }
 }

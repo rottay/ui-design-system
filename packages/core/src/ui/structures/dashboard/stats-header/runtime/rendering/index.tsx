@@ -207,14 +207,21 @@ function StatCard({ stat }: { stat: StatItem }) {
  * engine only publishes the wide-column count on a quoted channel.
  */
 function StatsHeaderImpl({ stats, loading = false }: StatsHeaderProps) {
+  // The wide-column count is published twice on purpose: as a channel the
+  // grid reads, and as an attribute the container cuts can SELECT on — a
+  // container query cannot read a custom property from a selector, and the
+  // cuts must not widen a single-stat header.
+  const columns = Math.max(Math.min(stats.length, 4), 1);
+
   return (
     <Box
       className="ds-stats-header"
       data-part="root"
+      data-columns={columns}
       data-loading={loading ? 'true' : 'false'}
       aria-busy={loading || undefined}
       style={{
-        '--ds-stats-header-columns': Math.max(Math.min(stats.length, 4), 1),
+        '--ds-stats-header-columns': columns,
       } as CSSProperties}
     >
       <div data-part="card-grid">
