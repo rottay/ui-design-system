@@ -12,6 +12,18 @@
  * narrow compositions, and the forced-colors contract for those owned
  * pieces.
  *
+ * WHAT THE COMPOSITION IS STAKED ON, recorded because it was false in the
+ * shipped tree. The component passes `data-part='switcher'` to the composed
+ * Segmented and the engine writes `data-part={caller ?? 'root'}`, so while
+ * `segmented.css` was anchored on `[data-part='root']` that one prop deleted
+ * all 29 of its selectors and 97 declarations — the track frame, the active fill,
+ * the forced-colors contract — while this file had already retired its own
+ * pill paint in exchange. `segmented.css` is now anchored on
+ * `role='radiogroup'`, stamped unconditionally by an engine that spreads no
+ * props, so S22 holds by construction instead of by the call site's restraint.
+ * The count-badge rules below are unaffected either way: they hang off THIS
+ * file's own wrapper root, which the family stamps itself.
+ *
  * SPECIFICITY (P-48): the root's hairline reaches the tenant floor from the
  * two scope classes + the root's own `data-part` + `data-inline` — two
  * DISTINCT attributes, never an identical one repeated (4th-tanda law; the

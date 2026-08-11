@@ -20,6 +20,18 @@
  * own overflow affordance engage). No capability is lost: every visual
  * channel the wrapper carried exists on the primitive's root, governed.
  *
+ * WHAT THE RETIREMENT IS STAKED ON, recorded because it was false in the
+ * shipped tree. The component passes `data-part='switcher'` to the composed
+ * Segmented and the engine writes `data-part={caller ?? 'root'}`, so while
+ * `segmented.css` was anchored on `[data-part='root']` that one prop deleted
+ * all 29 of its selectors and 97 declarations — the track frame, the selected
+ * state, the forced-colors contract — while this file had already given away
+ * its own frame in exchange. `segmented.css` is now anchored on
+ * `role='radiogroup'`, stamped unconditionally by an engine that spreads no
+ * props, so the composition above holds by construction instead of by the call
+ * site's restraint. Naming the composed control is vocabulary and stays;
+ * anchoring paint on a name the caller owns was the defect.
+ *
  * SPECIFICITY (P-48): no painting border remains in this file, so the
  * (0,3,1) tenant floor is moot here; the two scope classes + the root's own
  * `data-part` stay as the anatomy hook (the engine also stamps

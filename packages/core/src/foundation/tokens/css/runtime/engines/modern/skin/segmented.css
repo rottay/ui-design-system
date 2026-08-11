@@ -12,16 +12,35 @@
  * against; this is a clean greenfield skin.
  *
  * SCOPE ROOT carries `rottay-segmented rottay-segmented--modern` +
- * `data-part='root'`; each option button carries `data-part='option'` +
+ * `role='radiogroup'`; each option button carries `data-part='option'` +
  * `data-selected` + `data-disabled`. Option rules are anchored under the root
  * scope — `option` is shared vocabulary and must never be matched bare.
  *
- * SPECIFICITY (P-48): the root's `border` shorthand carries a real color, so it
- * must clear the tenant's unlayered `* { border-color }` floor at (0,3,1) — it
- * reaches (0,4,0) via the two scope classes + a repeated `data-part`, and stays
- * a SHORTHAND. The option's `border: none` is a color-free reset, exempt. The
- * option rules inherit the root's two classes through the descendant combinator,
- * so their `background`/`color` clear (0,3,0) comfortably.
+ * THE ROOT ANCHOR IS NOT `data-part`, AND THAT IS THE WHOLE POINT. The engine
+ * writes `data-part={caller ?? 'root'}` onto the same node that carries the two
+ * scope classes (P-79: the caller's part wins), so a `[data-part='root']`
+ * predicate is a predicate the CALLER can delete. All 29 selectors here were
+ * anchored on it and every one of them stopped matching for the two shipped
+ * structures that name the composed control — `view-mode-switcher` and
+ * `scope-switcher` both pass `data-part='switcher'`, and both retired their own
+ * frame paint in writing on the strength of the composition that severed. 26
+ * rules, 97 declarations (100 counted per selector), including the entire track
+ * frame and every option state. `role='radiogroup'` is stamped unconditionally
+ * by an engine that spreads no props, so no caller can suppress or replace it;
+ * `data-size` is the other attribute of that kind, which is why the size rules
+ * compound the two. The option / icon / label parts stay selectable as
+ * DESCENDANTS of that root — those are the engine's, not the caller's.
+ *
+ * SPECIFICITY (P-48), UNCHANGED BY THAT SUBSTITUTION and deliberately so: the
+ * root's `border` shorthand carries a real color, so it must clear the tenant's
+ * unlayered `* { border-color }` floor at (0,3,1) — it reaches (0,4,0) via the
+ * two scope classes + a repeated `role`, and stays a SHORTHAND. The option's
+ * `border: none` is a color-free reset, exempt. The option rules inherit the
+ * root's two classes through the descendant combinator, so their
+ * `background`/`color` clear (0,3,0) comfortably. Keying on the bare class pair
+ * instead would have dropped every one of the 29 selectors by one weight unit,
+ * which is a cascade question jsdom cannot adjudicate; an attribute-for-
+ * attribute swap is inert in the cascade and needs no browser pass.
  *
  * PASS-2 LAW (batch-28): hover paint (root frame lift, option wash/lift) is
  * gated to `@media (hover: hover)`; the option `:active` dip is the touch
@@ -40,7 +59,7 @@
  * single-axis-reading verdict) is removed.
  */
 
-.rottay-segmented.rottay-segmented--modern[data-part='root'] {
+.rottay-segmented.rottay-segmented--modern[role='radiogroup'] {
   display: inline-flex;
   align-items: center;
   gap: var(--ds-segmented-gap, 2px);
@@ -93,19 +112,19 @@
     background-position var(--ds-motion-normal) var(--ds-motion-ease-out);
 }
 
-.rottay-segmented.rottay-segmented--modern[data-part='root'][data-part='root'] {
+.rottay-segmented.rottay-segmented--modern[role='radiogroup'][role='radiogroup'] {
   border: var(--ds-edge-standard-width, 1px) var(--ds-edge-standard-style, solid)
     var(--ds-segmented-border, var(--ds-material-control-border, var(--ds-color-border)));
 }
 
-.rottay-segmented.rottay-segmented--modern[data-part='root']::-webkit-scrollbar {
+.rottay-segmented.rottay-segmented--modern[role='radiogroup']::-webkit-scrollbar {
   display: none;
 }
 
 /* Root hover is gated to hover-capable pointers (lane law); the option-level
    `:active` press below is the touch counterpart of the hover treatment. */
 @media (hover: hover) {
-  .rottay-segmented.rottay-segmented--modern[data-part='root'][data-part='root']:hover {
+  .rottay-segmented.rottay-segmented--modern[role='radiogroup'][role='radiogroup']:hover {
     border-color: var(
       --ds-segmented-border-hover,
       var(--ds-material-control-border-hover, color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border)))
@@ -169,11 +188,11 @@
   }
 }
 
-.rottay-segmented.rottay-segmented--modern[data-part='root'][data-block='true'] {
+.rottay-segmented.rottay-segmented--modern[role='radiogroup'][data-block='true'] {
   width: 100%;
 }
 
-.rottay-segmented.rottay-segmented--modern[data-part='root'][data-size='small'] {
+.rottay-segmented.rottay-segmented--modern[role='radiogroup'][data-size='small'] {
   --ds-segmented-current-height: var(--ds-segmented-sm-height, var(--ds-button-sm-height));
   --ds-segmented-current-padding-x: var(--ds-segmented-sm-padding-x, var(--ds-button-sm-padding-x));
   --ds-segmented-current-font-size: var(--ds-segmented-sm-font-size, var(--ds-button-sm-font-size));
@@ -183,7 +202,7 @@
   --ds-segmented-current-radius: var(--ds-segmented-sm-radius, var(--ds-segmented-item-radius, var(--ds-radius-sm)));
 }
 
-.rottay-segmented.rottay-segmented--modern[data-part='root'][data-size='middle'] {
+.rottay-segmented.rottay-segmented--modern[role='radiogroup'][data-size='middle'] {
   --ds-segmented-current-height: var(--ds-segmented-md-height, var(--ds-button-md-height));
   --ds-segmented-current-padding-x: var(--ds-segmented-md-padding-x, var(--ds-button-md-padding-x));
   --ds-segmented-current-font-size: var(--ds-segmented-md-font-size, var(--ds-button-md-font-size));
@@ -193,7 +212,7 @@
   --ds-segmented-current-radius: var(--ds-segmented-md-radius, var(--ds-segmented-item-radius, var(--ds-radius-sm)));
 }
 
-.rottay-segmented.rottay-segmented--modern[data-part='root'][data-size='large'] {
+.rottay-segmented.rottay-segmented--modern[role='radiogroup'][data-size='large'] {
   --ds-segmented-current-height: var(--ds-segmented-lg-height, var(--ds-button-lg-height));
   --ds-segmented-current-padding-x: var(--ds-segmented-lg-padding-x, var(--ds-button-lg-padding-x));
   --ds-segmented-current-font-size: var(--ds-segmented-lg-font-size, var(--ds-button-lg-font-size));
@@ -203,7 +222,7 @@
   --ds-segmented-current-radius: var(--ds-segmented-lg-radius, var(--ds-segmented-item-radius, var(--ds-radius-sm)));
 }
 
-.rottay-segmented--modern[data-part='root'] [data-part='option'] {
+.rottay-segmented--modern[role='radiogroup'] [data-part='option'] {
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
@@ -231,18 +250,18 @@
     transform var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
-.rottay-segmented--modern[data-part='root'] [data-part='option'][data-part='option'] {
+.rottay-segmented--modern[role='radiogroup'] [data-part='option'][data-part='option'] {
   border: 1px solid transparent;
 }
 
-.rottay-segmented--modern[data-part='root'][data-block='true'] [data-part='option'] {
+.rottay-segmented--modern[role='radiogroup'][data-block='true'] [data-part='option'] {
   flex: 1 1 0;
   /* Block mode fills the track: the 16rem truncation cap (a scroll-mode
      bound) must not keep two options from stretching a wide container. */
   max-inline-size: none;
 }
 
-.rottay-segmented--modern[data-part='root'] [data-part='icon'] {
+.rottay-segmented--modern[role='radiogroup'] [data-part='icon'] {
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
@@ -256,20 +275,20 @@
      transform/background-color transition was dead weight. */
 }
 
-.rottay-segmented--modern[data-part='root'] [data-part='label'] {
+.rottay-segmented--modern[role='radiogroup'] [data-part='label'] {
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.rottay-segmented--modern[data-part='root'] [data-part='option'][data-selected='false'] {
+.rottay-segmented--modern[role='radiogroup'] [data-part='option'][data-selected='false'] {
   background: var(--ds-segmented-item-bg);
   color: var(--ds-segmented-item-color, var(--ds-color-text-secondary));
 }
 
 @media (hover: hover) {
-  .rottay-segmented--modern[data-part='root'] [data-part='option'][data-selected='false']:hover {
+  .rottay-segmented--modern[role='radiogroup'] [data-part='option'][data-selected='false']:hover {
     /* `--ds-color-bg-hover` is a dark inset under both first-party themes
        (#18181c) — dark-on-dark with the hover ink. The hover surface mixes
        from the paired card chrome instead (measured: text-primary on
@@ -288,11 +307,11 @@
 }
 
 /* A held press settles the option back onto the track with a tactile dip. */
-.rottay-segmented--modern[data-part='root'] [data-part='option']:not([data-disabled='true']):active {
+.rottay-segmented--modern[role='radiogroup'] [data-part='option']:not([data-disabled='true']):active {
   transform: translateY(0) scale(var(--ds-state-press-scale));
 }
 
-.rottay-segmented--modern[data-part='root'] [data-part='option'][data-selected='true'] {
+.rottay-segmented--modern[role='radiogroup'] [data-part='option'][data-selected='true'] {
   background: var(
     --ds-segmented-item-bg-selected,
     linear-gradient(
@@ -321,18 +340,18 @@
   transform: var(--ds-segmented-item-transform-selected, none);
 }
 
-.rottay-segmented--modern[data-part='root'] [data-part='option']:focus-visible {
+.rottay-segmented--modern[role='radiogroup'] [data-part='option']:focus-visible {
   box-shadow: var(--ds-segmented-focus-ring, var(--ds-focus-ring));
 }
 
-.rottay-segmented--modern[data-part='root'] [data-part='option'][data-disabled='true'] {
+.rottay-segmented--modern[role='radiogroup'] [data-part='option'][data-disabled='true'] {
   opacity: var(--ds-button-disabled-opacity);
   cursor: not-allowed;
 }
 
 /* ---- coarse pointers: physical 44px floor, never a rem floor. ---- */
 @media (hover: none), (pointer: coarse) {
-  .rottay-segmented--modern[data-part='root'] [data-part='option'] {
+  .rottay-segmented--modern[role='radiogroup'] [data-part='option'] {
     min-block-size: var(--ds-segmented-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 }
@@ -342,36 +361,36 @@
         Opacity is stripped in this mode: disabled options remap to the
         GrayText system color so the track itself keeps its ButtonText frame. ---- */
 @media (forced-colors: active) {
-  .rottay-segmented.rottay-segmented--modern[data-part='root'][data-part='root'] {
+  .rottay-segmented.rottay-segmented--modern[role='radiogroup'][role='radiogroup'] {
     border-color: ButtonText;
   }
 
-  .rottay-segmented--modern[data-part='root'] [data-part='option'][data-part='option'] {
+  .rottay-segmented--modern[role='radiogroup'] [data-part='option'][data-part='option'] {
     forced-color-adjust: auto;
     border-color: ButtonText;
   }
 
-  .rottay-segmented--modern[data-part='root'] [data-part='option'][data-selected='true'] {
+  .rottay-segmented--modern[role='radiogroup'] [data-part='option'][data-selected='true'] {
     background: Highlight;
     color: HighlightText;
   }
 
-  .rottay-segmented--modern[data-part='root'] [data-part='option'][data-disabled='true'] {
+  .rottay-segmented--modern[role='radiogroup'] [data-part='option'][data-disabled='true'] {
     color: GrayText;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rottay-segmented.rottay-segmented--modern[data-part='root'],
-  .rottay-segmented--modern[data-part='root'] [data-part='option'],
-  .rottay-segmented--modern[data-part='root'] [data-part='icon'] {
+  .rottay-segmented.rottay-segmented--modern[role='radiogroup'],
+  .rottay-segmented--modern[role='radiogroup'] [data-part='option'],
+  .rottay-segmented--modern[role='radiogroup'] [data-part='icon'] {
     transition: none;
   }
 
   /* The lifts/dips are motion too: without their transitions they would fire
      instantly on every hover/press, which is worse than a calm frame. */
-  .rottay-segmented--modern[data-part='root'] [data-part='option'][data-selected='false']:hover,
-  .rottay-segmented--modern[data-part='root'] [data-part='option']:not([data-disabled='true']):active {
+  .rottay-segmented--modern[role='radiogroup'] [data-part='option'][data-selected='false']:hover,
+  .rottay-segmented--modern[role='radiogroup'] [data-part='option']:not([data-disabled='true']):active {
     transform: none;
   }
 }
