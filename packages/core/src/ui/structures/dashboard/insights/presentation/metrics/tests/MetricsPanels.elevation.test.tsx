@@ -17,22 +17,27 @@
  * THE POSTURE. Every leaf is now its own inline-size container and the narrow
  * cut spends the measure differently rather than compressing.
  *
- * THE TWO PRIMITIVE GAPS THIS LANE MEASURED, both pinned below so the next
+ * TWO ENVIRONMENT/PRIMITIVE FACTS THIS LANE MEASURED, pinned below so the next
  * lane inherits the evidence instead of re-deriving it:
  *
- *  1. `Text` DROPS an inline `fontSize` whose value is a `var()` string — all
- *     three engines. `metrics-cards` already ships
- *     `fontSize: 'var(--_ds-metric-value-size, 28px)'`, so its hero figure has
- *     never rendered at 28px; it renders at inherited body size. This is why
- *     the rows/minimal figures stay plain numbers: channelizing them would
- *     not have made them retunable, it would have deleted them.
+ *  1. THE TEST DOM, NOT THE COMPONENT. happy-dom silently drops an inline
+ *     style value containing a comma-SPACE inside a CSS function —
+ *     `var(--x, 28px)`, `clamp(a, b, c)`, `min(a, b)`, `calc(var(--x) * 2)` —
+ *     on every property it validates, while keeping the byte-identical
+ *     `var(--x,28px)`. A bare `document.createElement('span')` with no React
+ *     and no design system reproduces it. So an inline figure size CANNOT be
+ *     read back from a rendered node here; it is asserted from the engine
+ *     source and from the skin instead. An earlier version of this file
+ *     claimed `Text` dropped the value and that `metrics-cards` had never
+ *     painted its 28px hero — both were artefacts of this shim and are
+ *     withdrawn.
  *  2. `Text` drops a caller `data-part` under classic and rustic (modern
  *     forwards it), so every `Text`-borne part rule in these skins — the
- *     caption truncation included — is live under modern only.
+ *     caption truncation included — is live under modern only. That one is
+ *     about ATTRIBUTES, which the shim renders faithfully, and it stands.
  *
- * Both are `Text` contract defects, not family defects, and a family lane does
- * not ship a primitive change. When either is repaired the matching assertion
- * here fails ON PURPOSE, and its message says what to do next.
+ * (2) is a `Text` contract question, not a family defect, and a family lane
+ * does not ship a primitive change.
  *
  * CSS claims are parsed (never grepped) and carry a positive control. DOM
  * claims are rendered across all three engines, because `getComputedStyle` is
@@ -50,7 +55,6 @@ import { MetricsCards } from '../cards';
 import { MetricsMinimal } from '../minimal';
 import { MetricsRows } from '../rows';
 import type { KeyMetric } from '../../../foundation/contracts';
-import { Text } from '../../../../../../primitives';
 import { renderSurface } from '../../../../../../surfaces/foundation/common/test-utils';
 
 const SKIN_DIR = '../../../../../../../foundation/tokens/css/presentation/components/skin/';
@@ -139,18 +143,33 @@ describe('metrics panel elevation', () => {
     expect(viewportQueries).toEqual([]);
   });
 
-  it.each(LEAVES)('$name writes nothing from a cut that cannot be read', ({ file }) => {
+  it.each(LEAVES)('$name steps the figure down from inside its own cut', ({ file }) => {
     const root = parseSkin(file);
 
-    // The figure channel is unreachable through `Text` (see the file header),
-    // so no cut may write it. A declaration that reads as done and paints
-    // nothing is worse than an honest gap, and it would flip live unreviewed
-    // the day the primitive is repaired.
-    const writes: string[] = [];
+    const stepped: string[] = [];
     root.walkAtRules('container', (at) => {
-      at.walkDecls('--_ds-metric-value-size', (decl) => writes.push(decl.value));
+      at.walkDecls('--_ds-metric-value-size', (decl) => stepped.push(decl.value));
     });
-    expect(writes).toEqual([]);
+    expect(stepped).toHaveLength(1);
+    // A step DOWN, not merely a step: the narrow posture must not enlarge the
+    // figure it is trying to fit.
+    expect(Number.parseFloat(stepped[0])).toBeLessThan(28);
+  });
+
+  it.each(LEAVES)('$name reads that channel inline, so the cut can reach it', async ({ name, Component }) => {
+    // Read from SOURCE, not from a rendered node: the shim drops this exact
+    // value shape (see the file header), so the DOM cannot answer here.
+    const source = readFileSync(
+      new URL(`../${name.replace('metrics-', '')}/index.tsx`, import.meta.url),
+      'utf8',
+    );
+    expect(source).toContain("fontSize: 'var(--_ds-metric-value-size, 28px)'");
+
+    // The element the channel has to land on still has to exist.
+    const { container, unmount } = renderSurface(<Component metrics={METRICS} />, { engine: 'modern' });
+    await screen.findByText('Open roles');
+    expect(container.querySelectorAll('[data-part="metric-value"]')).toHaveLength(METRICS.length);
+    unmount();
   });
 
   it.each(TRUNCATING_LEAVES)('%s truncates the caption so the figure survives the clip', (file) => {
@@ -179,44 +198,27 @@ describe('metrics panel elevation', () => {
     }
   });
 
-  it.each(ENGINES)('keeps the figure a plain number, because Text cannot carry a var() size under %s', async (engine) => {
-    // The probe IS the claim: an arbitrary `var()` font-size must survive Text
-    // before any metrics figure may be channelized.
-    const { container, unmount } = renderSurface(
-      <Text className="wo-cra-23-probe" style={{ fontSize: 'var(--_ds-probe-size, 28px)', fontWeight: 800 }}>
-        probe
-      </Text>,
-      { engine },
-    );
-    await screen.findByText('probe');
-    const probe = container.querySelector<HTMLElement>('.wo-cra-23-probe');
-    const style = probe?.getAttribute('style') ?? '';
+  it('pins WHY no test here may read an inline figure size back from the DOM', () => {
+    // This is a property of the TEST DOM, not of React, not of `Text` and not
+    // of any browser — a bare element with no framework reproduces it. Pinned
+    // because a lane that does not know it will read a missing `font-size` as
+    // a product defect, which is exactly what happened once.
+    const el = document.createElement('span');
 
-    // Control: a sibling declaration on the SAME element does survive, so a
-    // missing font-size is Text dropping it and not the probe failing to run.
-    expect(style).toContain('font-weight');
-    expect(
-      style.includes('font-size'),
-      'Text now carries a var() font-size: the metrics figures can be channelized and the ' +
-        'narrow cuts can step them. Re-open the --_ds-metric-value-size wiring in all three leaves.',
-    ).toBe(false);
+    el.style.setProperty('font-size', '28px');
+    expect(el.style.getPropertyValue('font-size'), 'a plain length is kept').toBe('28px');
 
-    unmount();
-  });
+    el.style.setProperty('font-size', 'var(--x,28px)');
+    expect(el.style.getPropertyValue('font-size'), 'no comma-space: kept').not.toBe('');
 
-  it('reports the metrics-cards figure channel as authored but unreachable', async () => {
-    // Not a defect this lane repairs — repairing it changes the KPI hierarchy
-    // on three shipped dashboards and belongs to the sighted pass. Pinned so
-    // the finding is inherited rather than rediscovered.
-    const { container } = renderSurface(<MetricsCards metrics={METRICS} />, { engine: 'modern' });
-    await screen.findByText('Open roles');
-
-    const figure = container.querySelector<HTMLElement>('.metric-value-v3');
-    expect(figure).not.toBeNull();
-    expect(
-      (figure?.getAttribute('style') ?? '').includes('font-size'),
-      'MetricsCards now renders a font-size: the authored --_ds-metric-value-size channel is live. ' +
-        'Confirm the hero figure landed at 28px and retire this pin.',
-    ).toBe(false);
+    for (const dropped of ['var(--x, 28px)', 'clamp(1rem, 2vw, 2rem)', 'min(28px, 18cqi)']) {
+      el.style.setProperty('font-size', '28px');
+      el.style.setProperty('font-size', dropped);
+      expect(
+        el.style.getPropertyValue('font-size'),
+        `the test DOM now keeps ${dropped}: inline figure sizes became readable here, so the ` +
+          'metrics tests may assert them against a rendered node instead of against source.',
+      ).toBe('');
+    }
   });
 });

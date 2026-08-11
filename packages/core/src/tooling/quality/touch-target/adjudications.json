@@ -154,6 +154,11 @@
       "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction"
     },
     {
+      "key": "input.css :: .rottay-input.rottay-input--modern :: .rottay-input.rottay-input--modern[type='number']",
+      "kind": "exempt",
+      "reason": "same box as the floored class rule, not a second target: this selector is `.rottay-input.rottay-input--modern` plus a UA input-mode qualifier, and its only declarations are the spinner reset (`appearance: textfield`). The coarse floor at `@media (pointer: coarse) .rottay-input.rottay-input--modern` matches this element too. `[type]` is not dropped structurally the way a state pseudo is, because an attribute in the part half is load-bearing wherever it IS the identity (`[data-interactive='true']` on avatar)"
+    },
+    {
       "key": "input-number.css :: [data-part='addon-before'] :: [data-part='addon-before']",
       "kind": "debt",
       "owner": "design-system/D1-floors",
@@ -810,7 +815,7 @@
       "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction (same box as the CSS row tour.css :: .rottay-tour--modern :: [data-part='surface'])"
     },
     {
-      "key": "src/ui/structures/headers/detail/index.tsx :: Box :: [data-part='tab']",
+      "key": "src/ui/structures/headers/detail/runtime/rendering/index.tsx :: Box :: [data-part='tab']",
       "kind": "debt",
       "owner": "design-system/D1-floors",
       "reason": "DEBT: interactive element promoted to a control by its ARIA role — one the shared base floor deliberately leaves component-owned rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"

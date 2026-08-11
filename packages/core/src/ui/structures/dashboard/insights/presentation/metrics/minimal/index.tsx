@@ -93,12 +93,13 @@ function MetricRow({
             <Text
               data-part="metric-value"
               style={{
-                // Stays a NUMBER. `Text` drops an inline `fontSize` whose
-                // value is a `var()` string — measured in all three engines —
-                // so channelizing this would not make the figure retunable, it
-                // would delete it and leave the number at inherited body size.
-                // See the metrics elevation test for the probe.
-                fontSize: 28,
+                // The figure's measure rides the family channel the skin's
+                // narrow cut writes; 28px unset is the exact previous render.
+                // An inline literal here would outrank every container query.
+                // (No unit test can read this value back: happy-dom drops an
+                // inline length containing a comma-space inside a function.
+                // The channel is asserted from source and from the skin.)
+                fontSize: 'var(--_ds-metric-value-size, 28px)',
                 fontWeight: 800,
                 // Numeric role voice (C-08/C1): the tenant's authored figure
                 // face, mono chain as the exact pre-C1 fallback. `end` keeps

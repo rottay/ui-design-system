@@ -1635,11 +1635,6 @@
     var(--ds-surface-card)
   );
   --ds-surface-chip-text: var(--ds-color-primary);
-  --ds-card-border-hover: color-mix(
-    in srgb,
-    var(--ds-color-primary) 24%,
-    var(--ds-color-border)
-  );
   --ds-card-side-accent-soft: color-mix(
     in srgb,
     var(--ds-color-primary) 7%,

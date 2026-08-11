@@ -501,8 +501,7 @@
   --ds-color-text-muted: #737373;
   --ds-color-text-disabled: #b3b3b3;
 
-  /* Borders - Subtle on light */
-  --ds-color-border: rgba(0, 0, 0, 0.08);
+  /* Borders - subtle on light; --ds-color-border is the BrandTheme's. */
   --ds-color-border-primary: rgba(0, 0, 0, 0.08);
   --ds-color-border-secondary: rgba(0, 0, 0, 0.12);
   --ds-color-border-focus: #171717;

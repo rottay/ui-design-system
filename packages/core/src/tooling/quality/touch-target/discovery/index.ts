@@ -131,8 +131,11 @@ export function normalizeSelector(selector: string): string {
   for (const fn of [':is', ':where', ':not', ':has']) {
     out = stripBalancedPseudo(out, fn);
   }
+  // `:autofill` (and its -webkit- spelling) is a STATE of the same box, like
+  // every other name here: the UA sets it on a field it filled. Left in, one
+  // input reports as three separate unfloored targets.
   out = out.replace(
-    /:(hover|focus-visible|focus-within|focus|active|disabled|checked|enabled|first-child|last-child)\b/g,
+    /:(-webkit-)?(hover|focus-visible|focus-within|focus|active|disabled|checked|enabled|first-child|last-child|autofill)\b/g,
     ''
   );
   out = out.replace(/\[data-state[^\]]*\]/g, '');
@@ -235,10 +238,16 @@ export function structuralKey(selector: string): string {
   const clean = selector.replace(/::after$/, '');
   const compounds = splitCompounds(clean);
   if (compounds.length === 0) return clean;
-  const root = compounds[0].replace(/^[a-zA-Z][a-zA-Z0-9-]*(?=[.[#])/, '');
+  const stripElementType = (compound: string) =>
+    compound.replace(/^[a-zA-Z][a-zA-Z0-9-]*(?=[.[#])/, '');
+  const root = stripElementType(compounds[0]);
   const scope = root.match(/^[.a-z0-9_-]+/i)?.[0] ?? root;
   const last = compounds[compounds.length - 1];
-  const part = last.match(/\[data-part[^\]]*\]/)?.[0] ?? last;
+  // The same strip the scope half gets. Without it a single-compound selector
+  // splits the box in two: `input.rottay-input--modern` keys its scope off the
+  // stripped form and its part off the raw one, so the class-authored floor
+  // never reaches the element-authored rule it is written for.
+  const part = last.match(/\[data-part[^\]]*\]/)?.[0] ?? stripElementType(last);
   return `${scope} :: ${part}`;
 }
 
