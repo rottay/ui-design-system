@@ -5,7 +5,7 @@
       "id": "x-button-xs",
       "html": "<button data-variant=\"primary\" data-size=\"xs\" data-shape=\"default\" data-part=\"trigger\" type=\"button\" class=\"rottay-button rottay-button--modern rottay-button--primary rottay-button--xs rottay-button--default\" data-probe=\"x-button-xs\"><span data-part=\"content\"><span data-part=\"label\">b</span></span></button>",
       "requiresSelectors": [
-        ".rottay-button.rottay-button--modern[data-part='trigger']",
+        ".rottay-button.rottay-button--modern[data-variant]",
         ".rottay-button.rottay-button--modern[data-size='xs']:not([data-size-responsive])"
       ],
       "targets": [
@@ -27,7 +27,7 @@
       "id": "x-button-sm",
       "html": "<button data-variant=\"primary\" data-size=\"sm\" data-shape=\"default\" data-part=\"trigger\" type=\"button\" class=\"rottay-button rottay-button--modern rottay-button--primary rottay-button--sm rottay-button--default\" data-probe=\"x-button-sm\"><span data-part=\"content\"><span data-part=\"label\">b</span></span></button>",
       "requiresSelectors": [
-        ".rottay-button.rottay-button--modern[data-part='trigger']",
+        ".rottay-button.rottay-button--modern[data-variant]",
         ".rottay-button.rottay-button--modern[data-size='sm']:not([data-size-responsive])"
       ],
       "targets": [
@@ -49,7 +49,7 @@
       "id": "x-button-md",
       "html": "<button data-variant=\"primary\" data-size=\"md\" data-shape=\"default\" data-part=\"trigger\" type=\"button\" class=\"rottay-button rottay-button--modern rottay-button--primary rottay-button--md rottay-button--default\" data-probe=\"x-button-md\"><span data-part=\"content\"><span data-part=\"label\">b</span></span></button>",
       "requiresSelectors": [
-        ".rottay-button.rottay-button--modern[data-part='trigger']",
+        ".rottay-button.rottay-button--modern[data-variant]",
         ".rottay-button.rottay-button--modern[data-size='md']:not([data-size-responsive])"
       ],
       "targets": [
@@ -71,7 +71,7 @@
       "id": "x-button-lg",
       "html": "<button data-variant=\"primary\" data-size=\"lg\" data-shape=\"default\" data-part=\"trigger\" type=\"button\" class=\"rottay-button rottay-button--modern rottay-button--primary rottay-button--lg rottay-button--default\" data-probe=\"x-button-lg\"><span data-part=\"content\"><span data-part=\"label\">b</span></span></button>",
       "requiresSelectors": [
-        ".rottay-button.rottay-button--modern[data-part='trigger']",
+        ".rottay-button.rottay-button--modern[data-variant]",
         ".rottay-button.rottay-button--modern[data-size='lg']:not([data-size-responsive])"
       ],
       "targets": [
@@ -93,7 +93,7 @@
       "id": "x-button-xl",
       "html": "<button data-variant=\"primary\" data-size=\"xl\" data-shape=\"default\" data-part=\"trigger\" type=\"button\" class=\"rottay-button rottay-button--modern rottay-button--primary rottay-button--xl rottay-button--default\" data-probe=\"x-button-xl\"><span data-part=\"content\"><span data-part=\"label\">b</span></span></button>",
       "requiresSelectors": [
-        ".rottay-button.rottay-button--modern[data-part='trigger']",
+        ".rottay-button.rottay-button--modern[data-variant]",
         ".rottay-button.rottay-button--modern[data-size='xl']:not([data-size-responsive])"
       ],
       "targets": [

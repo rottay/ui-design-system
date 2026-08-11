@@ -5,13 +5,50 @@
  * owns paint and geometry exclusively through public --ds-button-* channels.
  * Product code can compose the primitive, but it never needs to restyle its
  * internals for hover, press, focus, busy, touch, RTL or high contrast.
+ *
+ * THE ROOT ANCHOR IS `[data-variant]`, NOT `data-part`, AND THE DIFFERENCE IS
+ * REACHABILITY. P-79 makes the caller's part win on modern (asserted in
+ * `Button.passthrough-contract.test.tsx`; classic and rustic keep `trigger`, so
+ * only this file was exposed). The 7 root rules here were keyed on
+ * `[data-part='trigger']`, and 123 production call sites pass a part of their
+ * own — every one of them lost all 47 declarations: layout, geometry, the
+ * typography channels, `appearance`, `isolation`, `overflow`, the whole
+ * transition list, `forced-color-adjust`, and the print and forced-colors
+ * contracts.
+ *
+ * `data-variant` is written into `anatomyProps`, which the engine spreads AFTER
+ * the caller's props, so the caller cannot reach it; `effectiveVariant` is total
+ * (`variant || 'primary'` and three exhaustive branches), so it is never absent.
+ * `data-size` and `data-shape` share both properties. The class pair is written
+ * after the spread too — a caller's `className` is appended, never substituted.
+ * Anatomy parts stay selectable as DESCENDANTS of the root; those are the
+ * engine's, not the caller's.
+ *
+ * TWO SECOND-ORDER LOSSES the property count does not show, because the rules
+ * that suffer them stay alive and matching:
+ *   - `--ds-button-surface-highlight: none` at the reduced-transparency block
+ *     below was the ONLY suppressor of the `::before` overlay, whose base value
+ *     is a `:root` literal in `presentation/components/button.css`. Severed, the
+ *     suppressor never matched and `prefers-reduced-transparency: reduce` was
+ *     silently not honoured.
+ *   - the four `--ds-button-resolved-*` defaults are re-declared by the five
+ *     `[data-size='…']:not([data-size-responsive])` rules, so severance was
+ *     invisible EXCEPT under a responsive size, where those rules also drop out
+ *     and the reads in `[data-part='icon']`, `[data-full-width]` and
+ *     `[data-shape='circle']` were left with no declaration at all.
+ *
+ * SPECIFICITY IS UNCHANGED BY THAT SUBSTITUTION and deliberately so: (0,3,0) at
+ * six selectors and (0,3,1) at the `::before`, exactly as before. The pure-class
+ * form specified earlier drops all 7 by one weight unit, which is a cascade
+ * question jsdom cannot adjudicate and is why that repair was deferred; an
+ * attribute-for-attribute swap is inert in the cascade and needs no browser pass.
  */
 
 /* -------------------------------------------------------------------------
    Anatomy and geometry
    ------------------------------------------------------------------------- */
 
-.rottay-button.rottay-button--modern[data-part='trigger'] {
+.rottay-button.rottay-button--modern[data-variant] {
   --ds-button-resolved-icon-size: var(--ds-button-md-icon-size);
   /* The CONTROL step first, the surface ramp as fallback. R1 Cohort 1 had this
      inverted for a reason that has since been removed: the family channel was
@@ -974,7 +1011,7 @@
    exists inside the `@media (hover: hover)` block above, and the pressed
    posture is the tactile feedback on these devices. */
 @media (hover: none), (pointer: coarse) {
-  .rottay-button.rottay-button--modern[data-part='trigger'] {
+  .rottay-button.rottay-button--modern[data-variant] {
     min-block-size: var(--ds-button-touch-target-min);
   }
 
@@ -989,7 +1026,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rottay-button.rottay-button--modern[data-part='trigger'],
+  .rottay-button.rottay-button--modern[data-variant],
   .rottay-button.rottay-button--modern [data-part='icon'] {
     transition: none;
   }
@@ -1007,7 +1044,7 @@
    state channels, which are solid already. State opacity rules on ::before
    keep running harmlessly against an empty layer. */
 @media (prefers-reduced-transparency: reduce) {
-  .rottay-button.rottay-button--modern[data-part='trigger'] {
+  .rottay-button.rottay-button--modern[data-variant] {
     --ds-button-surface-highlight: none;
   }
 
@@ -1023,7 +1060,7 @@
 }
 
 @media (forced-colors: active) {
-  .rottay-button.rottay-button--modern[data-part='trigger'] {
+  .rottay-button.rottay-button--modern[data-variant] {
     forced-color-adjust: auto;
     background: ButtonFace;
     color: ButtonText;
@@ -1031,7 +1068,7 @@
     box-shadow: none;
   }
 
-  .rottay-button.rottay-button--modern[data-part='trigger']::before {
+  .rottay-button.rottay-button--modern[data-variant]::before {
     display: none;
   }
 
@@ -1074,7 +1111,7 @@
 }
 
 @media print {
-  .rottay-button.rottay-button--modern[data-part='trigger'] {
+  .rottay-button.rottay-button--modern[data-variant] {
     background: transparent;
     color: CanvasText;
     border-color: CanvasText;

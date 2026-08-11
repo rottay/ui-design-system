@@ -73,7 +73,12 @@ describe('ModernButton Pass 2 craft contract', () => {
     expect(modernSkin).toContain("[data-icon-only='true']");
     expect(modernSkin).toContain('--ds-button-touch-target-min');
     expect(forcedColors).toContain('border-color: ButtonText');
-    expect(forcedColors).toContain("[data-part='trigger']::before");
+    // The root anchor is `[data-variant]`, not `data-part`: P-79 lets a caller
+    // replace the part, and 123 call sites do, so a part-keyed forced-colors
+    // exit reached none of them. The claim here is unchanged — the overlay is
+    // still suppressed in forced colors — only the predicate that survives a
+    // composing caller has moved.
+    expect(forcedColors).toContain('[data-variant]::before');
   });
 
   it('lets a full-width localized label wrap without reducing its size posture', () => {
