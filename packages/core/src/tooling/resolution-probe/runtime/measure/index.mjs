@@ -47,7 +47,12 @@
  * @module Tooling/ResolutionProbe/Runtime/Measure
  */
 
-import { rootAttributes, rootAttributesToHtml, rootClassNames } from '../../foundation/scope/index.mjs';
+import {
+  rootAttributes,
+  rootAttributesToHtml,
+  rootClassNames,
+  VERTICALS,
+} from '../../foundation/scope/index.mjs';
 import { validateFixture } from '../../foundation/roster/index.mjs';
 
 /** Deterministic viewport. Recorded in the artifact; changing it changes numbers. */
@@ -76,8 +81,27 @@ const CSS_URL = `${PROBE_ORIGIN}/bundle.css`;
  * parsed and applied. And before any reading is taken, these tokens — which
  * only the bundle declares — must resolve non-empty. If they do not, the run
  * throws. It never publishes.
+ *
+ * THE CANARY IS PER LAYER, because the bundle has two and they can fail
+ * independently. `--ds-radius-md` is declared by `themes/default.css`, so it
+ * certifies the BASE layer; `--ds-radius-scale` is declared only by a vertical
+ * artifact, so it certifies the TENANT layer. The tenant-less scope has no
+ * artifact and legitimately leaves the second empty — reading that as "the
+ * bundle did not apply" is what blocked the scope from existing.
+ *
+ * The tempting fix is to make both canaries base-declared names so every scope
+ * passes. That silently DROPS artifact certification from all six tenanted
+ * cells: an artifact failing to load would then look like a tenant that
+ * declares nothing, which is precisely the inert-looking-zeros failure this
+ * canary exists to prevent. Certify each layer a scope actually has.
  */
-const CANARY_PROPERTIES = ['--ds-radius-md', '--ds-radius-scale'];
+const BASE_LAYER_CANARY = Object.freeze(['--ds-radius-md']);
+const TENANT_LAYER_CANARY = Object.freeze(['--ds-radius-scale']);
+
+function canaryProperties(scope) {
+  const tenantLess = VERTICALS[scope.vertical]?.tenantSlug === null;
+  return tenantLess ? [...BASE_LAYER_CANARY] : [...BASE_LAYER_CANARY, ...TENANT_LAYER_CANARY];
+}
 
 function buildDocument(scope, fixtures) {
   const attributes = rootAttributes(scope);
@@ -189,7 +213,7 @@ async function assertStylesheetApplied(page, scope) {
         properties.map((property) => [property, computed.getPropertyValue(property).trim()]),
       ),
     };
-  }, CANARY_PROPERTIES);
+  }, canaryProperties(scope));
 
   const empty = Object.entries(state.values)
     .filter(([, value]) => value === '')

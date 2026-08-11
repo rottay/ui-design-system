@@ -24,7 +24,7 @@ import { diffArtifacts } from '../../composition/diff/index.mjs';
 import { runProbe, serialiseArtifact } from '../../composition/run/index.mjs';
 import { BUNDLE_MODES } from '../../runtime/bundle/index.mjs';
 import { FIXTURE_IDS } from '../../foundation/roster/index.mjs';
-import { THEMES, VERTICAL_KEYS } from '../../foundation/scope/index.mjs';
+import { SCOPE_KEYS, THEMES, VERTICAL_KEYS } from '../../foundation/scope/index.mjs';
 
 const USAGE = `resolution-probe — what the browser actually paints, per tenant.
 
@@ -36,6 +36,9 @@ Options
   --out <path>            write the artifact here (default: stdout)
   --bundle <mode>         ${BUNDLE_MODES.join(' | ')}   (default: fresh)
   --vertical <k>          repeatable; default all: ${VERTICAL_KEYS.join(', ')}
+                          plus 'none' — the tenant-less document (base + engine, no
+                          artifact). Opt-in: a base-layer defect is invisible in every
+                          tenanted cell, because an artifact outranks the base layer.
   --theme <t>             repeatable; default all: ${THEMES.join(', ')}
   --fixture <id>          repeatable; default all: ${FIXTURE_IDS.join(', ')}
   --set <--var=value>     dial only; repeatable
@@ -125,7 +128,8 @@ function parseOptions(argv) {
       }
       case '--vertical': {
         const vertical = next();
-        if (!VERTICAL_KEYS.includes(vertical)) throw new Error(`unknown --vertical ${vertical}`);
+        if (!SCOPE_KEYS.includes(vertical))
+          throw new Error(`unknown --vertical ${vertical} (known: ${SCOPE_KEYS.join(', ')})`);
         options.verticals.push(vertical);
         break;
       }
@@ -186,8 +190,14 @@ function summarise(artifact, options) {
   );
   for (const [vertical, provenance] of Object.entries(artifact.provenance.bundles)) {
     const drift = provenance.shippedDistDrift;
+    // A null drift has two causes and they are opposite claims: the shipped
+    // bundle was read as-is (freshness unproven), or there is no shipped
+    // bundle to compare a freshly composed one against (tenant-less). Printing
+    // the first for the second states the exact opposite of what happened.
     const driftNote = !drift
-      ? 'freshness NOT proven (shipped bundle read as-is)'
+      ? provenance.freshnessProven
+        ? 'composed from source; nothing shipped to compare against'
+        : 'freshness NOT proven (shipped bundle read as-is)'
       : drift.identical
         ? 'matches shipped dist'
         : drift.prefixIdentical

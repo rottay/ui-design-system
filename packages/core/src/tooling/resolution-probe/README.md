@@ -31,9 +31,27 @@ node src/tooling/resolution-probe/public/cli/index.mjs dial \
 # what changed between two runs
 node src/tooling/resolution-probe/public/cli/index.mjs diff before.json after.json
 
+# the tenant-less document — base + engine, no artifact, no tenant attributes
+node src/tooling/resolution-probe/public/cli/index.mjs run --vertical none --out base.json
+
 # the drills — run these before trusting a number this thing produced
 node --test src/tooling/resolution-probe/public/drills/tests/index.test.mjs
 ```
+
+**Any lane touching the base layer must ask for `--vertical none`.** A vertical
+artifact is unlayered tenant paint that outranks the base layer, so a base-layer
+defect is invisible in all six tenanted cells *by construction* — six green
+cells are not evidence about the base layer, they are evidence that an artifact
+covered it. Measured: `--ds-text-eyebrow-letter-spacing` and
+`--ds-text-eyebrow-transform` were declared by all three artifacts and by
+nothing in base, while `themes/default.css` read them **bare**, so every tenant
+resolved and a tenant-less document rendered its table header at the initial
+value. Both lanes that found it were reading source; no run could see it.
+
+It is deliberately **not** in the default run: adding a fourth scope would
+change the shape of every artifact and break comparability with every run taken
+before it existed. `--bundle dist|styles` refuse for it rather than quietly
+recomposing, because nothing ships a tenant-less bundle.
 
 Layers, in dependency order — every edge runs downward, and
 `node scripts/core-structure-audit.mjs --check` is green with these files in

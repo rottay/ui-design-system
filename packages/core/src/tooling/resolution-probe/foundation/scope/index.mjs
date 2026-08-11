@@ -58,9 +58,44 @@ export const VERTICALS = Object.freeze({
     artifactDir: 'evnto',
     fontPacks: [],
   }),
+  none: Object.freeze(TENANT_LESS_SPEC()),
 });
 
-export const VERTICAL_KEYS = Object.freeze(Object.keys(VERTICALS));
+/**
+ * The tenant-less document: base + engine, no artifact, no tenant attributes.
+ *
+ * Every other scope here carries a vertical artifact, and an artifact is
+ * unlayered tenant paint that outranks the base layer — so a base-layer defect
+ * is INVISIBLE in all six tenanted cells by construction. Measured: two names
+ * the three artifacts declare identically are read BARE at
+ * `themes/default.css:1690-1691`, which resolves for every tenant and to the
+ * initial value on a document that has no tenant. Six green cells said nothing
+ * about it.
+ *
+ * Deliberately NOT in `VERTICAL_KEYS`: adding it to the default run would
+ * change the shape of every artifact and break comparability with every run
+ * taken before it existed. A base-layer lane asks for it with
+ * `--vertical none`.
+ */
+function TENANT_LESS_SPEC() {
+  return {
+    vertical: 'none',
+    /** No `data-tenant`, and therefore no artifact and no shipped bundle. */
+    tenantSlug: null,
+    distBundle: null,
+    stylesBundle: null,
+    artifactDir: null,
+    fontPacks: [],
+  };
+}
+
+/** The three tenanted verticals — the default run, unchanged. */
+export const VERTICAL_KEYS = Object.freeze(
+  Object.keys(VERTICALS).filter((key) => VERTICALS[key].tenantSlug !== null),
+);
+
+/** Every scope a run can ask for, tenant-less included. */
+export const SCOPE_KEYS = Object.freeze(Object.keys(VERTICALS));
 
 /** The theme values a bundle can actually paint. `auto` is never one of these. */
 export const THEMES = Object.freeze(['light', 'dark']);
@@ -89,6 +124,11 @@ export function rootAttributes({ vertical, theme, engine = 'modern', locale = 'e
     lang: locale,
     dir: 'ltr',
   };
+
+  // The tenant-less document carries NEITHER arm. That is the whole point of
+  // the scope: no `data-tenant` means no artifact rule matches, so what the
+  // base layer alone resolves to becomes observable.
+  if (spec.tenantSlug === null) return attributes;
 
   // The legacy arm is `html[data-tenant=...]`; the provider arm is
   // `[data-ds-root][data-vertical=...]`. `both` is what SSR actually emits.

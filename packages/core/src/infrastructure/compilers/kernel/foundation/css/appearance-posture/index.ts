@@ -8,6 +8,10 @@
 import type { TenantAppearanceGeneral } from '@/foundation/contracts/composition/tenants/themes';
 import { TENANT_THEME_RADIUS_SCALE_BOUNDS } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
 import { MOTION_DIAL_BOUNDS } from '@/foundation/contracts/runtime/motion';
+import {
+  dialReachableRadius,
+  resolveRadiusScale,
+} from '@/foundation/kernel/geometry/radius-dial';
 import { clamp } from '@/foundation/kernel/math';
 import { withArabicSafeFallback } from '@/foundation/kernel/typography';
 import {
@@ -77,20 +81,28 @@ export function appearancePostureToVariables(
     }
   }
 
-  if (posture.buttonStyle) {
-    vars['--ds-radius-button'] = BUTTON_STYLE_RADIUS[posture.buttonStyle];
-  }
-  if (
+  const clampedRadiusScale =
     typeof posture.radiusScale === 'number' &&
     Number.isFinite(posture.radiusScale)
-  ) {
-    vars['--ds-radius-scale'] = String(
-      clamp(
-        posture.radiusScale,
-        TENANT_THEME_RADIUS_SCALE_BOUNDS.min,
-        TENANT_THEME_RADIUS_SCALE_BOUNDS.max,
-      ),
+      ? clamp(
+          posture.radiusScale,
+          TENANT_THEME_RADIUS_SCALE_BOUNDS.min,
+          TENANT_THEME_RADIUS_SCALE_BOUNDS.max,
+        )
+      : undefined;
+
+  if (posture.buttonStyle) {
+    // Two of the three presets are literals, and a literal at tenant scope is
+    // unreachable by the very dial declared beside it. `soft` already reads the
+    // ramp, so the helper leaves it alone. The divisor is the scale this same
+    // posture emits below, so a silhouette keeps its exact resting geometry.
+    vars['--ds-radius-button'] = dialReachableRadius(
+      BUTTON_STYLE_RADIUS[posture.buttonStyle],
+      resolveRadiusScale(clampedRadiusScale),
     );
+  }
+  if (clampedRadiusScale !== undefined) {
+    vars['--ds-radius-scale'] = String(clampedRadiusScale);
   }
   if (isDensityPreference(posture.density)) {
     vars[DENSITY_MODE_FACTOR_VARIABLE] = String(

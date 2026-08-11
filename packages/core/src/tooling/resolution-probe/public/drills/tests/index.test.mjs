@@ -199,3 +199,76 @@ test('diff: a different bundle MODE is not comparable', () => {
   assert.equal(result.comparable, false);
   assert.equal(result.provenanceDifferences[0].field, 'provenance.bundleMode');
 });
+
+/**
+ * The tenant-less scope exists so a base-layer defect is observable at all: an
+ * artifact is unlayered tenant paint that outranks the base layer, so all six
+ * tenanted cells are green by construction whatever the base layer says. Its
+ * own failure modes are silent — an artifact quietly included, or a canary
+ * that certifies a layer the scope does not have — so each gets a drill.
+ */
+test('tenant-less scope: composed from base + engine, with no artifact', async () => {
+  const { css, provenance } = await resolveBundle({ vertical: 'none', mode: 'fresh' });
+
+  assert.equal(
+    provenance.inputs.some((input) => input.includes('facade/artifacts/')),
+    false,
+    'the tenant-less bundle listed an artifact as an input, so it is not tenant-less',
+  );
+  assert.equal(provenance.freshnessProven, true);
+  assert.equal(
+    provenance.shippedDistDrift,
+    null,
+    'nothing ships a tenant-less bundle, so there is nothing to have drifted from',
+  );
+
+  // A name only an artifact declares must be absent; a base name must be present.
+  // Both directions, or "no artifact" could mean "no CSS at all".
+  assert.equal(css.includes('--ds-radius-scale:'), false);
+  assert.equal(css.includes('--ds-radius-md:'), true);
+});
+
+test('tenant-less scope: carries neither tenant arm on the root', () => {
+  const attributes = rootAttributes({ vertical: 'none', theme: 'light' });
+
+  for (const name of ['data-tenant', 'data-ds-root', 'data-vertical']) {
+    assert.equal(name in attributes, false, `tenant-less root carried ${name}`);
+  }
+  // It is still a real document: theme and engine must survive, or the scope
+  // would land in the dark-by-negation floor and measure the wrong thing.
+  assert.equal(attributes['data-theme'], 'light');
+  assert.equal(attributes['data-engine'], 'modern');
+});
+
+test('tenant-less scope: the shipped bundle modes refuse rather than silently recompose', async () => {
+  for (const mode of ['dist', 'styles']) {
+    await assert.rejects(
+      () => resolveBundle({ vertical: 'none', mode }),
+      /no shipped bundle/,
+      `--bundle ${mode} must refuse for a scope that ships nothing, not fall back to fresh`,
+    );
+  }
+});
+
+test('the applied-sheet canary certifies each layer a scope actually has', async () => {
+  const { css } = await resolveBundle({ vertical: 'none', mode: 'fresh' });
+
+  // The guard reads its canaries off the document. `--ds-radius-scale` is
+  // declared ONLY by an artifact, so a tenant-less document legitimately
+  // leaves it empty; requiring it there is what blocked this scope. Requiring
+  // it for a TENANTED scope is what proves the artifact loaded, and swapping
+  // both canaries to base-declared names to make every scope pass would drop
+  // that proof from all six tenanted cells.
+  assert.equal(
+    css.includes('--ds-radius-scale:'),
+    false,
+    'the tenant-layer canary must be absent here, or this drill proves nothing',
+  );
+
+  const tenanted = await resolveBundle({ vertical: 'bithire', mode: 'fresh' });
+  assert.equal(
+    tenanted.css.includes('--ds-radius-scale:'),
+    true,
+    'the tenant-layer canary must be present in a tenanted bundle',
+  );
+});

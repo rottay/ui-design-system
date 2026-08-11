@@ -61,9 +61,9 @@
       "id": "input-modern-md",
       "why": "The modern Input as the engine actually renders it, inside the field wrapper it always ships with — the root IS the input element, not a container. Carried `.ds-input` until 2026-08-11 for the same reason the button did, and was wrong the same way. A distinct chrome family for the colour channels, and a third radius chain: border-radius <- --ds-input-resolved-radius <- the size rule's precedence between --ds-input-md-radius and --ds-radius-md.",
       "requiresSelectors": [
-        ".rottay-input.rottay-input--modern[data-part='root']",
+        ".rottay-input.rottay-input--modern {",
         "border-radius: var(--ds-input-resolved-radius)",
-        ".rottay-input.rottay-input--modern[data-part='root'][data-size='md']:not([data-size-responsive])",
+        ".rottay-input.rottay-input--modern[data-size='md']:not([data-size-responsive])",
         "--ds-input-resolved-radius: var("
       ],
       "html": "<div class=\"rottay-input-field\" data-part=\"field\"><input id=\"probe-input-modern-md\" type=\"text\" class=\"rottay-input rottay-input--modern\" data-part=\"root\" data-variant=\"outline\" data-size=\"md\" data-filled=\"true\" value=\"input\" data-probe=\"input-modern-md\" /></div>",
@@ -141,7 +141,15 @@
             "--ds-card-radius",
             "--ds-button-md-border-radius",
             "--ds-button-md-radius",
-            "--ds-input-md-border-radius"
+            "--ds-input-md-border-radius",
+            "--ds-text-eyebrow-letter-spacing",
+            "--ds-text-eyebrow-transform",
+            "--ds-text-eyebrow-size",
+            "--ds-table-header-letter-spacing",
+            "--ds-table-header-text-transform",
+            "--ds-letter-spacing-body",
+            "--ds-type-scale",
+            "--ds-font-size-xs"
           ]
         }
       ]

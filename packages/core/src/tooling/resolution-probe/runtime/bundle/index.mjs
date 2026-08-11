@@ -100,8 +100,12 @@ function composeVerticalBundle(name, baseCss, modernEngine, tenantCss, verticalF
     `/* === Modern Engine (Rottay skins + Tailwind utilities) === */`,
     modernEngine,
     '',
-    `/* === ${name} tenant overrides (unlayered, wins by specificity + source order) === */`,
-    tenantCss,
+    ...(tenantCss === null
+      ? ['/* === No tenant overrides: this is the base layer as a document sees it === */']
+      : [
+          `/* === ${name} tenant overrides (unlayered, wins by specificity + source order) === */`,
+          tenantCss,
+        ]),
   ].join('\n');
 }
 
@@ -126,8 +130,13 @@ async function composeFresh(vertical) {
     readFile(resolve(SRC_CSS, 'facade/entrypoints/base.css')),
     resolve(SRC_CSS, 'facade/entrypoints'),
   );
-  const tenantPath = resolve(SRC_CSS, `facade/artifacts/${spec.artifactDir}/index.css`);
-  const tenantCss = resolveImports(readFile(tenantPath), dirname(tenantPath));
+  // No artifact for the tenant-less scope — that absence IS the measurement.
+  const tenantPath =
+    spec.artifactDir === null
+      ? null
+      : resolve(SRC_CSS, `facade/artifacts/${spec.artifactDir}/index.css`);
+  const tenantCss =
+    tenantPath === null ? null : resolveImports(readFile(tenantPath), dirname(tenantPath));
   const css = composeVerticalBundle(
     vertical,
     baseCss,
@@ -140,7 +149,7 @@ async function composeFresh(vertical) {
     inputs: [
       fromCoreRoot(resolve(SRC_CSS, 'runtime/engines/modern/compiled.css')),
       fromCoreRoot(resolve(SRC_CSS, 'facade/entrypoints/base.css')),
-      fromCoreRoot(tenantPath),
+      ...(tenantPath === null ? [] : [fromCoreRoot(tenantPath)]),
     ],
   };
 }
@@ -178,10 +187,21 @@ export async function resolveBundle({ vertical, mode = 'fresh' }) {
   if (!spec) throw new Error(`unknown vertical: ${vertical}`);
   if (!BUNDLE_MODES.includes(mode)) throw new Error(`unknown bundle mode: ${mode}`);
 
-  const distPath = resolve(DIST, spec.distBundle);
-  const stylesPath = resolve(STYLES, spec.stylesBundle);
-  const distCss = existsSync(distPath) ? readFileSync(distPath, 'utf-8') : null;
-  const stylesCss = existsSync(stylesPath) ? readFileSync(stylesPath, 'utf-8') : null;
+  // Nothing ships a tenant-less bundle, so `dist`/`styles` have no answer to
+  // give for it. Saying so is the point: a mode that silently fell back to
+  // `fresh` would label a recomposed bundle as the shipped one.
+  if (spec.distBundle === null && mode !== 'fresh') {
+    throw new Error(
+      `resolution-probe: --vertical ${vertical} has no shipped bundle, so --bundle ${mode} ` +
+        'cannot be measured. It exists only as `fresh` (base + engine, no artifact).',
+    );
+  }
+
+  const distPath = spec.distBundle === null ? null : resolve(DIST, spec.distBundle);
+  const stylesPath = spec.stylesBundle === null ? null : resolve(STYLES, spec.stylesBundle);
+  const distCss = distPath !== null && existsSync(distPath) ? readFileSync(distPath, 'utf-8') : null;
+  const stylesCss =
+    stylesPath !== null && existsSync(stylesPath) ? readFileSync(stylesPath, 'utf-8') : null;
 
   if (mode === 'dist' || mode === 'styles') {
     const css = mode === 'dist' ? distCss : stylesCss;
