@@ -1,0 +1,143 @@
+{
+  "$schema": "./schema.md",
+  "note": "Every fixture's element shape is DERIVED FROM THE CSS. `requiresSelectors` is not documentation: the harness asserts each string occurs verbatim in the CSS it is about to measure, and marks the fixture `unmatched` if it does not. A fixture that stops being matched is therefore reported, never silently measured as zero.",
+  "fixtures": [
+    {
+      "id": "card-modern-md",
+      "why": "The canonical derived-radius consumer. Chain: border-radius <- --ds-card-radius <- --ds-card-border-radius <- --ds-radius-lg <- calc(--ds-radius-lg-base * --ds-radius-scale). Four hops from the tenant dial to a painted pixel.",
+      "requiresSelectors": [
+        ".ds-card.ds-card--modern[data-part='root'][data-radius='md']",
+        "--ds-card-border-radius: var(--ds-radius-lg)"
+      ],
+      "html": "<div class=\"ds-card ds-card--modern\" data-part=\"root\" data-radius=\"md\" data-variant=\"elevated\" data-size=\"md\" data-padding=\"md\" data-probe=\"card-modern-md\"><div data-part=\"body\">card body</div></div>",
+      "targets": [
+        {
+          "id": "root",
+          "selector": "[data-probe='card-modern-md']",
+          "properties": [
+            "border-top-left-radius",
+            "border-bottom-right-radius",
+            "background-color",
+            "color",
+            "border-top-color",
+            "border-top-width",
+            "box-shadow",
+            "padding-top",
+            "font-family",
+            "font-size"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "button-modern-md",
+      "why": "Second derived-radius consumer on a different chain: border-radius <- --ds-button-md-radius <- --ds-button-md-border-radius <- --ds-radius-md. Two consumers on two chains rule out a per-component accident.",
+      "requiresSelectors": [
+        ".ds-btn {",
+        "--ds-button-md-border-radius: var(--ds-radius-md)"
+      ],
+      "html": "<button class=\"ds-btn ds-btn--primary\" data-part=\"root\" data-size=\"md\" data-probe=\"button-modern-md\">button</button>",
+      "targets": [
+        {
+          "id": "root",
+          "selector": "[data-probe='button-modern-md']",
+          "properties": [
+            "border-top-left-radius",
+            "background-color",
+            "color",
+            "border-top-color",
+            "border-top-width",
+            "box-shadow",
+            "font-family",
+            "font-size",
+            "font-weight"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "input-modern-md",
+      "why": "Third derived-radius consumer (--ds-input-md-border-radius <- --ds-radius-md), and a distinct chrome family for the colour channels.",
+      "requiresSelectors": [
+        ".ds-input {",
+        "--ds-input-md-border-radius: var(--ds-radius-md)"
+      ],
+      "html": "<input class=\"ds-input\" data-part=\"root\" data-size=\"md\" data-probe=\"input-modern-md\" value=\"input\" />",
+      "targets": [
+        {
+          "id": "root",
+          "selector": "[data-probe='input-modern-md']",
+          "properties": [
+            "border-top-left-radius",
+            "background-color",
+            "color",
+            "border-top-color",
+            "border-top-width",
+            "font-family",
+            "font-size"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "skeleton-card-line",
+      "why": "THE POSITIVE CONTROL. This rule reads the dial DIRECTLY -- `calc(4px * var(--ds-radius-scale, 1))` -- with no derived token in between. If this element does not move when the dial turns, the harness itself is broken and every 'inert' verdict in the same run is void.",
+      "requiresSelectors": [
+        ".rottay-skeleton-card [data-part='line']",
+        "calc(4px * var(--ds-radius-scale, 1))"
+      ],
+      "html": "<div class=\"rottay-skeleton-card\" data-part=\"root\" data-probe=\"skeleton-card\"><div data-part=\"body\"><div data-part=\"line\" data-probe=\"skeleton-card-line\">&nbsp;</div></div></div>",
+      "targets": [
+        {
+          "id": "line",
+          "selector": "[data-probe='skeleton-card-line']",
+          "properties": ["border-top-left-radius", "background-color", "height"]
+        }
+      ]
+    },
+    {
+      "id": "skeleton-form-action",
+      "why": "Second direct dial consumer on a different literal -- `calc(6px * var(--ds-radius-scale, 1))`. Two controls, two literals: a single moving fixture cannot be a coincidence of one rule.",
+      "requiresSelectors": [
+        ".rottay-skeleton-form [data-part='action']",
+        "calc(6px * var(--ds-radius-scale, 1))"
+      ],
+      "html": "<div class=\"rottay-skeleton-form\" data-part=\"root\" data-probe=\"skeleton-form\"><div data-part=\"action\" data-probe=\"skeleton-form-action\">&nbsp;</div></div>",
+      "targets": [
+        {
+          "id": "action",
+          "selector": "[data-probe='skeleton-form-action']",
+          "properties": ["border-top-left-radius", "background-color", "height"]
+        }
+      ]
+    },
+    {
+      "id": "token-readout",
+      "why": "Not a component: a bare element inside the tenant scope whose custom properties are read directly. It answers 'what value does this token RESOLVE to for this tenant' without an intervening paint rule, which separates 'the token is wrong' from 'the component does not read it'.",
+      "requiresSelectors": ["--ds-radius-md: calc(var(--ds-radius-md-base) * var(--ds-radius-scale, 1))"],
+      "html": "<div data-probe=\"token-readout\"></div>",
+      "targets": [
+        {
+          "id": "tokens",
+          "selector": "[data-probe='token-readout']",
+          "properties": [
+            "--ds-radius-scale",
+            "--ds-radius-sm",
+            "--ds-radius-md",
+            "--ds-radius-lg",
+            "--ds-radius-xl",
+            "--ds-radius-sm-base",
+            "--ds-radius-md-base",
+            "--ds-radius-lg-base",
+            "--ds-radius-xl-base",
+            "--ds-card-border-radius",
+            "--ds-card-radius",
+            "--ds-button-md-border-radius",
+            "--ds-button-md-radius",
+            "--ds-input-md-border-radius"
+          ]
+        }
+      ]
+    }
+  ]
+}
