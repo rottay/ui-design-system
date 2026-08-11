@@ -1,0 +1,4718 @@
+{
+ "fieldToChannels": {
+  "palette.primaryColor": [
+   "--ds-color-primary"
+  ],
+  "palette.secondaryColor": [
+   "--ds-color-secondary"
+  ],
+  "palette.accentColor": [
+   "--ds-color-accent"
+  ],
+  "palette.darkPrimaryColor": [
+   "--ds-color-dark-primary"
+  ],
+  "palette.darkSecondaryColor": [
+   "--ds-color-dark-secondary"
+  ],
+  "palette.darkAccentColor": [
+   "--ds-color-dark-accent"
+  ],
+  "palette.backgroundColor": [
+   "--ds-color-background",
+   "--ds-color-bg",
+   "--ds-color-bg-primary"
+  ],
+  "palette.backgroundSecondaryColor": [
+   "--ds-color-bg-secondary"
+  ],
+  "palette.backgroundTertiaryColor": [
+   "--ds-color-bg-tertiary"
+  ],
+  "palette.backgroundElevatedColor": [
+   "--ds-color-bg-elevated"
+  ],
+  "palette.textPrimaryColor": [
+   "--ds-color-text-primary"
+  ],
+  "palette.textSecondaryColor": [
+   "--ds-color-text-secondary"
+  ],
+  "palette.textMutedColor": [
+   "--ds-color-text-muted"
+  ],
+  "palette.textDisabledColor": [
+   "--ds-color-text-disabled"
+  ],
+  "palette.onPrimaryColor": [
+   "--ds-color-text-on-primary"
+  ],
+  "palette.borderPrimaryColor": [
+   "--ds-color-border-primary"
+  ],
+  "palette.borderSecondaryColor": [
+   "--ds-color-border-secondary"
+  ],
+  "palette.successColor": [
+   "--ds-color-success"
+  ],
+  "palette.warningColor": [
+   "--ds-color-warning"
+  ],
+  "palette.errorColor": [
+   "--ds-color-error"
+  ],
+  "palette.infoColor": [
+   "--ds-color-info"
+  ],
+  "palette.backgroundOverlayColor": [
+   "--ds-color-bg-overlay"
+  ],
+  "typography.fontFamilyBase": [
+   "--ds-font-family-base"
+  ],
+  "typography.fontFamilyHeading": [
+   "--ds-font-family-heading"
+  ],
+  "typography.fontFamilyMono": [
+   "--ds-font-family-mono"
+  ],
+  "typography.fontFamilyDisplay": [
+   "--ds-font-family-display"
+  ],
+  "typography.headingWeightBias": [],
+  "typography.headingLetterSpacing": [],
+  "typography.labelStyle": [],
+  "typography.letterSpacing.display": [
+   "--ds-letter-spacing-display"
+  ],
+  "typography.letterSpacing.heading": [
+   "--ds-letter-spacing-heading"
+  ],
+  "typography.letterSpacing.body": [
+   "--ds-letter-spacing-body"
+  ],
+  "typography.letterSpacing.mono": [
+   "--ds-letter-spacing-mono"
+  ],
+  "surfaces.borderRadius.sm": [
+   "--ds-radius-sm-base"
+  ],
+  "surfaces.borderRadius.md": [
+   "--ds-radius-md-base"
+  ],
+  "surfaces.borderRadius.lg": [
+   "--ds-radius-lg-base"
+  ],
+  "surfaces.borderRadius.xl": [
+   "--ds-radius-xl-base"
+  ],
+  "surfaces.shadows.sm": [
+   "--ds-shadow-sm"
+  ],
+  "surfaces.shadows.md": [
+   "--ds-shadow-md"
+  ],
+  "surfaces.shadows.lg": [
+   "--ds-shadow-lg"
+  ],
+  "surfaces.shadows.xl": [
+   "--ds-shadow-xl"
+  ],
+  "surfaces.surfaceRoles.canvas.background": [
+   "--ds-surface-canvas"
+  ],
+  "surfaces.surfaceRoles.canvas.foreground": [
+   "--ds-material-canvas-foreground"
+  ],
+  "surfaces.surfaceRoles.canvas.texture": [
+   "--ds-material-canvas-texture"
+  ],
+  "surfaces.surfaceRoles.shell.background": [
+   "--ds-surface-shell"
+  ],
+  "surfaces.surfaceRoles.shell.foreground": [
+   "--ds-material-shell-foreground"
+  ],
+  "surfaces.surfaceRoles.shell.border": [
+   "--ds-material-shell-border"
+  ],
+  "surfaces.surfaceRoles.panel.background": [
+   "--ds-surface-panel"
+  ],
+  "surfaces.surfaceRoles.panel.backgroundHover": [
+   "--ds-material-panel-background-hover"
+  ],
+  "surfaces.surfaceRoles.panel.backgroundActive": [
+   "--ds-material-panel-background-active"
+  ],
+  "surfaces.surfaceRoles.panel.backgroundSelected": [
+   "--ds-material-panel-background-selected"
+  ],
+  "surfaces.surfaceRoles.panel.backgroundDisabled": [
+   "--ds-material-panel-background-disabled"
+  ],
+  "surfaces.surfaceRoles.panel.foreground": [
+   "--ds-material-panel-foreground"
+  ],
+  "surfaces.surfaceRoles.panel.foregroundMuted": [
+   "--ds-material-panel-foreground-muted"
+  ],
+  "surfaces.surfaceRoles.panel.foregroundDisabled": [
+   "--ds-material-panel-foreground-disabled"
+  ],
+  "surfaces.surfaceRoles.panel.border": [
+   "--ds-material-panel-border"
+  ],
+  "surfaces.surfaceRoles.panel.borderStrong": [
+   "--ds-material-panel-border-strong"
+  ],
+  "surfaces.surfaceRoles.panel.borderHover": [
+   "--ds-material-panel-border-hover"
+  ],
+  "surfaces.surfaceRoles.panel.borderActive": [
+   "--ds-material-panel-border-active"
+  ],
+  "surfaces.surfaceRoles.panel.borderSelected": [
+   "--ds-material-panel-border-selected"
+  ],
+  "surfaces.surfaceRoles.panel.borderDisabled": [
+   "--ds-material-panel-border-disabled"
+  ],
+  "surfaces.surfaceRoles.panel.focusRing": [
+   "--ds-material-panel-focus-ring"
+  ],
+  "surfaces.surfaceRoles.panel.shadow": [
+   "--ds-material-panel-shadow"
+  ],
+  "surfaces.surfaceRoles.panel.shadowHover": [
+   "--ds-material-panel-shadow-hover"
+  ],
+  "surfaces.surfaceRoles.panel.shadowActive": [
+   "--ds-material-panel-shadow-active"
+  ],
+  "surfaces.surfaceRoles.panel.shadowSelected": [
+   "--ds-material-panel-shadow-selected"
+  ],
+  "surfaces.surfaceRoles.panel.highlight": [
+   "--ds-material-panel-highlight"
+  ],
+  "surfaces.surfaceRoles.card.background": [
+   "--ds-surface-card"
+  ],
+  "surfaces.surfaceRoles.card.backgroundHover": [
+   "--ds-material-card-background-hover"
+  ],
+  "surfaces.surfaceRoles.card.backgroundActive": [
+   "--ds-material-card-background-active"
+  ],
+  "surfaces.surfaceRoles.card.backgroundSelected": [
+   "--ds-material-card-background-selected"
+  ],
+  "surfaces.surfaceRoles.card.backgroundDisabled": [
+   "--ds-material-card-background-disabled"
+  ],
+  "surfaces.surfaceRoles.card.foreground": [
+   "--ds-material-card-foreground"
+  ],
+  "surfaces.surfaceRoles.card.foregroundMuted": [
+   "--ds-material-card-foreground-muted"
+  ],
+  "surfaces.surfaceRoles.card.foregroundDisabled": [
+   "--ds-material-card-foreground-disabled"
+  ],
+  "surfaces.surfaceRoles.card.border": [
+   "--ds-material-card-border"
+  ],
+  "surfaces.surfaceRoles.card.borderStrong": [
+   "--ds-material-card-border-strong"
+  ],
+  "surfaces.surfaceRoles.card.borderHover": [
+   "--ds-material-card-border-hover"
+  ],
+  "surfaces.surfaceRoles.card.borderActive": [
+   "--ds-material-card-border-active"
+  ],
+  "surfaces.surfaceRoles.card.borderSelected": [
+   "--ds-material-card-border-selected"
+  ],
+  "surfaces.surfaceRoles.card.borderDisabled": [
+   "--ds-material-card-border-disabled"
+  ],
+  "surfaces.surfaceRoles.card.focusRing": [
+   "--ds-material-card-focus-ring"
+  ],
+  "surfaces.surfaceRoles.card.shadow": [
+   "--ds-material-card-shadow"
+  ],
+  "surfaces.surfaceRoles.card.shadowHover": [
+   "--ds-material-card-shadow-hover"
+  ],
+  "surfaces.surfaceRoles.card.shadowActive": [
+   "--ds-material-card-shadow-active"
+  ],
+  "surfaces.surfaceRoles.card.shadowSelected": [
+   "--ds-material-card-shadow-selected"
+  ],
+  "surfaces.surfaceRoles.card.highlight": [
+   "--ds-material-card-highlight"
+  ],
+  "surfaces.surfaceRoles.inset.background": [
+   "--ds-surface-inset"
+  ],
+  "surfaces.surfaceRoles.inset.foreground": [
+   "--ds-material-inset-foreground"
+  ],
+  "surfaces.surfaceRoles.inset.border": [
+   "--ds-material-inset-border"
+  ],
+  "surfaces.surfaceRoles.control.background": [
+   "--ds-surface-control"
+  ],
+  "surfaces.surfaceRoles.control.backgroundHover": [
+   "--ds-material-control-background-hover"
+  ],
+  "surfaces.surfaceRoles.control.backgroundActive": [
+   "--ds-material-control-background-active"
+  ],
+  "surfaces.surfaceRoles.control.backgroundSelected": [
+   "--ds-material-control-background-selected"
+  ],
+  "surfaces.surfaceRoles.control.backgroundDisabled": [
+   "--ds-material-control-background-disabled"
+  ],
+  "surfaces.surfaceRoles.control.foreground": [
+   "--ds-material-control-foreground"
+  ],
+  "surfaces.surfaceRoles.control.foregroundMuted": [
+   "--ds-material-control-foreground-muted"
+  ],
+  "surfaces.surfaceRoles.control.foregroundDisabled": [
+   "--ds-material-control-foreground-disabled"
+  ],
+  "surfaces.surfaceRoles.control.border": [
+   "--ds-material-control-border"
+  ],
+  "surfaces.surfaceRoles.control.borderStrong": [
+   "--ds-material-control-border-strong"
+  ],
+  "surfaces.surfaceRoles.control.borderHover": [
+   "--ds-material-control-border-hover"
+  ],
+  "surfaces.surfaceRoles.control.borderActive": [
+   "--ds-material-control-border-active"
+  ],
+  "surfaces.surfaceRoles.control.borderSelected": [
+   "--ds-material-control-border-selected"
+  ],
+  "surfaces.surfaceRoles.control.borderDisabled": [
+   "--ds-material-control-border-disabled"
+  ],
+  "surfaces.surfaceRoles.control.focusRing": [
+   "--ds-material-control-focus-ring"
+  ],
+  "surfaces.surfaceRoles.control.shadow": [
+   "--ds-material-control-shadow"
+  ],
+  "surfaces.surfaceRoles.control.shadowHover": [
+   "--ds-material-control-shadow-hover"
+  ],
+  "surfaces.surfaceRoles.control.shadowActive": [
+   "--ds-material-control-shadow-active"
+  ],
+  "surfaces.surfaceRoles.control.shadowSelected": [
+   "--ds-material-control-shadow-selected"
+  ],
+  "surfaces.surfaceRoles.raised.background": [
+   "--ds-surface-raised"
+  ],
+  "surfaces.surfaceRoles.raised.foreground": [
+   "--ds-material-raised-foreground"
+  ],
+  "surfaces.surfaceRoles.raised.border": [
+   "--ds-material-raised-border"
+  ],
+  "surfaces.surfaceRoles.raised.shadow": [
+   "--ds-material-raised-shadow"
+  ],
+  "surfaces.surfaceRoles.overlay.background": [
+   "--ds-surface-overlay"
+  ],
+  "surfaces.surfaceRoles.overlay.foreground": [
+   "--ds-material-overlay-foreground"
+  ],
+  "surfaces.glass.blur": [
+   "--ds-glass-blur"
+  ],
+  "surfaces.glass.background": [
+   "--ds-glass-bg"
+  ],
+  "surfaces.glass.border": [
+   "--ds-glass-border"
+  ],
+  "surfaces.gradients.primary": [
+   "--ds-gradient-primary"
+  ],
+  "surfaces.gradients.surface": [
+   "--ds-gradient-surface"
+  ],
+  "surfaces.gradients.mesh": [
+   "--ds-gradient-mesh"
+  ],
+  "surfaces.overlays.light": [
+   "--ds-overlay-light"
+  ],
+  "surfaces.overlays.medium": [
+   "--ds-overlay-medium"
+  ],
+  "surfaces.overlays.heavy": [
+   "--ds-overlay-heavy"
+  ],
+  "motion.entrance": [],
+  "motion.pulseSpeed": [],
+  "motion.skeletonStyle": [],
+  "charts.lineStyle": [],
+  "charts.tooltipStyle": [],
+  "charts.colorScheme": [],
+  "chrome.card.defaultElevation": [],
+  "chrome.card.hoverElevation": [],
+  "chrome.card.paddingDensity": [],
+  "chrome.accent.barPosition": [],
+  "chrome.accent.barStyle": [],
+  "chrome.accent.iconContainerShape": [],
+  "chrome.accent.badgeShape": [],
+  "chrome.accent.dividerStyle": [],
+  "chrome.sidebar.bg": [
+   "--ds-sidebar-bg"
+  ],
+  "chrome.sidebar.footerBg": [
+   "--ds-sidebar-footer-bg"
+  ],
+  "chrome.sidebar.border": [
+   "--ds-sidebar-border"
+  ],
+  "chrome.sidebar.text": [
+   "--ds-sidebar-text"
+  ],
+  "chrome.sidebar.textMuted": [
+   "--ds-sidebar-text-muted"
+  ],
+  "chrome.sidebar.groupFontSize": [
+   "--ds-sidebar-group-font-size"
+  ],
+  "chrome.sidebar.groupColor": [
+   "--ds-sidebar-group-color"
+  ],
+  "chrome.sidebar.groupLetterSpacing": [
+   "--ds-sidebar-group-letter-spacing"
+  ],
+  "chrome.sidebar.itemFontSize": [
+   "--ds-sidebar-item-font-size"
+  ],
+  "chrome.sidebar.itemColor": [
+   "--ds-sidebar-item-color"
+  ],
+  "chrome.sidebar.itemColorActive": [
+   "--ds-sidebar-item-color-active"
+  ],
+  "chrome.sidebar.itemBgActive": [
+   "--ds-sidebar-item-bg-active"
+  ],
+  "chrome.sidebar.itemBgHover": [
+   "--ds-sidebar-item-bg-hover"
+  ],
+  "chrome.sidebar.itemPadding": [
+   "--ds-sidebar-item-padding"
+  ],
+  "chrome.sidebar.iconSize": [
+   "--ds-sidebar-icon-size"
+  ],
+  "chrome.layout.bg": [
+   "--ds-layout-bg"
+  ],
+  "chrome.layout.headerBg": [
+   "--ds-layout-header-bg"
+  ],
+  "chrome.layout.headerBackdrop": [
+   "--ds-layout-header-backdrop"
+  ],
+  "chrome.layout.headerBorder": [
+   "--ds-layout-header-border"
+  ],
+  "chrome.layout.siderBg": [
+   "--ds-layout-sider-bg"
+  ],
+  "chrome.layout.siderBorder": [
+   "--ds-layout-sider-border"
+  ],
+  "chrome.shell.gridSize": [
+   "--ds-shell-grid-size"
+  ],
+  "chrome.shell.gridLine": [
+   "--ds-shell-grid-line"
+  ],
+  "chrome.shell.bg": [
+   "--ds-workspace-shell-bg"
+  ],
+  "chrome.shell.border": [
+   "--ds-workspace-shell-border"
+  ],
+  "chrome.shell.overlay": [
+   "--ds-workspace-shell-overlay"
+  ],
+  "chrome.shell.shadow": [
+   "--ds-workspace-shell-shadow"
+  ],
+  "chrome.shell.activeBg": [
+   "--ds-shell-active-bg"
+  ],
+  "chrome.shell.activeGradient": [
+   "--ds-shell-active-gradient"
+  ],
+  "chrome.shell.dropdownShadow": [
+   "--ds-shell-dropdown-shadow"
+  ],
+  "chrome.shell.commandFont": [
+   "--ds-command-font"
+  ],
+  "chrome.shell.commandLetterSpacing": [
+   "--ds-command-letter-spacing"
+  ],
+  "chrome.shell.commandGridSize": [
+   "--ds-command-grid-size"
+  ],
+  "chrome.shell.commandGridLineSoft": [
+   "--ds-command-grid-line-soft"
+  ],
+  "chrome.shell.commandGridLine": [
+   "--ds-command-grid-line"
+  ],
+  "chrome.shell.commandGridLineStrong": [
+   "--ds-command-grid-line-strong"
+  ],
+  "chrome.shell.commandGridBg": [
+   "--ds-command-grid-bg"
+  ],
+  "chrome.shell.commandGridBgStrong": [
+   "--ds-command-grid-bg-strong"
+  ],
+  "chrome.shell.commandGlow": [
+   "--ds-command-glow"
+  ],
+  "chrome.shell.commandLine": [
+   "--ds-command-line"
+  ],
+  "chrome.shell.commandRailBg": [
+   "--ds-command-rail-bg"
+  ],
+  "chrome.shell.commandHomeMaxWidth": [
+   "--ds-command-home-max-width"
+  ],
+  "chrome.shell.commandHomeGap": [
+   "--ds-command-home-gap"
+  ],
+  "chrome.shell.commandHomePanelGap": [
+   "--ds-command-home-panel-gap"
+  ],
+  "chrome.shell.commandHomeGridLine": [
+   "--ds-command-home-grid-line"
+  ],
+  "chrome.shell.commandHomePanelBorder": [
+   "--ds-command-home-panel-border"
+  ],
+  "chrome.shell.commandHomePanelBorderSoft": [
+   "--ds-command-home-panel-border-soft"
+  ],
+  "chrome.shell.commandHomePanelShadow": [
+   "--ds-command-home-panel-shadow"
+  ],
+  "chrome.shell.commandHomePanelBg": [
+   "--ds-command-home-panel-bg"
+  ],
+  "chrome.shell.commandHomePanelBgStrong": [
+   "--ds-command-home-panel-bg-strong"
+  ],
+  "chrome.shell.commandHomeCompactActionHeight": [
+   "--ds-command-home-compact-action-height"
+  ],
+  "chrome.shell.commandHomeConsoleMinHeight": [
+   "--ds-command-home-console-min-height"
+  ],
+  "chrome.shell.commandHomeConsolePadding": [
+   "--ds-command-home-console-padding"
+  ],
+  "chrome.shell.commandHomeConsoleBg": [
+   "--ds-command-home-console-bg"
+  ],
+  "chrome.shell.commandHomeSurfaceBg": [
+   "--ds-command-home-surface-bg"
+  ],
+  "chrome.shell.commandHomeHeroBg": [
+   "--ds-command-home-hero-bg"
+  ],
+  "chrome.shell.commandHomeIconBg": [
+   "--ds-command-home-icon-bg"
+  ],
+  "chrome.shell.commandHomeIconBorder": [
+   "--ds-command-home-icon-border"
+  ],
+  "chrome.shell.commandHomeControlBg": [
+   "--ds-command-home-control-bg"
+  ],
+  "chrome.shell.commandHomeControlBorder": [
+   "--ds-command-home-control-border"
+  ],
+  "chrome.shell.commandHomeControlHoverBg": [
+   "--ds-command-home-control-hover-bg"
+  ],
+  "chrome.shell.commandHomeControlHoverBorder": [
+   "--ds-command-home-control-hover-border"
+  ],
+  "chrome.shell.commandHomeMeterBg": [
+   "--ds-command-home-meter-bg"
+  ],
+  "chrome.shell.commandHomeMeterFill": [
+   "--ds-command-home-meter-fill"
+  ],
+  "chrome.toolbar.bg": [
+   "--ds-toolbar-bg"
+  ],
+  "chrome.toolbar.border": [
+   "--ds-toolbar-border"
+  ],
+  "chrome.toolbar.borderBottom": [
+   "--ds-toolbar-border-bottom"
+  ],
+  "chrome.toolbar.color": [
+   "--ds-toolbar-color"
+  ],
+  "chrome.toolbar.shadow": [
+   "--ds-toolbar-shadow"
+  ],
+  "chrome.toolbar.radius": [
+   "--ds-toolbar-radius"
+  ],
+  "chrome.toolbar.padding": [
+   "--ds-toolbar-padding"
+  ],
+  "chrome.toolbar.gap": [
+   "--ds-toolbar-gap"
+  ],
+  "chrome.toolbar.controlBg": [
+   "--ds-toolbar-control-bg"
+  ],
+  "chrome.toolbar.controlBorder": [
+   "--ds-toolbar-control-border"
+  ],
+  "chrome.toolbar.controlColor": [
+   "--ds-toolbar-control-color"
+  ],
+  "chrome.toolbar.divider": [
+   "--ds-toolbar-divider"
+  ],
+  "chrome.filterPill.bg": [
+   "--ds-filter-pill-bg"
+  ],
+  "chrome.filterPill.border": [
+   "--ds-filter-pill-border"
+  ],
+  "chrome.filterPill.color": [
+   "--ds-filter-pill-color"
+  ],
+  "chrome.filterPill.shadow": [
+   "--ds-filter-pill-shadow"
+  ],
+  "chrome.filterPill.frameBorder": [
+   "--ds-filter-pill-frame-border"
+  ],
+  "chrome.filterPill.frameShadow": [
+   "--ds-filter-pill-frame-shadow"
+  ],
+  "chrome.filterPill.hoverBg": [
+   "--ds-filter-pill-hover-bg"
+  ],
+  "chrome.filterPill.hoverBorder": [
+   "--ds-filter-pill-hover-border"
+  ],
+  "chrome.filterPill.activeBg": [
+   "--ds-filter-pill-active-bg"
+  ],
+  "chrome.filterPill.activeBorder": [
+   "--ds-filter-pill-active-border"
+  ],
+  "chrome.filterPill.activeColor": [
+   "--ds-filter-pill-active-color"
+  ],
+  "chrome.filterPill.activeShadow": [
+   "--ds-filter-pill-active-shadow"
+  ],
+  "chrome.filterPill.focusRing": [
+   "--ds-filter-pill-focus-ring"
+  ],
+  "chrome.filterPill.countBg": [
+   "--ds-filter-pill-count-bg"
+  ],
+  "chrome.filterPill.countActiveBg": [
+   "--ds-filter-pill-count-active-bg"
+  ],
+  "chrome.filterPill.countBorder": [
+   "--ds-filter-pill-count-border"
+  ],
+  "chrome.filterPill.countActiveBorder": [
+   "--ds-filter-pill-count-active-border"
+  ],
+  "chrome.filterPill.countRing": [
+   "--ds-filter-pill-count-ring"
+  ],
+  "chrome.filterPill.countActiveRing": [
+   "--ds-filter-pill-count-active-ring"
+  ],
+  "chrome.badge.fontFamily": [
+   "--ds-badge-font-family"
+  ],
+  "chrome.badge.letterSpacing": [
+   "--ds-badge-letter-spacing"
+  ],
+  "chrome.badge.gap": [
+   "--ds-badge-gap"
+  ],
+  "chrome.badge.radius": [
+   "--ds-badge-radius"
+  ],
+  "chrome.badge.chipRadius": [
+   "--ds-badge-chip-radius"
+  ],
+  "chrome.badge.pillRadius": [
+   "--ds-badge-pill-radius"
+  ],
+  "chrome.badge.surface": [
+   "--ds-badge-surface"
+  ],
+  "chrome.badge.ink": [
+   "--ds-badge-ink"
+  ],
+  "chrome.badge.frame": [
+   "--ds-badge-frame"
+  ],
+  "chrome.badge.highlight": [
+   "--ds-badge-highlight"
+  ],
+  "chrome.badge.shadow": [
+   "--ds-badge-shadow"
+  ],
+  "chrome.badge.surfaceHover": [
+   "--ds-badge-surface-hover"
+  ],
+  "chrome.badge.inkHover": [
+   "--ds-badge-ink-hover"
+  ],
+  "chrome.badge.frameHover": [
+   "--ds-badge-frame-hover"
+  ],
+  "chrome.badge.shadowHover": [
+   "--ds-badge-shadow-hover"
+  ],
+  "chrome.badge.hoverTransform": [
+   "--ds-badge-hover-transform"
+  ],
+  "chrome.badge.surfacePressed": [
+   "--ds-badge-surface-pressed"
+  ],
+  "chrome.badge.framePressed": [
+   "--ds-badge-frame-pressed"
+  ],
+  "chrome.badge.pressTransform": [
+   "--ds-badge-press-transform"
+  ],
+  "chrome.badge.focusRing": [
+   "--ds-badge-focus-ring"
+  ],
+  "chrome.badge.selectedSurface": [
+   "--ds-badge-selected-surface"
+  ],
+  "chrome.badge.selectedInk": [
+   "--ds-badge-selected-ink"
+  ],
+  "chrome.badge.selectedFrame": [
+   "--ds-badge-selected-frame"
+  ],
+  "chrome.badge.selectedShadow": [
+   "--ds-badge-selected-shadow"
+  ],
+  "chrome.badge.iconBg": [
+   "--ds-badge-icon-bg"
+  ],
+  "chrome.badge.iconBorder": [
+   "--ds-badge-icon-border"
+  ],
+  "chrome.badge.iconRadius": [
+   "--ds-badge-icon-radius"
+  ],
+  "chrome.badge.countBg": [
+   "--ds-badge-count-bg"
+  ],
+  "chrome.badge.countBorder": [
+   "--ds-badge-count-border"
+  ],
+  "chrome.badge.countRadius": [
+   "--ds-badge-count-radius"
+  ],
+  "chrome.badge.countFontFamily": [
+   "--ds-badge-count-font-family"
+  ],
+  "chrome.badge.removeBg": [
+   "--ds-badge-remove-bg"
+  ],
+  "chrome.badge.removeBorder": [
+   "--ds-badge-remove-border"
+  ],
+  "chrome.badge.removeRadius": [
+   "--ds-badge-remove-radius"
+  ],
+  "chrome.badge.removeHoverBg": [
+   "--ds-badge-remove-hover-bg"
+  ],
+  "chrome.badge.motionDuration": [
+   "--ds-badge-motion-duration"
+  ],
+  "chrome.badge.motionEasing": [
+   "--ds-badge-motion-easing"
+  ],
+  "chrome.badge.pulseDuration": [
+   "--ds-badge-pulse-duration"
+  ],
+  "chrome.badge.touchTarget": [
+   "--ds-badge-touch-target"
+  ],
+  "chrome.breadcrumb.bg": [
+   "--ds-breadcrumb-bg"
+  ],
+  "chrome.breadcrumb.border": [
+   "--ds-breadcrumb-border"
+  ],
+  "chrome.breadcrumb.color": [
+   "--ds-breadcrumb-color"
+  ],
+  "chrome.breadcrumb.linkColor": [
+   "--ds-breadcrumb-link-color"
+  ],
+  "chrome.breadcrumb.itemColor": [
+   "--ds-breadcrumb-item-color"
+  ],
+  "chrome.breadcrumb.colorHover": [
+   "--ds-breadcrumb-color-hover"
+  ],
+  "chrome.breadcrumb.colorActive": [
+   "--ds-breadcrumb-active-color",
+   "--ds-breadcrumb-color-active"
+  ],
+  "chrome.breadcrumb.separatorColor": [
+   "--ds-breadcrumb-separator-color"
+  ],
+  "chrome.breadcrumb.fontSize": [
+   "--ds-breadcrumb-font-size"
+  ],
+  "chrome.breadcrumb.padding": [
+   "--ds-breadcrumb-padding"
+  ],
+  "chrome.search.bg": [
+   "--ds-search-bg"
+  ],
+  "chrome.search.border": [
+   "--ds-search-border"
+  ],
+  "chrome.search.color": [
+   "--ds-search-color"
+  ],
+  "chrome.search.shadow": [
+   "--ds-search-shadow"
+  ],
+  "chrome.search.radius": [
+   "--ds-search-radius"
+  ],
+  "chrome.search.inputBg": [
+   "--ds-search-input-bg"
+  ],
+  "chrome.search.inputBorder": [
+   "--ds-search-input-border"
+  ],
+  "chrome.search.inputColor": [
+   "--ds-search-input-color"
+  ],
+  "chrome.search.placeholderColor": [
+   "--ds-search-placeholder-color"
+  ],
+  "chrome.search.iconColor": [
+   "--ds-input-search-icon-color",
+   "--ds-search-icon-color"
+  ],
+  "chrome.search.clearColor": [
+   "--ds-input-search-clear-color",
+   "--ds-search-clear-color"
+  ],
+  "chrome.search.clearColorHover": [
+   "--ds-search-clear-color-hover"
+  ],
+  "chrome.search.resultBg": [
+   "--ds-search-result-bg"
+  ],
+  "chrome.search.resultBgHover": [
+   "--ds-search-result-bg-hover"
+  ],
+  "chrome.search.resultBorder": [
+   "--ds-search-result-border"
+  ],
+  "chrome.search.resultShadow": [
+   "--ds-search-result-shadow"
+  ],
+  "chrome.search.resultTitleColor": [
+   "--ds-search-result-title-color"
+  ],
+  "chrome.search.resultMetaColor": [
+   "--ds-search-result-meta-color"
+  ],
+  "chrome.search.categoryColor": [
+   "--ds-search-category-color"
+  ],
+  "chrome.search.emptyBg": [
+   "--ds-search-empty-bg"
+  ],
+  "chrome.controls.buttonGeometry.letterSpacing": [
+   "--ds-button-letter-spacing"
+  ],
+  "chrome.controls.buttonGeometry.gap": [
+   "--ds-button-gap"
+  ],
+  "chrome.controls.buttonGeometry.radius": [
+   "--ds-radius-button"
+  ],
+  "chrome.controls.buttonGeometry.xs.height": [
+   "--ds-button-xs-height"
+  ],
+  "chrome.controls.buttonGeometry.xs.paddingX": [
+   "--ds-button-xs-padding-x"
+  ],
+  "chrome.controls.buttonGeometry.xs.fontSize": [
+   "--ds-button-xs-font-size"
+  ],
+  "chrome.controls.buttonGeometry.xs.lineHeight": [
+   "--ds-button-xs-line-height"
+  ],
+  "chrome.controls.buttonGeometry.xs.iconSize": [
+   "--ds-button-xs-icon-size"
+  ],
+  "chrome.controls.buttonGeometry.xs.gap": [
+   "--ds-button-xs-gap"
+  ],
+  "chrome.controls.buttonGeometry.xs.radius": [
+   "--ds-button-xs-radius"
+  ],
+  "chrome.controls.buttonGeometry.sm.height": [
+   "--ds-button-sm-height"
+  ],
+  "chrome.controls.buttonGeometry.sm.paddingX": [
+   "--ds-button-sm-padding-x"
+  ],
+  "chrome.controls.buttonGeometry.sm.fontSize": [
+   "--ds-button-sm-font-size"
+  ],
+  "chrome.controls.buttonGeometry.sm.lineHeight": [
+   "--ds-button-sm-line-height"
+  ],
+  "chrome.controls.buttonGeometry.sm.iconSize": [
+   "--ds-button-sm-icon-size"
+  ],
+  "chrome.controls.buttonGeometry.sm.gap": [
+   "--ds-button-sm-gap"
+  ],
+  "chrome.controls.buttonGeometry.sm.radius": [
+   "--ds-button-sm-radius"
+  ],
+  "chrome.controls.buttonGeometry.md.height": [
+   "--ds-button-md-height"
+  ],
+  "chrome.controls.buttonGeometry.md.paddingX": [
+   "--ds-button-md-padding-x"
+  ],
+  "chrome.controls.buttonGeometry.md.fontSize": [
+   "--ds-button-md-font-size"
+  ],
+  "chrome.controls.buttonGeometry.md.lineHeight": [
+   "--ds-button-md-line-height"
+  ],
+  "chrome.controls.buttonGeometry.md.iconSize": [
+   "--ds-button-md-icon-size"
+  ],
+  "chrome.controls.buttonGeometry.md.gap": [
+   "--ds-button-md-gap"
+  ],
+  "chrome.controls.buttonGeometry.md.radius": [
+   "--ds-button-md-radius"
+  ],
+  "chrome.controls.buttonGeometry.lg.height": [
+   "--ds-button-lg-height"
+  ],
+  "chrome.controls.buttonGeometry.lg.paddingX": [
+   "--ds-button-lg-padding-x"
+  ],
+  "chrome.controls.buttonGeometry.lg.fontSize": [
+   "--ds-button-lg-font-size"
+  ],
+  "chrome.controls.buttonGeometry.lg.lineHeight": [
+   "--ds-button-lg-line-height"
+  ],
+  "chrome.controls.buttonGeometry.lg.iconSize": [
+   "--ds-button-lg-icon-size"
+  ],
+  "chrome.controls.buttonGeometry.lg.gap": [
+   "--ds-button-lg-gap"
+  ],
+  "chrome.controls.buttonGeometry.lg.radius": [
+   "--ds-button-lg-radius"
+  ],
+  "chrome.controls.buttonGeometry.xl.height": [
+   "--ds-button-xl-height"
+  ],
+  "chrome.controls.buttonGeometry.xl.paddingX": [
+   "--ds-button-xl-padding-x"
+  ],
+  "chrome.controls.buttonGeometry.xl.fontSize": [
+   "--ds-button-xl-font-size"
+  ],
+  "chrome.controls.buttonGeometry.xl.lineHeight": [
+   "--ds-button-xl-line-height"
+  ],
+  "chrome.controls.buttonGeometry.xl.iconSize": [
+   "--ds-button-xl-icon-size"
+  ],
+  "chrome.controls.buttonGeometry.xl.gap": [
+   "--ds-button-xl-gap"
+  ],
+  "chrome.controls.buttonGeometry.xl.radius": [
+   "--ds-button-xl-radius"
+  ],
+  "chrome.controls.fieldGeometry.gap": [
+   "--ds-input-gap"
+  ],
+  "chrome.controls.fieldGeometry.radius": [
+   "--ds-radius-input"
+  ],
+  "chrome.controls.fieldGeometry.letterSpacing": [
+   "--ds-input-letter-spacing"
+  ],
+  "chrome.controls.fieldGeometry.borderWidth": [
+   "--ds-input-border-width"
+  ],
+  "chrome.controls.fieldGeometry.borderStyle": [
+   "--ds-input-border-style"
+  ],
+  "chrome.controls.fieldGeometry.messageGap": [
+   "--ds-input-message-gap"
+  ],
+  "chrome.controls.fieldGeometry.groupGap": [
+   "--ds-input-group-gap"
+  ],
+  "chrome.controls.fieldGeometry.groupGapSeparated": [
+   "--ds-input-group-gap-separated"
+  ],
+  "chrome.controls.fieldGeometry.groupOverlap": [
+   "--ds-input-group-overlap"
+  ],
+  "chrome.controls.fieldGeometry.groupMinItemWidth": [
+   "--ds-input-group-min-item-width"
+  ],
+  "chrome.controls.fieldGeometry.formFieldGap": [
+   "--ds-form-field-gap"
+  ],
+  "chrome.controls.fieldGeometry.horizontalGap": [
+   "--ds-form-field-horizontal-gap"
+  ],
+  "chrome.controls.fieldGeometry.labelOffsetY": [
+   "--ds-form-field-label-offset-y"
+  ],
+  "chrome.controls.fieldGeometry.requiredGap": [
+   "--ds-form-field-required-gap"
+  ],
+  "chrome.controls.fieldGeometry.labelFontSize": [
+   "--ds-input-label-font-size"
+  ],
+  "chrome.controls.fieldGeometry.labelLetterSpacing": [
+   "--ds-input-label-letter-spacing"
+  ],
+  "chrome.controls.fieldGeometry.labelLineHeight": [
+   "--ds-input-label-line-height"
+  ],
+  "chrome.controls.fieldGeometry.helperFontSize": [
+   "--ds-input-helper-font-size"
+  ],
+  "chrome.controls.fieldGeometry.helperLineHeight": [
+   "--ds-input-helper-line-height"
+  ],
+  "chrome.controls.fieldGeometry.affixSize": [
+   "--ds-input-affix-size"
+  ],
+  "chrome.controls.fieldGeometry.affixSizeCompact": [
+   "--ds-input-affix-size-compact"
+  ],
+  "chrome.controls.fieldGeometry.affixRadius": [
+   "--ds-input-affix-radius"
+  ],
+  "chrome.controls.fieldGeometry.actionSize": [
+   "--ds-input-action-size"
+  ],
+  "chrome.controls.fieldGeometry.actionRadius": [
+   "--ds-input-action-radius"
+  ],
+  "chrome.controls.fieldGeometry.touchTargetMin": [
+   "--ds-input-touch-target-min"
+  ],
+  "chrome.controls.fieldGeometry.loadingSize": [
+   "--ds-input-loading-size"
+  ],
+  "chrome.controls.fieldGeometry.loadingStroke": [
+   "--ds-input-loading-stroke"
+  ],
+  "chrome.controls.fieldGeometry.loadingDuration": [
+   "--ds-input-loading-duration"
+  ],
+  "chrome.controls.fieldGeometry.textareaMinHeight": [
+   "--ds-textarea-min-height"
+  ],
+  "chrome.controls.fieldGeometry.textareaMaxHeight": [
+   "--ds-textarea-max-height"
+  ],
+  "chrome.controls.fieldGeometry.textareaPaddingX": [
+   "--ds-textarea-padding-x"
+  ],
+  "chrome.controls.fieldGeometry.textareaPaddingY": [
+   "--ds-textarea-padding-y"
+  ],
+  "chrome.controls.fieldGeometry.textareaRadius": [
+   "--ds-textarea-radius"
+  ],
+  "chrome.controls.fieldGeometry.textareaResize": [
+   "--ds-textarea-resize"
+  ],
+  "chrome.controls.fieldGeometry.transitionDuration": [
+   "--ds-input-transition-duration"
+  ],
+  "chrome.controls.fieldGeometry.transitionTiming": [
+   "--ds-input-transition-timing"
+  ],
+  "chrome.controls.fieldGeometry.xs.height": [
+   "--ds-input-xs-height"
+  ],
+  "chrome.controls.fieldGeometry.xs.paddingX": [
+   "--ds-input-xs-padding-x"
+  ],
+  "chrome.controls.fieldGeometry.xs.paddingY": [
+   "--ds-input-xs-padding-y"
+  ],
+  "chrome.controls.fieldGeometry.xs.fontSize": [
+   "--ds-input-xs-font-size"
+  ],
+  "chrome.controls.fieldGeometry.xs.lineHeight": [
+   "--ds-input-xs-line-height"
+  ],
+  "chrome.controls.fieldGeometry.xs.iconSize": [
+   "--ds-input-xs-icon-size"
+  ],
+  "chrome.controls.fieldGeometry.xs.radius": [
+   "--ds-input-xs-radius"
+  ],
+  "chrome.controls.fieldGeometry.sm.height": [
+   "--ds-input-sm-height"
+  ],
+  "chrome.controls.fieldGeometry.sm.paddingX": [
+   "--ds-input-sm-padding-x"
+  ],
+  "chrome.controls.fieldGeometry.sm.paddingY": [
+   "--ds-input-sm-padding-y"
+  ],
+  "chrome.controls.fieldGeometry.sm.fontSize": [
+   "--ds-input-sm-font-size"
+  ],
+  "chrome.controls.fieldGeometry.sm.lineHeight": [
+   "--ds-input-sm-line-height"
+  ],
+  "chrome.controls.fieldGeometry.sm.iconSize": [
+   "--ds-input-sm-icon-size"
+  ],
+  "chrome.controls.fieldGeometry.sm.radius": [
+   "--ds-input-sm-radius"
+  ],
+  "chrome.controls.fieldGeometry.md.height": [
+   "--ds-input-md-height"
+  ],
+  "chrome.controls.fieldGeometry.md.paddingX": [
+   "--ds-input-md-padding-x"
+  ],
+  "chrome.controls.fieldGeometry.md.paddingY": [
+   "--ds-input-md-padding-y"
+  ],
+  "chrome.controls.fieldGeometry.md.fontSize": [
+   "--ds-input-md-font-size"
+  ],
+  "chrome.controls.fieldGeometry.md.lineHeight": [
+   "--ds-input-md-line-height"
+  ],
+  "chrome.controls.fieldGeometry.md.iconSize": [
+   "--ds-input-md-icon-size"
+  ],
+  "chrome.controls.fieldGeometry.md.radius": [
+   "--ds-input-md-radius"
+  ],
+  "chrome.controls.fieldGeometry.lg.height": [
+   "--ds-input-lg-height"
+  ],
+  "chrome.controls.fieldGeometry.lg.paddingX": [
+   "--ds-input-lg-padding-x"
+  ],
+  "chrome.controls.fieldGeometry.lg.paddingY": [
+   "--ds-input-lg-padding-y"
+  ],
+  "chrome.controls.fieldGeometry.lg.fontSize": [
+   "--ds-input-lg-font-size"
+  ],
+  "chrome.controls.fieldGeometry.lg.lineHeight": [
+   "--ds-input-lg-line-height"
+  ],
+  "chrome.controls.fieldGeometry.lg.iconSize": [
+   "--ds-input-lg-icon-size"
+  ],
+  "chrome.controls.fieldGeometry.lg.radius": [
+   "--ds-input-lg-radius"
+  ],
+  "chrome.controls.fieldGeometry.xl.height": [
+   "--ds-input-xl-height"
+  ],
+  "chrome.controls.fieldGeometry.xl.paddingX": [
+   "--ds-input-xl-padding-x"
+  ],
+  "chrome.controls.fieldGeometry.xl.paddingY": [
+   "--ds-input-xl-padding-y"
+  ],
+  "chrome.controls.fieldGeometry.xl.fontSize": [
+   "--ds-input-xl-font-size"
+  ],
+  "chrome.controls.fieldGeometry.xl.lineHeight": [
+   "--ds-input-xl-line-height"
+  ],
+  "chrome.controls.fieldGeometry.xl.iconSize": [
+   "--ds-input-xl-icon-size"
+  ],
+  "chrome.controls.fieldGeometry.xl.radius": [
+   "--ds-input-xl-radius"
+  ],
+  "chrome.controls.segmented.bg": [
+   "--ds-segmented-bg"
+  ],
+  "chrome.controls.segmented.border": [
+   "--ds-segmented-border"
+  ],
+  "chrome.controls.segmented.radius": [
+   "--ds-segmented-radius"
+  ],
+  "chrome.controls.segmented.padding": [
+   "--ds-segmented-padding"
+  ],
+  "chrome.controls.segmented.gap": [
+   "--ds-segmented-gap"
+  ],
+  "chrome.controls.segmented.shadow": [
+   "--ds-segmented-shadow"
+  ],
+  "chrome.controls.segmented.itemBg": [
+   "--ds-segmented-item-bg"
+  ],
+  "chrome.controls.segmented.itemBgHover": [
+   "--ds-segmented-item-bg-hover"
+  ],
+  "chrome.controls.segmented.itemBgSelected": [
+   "--ds-segmented-item-bg-selected"
+  ],
+  "chrome.controls.segmented.itemColor": [
+   "--ds-segmented-item-color"
+  ],
+  "chrome.controls.segmented.itemColorHover": [
+   "--ds-segmented-item-color-hover"
+  ],
+  "chrome.controls.segmented.itemColorSelected": [
+   "--ds-segmented-item-color-selected"
+  ],
+  "chrome.controls.segmented.itemRadius": [
+   "--ds-segmented-item-radius"
+  ],
+  "chrome.controls.segmented.itemShadowSelected": [
+   "--ds-segmented-item-shadow-selected"
+  ],
+  "chrome.controls.segmented.focusRing": [
+   "--ds-segmented-focus-ring"
+  ],
+  "chrome.controls.segmented.sm.height": [
+   "--ds-segmented-sm-height"
+  ],
+  "chrome.controls.segmented.sm.paddingX": [
+   "--ds-segmented-sm-padding-x"
+  ],
+  "chrome.controls.segmented.sm.fontSize": [
+   "--ds-segmented-sm-font-size"
+  ],
+  "chrome.controls.segmented.sm.lineHeight": [
+   "--ds-segmented-sm-line-height"
+  ],
+  "chrome.controls.segmented.sm.iconSize": [
+   "--ds-segmented-sm-icon-size"
+  ],
+  "chrome.controls.segmented.sm.gap": [
+   "--ds-segmented-sm-gap"
+  ],
+  "chrome.controls.segmented.sm.radius": [
+   "--ds-segmented-sm-radius"
+  ],
+  "chrome.controls.segmented.md.height": [
+   "--ds-segmented-md-height"
+  ],
+  "chrome.controls.segmented.md.paddingX": [
+   "--ds-segmented-md-padding-x"
+  ],
+  "chrome.controls.segmented.md.fontSize": [
+   "--ds-segmented-md-font-size"
+  ],
+  "chrome.controls.segmented.md.lineHeight": [
+   "--ds-segmented-md-line-height"
+  ],
+  "chrome.controls.segmented.md.iconSize": [
+   "--ds-segmented-md-icon-size"
+  ],
+  "chrome.controls.segmented.md.gap": [
+   "--ds-segmented-md-gap"
+  ],
+  "chrome.controls.segmented.md.radius": [
+   "--ds-segmented-md-radius"
+  ],
+  "chrome.controls.segmented.lg.height": [
+   "--ds-segmented-lg-height"
+  ],
+  "chrome.controls.segmented.lg.paddingX": [
+   "--ds-segmented-lg-padding-x"
+  ],
+  "chrome.controls.segmented.lg.fontSize": [
+   "--ds-segmented-lg-font-size"
+  ],
+  "chrome.controls.segmented.lg.lineHeight": [
+   "--ds-segmented-lg-line-height"
+  ],
+  "chrome.controls.segmented.lg.iconSize": [
+   "--ds-segmented-lg-icon-size"
+  ],
+  "chrome.controls.segmented.lg.gap": [
+   "--ds-segmented-lg-gap"
+  ],
+  "chrome.controls.segmented.lg.radius": [
+   "--ds-segmented-lg-radius"
+  ],
+  "chrome.controls.buttonPrimary.bg": [
+   "--ds-button-primary-bg"
+  ],
+  "chrome.controls.buttonPrimary.bgHover": [
+   "--ds-button-primary-bg-hover"
+  ],
+  "chrome.controls.buttonPrimary.text": [],
+  "chrome.controls.buttonPrimary.color": [
+   "--ds-button-primary-color"
+  ],
+  "chrome.controls.buttonPrimary.border": [
+   "--ds-button-primary-border"
+  ],
+  "chrome.controls.buttonPrimary.shadow": [
+   "--ds-button-primary-shadow"
+  ],
+  "chrome.controls.buttonSecondary.bg": [
+   "--ds-button-secondary-bg"
+  ],
+  "chrome.controls.buttonSecondary.bgHover": [
+   "--ds-button-secondary-bg-hover"
+  ],
+  "chrome.controls.buttonSecondary.text": [],
+  "chrome.controls.buttonSecondary.color": [
+   "--ds-button-secondary-color"
+  ],
+  "chrome.controls.buttonSecondary.border": [
+   "--ds-button-secondary-border"
+  ],
+  "chrome.controls.buttonDefault.bg": [
+   "--ds-button-default-bg"
+  ],
+  "chrome.controls.buttonDefault.bgHover": [
+   "--ds-button-default-bg-hover"
+  ],
+  "chrome.controls.buttonDefault.text": [],
+  "chrome.controls.buttonDefault.color": [
+   "--ds-button-default-color"
+  ],
+  "chrome.controls.buttonDefault.border": [
+   "--ds-button-default-border"
+  ],
+  "chrome.controls.buttonGhost.bg": [
+   "--ds-button-ghost-bg"
+  ],
+  "chrome.controls.buttonGhost.bgHover": [
+   "--ds-button-ghost-bg-hover"
+  ],
+  "chrome.controls.buttonGhost.text": [],
+  "chrome.controls.buttonGhost.color": [
+   "--ds-button-ghost-color"
+  ],
+  "chrome.controls.disabled.bg": [
+   "--ds-button-disabled-bg"
+  ],
+  "chrome.controls.disabled.text": [
+   "--ds-button-disabled-color"
+  ],
+  "chrome.controls.disabled.border": [
+   "--ds-button-disabled-border"
+  ],
+  "chrome.controls.disabled.borderColor": [
+   "--ds-button-disabled-border-color",
+   "--ds-input-border-color-disabled"
+  ],
+  "chrome.controls.input.bg": [
+   "--ds-color-bg-input",
+   "--ds-input-bg"
+  ],
+  "chrome.controls.input.bgHover": [
+   "--ds-input-bg-hover"
+  ],
+  "chrome.controls.input.bgFocus": [
+   "--ds-input-bg-focus"
+  ],
+  "chrome.controls.input.border": [
+   "--ds-input-border"
+  ],
+  "chrome.controls.input.borderHover": [
+   "--ds-input-border-hover"
+  ],
+  "chrome.controls.input.borderFocus": [
+   "--ds-input-border-focus"
+  ],
+  "chrome.controls.input.shadowRest": [
+   "--ds-input-shadow-rest"
+  ],
+  "chrome.controls.input.shadowHover": [
+   "--ds-input-shadow-hover"
+  ],
+  "chrome.controls.input.shadowFocus": [
+   "--ds-input-shadow-focus"
+  ],
+  "chrome.controls.input.insetShadow": [
+   "--ds-input-inset-shadow"
+  ],
+  "chrome.controls.input.caretColor": [
+   "--ds-input-caret-color"
+  ],
+  "chrome.controls.input.selectionBg": [
+   "--ds-input-selection-bg"
+  ],
+  "chrome.controls.input.selectionColor": [
+   "--ds-input-selection-color"
+  ],
+  "chrome.controls.input.color": [
+   "--ds-input-color"
+  ],
+  "chrome.controls.input.colorPlaceholder": [
+   "--ds-input-color-placeholder"
+  ],
+  "chrome.controls.input.bgDisabled": [
+   "--ds-input-bg-disabled"
+  ],
+  "chrome.controls.input.colorDisabled": [
+   "--ds-input-color-disabled"
+  ],
+  "chrome.controls.input.borderDisabled": [
+   "--ds-input-border-disabled"
+  ],
+  "chrome.controls.input.filled.bg": [
+   "--ds-input-filled-bg"
+  ],
+  "chrome.controls.input.filled.bgHover": [
+   "--ds-input-filled-bg-hover"
+  ],
+  "chrome.controls.input.filled.bgFocus": [
+   "--ds-input-filled-bg-focus"
+  ],
+  "chrome.controls.input.filled.border": [
+   "--ds-input-filled-border"
+  ],
+  "chrome.controls.input.addon.bg": [
+   "--ds-input-addon-bg"
+  ],
+  "chrome.controls.input.addon.color": [
+   "--ds-input-addon-color"
+  ],
+  "chrome.controls.input.addon.border": [
+   "--ds-input-addon-border"
+  ],
+  "chrome.controls.input.addon.radius": [
+   "--ds-input-addon-radius"
+  ],
+  "chrome.controls.input.affix.bg": [
+   "--ds-input-affix-bg"
+  ],
+  "chrome.controls.input.affix.color": [
+   "--ds-input-affix-color"
+  ],
+  "chrome.controls.input.affix.border": [
+   "--ds-input-affix-border"
+  ],
+  "chrome.controls.input.affix.paddingX": [
+   "--ds-input-affix-padding-x"
+  ],
+  "chrome.controls.input.label.color": [
+   "--ds-input-label-color"
+  ],
+  "chrome.controls.input.label.requiredColor": [
+   "--ds-input-label-required-color"
+  ],
+  "chrome.controls.input.label.disabledColor": [
+   "--ds-input-label-color-disabled"
+  ],
+  "chrome.controls.input.helper.color": [
+   "--ds-input-helper-color"
+  ],
+  "chrome.controls.input.helper.errorColor": [
+   "--ds-input-error-message-color"
+  ],
+  "chrome.controls.input.clear.color": [
+   "--ds-input-clear-color"
+  ],
+  "chrome.controls.input.clear.colorHover": [
+   "--ds-input-clear-color-hover"
+  ],
+  "chrome.controls.input.clear.bg": [
+   "--ds-input-clear-bg"
+  ],
+  "chrome.controls.input.clear.bgHover": [
+   "--ds-input-clear-bg-hover"
+  ],
+  "chrome.controls.input.clear.border": [
+   "--ds-input-clear-border"
+  ],
+  "chrome.controls.input.clear.borderHover": [
+   "--ds-input-clear-border-hover"
+  ],
+  "chrome.controls.input.clear.shadowHover": [
+   "--ds-input-action-shadow-hover"
+  ],
+  "chrome.controls.input.clear.focusRing": [
+   "--ds-input-action-focus-ring"
+  ],
+  "chrome.controls.input.clear.activeTransform": [
+   "--ds-input-action-active-transform"
+  ],
+  "chrome.controls.input.readOnly.bg": [
+   "--ds-input-readonly-bg"
+  ],
+  "chrome.controls.input.readOnly.color": [
+   "--ds-input-readonly-color"
+  ],
+  "chrome.controls.input.readOnly.border": [
+   "--ds-input-readonly-border"
+  ],
+  "chrome.controls.input.readOnly.borderStyle": [
+   "--ds-input-readonly-border-style"
+  ],
+  "chrome.controls.input.readOnly.cursor": [
+   "--ds-input-readonly-cursor"
+  ],
+  "chrome.controls.input.loadingColor": [
+   "--ds-input-loading-color"
+  ],
+  "chrome.controls.input.autofill.bg": [
+   "--ds-input-autofill-bg"
+  ],
+  "chrome.controls.input.autofill.color": [
+   "--ds-input-autofill-color"
+  ],
+  "chrome.controls.input.autofill.caret": [
+   "--ds-input-autofill-caret"
+  ],
+  "chrome.controls.input.count.color": [
+   "--ds-input-count-color"
+  ],
+  "chrome.controls.input.count.colorWarning": [
+   "--ds-input-count-color-warning"
+  ],
+  "chrome.controls.input.count.colorError": [
+   "--ds-input-count-color-error"
+  ],
+  "chrome.controls.input.successBorder": [
+   "--ds-input-success-border"
+  ],
+  "chrome.controls.input.successBg": [
+   "--ds-input-success-bg"
+  ],
+  "chrome.controls.input.warningBorder": [
+   "--ds-input-warning-border"
+  ],
+  "chrome.controls.input.warningBg": [
+   "--ds-input-warning-bg"
+  ],
+  "chrome.controls.input.errorBorder": [
+   "--ds-input-error-border"
+  ],
+  "chrome.controls.input.errorBg": [
+   "--ds-input-error-bg"
+  ],
+  "chrome.controls.input.errorColor": [
+   "--ds-input-error-color"
+  ],
+  "chrome.table.bg": [
+   "--ds-table-bg"
+  ],
+  "chrome.table.border": [
+   "--ds-table-border"
+  ],
+  "chrome.table.radius": [
+   "--ds-table-radius"
+  ],
+  "chrome.table.headerBg": [
+   "--ds-table-header-bg"
+  ],
+  "chrome.table.headerBgHover": [
+   "--ds-table-header-bg-hover"
+  ],
+  "chrome.table.headerColor": [
+   "--ds-table-header-color"
+  ],
+  "chrome.table.headerFontSize": [
+   "--ds-table-header-font-size"
+  ],
+  "chrome.table.headerLetterSpacing": [
+   "--ds-table-header-letter-spacing"
+  ],
+  "chrome.table.headerTextTransform": [
+   "--ds-table-header-text-transform"
+  ],
+  "chrome.table.headerBlockSize": [
+   "--ds-table-header-block-size"
+  ],
+  "chrome.table.headerBorder": [
+   "--ds-table-header-border"
+  ],
+  "chrome.table.headerShadow": [
+   "--ds-table-header-shadow"
+  ],
+  "chrome.table.rowBg": [
+   "--ds-table-row-bg"
+  ],
+  "chrome.table.rowBgHover": [
+   "--ds-table-row-bg-hover"
+  ],
+  "chrome.table.rowBgStriped": [
+   "--ds-table-row-bg-striped"
+  ],
+  "chrome.table.rowBgSelected": [
+   "--ds-table-row-bg-selected"
+  ],
+  "chrome.table.rowBgExpanded": [
+   "--ds-table-row-bg-expanded"
+  ],
+  "chrome.table.rowBorder": [
+   "--ds-table-row-border"
+  ],
+  "chrome.table.rowHoverShadow": [
+   "--ds-table-row-hover-shadow"
+  ],
+  "chrome.table.cellPaddingCompact": [
+   "--ds-table-padding-compact"
+  ],
+  "chrome.table.cellPaddingComfortable": [
+   "--ds-table-padding-comfortable"
+  ],
+  "chrome.table.cellPaddingSpacious": [
+   "--ds-table-padding-spacious"
+  ],
+  "chrome.table.cellFontSize": [
+   "--ds-table-cell-font-size"
+  ],
+  "chrome.table.cellColor": [
+   "--ds-table-cell-color"
+  ],
+  "chrome.table.filterRowBg": [
+   "--ds-table-filter-row-bg"
+  ],
+  "chrome.table.filterFocusShadow": [
+   "--ds-table-filter-focus-shadow"
+  ],
+  "chrome.table.resizeBg": [
+   "--ds-table-resize-bg"
+  ],
+  "chrome.table.resizeBgHover": [
+   "--ds-table-resize-bg-hover"
+  ],
+  "chrome.table.reorderBg": [
+   "--ds-table-reorder-bg"
+  ],
+  "chrome.table.actionBg": [
+   "--ds-table-action-bg"
+  ],
+  "chrome.table.actionBorder": [
+   "--ds-table-action-border"
+  ],
+  "chrome.table.sheen": [
+   "--ds-table-sheen"
+  ],
+  "chrome.table.pageButtonHoverShadow": [
+   "--ds-table-page-button-hover-shadow"
+  ],
+  "chrome.table.loadingOverlayBg": [
+   "--ds-table-loading-overlay-bg"
+  ],
+  "chrome.cardComponent.padding": [
+   "--ds-card-padding"
+  ],
+  "chrome.cardComponent.paddingSm": [
+   "--ds-card-padding-sm",
+   "--ds-card-sm-padding"
+  ],
+  "chrome.cardComponent.paddingMd": [
+   "--ds-card-md-padding",
+   "--ds-card-padding-md"
+  ],
+  "chrome.cardComponent.paddingLg": [
+   "--ds-card-lg-padding",
+   "--ds-card-padding-lg"
+  ],
+  "chrome.cardComponent.paddingXl": [
+   "--ds-card-padding-xl",
+   "--ds-card-xl-padding"
+  ],
+  "chrome.cardComponent.bg": [
+   "--ds-card-bg"
+  ],
+  "chrome.cardComponent.bgHover": [
+   "--ds-card-bg-hover"
+  ],
+  "chrome.cardComponent.color": [
+   "--ds-card-color"
+  ],
+  "chrome.cardComponent.colorMuted": [
+   "--ds-card-color-muted"
+  ],
+  "chrome.cardComponent.border": [
+   "--ds-card-border"
+  ],
+  "chrome.cardComponent.borderColor": [
+   "--ds-card-border-color"
+  ],
+  "chrome.cardComponent.borderHover": [
+   "--ds-card-border-color-hover",
+   "--ds-card-border-hover"
+  ],
+  "chrome.cardComponent.titleLetterSpacing": [
+   "--ds-card-title-letter-spacing"
+  ],
+  "chrome.cardComponent.shadow": [
+   "--ds-card-shadow"
+  ],
+  "chrome.cardComponent.shadowHover": [
+   "--ds-card-shadow-hover"
+  ],
+  "chrome.cardComponent.radius": [
+   "--ds-card-border-radius",
+   "--ds-card-radius"
+  ],
+  "chrome.cardComponent.focusRing": [
+   "--ds-card-focus-ring"
+  ],
+  "chrome.cardComponent.hoverTransform": [
+   "--ds-card-hover-transform",
+   "--ds-card-interactive-transform-hover"
+  ],
+  "chrome.cardComponent.headerBorder": [
+   "--ds-card-header-border"
+  ],
+  "chrome.cardComponent.headerBorderColor": [
+   "--ds-card-header-border-color"
+  ],
+  "chrome.cardComponent.headerBg": [
+   "--ds-card-header-bg"
+  ],
+  "chrome.cardComponent.headerColor": [
+   "--ds-card-header-color"
+  ],
+  "chrome.cardComponent.headerPadding": [
+   "--ds-card-header-padding"
+  ],
+  "chrome.cardComponent.titleColor": [
+   "--ds-card-title-color"
+  ],
+  "chrome.cardComponent.titleFontSize": [
+   "--ds-card-title-font-size"
+  ],
+  "chrome.cardComponent.subtitleColor": [
+   "--ds-card-subtitle-color"
+  ],
+  "chrome.cardComponent.bodyColor": [
+   "--ds-card-body-color"
+  ],
+  "chrome.cardComponent.bodyPadding": [
+   "--ds-card-body-padding"
+  ],
+  "chrome.cardComponent.footerBorder": [
+   "--ds-card-footer-border"
+  ],
+  "chrome.cardComponent.footerBorderColor": [
+   "--ds-card-footer-border-color"
+  ],
+  "chrome.cardComponent.footerBg": [
+   "--ds-card-footer-bg"
+  ],
+  "chrome.cardComponent.footerColor": [
+   "--ds-card-footer-color"
+  ],
+  "chrome.cardComponent.footerPadding": [
+   "--ds-card-footer-padding"
+  ],
+  "chrome.cardComponent.imagePlaceholderBg": [
+   "--ds-card-image-placeholder-bg"
+  ],
+  "chrome.cardComponent.imagePlaceholderColor": [
+   "--ds-card-image-placeholder-color"
+  ],
+  "chrome.metricCard.bg": [
+   "--ds-metric-card-bg"
+  ],
+  "chrome.metricCard.border": [
+   "--ds-metric-card-border"
+  ],
+  "chrome.metricCard.borderHover": [
+   "--ds-metric-card-border-hover"
+  ],
+  "chrome.metricCard.selectedBorder": [
+   "--ds-metric-card-selected-border"
+  ],
+  "chrome.metricCard.selectedRing": [
+   "--ds-metric-card-selected-ring"
+  ],
+  "chrome.metricCard.shadow": [
+   "--ds-metric-card-shadow"
+  ],
+  "chrome.metricCard.shadowHover": [
+   "--ds-metric-card-shadow-hover"
+  ],
+  "chrome.metricCard.sheen": [
+   "--ds-metric-card-sheen"
+  ],
+  "chrome.metricCard.iconBg": [
+   "--ds-metric-card-icon-bg"
+  ],
+  "chrome.metricCard.iconBorder": [
+   "--ds-metric-card-icon-border"
+  ],
+  "chrome.metricCard.labelColor": [
+   "--ds-metric-card-label-color"
+  ],
+  "chrome.metricCard.valueColor": [
+   "--ds-metric-card-value-color"
+  ],
+  "chrome.metricCard.trendColor": [
+   "--ds-metric-card-trend-color"
+  ],
+  "chrome.metricCard.meterTrack": [
+   "--ds-metric-card-meter-track"
+  ],
+  "chrome.metricCard.meterTrackBorder": [
+   "--ds-metric-card-meter-track-border"
+  ],
+  "chrome.metricCard.meterFill": [
+   "--ds-metric-card-meter-fill"
+  ],
+  "chrome.metricCard.meterFillSuccess": [
+   "--ds-metric-card-meter-fill-success"
+  ],
+  "chrome.metricCard.meterFillWarning": [
+   "--ds-metric-card-meter-fill-warning"
+  ],
+  "chrome.metricCard.meterFillError": [
+   "--ds-metric-card-meter-fill-error"
+  ],
+  "chrome.metricCard.meterFillNeutral": [
+   "--ds-metric-card-meter-fill-neutral"
+  ],
+  "chrome.signalCard.bg": [
+   "--ds-signal-card-bg"
+  ],
+  "chrome.signalCard.topLineDisplay": [
+   "--ds-signal-card-top-line-display"
+  ],
+  "chrome.signalCard.border": [
+   "--ds-signal-card-border"
+  ],
+  "chrome.signalCard.borderHover": [
+   "--ds-signal-card-border-hover"
+  ],
+  "chrome.signalCard.shadow": [
+   "--ds-signal-card-shadow"
+  ],
+  "chrome.signalCard.iconBg": [
+   "--ds-signal-card-icon-bg"
+  ],
+  "chrome.signalCard.iconBorder": [
+   "--ds-signal-card-icon-border"
+  ],
+  "chrome.signalCard.titleColor": [
+   "--ds-signal-card-title-color"
+  ],
+  "chrome.signalCard.bodyColor": [
+   "--ds-signal-card-body-color"
+  ],
+  "chrome.signalCard.badgeBg": [
+   "--ds-signal-card-badge-bg"
+  ],
+  "chrome.signalCard.badgeBorder": [
+   "--ds-signal-card-badge-border"
+  ],
+  "chrome.signalCard.badgeColor": [
+   "--ds-signal-card-badge-color"
+  ],
+  "chrome.signalCard.sectionBg": [
+   "--ds-signal-card-section-bg"
+  ],
+  "chrome.signalCard.sectionAltBg": [
+   "--ds-signal-card-section-alt-bg"
+  ],
+  "chrome.signalCard.meterTrack": [
+   "--ds-signal-card-meter-track"
+  ],
+  "chrome.signalCard.meterTrackBorder": [
+   "--ds-signal-card-meter-track-border"
+  ],
+  "chrome.signalCard.meterFill": [
+   "--ds-signal-card-meter-fill"
+  ],
+  "chrome.workspaceCard.bg": [
+   "--ds-workspace-card-bg"
+  ],
+  "chrome.workspaceCard.bgHover": [
+   "--ds-workspace-card-bg-hover"
+  ],
+  "chrome.workspaceCard.border": [
+   "--ds-workspace-card-border"
+  ],
+  "chrome.workspaceCard.borderHover": [
+   "--ds-workspace-card-border-hover"
+  ],
+  "chrome.workspaceCard.shadow": [
+   "--ds-workspace-card-shadow"
+  ],
+  "chrome.workspaceCard.shadowHover": [
+   "--ds-workspace-card-shadow-hover"
+  ],
+  "chrome.workspaceCard.radius": [
+   "--ds-workspace-card-radius"
+  ],
+  "chrome.workspaceCard.padding": [
+   "--ds-workspace-card-padding"
+  ],
+  "chrome.workspaceCard.gap": [
+   "--ds-workspace-card-gap"
+  ],
+  "chrome.workspaceCard.iconBg": [
+   "--ds-workspace-card-icon-bg"
+  ],
+  "chrome.workspaceCard.iconBorder": [
+   "--ds-workspace-card-icon-border"
+  ],
+  "chrome.workspaceCard.iconColor": [
+   "--ds-workspace-card-icon-color"
+  ],
+  "chrome.workspaceCard.titleColor": [
+   "--ds-workspace-card-title-color"
+  ],
+  "chrome.workspaceCard.bodyColor": [
+   "--ds-workspace-card-body-color"
+  ],
+  "chrome.workspaceCard.labelColor": [
+   "--ds-workspace-card-label-color"
+  ],
+  "chrome.workspaceCard.valueColor": [
+   "--ds-workspace-card-value-color"
+  ],
+  "chrome.workspaceCard.footerBg": [
+   "--ds-workspace-card-footer-bg"
+  ],
+  "chrome.workspaceCard.footerBorder": [
+   "--ds-workspace-card-footer-border"
+  ],
+  "chrome.workspaceCard.footerColor": [
+   "--ds-workspace-card-footer-color"
+  ],
+  "chrome.workspaceCard.hoverTransform": [
+   "--ds-workspace-card-hover-transform"
+  ],
+  "chrome.compactCard.bg": [
+   "--ds-compact-card-bg"
+  ],
+  "chrome.compactCard.bgHover": [
+   "--ds-compact-card-bg-hover"
+  ],
+  "chrome.compactCard.border": [
+   "--ds-compact-card-border"
+  ],
+  "chrome.compactCard.borderHover": [
+   "--ds-compact-card-border-hover"
+  ],
+  "chrome.compactCard.shadow": [
+   "--ds-compact-card-shadow"
+  ],
+  "chrome.compactCard.radius": [
+   "--ds-compact-card-radius"
+  ],
+  "chrome.compactCard.padding": [
+   "--ds-compact-card-padding"
+  ],
+  "chrome.compactCard.gap": [
+   "--ds-compact-card-gap"
+  ],
+  "chrome.compactCard.titleColor": [
+   "--ds-compact-card-title-color"
+  ],
+  "chrome.compactCard.bodyColor": [
+   "--ds-compact-card-body-color"
+  ],
+  "chrome.compactCard.labelColor": [
+   "--ds-compact-card-label-color"
+  ],
+  "chrome.compactCard.valueColor": [
+   "--ds-compact-card-value-color"
+  ],
+  "chrome.tallCard.bg": [
+   "--ds-tall-card-bg"
+  ],
+  "chrome.tallCard.border": [
+   "--ds-tall-card-border"
+  ],
+  "chrome.tallCard.borderHover": [
+   "--ds-tall-card-border-hover"
+  ],
+  "chrome.tallCard.shadow": [
+   "--ds-tall-card-shadow"
+  ],
+  "chrome.tallCard.radius": [
+   "--ds-tall-card-radius"
+  ],
+  "chrome.tallCard.padding": [
+   "--ds-tall-card-padding"
+  ],
+  "chrome.tallCard.gap": [
+   "--ds-tall-card-gap"
+  ],
+  "chrome.tallCard.titleColor": [
+   "--ds-tall-card-title-color"
+  ],
+  "chrome.tallCard.bodyColor": [
+   "--ds-tall-card-body-color"
+  ],
+  "chrome.tallCard.labelColor": [
+   "--ds-tall-card-label-color"
+  ],
+  "chrome.tallCard.valueColor": [
+   "--ds-tall-card-value-color"
+  ],
+  "chrome.collectionCard.bg": [
+   "--ds-collection-card-bg"
+  ],
+  "chrome.collectionCard.bgHover": [
+   "--ds-collection-card-bg-hover"
+  ],
+  "chrome.collectionCard.border": [
+   "--ds-collection-card-border"
+  ],
+  "chrome.collectionCard.borderHover": [
+   "--ds-collection-card-border-hover"
+  ],
+  "chrome.collectionCard.selectedBorder": [
+   "--ds-collection-card-selected-border"
+  ],
+  "chrome.collectionCard.selectedRing": [
+   "--ds-collection-card-selected-ring"
+  ],
+  "chrome.collectionCard.shadow": [
+   "--ds-collection-card-shadow"
+  ],
+  "chrome.collectionCard.shadowHover": [
+   "--ds-collection-card-shadow-hover"
+  ],
+  "chrome.collectionCard.radius": [
+   "--ds-collection-card-radius"
+  ],
+  "chrome.collectionCard.padding": [
+   "--ds-collection-card-padding"
+  ],
+  "chrome.collectionCard.gap": [
+   "--ds-collection-card-gap"
+  ],
+  "chrome.collectionCard.titleColor": [
+   "--ds-collection-card-title-color"
+  ],
+  "chrome.collectionCard.bodyColor": [
+   "--ds-collection-card-body-color"
+  ],
+  "chrome.collectionCard.labelColor": [
+   "--ds-collection-card-label-color"
+  ],
+  "chrome.collectionCard.valueColor": [
+   "--ds-collection-card-value-color"
+  ],
+  "chrome.collectionCard.statusBg": [
+   "--ds-collection-card-status-bg"
+  ],
+  "chrome.collectionCard.statusBorder": [
+   "--ds-collection-card-status-border"
+  ],
+  "chrome.collectionCard.statusColor": [
+   "--ds-collection-card-status-color"
+  ],
+  "chrome.listingGrid.gap": [
+   "--ds-listing-grid-gap"
+  ],
+  "chrome.listingGrid.minCardWidth": [
+   "--ds-listing-grid-min-card-width"
+  ],
+  "chrome.listingGrid.minCompactWidth": [
+   "--ds-listing-grid-min-compact-width"
+  ],
+  "chrome.listingGrid.minTallWidth": [
+   "--ds-listing-grid-min-tall-width"
+  ],
+  "chrome.listingGrid.cardGap": [
+   "--ds-listing-grid-card-gap"
+  ],
+  "chrome.listingGrid.cardBg": [
+   "--ds-listing-grid-card-bg"
+  ],
+  "chrome.listingGrid.cardBorder": [
+   "--ds-listing-grid-card-border"
+  ],
+  "chrome.listingGrid.cardShadow": [
+   "--ds-listing-grid-card-shadow"
+  ],
+  "chrome.listingGrid.selectedRing": [
+   "--ds-listing-grid-selected-ring"
+  ],
+  "chrome.listingGrid.emptyBg": [
+   "--ds-listing-grid-empty-bg"
+  ],
+  "chrome.listingGrid.emptyBorder": [
+   "--ds-listing-grid-empty-border"
+  ],
+  "chrome.listingGrid.skeletonBg": [
+   "--ds-listing-grid-skeleton-bg"
+  ],
+  "chrome.list.previewRailGap": [
+   "--ds-list-preview-rail-gap"
+  ],
+  "chrome.list.previewPanelBg": [
+   "--ds-list-preview-panel-bg"
+  ],
+  "chrome.list.previewPanelBorder": [
+   "--ds-list-preview-panel-border"
+  ],
+  "chrome.list.previewPanelShadow": [
+   "--ds-list-preview-panel-shadow"
+  ],
+  "chrome.list.previewMotionDuration": [
+   "--ds-list-preview-motion-duration"
+  ],
+  "chrome.list.previewMotionEase": [
+   "--ds-list-preview-motion-ease"
+  ],
+  "chrome.list.shellSectionGap": [
+   "--ds-list-shell-section-gap"
+  ],
+  "chrome.detail.railWidth": [
+   "--ds-detail-rail-width"
+  ],
+  "chrome.detail.heroBg": [
+   "--ds-detail-hero-bg"
+  ],
+  "chrome.detail.heroBorder": [
+   "--ds-detail-hero-border"
+  ],
+  "chrome.detail.heroShadow": [
+   "--ds-detail-hero-shadow"
+  ],
+  "chrome.detail.sectionBg": [
+   "--ds-detail-section-bg"
+  ],
+  "chrome.detail.sectionBorder": [
+   "--ds-detail-section-border"
+  ],
+  "chrome.detail.sectionShadow": [
+   "--ds-detail-section-shadow"
+  ],
+  "chrome.modal.bg": [
+   "--ds-modal-bg"
+  ],
+  "chrome.modal.color": [
+   "--ds-modal-color"
+  ],
+  "chrome.modal.shadow": [
+   "--ds-modal-shadow"
+  ],
+  "chrome.modal.overlayBg": [
+   "--ds-modal-overlay-bg"
+  ],
+  "chrome.modal.overlayBackdrop": [
+   "--ds-modal-overlay-backdrop"
+  ],
+  "chrome.modal.headerBg": [
+   "--ds-modal-header-bg"
+  ],
+  "chrome.modal.headerBorder": [
+   "--ds-modal-header-border"
+  ],
+  "chrome.modal.titleColor": [
+   "--ds-modal-title-color"
+  ],
+  "chrome.modal.subtitleColor": [
+   "--ds-modal-subtitle-color"
+  ],
+  "chrome.modal.bodyColor": [
+   "--ds-modal-body-color"
+  ],
+  "chrome.modal.footerBorder": [
+   "--ds-modal-footer-border"
+  ],
+  "chrome.modal.footerBg": [
+   "--ds-modal-footer-bg"
+  ],
+  "chrome.modal.closeColor": [
+   "--ds-modal-close-color"
+  ],
+  "chrome.modal.closeColorHover": [
+   "--ds-modal-close-color-hover"
+  ],
+  "chrome.modal.closeBgHover": [
+   "--ds-modal-close-bg-hover"
+  ],
+  "chrome.tabs.border": [
+   "--ds-tabs-border"
+  ],
+  "chrome.tabs.color": [
+   "--ds-tab-color"
+  ],
+  "chrome.tabs.colorHover": [
+   "--ds-tab-color-hover"
+  ],
+  "chrome.tabs.colorActive": [
+   "--ds-tab-color-active"
+  ],
+  "chrome.tabs.bgHover": [
+   "--ds-tab-bg-hover"
+  ],
+  "chrome.tabs.borderActive": [
+   "--ds-tab-border-active"
+  ],
+  "chrome.tabs.listBg": [
+   "--ds-tabs-list-bg"
+  ],
+  "chrome.tabs.listBorder": [
+   "--ds-tabs-list-border"
+  ],
+  "chrome.tabs.listRadius": [
+   "--ds-tabs-list-radius"
+  ],
+  "chrome.tabs.listPadding": [
+   "--ds-tabs-list-padding"
+  ],
+  "chrome.tabs.listShadow": [
+   "--ds-tabs-list-shadow"
+  ],
+  "chrome.tabs.listTexture": [
+   "--ds-tabs-list-texture"
+  ],
+  "chrome.tabs.listHighlight": [
+   "--ds-tabs-list-highlight"
+  ],
+  "chrome.tabs.gap": [
+   "--ds-tabs-gap"
+  ],
+  "chrome.tabs.itemGap": [
+   "--ds-tabs-item-gap"
+  ],
+  "chrome.tabs.itemRadius": [
+   "--ds-tabs-item-radius"
+  ],
+  "chrome.tabs.activeBg": [
+   "--ds-tabs-active-bg"
+  ],
+  "chrome.tabs.activeShadow": [
+   "--ds-tabs-active-shadow"
+  ],
+  "chrome.tabs.activeHighlight": [
+   "--ds-tabs-active-highlight"
+  ],
+  "chrome.tabs.pressedTransform": [
+   "--ds-tabs-pressed-transform"
+  ],
+  "chrome.tabs.iconPadding": [
+   "--ds-tabs-icon-padding"
+  ],
+  "chrome.tabs.iconShadowActive": [
+   "--ds-tabs-icon-shadow-active"
+  ],
+  "chrome.tabs.badgeBgActive": [
+   "--ds-tabs-badge-bg-active"
+  ],
+  "chrome.tabs.badgeColorActive": [
+   "--ds-tabs-badge-color-active"
+  ],
+  "chrome.tabs.badgeBorderActive": [
+   "--ds-tabs-badge-border-active"
+  ],
+  "chrome.tabs.indicatorHeight": [
+   "--ds-tabs-indicator-height"
+  ],
+  "chrome.tabs.panelBg": [
+   "--ds-tabs-panel-bg"
+  ],
+  "chrome.tabs.panelBorder": [
+   "--ds-tabs-panel-border"
+  ],
+  "chrome.tabs.panelRadius": [
+   "--ds-tabs-panel-radius"
+  ],
+  "chrome.tabs.panelShadow": [
+   "--ds-tabs-panel-shadow"
+  ],
+  "chrome.tabs.panelTexture": [
+   "--ds-tabs-panel-texture"
+  ],
+  "chrome.tabs.panelHighlight": [
+   "--ds-tabs-panel-highlight"
+  ],
+  "chrome.tabs.overflowControlBg": [
+   "--ds-tabs-overflow-control-bg"
+  ],
+  "chrome.tabs.overflowControlBgHover": [
+   "--ds-tabs-overflow-control-bg-hover"
+  ],
+  "chrome.tabs.overflowControlShadow": [
+   "--ds-tabs-overflow-control-shadow"
+  ],
+  "chrome.tabs.overflowControlShadowHover": [
+   "--ds-tabs-overflow-control-shadow-hover"
+  ],
+  "chrome.tabs.motionDuration": [
+   "--ds-tabs-motion-duration"
+  ],
+  "chrome.tabs.activeRevealDuration": [
+   "--ds-tabs-active-reveal-duration"
+  ],
+  "chrome.tabs.panelMotionDuration": [
+   "--ds-tabs-panel-motion-duration"
+  ],
+  "chrome.tabs.smHeight": [
+   "--ds-tabs-sm-height"
+  ],
+  "chrome.tabs.smPadding": [
+   "--ds-tabs-sm-padding"
+  ],
+  "chrome.tabs.smFontSize": [
+   "--ds-tabs-sm-font-size"
+  ],
+  "chrome.tabs.smIconSize": [
+   "--ds-tabs-sm-icon-size"
+  ],
+  "chrome.tabs.mdHeight": [
+   "--ds-tabs-md-height"
+  ],
+  "chrome.tabs.mdPadding": [
+   "--ds-tabs-md-padding"
+  ],
+  "chrome.tabs.mdFontSize": [
+   "--ds-tabs-md-font-size"
+  ],
+  "chrome.tabs.mdIconSize": [
+   "--ds-tabs-md-icon-size"
+  ],
+  "chrome.tabs.lgHeight": [
+   "--ds-tabs-lg-height"
+  ],
+  "chrome.tabs.lgPadding": [
+   "--ds-tabs-lg-padding"
+  ],
+  "chrome.tabs.lgFontSize": [
+   "--ds-tabs-lg-font-size"
+  ],
+  "chrome.tabs.lgIconSize": [
+   "--ds-tabs-lg-icon-size"
+  ],
+  "expressive.experienceProfile": [],
+  "expressive.profiles.type": [],
+  "expressive.profiles.geometry": []
+ },
+ "channelToField": {
+  "--ds-color-primary": [
+   "palette.primaryColor"
+  ],
+  "--ds-color-secondary": [
+   "palette.secondaryColor"
+  ],
+  "--ds-color-accent": [
+   "palette.accentColor"
+  ],
+  "--ds-color-dark-primary": [
+   "palette.darkPrimaryColor"
+  ],
+  "--ds-color-dark-secondary": [
+   "palette.darkSecondaryColor"
+  ],
+  "--ds-color-dark-accent": [
+   "palette.darkAccentColor"
+  ],
+  "--ds-color-background": [
+   "palette.backgroundColor"
+  ],
+  "--ds-color-bg": [
+   "palette.backgroundColor"
+  ],
+  "--ds-color-bg-primary": [
+   "palette.backgroundColor"
+  ],
+  "--ds-color-bg-secondary": [
+   "palette.backgroundSecondaryColor"
+  ],
+  "--ds-color-bg-tertiary": [
+   "palette.backgroundTertiaryColor"
+  ],
+  "--ds-color-bg-elevated": [
+   "palette.backgroundElevatedColor"
+  ],
+  "--ds-color-text-primary": [
+   "palette.textPrimaryColor"
+  ],
+  "--ds-color-text-secondary": [
+   "palette.textSecondaryColor"
+  ],
+  "--ds-color-text-muted": [
+   "palette.textMutedColor"
+  ],
+  "--ds-color-text-disabled": [
+   "palette.textDisabledColor"
+  ],
+  "--ds-color-text-on-primary": [
+   "palette.onPrimaryColor"
+  ],
+  "--ds-color-border-primary": [
+   "palette.borderPrimaryColor"
+  ],
+  "--ds-color-border-secondary": [
+   "palette.borderSecondaryColor"
+  ],
+  "--ds-color-success": [
+   "palette.successColor"
+  ],
+  "--ds-color-warning": [
+   "palette.warningColor"
+  ],
+  "--ds-color-error": [
+   "palette.errorColor"
+  ],
+  "--ds-color-info": [
+   "palette.infoColor"
+  ],
+  "--ds-color-bg-overlay": [
+   "palette.backgroundOverlayColor"
+  ],
+  "--ds-font-family-base": [
+   "typography.fontFamilyBase"
+  ],
+  "--ds-font-family-heading": [
+   "typography.fontFamilyHeading"
+  ],
+  "--ds-font-family-mono": [
+   "typography.fontFamilyMono"
+  ],
+  "--ds-font-family-display": [
+   "typography.fontFamilyDisplay"
+  ],
+  "--ds-letter-spacing-display": [
+   "typography.letterSpacing.display"
+  ],
+  "--ds-letter-spacing-heading": [
+   "typography.letterSpacing.heading"
+  ],
+  "--ds-letter-spacing-body": [
+   "typography.letterSpacing.body"
+  ],
+  "--ds-letter-spacing-mono": [
+   "typography.letterSpacing.mono"
+  ],
+  "--ds-radius-sm-base": [
+   "surfaces.borderRadius.sm"
+  ],
+  "--ds-radius-md-base": [
+   "surfaces.borderRadius.md"
+  ],
+  "--ds-radius-lg-base": [
+   "surfaces.borderRadius.lg"
+  ],
+  "--ds-radius-xl-base": [
+   "surfaces.borderRadius.xl"
+  ],
+  "--ds-shadow-sm": [
+   "surfaces.shadows.sm"
+  ],
+  "--ds-shadow-md": [
+   "surfaces.shadows.md"
+  ],
+  "--ds-shadow-lg": [
+   "surfaces.shadows.lg"
+  ],
+  "--ds-shadow-xl": [
+   "surfaces.shadows.xl"
+  ],
+  "--ds-surface-canvas": [
+   "surfaces.surfaceRoles.canvas.background"
+  ],
+  "--ds-material-canvas-foreground": [
+   "surfaces.surfaceRoles.canvas.foreground"
+  ],
+  "--ds-material-canvas-texture": [
+   "surfaces.surfaceRoles.canvas.texture"
+  ],
+  "--ds-surface-shell": [
+   "surfaces.surfaceRoles.shell.background"
+  ],
+  "--ds-material-shell-foreground": [
+   "surfaces.surfaceRoles.shell.foreground"
+  ],
+  "--ds-material-shell-border": [
+   "surfaces.surfaceRoles.shell.border"
+  ],
+  "--ds-surface-panel": [
+   "surfaces.surfaceRoles.panel.background"
+  ],
+  "--ds-material-panel-background-hover": [
+   "surfaces.surfaceRoles.panel.backgroundHover"
+  ],
+  "--ds-material-panel-background-active": [
+   "surfaces.surfaceRoles.panel.backgroundActive"
+  ],
+  "--ds-material-panel-background-selected": [
+   "surfaces.surfaceRoles.panel.backgroundSelected"
+  ],
+  "--ds-material-panel-background-disabled": [
+   "surfaces.surfaceRoles.panel.backgroundDisabled"
+  ],
+  "--ds-material-panel-foreground": [
+   "surfaces.surfaceRoles.panel.foreground"
+  ],
+  "--ds-material-panel-foreground-muted": [
+   "surfaces.surfaceRoles.panel.foregroundMuted"
+  ],
+  "--ds-material-panel-foreground-disabled": [
+   "surfaces.surfaceRoles.panel.foregroundDisabled"
+  ],
+  "--ds-material-panel-border": [
+   "surfaces.surfaceRoles.panel.border"
+  ],
+  "--ds-material-panel-border-strong": [
+   "surfaces.surfaceRoles.panel.borderStrong"
+  ],
+  "--ds-material-panel-border-hover": [
+   "surfaces.surfaceRoles.panel.borderHover"
+  ],
+  "--ds-material-panel-border-active": [
+   "surfaces.surfaceRoles.panel.borderActive"
+  ],
+  "--ds-material-panel-border-selected": [
+   "surfaces.surfaceRoles.panel.borderSelected"
+  ],
+  "--ds-material-panel-border-disabled": [
+   "surfaces.surfaceRoles.panel.borderDisabled"
+  ],
+  "--ds-material-panel-focus-ring": [
+   "surfaces.surfaceRoles.panel.focusRing"
+  ],
+  "--ds-material-panel-shadow": [
+   "surfaces.surfaceRoles.panel.shadow"
+  ],
+  "--ds-material-panel-shadow-hover": [
+   "surfaces.surfaceRoles.panel.shadowHover"
+  ],
+  "--ds-material-panel-shadow-active": [
+   "surfaces.surfaceRoles.panel.shadowActive"
+  ],
+  "--ds-material-panel-shadow-selected": [
+   "surfaces.surfaceRoles.panel.shadowSelected"
+  ],
+  "--ds-material-panel-highlight": [
+   "surfaces.surfaceRoles.panel.highlight"
+  ],
+  "--ds-surface-card": [
+   "surfaces.surfaceRoles.card.background"
+  ],
+  "--ds-material-card-background-hover": [
+   "surfaces.surfaceRoles.card.backgroundHover"
+  ],
+  "--ds-material-card-background-active": [
+   "surfaces.surfaceRoles.card.backgroundActive"
+  ],
+  "--ds-material-card-background-selected": [
+   "surfaces.surfaceRoles.card.backgroundSelected"
+  ],
+  "--ds-material-card-background-disabled": [
+   "surfaces.surfaceRoles.card.backgroundDisabled"
+  ],
+  "--ds-material-card-foreground": [
+   "surfaces.surfaceRoles.card.foreground"
+  ],
+  "--ds-material-card-foreground-muted": [
+   "surfaces.surfaceRoles.card.foregroundMuted"
+  ],
+  "--ds-material-card-foreground-disabled": [
+   "surfaces.surfaceRoles.card.foregroundDisabled"
+  ],
+  "--ds-material-card-border": [
+   "surfaces.surfaceRoles.card.border"
+  ],
+  "--ds-material-card-border-strong": [
+   "surfaces.surfaceRoles.card.borderStrong"
+  ],
+  "--ds-material-card-border-hover": [
+   "surfaces.surfaceRoles.card.borderHover"
+  ],
+  "--ds-material-card-border-active": [
+   "surfaces.surfaceRoles.card.borderActive"
+  ],
+  "--ds-material-card-border-selected": [
+   "surfaces.surfaceRoles.card.borderSelected"
+  ],
+  "--ds-material-card-border-disabled": [
+   "surfaces.surfaceRoles.card.borderDisabled"
+  ],
+  "--ds-material-card-focus-ring": [
+   "surfaces.surfaceRoles.card.focusRing"
+  ],
+  "--ds-material-card-shadow": [
+   "surfaces.surfaceRoles.card.shadow"
+  ],
+  "--ds-material-card-shadow-hover": [
+   "surfaces.surfaceRoles.card.shadowHover"
+  ],
+  "--ds-material-card-shadow-active": [
+   "surfaces.surfaceRoles.card.shadowActive"
+  ],
+  "--ds-material-card-shadow-selected": [
+   "surfaces.surfaceRoles.card.shadowSelected"
+  ],
+  "--ds-material-card-highlight": [
+   "surfaces.surfaceRoles.card.highlight"
+  ],
+  "--ds-surface-inset": [
+   "surfaces.surfaceRoles.inset.background"
+  ],
+  "--ds-material-inset-foreground": [
+   "surfaces.surfaceRoles.inset.foreground"
+  ],
+  "--ds-material-inset-border": [
+   "surfaces.surfaceRoles.inset.border"
+  ],
+  "--ds-surface-control": [
+   "surfaces.surfaceRoles.control.background"
+  ],
+  "--ds-material-control-background-hover": [
+   "surfaces.surfaceRoles.control.backgroundHover"
+  ],
+  "--ds-material-control-background-active": [
+   "surfaces.surfaceRoles.control.backgroundActive"
+  ],
+  "--ds-material-control-background-selected": [
+   "surfaces.surfaceRoles.control.backgroundSelected"
+  ],
+  "--ds-material-control-background-disabled": [
+   "surfaces.surfaceRoles.control.backgroundDisabled"
+  ],
+  "--ds-material-control-foreground": [
+   "surfaces.surfaceRoles.control.foreground"
+  ],
+  "--ds-material-control-foreground-muted": [
+   "surfaces.surfaceRoles.control.foregroundMuted"
+  ],
+  "--ds-material-control-foreground-disabled": [
+   "surfaces.surfaceRoles.control.foregroundDisabled"
+  ],
+  "--ds-material-control-border": [
+   "surfaces.surfaceRoles.control.border"
+  ],
+  "--ds-material-control-border-strong": [
+   "surfaces.surfaceRoles.control.borderStrong"
+  ],
+  "--ds-material-control-border-hover": [
+   "surfaces.surfaceRoles.control.borderHover"
+  ],
+  "--ds-material-control-border-active": [
+   "surfaces.surfaceRoles.control.borderActive"
+  ],
+  "--ds-material-control-border-selected": [
+   "surfaces.surfaceRoles.control.borderSelected"
+  ],
+  "--ds-material-control-border-disabled": [
+   "surfaces.surfaceRoles.control.borderDisabled"
+  ],
+  "--ds-material-control-focus-ring": [
+   "surfaces.surfaceRoles.control.focusRing"
+  ],
+  "--ds-material-control-shadow": [
+   "surfaces.surfaceRoles.control.shadow"
+  ],
+  "--ds-material-control-shadow-hover": [
+   "surfaces.surfaceRoles.control.shadowHover"
+  ],
+  "--ds-material-control-shadow-active": [
+   "surfaces.surfaceRoles.control.shadowActive"
+  ],
+  "--ds-material-control-shadow-selected": [
+   "surfaces.surfaceRoles.control.shadowSelected"
+  ],
+  "--ds-surface-raised": [
+   "surfaces.surfaceRoles.raised.background"
+  ],
+  "--ds-material-raised-foreground": [
+   "surfaces.surfaceRoles.raised.foreground"
+  ],
+  "--ds-material-raised-border": [
+   "surfaces.surfaceRoles.raised.border"
+  ],
+  "--ds-material-raised-shadow": [
+   "surfaces.surfaceRoles.raised.shadow"
+  ],
+  "--ds-surface-overlay": [
+   "surfaces.surfaceRoles.overlay.background"
+  ],
+  "--ds-material-overlay-foreground": [
+   "surfaces.surfaceRoles.overlay.foreground"
+  ],
+  "--ds-glass-blur": [
+   "surfaces.glass.blur"
+  ],
+  "--ds-glass-bg": [
+   "surfaces.glass.background"
+  ],
+  "--ds-glass-border": [
+   "surfaces.glass.border"
+  ],
+  "--ds-gradient-primary": [
+   "surfaces.gradients.primary"
+  ],
+  "--ds-gradient-surface": [
+   "surfaces.gradients.surface"
+  ],
+  "--ds-gradient-mesh": [
+   "surfaces.gradients.mesh"
+  ],
+  "--ds-overlay-light": [
+   "surfaces.overlays.light"
+  ],
+  "--ds-overlay-medium": [
+   "surfaces.overlays.medium"
+  ],
+  "--ds-overlay-heavy": [
+   "surfaces.overlays.heavy"
+  ],
+  "--ds-sidebar-bg": [
+   "chrome.sidebar.bg"
+  ],
+  "--ds-sidebar-footer-bg": [
+   "chrome.sidebar.footerBg"
+  ],
+  "--ds-sidebar-border": [
+   "chrome.sidebar.border"
+  ],
+  "--ds-sidebar-text": [
+   "chrome.sidebar.text"
+  ],
+  "--ds-sidebar-text-muted": [
+   "chrome.sidebar.textMuted"
+  ],
+  "--ds-sidebar-group-font-size": [
+   "chrome.sidebar.groupFontSize"
+  ],
+  "--ds-sidebar-group-color": [
+   "chrome.sidebar.groupColor"
+  ],
+  "--ds-sidebar-group-letter-spacing": [
+   "chrome.sidebar.groupLetterSpacing"
+  ],
+  "--ds-sidebar-item-font-size": [
+   "chrome.sidebar.itemFontSize"
+  ],
+  "--ds-sidebar-item-color": [
+   "chrome.sidebar.itemColor"
+  ],
+  "--ds-sidebar-item-color-active": [
+   "chrome.sidebar.itemColorActive"
+  ],
+  "--ds-sidebar-item-bg-active": [
+   "chrome.sidebar.itemBgActive"
+  ],
+  "--ds-sidebar-item-bg-hover": [
+   "chrome.sidebar.itemBgHover"
+  ],
+  "--ds-sidebar-item-padding": [
+   "chrome.sidebar.itemPadding"
+  ],
+  "--ds-sidebar-icon-size": [
+   "chrome.sidebar.iconSize"
+  ],
+  "--ds-layout-bg": [
+   "chrome.layout.bg"
+  ],
+  "--ds-layout-header-bg": [
+   "chrome.layout.headerBg"
+  ],
+  "--ds-layout-header-backdrop": [
+   "chrome.layout.headerBackdrop"
+  ],
+  "--ds-layout-header-border": [
+   "chrome.layout.headerBorder"
+  ],
+  "--ds-layout-sider-bg": [
+   "chrome.layout.siderBg"
+  ],
+  "--ds-layout-sider-border": [
+   "chrome.layout.siderBorder"
+  ],
+  "--ds-shell-grid-size": [
+   "chrome.shell.gridSize"
+  ],
+  "--ds-shell-grid-line": [
+   "chrome.shell.gridLine"
+  ],
+  "--ds-workspace-shell-bg": [
+   "chrome.shell.bg"
+  ],
+  "--ds-workspace-shell-border": [
+   "chrome.shell.border"
+  ],
+  "--ds-workspace-shell-overlay": [
+   "chrome.shell.overlay"
+  ],
+  "--ds-workspace-shell-shadow": [
+   "chrome.shell.shadow"
+  ],
+  "--ds-shell-active-bg": [
+   "chrome.shell.activeBg"
+  ],
+  "--ds-shell-active-gradient": [
+   "chrome.shell.activeGradient"
+  ],
+  "--ds-shell-dropdown-shadow": [
+   "chrome.shell.dropdownShadow"
+  ],
+  "--ds-command-font": [
+   "chrome.shell.commandFont"
+  ],
+  "--ds-command-letter-spacing": [
+   "chrome.shell.commandLetterSpacing"
+  ],
+  "--ds-command-grid-size": [
+   "chrome.shell.commandGridSize"
+  ],
+  "--ds-command-grid-line-soft": [
+   "chrome.shell.commandGridLineSoft"
+  ],
+  "--ds-command-grid-line": [
+   "chrome.shell.commandGridLine"
+  ],
+  "--ds-command-grid-line-strong": [
+   "chrome.shell.commandGridLineStrong"
+  ],
+  "--ds-command-grid-bg": [
+   "chrome.shell.commandGridBg"
+  ],
+  "--ds-command-grid-bg-strong": [
+   "chrome.shell.commandGridBgStrong"
+  ],
+  "--ds-command-glow": [
+   "chrome.shell.commandGlow"
+  ],
+  "--ds-command-line": [
+   "chrome.shell.commandLine"
+  ],
+  "--ds-command-rail-bg": [
+   "chrome.shell.commandRailBg"
+  ],
+  "--ds-command-home-max-width": [
+   "chrome.shell.commandHomeMaxWidth"
+  ],
+  "--ds-command-home-gap": [
+   "chrome.shell.commandHomeGap"
+  ],
+  "--ds-command-home-panel-gap": [
+   "chrome.shell.commandHomePanelGap"
+  ],
+  "--ds-command-home-grid-line": [
+   "chrome.shell.commandHomeGridLine"
+  ],
+  "--ds-command-home-panel-border": [
+   "chrome.shell.commandHomePanelBorder"
+  ],
+  "--ds-command-home-panel-border-soft": [
+   "chrome.shell.commandHomePanelBorderSoft"
+  ],
+  "--ds-command-home-panel-shadow": [
+   "chrome.shell.commandHomePanelShadow"
+  ],
+  "--ds-command-home-panel-bg": [
+   "chrome.shell.commandHomePanelBg"
+  ],
+  "--ds-command-home-panel-bg-strong": [
+   "chrome.shell.commandHomePanelBgStrong"
+  ],
+  "--ds-command-home-compact-action-height": [
+   "chrome.shell.commandHomeCompactActionHeight"
+  ],
+  "--ds-command-home-console-min-height": [
+   "chrome.shell.commandHomeConsoleMinHeight"
+  ],
+  "--ds-command-home-console-padding": [
+   "chrome.shell.commandHomeConsolePadding"
+  ],
+  "--ds-command-home-console-bg": [
+   "chrome.shell.commandHomeConsoleBg"
+  ],
+  "--ds-command-home-surface-bg": [
+   "chrome.shell.commandHomeSurfaceBg"
+  ],
+  "--ds-command-home-hero-bg": [
+   "chrome.shell.commandHomeHeroBg"
+  ],
+  "--ds-command-home-icon-bg": [
+   "chrome.shell.commandHomeIconBg"
+  ],
+  "--ds-command-home-icon-border": [
+   "chrome.shell.commandHomeIconBorder"
+  ],
+  "--ds-command-home-control-bg": [
+   "chrome.shell.commandHomeControlBg"
+  ],
+  "--ds-command-home-control-border": [
+   "chrome.shell.commandHomeControlBorder"
+  ],
+  "--ds-command-home-control-hover-bg": [
+   "chrome.shell.commandHomeControlHoverBg"
+  ],
+  "--ds-command-home-control-hover-border": [
+   "chrome.shell.commandHomeControlHoverBorder"
+  ],
+  "--ds-command-home-meter-bg": [
+   "chrome.shell.commandHomeMeterBg"
+  ],
+  "--ds-command-home-meter-fill": [
+   "chrome.shell.commandHomeMeterFill"
+  ],
+  "--ds-toolbar-bg": [
+   "chrome.toolbar.bg"
+  ],
+  "--ds-toolbar-border": [
+   "chrome.toolbar.border"
+  ],
+  "--ds-toolbar-border-bottom": [
+   "chrome.toolbar.borderBottom"
+  ],
+  "--ds-toolbar-color": [
+   "chrome.toolbar.color"
+  ],
+  "--ds-toolbar-shadow": [
+   "chrome.toolbar.shadow"
+  ],
+  "--ds-toolbar-radius": [
+   "chrome.toolbar.radius"
+  ],
+  "--ds-toolbar-padding": [
+   "chrome.toolbar.padding"
+  ],
+  "--ds-toolbar-gap": [
+   "chrome.toolbar.gap"
+  ],
+  "--ds-toolbar-control-bg": [
+   "chrome.toolbar.controlBg"
+  ],
+  "--ds-toolbar-control-border": [
+   "chrome.toolbar.controlBorder"
+  ],
+  "--ds-toolbar-control-color": [
+   "chrome.toolbar.controlColor"
+  ],
+  "--ds-toolbar-divider": [
+   "chrome.toolbar.divider"
+  ],
+  "--ds-filter-pill-bg": [
+   "chrome.filterPill.bg"
+  ],
+  "--ds-filter-pill-border": [
+   "chrome.filterPill.border"
+  ],
+  "--ds-filter-pill-color": [
+   "chrome.filterPill.color"
+  ],
+  "--ds-filter-pill-shadow": [
+   "chrome.filterPill.shadow"
+  ],
+  "--ds-filter-pill-frame-border": [
+   "chrome.filterPill.frameBorder"
+  ],
+  "--ds-filter-pill-frame-shadow": [
+   "chrome.filterPill.frameShadow"
+  ],
+  "--ds-filter-pill-hover-bg": [
+   "chrome.filterPill.hoverBg"
+  ],
+  "--ds-filter-pill-hover-border": [
+   "chrome.filterPill.hoverBorder"
+  ],
+  "--ds-filter-pill-active-bg": [
+   "chrome.filterPill.activeBg"
+  ],
+  "--ds-filter-pill-active-border": [
+   "chrome.filterPill.activeBorder"
+  ],
+  "--ds-filter-pill-active-color": [
+   "chrome.filterPill.activeColor"
+  ],
+  "--ds-filter-pill-active-shadow": [
+   "chrome.filterPill.activeShadow"
+  ],
+  "--ds-filter-pill-focus-ring": [
+   "chrome.filterPill.focusRing"
+  ],
+  "--ds-filter-pill-count-bg": [
+   "chrome.filterPill.countBg"
+  ],
+  "--ds-filter-pill-count-active-bg": [
+   "chrome.filterPill.countActiveBg"
+  ],
+  "--ds-filter-pill-count-border": [
+   "chrome.filterPill.countBorder"
+  ],
+  "--ds-filter-pill-count-active-border": [
+   "chrome.filterPill.countActiveBorder"
+  ],
+  "--ds-filter-pill-count-ring": [
+   "chrome.filterPill.countRing"
+  ],
+  "--ds-filter-pill-count-active-ring": [
+   "chrome.filterPill.countActiveRing"
+  ],
+  "--ds-badge-font-family": [
+   "chrome.badge.fontFamily"
+  ],
+  "--ds-badge-letter-spacing": [
+   "chrome.badge.letterSpacing"
+  ],
+  "--ds-badge-gap": [
+   "chrome.badge.gap"
+  ],
+  "--ds-badge-radius": [
+   "chrome.badge.radius"
+  ],
+  "--ds-badge-chip-radius": [
+   "chrome.badge.chipRadius"
+  ],
+  "--ds-badge-pill-radius": [
+   "chrome.badge.pillRadius"
+  ],
+  "--ds-badge-surface": [
+   "chrome.badge.surface"
+  ],
+  "--ds-badge-ink": [
+   "chrome.badge.ink"
+  ],
+  "--ds-badge-frame": [
+   "chrome.badge.frame"
+  ],
+  "--ds-badge-highlight": [
+   "chrome.badge.highlight"
+  ],
+  "--ds-badge-shadow": [
+   "chrome.badge.shadow"
+  ],
+  "--ds-badge-surface-hover": [
+   "chrome.badge.surfaceHover"
+  ],
+  "--ds-badge-ink-hover": [
+   "chrome.badge.inkHover"
+  ],
+  "--ds-badge-frame-hover": [
+   "chrome.badge.frameHover"
+  ],
+  "--ds-badge-shadow-hover": [
+   "chrome.badge.shadowHover"
+  ],
+  "--ds-badge-hover-transform": [
+   "chrome.badge.hoverTransform"
+  ],
+  "--ds-badge-surface-pressed": [
+   "chrome.badge.surfacePressed"
+  ],
+  "--ds-badge-frame-pressed": [
+   "chrome.badge.framePressed"
+  ],
+  "--ds-badge-press-transform": [
+   "chrome.badge.pressTransform"
+  ],
+  "--ds-badge-focus-ring": [
+   "chrome.badge.focusRing"
+  ],
+  "--ds-badge-selected-surface": [
+   "chrome.badge.selectedSurface"
+  ],
+  "--ds-badge-selected-ink": [
+   "chrome.badge.selectedInk"
+  ],
+  "--ds-badge-selected-frame": [
+   "chrome.badge.selectedFrame"
+  ],
+  "--ds-badge-selected-shadow": [
+   "chrome.badge.selectedShadow"
+  ],
+  "--ds-badge-icon-bg": [
+   "chrome.badge.iconBg"
+  ],
+  "--ds-badge-icon-border": [
+   "chrome.badge.iconBorder"
+  ],
+  "--ds-badge-icon-radius": [
+   "chrome.badge.iconRadius"
+  ],
+  "--ds-badge-count-bg": [
+   "chrome.badge.countBg"
+  ],
+  "--ds-badge-count-border": [
+   "chrome.badge.countBorder"
+  ],
+  "--ds-badge-count-radius": [
+   "chrome.badge.countRadius"
+  ],
+  "--ds-badge-count-font-family": [
+   "chrome.badge.countFontFamily"
+  ],
+  "--ds-badge-remove-bg": [
+   "chrome.badge.removeBg"
+  ],
+  "--ds-badge-remove-border": [
+   "chrome.badge.removeBorder"
+  ],
+  "--ds-badge-remove-radius": [
+   "chrome.badge.removeRadius"
+  ],
+  "--ds-badge-remove-hover-bg": [
+   "chrome.badge.removeHoverBg"
+  ],
+  "--ds-badge-motion-duration": [
+   "chrome.badge.motionDuration"
+  ],
+  "--ds-badge-motion-easing": [
+   "chrome.badge.motionEasing"
+  ],
+  "--ds-badge-pulse-duration": [
+   "chrome.badge.pulseDuration"
+  ],
+  "--ds-badge-touch-target": [
+   "chrome.badge.touchTarget"
+  ],
+  "--ds-breadcrumb-bg": [
+   "chrome.breadcrumb.bg"
+  ],
+  "--ds-breadcrumb-border": [
+   "chrome.breadcrumb.border"
+  ],
+  "--ds-breadcrumb-color": [
+   "chrome.breadcrumb.color"
+  ],
+  "--ds-breadcrumb-link-color": [
+   "chrome.breadcrumb.linkColor"
+  ],
+  "--ds-breadcrumb-item-color": [
+   "chrome.breadcrumb.itemColor"
+  ],
+  "--ds-breadcrumb-color-hover": [
+   "chrome.breadcrumb.colorHover"
+  ],
+  "--ds-breadcrumb-active-color": [
+   "chrome.breadcrumb.colorActive"
+  ],
+  "--ds-breadcrumb-color-active": [
+   "chrome.breadcrumb.colorActive"
+  ],
+  "--ds-breadcrumb-separator-color": [
+   "chrome.breadcrumb.separatorColor"
+  ],
+  "--ds-breadcrumb-font-size": [
+   "chrome.breadcrumb.fontSize"
+  ],
+  "--ds-breadcrumb-padding": [
+   "chrome.breadcrumb.padding"
+  ],
+  "--ds-search-bg": [
+   "chrome.search.bg"
+  ],
+  "--ds-search-border": [
+   "chrome.search.border"
+  ],
+  "--ds-search-color": [
+   "chrome.search.color"
+  ],
+  "--ds-search-shadow": [
+   "chrome.search.shadow"
+  ],
+  "--ds-search-radius": [
+   "chrome.search.radius"
+  ],
+  "--ds-search-input-bg": [
+   "chrome.search.inputBg"
+  ],
+  "--ds-search-input-border": [
+   "chrome.search.inputBorder"
+  ],
+  "--ds-search-input-color": [
+   "chrome.search.inputColor"
+  ],
+  "--ds-search-placeholder-color": [
+   "chrome.search.placeholderColor"
+  ],
+  "--ds-input-search-icon-color": [
+   "chrome.search.iconColor"
+  ],
+  "--ds-search-icon-color": [
+   "chrome.search.iconColor"
+  ],
+  "--ds-input-search-clear-color": [
+   "chrome.search.clearColor"
+  ],
+  "--ds-search-clear-color": [
+   "chrome.search.clearColor"
+  ],
+  "--ds-search-clear-color-hover": [
+   "chrome.search.clearColorHover"
+  ],
+  "--ds-search-result-bg": [
+   "chrome.search.resultBg"
+  ],
+  "--ds-search-result-bg-hover": [
+   "chrome.search.resultBgHover"
+  ],
+  "--ds-search-result-border": [
+   "chrome.search.resultBorder"
+  ],
+  "--ds-search-result-shadow": [
+   "chrome.search.resultShadow"
+  ],
+  "--ds-search-result-title-color": [
+   "chrome.search.resultTitleColor"
+  ],
+  "--ds-search-result-meta-color": [
+   "chrome.search.resultMetaColor"
+  ],
+  "--ds-search-category-color": [
+   "chrome.search.categoryColor"
+  ],
+  "--ds-search-empty-bg": [
+   "chrome.search.emptyBg"
+  ],
+  "--ds-button-letter-spacing": [
+   "chrome.controls.buttonGeometry.letterSpacing"
+  ],
+  "--ds-button-gap": [
+   "chrome.controls.buttonGeometry.gap"
+  ],
+  "--ds-radius-button": [
+   "chrome.controls.buttonGeometry.radius"
+  ],
+  "--ds-button-xs-height": [
+   "chrome.controls.buttonGeometry.xs.height"
+  ],
+  "--ds-button-xs-padding-x": [
+   "chrome.controls.buttonGeometry.xs.paddingX"
+  ],
+  "--ds-button-xs-font-size": [
+   "chrome.controls.buttonGeometry.xs.fontSize"
+  ],
+  "--ds-button-xs-line-height": [
+   "chrome.controls.buttonGeometry.xs.lineHeight"
+  ],
+  "--ds-button-xs-icon-size": [
+   "chrome.controls.buttonGeometry.xs.iconSize"
+  ],
+  "--ds-button-xs-gap": [
+   "chrome.controls.buttonGeometry.xs.gap"
+  ],
+  "--ds-button-xs-radius": [
+   "chrome.controls.buttonGeometry.xs.radius"
+  ],
+  "--ds-button-sm-height": [
+   "chrome.controls.buttonGeometry.sm.height"
+  ],
+  "--ds-button-sm-padding-x": [
+   "chrome.controls.buttonGeometry.sm.paddingX"
+  ],
+  "--ds-button-sm-font-size": [
+   "chrome.controls.buttonGeometry.sm.fontSize"
+  ],
+  "--ds-button-sm-line-height": [
+   "chrome.controls.buttonGeometry.sm.lineHeight"
+  ],
+  "--ds-button-sm-icon-size": [
+   "chrome.controls.buttonGeometry.sm.iconSize"
+  ],
+  "--ds-button-sm-gap": [
+   "chrome.controls.buttonGeometry.sm.gap"
+  ],
+  "--ds-button-sm-radius": [
+   "chrome.controls.buttonGeometry.sm.radius"
+  ],
+  "--ds-button-md-height": [
+   "chrome.controls.buttonGeometry.md.height"
+  ],
+  "--ds-button-md-padding-x": [
+   "chrome.controls.buttonGeometry.md.paddingX"
+  ],
+  "--ds-button-md-font-size": [
+   "chrome.controls.buttonGeometry.md.fontSize"
+  ],
+  "--ds-button-md-line-height": [
+   "chrome.controls.buttonGeometry.md.lineHeight"
+  ],
+  "--ds-button-md-icon-size": [
+   "chrome.controls.buttonGeometry.md.iconSize"
+  ],
+  "--ds-button-md-gap": [
+   "chrome.controls.buttonGeometry.md.gap"
+  ],
+  "--ds-button-md-radius": [
+   "chrome.controls.buttonGeometry.md.radius"
+  ],
+  "--ds-button-lg-height": [
+   "chrome.controls.buttonGeometry.lg.height"
+  ],
+  "--ds-button-lg-padding-x": [
+   "chrome.controls.buttonGeometry.lg.paddingX"
+  ],
+  "--ds-button-lg-font-size": [
+   "chrome.controls.buttonGeometry.lg.fontSize"
+  ],
+  "--ds-button-lg-line-height": [
+   "chrome.controls.buttonGeometry.lg.lineHeight"
+  ],
+  "--ds-button-lg-icon-size": [
+   "chrome.controls.buttonGeometry.lg.iconSize"
+  ],
+  "--ds-button-lg-gap": [
+   "chrome.controls.buttonGeometry.lg.gap"
+  ],
+  "--ds-button-lg-radius": [
+   "chrome.controls.buttonGeometry.lg.radius"
+  ],
+  "--ds-button-xl-height": [
+   "chrome.controls.buttonGeometry.xl.height"
+  ],
+  "--ds-button-xl-padding-x": [
+   "chrome.controls.buttonGeometry.xl.paddingX"
+  ],
+  "--ds-button-xl-font-size": [
+   "chrome.controls.buttonGeometry.xl.fontSize"
+  ],
+  "--ds-button-xl-line-height": [
+   "chrome.controls.buttonGeometry.xl.lineHeight"
+  ],
+  "--ds-button-xl-icon-size": [
+   "chrome.controls.buttonGeometry.xl.iconSize"
+  ],
+  "--ds-button-xl-gap": [
+   "chrome.controls.buttonGeometry.xl.gap"
+  ],
+  "--ds-button-xl-radius": [
+   "chrome.controls.buttonGeometry.xl.radius"
+  ],
+  "--ds-input-gap": [
+   "chrome.controls.fieldGeometry.gap"
+  ],
+  "--ds-radius-input": [
+   "chrome.controls.fieldGeometry.radius"
+  ],
+  "--ds-input-letter-spacing": [
+   "chrome.controls.fieldGeometry.letterSpacing"
+  ],
+  "--ds-input-border-width": [
+   "chrome.controls.fieldGeometry.borderWidth"
+  ],
+  "--ds-input-border-style": [
+   "chrome.controls.fieldGeometry.borderStyle"
+  ],
+  "--ds-input-message-gap": [
+   "chrome.controls.fieldGeometry.messageGap"
+  ],
+  "--ds-input-group-gap": [
+   "chrome.controls.fieldGeometry.groupGap"
+  ],
+  "--ds-input-group-gap-separated": [
+   "chrome.controls.fieldGeometry.groupGapSeparated"
+  ],
+  "--ds-input-group-overlap": [
+   "chrome.controls.fieldGeometry.groupOverlap"
+  ],
+  "--ds-input-group-min-item-width": [
+   "chrome.controls.fieldGeometry.groupMinItemWidth"
+  ],
+  "--ds-form-field-gap": [
+   "chrome.controls.fieldGeometry.formFieldGap"
+  ],
+  "--ds-form-field-horizontal-gap": [
+   "chrome.controls.fieldGeometry.horizontalGap"
+  ],
+  "--ds-form-field-label-offset-y": [
+   "chrome.controls.fieldGeometry.labelOffsetY"
+  ],
+  "--ds-form-field-required-gap": [
+   "chrome.controls.fieldGeometry.requiredGap"
+  ],
+  "--ds-input-label-font-size": [
+   "chrome.controls.fieldGeometry.labelFontSize"
+  ],
+  "--ds-input-label-letter-spacing": [
+   "chrome.controls.fieldGeometry.labelLetterSpacing"
+  ],
+  "--ds-input-label-line-height": [
+   "chrome.controls.fieldGeometry.labelLineHeight"
+  ],
+  "--ds-input-helper-font-size": [
+   "chrome.controls.fieldGeometry.helperFontSize"
+  ],
+  "--ds-input-helper-line-height": [
+   "chrome.controls.fieldGeometry.helperLineHeight"
+  ],
+  "--ds-input-affix-size": [
+   "chrome.controls.fieldGeometry.affixSize"
+  ],
+  "--ds-input-affix-size-compact": [
+   "chrome.controls.fieldGeometry.affixSizeCompact"
+  ],
+  "--ds-input-affix-radius": [
+   "chrome.controls.fieldGeometry.affixRadius"
+  ],
+  "--ds-input-action-size": [
+   "chrome.controls.fieldGeometry.actionSize"
+  ],
+  "--ds-input-action-radius": [
+   "chrome.controls.fieldGeometry.actionRadius"
+  ],
+  "--ds-input-touch-target-min": [
+   "chrome.controls.fieldGeometry.touchTargetMin"
+  ],
+  "--ds-input-loading-size": [
+   "chrome.controls.fieldGeometry.loadingSize"
+  ],
+  "--ds-input-loading-stroke": [
+   "chrome.controls.fieldGeometry.loadingStroke"
+  ],
+  "--ds-input-loading-duration": [
+   "chrome.controls.fieldGeometry.loadingDuration"
+  ],
+  "--ds-textarea-min-height": [
+   "chrome.controls.fieldGeometry.textareaMinHeight"
+  ],
+  "--ds-textarea-max-height": [
+   "chrome.controls.fieldGeometry.textareaMaxHeight"
+  ],
+  "--ds-textarea-padding-x": [
+   "chrome.controls.fieldGeometry.textareaPaddingX"
+  ],
+  "--ds-textarea-padding-y": [
+   "chrome.controls.fieldGeometry.textareaPaddingY"
+  ],
+  "--ds-textarea-radius": [
+   "chrome.controls.fieldGeometry.textareaRadius"
+  ],
+  "--ds-textarea-resize": [
+   "chrome.controls.fieldGeometry.textareaResize"
+  ],
+  "--ds-input-transition-duration": [
+   "chrome.controls.fieldGeometry.transitionDuration"
+  ],
+  "--ds-input-transition-timing": [
+   "chrome.controls.fieldGeometry.transitionTiming"
+  ],
+  "--ds-input-xs-height": [
+   "chrome.controls.fieldGeometry.xs.height"
+  ],
+  "--ds-input-xs-padding-x": [
+   "chrome.controls.fieldGeometry.xs.paddingX"
+  ],
+  "--ds-input-xs-padding-y": [
+   "chrome.controls.fieldGeometry.xs.paddingY"
+  ],
+  "--ds-input-xs-font-size": [
+   "chrome.controls.fieldGeometry.xs.fontSize"
+  ],
+  "--ds-input-xs-line-height": [
+   "chrome.controls.fieldGeometry.xs.lineHeight"
+  ],
+  "--ds-input-xs-icon-size": [
+   "chrome.controls.fieldGeometry.xs.iconSize"
+  ],
+  "--ds-input-xs-radius": [
+   "chrome.controls.fieldGeometry.xs.radius"
+  ],
+  "--ds-input-sm-height": [
+   "chrome.controls.fieldGeometry.sm.height"
+  ],
+  "--ds-input-sm-padding-x": [
+   "chrome.controls.fieldGeometry.sm.paddingX"
+  ],
+  "--ds-input-sm-padding-y": [
+   "chrome.controls.fieldGeometry.sm.paddingY"
+  ],
+  "--ds-input-sm-font-size": [
+   "chrome.controls.fieldGeometry.sm.fontSize"
+  ],
+  "--ds-input-sm-line-height": [
+   "chrome.controls.fieldGeometry.sm.lineHeight"
+  ],
+  "--ds-input-sm-icon-size": [
+   "chrome.controls.fieldGeometry.sm.iconSize"
+  ],
+  "--ds-input-sm-radius": [
+   "chrome.controls.fieldGeometry.sm.radius"
+  ],
+  "--ds-input-md-height": [
+   "chrome.controls.fieldGeometry.md.height"
+  ],
+  "--ds-input-md-padding-x": [
+   "chrome.controls.fieldGeometry.md.paddingX"
+  ],
+  "--ds-input-md-padding-y": [
+   "chrome.controls.fieldGeometry.md.paddingY"
+  ],
+  "--ds-input-md-font-size": [
+   "chrome.controls.fieldGeometry.md.fontSize"
+  ],
+  "--ds-input-md-line-height": [
+   "chrome.controls.fieldGeometry.md.lineHeight"
+  ],
+  "--ds-input-md-icon-size": [
+   "chrome.controls.fieldGeometry.md.iconSize"
+  ],
+  "--ds-input-md-radius": [
+   "chrome.controls.fieldGeometry.md.radius"
+  ],
+  "--ds-input-lg-height": [
+   "chrome.controls.fieldGeometry.lg.height"
+  ],
+  "--ds-input-lg-padding-x": [
+   "chrome.controls.fieldGeometry.lg.paddingX"
+  ],
+  "--ds-input-lg-padding-y": [
+   "chrome.controls.fieldGeometry.lg.paddingY"
+  ],
+  "--ds-input-lg-font-size": [
+   "chrome.controls.fieldGeometry.lg.fontSize"
+  ],
+  "--ds-input-lg-line-height": [
+   "chrome.controls.fieldGeometry.lg.lineHeight"
+  ],
+  "--ds-input-lg-icon-size": [
+   "chrome.controls.fieldGeometry.lg.iconSize"
+  ],
+  "--ds-input-lg-radius": [
+   "chrome.controls.fieldGeometry.lg.radius"
+  ],
+  "--ds-input-xl-height": [
+   "chrome.controls.fieldGeometry.xl.height"
+  ],
+  "--ds-input-xl-padding-x": [
+   "chrome.controls.fieldGeometry.xl.paddingX"
+  ],
+  "--ds-input-xl-padding-y": [
+   "chrome.controls.fieldGeometry.xl.paddingY"
+  ],
+  "--ds-input-xl-font-size": [
+   "chrome.controls.fieldGeometry.xl.fontSize"
+  ],
+  "--ds-input-xl-line-height": [
+   "chrome.controls.fieldGeometry.xl.lineHeight"
+  ],
+  "--ds-input-xl-icon-size": [
+   "chrome.controls.fieldGeometry.xl.iconSize"
+  ],
+  "--ds-input-xl-radius": [
+   "chrome.controls.fieldGeometry.xl.radius"
+  ],
+  "--ds-segmented-bg": [
+   "chrome.controls.segmented.bg"
+  ],
+  "--ds-segmented-border": [
+   "chrome.controls.segmented.border"
+  ],
+  "--ds-segmented-radius": [
+   "chrome.controls.segmented.radius"
+  ],
+  "--ds-segmented-padding": [
+   "chrome.controls.segmented.padding"
+  ],
+  "--ds-segmented-gap": [
+   "chrome.controls.segmented.gap"
+  ],
+  "--ds-segmented-shadow": [
+   "chrome.controls.segmented.shadow"
+  ],
+  "--ds-segmented-item-bg": [
+   "chrome.controls.segmented.itemBg"
+  ],
+  "--ds-segmented-item-bg-hover": [
+   "chrome.controls.segmented.itemBgHover"
+  ],
+  "--ds-segmented-item-bg-selected": [
+   "chrome.controls.segmented.itemBgSelected"
+  ],
+  "--ds-segmented-item-color": [
+   "chrome.controls.segmented.itemColor"
+  ],
+  "--ds-segmented-item-color-hover": [
+   "chrome.controls.segmented.itemColorHover"
+  ],
+  "--ds-segmented-item-color-selected": [
+   "chrome.controls.segmented.itemColorSelected"
+  ],
+  "--ds-segmented-item-radius": [
+   "chrome.controls.segmented.itemRadius"
+  ],
+  "--ds-segmented-item-shadow-selected": [
+   "chrome.controls.segmented.itemShadowSelected"
+  ],
+  "--ds-segmented-focus-ring": [
+   "chrome.controls.segmented.focusRing"
+  ],
+  "--ds-segmented-sm-height": [
+   "chrome.controls.segmented.sm.height"
+  ],
+  "--ds-segmented-sm-padding-x": [
+   "chrome.controls.segmented.sm.paddingX"
+  ],
+  "--ds-segmented-sm-font-size": [
+   "chrome.controls.segmented.sm.fontSize"
+  ],
+  "--ds-segmented-sm-line-height": [
+   "chrome.controls.segmented.sm.lineHeight"
+  ],
+  "--ds-segmented-sm-icon-size": [
+   "chrome.controls.segmented.sm.iconSize"
+  ],
+  "--ds-segmented-sm-gap": [
+   "chrome.controls.segmented.sm.gap"
+  ],
+  "--ds-segmented-sm-radius": [
+   "chrome.controls.segmented.sm.radius"
+  ],
+  "--ds-segmented-md-height": [
+   "chrome.controls.segmented.md.height"
+  ],
+  "--ds-segmented-md-padding-x": [
+   "chrome.controls.segmented.md.paddingX"
+  ],
+  "--ds-segmented-md-font-size": [
+   "chrome.controls.segmented.md.fontSize"
+  ],
+  "--ds-segmented-md-line-height": [
+   "chrome.controls.segmented.md.lineHeight"
+  ],
+  "--ds-segmented-md-icon-size": [
+   "chrome.controls.segmented.md.iconSize"
+  ],
+  "--ds-segmented-md-gap": [
+   "chrome.controls.segmented.md.gap"
+  ],
+  "--ds-segmented-md-radius": [
+   "chrome.controls.segmented.md.radius"
+  ],
+  "--ds-segmented-lg-height": [
+   "chrome.controls.segmented.lg.height"
+  ],
+  "--ds-segmented-lg-padding-x": [
+   "chrome.controls.segmented.lg.paddingX"
+  ],
+  "--ds-segmented-lg-font-size": [
+   "chrome.controls.segmented.lg.fontSize"
+  ],
+  "--ds-segmented-lg-line-height": [
+   "chrome.controls.segmented.lg.lineHeight"
+  ],
+  "--ds-segmented-lg-icon-size": [
+   "chrome.controls.segmented.lg.iconSize"
+  ],
+  "--ds-segmented-lg-gap": [
+   "chrome.controls.segmented.lg.gap"
+  ],
+  "--ds-segmented-lg-radius": [
+   "chrome.controls.segmented.lg.radius"
+  ],
+  "--ds-button-primary-bg": [
+   "chrome.controls.buttonPrimary.bg"
+  ],
+  "--ds-button-primary-bg-hover": [
+   "chrome.controls.buttonPrimary.bgHover"
+  ],
+  "--ds-button-primary-color": [
+   "chrome.controls.buttonPrimary.color"
+  ],
+  "--ds-button-primary-border": [
+   "chrome.controls.buttonPrimary.border"
+  ],
+  "--ds-button-primary-shadow": [
+   "chrome.controls.buttonPrimary.shadow"
+  ],
+  "--ds-button-secondary-bg": [
+   "chrome.controls.buttonSecondary.bg"
+  ],
+  "--ds-button-secondary-bg-hover": [
+   "chrome.controls.buttonSecondary.bgHover"
+  ],
+  "--ds-button-secondary-color": [
+   "chrome.controls.buttonSecondary.color"
+  ],
+  "--ds-button-secondary-border": [
+   "chrome.controls.buttonSecondary.border"
+  ],
+  "--ds-button-default-bg": [
+   "chrome.controls.buttonDefault.bg"
+  ],
+  "--ds-button-default-bg-hover": [
+   "chrome.controls.buttonDefault.bgHover"
+  ],
+  "--ds-button-default-color": [
+   "chrome.controls.buttonDefault.color"
+  ],
+  "--ds-button-default-border": [
+   "chrome.controls.buttonDefault.border"
+  ],
+  "--ds-button-ghost-bg": [
+   "chrome.controls.buttonGhost.bg"
+  ],
+  "--ds-button-ghost-bg-hover": [
+   "chrome.controls.buttonGhost.bgHover"
+  ],
+  "--ds-button-ghost-color": [
+   "chrome.controls.buttonGhost.color"
+  ],
+  "--ds-button-disabled-bg": [
+   "chrome.controls.disabled.bg"
+  ],
+  "--ds-button-disabled-color": [
+   "chrome.controls.disabled.text"
+  ],
+  "--ds-button-disabled-border": [
+   "chrome.controls.disabled.border"
+  ],
+  "--ds-button-disabled-border-color": [
+   "chrome.controls.disabled.borderColor"
+  ],
+  "--ds-input-border-color-disabled": [
+   "chrome.controls.disabled.borderColor"
+  ],
+  "--ds-color-bg-input": [
+   "chrome.controls.input.bg"
+  ],
+  "--ds-input-bg": [
+   "chrome.controls.input.bg"
+  ],
+  "--ds-input-bg-hover": [
+   "chrome.controls.input.bgHover"
+  ],
+  "--ds-input-bg-focus": [
+   "chrome.controls.input.bgFocus"
+  ],
+  "--ds-input-border": [
+   "chrome.controls.input.border"
+  ],
+  "--ds-input-border-hover": [
+   "chrome.controls.input.borderHover"
+  ],
+  "--ds-input-border-focus": [
+   "chrome.controls.input.borderFocus"
+  ],
+  "--ds-input-shadow-rest": [
+   "chrome.controls.input.shadowRest"
+  ],
+  "--ds-input-shadow-hover": [
+   "chrome.controls.input.shadowHover"
+  ],
+  "--ds-input-shadow-focus": [
+   "chrome.controls.input.shadowFocus"
+  ],
+  "--ds-input-inset-shadow": [
+   "chrome.controls.input.insetShadow"
+  ],
+  "--ds-input-caret-color": [
+   "chrome.controls.input.caretColor"
+  ],
+  "--ds-input-selection-bg": [
+   "chrome.controls.input.selectionBg"
+  ],
+  "--ds-input-selection-color": [
+   "chrome.controls.input.selectionColor"
+  ],
+  "--ds-input-color": [
+   "chrome.controls.input.color"
+  ],
+  "--ds-input-color-placeholder": [
+   "chrome.controls.input.colorPlaceholder"
+  ],
+  "--ds-input-bg-disabled": [
+   "chrome.controls.input.bgDisabled"
+  ],
+  "--ds-input-color-disabled": [
+   "chrome.controls.input.colorDisabled"
+  ],
+  "--ds-input-border-disabled": [
+   "chrome.controls.input.borderDisabled"
+  ],
+  "--ds-input-filled-bg": [
+   "chrome.controls.input.filled.bg"
+  ],
+  "--ds-input-filled-bg-hover": [
+   "chrome.controls.input.filled.bgHover"
+  ],
+  "--ds-input-filled-bg-focus": [
+   "chrome.controls.input.filled.bgFocus"
+  ],
+  "--ds-input-filled-border": [
+   "chrome.controls.input.filled.border"
+  ],
+  "--ds-input-addon-bg": [
+   "chrome.controls.input.addon.bg"
+  ],
+  "--ds-input-addon-color": [
+   "chrome.controls.input.addon.color"
+  ],
+  "--ds-input-addon-border": [
+   "chrome.controls.input.addon.border"
+  ],
+  "--ds-input-addon-radius": [
+   "chrome.controls.input.addon.radius"
+  ],
+  "--ds-input-affix-bg": [
+   "chrome.controls.input.affix.bg"
+  ],
+  "--ds-input-affix-color": [
+   "chrome.controls.input.affix.color"
+  ],
+  "--ds-input-affix-border": [
+   "chrome.controls.input.affix.border"
+  ],
+  "--ds-input-affix-padding-x": [
+   "chrome.controls.input.affix.paddingX"
+  ],
+  "--ds-input-label-color": [
+   "chrome.controls.input.label.color"
+  ],
+  "--ds-input-label-required-color": [
+   "chrome.controls.input.label.requiredColor"
+  ],
+  "--ds-input-label-color-disabled": [
+   "chrome.controls.input.label.disabledColor"
+  ],
+  "--ds-input-helper-color": [
+   "chrome.controls.input.helper.color"
+  ],
+  "--ds-input-error-message-color": [
+   "chrome.controls.input.helper.errorColor"
+  ],
+  "--ds-input-clear-color": [
+   "chrome.controls.input.clear.color"
+  ],
+  "--ds-input-clear-color-hover": [
+   "chrome.controls.input.clear.colorHover"
+  ],
+  "--ds-input-clear-bg": [
+   "chrome.controls.input.clear.bg"
+  ],
+  "--ds-input-clear-bg-hover": [
+   "chrome.controls.input.clear.bgHover"
+  ],
+  "--ds-input-clear-border": [
+   "chrome.controls.input.clear.border"
+  ],
+  "--ds-input-clear-border-hover": [
+   "chrome.controls.input.clear.borderHover"
+  ],
+  "--ds-input-action-shadow-hover": [
+   "chrome.controls.input.clear.shadowHover"
+  ],
+  "--ds-input-action-focus-ring": [
+   "chrome.controls.input.clear.focusRing"
+  ],
+  "--ds-input-action-active-transform": [
+   "chrome.controls.input.clear.activeTransform"
+  ],
+  "--ds-input-readonly-bg": [
+   "chrome.controls.input.readOnly.bg"
+  ],
+  "--ds-input-readonly-color": [
+   "chrome.controls.input.readOnly.color"
+  ],
+  "--ds-input-readonly-border": [
+   "chrome.controls.input.readOnly.border"
+  ],
+  "--ds-input-readonly-border-style": [
+   "chrome.controls.input.readOnly.borderStyle"
+  ],
+  "--ds-input-readonly-cursor": [
+   "chrome.controls.input.readOnly.cursor"
+  ],
+  "--ds-input-loading-color": [
+   "chrome.controls.input.loadingColor"
+  ],
+  "--ds-input-autofill-bg": [
+   "chrome.controls.input.autofill.bg"
+  ],
+  "--ds-input-autofill-color": [
+   "chrome.controls.input.autofill.color"
+  ],
+  "--ds-input-autofill-caret": [
+   "chrome.controls.input.autofill.caret"
+  ],
+  "--ds-input-count-color": [
+   "chrome.controls.input.count.color"
+  ],
+  "--ds-input-count-color-warning": [
+   "chrome.controls.input.count.colorWarning"
+  ],
+  "--ds-input-count-color-error": [
+   "chrome.controls.input.count.colorError"
+  ],
+  "--ds-input-success-border": [
+   "chrome.controls.input.successBorder"
+  ],
+  "--ds-input-success-bg": [
+   "chrome.controls.input.successBg"
+  ],
+  "--ds-input-warning-border": [
+   "chrome.controls.input.warningBorder"
+  ],
+  "--ds-input-warning-bg": [
+   "chrome.controls.input.warningBg"
+  ],
+  "--ds-input-error-border": [
+   "chrome.controls.input.errorBorder"
+  ],
+  "--ds-input-error-bg": [
+   "chrome.controls.input.errorBg"
+  ],
+  "--ds-input-error-color": [
+   "chrome.controls.input.errorColor"
+  ],
+  "--ds-table-bg": [
+   "chrome.table.bg"
+  ],
+  "--ds-table-border": [
+   "chrome.table.border"
+  ],
+  "--ds-table-radius": [
+   "chrome.table.radius"
+  ],
+  "--ds-table-header-bg": [
+   "chrome.table.headerBg"
+  ],
+  "--ds-table-header-bg-hover": [
+   "chrome.table.headerBgHover"
+  ],
+  "--ds-table-header-color": [
+   "chrome.table.headerColor"
+  ],
+  "--ds-table-header-font-size": [
+   "chrome.table.headerFontSize"
+  ],
+  "--ds-table-header-letter-spacing": [
+   "chrome.table.headerLetterSpacing"
+  ],
+  "--ds-table-header-text-transform": [
+   "chrome.table.headerTextTransform"
+  ],
+  "--ds-table-header-block-size": [
+   "chrome.table.headerBlockSize"
+  ],
+  "--ds-table-header-border": [
+   "chrome.table.headerBorder"
+  ],
+  "--ds-table-header-shadow": [
+   "chrome.table.headerShadow"
+  ],
+  "--ds-table-row-bg": [
+   "chrome.table.rowBg"
+  ],
+  "--ds-table-row-bg-hover": [
+   "chrome.table.rowBgHover"
+  ],
+  "--ds-table-row-bg-striped": [
+   "chrome.table.rowBgStriped"
+  ],
+  "--ds-table-row-bg-selected": [
+   "chrome.table.rowBgSelected"
+  ],
+  "--ds-table-row-bg-expanded": [
+   "chrome.table.rowBgExpanded"
+  ],
+  "--ds-table-row-border": [
+   "chrome.table.rowBorder"
+  ],
+  "--ds-table-row-hover-shadow": [
+   "chrome.table.rowHoverShadow"
+  ],
+  "--ds-table-padding-compact": [
+   "chrome.table.cellPaddingCompact"
+  ],
+  "--ds-table-padding-comfortable": [
+   "chrome.table.cellPaddingComfortable"
+  ],
+  "--ds-table-padding-spacious": [
+   "chrome.table.cellPaddingSpacious"
+  ],
+  "--ds-table-cell-font-size": [
+   "chrome.table.cellFontSize"
+  ],
+  "--ds-table-cell-color": [
+   "chrome.table.cellColor"
+  ],
+  "--ds-table-filter-row-bg": [
+   "chrome.table.filterRowBg"
+  ],
+  "--ds-table-filter-focus-shadow": [
+   "chrome.table.filterFocusShadow"
+  ],
+  "--ds-table-resize-bg": [
+   "chrome.table.resizeBg"
+  ],
+  "--ds-table-resize-bg-hover": [
+   "chrome.table.resizeBgHover"
+  ],
+  "--ds-table-reorder-bg": [
+   "chrome.table.reorderBg"
+  ],
+  "--ds-table-action-bg": [
+   "chrome.table.actionBg"
+  ],
+  "--ds-table-action-border": [
+   "chrome.table.actionBorder"
+  ],
+  "--ds-table-sheen": [
+   "chrome.table.sheen"
+  ],
+  "--ds-table-page-button-hover-shadow": [
+   "chrome.table.pageButtonHoverShadow"
+  ],
+  "--ds-table-loading-overlay-bg": [
+   "chrome.table.loadingOverlayBg"
+  ],
+  "--ds-card-padding": [
+   "chrome.cardComponent.padding"
+  ],
+  "--ds-card-padding-sm": [
+   "chrome.cardComponent.paddingSm"
+  ],
+  "--ds-card-sm-padding": [
+   "chrome.cardComponent.paddingSm"
+  ],
+  "--ds-card-md-padding": [
+   "chrome.cardComponent.paddingMd"
+  ],
+  "--ds-card-padding-md": [
+   "chrome.cardComponent.paddingMd"
+  ],
+  "--ds-card-lg-padding": [
+   "chrome.cardComponent.paddingLg"
+  ],
+  "--ds-card-padding-lg": [
+   "chrome.cardComponent.paddingLg"
+  ],
+  "--ds-card-padding-xl": [
+   "chrome.cardComponent.paddingXl"
+  ],
+  "--ds-card-xl-padding": [
+   "chrome.cardComponent.paddingXl"
+  ],
+  "--ds-card-bg": [
+   "chrome.cardComponent.bg"
+  ],
+  "--ds-card-bg-hover": [
+   "chrome.cardComponent.bgHover"
+  ],
+  "--ds-card-color": [
+   "chrome.cardComponent.color"
+  ],
+  "--ds-card-color-muted": [
+   "chrome.cardComponent.colorMuted"
+  ],
+  "--ds-card-border": [
+   "chrome.cardComponent.border"
+  ],
+  "--ds-card-border-color": [
+   "chrome.cardComponent.borderColor"
+  ],
+  "--ds-card-border-color-hover": [
+   "chrome.cardComponent.borderHover"
+  ],
+  "--ds-card-border-hover": [
+   "chrome.cardComponent.borderHover"
+  ],
+  "--ds-card-title-letter-spacing": [
+   "chrome.cardComponent.titleLetterSpacing"
+  ],
+  "--ds-card-shadow": [
+   "chrome.cardComponent.shadow"
+  ],
+  "--ds-card-shadow-hover": [
+   "chrome.cardComponent.shadowHover"
+  ],
+  "--ds-card-border-radius": [
+   "chrome.cardComponent.radius"
+  ],
+  "--ds-card-radius": [
+   "chrome.cardComponent.radius"
+  ],
+  "--ds-card-focus-ring": [
+   "chrome.cardComponent.focusRing"
+  ],
+  "--ds-card-hover-transform": [
+   "chrome.cardComponent.hoverTransform"
+  ],
+  "--ds-card-interactive-transform-hover": [
+   "chrome.cardComponent.hoverTransform"
+  ],
+  "--ds-card-header-border": [
+   "chrome.cardComponent.headerBorder"
+  ],
+  "--ds-card-header-border-color": [
+   "chrome.cardComponent.headerBorderColor"
+  ],
+  "--ds-card-header-bg": [
+   "chrome.cardComponent.headerBg"
+  ],
+  "--ds-card-header-color": [
+   "chrome.cardComponent.headerColor"
+  ],
+  "--ds-card-header-padding": [
+   "chrome.cardComponent.headerPadding"
+  ],
+  "--ds-card-title-color": [
+   "chrome.cardComponent.titleColor"
+  ],
+  "--ds-card-title-font-size": [
+   "chrome.cardComponent.titleFontSize"
+  ],
+  "--ds-card-subtitle-color": [
+   "chrome.cardComponent.subtitleColor"
+  ],
+  "--ds-card-body-color": [
+   "chrome.cardComponent.bodyColor"
+  ],
+  "--ds-card-body-padding": [
+   "chrome.cardComponent.bodyPadding"
+  ],
+  "--ds-card-footer-border": [
+   "chrome.cardComponent.footerBorder"
+  ],
+  "--ds-card-footer-border-color": [
+   "chrome.cardComponent.footerBorderColor"
+  ],
+  "--ds-card-footer-bg": [
+   "chrome.cardComponent.footerBg"
+  ],
+  "--ds-card-footer-color": [
+   "chrome.cardComponent.footerColor"
+  ],
+  "--ds-card-footer-padding": [
+   "chrome.cardComponent.footerPadding"
+  ],
+  "--ds-card-image-placeholder-bg": [
+   "chrome.cardComponent.imagePlaceholderBg"
+  ],
+  "--ds-card-image-placeholder-color": [
+   "chrome.cardComponent.imagePlaceholderColor"
+  ],
+  "--ds-metric-card-bg": [
+   "chrome.metricCard.bg"
+  ],
+  "--ds-metric-card-border": [
+   "chrome.metricCard.border"
+  ],
+  "--ds-metric-card-border-hover": [
+   "chrome.metricCard.borderHover"
+  ],
+  "--ds-metric-card-selected-border": [
+   "chrome.metricCard.selectedBorder"
+  ],
+  "--ds-metric-card-selected-ring": [
+   "chrome.metricCard.selectedRing"
+  ],
+  "--ds-metric-card-shadow": [
+   "chrome.metricCard.shadow"
+  ],
+  "--ds-metric-card-shadow-hover": [
+   "chrome.metricCard.shadowHover"
+  ],
+  "--ds-metric-card-sheen": [
+   "chrome.metricCard.sheen"
+  ],
+  "--ds-metric-card-icon-bg": [
+   "chrome.metricCard.iconBg"
+  ],
+  "--ds-metric-card-icon-border": [
+   "chrome.metricCard.iconBorder"
+  ],
+  "--ds-metric-card-label-color": [
+   "chrome.metricCard.labelColor"
+  ],
+  "--ds-metric-card-value-color": [
+   "chrome.metricCard.valueColor"
+  ],
+  "--ds-metric-card-trend-color": [
+   "chrome.metricCard.trendColor"
+  ],
+  "--ds-metric-card-meter-track": [
+   "chrome.metricCard.meterTrack"
+  ],
+  "--ds-metric-card-meter-track-border": [
+   "chrome.metricCard.meterTrackBorder"
+  ],
+  "--ds-metric-card-meter-fill": [
+   "chrome.metricCard.meterFill"
+  ],
+  "--ds-metric-card-meter-fill-success": [
+   "chrome.metricCard.meterFillSuccess"
+  ],
+  "--ds-metric-card-meter-fill-warning": [
+   "chrome.metricCard.meterFillWarning"
+  ],
+  "--ds-metric-card-meter-fill-error": [
+   "chrome.metricCard.meterFillError"
+  ],
+  "--ds-metric-card-meter-fill-neutral": [
+   "chrome.metricCard.meterFillNeutral"
+  ],
+  "--ds-signal-card-bg": [
+   "chrome.signalCard.bg"
+  ],
+  "--ds-signal-card-top-line-display": [
+   "chrome.signalCard.topLineDisplay"
+  ],
+  "--ds-signal-card-border": [
+   "chrome.signalCard.border"
+  ],
+  "--ds-signal-card-border-hover": [
+   "chrome.signalCard.borderHover"
+  ],
+  "--ds-signal-card-shadow": [
+   "chrome.signalCard.shadow"
+  ],
+  "--ds-signal-card-icon-bg": [
+   "chrome.signalCard.iconBg"
+  ],
+  "--ds-signal-card-icon-border": [
+   "chrome.signalCard.iconBorder"
+  ],
+  "--ds-signal-card-title-color": [
+   "chrome.signalCard.titleColor"
+  ],
+  "--ds-signal-card-body-color": [
+   "chrome.signalCard.bodyColor"
+  ],
+  "--ds-signal-card-badge-bg": [
+   "chrome.signalCard.badgeBg"
+  ],
+  "--ds-signal-card-badge-border": [
+   "chrome.signalCard.badgeBorder"
+  ],
+  "--ds-signal-card-badge-color": [
+   "chrome.signalCard.badgeColor"
+  ],
+  "--ds-signal-card-section-bg": [
+   "chrome.signalCard.sectionBg"
+  ],
+  "--ds-signal-card-section-alt-bg": [
+   "chrome.signalCard.sectionAltBg"
+  ],
+  "--ds-signal-card-meter-track": [
+   "chrome.signalCard.meterTrack"
+  ],
+  "--ds-signal-card-meter-track-border": [
+   "chrome.signalCard.meterTrackBorder"
+  ],
+  "--ds-signal-card-meter-fill": [
+   "chrome.signalCard.meterFill"
+  ],
+  "--ds-workspace-card-bg": [
+   "chrome.workspaceCard.bg"
+  ],
+  "--ds-workspace-card-bg-hover": [
+   "chrome.workspaceCard.bgHover"
+  ],
+  "--ds-workspace-card-border": [
+   "chrome.workspaceCard.border"
+  ],
+  "--ds-workspace-card-border-hover": [
+   "chrome.workspaceCard.borderHover"
+  ],
+  "--ds-workspace-card-shadow": [
+   "chrome.workspaceCard.shadow"
+  ],
+  "--ds-workspace-card-shadow-hover": [
+   "chrome.workspaceCard.shadowHover"
+  ],
+  "--ds-workspace-card-radius": [
+   "chrome.workspaceCard.radius"
+  ],
+  "--ds-workspace-card-padding": [
+   "chrome.workspaceCard.padding"
+  ],
+  "--ds-workspace-card-gap": [
+   "chrome.workspaceCard.gap"
+  ],
+  "--ds-workspace-card-icon-bg": [
+   "chrome.workspaceCard.iconBg"
+  ],
+  "--ds-workspace-card-icon-border": [
+   "chrome.workspaceCard.iconBorder"
+  ],
+  "--ds-workspace-card-icon-color": [
+   "chrome.workspaceCard.iconColor"
+  ],
+  "--ds-workspace-card-title-color": [
+   "chrome.workspaceCard.titleColor"
+  ],
+  "--ds-workspace-card-body-color": [
+   "chrome.workspaceCard.bodyColor"
+  ],
+  "--ds-workspace-card-label-color": [
+   "chrome.workspaceCard.labelColor"
+  ],
+  "--ds-workspace-card-value-color": [
+   "chrome.workspaceCard.valueColor"
+  ],
+  "--ds-workspace-card-footer-bg": [
+   "chrome.workspaceCard.footerBg"
+  ],
+  "--ds-workspace-card-footer-border": [
+   "chrome.workspaceCard.footerBorder"
+  ],
+  "--ds-workspace-card-footer-color": [
+   "chrome.workspaceCard.footerColor"
+  ],
+  "--ds-workspace-card-hover-transform": [
+   "chrome.workspaceCard.hoverTransform"
+  ],
+  "--ds-compact-card-bg": [
+   "chrome.compactCard.bg"
+  ],
+  "--ds-compact-card-bg-hover": [
+   "chrome.compactCard.bgHover"
+  ],
+  "--ds-compact-card-border": [
+   "chrome.compactCard.border"
+  ],
+  "--ds-compact-card-border-hover": [
+   "chrome.compactCard.borderHover"
+  ],
+  "--ds-compact-card-shadow": [
+   "chrome.compactCard.shadow"
+  ],
+  "--ds-compact-card-radius": [
+   "chrome.compactCard.radius"
+  ],
+  "--ds-compact-card-padding": [
+   "chrome.compactCard.padding"
+  ],
+  "--ds-compact-card-gap": [
+   "chrome.compactCard.gap"
+  ],
+  "--ds-compact-card-title-color": [
+   "chrome.compactCard.titleColor"
+  ],
+  "--ds-compact-card-body-color": [
+   "chrome.compactCard.bodyColor"
+  ],
+  "--ds-compact-card-label-color": [
+   "chrome.compactCard.labelColor"
+  ],
+  "--ds-compact-card-value-color": [
+   "chrome.compactCard.valueColor"
+  ],
+  "--ds-tall-card-bg": [
+   "chrome.tallCard.bg"
+  ],
+  "--ds-tall-card-border": [
+   "chrome.tallCard.border"
+  ],
+  "--ds-tall-card-border-hover": [
+   "chrome.tallCard.borderHover"
+  ],
+  "--ds-tall-card-shadow": [
+   "chrome.tallCard.shadow"
+  ],
+  "--ds-tall-card-radius": [
+   "chrome.tallCard.radius"
+  ],
+  "--ds-tall-card-padding": [
+   "chrome.tallCard.padding"
+  ],
+  "--ds-tall-card-gap": [
+   "chrome.tallCard.gap"
+  ],
+  "--ds-tall-card-title-color": [
+   "chrome.tallCard.titleColor"
+  ],
+  "--ds-tall-card-body-color": [
+   "chrome.tallCard.bodyColor"
+  ],
+  "--ds-tall-card-label-color": [
+   "chrome.tallCard.labelColor"
+  ],
+  "--ds-tall-card-value-color": [
+   "chrome.tallCard.valueColor"
+  ],
+  "--ds-collection-card-bg": [
+   "chrome.collectionCard.bg"
+  ],
+  "--ds-collection-card-bg-hover": [
+   "chrome.collectionCard.bgHover"
+  ],
+  "--ds-collection-card-border": [
+   "chrome.collectionCard.border"
+  ],
+  "--ds-collection-card-border-hover": [
+   "chrome.collectionCard.borderHover"
+  ],
+  "--ds-collection-card-selected-border": [
+   "chrome.collectionCard.selectedBorder"
+  ],
+  "--ds-collection-card-selected-ring": [
+   "chrome.collectionCard.selectedRing"
+  ],
+  "--ds-collection-card-shadow": [
+   "chrome.collectionCard.shadow"
+  ],
+  "--ds-collection-card-shadow-hover": [
+   "chrome.collectionCard.shadowHover"
+  ],
+  "--ds-collection-card-radius": [
+   "chrome.collectionCard.radius"
+  ],
+  "--ds-collection-card-padding": [
+   "chrome.collectionCard.padding"
+  ],
+  "--ds-collection-card-gap": [
+   "chrome.collectionCard.gap"
+  ],
+  "--ds-collection-card-title-color": [
+   "chrome.collectionCard.titleColor"
+  ],
+  "--ds-collection-card-body-color": [
+   "chrome.collectionCard.bodyColor"
+  ],
+  "--ds-collection-card-label-color": [
+   "chrome.collectionCard.labelColor"
+  ],
+  "--ds-collection-card-value-color": [
+   "chrome.collectionCard.valueColor"
+  ],
+  "--ds-collection-card-status-bg": [
+   "chrome.collectionCard.statusBg"
+  ],
+  "--ds-collection-card-status-border": [
+   "chrome.collectionCard.statusBorder"
+  ],
+  "--ds-collection-card-status-color": [
+   "chrome.collectionCard.statusColor"
+  ],
+  "--ds-listing-grid-gap": [
+   "chrome.listingGrid.gap"
+  ],
+  "--ds-listing-grid-min-card-width": [
+   "chrome.listingGrid.minCardWidth"
+  ],
+  "--ds-listing-grid-min-compact-width": [
+   "chrome.listingGrid.minCompactWidth"
+  ],
+  "--ds-listing-grid-min-tall-width": [
+   "chrome.listingGrid.minTallWidth"
+  ],
+  "--ds-listing-grid-card-gap": [
+   "chrome.listingGrid.cardGap"
+  ],
+  "--ds-listing-grid-card-bg": [
+   "chrome.listingGrid.cardBg"
+  ],
+  "--ds-listing-grid-card-border": [
+   "chrome.listingGrid.cardBorder"
+  ],
+  "--ds-listing-grid-card-shadow": [
+   "chrome.listingGrid.cardShadow"
+  ],
+  "--ds-listing-grid-selected-ring": [
+   "chrome.listingGrid.selectedRing"
+  ],
+  "--ds-listing-grid-empty-bg": [
+   "chrome.listingGrid.emptyBg"
+  ],
+  "--ds-listing-grid-empty-border": [
+   "chrome.listingGrid.emptyBorder"
+  ],
+  "--ds-listing-grid-skeleton-bg": [
+   "chrome.listingGrid.skeletonBg"
+  ],
+  "--ds-list-preview-rail-gap": [
+   "chrome.list.previewRailGap"
+  ],
+  "--ds-list-preview-panel-bg": [
+   "chrome.list.previewPanelBg"
+  ],
+  "--ds-list-preview-panel-border": [
+   "chrome.list.previewPanelBorder"
+  ],
+  "--ds-list-preview-panel-shadow": [
+   "chrome.list.previewPanelShadow"
+  ],
+  "--ds-list-preview-motion-duration": [
+   "chrome.list.previewMotionDuration"
+  ],
+  "--ds-list-preview-motion-ease": [
+   "chrome.list.previewMotionEase"
+  ],
+  "--ds-list-shell-section-gap": [
+   "chrome.list.shellSectionGap"
+  ],
+  "--ds-detail-rail-width": [
+   "chrome.detail.railWidth"
+  ],
+  "--ds-detail-hero-bg": [
+   "chrome.detail.heroBg"
+  ],
+  "--ds-detail-hero-border": [
+   "chrome.detail.heroBorder"
+  ],
+  "--ds-detail-hero-shadow": [
+   "chrome.detail.heroShadow"
+  ],
+  "--ds-detail-section-bg": [
+   "chrome.detail.sectionBg"
+  ],
+  "--ds-detail-section-border": [
+   "chrome.detail.sectionBorder"
+  ],
+  "--ds-detail-section-shadow": [
+   "chrome.detail.sectionShadow"
+  ],
+  "--ds-modal-bg": [
+   "chrome.modal.bg"
+  ],
+  "--ds-modal-color": [
+   "chrome.modal.color"
+  ],
+  "--ds-modal-shadow": [
+   "chrome.modal.shadow"
+  ],
+  "--ds-modal-overlay-bg": [
+   "chrome.modal.overlayBg"
+  ],
+  "--ds-modal-overlay-backdrop": [
+   "chrome.modal.overlayBackdrop"
+  ],
+  "--ds-modal-header-bg": [
+   "chrome.modal.headerBg"
+  ],
+  "--ds-modal-header-border": [
+   "chrome.modal.headerBorder"
+  ],
+  "--ds-modal-title-color": [
+   "chrome.modal.titleColor"
+  ],
+  "--ds-modal-subtitle-color": [
+   "chrome.modal.subtitleColor"
+  ],
+  "--ds-modal-body-color": [
+   "chrome.modal.bodyColor"
+  ],
+  "--ds-modal-footer-border": [
+   "chrome.modal.footerBorder"
+  ],
+  "--ds-modal-footer-bg": [
+   "chrome.modal.footerBg"
+  ],
+  "--ds-modal-close-color": [
+   "chrome.modal.closeColor"
+  ],
+  "--ds-modal-close-color-hover": [
+   "chrome.modal.closeColorHover"
+  ],
+  "--ds-modal-close-bg-hover": [
+   "chrome.modal.closeBgHover"
+  ],
+  "--ds-tabs-border": [
+   "chrome.tabs.border"
+  ],
+  "--ds-tab-color": [
+   "chrome.tabs.color"
+  ],
+  "--ds-tab-color-hover": [
+   "chrome.tabs.colorHover"
+  ],
+  "--ds-tab-color-active": [
+   "chrome.tabs.colorActive"
+  ],
+  "--ds-tab-bg-hover": [
+   "chrome.tabs.bgHover"
+  ],
+  "--ds-tab-border-active": [
+   "chrome.tabs.borderActive"
+  ],
+  "--ds-tabs-list-bg": [
+   "chrome.tabs.listBg"
+  ],
+  "--ds-tabs-list-border": [
+   "chrome.tabs.listBorder"
+  ],
+  "--ds-tabs-list-radius": [
+   "chrome.tabs.listRadius"
+  ],
+  "--ds-tabs-list-padding": [
+   "chrome.tabs.listPadding"
+  ],
+  "--ds-tabs-list-shadow": [
+   "chrome.tabs.listShadow"
+  ],
+  "--ds-tabs-list-texture": [
+   "chrome.tabs.listTexture"
+  ],
+  "--ds-tabs-list-highlight": [
+   "chrome.tabs.listHighlight"
+  ],
+  "--ds-tabs-gap": [
+   "chrome.tabs.gap"
+  ],
+  "--ds-tabs-item-gap": [
+   "chrome.tabs.itemGap"
+  ],
+  "--ds-tabs-item-radius": [
+   "chrome.tabs.itemRadius"
+  ],
+  "--ds-tabs-active-bg": [
+   "chrome.tabs.activeBg"
+  ],
+  "--ds-tabs-active-shadow": [
+   "chrome.tabs.activeShadow"
+  ],
+  "--ds-tabs-active-highlight": [
+   "chrome.tabs.activeHighlight"
+  ],
+  "--ds-tabs-pressed-transform": [
+   "chrome.tabs.pressedTransform"
+  ],
+  "--ds-tabs-icon-padding": [
+   "chrome.tabs.iconPadding"
+  ],
+  "--ds-tabs-icon-shadow-active": [
+   "chrome.tabs.iconShadowActive"
+  ],
+  "--ds-tabs-badge-bg-active": [
+   "chrome.tabs.badgeBgActive"
+  ],
+  "--ds-tabs-badge-color-active": [
+   "chrome.tabs.badgeColorActive"
+  ],
+  "--ds-tabs-badge-border-active": [
+   "chrome.tabs.badgeBorderActive"
+  ],
+  "--ds-tabs-indicator-height": [
+   "chrome.tabs.indicatorHeight"
+  ],
+  "--ds-tabs-panel-bg": [
+   "chrome.tabs.panelBg"
+  ],
+  "--ds-tabs-panel-border": [
+   "chrome.tabs.panelBorder"
+  ],
+  "--ds-tabs-panel-radius": [
+   "chrome.tabs.panelRadius"
+  ],
+  "--ds-tabs-panel-shadow": [
+   "chrome.tabs.panelShadow"
+  ],
+  "--ds-tabs-panel-texture": [
+   "chrome.tabs.panelTexture"
+  ],
+  "--ds-tabs-panel-highlight": [
+   "chrome.tabs.panelHighlight"
+  ],
+  "--ds-tabs-overflow-control-bg": [
+   "chrome.tabs.overflowControlBg"
+  ],
+  "--ds-tabs-overflow-control-bg-hover": [
+   "chrome.tabs.overflowControlBgHover"
+  ],
+  "--ds-tabs-overflow-control-shadow": [
+   "chrome.tabs.overflowControlShadow"
+  ],
+  "--ds-tabs-overflow-control-shadow-hover": [
+   "chrome.tabs.overflowControlShadowHover"
+  ],
+  "--ds-tabs-motion-duration": [
+   "chrome.tabs.motionDuration"
+  ],
+  "--ds-tabs-active-reveal-duration": [
+   "chrome.tabs.activeRevealDuration"
+  ],
+  "--ds-tabs-panel-motion-duration": [
+   "chrome.tabs.panelMotionDuration"
+  ],
+  "--ds-tabs-sm-height": [
+   "chrome.tabs.smHeight"
+  ],
+  "--ds-tabs-sm-padding": [
+   "chrome.tabs.smPadding"
+  ],
+  "--ds-tabs-sm-font-size": [
+   "chrome.tabs.smFontSize"
+  ],
+  "--ds-tabs-sm-icon-size": [
+   "chrome.tabs.smIconSize"
+  ],
+  "--ds-tabs-md-height": [
+   "chrome.tabs.mdHeight"
+  ],
+  "--ds-tabs-md-padding": [
+   "chrome.tabs.mdPadding"
+  ],
+  "--ds-tabs-md-font-size": [
+   "chrome.tabs.mdFontSize"
+  ],
+  "--ds-tabs-md-icon-size": [
+   "chrome.tabs.mdIconSize"
+  ],
+  "--ds-tabs-lg-height": [
+   "chrome.tabs.lgHeight"
+  ],
+  "--ds-tabs-lg-padding": [
+   "chrome.tabs.lgPadding"
+  ],
+  "--ds-tabs-lg-font-size": [
+   "chrome.tabs.lgFontSize"
+  ],
+  "--ds-tabs-lg-icon-size": [
+   "chrome.tabs.lgIconSize"
+  ]
+ }
+}
