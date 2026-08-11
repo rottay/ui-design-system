@@ -586,6 +586,19 @@ export const rottayBrandTheme: BrandTheme = {
   },
 
   chrome: {
+    /**
+     * A status badge on a control plane is a label on a record, not a button.
+     * The pill shape the DS and both sibling verticals use belongs to consumer
+     * surfaces; Rottay squares it off onto the same radius ramp its inputs and
+     * cards ride, which is what `technical-sharp` means in practice.
+     */
+    badge: {
+      radius: 'var(--ds-radius-sm)',
+      gap: 'var(--ds-spacing-1)',
+      fontWeight: 'var(--ds-font-weight-medium)',
+      lineHeight: 'var(--ds-line-height-none)',
+    },
+
     card: {
       defaultElevation: 'md',
       hoverElevation: 'lift-two',
@@ -638,6 +651,123 @@ export const rottayBrandTheme: BrandTheme = {
       gridOpacity: 0.9,
     },
     controls: {
+      /**
+       * The control ramp. Rottay is a console: a screen is a table of rows with
+       * inline controls, so the DS baseline (40px md, 56px xl) spends a third of
+       * the viewport on air. One seed — `--ds-input-md-height` — sets the row,
+       * and every other size is an offset from it, so a tenant that moves the
+       * seed moves the whole ladder including Button.
+       *
+       * The sizes are px and not `calc(… * var(--ds-density-*))`: the consumers
+       * already apply density themselves (`input.css`, `date-picker.css`,
+       * `tree-select.css`, `button.css` all wrap these tokens in
+       * `* var(--ds-density-effective-scale)`), so a factor here would apply
+       * twice. Height is the seed; padding and gap derive from it optically.
+       */
+      fieldGeometry: {
+        gap: 'var(--ds-spacing-2)',
+        fontWeight: 'var(--ds-font-weight-normal)',
+        letterSpacing: 'var(--ds-letter-spacing-body)',
+        labelFontSize: 'var(--ds-font-size-xs)',
+        labelFontWeight: 'var(--ds-font-weight-medium)',
+        helperFontSize: 'var(--ds-font-size-xs)',
+        loadingStroke: '1.5',
+        transitionDuration: 'var(--ds-motion-fast)',
+        transitionTiming: 'var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1))',
+        xs: {
+          height: 'calc(var(--ds-input-md-height) - 0.5rem)',
+          paddingX: 'calc(var(--ds-input-xs-height) * 0.35)',
+          paddingY: 'calc(var(--ds-input-xs-height) * 0.2)',
+          fontSize: 'var(--ds-font-size-xs)',
+          lineHeight: 'var(--ds-line-height-tight)',
+          iconSize: 'var(--ds-icon-xs-size)',
+        },
+        sm: {
+          height: 'calc(var(--ds-input-md-height) - 0.25rem)',
+          paddingX: 'calc(var(--ds-input-sm-height) * 0.35)',
+          paddingY: 'calc(var(--ds-input-sm-height) * 0.2)',
+          fontSize: 'calc(0.8125rem * var(--ds-type-scale, 1))',
+          lineHeight: 'var(--ds-line-height-tight)',
+          iconSize: 'calc(var(--ds-icon-sm-size) - 2px)',
+        },
+        md: {
+          height: '2.25rem',
+          paddingX: 'calc(var(--ds-input-md-height) * 0.35)',
+          paddingY: 'calc(var(--ds-input-md-height) * 0.2)',
+          fontSize: 'var(--ds-font-size-sm)',
+          lineHeight: 'var(--ds-line-height-tight)',
+          iconSize: 'var(--ds-icon-sm-size)',
+        },
+        lg: {
+          height: 'calc(var(--ds-input-md-height) + 0.375rem)',
+          paddingX: 'calc(var(--ds-input-lg-height) * 0.35)',
+          paddingY: 'calc(var(--ds-input-lg-height) * 0.2)',
+          fontSize: 'var(--ds-font-size-base)',
+          lineHeight: 'var(--ds-line-height-tight)',
+          iconSize: 'calc(var(--ds-icon-sm-size) + 2px)',
+        },
+        xl: {
+          height: 'calc(var(--ds-input-md-height) + 0.875rem)',
+          paddingX: 'calc(var(--ds-input-xl-height) * 0.35)',
+          paddingY: 'calc(var(--ds-input-xl-height) * 0.2)',
+          fontSize: 'var(--ds-font-size-lg)',
+          lineHeight: 'var(--ds-line-height-tight)',
+          iconSize: 'var(--ds-icon-md-size)',
+        },
+      },
+
+      /**
+       * Button rides the same row height as the field, so a control strip lines
+       * up without per-screen correction. Buttons take more horizontal room than
+       * fields (0.42 of the height against 0.35) because a label needs shoulders
+       * where a value does not.
+       */
+      buttonGeometry: {
+        fontWeight: 'var(--ds-font-weight-medium)',
+        letterSpacing: 'var(--ds-letter-spacing-body)',
+        gap: 'calc(var(--ds-input-md-height) * 0.18)',
+        xs: {
+          height: 'var(--ds-input-xs-height)',
+          paddingX: 'calc(var(--ds-input-xs-height) * 0.42)',
+          gap: 'calc(var(--ds-input-xs-height) * 0.18)',
+          fontSize: 'var(--ds-font-size-xs)',
+          lineHeight: 'var(--ds-line-height-tight)',
+          iconSize: 'var(--ds-icon-xs-size)',
+        },
+        sm: {
+          height: 'var(--ds-input-sm-height)',
+          paddingX: 'calc(var(--ds-input-sm-height) * 0.42)',
+          gap: 'calc(var(--ds-input-sm-height) * 0.18)',
+          fontSize: 'calc(0.8125rem * var(--ds-type-scale, 1))',
+          lineHeight: 'var(--ds-line-height-tight)',
+          iconSize: 'calc(var(--ds-icon-sm-size) - 2px)',
+        },
+        md: {
+          height: 'var(--ds-input-md-height)',
+          paddingX: 'calc(var(--ds-input-md-height) * 0.42)',
+          gap: 'calc(var(--ds-input-md-height) * 0.18)',
+          fontSize: 'var(--ds-font-size-sm)',
+          lineHeight: 'var(--ds-line-height-tight)',
+          iconSize: 'var(--ds-icon-sm-size)',
+        },
+        lg: {
+          height: 'var(--ds-input-lg-height)',
+          paddingX: 'calc(var(--ds-input-lg-height) * 0.42)',
+          gap: 'calc(var(--ds-input-lg-height) * 0.18)',
+          fontSize: 'var(--ds-font-size-base)',
+          lineHeight: 'var(--ds-line-height-tight)',
+          iconSize: 'calc(var(--ds-icon-sm-size) + 2px)',
+        },
+        xl: {
+          height: 'var(--ds-input-xl-height)',
+          paddingX: 'calc(var(--ds-input-xl-height) * 0.42)',
+          gap: 'calc(var(--ds-input-xl-height) * 0.18)',
+          fontSize: 'var(--ds-font-size-lg)',
+          lineHeight: 'var(--ds-line-height-tight)',
+          iconSize: 'var(--ds-icon-md-size)',
+        },
+      },
+
       // ---- CTRL-04 PRESERVATION PINS (R1 Cohort 1) ----
       // NOT new product decisions. Each value is what this vertical ALREADY
       // resolves today, moved from an implicit engine-tier default onto
@@ -712,8 +842,15 @@ export const rottayBrandTheme: BrandTheme = {
         filled: { bg: '#1A1A1E', bgHover: '#222226', bgFocus: '#1A1A1E' },
         addon: { bg: '#1A1A1E', color: '#6B6B72', border: '#2A2A2F' },
         label: { color: '#A0A0A5' },
-        helper: { color: '#6B6B72' },
+        helper: { color: '#6B6B72', errorFontWeight: 'var(--ds-font-weight-medium)' },
         clear: { color: '#6B6B72', colorHover: '#A0A0A5' },
+        /**
+         * A read-only field in a control plane is a fact, not an empty slot: it
+         * carries an id you are about to copy. The DS baseline dashes the border
+         * and blocks the caret, which reads as "disabled". Rottay keeps the solid
+         * border and the text cursor.
+         */
+        readOnly: { borderStyle: 'solid', cursor: 'text' },
         successBorder: '#16A34A',
         successShadowFocus: '0 0 0 2px rgba(34, 197, 94, 0.18)',
         warningBorder: '#D97706',
@@ -739,8 +876,38 @@ export const rottayBrandTheme: BrandTheme = {
       cellFontSize: '0.875rem',
       cellColor: '#ECECEC',
       loadingOverlayBg: 'rgba(12, 12, 14, 0.7)',
+      /**
+       * The header is a fixed rail on the control ladder rather than `auto`, so a
+       * table lines up with the toolbar controls above it.
+       */
+      headerBlockSize: 'calc(var(--ds-input-md-height) - 0.25rem)',
+      /**
+       * 0.08em is eyebrow tracking for a two-word label. A data header is read in
+       * columns, not as prose; three quarters of the eyebrow keeps the channel and
+       * closes the letters up.
+       */
+      headerLetterSpacing: 'calc(var(--ds-text-eyebrow-letter-spacing) * 0.75)',
+      /** No sheen. The baseline gradient is transparent-to-transparent anyway. */
+      sheen: 'none',
     },
     cardComponent: {
+      /**
+       * One padding ladder. The DS ships two that disagree — `--ds-card-{size}-padding`
+       * (12/16/24/32) and `--ds-card-padding-{size}` (16/20/28/40) — and a card
+       * gets whichever its skin happens to read. `paddingSm..Xl` writes both names
+       * from one field, so Rottay has a single answer, and each step sits on the
+       * spacing ramp so the density dial reaches it.
+       */
+      paddingSm: 'var(--ds-spacing-3)',
+      paddingMd: 'var(--ds-spacing-4)',
+      paddingLg: 'var(--ds-spacing-5)',
+      paddingXl: 'var(--ds-spacing-6)',
+      headerPadding: 'var(--ds-spacing-4) var(--ds-spacing-4) var(--ds-spacing-3)',
+      bodyPadding: 'var(--ds-spacing-4)',
+      footerPadding: 'var(--ds-spacing-3) var(--ds-spacing-4)',
+      /** A console card title names a panel; it is a label, not a headline. */
+      titleFontSize: 'var(--ds-font-size-sm)',
+      titleFontWeight: 'var(--ds-font-weight-medium)',
       bg: '#18181B',
       bgHover: '#1A1A1E',
       color: '#ECECEC',
