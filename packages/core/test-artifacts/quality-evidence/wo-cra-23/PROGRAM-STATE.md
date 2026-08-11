@@ -437,6 +437,70 @@ under §1.4 is always no. Rows c–f above are all this shape.
 Corollary: idling for an answer is itself the defect. An hourly heartbeat now re-enters the programme
 if a lane has stalled waiting on a decision that was never the owner's to make.
 
+### ⚠ NEVER run `build:vertical-css` without a full `pnpm build` first
+
+`build-vertical-artifacts.mjs` imports the compiler from **`dist/`**, which lags `src/`. A
+radius-scale wrap landed in source after the last build, so `lint:artifacts` reports bithire and
+rottay stale and the regeneration would write the OLD form:
+
+```
+bithire:16  committed  calc(9px / 1.25 * var(--ds-radius-scale, 1))
+            generated  9px
+rottay:373  committed  calc(6px * var(--ds-radius-scale, 1))
+            generated  6px
+```
+
+**Regenerating alone silently reverts the radius-dial lane's work.** Run the full build, or do not
+regenerate. This is `artifact gates read dist, not src` arriving as a destructive operation rather than
+a false reading — and it is why a lane that needed an after-arm artifact rendered it **in memory from
+`src/`** and proved the harness with a null-arm control (byte-identical to the committed artifact on
+unedited sources) before trusting a single number.
+
+### A one-engine answer is not a family answer — check all three engines by name
+
+A lane retracted its own correction before it propagated, and the retraction is the finding. It had
+reported "the `HeadersBatch` comment is stale, `Button` honours a caller `data-part`" after reading
+one engine. Measured across all three:
+
+| engine | caller `data-part` | mechanism |
+|---|---|---|
+| modern | **survives** | destructured explicitly, P-79 note at `:197` |
+| rustic | **survives** | `{...rest}` onto the `<button>`; `skinAttributes` carries no `data-part` |
+| classic | **never survives** | `stampDataPart(rootRef.current, 'trigger')` in a `useLayoutEffect` that re-runs after **every commit** |
+
+The original comment is right for classic and wrong for the other two; the correction was right for two
+and wrong for classic. **Neither is safe as a blanket.** Classic does not merely ignore the attribute —
+it removes it from a live DOM node after render, so a test asserting before the effect settles sees it
+and then loses it.
+
+Consequence that reverses an earlier disposition: `ds-column-menu-control` is **not** dead residue. It
+is the only anatomy hook on that Button surviving all three engines, precisely because classic
+overwrites `data-part`. A *reserved* hook, not a live one — deleting it under §1.3 is correct only if
+we accept that column-menu's trigger is never styled under classic. That is an owner call.
+
+Operative form: **before citing a per-engine behaviour, check all three engines by name.** A claim
+about "the Button" tested against one engine is a claim about that engine. Same shape as the
+single-instrument failures already recorded — one resolution, generalised past its corpus.
+
+### Authoring a literal where the DS declaration is already a FORMULA is a regression
+
+The rottay identity lane resolved all 289 in-scope names and split them:
+
+```
+rottay == evnto            138   genuinely no vertical identity — the real gap
+rottay != evnto already    149   the DS declaration is a formula over per-vertical
+                                 inputs, so it ALREADY carries rottay's palette
+```
+
+`material` 62/66 and `surface` 19/20 already diverge, because their DS declarations are
+`var(--ds-surface-card)` / `color-mix(… var(--ds-color-primary) …)` chains bottoming out in the
+vertical's own `--ds-color-*`. Authoring literals there would have **replaced a live formula with baked
+paint**. The lane left both families alone.
+
+This is §6.0 read forward for a third time tonight, in a third disguise. The census column "missing
+from vertical X" answers *who redeclares at tenant scope*, never *what paints* — the same correction
+the evnto lane made from the other direction.
+
 ### THE LARGEST DEFECT: a primitive's whole skin dies wherever a caller names a part
 
 `runtime/engines/modern/skin/input.css` opens **82 rules** with
