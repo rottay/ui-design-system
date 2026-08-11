@@ -1,116 +1,55 @@
 'use client';
 
 /**
- * @fileoverview DetailHeader — structures-tier detail-page header with back
- * navigation, breadcrumb trail, hero title cluster, status badge, action
- * rail, optional metadata strip, optional tab strip, and optional
- * context-rail slot.
+ * @fileoverview DetailHeader shared rendering — the one DOM tree every engine
+ * composes: back navigation, breadcrumb trail, hero identity cluster, status
+ * badge, action rail, metadata region, optional tab strip and context rail.
  *
  * @description
- * Engine-free structures family for entity-detail pages. Pairs with the
- * `record` building blocks (`RecordField`, `RecordFieldGrid`)
- * and with `form-sections` (`FormSections`) to compose a full
- * detail screen.
- *
- * DetailHeader is chrome, not a surface: it is a structural widget that
- * wraps the top of a detail page. The heavier DS `DetailSurface` is a
- * full-page config object (EntityAdapter + tabs + sidebar + footer +
- * breadcrumbs + a config-driven API). DetailHeader is just the header
- * strip — consumers compose it with their own body content. Use this
- * when you want a rich detail-page header without committing to the
- * full surface config contract.
- *
- * Features:
- *   - Back button (uses NavigationLinkProvider Link adapter when
- *     mounted, falls back to native `<a>`)
- *   - Breadcrumb trail (uses NavigationLinkProvider Link adapter for
- *     items with hrefs)
- *   - Hero title cluster: optional eyebrow chip, title, optional
- *     status badge, optional subtitle, optional context-rail slot
- *   - Optional avatar (string for URL or initials, or any ReactNode)
- *   - Action rail with structured DetailHeaderAction[] (uses the
- *     shared header-actions semantic vocabulary)
- *   - Optional metadata strip (label/value pairs with optional icon
- *     and monospace mode)
- *   - Optional children slot inside the metadata card
- *   - Optional tab strip with active state, count badge, and icon
- *   - 4 archetype variants (control, editorial, technical, governance)
- *     each with their own gradient + grid background pattern
+ * DetailHeader is chrome, not a surface: it wraps the top of an entity-detail
+ * page. The heavier `DetailSurface` is a full-page config object; this family
+ * is only the header, composed by consumers with their own body content.
  *
  * The family stays domain-agnostic. All copy is consumer-supplied; the
  * component knows nothing about tenants, users, or any specific entity.
- * Status badge variants follow the standard DS Badge vocabulary.
+ *
+ * PAINT OWNERSHIP: this file stamps parts and state only. All paint lives in
+ * `presentation/components/skin/detail-header.css`, anchored on the root's
+ * `ds-structure ds-detail-header` scope classes. The family is engine-free —
+ * it composes engine-switched primitives, so one tree serves every engine.
+ *
+ * @module Structures/Headers/DetailHeader
+ * @category Structure
+ * @package @rottay/design-system
  */
 
 import { type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react';
 
 import { NavigationBackIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-back';
-import type { ComponentType } from 'react';
-type DetailHeaderIcon = ComponentType<any>;
-
-import { Badge, Box, Breadcrumb, Button, Flex, Stack, Text, Tooltip } from '../../../primitives';
-import { useNavigationLink } from '../../../../infrastructure/runtime/adapters/presentation/react/navigation';
+import { Badge, Box, Breadcrumb, Button, Flex, Stack, Text, Tooltip } from '@/ui/primitives';
+import { useNavigationLink } from '@/infrastructure/runtime/adapters/presentation/react/navigation';
 import {
-  type SharedHeaderActionKind,
   resolveSharedHeaderActionIcon,
   resolveSharedHeaderActionTooltip,
   resolveSharedHeaderActionVariant,
-} from '../../../patterns/foundation/header-actions';
+} from '@/ui/patterns/foundation/header-actions';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
-export type DetailHeaderArchetype = 'editorial' | 'control' | 'technical' | 'governance';
-
-export interface DetailHeaderAction {
-  label: string;
-  kind?: SharedHeaderActionKind;
-  icon?: DetailHeaderIcon;
-  onClick?: () => void;
-  href?: string;
-  loading?: boolean;
-  disabled?: boolean;
-  variant?: 'primary' | 'secondary' | 'ghost' | 'error';
-  tooltip?: string;
-}
-
-export interface DetailHeaderTab {
-  id: string;
-  label: string;
-  count?: number;
-  icon?: DetailHeaderIcon;
-}
-
-export interface DetailHeaderProps {
-  title: string;
-  subtitle?: string;
-  avatar?: string | ReactNode;
-  status?: {
-    label: string;
-    variant: 'primary' | 'success' | 'error' | 'warning' | 'secondary';
-  };
-  backHref: string;
-  backLabel?: string;
-  breadcrumb?: Array<{ label: string; href?: string }>;
-  actions?: DetailHeaderAction[];
-  tabs?: DetailHeaderTab[];
-  activeTab?: string;
-  onTabChange?: (tabId: string) => void;
-  metadata?: Array<{ label: string; value: string; icon?: DetailHeaderIcon; mono?: boolean }>;
-  eyebrow?: string;
-  archetype?: DetailHeaderArchetype;
-  contextRail?: ReactNode;
-  children?: ReactNode;
-}
+import type { DetailHeaderProps } from '../../contracts';
 
 // Tab-active background is STATE-SELECTED in the skin: the root carries
 // `data-archetype`, so per-archetype rules reach the sibling tab strip without
-// any inline custom property (the root stamp replaced the old JS ternary).
+// any inline custom property.
 
-function renderAvatarNode(avatar: string | ReactNode, title: string) {
+function renderAvatarNode(avatar: string | ReactNode) {
   if (typeof avatar === 'string') {
     if (avatar.startsWith('http') || avatar.startsWith('/')) {
       return (
         <Box data-part="avatar" data-variant="image">
-          <img src={avatar} alt={title} />
+          {/* The hero h1 carries the identity name one line away, so the
+              portrait is decorative: an `alt` echoing the title made every
+              screen reader announce the record twice. */}
+          <img src={avatar} alt="" aria-hidden="true" />
         </Box>
       );
     }
@@ -142,10 +81,12 @@ export function DetailHeader({
   archetype = 'control',
   contextRail,
   children,
+  className,
 }: DetailHeaderProps) {
   const i18n = useOptionalTranslation('common');
   const resolvedBackLabel = backLabel ?? i18n?.tOr('back', 'Back') ?? 'Back';
   const tabStripLabel = i18n?.tOr('tabs', 'Tabs') ?? 'Tabs';
+  const metadataRegionLabel = i18n?.tOr('details', 'Details') ?? 'Details';
   // Resolve the framework-specific Link component once. Falls back to a
   // native <a> tag when no NavigationLinkProvider is mounted, which keeps
   // the DS package framework-agnostic.
@@ -162,9 +103,12 @@ export function DetailHeader({
     label: item.href ? renderHrefAnchor(item.href, item.label) : item.label,
   }));
   const visibleMetadata = metadata?.filter((item) => item.value) || [];
+  const rootClassName = ['ds-structure', 'ds-detail-header', className]
+    .filter(Boolean)
+    .join(' ');
 
   return (
-    <Box data-part="root" data-archetype={archetype} className="ds-structure ds-detail-header">
+    <Box data-part="root" data-archetype={archetype} className={rootClassName}>
       <Box data-part="top-bar">
         <Flex justify="between" align="center" gap={16} wrap="wrap">
           <Flex align="center" gap={16} wrap="wrap">
@@ -183,10 +127,13 @@ export function DetailHeader({
             )}
 
             {breadcrumbItems && breadcrumbItems.length > 0 ? (
-              <>
+              /* The trail is one addressable region so a narrow container can
+                 retire the whole ancestor path in a single rule — hiding the
+                 divider alone would leave a floating crumb list. */
+              <Flex data-part="breadcrumb-trail" align="center" gap={16}>
                 <Box data-part="breadcrumb-divider" />
                 <Breadcrumb items={breadcrumbItems} />
-              </>
+              </Flex>
             ) : null}
           </Flex>
 
@@ -220,9 +167,13 @@ export function DetailHeader({
       </Box>
 
       <Box data-part="hero-panel" data-archetype={archetype}>
+        {/* The hero's accent stroke — where the tenant's
+            `--ds-detail-hero-spine` lands. */}
+        <Box data-part="hero-spine" aria-hidden="true" />
+
         <Flex align="start" justify="between" gap={22} wrap="wrap">
           <Flex align="start" gap={18} style={{ minWidth: 0, flex: 1 }}>
-            {avatar ? renderAvatarNode(avatar, title) : null}
+            {avatar ? renderAvatarNode(avatar) : null}
 
             <Stack spacing="sm" style={{ minWidth: 0, flex: 1 }}>
               {eyebrow ? (
@@ -250,7 +201,10 @@ export function DetailHeader({
         </Flex>
 
         {visibleMetadata.length > 0 || children ? (
-          <Box data-part="metadata-card">
+          /* The region is named for assistive technology: without it the
+             label/value pairs read as a run of unrelated strings between the
+             title and the tab strip. */
+          <Box data-part="metadata-card" role="group" aria-label={metadataRegionLabel}>
             {visibleMetadata.length > 0 ? (
               <Flex gap={12} wrap="wrap">
                 {visibleMetadata.map((item, index) => (
@@ -293,7 +247,10 @@ export function DetailHeader({
 
       {tabs && tabs.length > 0 ? (
         <Box data-part="tab-strip" role="tablist" aria-label={tabStripLabel}>
-          <Flex align="center" gap={10} wrap="wrap">
+          {/* Wrapping is skin-owned, not composed inline: a narrow container
+              turns the lane from a wrapping stack of rows into one swipeable
+              row, and an inline `flex-wrap` would outrank every engine. */}
+          <Flex data-part="tab-list" align="center" gap={10}>
             {tabs.map((tab) => {
               const isActive = activeTab === tab.id;
               const TabIcon = tab.icon;
@@ -365,6 +322,9 @@ export function DetailHeader({
                       </Box>
                     ) : null}
                   </Flex>
+                  {/* Selection rail: the state is a structural edge, not a
+                      background wash. */}
+                  <Box data-part="tab-rail" data-active={isActive} aria-hidden="true" />
                 </Box>
               );
             })}
@@ -374,5 +334,7 @@ export function DetailHeader({
     </Box>
   );
 }
+
+DetailHeader.displayName = 'DetailHeader';
 
 export default DetailHeader;
