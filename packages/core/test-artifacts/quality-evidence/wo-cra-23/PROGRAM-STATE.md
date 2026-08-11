@@ -529,6 +529,29 @@ fallback arm, and the declared-nowhere census. Those stand. But **the instrument
 evidence within its roster**, and a roster of six fixtures is not the component library. Any lane
 quoting `changedRows: 0` must state which fixtures could have moved.
 
+### A PORTAL FAMILY MOUNTS ITS SURFACE ONE TICK BEFORE ITS CONTENT
+
+A reachability instrument reported **44 dead rules** in `column-menu`. All false. The Popover mounts
+the governed surface (`.ds-structure.ds-column-menu-panel[data-part="surface"]`) **one tick before**
+the family's content renders inside it, so a fixture that gates on the surface and then samples sees a
+correctly-classed, entirely **empty** panel — and every content rule reads as dead.
+
+```
+gate on the surface   44 unmatched
+gate on the content    5 unmatched      same skin, same commit
+```
+
+Gate on content (`…[data-part="surface"] [data-part="panel"]` **plus a row count**), never on the
+container. This will hit `skin-orphan-scope-audit` and every reachability check on **every portal
+family**, and its failure direction is the dangerous one: it manufactures dead-rule findings that
+license deletion.
+
+The 5 that remain are pointer-drag and resize runtime states, not dead rules — which is the other half
+of the lesson: an unmatched selector in a static fixture is a **state you did not reach**, until proven
+otherwise. A lane also recorded 3 `export-button` toast rules as **unverified rather than live**,
+because `navigator.clipboard.writeText` cannot be stubbed in this environment. Saying "I could not
+reach this" is a different claim from "this is dead", and only one of them is safe to act on.
+
 ### CORRECTION TO A COMMIT MESSAGE: `d5c255a1d` is NOT repaint-neutral
 
 I committed the toolbar repair claiming "the repaint is provably identical across all six
