@@ -2103,6 +2103,42 @@ overridden in light but not dark still reads as overridden. bithire declaring
 `--ds-color-bg-primary: #ffffff` beside `--ds-color-bg-secondary: #151d2b` is the light/dark split,
 not an inconsistency. Resolving it properly is the same per-cell question the probe answers.
 
+### THE CLOSING FINDING: one number, two families, two lanes — a theme defect with two witnesses
+
+I looked at two captures side by side and reported an element that appeared in `evnto/light` and not
+in `bithire/dark`, with my uncertainty stated. **The class was real, the cell was wrong, and where it
+actually fires is the more useful answer.**
+
+The element is `rottay-transition-signal-caption`, 152×50, present in **all six cells** — so presence
+is constant and visibility is not. Its edge against its own ground:
+
+```
+bithire/light   1.24 pass      evnto/light    1.20 pass      platform/light  1.20 pass
+bithire/dark    1.34 pass      evnto/dark     1.24 pass      platform/dark   1.09 FAIL
+```
+
+The pair I compared is the one pair where both are fine — `bithire/dark` is the **healthiest of the
+six**. What made it read as absent at 1280 is unresolved; a 1.34 hairline on navy is genuinely
+quieter than a 1.20 on paper even though the number is higher.
+
+**And 1.09 is the third independent appearance of that number in rottay's dark theme.** The segmented
+border, and now this caption: both `--ds-color-border` `#1c1c20` on a near-black ground, both under
+the calibrated cut, **two families, two lanes, one cause.**
+
+> That is what turns *"segmented needs a patch"* into **platform's dark border authority** — 625 reads
+> corpus-wide. It is no longer a family finding with a workaround; it is a theme finding with two
+> witnesses.
+
+And it retires the narrow repair as a pattern: `--ds-segmented-border: var(--ds-color-border-secondary)`
+is correct for segmented and **does not generalise** — `transition-signal-caption` has no equivalent
+channel of its own. Family-by-family patching is how this becomes expensive; raising rottay's dark
+border is one edit measured once.
+
+**This is the strongest case the programme produced for why the sighted pass exists.** Every counter
+was green. The reach census, the class-A and class-B censuses, the severance census, `gates:ci`, the
+token audit — all green, and none of them can see a hairline that is present, correct, declared, and
+invisible. It took an eye to find the first instance and a measurement to find that it was the second.
+
 ### THE THESIS HELD, AND THE HARNESS ALMOST PROVED THE OPPOSITE
 
 `oauth-transition` captured in six cells after its repair — the one surface where the ambient glow
