@@ -673,12 +673,21 @@ across 56 components — menu 28, upload 26, inputnumber 25, tooltip 23, switch 
 20, tag 20. A component channel in a theme file is a layering violation **regardless of its value**,
 and moving it is a **relocation to `presentation/components/`, not a deletion**.
 
-> ⚠ **Relocation is NOT safe by construction — an earlier revision of this line implied it was.**
-> `rottay-components` and `rottay-engines` **outrank** `rottay-tokens`, so moving a declaration from
-> the theme file into a component sheet **raises its layer rank** and it would then win against
-> declarations it currently loses to. Safe only for declarations that have no competitor in any cell,
-> or if the moved sheet is assigned to the tokens layer so rank is unchanged. **The count of
-> would-flip declarations is the real cost of that wave and must be established before it opens.**
+**Relocation raises layer rank — measured, and the cost is 17.** [M] `rottay-components` outranks
+`rottay-tokens`, so a moved declaration wins against things it currently loses to. Measured across
+all six cells: **530 of 547 relocate with no cascade consequence; 17 flip.**
+
+> **All 17 have a single cause and it is not a layering hazard — it is a PAIRING hazard.** Every one
+> loses today to `default.css :root[data-theme='dark']`, and nothing else competes. Moving the light
+> value to rank 6 while its dark partner stays at rank 4 inverts the pair, so the light value would
+> win in dark mode. **Move each pair together and flips go 17 → 0.** The mitigation is inside the
+> wave, not a reshape of it.
+
+Zero order-dependent cases: only 5 of the 547 are declared in a component sheet at all, so import
+position decides nothing today. The layer binding itself is the import specifier's path fragment, and
+the gate that enforces it is **not in the CI manifest** — amending its `expectedLayer()` so a
+component sheet may carry the tokens layer is a one-function deliberate amendment that makes the
+relocation rank-neutral outright.
 
 **The split-family rule.** The evnto border hole is not an isolate:
 
