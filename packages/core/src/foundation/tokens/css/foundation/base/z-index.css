@@ -11,39 +11,6 @@
      Organized from bottom to top of the stack
      ======================================================================== */
 
-  /* Base layer - Normal document flow */
-  --ds-z-index-base: 0;
-
-  /* Dropdown layer - Select menus, autocomplete, etc */
-  --ds-z-index-dropdown: 1000;
-
-  /* Sticky elements - Sticky headers, footers */
-  --ds-z-index-sticky: 1100;
-
-  /* Fixed elements - Fixed navigation, banners */
-  --ds-z-index-fixed: 1200;
-
-  /* Overlay backdrop - Modal/drawer backdrops */
-  --ds-z-index-overlay: 1300;
-
-  /* Drawer - Side panels */
-  --ds-z-index-drawer: 1400;
-
-  /* Modal/Dialog - Modal windows */
-  --ds-z-index-modal: 1500;
-
-  /* Popover - Context menus, popovers */
-  --ds-z-index-popover: 1600;
-
-  /* Tooltip - Tooltips and hints */
-  --ds-z-index-tooltip: 1700;
-
-  /* Notification/Toast - Toast messages, notifications */
-  --ds-z-index-notification: 1800;
-
-  /* Maximum - Highest priority elements */
-  --ds-z-index-max: 9999;
-
   /* ========================================================================
      COMPONENT-SPECIFIC Z-INDEX
      Specific layers for common component scenarios

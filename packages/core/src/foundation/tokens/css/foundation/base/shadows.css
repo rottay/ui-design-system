@@ -12,13 +12,6 @@
      in every entrypoint). classic/rustic components and the brand compiler
      consume these --ds-shadow-* names.
      ======================================================================== */
-  --ds-shadow-none: var(--ds-elevation-0);
-  --ds-shadow-xs: var(--ds-elevation-1);
-  --ds-shadow-sm: var(--ds-elevation-1);
-  --ds-shadow-md: var(--ds-elevation-2);
-  --ds-shadow-lg: var(--ds-elevation-3);
-  --ds-shadow-xl: var(--ds-elevation-4);
-  --ds-shadow-2xl: var(--ds-elevation-5);
   --ds-shadow-3xl: var(--ds-elevation-5), 0 48px 96px rgba(0, 0, 0, 0.1);
 
   /* Inner shadow for inset effects */

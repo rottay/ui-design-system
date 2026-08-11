@@ -31,46 +31,16 @@
      scale from this file. The fluid ramp below is a separate opt-in axis and is
      intentionally NOT density-wrapped.
      ======================================================================== */
-  --ds-density-global-effective-scale: clamp(
-    0.5,
-    calc(var(--ds-density-scale, 1) * var(--ds-density-mode-factor, 1)),
-    3
-  );
-  --ds-density-effective-scale: clamp(
-    0.5,
-    calc(
-      var(--ds-density-global-effective-scale, 1) *
-      var(--ds-density-local-factor, 1)
-    ),
-    3
-  );
-  --ds-spacing-0: 0;
-  --ds-spacing-1: calc(0.25rem * var(--ds-density-effective-scale, 1));   /* 4px */
-  --ds-spacing-2: calc(0.5rem * var(--ds-density-effective-scale, 1));    /* 8px */
-  --ds-spacing-3: calc(0.75rem * var(--ds-density-effective-scale, 1));   /* 12px */
-  --ds-spacing-4: calc(1rem * var(--ds-density-effective-scale, 1));      /* 16px */
-  --ds-spacing-5: calc(1.25rem * var(--ds-density-effective-scale, 1));   /* 20px */
-  --ds-spacing-6: calc(1.5rem * var(--ds-density-effective-scale, 1));    /* 24px */
   --ds-spacing-7: calc(1.75rem * var(--ds-density-effective-scale, 1));   /* 28px */
-  --ds-spacing-8: calc(2rem * var(--ds-density-effective-scale, 1));      /* 32px */
   --ds-spacing-9: calc(2.25rem * var(--ds-density-effective-scale, 1));   /* 36px */
-  --ds-spacing-10: calc(2.5rem * var(--ds-density-effective-scale, 1));   /* 40px */
   --ds-spacing-11: calc(2.75rem * var(--ds-density-effective-scale, 1));  /* 44px */
-  --ds-spacing-12: calc(3rem * var(--ds-density-effective-scale, 1));     /* 48px */
   --ds-spacing-14: calc(3.5rem * var(--ds-density-effective-scale, 1));   /* 56px */
-  --ds-spacing-16: calc(4rem * var(--ds-density-effective-scale, 1));     /* 64px */
-  --ds-spacing-20: calc(5rem * var(--ds-density-effective-scale, 1));     /* 80px */
-  --ds-spacing-24: calc(6rem * var(--ds-density-effective-scale, 1));     /* 96px */
   --ds-spacing-28: calc(7rem * var(--ds-density-effective-scale, 1));     /* 112px */
-  --ds-spacing-32: calc(8rem * var(--ds-density-effective-scale, 1));     /* 128px */
   --ds-spacing-36: calc(9rem * var(--ds-density-effective-scale, 1));     /* 144px */
-  --ds-spacing-40: calc(10rem * var(--ds-density-effective-scale, 1));    /* 160px */
   --ds-spacing-44: calc(11rem * var(--ds-density-effective-scale, 1));    /* 176px */
-  --ds-spacing-48: calc(12rem * var(--ds-density-effective-scale, 1));    /* 192px */
   --ds-spacing-52: calc(13rem * var(--ds-density-effective-scale, 1));    /* 208px */
   --ds-spacing-56: calc(14rem * var(--ds-density-effective-scale, 1));    /* 224px */
   --ds-spacing-60: calc(15rem * var(--ds-density-effective-scale, 1));    /* 240px */
-  --ds-spacing-64: calc(16rem * var(--ds-density-effective-scale, 1));    /* 256px */
   --ds-spacing-72: calc(18rem * var(--ds-density-effective-scale, 1));    /* 288px */
   --ds-spacing-80: calc(20rem * var(--ds-density-effective-scale, 1));    /* 320px */
   --ds-spacing-96: calc(24rem * var(--ds-density-effective-scale, 1));    /* 384px */
@@ -79,51 +49,44 @@
      NAMED SPACING - Semantic Aliases
      Commonly used spacing values with semantic names
      ======================================================================== */
-  --ds-spacing-xxxs: var(--ds-spacing-1);   /* 4px */
-  --ds-spacing-xxs: var(--ds-spacing-2);    /* 8px */
-  --ds-spacing-xs: var(--ds-spacing-3);     /* 12px */
-  --ds-spacing-sm: var(--ds-spacing-4);     /* 16px */
-  --ds-spacing-md: var(--ds-spacing-6);     /* 24px */
-  --ds-spacing-lg: var(--ds-spacing-8);     /* 32px */
-  --ds-spacing-xl: var(--ds-spacing-10);    /* 40px */
-  --ds-spacing-2xl: var(--ds-spacing-12);   /* 48px */
-  --ds-spacing-3xl: var(--ds-spacing-16);   /* 64px */
-  --ds-spacing-4xl: var(--ds-spacing-20);   /* 80px */
-  --ds-spacing-5xl: var(--ds-spacing-24);   /* 96px */
+  --ds-spacing-xxxs: var(--ds-density-spacing-xxxs, var(--ds-spacing-1)); /* 4px */
+  --ds-spacing-xxs: var(--ds-density-spacing-xxs, var(--ds-spacing-2)); /* 8px */
+  --ds-spacing-4xl: var(--ds-density-spacing-4xl, var(--ds-spacing-20)); /* 80px */
+  --ds-spacing-5xl: var(--ds-density-spacing-5xl, var(--ds-spacing-24)); /* 96px */
 
   /* ========================================================================
      LAYOUT SPACING - Page/Section Level
      Used for larger layout spacing needs
      ======================================================================== */
-  --ds-spacing-gutter: var(--ds-spacing-4);        /* 16px - Base gutter */
-  --ds-spacing-gutter-sm: var(--ds-spacing-2);     /* 8px - Small screens */
-  --ds-spacing-gutter-md: var(--ds-spacing-6);     /* 24px - Medium screens */
-  --ds-spacing-gutter-lg: var(--ds-spacing-8);     /* 32px - Large screens */
-  --ds-spacing-gutter-xl: var(--ds-spacing-12);    /* 48px - Extra large screens */
+  --ds-spacing-gutter: var(--ds-density-spacing-gutter, var(--ds-spacing-4)); /* 16px - Base gutter */
+  --ds-spacing-gutter-sm: var(--ds-density-spacing-gutter-sm, var(--ds-spacing-2)); /* 8px - Small screens */
+  --ds-spacing-gutter-md: var(--ds-density-spacing-gutter-md, var(--ds-spacing-6)); /* 24px - Medium screens */
+  --ds-spacing-gutter-lg: var(--ds-density-spacing-gutter-lg, var(--ds-spacing-8)); /* 32px - Large screens */
+  --ds-spacing-gutter-xl: var(--ds-density-spacing-gutter-xl, var(--ds-spacing-12)); /* 48px - Extra large screens */
 
-  --ds-spacing-section: var(--ds-spacing-16);      /* 64px - Section spacing */
-  --ds-spacing-section-sm: var(--ds-spacing-8);    /* 32px - Small sections */
-  --ds-spacing-section-lg: var(--ds-spacing-24);   /* 96px - Large sections */
+  --ds-spacing-section: var(--ds-density-spacing-section, var(--ds-spacing-16)); /* 64px - Section spacing */
+  --ds-spacing-section-sm: var(--ds-density-spacing-section-sm, var(--ds-spacing-8)); /* 32px - Small sections */
+  --ds-spacing-section-lg: var(--ds-density-spacing-section-lg, var(--ds-spacing-24)); /* 96px - Large sections */
 
-  --ds-spacing-container: var(--ds-spacing-6);     /* 24px - Container padding */
-  --ds-spacing-container-sm: var(--ds-spacing-4);  /* 16px - Small containers */
-  --ds-spacing-container-lg: var(--ds-spacing-12); /* 48px - Large containers */
+  --ds-spacing-container: var(--ds-density-spacing-container, var(--ds-spacing-6)); /* 24px - Container padding */
+  --ds-spacing-container-sm: var(--ds-density-spacing-container-sm, var(--ds-spacing-4)); /* 16px - Small containers */
+  --ds-spacing-container-lg: var(--ds-density-spacing-container-lg, var(--ds-spacing-12)); /* 48px - Large containers */
 
   /* ========================================================================
      COMPONENT SPACING - Component-Specific
      Default spacing for common component patterns
      ======================================================================== */
-  --ds-spacing-component-gap: var(--ds-spacing-4);          /* 16px - Gap between items */
-  --ds-spacing-component-gap-sm: var(--ds-spacing-2);       /* 8px - Small gap */
-  --ds-spacing-component-gap-lg: var(--ds-spacing-6);       /* 24px - Large gap */
+  --ds-spacing-component-gap: var(--ds-density-spacing-component-gap, var(--ds-spacing-4)); /* 16px - Gap between items */
+  --ds-spacing-component-gap-sm: var(--ds-density-spacing-component-gap-sm, var(--ds-spacing-2)); /* 8px - Small gap */
+  --ds-spacing-component-gap-lg: var(--ds-density-spacing-component-gap-lg, var(--ds-spacing-6)); /* 24px - Large gap */
 
-  --ds-spacing-component-padding: var(--ds-spacing-4);      /* 16px - Internal padding */
-  --ds-spacing-component-padding-sm: var(--ds-spacing-2);   /* 8px - Small padding */
-  --ds-spacing-component-padding-lg: var(--ds-spacing-6);   /* 24px - Large padding */
+  --ds-spacing-component-padding: var(--ds-density-spacing-component-padding, var(--ds-spacing-4)); /* 16px - Internal padding */
+  --ds-spacing-component-padding-sm: var(--ds-density-spacing-component-padding-sm, var(--ds-spacing-2)); /* 8px - Small padding */
+  --ds-spacing-component-padding-lg: var(--ds-density-spacing-component-padding-lg, var(--ds-spacing-6)); /* 24px - Large padding */
 
-  --ds-spacing-component-margin: var(--ds-spacing-4);       /* 16px - External margin */
-  --ds-spacing-component-margin-sm: var(--ds-spacing-2);    /* 8px - Small margin */
-  --ds-spacing-component-margin-lg: var(--ds-spacing-8);    /* 32px - Large margin */
+  --ds-spacing-component-margin: var(--ds-density-spacing-component-margin, var(--ds-spacing-4)); /* 16px - External margin */
+  --ds-spacing-component-margin-sm: var(--ds-density-spacing-component-margin-sm, var(--ds-spacing-2)); /* 8px - Small margin */
+  --ds-spacing-component-margin-lg: var(--ds-density-spacing-component-margin-lg, var(--ds-spacing-8)); /* 32px - Large margin */
 
   /* ---------------------------------------------------------------------
    * Fluid space ramp (WO-ARC-05).

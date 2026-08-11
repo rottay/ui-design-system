@@ -9,10 +9,6 @@
      BORDER WIDTHS
      Standard border widths for component boundaries
      ======================================================================== */
-  --ds-border-width-0: 0;
-  --ds-border-width-1: 1px;
-  --ds-border-width-2: 2px;
-  --ds-border-width-4: 4px;
   --ds-border-width-8: 8px;
 
   /* Semantic aliases */
@@ -50,14 +46,7 @@
      Contextual border colors based on the color palette
      ======================================================================== */
 
-  /* Default borders */
-  --ds-border-color-default: var(--ds-color-neutral-200);
-  --ds-border-color-muted: var(--ds-color-neutral-100);
-  --ds-border-color-strong: var(--ds-color-neutral-300);
-
   /* Interactive borders */
-  --ds-border-color-hover: var(--ds-color-neutral-300);
-  --ds-border-color-focus: var(--ds-color-primary-500);
   --ds-border-color-active: var(--ds-color-primary-600);
 
   /* Semantic borders */
@@ -75,8 +64,6 @@
      DIVIDER STYLES
      Styles for visual separators
      ======================================================================== */
-  --ds-divider-width: var(--ds-border-width-1);
-  --ds-divider-color: var(--ds-border-color-default);
   --ds-divider-style: var(--ds-border-style-solid);
 
   /* Divider with spacing */

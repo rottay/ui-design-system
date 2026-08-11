@@ -531,7 +531,7 @@
   --ds-type-section-title-text-transform: none;
   --ds-type-section-title-font-variant-numeric: normal;
   --ds-type-body-font-family: var(--ds-font-family-base);
-  --ds-type-body-font-size: var(--ds-font-size-base);
+  --ds-type-body-font-size: calc(0.875rem * var(--ds-type-scale, 1));
   --ds-type-body-font-weight: 400;
   --ds-type-body-line-height: var(--ds-line-height-normal);
   --ds-type-body-letter-spacing: var(--ds-letter-spacing-normal);
@@ -683,13 +683,13 @@
   --ds-spacing-64: calc(16rem * var(--ds-density-effective-scale, 1));
 
   /* Semantic Spacing */
-  --ds-spacing-xs: var(--ds-spacing-1);
-  --ds-spacing-sm: var(--ds-spacing-2);
-  --ds-spacing-md: var(--ds-spacing-4);
-  --ds-spacing-lg: var(--ds-spacing-6);
-  --ds-spacing-xl: var(--ds-spacing-8);
-  --ds-spacing-2xl: var(--ds-spacing-12);
-  --ds-spacing-3xl: var(--ds-spacing-16);
+  --ds-spacing-xs: var(--ds-density-spacing-xs, var(--ds-spacing-1));
+  --ds-spacing-sm: var(--ds-density-spacing-sm, var(--ds-spacing-2));
+  --ds-spacing-md: var(--ds-density-spacing-md, var(--ds-spacing-4));
+  --ds-spacing-lg: var(--ds-density-spacing-lg, var(--ds-spacing-6));
+  --ds-spacing-xl: var(--ds-density-spacing-xl, var(--ds-spacing-8));
+  --ds-spacing-2xl: var(--ds-density-spacing-2xl, var(--ds-spacing-12));
+  --ds-spacing-3xl: var(--ds-density-spacing-3xl, var(--ds-spacing-16));
 
   /* ─────────────────────────────────────────────────────────────────────────────
      4. BORDERS - Vercel Minimal Style
@@ -1071,7 +1071,6 @@
   --ds-card-footer-border: #e5e5e5;
 
   /* Card Common */
-  --ds-divider-text-color: var(--ds-color-text-primary);
   --ds-page-shell-subtitle-color: var(--ds-color-text-secondary);
 
   /* ─────────────────────────────────────────────────────────────────────────────
