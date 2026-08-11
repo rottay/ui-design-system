@@ -4,6 +4,25 @@ import { fireEvent, screen, waitFor } from '@testing-library/react';
 
 import { ContextMenu } from '..';
 import { renderWithEngine } from '../../../../../tooling/testing/helpers/engine';
+import {
+  readSkinRules,
+  waitForComposedContent,
+  winningDecl,
+} from '../../../../../tooling/testing/helpers/skin-reachability';
+
+/** Engine skins live outside the helper's default presentation root. */
+const RUSTIC_SKIN_ROOT = 'src/foundation/tokens/css/runtime/engines/rustic/skin';
+
+/**
+ * The twin of the dropdown item-hover rule: `context-menu.css` reads the same
+ * `--ds-dropdown-item-hover-bg` channel, and nothing asserted it. PARSED rather
+ * than substring-matched so a reformat cannot turn a live channel into a red.
+ */
+const CONTEXT_MENU_ITEM_HOVER = winningDecl(
+  readSkinRules('context-menu', RUSTIC_SKIN_ROOT),
+  'background-color',
+  (rule) => rule.selector.includes("[data-part='item']") && rule.selector.includes(':hover')
+);
 
 describe('ContextMenu real engines', () => {
   it('covers divider, group, disabled, select, outside-click, and escape branches in the rustic engine', async () => {
@@ -34,6 +53,25 @@ describe('ContextMenu real engines', () => {
     expect(screen.getByRole('separator')).toBeInTheDocument();
     expect(screen.getByText('Workspace')).toBeInTheDocument();
     expect(screen.getByText('O')).toBeInTheDocument();
+
+    // Side one: the rule declares the shared channel and keeps the guard that
+    // stops it repainting a disabled row.
+    expect(CONTEXT_MENU_ITEM_HOVER?.decls['background-color']).toBe(
+      'var(--ds-dropdown-item-hover-bg, var(--ds-color-neutral-100, #f3f4f6))'
+    );
+    expect(CONTEXT_MENU_ITEM_HOVER?.selector).toContain(":not([data-disabled='true'])");
+
+    // Side two: the DOM presents a node that selector can reach, and correctly
+    // excludes the disabled one. Declaring the rule and stamping the hook it
+    // needs are separate facts.
+    const restingItem = CONTEXT_MENU_ITEM_HOVER!.selector.replace(':hover', '');
+    await waitForComposedContent(waitFor, document, restingItem, 1);
+    expect(screen.getByRole('menuitem', { name: /open dashboard/i }).matches(restingItem)).toBe(
+      true
+    );
+    expect(screen.getByRole('menuitem', { name: /disabled item/i }).matches(restingItem)).toBe(
+      false
+    );
 
     fireEvent.click(screen.getByRole('menuitem', { name: /disabled item/i }));
     expect(handleSelect).not.toHaveBeenCalled();
