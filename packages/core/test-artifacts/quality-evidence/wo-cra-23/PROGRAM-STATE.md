@@ -2139,17 +2139,43 @@ green was being assumed every time the gates were called clean. Both describe **
 than values, which makes them the likeliest to be live rather than aged, and they are attributed
 first.
 
-**Strong lead on three of the eight, to be tested and not assumed.** `fluid-ramps` claims the fluid
-3xl/4xl/5xl are bounded by two values the static ramp declares. But the static top rung is
-`--ds-font-size-5xl-base: 2.5rem`, measured when a lane refused to route collection-header's clamps
-through ramp tokens because those need **2.625–3.625rem, above the static top**. If the fluid ramp
-reaches sizes the static ramp cannot express, the contract cannot hold — and it is **not a live paint
-defect but a contract that aged past its ramp**. Two independent witnesses for one gap, from opposite
-ends: the clamps could not be expressed downward, and this contract cannot bound them upward. **The
-static ramp is missing rungs at the top.**
+**ATTRIBUTED — 5 live, 1 aged, every one re-run per commit rather than read off a diff.**
 
-Attribution is the deliverable, not repair: for each, *when did it go red* and *is it a live defect or
-an aged contract*. Different answers, different work. **None of them is baselined.**
+```
+tokens.contract          6c9f6ccf1   chore(wip): preserve foundation tokens and compilers
+root-component-authority 6c9f6ccf1   ← the same commit
+elevation-surface-lift   6c9f6ccf1   ← the same commit
+fluid-ramps ×3           edf91a41f   refactor(tokens): default.css becomes the sole authority
+bithire-motion           6a4a78b29   chore(build): reconcile artifacts, manifest…
+reduced-motion-guard     ba4d72e41   refactor(skin): extract the shared header…
+```
+
+> **One untitled `chore(wip)` put three ownership contracts into the red at once**, verified at its
+> boundary — all three green at `033091ffe`, all three red at `6c9f6ccf1`. None was born broken;
+> `root-component-authority` was green at its own birth commit and three after.
+
+The five live ones are concrete and none is a stale test: `--ds-surface-tone` is declared in **zero
+files**, so the public token surface names a channel that does not exist; `--ds-button-primary-shadow`
+exists but in `foundation/responsive/button.css` rather than the `button.css` the contract declares as
+its owner — **the channel left its owner**, which is exactly what the test is for; the modal skin no
+longer carries the `background-color` line the contract requires; the regenerated artifact stopped
+emitting `--ds-tint-8`, so the ledger tone channels have nothing to bind to; and the shared-header
+extraction reintroduced an unguarded animation.
+
+**MY LEAD WAS CONFIRMED IN MECHANISM AND WRONG IN LOCATION.** I predicted the failure was old and
+moved with the ramp rather than with a recent commit — confirmed, it fell in `edf91a41f`, a deletion
+sweep, exactly that shape. But I wrote *"the static ramp is missing rungs at the top"*, citing the
+2.5rem top against collection-header's 2.625–3.625rem clamps. The static ramp declares
+`0.6875 · 0.75 · 0.875 · 0.9375 · 1 · 1.125 · 1.25 · 1.5 · 2 · 2.5 · 3 · 4.5 · 6 · 8`, and the value
+this contract cannot bound is **`1.875rem`, falling between `1.5` and `2` — a missing MIDDLE rung.**
+
+**There are two gaps, not one.** The clamps' 2.625–3.625rem is a second real gap and it is not the one
+breaking this test. So the correction is not "the ramp does not reach high enough" but **"the sweep
+removed an intermediate rung the fluid ramp still uses."**
+
+The suite that finds all of this is `vitest run src/foundation/tokens` — **40 files, 355 tests**,
+6 red files / 8 tests. The three oldest survived a `chore(wip)` because **no filtered run touches
+them**, and every lane including this one spent the night on `--project unit <file>`.
 
 ### A family patch survives the real fix and UNDERCUTS it
 
