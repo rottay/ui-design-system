@@ -529,6 +529,64 @@ fallback arm, and the declared-nowhere census. Those stand. But **the instrument
 evidence within its roster**, and a roster of six fixtures is not the component library. Any lane
 quoting `changedRows: 0` must state which fixtures could have moved.
 
+### THE PRIMITIVES TIER, CENSUSED — one systemic cause, not seventy-six findings
+
+Ranked by what a person would see, not by count:
+
+| | exposure | live call sites |
+|---|---|---|
+| **Segmented** | 29 rules / 100 decls | 2 shipped switchers |
+| **Button** | 7 / 47 | **127** across 38 files |
+| **Badge** | 29 / 110 | 16 in 9 shipped patterns |
+| **Tag** | 39 modern + 31 rustic | 4 — the only one losing under TWO engines |
+| latent | Menu 83/300, List 72/132, Descriptions 40/129, Timeline 37/89 | **0** callers pass a part |
+
+**Segmented is first and it is not the biggest count.** `view-mode-switcher` and `scope-switcher` both
+render `<ModernSegmented data-part="switcher">`, severing all 29 rules — and `view-mode-switcher.css`'s
+header states the composition law in writing and records that the family **deliberately retired its own
+frame paint** on that basis. So it deleted its compensation in favour of a channel its own call site
+severs. **The `search-command-bar` law running backwards**: that family was compensating for lost
+primitive paint; this one removed its compensation and trusts paint that never arrives.
+
+Consequence for a ruling I made: those are the two families whose headers say *"the correct read count
+for this file is zero."* True — and true because the primitive should paint it. I left them alone for
+the right reason and there is still a defect.
+
+**Class 4 is ONE cause.** Rendered across 86 primitives: **classic stamps a `data-part` in 3**, modern
+in 74, rustic in 64. So every `[data-part]`-keyed rule is inert under classic for 83 of 86. Reported
+per-primitive it would have been 76 tickets and the single systemic fix would have been buried.
+
+### One population, two names — three instances in one night
+
+- **`Button` / `ModernButton`** — 69 call sites spell it one way, 58 import the modern engine directly.
+  A census keyed on one spelling missed **a third of 127**.
+- **`List` / `List.Item` / `List.Meta`** — a default-export-only walk reported 47 rules; the compounds
+  are named-only exports with their own parts and their own skin rules. Real figure **72**.
+- **Alias exports** — six rows of the same rendered element reached through different export names,
+  correctly folded rather than reported as findings.
+
+**A census keyed on a module's default export under-reports compound primitives**, and one keyed on a
+single spelling under-reports everything.
+
+### A mutation that breaks the parser proves nothing about the assertion
+
+A mutation control came back 2/14 red and **the defect was the control's**: deleting from `[data-part=`
+left a dangling selector prefix, so postcss threw `CssSyntaxError` instead of the assertion evaluating
+false. Anchoring the mutation at the start of the selector line fixed it.
+
+This is the false-signal class arriving **inside the instrument built to validate instruments** — the
+one place nobody thinks to look. Alongside it, two more from the same tier: a part classifier returned
+a **clean false zero on `Button`'s root** because the part is emitted inside an attribute object rather
+than as a JSX attribute; and a render census passed `engine=` to a provider whose prop is
+`defaultEngine`, **rendering the default engine three times and reading it as three engines agreeing**
+— which is precisely the failure that produced the `Text` `fontSize` claim recorded below.
+
+Companion, from the same round: **parsing beats the strict-substring / formatter-robust trade-off** —
+it costs no detection (a re-indent holds, a changed fallback fails) and it is "parse, never grep"
+applied to an assertion. And **a role rule has two sides**: asserting a skin declares a channel is half
+a test until something asserts the DOM presents the hook the selector needs, with the negative case
+(the disabled row must NOT match) as a control that fails on its own.
+
 ### THREE ENGINES ARE NOT THREE INSTRUMENTS — the retraction that cost the most
 
 A lane reported, and I amplified as the largest finding of the programme, that `Text` drops an inline
