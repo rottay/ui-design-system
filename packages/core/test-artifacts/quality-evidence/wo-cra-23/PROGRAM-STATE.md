@@ -2064,6 +2064,100 @@ because its authorship is concentrated per family; evnto's is palette-level only
 opposite distributions. If that generalises past these two families it is the answer the programme
 has been looking for, and it is measurable without a single pixel.
 
+**IT GENERALISED, AND THE HALF THAT WAS WRONG IS WHICH VERTICAL IS WHICH.** Measured across all 122
+modern families, direct and indirect authorship kept in separate columns, with the two-family run
+reproduced exactly as a control:
+
+| | families authored DIRECTLY | own-family channels | top-5 concentration | indirect only | median generic ch/family |
+|---|---|---|---|---|---|
+| rottay/platform | **39 / 122** | 409 | 65% | 82 | 12 |
+| bithire | 13 / 122 | 396 | **80%** | 108 | 13 |
+| evnto | **5 / 122** | 75 | 100% | 115 | 10 |
+
+**Platform is the broadly-authored vertical, not bithire** — three times the breadth at essentially
+the same volume (409 against 396, which is the 1984/1876 runtime split seen from the family side). So
+the divergence is neither volume nor "bithire concentrates and the others do not". bithire puts
+**four-fifths of its authorship into five families** — input, button, tabs, badge, segmented — while
+platform spreads a nearly identical budget across three times as many.
+
+And evnto's null needed softening too: it authors **5** families, not zero — button 55, input 9, card
+5, table 5, layout 1. The Badge and Segmented zeros were not a coincidence, but "evnto authors
+nothing" was too strong. What is true: **evnto authors only the most generic controls and nothing
+above the control layer** — no pattern, no structure, no compact-label family.
+
+**The unexpected result is the one that answers the question.** Indirect shaping is nearly identical
+across all three: median generic channels per family 12 / 13 / 10, and each vertical fails to touch
+at most **2** families out of 122. Every vertical reaches nearly every family through the generic
+layer at nearly the same density.
+
+> All the divergence lives in **direct family authorship**, and none of it in indirect. The three
+> verticals differ in *which families they own*, not in how much generic ground they cover. Platform
+> owns broadly (39), bithire owns narrowly and deeply (13, four-fifths in five), evnto owns only the
+> control layer (5). Indirect shaping is a constant, not a differentiator.
+
+**CORRECTED once the prefix map was fixed — two numbers above are wrong and the mechanism is not
+concentration.** Deriving each family's prefix from *what it reads* rather than from its filename cut
+the misfiled families from 19 to 2 (`tree-view`, `typography`, both carried as `unknown` and excluded
+from every figure rather than counted as zero):
+
+| | DIRECT families | own channels | **channels per family** | top-5 concentration | median generic |
+|---|---|---|---|---|---|
+| rottay/platform | **48 / 120** | 593 | 12 | 51% | 11 |
+| bithire | 25 / 120 | **724** | **29** | 51% | 13 |
+| evnto | 13 / 120 | 113 | 9 | 76% | 10 |
+
+What survives: **platform is the broadest** (48 > 25 > 13, the same ordering as 39 > 13 > 5), and
+**indirect shaping is still a near-constant** (13 / 10 / 11). Both headline claims hold.
+
+What is wrong above, and both were mine to repeat:
+
+1. **"bithire concentrates four-fifths of its authorship into five families" is false.** It is 51% —
+   *identical* to platform's 51%. Concentration does not separate bithire from platform at all. Only
+   evnto is concentrated, at 76%, and that is an artefact of having 13 families to spread across.
+2. **The totals no longer tie.** v1 had platform 409 ≈ bithire 396; corrected, bithire authors
+   **724 against platform's 593** — *more* channels across *half* as many families.
+
+The mechanism is **depth per family**, not concentration, and it is a better-supported statement:
+
+> Platform owns broadly and shallowly — 48 families, 12 channels each. bithire owns narrowly and
+> deeply — 25 families, 29 each. evnto owns little and shallowly — 13 families, 9 each. Indirect
+> shaping is a constant across all three, not a differentiator.
+
+The bug was dull and worth recording anyway: `'--ds-badge-x'.split('-')[2]` is `'ds'`, because the
+leading `--` yields two empty segments, so every channel grouped into one bucket. **All six controls
+failed on the first run**, which is the only reason it cost a minute instead of shipping.
+
+### The dark-authorship gap has one signature, so it is one fix
+
+Chased on the corrected instrument. Across bithire's 24 directly-authored families, own-family
+channels split by cell: **4 with zero dark authorship** (`segmented` 38/0 the clean specimen), **17
+light-heavy and dark-thin**, **3 at parity**.
+
+```
+input 105/38 · button 82/10 · password-input 82/28 · tabs 50/12 · badge 43/11
+ratios cluster 3:1 to 8:1 — button worst at 8:1, tree-select 12:1
+```
+
+**bithire authors dark at roughly a quarter of its light density, everywhere.** Systematic, not
+per-family — which makes it **one compiler fix rather than a twenty-family sweep**, and it is the
+same 32-channel shape already seen on Badge and on the surface dark leak repaired earlier. The
+symptom is measured; the compiler itself has not been read.
+
+**The DIRECT column was a floor, not a count**, and the lane said so before quoting it. 19 of 122
+families derive zero own-prefix channels, and most are **naming mismatches rather than genuine
+non-authorship**: `data-table` reads `--ds-table-*` (120 channels), `password-input` reads
+`--ds-input-*` (93), `date-picker` likewise, `back-top` reads `--ds-backtop-*`. The prefix comes from
+the filename stem, so those families are misfiled into indirect-only. The relative shape 5 / 13 / 39
+is unlikely to invert from a 19-family correction, but the absolutes must not be quoted until the
+prefix map is fixed. Others in the 19 — `approval-inbox`, `command-palette`, `moderation-gallery` —
+genuinely read only generics and are correctly placed.
+
+Where to look for the compiler-gap signature, unchased but visible: bithire authors badge **43 light
+/ 11 dark** and segmented **38 light / 0 dark**. A family authored densely in light and not at all in
+dark is exactly that shape, and segmented is the cleaner specimen because its dark count is exactly
+zero. If the gap is real it repeats across bithire's other twelve directly-authored families — one
+query, and worth running before anyone repairs family by family.
+
 Scope limit the lane declared and which matters for reading the table: it counts own-family prefixes,
 so a vertical that shapes a family *indirectly* through `--ds-surface-control` or `--ds-material-*`
 reads as "does not author" — true of the family, misleading about the intent. Flag 1 below is exactly
@@ -2134,6 +2228,26 @@ are worth fixing; only one of them announces itself.
 
 Note this does not contradict the standing law that zero importers is not dead code. The claim is
 narrower and exact: Link's **severance exposure** is zero, not Link.
+
+**There was a second, and the right fix was the instrument rather than the row.** `display/QRCode`
+also ranked LIVE on one site — and that site is **AntD's QRCode, inside our own primitive's
+internals**, stamping a part onto the AntD element rather than our root. It moves to LATENT. Rather
+than hand-check two rows, the lane gave `callsites.mjs` **import resolution**: it now records the
+module each JSX name binds to and marks it ours or foreign, then re-ran every ranking row.
+
+```
+resolve 100% ours   Button 127 · Badge 16 · Spinner 12 · Tag 4 · Avatar 4 · Skeleton 2 · Segmented 2
+false LIVE          navigation/Link · display/QRCode      — exactly the two rows resting on one site
+```
+
+The reassuring half: **Tag resolves 4 of 4 to our primitive**, one of them through
+`facade/index.ts:39` re-exporting ours, so the `#26` adjudication and its committed test stand whole.
+The sweep also found 38 foreign bindings and 35 locally-declared components with no import in
+production, none of which is assumed ours.
+
+This is the correct response to the false-LIVE / false-zero distinction: **a false LIVE announces
+itself the first time someone looks, so the fix is not to look — it is to stop the instrument
+matching by name.** Another one would be born mute otherwise.
 
 ### Two files named for the same vertical, and only one of them has the skins
 
