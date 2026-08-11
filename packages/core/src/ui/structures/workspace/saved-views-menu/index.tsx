@@ -25,18 +25,23 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
+// Compatibility-catalog residue, all three blocked on a missing governed role:
+// `Sparkles` marks the two empty states, `Bookmark` the custom-view glyph.
+// The corpus has no empty/nothing-here role and no bookmark role, and adding
+// one edits the corpus manifest and regenerates the pack — not a family lane's
+// call. Reported instead. `LayoutTemplate` moved to the governed `layout.grid`.
 import {
   BookmarkIcon as Bookmark,
-  BookmarkPlusIcon as BookmarkPlus,
-  CheckIcon as Check,
-  CopyIcon as Copy,
-  LayoutTemplateIcon as LayoutTemplate,
-  Share2Icon as Share2,
   SparklesIcon as Sparkles,
-  StarIcon as Star,
-  Trash2Icon as Trash2,
 } from '../../../../graphics/icons';
+import { LayoutGridIcon } from '@/graphics/icons/presentation/semantic/generated/roles/layout-grid';
 import { LayoutListIcon } from '@/graphics/icons/presentation/semantic/generated/roles/layout-list';
+import { ActionConfirmIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-confirm';
+import { ActionCopyIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-copy';
+import { ActionDeleteIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-delete';
+import { ActionSaveIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-save';
+import { ActionShareIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-share';
+import { StatusFeaturedIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-featured';
 
 import { Box, Flex, Text } from '../../../primitives';
 import { Portal } from '../../../primitives/runtime/overlay/portal';
@@ -584,7 +589,7 @@ export function SavedViewsMenu({
                         data-tone="neutral"
                         onClick={handleDuplicateActiveView}
                       >
-                        <Copy style={{ width: 12, height: 12 }} />
+                        <ActionCopyIcon decorative />
                         {labels.duplicate}
                       </Box>
                     )}
@@ -597,7 +602,7 @@ export function SavedViewsMenu({
                         data-tone="neutral"
                         onClick={handleShareActiveView}
                       >
-                        <Share2 style={{ width: 12, height: 12 }} />
+                        <ActionShareIcon decorative />
                         {shareState === 'copied' ? labels.copied : labels.share}
                       </Box>
                     )}
@@ -613,7 +618,7 @@ export function SavedViewsMenu({
                           closeMenu();
                         }}
                       >
-                        <BookmarkPlus style={{ width: 12, height: 12 }} />
+                        <ActionSaveIcon decorative />
                         {labels.saveCurrent}
                       </Box>
                     )}
@@ -836,16 +841,13 @@ function ViewItem({ view, isActive, onSelect, labels, onDelete }: ViewItemProps)
                 </Text>
               </Box>
             </Flex>
+            {/* The governed icon forwards an allowlist, not a rest spread:
+                `data-part` survives, every other `data-*` is dropped, so the
+                state attribute rides a host element. */}
             {isActive && (
-              <Check
-                data-part="checkmark"
-                data-active={true}
-                style={{
-                  width: 14,
-                  height: 14,
-                  flexShrink: 0,
-                }}
-              />
+              <Box data-part="checkmark" data-active={true}>
+                <ActionConfirmIcon decorative />
+              </Box>
             )}
           </Flex>
         </button>
@@ -866,7 +868,7 @@ function ViewItem({ view, isActive, onSelect, labels, onDelete }: ViewItemProps)
               cursor: 'pointer',
             }}
           >
-            <Trash2 style={{ width: 13, height: 13 }} />
+            <ActionDeleteIcon decorative />
           </button>
         )}
       </Flex>
@@ -875,21 +877,12 @@ function ViewItem({ view, isActive, onSelect, labels, onDelete }: ViewItemProps)
 }
 
 function ViewGlyph({ isSystem, active }: { isSystem?: boolean; active?: boolean }) {
-  const Icon = isSystem ? LayoutTemplate : Bookmark;
+  // Branched, not a shared component reference: the governed icon REQUIRES
+  // `decorative` (without it the facade renders null) and the compatibility
+  // glyph would leak that prop to the DOM.
   return (
-    <Box
-      data-part="glyph"
-      data-active={!!active}
-      style={{
-        width: 30,
-        height: 30,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexShrink: 0,
-      }}
-    >
-      <Icon style={{ width: 14, height: 14 }} />
+    <Box data-part="glyph" data-active={!!active}>
+      {isSystem ? <LayoutGridIcon decorative /> : <Bookmark aria-hidden />}
     </Box>
   );
 }
@@ -931,7 +924,7 @@ function StatusPill({
         padding: '0 8px',
       }}
     >
-      {tone === 'primary' ? <Star style={{ width: 10, height: 10 }} /> : null}
+      {tone === 'primary' ? <StatusFeaturedIcon decorative /> : null}
       {label}
     </Box>
   );
