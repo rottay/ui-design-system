@@ -529,6 +529,76 @@ fallback arm, and the declared-nowhere census. Those stand. But **the instrument
 evidence within its roster**, and a roster of six fixtures is not the component library. Any lane
 quoting `changedRows: 0` must state which fixtures could have moved.
 
+### THREE ENGINES ARE NOT THREE INSTRUMENTS — the retraction that cost the most
+
+A lane reported, and I amplified as the largest finding of the programme, that `Text` drops an inline
+`fontSize` whose value is a `var()` string in **all three engines** — and therefore that
+`metrics-cards`' KPI hero had never painted at 28px on three shipped dashboards. **False.** I called it
+shipped, dispatched a lane to adjudicate it, and told the owner the hierarchy was inverted in
+production.
+
+The probe that killed it removes the design system entirely:
+
+```
+document.createElement('span')
+  style.fontSize = 'var(--x, 28px)'  →  ''      dropped
+  style.fontSize = 'var(--x,28px)'   →  kept    same value, no space
+  style.fontSize = '28px'            →  kept
+```
+
+**happy-dom 20.9.0 rejects any inline value containing a comma-SPACE inside a CSS function** —
+`var()`, `clamp()`, `min()`, `max()`, `calc()` — on every property it validates (`font-size`, `width`,
+`line-height`, `letter-spacing`, padding/margin/inset, height, colour). Properties it does **not**
+validate — `font-family`, `min-width`, `gap` — accept everything. That asymmetry is why a `var()`
+`fontFamily` survived beside a dropped `fontSize` **on the same element**, which is what made the
+component look guilty. And **the rejection is not a reset**: it leaves the prior value, so a probe that
+does not clear the style attribute first reads a stale one and concludes the opposite.
+
+**The method failure, in the reporting lane's own words:** *"I had two instruments and they were the
+same instrument."* The render said no font-size; the source reading was about a **different prop**
+(`textStyle`, not `style`) and never predicted the drop. Agreement was read where none existed. And
+**"all three engines" felt like triangulation when all three share one shim** — §3's law with a new
+face, and the check that would have caught it in thirty seconds was to take the design system out of
+the picture.
+
+What survives, and it is real: of **373 sites** carrying that shape across 1,870 `.tsx` files, **10 are
+in tests**. A test planting a value the shim drops asserts against something that never landed and may
+be passing for the wrong reason. The 282 shipped sites render correctly in a browser; their only
+consequence is that **they can never be asserted against in this environment**.
+
+Standing rule: **before reporting a primitive defect, reproduce it on a bare `document.createElement`.**
+If the DS-free element does it too, the defect is the environment.
+
+### THE SIGHTED PASS — what it must answer, and why no counter can
+
+Not a nice-to-have. After the runtime census it is **the only instrument left that can answer the
+programme's own question**, and it carries four items that measurement has already sized and cannot
+settle.
+
+**Why it became load-bearing.** Bithire and rottay diverge on **1,984 and 1,876 channels — 6% apart**
+— and one reads as a product while the other reads as the design system. So whatever makes BitHire a
+product is **not channel count**, and no counter anyone here can build will find it. Authoring another
+wave of channels cannot close a gap that channel count does not explain.
+
+**Four questions, each earned by measurement:**
+
+1. **Does the untenanted light surface look right?** 301 channels changed on a surface nobody has ever
+   looked at. Values verified, appearance not — stated as a limit by the lane that changed them.
+2. **Is `#f5f5f5` on `#fafafa` a boundary?** A 5/255 delta. And if not, does the ramp want a **rung
+   between 100 and 200** rather than a reassignment — since both verticals with an opinion land
+   *between* those rungs (`#EDEDEC`, `≈#F2F2F2`), and `0.08em` falls between `wider` and `widest` as an
+   independent second case that the ramps have gaps.
+3. **The Button repair**, specified and deliberately unshipped because jsdom cannot adjudicate cascade.
+   Gate: variants × sizes × shapes × disabled × focus-visible, on all three verticals.
+4. **BitHire's blue `successColor`** collapsing success into info in dark, and its dark shadows being
+   *shallower* than its light ones (0.06–0.12 against 0.08–0.42). Both pre-existing, both now visible
+   in more places, neither a rule violation — so only eyes decide.
+
+**Execution constraints, all learned the hard way:** pixels require the **production** showroom (dev
+paints non-deterministically); kill any stale 7001 by hand first, because `reuseExistingServer` will
+silently attach and poison the captures and `pnpm next:free` does not free that port; and the machine
+budget is one heavy build, one server, one chromium — so this cannot overlap a fix lane running suites.
+
 ### DEGRADED, NOT UNSTYLED — why the Button defect survived every review
 
 Adjudicated, repair specified, **execution deliberately deferred**. `button.css` keys 7 selectors on
