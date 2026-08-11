@@ -2208,6 +2208,54 @@ track, and white-on-white in light. Identical shape to the recorded `--ds-menu-b
 `background-image: none` in the reading proves the authored gradient never fires, because the base
 declaration satisfies the family var before the fallback arm is reached.
 
+### The dark gap has TWO signatures, and one of them is a channel bithire authored that nothing reads
+
+Measured on the same sha-pinned bundles as the segmented run. **Three of six Badge variants are
+byte-identical across bithire light and dark** — success, warning and info move 0 of 7 painted
+properties, while default/secondary/danger move 3/2/2.
+
+```
+variant   chip fill  ink        dark        light
+success   #112726    #003d5b    1.36 FAIL   10.60
+warning   #26231e    #4d3200    1.32 FAIL   10.98
+info      #132035    #0f3867    1.39 FAIL   10.52
+```
+
+The light treatment is correct; it simply never adapts. Dark ink on a dark chip, worse than the
+segmented failures. `box-shadow` is identical in all six — a 78% white top keyline over a light-navy
+tint, unchanged on dark.
+
+**Signature A — the compiler resolved the palette to literals.** `--ds-badge-frame` is declared once,
+in bithire's **unconditional** block, as `color-mix(in srgb, #3A6FB0 16%, #D4E0EA)` — both terms
+bithire's *light* values (dark primary is `#1e84e6`, dark border `#253545`). Resolved: `#bbcee1`,
+which is **1.61:1 on white** (a correct subtle hairline) and **11.34:1 on the dark ground**. The frame
+is inverted — subtle in light, blazing in dark. Same shape on `-frame-hover`, `-frame-pressed`,
+`-selected-frame`, `-icon-border`, `-remove-border`, `-count-border`, `-focus-ring`.
+
+> **A literal in the unconditional block has no dark counterpart and no `var()` left to re-resolve.**
+> Of the 132 `--ds-badge-*` channels the skin reads: **17 move with the theme, 59 identical, 56
+> empty — and the movers are exactly the ones left as `var()` references.** This is the
+> formula-vs-literal law at compiler scale, from the same emitter as the 32 surface-leak rows.
+
+**Signature B — pre-composed alpha, and it is a different mechanism.** The skin reads
+`--ds-badge-tone-soft-bg: var(--ds-color-alpha-success-10)`. rottay declares light *and* dark arms for
+it; **bithire declares neither**, so it inherits the base literal in both themes. The lane nearly
+filed this as more signature A and was stopped by arithmetic: bithire authors its success tint at
+**12%** and the measurement read **10%**, so bithire's own declaration was not what painted.
+
+**And the consequence that matters most.** `extension.css:613` declares
+`--ds-badge-success-bg: color-mix(in srgb, var(--ds-color-success) 12%, var(--ds-control-surface))` —
+a formula over `var()`s, which *would* follow the theme correctly. **The modern skin never reads that
+channel.**
+
+> bithire already authored the fix. Nothing consumes it. The vertical looks authored, measures
+> authored on any naming census, and paints from a base literal instead.
+
+That is "declaration is not reach" with a live instance, and it is why the 32-name count was never
+going to answer the question. It also means the `--ds-color-success` / `--ds-color-warning` repair
+made earlier tonight **does not reach these badges** — they read `--ds-color-alpha-success-10`, a
+different name with no dark arm.
+
 ### The counts are 6% apart because the DISTRIBUTION hides inside them
 
 The programme's central refutation stands and now has a shape. Runtime channel counts put bithire at
