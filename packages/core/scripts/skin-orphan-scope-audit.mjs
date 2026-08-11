@@ -92,12 +92,15 @@ function reachableClasses(root, trees) {
 function stampedClasses(root, trees) {
   const rows = [];
   let files = 0;
+  let unscannable = 0;
+  const unscannableFiles = new Set();
   for (const tree of trees) {
     const abs = join(root, tree);
     if (!existsSync(abs)) continue;
     for (const f of walk(abs, (n) => /\.tsx$/.test(n) && !/\.(test|stories)\.tsx$/.test(n))) {
       files += 1;
       const src = readFileSync(f, 'utf8');
+      const rel = relative(root, f).split(sep).join('/');
       const found = new Set();
       // className="a b" | className={'a b'} | className={`a b ${x}`} | ['a','b'] join
       for (const m of src.matchAll(/className\s*=\s*(?:"([^"]*)"|'([^']*)'|\{\s*[`'"]([^`'"]*)[`'"])/g)) {
@@ -108,10 +111,18 @@ function stampedClasses(root, trees) {
       for (const m of src.matchAll(/\[\s*((?:'ds-[a-z0-9-]+'\s*,\s*)+'ds-[a-z0-9-]+')/g)) {
         for (const q of m[1].matchAll(/'(ds-[a-z0-9-]+)'/g)) found.add(q[1]);
       }
-      if (found.size) rows.push({ file: relative(root, f).split(sep).join('/'), classes: [...found] });
+      // COVERAGE OF THE EXTRACTOR ITSELF. Every `className={` whose first token
+      // is not a literal is a shape this scan cannot read -- clsx()/cn() calls,
+      // conditional objects, identifiers. Counting them turns "this is a floor"
+      // from an assertion into a measured number, so a reader can see how much
+      // of the corpus the instrument actually had eyes on.
+      for (const m of src.matchAll(/className\s*=\s*\{\s*([^\s`'"{])/g)) {
+        if (m[1] !== '[') { unscannable += 1; unscannableFiles.add(rel); }
+      }
+      if (found.size) rows.push({ file: rel, classes: [...found] });
     }
   }
-  return { rows, files };
+  return { rows, files, unscannable, unscannableFiles: [...unscannableFiles] };
 }
 
 /** Classes that are structural noise rather than a family's own scope. */
@@ -119,7 +130,7 @@ const IGNORED = new Set(['ds-structure', 'ds-compat']);
 
 function audit(root, { cssTrees = CSS_TREES, tsxTrees = TSX_TREES } = {}) {
   const { classes: reachable, files: cssFiles } = reachableClasses(root, cssTrees);
-  const { rows, files: tsxFiles } = stampedClasses(root, tsxTrees);
+  const { rows, files: tsxFiles, unscannable, unscannableFiles } = stampedClasses(root, tsxTrees);
   const orphans = [];
   for (const row of rows) {
     for (const cls of row.classes) {
@@ -128,7 +139,10 @@ function audit(root, { cssTrees = CSS_TREES, tsxTrees = TSX_TREES } = {}) {
     }
   }
   orphans.sort((a, b) => (a.file + a.class).localeCompare(b.file + b.class));
-  return { orphans, cssFiles, tsxFiles, cssTrees, tsxTrees, reachableCount: reachable.size };
+  return {
+    orphans, cssFiles, tsxFiles, cssTrees, tsxTrees,
+    reachableCount: reachable.size, unscannable, unscannableFiles,
+  };
 }
 
 /* ── positive control ──────────────────────────────────────────────────────
@@ -155,9 +169,13 @@ function selfTest() {
     `export const C = () => <div className="ds-probe-orphan-plain" />;`,
     `export const D = () => <div className={'ds-probe-orphan-single'} />;`,
     `export const E = () => <div className={['ds-structure', 'ds-probe-orphan-array'].join(' ')} />;`,
+    // A shape the extractor cannot read. It must be COUNTED as unreadable, not
+    // silently contribute zero: a scan that cannot see something and does not
+    // say so is the failure this control exists to prevent.
+    `export const F = () => <div className={clsx('ds-probe-invisible', x && 'ds-probe-also-invisible')} />;`,
   ].join('\n'));
 
-  const { orphans } = audit(dir, {
+  const { orphans, unscannable } = audit(dir, {
     cssTrees: ['src/foundation/tokens/css/presentation/components'],
     tsxTrees: ['src/ui/structures'],
   });
@@ -167,12 +185,19 @@ function selfTest() {
 
   const missed = mustFind.filter((c) => !got.has(c));
   const falsePositives = mustNotFind.filter((c) => got.has(c));
+  // Second axis: the classifier can be right while the EXTRACTOR is blind. The
+  // planted clsx() call must register as unreadable, or the gate is under-
+  // reporting its own coverage and every count it prints is unbounded.
+  const blindSpotReported = unscannable >= 1;
+
   console.log(`[self-test] planted ${mustFind.length} orphans, caught ${mustFind.length - missed.length}`);
   console.log(`[self-test] reachable classes that must NOT be flagged: ${mustNotFind.join(', ')}`);
+  console.log(`[self-test] planted 1 unreadable className shape, counted: ${unscannable}`);
   if (missed.length) console.error(`[self-test] MISSED: ${missed.join(', ')}`);
   if (falsePositives.length) console.error(`[self-test] FALSE POSITIVE: ${falsePositives.join(', ')}`);
-  const ok = !missed.length && !falsePositives.length;
-  console.log(`[self-test] ${ok ? 'PASS — the gate demonstrably finds what it claims to find' : 'FAIL'}`);
+  if (!blindSpotReported) console.error('[self-test] BLIND SPOT UNREPORTED: an unreadable className was not counted');
+  const ok = !missed.length && !falsePositives.length && blindSpotReported;
+  console.log(`[self-test] ${ok ? 'PASS — finds what it claims, and admits what it cannot see' : 'FAIL'}`);
   return ok ? 0 : 1;
 }
 
@@ -194,7 +219,12 @@ console.log(`  TSX trees searched   : ${result.tsxTrees.join(', ')}`);
 console.log(`  TSX files scanned    : ${result.tsxFiles}`);
 console.log(`  orphan scope classes : ${result.orphans.length}`);
 for (const o of result.orphans) console.log(`    ${o.class}  <-  ${o.file}`);
-console.log('  NOTE: interpolated class names are invisible to a static scan, so this is a FLOOR.');
+console.log(`  unreadable className=  : ${result.unscannable} expression(s) in ${result.unscannableFiles.length} file(s)`);
+console.log('  WHAT A FINDING MEANS: no selector in the trees above matches that class, by LITERAL');
+console.log('  comparison. It does NOT mean the element is unstyled. This gate RENDERS NOTHING, so it');
+console.log('  cannot tell a dead rule from a state it failed to reach -- it reaches no states at all,');
+console.log('  which is also why mount timing cannot bias it. The unreadable count is its blind spot,');
+console.log('  measured rather than asserted: every one is a class this scan could not see.');
 
 if (mode === 'seed') {
   writeFileSync(BASELINE_PATH, `${JSON.stringify({ orphans: result.orphans.map(key) }, null, 2)}\n`);
