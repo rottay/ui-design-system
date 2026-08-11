@@ -683,9 +683,14 @@ export const TORTURE_PROBE_VARS: readonly string[] = [
   '--ds-modal-bg',
   '--ds-tabs-border',
   '--ds-tab-color-active',
-  '--ds-radius-sm',
-  '--ds-radius-md',
-  '--ds-radius-lg',
-  '--ds-radius-xl',
+  // The dial OPERANDS, which is what a tenant theme compiles for the radius
+  // ramp: the foundation derives `--ds-radius-{step}` as
+  // `calc(var(--ds-radius-{step}-base) * var(--ds-radius-scale, 1))`, so the
+  // operand is the channel that carries a tenant's authored corner and the one
+  // a hardcode has to diverge from.
+  '--ds-radius-sm-base',
+  '--ds-radius-md-base',
+  '--ds-radius-lg-base',
+  '--ds-radius-xl-base',
   '--ds-font-family-base',
 ];

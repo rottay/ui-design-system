@@ -88,7 +88,11 @@ describe("W4 overlay chrome parity", () => {
     });
 
     expect(vars["--ds-tooltip-bordered-background"]).toBe("#142238");
-    expect(vars["--ds-tooltip-bordered-radius"]).toBe("0.35rem");
+    // A radius channel follows the tenant dial; with no posture set the divisor
+    // is 1, so this rests at the authored 0.35rem.
+    expect(vars["--ds-tooltip-bordered-radius"]).toBe(
+      "calc(0.35rem * var(--ds-radius-scale, 1))"
+    );
     expect(vars["--ds-tooltip-enter-duration"]).toBe("180ms");
     expect(vars["--ds-popover-bordered-background"]).toBe("#FFFCF6");
     expect(vars["--ds-popover-bordered-muted-foreground"]).toBe("#6F665C");

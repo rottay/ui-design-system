@@ -63,7 +63,24 @@ describe("Evnto canonical visual axes", () => {
   const vertical = VERTICAL_REGISTRY.evnto;
 
   it("shares one exact immutable source across brand, profile, and vertical registries", () => {
-    expect(evntoBrandTheme.surfaces).toBe(EVNTO_CANONICAL_SURFACES);
+    // The brand theme extends the baseline with `surfaceRoles`, a role only
+    // BrandTheme expresses — the vertical and profile registries read the axes
+    // one by one and have no slot for it. So the anti-drift invariant is
+    // per-AXIS identity rather than identity of the container: every canonical
+    // axis must still be the one frozen source, and the extension must be
+    // purely additive.
+    for (const axis of Object.keys(EVNTO_CANONICAL_SURFACES) as Array<
+      keyof typeof EVNTO_CANONICAL_SURFACES
+    >) {
+      expect(evntoBrandTheme.surfaces?.[axis], axis).toBe(
+        EVNTO_CANONICAL_SURFACES[axis]
+      );
+    }
+    expect(
+      Object.keys(evntoBrandTheme.surfaces ?? {}).filter(
+        (key) => !(key in EVNTO_CANONICAL_SURFACES)
+      )
+    ).toEqual(["surfaceRoles"]);
     expect(productProfile?.personality?.animation).toBe(EVNTO_CANONICAL_MOTION);
     expect(vertical?.personality.animation).toBe(EVNTO_CANONICAL_MOTION);
     expect(productProfile?.tokenOverrides?.borderRadius).toBe(
@@ -867,11 +884,15 @@ describe("H3 contract: bithire", () => {
       },
       { includeDarkSelector: false }
     );
-    it("radius scale sm/md/lg/xl", () => {
-      expect(css).toContain("--ds-radius-sm: 7px");
-      expect(css).toContain("--ds-radius-md: 10px");
-      expect(css).toContain("--ds-radius-lg: 14px");
-      expect(css).toContain("--ds-radius-xl: 18px");
+    // As in the artifact block above: the generator emits the dial operands.
+    // BitHire's scale is 1.25, so each operand is the authored value divided by
+    // it and the foundation's multiply reproduces 7/10/14/18 at rest.
+    it("radius dial operands sm/md/lg/xl", () => {
+      expect(css).toContain("--ds-radius-scale: 1.25");
+      expect(css).toContain("--ds-radius-sm-base: calc(7px / 1.25)");
+      expect(css).toContain("--ds-radius-md-base: calc(10px / 1.25)");
+      expect(css).toContain("--ds-radius-lg-base: calc(14px / 1.25)");
+      expect(css).toContain("--ds-radius-xl-base: calc(18px / 1.25)");
     });
     it("shadow scale sm/md/lg/xl", () => {
       expect(css).toContain("--ds-shadow-sm");
@@ -1108,8 +1129,13 @@ describe("H3 contract: evnto", () => {
       "utf-8"
     );
     const dark = modeEffective(artifact, "dark");
-    it("artifact: radius-sm is 10px", () => {
-      expect(artifact).toContain("--ds-radius-sm: 10px");
+    // The vertical emits the dial OPERAND, not the resolved radius:
+    // themes/default.css computes `calc(base * var(--ds-radius-scale, 1))`, and
+    // a flat `--ds-radius-sm` at tenant scope would replace that calc outright.
+    // Evnto's scale is 1, so the operand is the authored value unchanged.
+    it("artifact: radius-sm operand is the authored 10px", () => {
+      expect(artifact).toContain("--ds-radius-sm-base: 10px");
+      expect(artifact).not.toContain("--ds-radius-sm: 10px");
     });
     it("artifact: shadow matches authored", () => {
       const authored = evntoBrandTheme.surfaces!.shadows!;
@@ -1130,9 +1156,11 @@ describe("H3 contract: evnto", () => {
       expect(artifact).toContain("--ds-button-disabled-opacity: 0.4");
       expect(artifact).toContain("--ds-input-disabled-opacity: 0.4");
     });
-    it("dark: radius matches authored", () => {
-      expect(dark("--ds-radius-sm")).toBe("10px");
-      expect(dark("--ds-radius-xl")).toBe("24px");
+    // Shape does not change with mode, so the dark overlay restates none of it
+    // and inherits the base operands. Asserting that inheritance is the point.
+    it("dark: radius operands match authored", () => {
+      expect(dark("--ds-radius-sm-base")).toBe("10px");
+      expect(dark("--ds-radius-xl-base")).toBe("24px");
     });
     it("dark: shadow matches authored", () => {
       const authored = evntoBrandTheme.surfaces!.shadows!;
@@ -1182,7 +1210,7 @@ describe("H3 contract: evnto", () => {
       expect(css).toContain("--ds-shell-grid-size: 0px");
       expect(css).toContain("--ds-button-default-bg: #FFFFFF");
       expect(css).toContain("--ds-button-disabled-opacity: 0.4");
-      expect(css).toContain("--ds-radius-sm: 10px");
+      expect(css).toContain("--ds-radius-sm-base: 10px");
     });
   });
 });

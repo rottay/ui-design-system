@@ -509,7 +509,12 @@ describe("brandThemeToChromeVariables", () => {
     expect(vars["--ds-button-font-weight"]).toBe("620");
     expect(vars["--ds-button-sm-height"]).toBe("31px");
     expect(vars["--ds-button-sm-padding-x"]).toBe("10px");
-    expect(vars["--ds-radius-button"]).toBe("9px");
+    // Radius channels are emitted as their own product with the tenant dial.
+    // This fixture sets no radiusScale, so the divisor is 1 and the corner
+    // rests at the authored 9px while staying reachable by `shape.radius-scale`.
+    expect(vars["--ds-radius-button"]).toBe(
+      "calc(9px * var(--ds-radius-scale, 1))"
+    );
     expect(vars["--ds-button-group-gap"]).toBe("7px");
     expect(vars["--ds-button-group-mobile-direction"]).toBe("row");
     expect(vars["--ds-button-group-mobile-gap"]).toBe("11px");
@@ -532,7 +537,9 @@ describe("brandThemeToChromeVariables", () => {
       "radial-gradient(circle, #fff2, transparent)"
     );
     expect(vars["--ds-input-md-height"]).toBe("35px");
-    expect(vars["--ds-radius-input"]).toBe("9px");
+    expect(vars["--ds-radius-input"]).toBe(
+      "calc(9px * var(--ds-radius-scale, 1))"
+    );
     expect(vars["--ds-segmented-bg"]).toBe("#f4f6f8");
     expect(vars["--ds-segmented-border"]).toBe("#d7dde5");
     expect(vars["--ds-segmented-item-bg-selected"]).toBe("#ffffff");
@@ -542,7 +549,9 @@ describe("brandThemeToChromeVariables", () => {
     expect(vars["--ds-table-padding-comfortable"]).toBe("9px 12px");
     expect(vars["--ds-tabs-list-padding"]).toBe("3px");
     expect(vars["--ds-tabs-segmented-list-bg"]).toBe("#eef3f8");
-    expect(vars["--ds-tabs-item-radius"]).toBe("8px");
+    expect(vars["--ds-tabs-item-radius"]).toBe(
+      "calc(8px * var(--ds-radius-scale, 1))"
+    );
     expect(vars["--ds-tabs-item-font-family"]).toBe("Inter");
     expect(vars["--ds-tabs-item-font-weight-active"]).toBe("650");
     expect(vars["--ds-tabs-disabled-opacity"]).toBe("0.46");
@@ -550,7 +559,9 @@ describe("brandThemeToChromeVariables", () => {
     expect(vars["--ds-tabs-indicator-gradient"]).toBe(
       "linear-gradient(90deg, #345, #678)"
     );
-    expect(vars["--ds-tabs-panel-radius"]).toBe("12px");
+    expect(vars["--ds-tabs-panel-radius"]).toBe(
+      "calc(12px * var(--ds-radius-scale, 1))"
+    );
     expect(vars["--ds-tabs-overflow-control-size"]).toBe("30px");
     expect(vars["--ds-tabs-motion-duration"]).toBe("180ms");
     expect(vars["--ds-tabs-sm-height"]).toBe("30px");
@@ -867,10 +878,6 @@ describe("parity: static generator with brandTheme", () => {
     );
     const axes = [
       "--ds-density-scale",
-      "--ds-radius-sm",
-      "--ds-radius-md",
-      "--ds-radius-lg",
-      "--ds-radius-xl",
       "--ds-shadow-sm",
       "--ds-shadow-md",
       "--ds-shadow-lg",
@@ -893,6 +900,37 @@ describe("parity: static generator with brandTheme", () => {
 
     for (const token of axes) {
       expect(valueOf(custom, token), token).toBe(valueOf(bundled, token));
+    }
+
+    // Radius is compared on the RESTING value, not on a channel name, because
+    // the two paths carry the ramp differently on purpose. The BrandTheme path
+    // emits the dial operands `--ds-radius-{step}-base`, which the foundation
+    // multiplies by `--ds-radius-scale`. The legacy vertical-preset path emits
+    // no operand, so `withoutDialOperandRadius` keeps its flat `--ds-radius-
+    // {step}` rather than letting the step collapse to the DS literal. Equal
+    // paint is the contract; identical spelling never was.
+    const restingRadius = (css: string, step: string) => {
+      const scale = Number(valueOf(css, "--ds-radius-scale") ?? 1);
+      const flat = valueOf(css, `--ds-radius-${step}`);
+      if (flat !== undefined) return flat;
+      const operand = valueOf(css, `--ds-radius-${step}-base`)?.trim();
+      if (operand === undefined) return undefined;
+      const literal = /^(-?[\d.]+)px$/.exec(operand);
+      const divided = /^calc\((-?[\d.]+)px \/ ([\d.]+)\)$/.exec(operand);
+      const px = literal
+        ? Number(literal[1])
+        : divided
+          ? Number(divided[1]) / Number(divided[2])
+          : undefined;
+      return px === undefined ? undefined : `${px * scale}px`;
+    };
+
+    for (const step of ["sm", "md", "lg", "xl"]) {
+      const bundledRadius = restingRadius(bundled, step);
+      // Both sides must actually carry the step: two undefineds would compare
+      // equal and prove nothing.
+      expect(bundledRadius, `bundled ${step}`).toBeDefined();
+      expect(restingRadius(custom, step), `custom ${step}`).toBe(bundledRadius);
     }
   });
 

@@ -165,14 +165,26 @@ describe('appearanceGeneralToVariables', () => {
     expect(Object.values(vars).join(' ')).not.toContain('attacker');
   });
 
-  it('shape.buttonStyle pill produces --ds-radius-button 9999px', () => {
+  // The preset silhouettes are emitted as their own product with the radius
+  // dial, not as flat literals: a literal at tenant scope is unlayered and
+  // would outrank the foundation's `calc(base * var(--ds-radius-scale, 1))`,
+  // pinning the corner at every dial position. No posture is set here, so the
+  // divisor is 1 and each resolves to its authored value at rest.
+  it('shape.buttonStyle pill produces a dial-reachable --ds-radius-button resting at 9999px', () => {
     const vars = appearanceGeneralToVariables({ shape: { buttonStyle: 'pill' } });
-    expect(vars['--ds-radius-button']).toBe('9999px');
+    expect(vars['--ds-radius-button']).toBe('calc(9999px * var(--ds-radius-scale, 1))');
   });
 
-  it('shape.buttonStyle sharp produces --ds-radius-button 2px', () => {
+  it('shape.buttonStyle sharp produces a dial-reachable --ds-radius-button resting at 2px', () => {
     const vars = appearanceGeneralToVariables({ shape: { buttonStyle: 'sharp' } });
-    expect(vars['--ds-radius-button']).toBe('2px');
+    expect(vars['--ds-radius-button']).toBe('calc(2px * var(--ds-radius-scale, 1))');
+  });
+
+  // `soft` already reads the ramp, so the dial reaches it without help and the
+  // helper must leave it exactly as authored.
+  it('shape.buttonStyle soft keeps reading the ramp rather than being folded', () => {
+    const vars = appearanceGeneralToVariables({ shape: { buttonStyle: 'soft' } });
+    expect(vars['--ds-radius-button']).toBe('var(--ds-radius-md, 8px)');
   });
 
   it('surfaces.elevation flat zeroes out elevation vars', () => {
@@ -316,13 +328,15 @@ describe('appearanceAdvancedToVariables', () => {
     expect(vars['--ds-filter-pill-count-active-ring']).toBe('inset 0 0 0 1px #cccccc');
     expect(vars['--ds-badge-surface']).toBe('#fffdf7');
     expect(vars['--ds-badge-frame']).toBe('#b7a98f');
-    expect(vars['--ds-badge-chip-radius']).toBe('4px');
+    // Every emitted radius channel follows the tenant dial; at the default
+    // scale this rests at the authored 4px.
+    expect(vars['--ds-badge-chip-radius']).toBe('calc(4px * var(--ds-radius-scale, 1))');
     expect(vars['--ds-badge-remove-opacity']).toBe('0.82');
     expect(vars['--ds-badge-pulse-scale']).toBe('1.2');
     expect(vars['--ds-breadcrumb-active-color']).toBe('#111111');
     expect(vars['--ds-input-search-icon-color']).toBe('#777777');
     expect(vars['--ds-table-row-bg-expanded']).toBe('#f4f4f4');
-    expect(vars['--ds-card-border-radius']).toBe('8px');
+    expect(vars['--ds-card-border-radius']).toBe('calc(8px * var(--ds-radius-scale, 1))');
     expect(vars['--ds-metric-card-meter-fill-success']).toBe('linear-gradient(#0a0, #080)');
     expect(vars['--ds-metric-card-value-color-hover']).toBe('#0055ff');
     expect(vars['--ds-signal-card-section-alt-bg']).toBe('#f5f7ff');

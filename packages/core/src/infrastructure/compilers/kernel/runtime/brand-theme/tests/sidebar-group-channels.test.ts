@@ -40,7 +40,14 @@ describe('sidebar group channels are wired to the Modern menu skin', () => {
   it.each([
     ['groupMarginTop', '--ds-sidebar-group-margin-top', '0.5px'],
     ['groupMarginBottom', '--ds-sidebar-group-margin-bottom', '0.5px'],
-    ['groupPaddingTop', '--ds-sidebar-group-padding-top', '6px'],
+    // The padding fallback is density-reachable rather than flat: at the
+    // default density the clamp resolves to 1, so an unset tenant still gets
+    // the 6px this rule used before wiring.
+    [
+      'groupPaddingTop',
+      '--ds-sidebar-group-padding-top',
+      'calc(6px * var(--ds-density-effective-scale, 1))',
+    ],
     ['itemIndent', '--ds-sidebar-item-indent', '0px'],
   ])('%s reaches %s and the skin reads it with the pre-wiring default', (field, channel, fallback) => {
     const sentinel = '37px';

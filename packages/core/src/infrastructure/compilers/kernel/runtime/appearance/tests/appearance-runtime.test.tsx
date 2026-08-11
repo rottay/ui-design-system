@@ -124,7 +124,11 @@ describe('TenantAppearance via DesignSystemProvider', () => {
     });
 
     const root = document.documentElement;
-    expect(root.style.getPropertyValue('--ds-radius-button')).toBe('9999px');
+    // The pill silhouette reaches the root as its own product with the radius
+    // dial, so a tenant scale still moves it; at rest it is the authored 9999px.
+    expect(root.style.getPropertyValue('--ds-radius-button')).toBe(
+      'calc(9999px * var(--ds-radius-scale, 1))'
+    );
   });
 
   it('appearance.general.navigation.sidebarTone=inverse injects sidebar vars', async () => {
