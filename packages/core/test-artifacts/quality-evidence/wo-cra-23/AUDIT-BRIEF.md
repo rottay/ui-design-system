@@ -302,7 +302,11 @@ or target until re-derived.** Check whether any has leaked into one.
 
 ### The nine declaration layers — where a token may be declared
 
-| # | layer | distinct names | declared in |
+**All paths below are relative to `packages/core/src/foundation/tokens/css/` unless they begin with
+`packages/`.** The token spec writes them relative to that root and the first draft of this brief
+copied them unprefixed, which makes them unresolvable — an auditor flagged exactly that.
+
+| # | layer | distinct names | declared in (under `packages/core/src/foundation/tokens/css/`) |
 |---|---|---:|---|
 | 1 | raw ramps | **453** [M] | `foundation/base/*` |
 | 2 | semantic role channels | 1,075 [M] | **one file** — `foundation/themes/default.css` |
@@ -312,7 +316,7 @@ or target until re-derived.** Check whether any has leaked into one.
 | 6 | generated vertical artifacts | 1,910 total, **605 exclusive** [M] | `facade/artifacts/*` |
 | 7 | private `--_ds-*` | **99 declared**, 310 mentions [M] | co-located with the family |
 | 8 | framework projection | 28 [M] | `framework-token-projection.css` |
-| 9 | runtime TS channels | ~356 **[U]** | `tokens/ts/`, `ui/**` |
+| 9 | runtime TS channels | ~356 **[U]** | `packages/core/src/foundation/tokens/ts/`, `packages/core/src/ui/**` |
 
 **Total distinct declared across `src/**/*.css`: 4,164 [M].**
 
