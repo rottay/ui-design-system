@@ -38,13 +38,31 @@ uses, and it is a runtime question, so it is asked at runtime.
 | `four-cell.mjs` | Tenant-less + before + after, one vertical. The silence test in its smallest form. |
 | `blast-radius.mjs` | Who inherits a base value — 8 cells across all three verticals. |
 | `extra-fixtures.json` | Painted-longhand fixtures the shipped roster does not cover (control block-size, card body padding, badge radius). |
+| `cells8.mjs` | 8 cells (tenant-less + 3 verticals × 2 themes), full declared corpus, **every artifact rendered from source**. Sha-pins five watched files before and after and exits 2 if any moved. Writes `cells8.json`. |
+| `parse-sites.mjs` | Every `--ds-*` declaration with its file, selector, theme scope and tier, **parsed with postcss**. Writes `sites.json`. |
+| `fieldmap.mjs` | Which BrandTheme field writes which channel, derived by perturbing all 796 leaf fields. Answers *"is this reachable from the contract at all"*. Writes `fieldmap.json`. |
+| `backlog.mjs` | The base-layer defect backlog: role rule, fill guard, calibrated contrast. Writes `BACKLOG.json`. |
 
 `census-runtime.json` is the current output: every `--ds-*` name with which
 verticals speak on it and its paint role.
 
+**`BACKLOG.json` is the base-layer work order** — 270 live rows, each with its
+8 cell values, paint role, severity, defective cells, declaring sites, fix site
+and blast radius. Its headline: the base tier declares light-mode literals
+**unconditionally** and 135 of the 141 base-involved rows have no light/dark
+split in their declaring file, so the dark-leak and light-leak populations are
+one defect read from opposite ends. Regenerate with:
+
+```
+node cells8.mjs        # needs a browser; writes cells8.json (~1.7 MB, not committed)
+node parse-sites.mjs   # cheap
+node fieldmap.mjs      # ~800 esbuild renders, minutes
+node backlog.mjs       # pure JSON; rewrites BACKLOG.json
+```
+
 ---
 
-## Six traps. Each one drew blood.
+## Nine traps. Each one drew blood.
 
 **1 — `dist/` is behind `src/`, so a dist-backed render is wrong.**
 `scripts/build-vertical-artifacts.mjs` imports the compiler from `dist/`. At the
@@ -91,9 +109,34 @@ the **selector**. Unchecked, that edit would have inserted six dark pins into th
 light block — the exact defect being fixed, doubled. Keep edits fail-closed:
 assert the old text occurs exactly once before replacing.
 
+**7 — a role rule has two sides, and the second one inverts.**
+A ground's defect is being on the wrong SIDE of the divide from its page — a
+white panel on a dark page. An edge's and an ink's defect is too little
+CONTRAST against the ground they sit on, and **an invisible edge is precisely
+one on the SAME side as its ground**. Testing "wrong side" for edges reported
+`invisible-boundary: 0` on a corpus holding 66. Side for grounds, contrast for
+edges and ink. Symmetrically: *light ink in a light document is on-tone by
+construction* — there is no legible white-on-white — so that direction is not a
+signal at all, and treating it as one manufactures 1:1 rows out of every
+`#ffffff` label sitting on a filled tone.
+
+**8 — a brace regex is a grep in disguise; parse with postcss.**
+`([^{}]+)\{([^{}]*)\}` over `foundation/themes/default.css` matched **6 blocks**
+in a 99 KB file carrying 1,057 root declarations, and the lane it fed reported
+"not declared anywhere" — which reads exactly like a finding rather than a
+broken instrument. postcss finds 13,598 rules and 9,848 `--ds-*` declarations
+across the tree. Anything claiming where a channel is declared must parse.
+
+**9 — `grep` without `--` silently returns zero for a `--ds-*` name.**
+The leading dashes parse as options, so `grep -rn "--ds-form-label-color" src/`
+reports nothing and exits clean. It nearly shipped as "declared only in rottay's
+artifact"; the composed bundle text refuted it. Inverse of the documented
+`rg -r` trap — that one corrupts output, this one empties it. Always `grep -- `,
+or search for the name without its prefix.
+
 ---
 
-## Two laws this instrument is built on
+## Three laws this instrument is built on
 
 **An outcome test survives a false premise; a mechanism argument does not.**
 A belief used here (".dark is a complete override") turned out to be true only of
@@ -103,9 +146,18 @@ across 4,027 names in four scopes) rather than on the belief. A mechanism
 argument built on the same premise would have shipped the defect silently.
 
 **Every scope re-measured at execution time collapsed by roughly an order of
-magnitude.** 585→333, 485→190, 365→104, 129→13, 53→2. Five instances, no
-exceptions. A census sizes a wave; it does not authorise one. If a
-re-measurement *confirms* a census number, suspect the re-measurement first.
+magnitude.** 585→333, 485→190, 365→104, 129→13, 53→2, 189→141. Six instances, no
+exceptions — the last one measured against this lane's own earlier figure. A
+census sizes a wave; it does not authorise one. If a re-measurement *confirms* a
+census number, suspect the re-measurement first.
+
+**A threshold is calibrated against the healthy population, never picked.**
+The edge cut-off here is 1.15:1 because the corpus says so: good hairlines
+measure 1.25–1.46 (`--ds-color-border` at bithire/light 1.34, platform/light
+1.26, bithire/dark 1.46) and dead ones 1.06, so 1.15 separates them with margin
+on both sides. A guessed 1.5 flagged 197 rows and was condemning every
+well-designed border. State the positive and negative control beside any
+threshold, or it is a demolition order rather than a backlog.
 
 ---
 
