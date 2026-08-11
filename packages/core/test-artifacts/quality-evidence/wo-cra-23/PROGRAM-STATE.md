@@ -431,6 +431,49 @@ under §1.4 is always no. Rows c–f above are all this shape.
 Corollary: idling for an answer is itself the defect. An hourly heartbeat now re-enters the programme
 if a lane has stalled waiting on a decision that was never the owner's to make.
 
+### THE DENOMINATOR — why the three verticals do not read as different companies
+
+Censused 2026-08-11 at ref `17acb610c`, postcss on both sides, `base.css`'s full 439-file `@import`
+graph resolved recursively. The artifact side matched each rule's selector structurally against the
+unconditional tenant block rather than by line number, and the method independently re-isolated
+`--ds-type-body-font-size` as the sole D2 miss — cross-validating itself against a known answer.
+
+**3,303 unique custom properties are declared on bare `:root`** across 34 files (`default.css` 1,057 —
+reproducing D4's independent figure exactly — plus `patterns.css` 326, `card.css` 243, `button.css`
+233, `input.css` 176, and 29 more).
+
+| bucket | count | meaning |
+|---|---|---|
+| tenant-overridden — all three verticals redeclare | **218** | the only channels where the three verticals provably differ |
+| **partial** — some redeclare, some do not | **589** | one vertical has an opinion, another silently inherits the DS default |
+| **fully tenant-free** — none redeclare | **2,496** | all three verticals resolve **identically** |
+
+This is the answer to the question the programme exists to solve. It is not that the plumbing does not
+reach; it is that **on 2,496 channels no vertical expresses an opinion at all**, so all three paint the
+same DS default — and on 589 more, only some do.
+
+The partial bucket is asymmetric and that asymmetry is the disease in miniature: **evnto misses 585,
+rottay misses 485, bithire misses only 23**. BitHire diverges; the other two fall back toward the DS
+baseline. That is precisely why BitHire reads as a product and the other two read as the design system.
+
+**Why the partial bucket is the wave to run first.** It needs no design judgment: a sibling vertical
+already declares the channel, proving both that it is expressible and what shape a value takes. The
+2,496 do need judgment — a large part is legitimate component surface (`card` 162, `button` 137,
+`select` 130, `modal` 128, `avatar` 112) that BrandTheme's `chrome.*` sections exist to own, but some
+is properly internal (animation duration/delay/easing primitives, the `z` scale, `--_ds-*` composition
+variables). The census deliberately did not adjudicate that split, which was the right call.
+
+**Keep two questions separate, because they have different answers.** *Vertical identity* — do BitHire,
+Evnto and Rottay look different — is what these buckets measure. *Tenant reach* — can a DB tenant look
+different from its vertical — is a different question: the runtime tenant layer at (0,4,0) outranks
+every artifact and bare `:root`, so a tenant can already override a channel no vertical declares.
+Conflating them will produce the wrong wave.
+
+Related class, found in passing and not chased: **24 names are declared on bare `:root` in two
+different files** (e.g. `--ds-card-shadow-hover` in both `card.css` and `runtime/personality.css`) —
+a cross-file sibling of the within-file self-conflict already recorded. Full per-name lists for all
+three buckets: `scratchpad/WO-CRA-23-bare-root-census-report.md`.
+
 ### Identical declarations, divergent resolutions — two lanes disagreed, both were half right
 
 Adjudicated by measurement after two family lanes reached opposite conclusions about the same channel.
