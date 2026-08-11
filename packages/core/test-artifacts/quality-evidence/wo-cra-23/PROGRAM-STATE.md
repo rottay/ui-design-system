@@ -431,6 +431,31 @@ under §1.4 is always no. Rows c–f above are all this shape.
 Corollary: idling for an answer is itself the defect. An hourly heartbeat now re-enters the programme
 if a lane has stalled waiting on a decision that was never the owner's to make.
 
+### Identical declarations, divergent resolutions — two lanes disagreed, both were half right
+
+Adjudicated by measurement after two family lanes reached opposite conclusions about the same channel.
+
+`--ds-type-page-title-*` is **byte-identical text** in all three artifacts. One lane concluded from
+that "wiring a title to it yields ZERO divergence." False:
+
+```
+--ds-type-page-title-font-family:    var(--ds-font-family-heading)
+     resolves  bithire Space Grotesk · evnto Inter · rottay Inter (different stack)
+--ds-type-page-title-letter-spacing: var(--ds-letter-spacing-heading, -0.02em)
+     resolves  -0.025em / -0.02em / -0.015em
+```
+
+Identical declarations, divergent resolutions, because the declarations are **formulas over
+per-vertical inputs**. This is §6.0's formula-or-literal law read forward instead of backward: a
+static emitter is harmless if it emits `var()`. Comparing declaration TEXT and reporting identity of
+VALUES is the same error already recorded against a density/spacing claim earlier in this programme —
+it recurs because the two look alike in a diff.
+
+Both lanes' wiring choices were nonetheless correct, for a reason neither stated: a page title and a
+collection hero are different **roles**. `page-title` is a fixed `calc(1.5rem * …)`, so a fluid hero
+wired to it would collapse to 24px. Role first, divergence second — the divergence follows the role's
+inputs automatically.
+
 ### D2 IS WITHDRAWN — the theme layer is the tenant-free baseline, not dead code
 
 The execution lane refuted the whole ruling, and the refutation is structural.
