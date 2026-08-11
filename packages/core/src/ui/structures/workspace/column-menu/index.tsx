@@ -25,6 +25,8 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
+// Corpus gap: no pin/unpin role exists. `action.attach` is the nearest name and
+// means something else, so the compatibility catalog stays until a role lands.
 import { PinOffIcon as PinOff } from "../../../../graphics/icons";
 import { LayoutColumnsIcon } from "@/graphics/icons/presentation/semantic/generated/roles/layout-columns";
 import { ActionReorderIcon } from "@/graphics/icons/presentation/semantic/generated/roles/action-reorder";
@@ -828,7 +830,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                                 }
                               >
                                 {isPinnedLeft ? (
-                                  <PinOff size={13} />
+                                  <PinOff size={13} decorative />
                                 ) : (
                                   <PinLeftIcon />
                                 )}
@@ -856,7 +858,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                                 }
                               >
                                 {isPinnedRight ? (
-                                  <PinOff size={13} />
+                                  <PinOff size={13} decorative />
                                 ) : (
                                   <PinRightIcon />
                                 )}
