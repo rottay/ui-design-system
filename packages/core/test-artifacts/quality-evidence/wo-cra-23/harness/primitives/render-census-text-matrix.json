@@ -1,0 +1,212 @@
+[
+ {
+  "engine": "classic",
+  "combo": "bare",
+  "fontSize": true,
+  "fontFamily": true,
+  "style": "font-size: var(--probe-fs); text-align: left; overflow-wrap: anywhere; font-optical-sizing: var(--ds-type-optical-sizing); font-variation-settings: var(--ds-type-font-variation-settings); font-family:"
+ },
+ {
+  "engine": "classic",
+  "combo": "size=sm",
+  "fontSize": true,
+  "fontFamily": true,
+  "style": "font-size: var(--probe-fs); text-align: left; overflow-wrap: anywhere; font-optical-sizing: var(--ds-type-optical-sizing); font-variation-settings: var(--ds-type-font-variation-settings); font-family:"
+ },
+ {
+  "engine": "classic",
+  "combo": "size=lg",
+  "fontSize": true,
+  "fontFamily": true,
+  "style": "font-size: var(--probe-fs); text-align: left; overflow-wrap: anywhere; font-optical-sizing: var(--ds-type-optical-sizing); font-variation-settings: var(--ds-type-font-variation-settings); font-family:"
+ },
+ {
+  "engine": "classic",
+  "combo": "textStyle=body",
+  "fontSize": true,
+  "fontFamily": true,
+  "style": "font-family: var(--probe-ff); font-size: var(--probe-fs); font-weight: var(--ds-type-body-font-weight); line-height: var(--ds-type-body-line-height); letter-spacing: var(--ds-type-body-letter-spacing)"
+ },
+ {
+  "engine": "classic",
+  "combo": "textStyle=caption",
+  "fontSize": true,
+  "fontFamily": true,
+  "style": "font-family: var(--probe-ff); font-size: var(--probe-fs); font-weight: var(--ds-type-caption-font-weight); line-height: var(--ds-type-caption-line-height); letter-spacing: var(--ds-type-caption-letter"
+ },
+ {
+  "engine": "classic",
+  "combo": "as=label",
+  "fontSize": true,
+  "fontFamily": true,
+  "style": "font-size: var(--probe-fs); color: var(--ds-color-text-primary); text-align: left; overflow-wrap: anywhere; font-optical-sizing: var(--ds-type-optical-sizing); font-variation-settings: var(--ds-type-f"
+ },
+ {
+  "engine": "classic",
+  "combo": "fluid",
+  "fontSize": true,
+  "fontFamily": true,
+  "style": "font-size: var(--probe-fs); text-align: left; overflow-wrap: anywhere; font-optical-sizing: var(--ds-type-optical-sizing); font-variation-settings: var(--ds-type-font-variation-settings); font-family:"
+ },
+ {
+  "engine": "classic",
+  "combo": "monospace",
+  "fontSize": true,
+  "fontFamily": true,
+  "style": "font-size: var(--probe-fs); font-family: var(--probe-ff); text-align: left; overflow-wrap: anywhere; font-optical-sizing: var(--ds-type-optical-sizing); font-variation-settings: var(--ds-type-font-var"
+ },
+ {
+  "engine": "classic",
+  "combo": "truncate",
+  "fontSize": true,
+  "fontFamily": true,
+  "style": "font-size: var(--probe-fs); text-align: left; font-optical-sizing: var(--ds-type-optical-sizing); font-variation-settings: var(--ds-type-font-variation-settings); display: inline-block; max-width: 100"
+ },
+ {
+  "engine": "classic",
+  "combo": "size responsive",
+  "fontSize": true,
+  "fontFamily": true,
+  "style": "text-align: left; overflow-wrap: anywhere; font-optical-sizing: var(--ds-type-optical-sizing); font-variation-settings: var(--ds-type-font-variation-settings); font-size: var(--probe-fs); font-family:"
+ },
+ {
+  "engine": "modern",
+  "combo": "bare",
+  "fontSize": true,
+  "fontFamily": true,
+  "style": "font-size: var(--probe-fs); font-weight: var(--ds-type-body-font-weight); text-align: left; overflow-wrap: anywhere; font-optical-sizing: var(--ds-type-optical-sizing); font-variation-settings: var(--"
+ },
+ {
+  "engine": "modern",
+  "combo": "size=sm",
+  "fontSize": true,
+  "fontFamily": true,
+  "style": "font-size: var(--probe-fs); font-weight: var(--ds-type-supporting-font-weight); text-align: left; overflow-wrap: anywhere; font-optical-sizing: var(--ds-type-optical-sizing); font-variation-settings: "
+ },
+ {
+  "engine": "modern",
+  "combo": "size=lg",
+  "fontSize": true,
+  "fontFamily": true,
+  "style": "font-size: var(--probe-fs); font-weight: var(--ds-type-body-font-weight); text-align: left; overflow-wrap: anywhere; font-optical-sizing: var(--ds-type-optical-sizing); font-variation-settings: var(--"
+ },
+ {
+  "engine": "modern",
+  "combo": "textStyle=body",
+  "fontSize": true,
+  "fontFamily": true,
+  "style": "font-family: var(--probe-ff); font-size: var(--probe-fs); font-weight: var(--ds-type-body-font-weight); line-height: var(--ds-type-body-line-height); letter-spacing: var(--ds-type-body-letter-spacing)"
+ },
+ {
+  "engine": "modern",
+  "combo": "textStyle=caption",
+  "fontSize": true,
+  "fontFamily": true,
+  "style": "font-family: var(--probe-ff); font-size: var(--probe-fs); font-weight: var(--ds-type-caption-font-weight); line-height: var(--ds-type-caption-line-height); letter-spacing: var(--ds-type-caption-letter"
+ },
+ {
+  "engine": "modern",
+  "combo": "as=label",
+  "fontSize": true,
+  "fontFamily": true,
+  "style": "font-size: var(--probe-fs); font-weight: var(--ds-type-body-font-weight); text-align: left; overflow-wrap: anywhere; font-optical-sizing: var(--ds-type-optical-sizing); font-variation-settings: var(--"
+ },
+ {
+  "engine": "modern",
+  "combo": "fluid",
+  "fontSize": true,
+  "fontFamily": true,
+  "style": "font-size: var(--probe-fs); font-weight: var(--ds-type-body-font-weight); text-align: left; overflow-wrap: anywhere; font-optical-sizing: var(--ds-type-optical-sizing); font-variation-settings: var(--"
+ },
+ {
+  "engine": "modern",
+  "combo": "monospace",
+  "fontSize": true,
+  "fontFamily": true,
+  "style": "font-size: var(--probe-fs); font-weight: var(--ds-type-body-font-weight); font-family: var(--probe-ff); text-align: left; overflow-wrap: anywhere; font-optical-sizing: var(--ds-type-optical-sizing); f"
+ },
+ {
+  "engine": "modern",
+  "combo": "truncate",
+  "fontSize": true,
+  "fontFamily": true,
+  "style": "font-size: var(--probe-fs); font-weight: var(--ds-type-body-font-weight); text-align: left; font-optical-sizing: var(--ds-type-optical-sizing); font-variation-settings: var(--ds-type-font-variation-se"
+ },
+ {
+  "engine": "modern",
+  "combo": "size responsive",
+  "fontSize": true,
+  "fontFamily": true,
+  "style": "text-align: left; overflow-wrap: anywhere; font-optical-sizing: var(--ds-type-optical-sizing); font-variation-settings: var(--ds-type-font-variation-settings); font-size: var(--probe-fs); font-family:"
+ },
+ {
+  "engine": "rustic",
+  "combo": "bare",
+  "fontSize": true,
+  "fontFamily": true,
+  "style": "font-size: var(--probe-fs); font-weight: 400; text-align: left; font-family: var(--probe-ff); overflow-wrap: anywhere; font-optical-sizing: var(--ds-type-optical-sizing); font-variation-settings: var("
+ },
+ {
+  "engine": "rustic",
+  "combo": "size=sm",
+  "fontSize": true,
+  "fontFamily": true,
+  "style": "font-size: var(--probe-fs); font-weight: 400; text-align: left; font-family: var(--probe-ff); overflow-wrap: anywhere; font-optical-sizing: var(--ds-type-optical-sizing); font-variation-settings: var("
+ },
+ {
+  "engine": "rustic",
+  "combo": "size=lg",
+  "fontSize": true,
+  "fontFamily": true,
+  "style": "font-size: var(--probe-fs); font-weight: 400; text-align: left; font-family: var(--probe-ff); overflow-wrap: anywhere; font-optical-sizing: var(--ds-type-optical-sizing); font-variation-settings: var("
+ },
+ {
+  "engine": "rustic",
+  "combo": "textStyle=body",
+  "fontSize": true,
+  "fontFamily": true,
+  "style": "font-size: var(--probe-fs); font-weight: var(--ds-type-body-font-weight); text-align: left; font-family: var(--probe-ff); line-height: var(--ds-type-body-line-height); letter-spacing: var(--ds-type-bo"
+ },
+ {
+  "engine": "rustic",
+  "combo": "textStyle=caption",
+  "fontSize": true,
+  "fontFamily": true,
+  "style": "font-size: var(--probe-fs); font-weight: var(--ds-type-caption-font-weight); text-align: left; font-family: var(--probe-ff); line-height: var(--ds-type-caption-line-height); letter-spacing: var(--ds-t"
+ },
+ {
+  "engine": "rustic",
+  "combo": "as=label",
+  "fontSize": true,
+  "fontFamily": true,
+  "style": "font-size: var(--probe-fs); font-weight: 400; text-align: left; font-family: var(--probe-ff); overflow-wrap: anywhere; font-optical-sizing: var(--ds-type-optical-sizing); font-variation-settings: var("
+ },
+ {
+  "engine": "rustic",
+  "combo": "fluid",
+  "fontSize": true,
+  "fontFamily": true,
+  "style": "font-size: var(--probe-fs); font-weight: 400; text-align: left; font-family: var(--probe-ff); overflow-wrap: anywhere; font-optical-sizing: var(--ds-type-optical-sizing); font-variation-settings: var("
+ },
+ {
+  "engine": "rustic",
+  "combo": "monospace",
+  "fontSize": true,
+  "fontFamily": true,
+  "style": "font-size: var(--probe-fs); font-weight: 400; text-align: left; font-family: var(--probe-ff); overflow-wrap: anywhere; font-optical-sizing: var(--ds-type-optical-sizing); font-variation-settings: var("
+ },
+ {
+  "engine": "rustic",
+  "combo": "truncate",
+  "fontSize": true,
+  "fontFamily": true,
+  "style": "font-size: var(--probe-fs); font-weight: 400; text-align: left; font-family: var(--probe-ff); font-optical-sizing: var(--ds-type-optical-sizing); font-variation-settings: var(--ds-type-font-variation-"
+ },
+ {
+  "engine": "rustic",
+  "combo": "size responsive",
+  "fontSize": true,
+  "fontFamily": true,
+  "style": "font-weight: 400; text-align: left; font-family: var(--probe-ff); overflow-wrap: anywhere; font-optical-sizing: var(--ds-type-optical-sizing); font-variation-settings: var(--ds-type-font-variation-set"
+ }
+]

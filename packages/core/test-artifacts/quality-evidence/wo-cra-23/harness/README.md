@@ -6,6 +6,11 @@ nobody else has run.
 
 Run everything from `packages/core`. Node only, no build step, no dev server.
 
+> **Sibling: `primitives/`** — the primitives-tier census. This harness measures
+> channels; that one measures the component boundary, asking what a caller can
+> take away from a primitive. Its work order is `primitives/FINDINGS.json`, and
+> its README leads with the ranking and carries nine traps of its own.
+
 ---
 
 ## The question these scripts exist to ask
