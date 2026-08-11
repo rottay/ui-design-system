@@ -2243,18 +2243,41 @@ it; **bithire declares neither**, so it inherits the base literal in both themes
 filed this as more signature A and was stopped by arithmetic: bithire authors its success tint at
 **12%** and the measurement read **10%**, so bithire's own declaration was not what painted.
 
-**And the consequence that matters most.** `extension.css:613` declares
-`--ds-badge-success-bg: color-mix(in srgb, var(--ds-color-success) 12%, var(--ds-control-surface))` —
-a formula over `var()`s, which *would* follow the theme correctly. **The modern skin never reads that
-channel.**
+**RETRACTED — I recorded this as the headline and it is wrong.** `extension.css:613` declares
+`--ds-badge-success-bg` as a formula over `var()`s that follows the theme, and I wrote that nothing
+consumes it: *"bithire already authored the fix, nothing reads it."* **It is read** — verified at
+`classic/theme.css:662` and `rustic/theme.css:724`. The lane that reported it caught its own framing
+and flagged it before it hardened.
 
-> bithire already authored the fix. Nothing consumes it. The vertical looks authored, measures
-> authored on any naming census, and paints from a base literal instead.
+The surviving finding is real and much weaker: **a vertical authors a theme-following channel that
+does not reach the engine it actually ships.** Engine-scoped, not orphaned. And routing modern onto
+that channel would *flatten* it — modern runs a per-variant tone system (solid / soft / outline)
+where classic and rustic carry a single background.
 
-That is "declaration is not reach" with a live instance, and it is why the 32-name count was never
-going to answer the question. It also means the `--ds-color-success` / `--ds-color-warning` repair
-made earlier tonight **does not reach these badges** — they read `--ds-color-alpha-success-10`, a
-different name with no dark arm.
+Still true, and the part that mattered for the repair: the `--ds-color-success` / `--ds-color-warning`
+move made earlier tonight **does not reach these badges** — they read `--ds-color-alpha-success-10`,
+a different name with no dark arm.
+
+**What actually fixed it lived in the skin.** The modern tone chain read fixed ramp *steps* and a
+pre-composed alpha, and neither can be theme-aware by construction: a ramp step is a fixed colour by
+definition, so asking one to carry a contextual ink is the defect.
+
+```
+--ds-badge-tone-soft-bg:    var(--ds-color-alpha-success-10)
+                          → var(--ds-color-success-bg,  var(--ds-color-alpha-success-10))
+--ds-badge-tone-soft-color: var(--ds-color-success-700)
+                          → var(--ds-color-success-ink, var(--ds-color-success-700))
+```
+
+Both roles already existed; nothing was minted; the ramp step stays as the fallback arm. Measured:
+success **1.36 → 6.62** dark, warning **1.32 → 7.04** dark, both clearing AA, and the three variants
+go from **0/7 to 3/7** properties moving with the theme.
+
+Two rows left open and declared rather than buried: **info reaches only 3.68 in dark** — legible
+instead of invisible, still under AA, and closing it needs bithire to author a lighter info ink,
+because its info and success share a hue family so chip and ink are both blue. And **`default` in
+LIGHT measures 3.82, below AA, pre-existing** — the diff is exactly three variant rules, proven by
+the drift list, so it was failing before and nobody had computed it.
 
 ### The counts are 6% apart because the DISTRIBUTION hides inside them
 
