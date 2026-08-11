@@ -437,6 +437,40 @@ under §1.4 is always no. Rows c–f above are all this shape.
 Corollary: idling for an answer is itself the defect. An hourly heartbeat now re-enters the programme
 if a lane has stalled waiting on a decision that was never the owner's to make.
 
+### The governed icon drops every `data-*` except `data-part`, silently
+
+`createSemanticIcon` forwards an **allowlist**, not a rest spread. `data-part` is passed explicitly and
+survives; `data-active` and every other `data-*` is dropped with no error and no warning — the
+attribute is simply absent and any selector keyed on it goes dead. A lane migrating a stateful icon to
+the governed facade killed `[data-part='checkmark'][data-active='true']` this way; only a contract test
+caught it. Move state attributes to a host element. Belongs beside the P-79 part pass-through note.
+
+### A file that looks unfinished may be finished on purpose — the header is the evidence
+
+Two of five workspace families assigned for elevation **forbid it in writing**.
+`view-mode-switcher.css` is 3.9KB carrying exactly one rule with three declarations, and its header
+states *"the correct read count for this file is zero"*, names the census that established it (the only
+one of 25 skin-owning structures reading no radius, elevation, spacing, motion or type token), and
+pre-empts the precise move an elevation lane would make: *"re-adding any of them here would rebuild a
+lower layer."* `scope-switcher.css` carries the twin note as **MATERIAL INVARIANT — DELIBERATELY FLAT**.
+
+Elevating either would have been a **regression dressed as progress**. This is the mirror of the law
+recorded above about dead rules: that one says a rule may encode an outgrown assumption; this one says
+a *sparse* file may encode a live decision. In both directions, **read the header before acting on the
+shape.**
+
+### A transient mid-edit state is not a defect, and a `git status` line is not an audit
+
+Two false alarms in one session, both from reading the tree instead of the thing. A lane reported a
+syntax error blocking every workspace test; by the time it was checked the JSX comment closed
+correctly and the suite collected at 62/63 — it had observed another lane mid-write. A second lane
+reported an engine-split fence breach because `index.tsx` was deleted and `index.ts` + `contracts/` +
+`runtime/` appeared; that is the folder/index hierarchy `CLAUDE.md` mandates, and the refused shape is
+specifically three `engines/*/index.tsx` files. **The two are indistinguishable in `git status` and
+trivially distinguishable by `ls engines/`.**
+
+Both lanes were right to escalate rather than assume. The rule is the check, not the silence.
+
 ### A formula may only bake a value the same file authors
 
 The rule that settled where the radius-dial fix belonged, and it generalises. BitHire's `1.25` divisor
