@@ -500,6 +500,29 @@ a false reading — and it is why a lane that needed an after-arm artifact rende
 `src/`** and proved the harness with a null-arm control (byte-identical to the committed artifact on
 unedited sources) before trusting a single number.
 
+### Synthetic controls prove capability; historical replay proves relevance
+
+The fixture-drift test ships with both, and they are different claims. Six planted mutations prove the
+comparator **can** fail and that each failure **names** what drifted — a mutation that only trips a
+child-count check would pass a weaker test. Then the two committed pre-ruling fixtures were restored
+from git and replayed: it caught the real `.ds-btn` substitution on the first line, naming the exact
+classes. Capability and relevance are not the same evidence, and a control set that only proves the
+first is half a proof.
+
+Its coverage rule is the part that stops recurrence: a test covering today's three fixtures re-opens
+the hole at the fourth, so **every fixture must either register a render or declare itself synthetic**,
+and anything that is neither fails with a message saying why. That is a doctrine made executable rather
+than written down — the difference between a rule and a gate.
+
+It found a third stale fixture before shipping: `card-modern-md` was missing `ds-card--elevated`.
+**Latent, not live** — that class occurs zero times in all three composed bundles, because the card
+skin keys on `data-variant`. It cost nothing yet and would have cost everything the day someone wrote
+a class-keyed rule.
+
+The pattern across all three: **the two that mattered were caught by the CSS side, the one that did not
+matter yet by the DOM side. Neither instrument alone sees both.** Which is the positive case for the
+two-instruments law — techniques that do not share a module see different halves.
+
 ### WHEN AN EXECUTABLE CONTRACT EXISTS, IT IS THE AUTHORITY — three narratives, all wrong
 
 The single most expensive lesson of the programme, and the cheapest to have avoided.
