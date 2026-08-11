@@ -529,6 +529,46 @@ fallback arm, and the declared-nowhere census. Those stand. But **the instrument
 evidence within its roster**, and a roster of six fixtures is not the component library. Any lane
 quoting `changedRows: 0` must state which fixtures could have moved.
 
+### CORRECTED: the light block is not missing, it is CONTAMINATED — 13 seeds
+
+Replaces the section below, which I recorded from a first measurement. The bare `:root` **is** the
+light block: `default.css` already follows light-first with a `.dark` override, and the `.dark` block is
+complete and correct. What is wrong is narrower and more actionable — **13 seeds inside the light block
+carry a vertical's dark values**, and the contamination is Rottay's palette, so the [O] drift reading
+still holds.
+
+The `.dark` block already demonstrates the target pattern in its own text
+(`--ds-color-bg-primary: var(--ds-color-neutral-50)`), and the light neutral ramp is present and correct
+on bare `:root`. So the rewire invents no colour: it makes the light block do what the dark block
+already does. Six of the 13 need a dark pin; the other seven are already overridden in `.dark` and are
+dark-neutral by construction. The ~62 downstream grounds collapse to these 13.
+
+**The trap, and the lane that flagged it nearly fell into it.** A luminance filter over the source block
+reports **129** dark literals — and **~111 are correct light-mode ink**: `--ds-tooltip-bg: #171717`,
+`--ds-checkbox-checked-bg`, `--ds-tag-primary-bg`, the whole tail of the primary/success/warning/error
+ramps. A dark tooltip on a light page is right. **Acting on 129 would destroy the light theme.**
+
+The role rule must be applied to the **source block**, not only to the resolved runtime set. This is the
+365→104 collapse arriving one level down, and the naive filter is the first thing anyone will reach for
+on this file.
+
+Left out deliberately, needing APCA rather than eyeballs [O]: `--ds-color-text-{secondary,tertiary,muted}`
+pass a crude ink threshold but are dark-theme greys, weak on a light ground.
+
+### A source-only commit cannot close a paint window
+
+The lane refused to execute an instruction of mine, correctly. I required the vertical pins to land in
+the same commit as the seed rewire so no window exists where two products repaint unattributed. They
+cannot: the pins are **TypeScript** in `brand-themes/**`, while what paints is `facade/artifacts/**`.
+`default.css` takes effect immediately — it is source CSS in the bundle — but a pin does not reach paint
+until the artifacts regenerate. A source-only commit therefore opens exactly the window it was meant to
+close, delayed by one build.
+
+Closing it needs all three artifacts regenerated **inside the same commit**, which needs a full
+`pnpm build` first (the compiler is imported from `dist/`, which lags). That build is the coordinator's
+singleton. **So this class of change cannot be handed to a lane at all** — a lane can produce the source
+and the proof, and only the coordinator can land it.
+
 ### ANSWERED: the untenanted default has no light theme at all
 
 The open [O] question — *"whether the untenanted default should deliberately be its own neutral identity
