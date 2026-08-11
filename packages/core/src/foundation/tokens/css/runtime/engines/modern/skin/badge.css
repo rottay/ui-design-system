@@ -388,15 +388,15 @@
 .rottay-badge.rottay-badge--modern[data-variant='success'] {
   --ds-badge-tone-solid-bg: var(--ds-color-success);
   --ds-badge-tone-solid-color: var(--ds-color-text-on-primary);
-  --ds-badge-tone-soft-bg: var(--ds-color-alpha-success-10);
-  --ds-badge-tone-soft-color: var(--ds-color-success-700);
+  --ds-badge-tone-soft-bg: var(--ds-color-success-bg, var(--ds-color-alpha-success-10));
+  --ds-badge-tone-soft-color: var(--ds-color-success-ink, var(--ds-color-success-700));
   --ds-badge-tone-outline: var(--ds-color-success-border, var(--ds-color-success));
 }
 .rottay-badge.rottay-badge--modern[data-variant='warning'] {
   --ds-badge-tone-solid-bg: var(--ds-color-warning);
   --ds-badge-tone-solid-color: var(--ds-color-text-on-primary);
-  --ds-badge-tone-soft-bg: var(--ds-color-alpha-warning-10);
-  --ds-badge-tone-soft-color: var(--ds-color-warning-700);
+  --ds-badge-tone-soft-bg: var(--ds-color-warning-bg, var(--ds-color-alpha-warning-10));
+  --ds-badge-tone-soft-color: var(--ds-color-warning-ink, var(--ds-color-warning-700));
   --ds-badge-tone-outline: var(--ds-color-warning-border, var(--ds-color-warning));
 }
 .rottay-badge.rottay-badge--modern[data-variant='error'] {
@@ -409,8 +409,8 @@
 .rottay-badge.rottay-badge--modern[data-variant='info'] {
   --ds-badge-tone-solid-bg: var(--ds-color-info);
   --ds-badge-tone-solid-color: var(--ds-color-text-on-primary);
-  --ds-badge-tone-soft-bg: var(--ds-color-alpha-info-10);
-  --ds-badge-tone-soft-color: var(--ds-color-info-700);
+  --ds-badge-tone-soft-bg: var(--ds-color-info-bg, var(--ds-color-alpha-info-10));
+  --ds-badge-tone-soft-color: var(--ds-color-info-ink, var(--ds-color-info-700));
   --ds-badge-tone-outline: var(--ds-color-info-border, var(--ds-color-info));
 }
 

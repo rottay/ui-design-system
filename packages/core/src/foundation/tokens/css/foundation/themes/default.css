@@ -1965,9 +1965,9 @@
      fallback so nothing moves where no tenant authors it. */
   --ds-segmented-bg: var(--ds-surface-control, #f5f5f5);
   --ds-segmented-item-bg: transparent;
-  --ds-segmented-item-bg-selected: #ffffff;
-  --ds-segmented-item-color: #525252;
-  --ds-segmented-item-color-selected: #171717;
+  --ds-segmented-item-bg-selected: var(--ds-color-bg-elevated, #ffffff);
+  --ds-segmented-item-color: var(--ds-color-text-secondary, #525252);
+  --ds-segmented-item-color-selected: var(--ds-color-text-primary, #171717);
   --ds-segmented-radius: var(--ds-radius-md);
   --ds-segmented-shadow: var(--ds-shadow-xs);
 
