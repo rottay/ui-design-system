@@ -49,7 +49,72 @@
  * primary-first action partition gains a hairline seam
  * (data-part='action-divider') so the dominant group reads apart from the
  * quiet cluster without another box.
+ *
+ * MATERIALS (one dominant boundary per semantic region): the secondary rail
+ * used to render four parts — eyebrow, neutral meta chip, shortcuts label and
+ * shortcut pill — with ONE material: 999px radius, `--ds-surface-panel` fill,
+ * `--ds-color-border-subtle` hairline, 12px/700 caps. Nothing told identity
+ * from data from affordance. They now carry three:
+ *   · eyebrow / shortcuts label -> overline, no frame; the eyebrow keeps a
+ *     single accent tick as the identity column's only brand chroma
+ *   · meta chip -> the only framed object left in the rail, so the tone
+ *     frames read again
+ *   · shortcut cap -> real key material on the governed `--ds-kbd-*` set
+ * Every value resolves through a family-private `--_ds-collection-header-*`
+ * declared once on the scope root; this file mints no public channel.
+ *
+ * TYPE OWNERSHIP follows the LAYER, not preference. `Box` parts (title, meta
+ * chip, shortcuts label, key cap) have no competing typography skin, so their
+ * whole type ladder is owned here and reads the authored roles. `Text` parts
+ * (eyebrow, subtitle) are painted by the typography skin in the LATER
+ * `rottay-engines` layer, so a font declaration here would be inert — their
+ * type stays on the caller channel engine-side and is channel-driven there.
+ *
+ * FLUID STEPS are `cqi`, not `vw`: the root is a query container, and a hero
+ * sized to the viewport renders at its widest inside a half-width rail, which
+ * is the one place it must be smallest.
  */
+
+/* family-private channels ------------------------------------------------------
+   The one place this family resolves public channels into its own vocabulary.
+   Three semantic regions get three DISTINCT materials, because they carry three
+   different kinds of meaning and used to carry one:
+     · identity  (eyebrow)         -> overline, no frame, one accent tick
+     · data      (meta chips)      -> the ONLY framed object in the rail
+     · affordance(shortcut keys)   -> key caps on the governed `--ds-kbd-*` set
+   Every private resolves from an EXISTING public channel; this file mints none.
+   Reading `--ds-kbd-*` is deliberate: a tenant that styles its key caps once
+   styles them here too, instead of this rail inventing a second key material. */
+
+.ds-structure.ds-collection-header[data-part='root'] {
+  --_ds-collection-header-overline-size: var(--ds-page-header-eyebrow-size, var(--ds-font-size-xs, 12px));
+  --_ds-collection-header-overline-tracking: var(--ds-page-header-eyebrow-tracking, 0.13em);
+  --_ds-collection-header-overline-weight: var(--ds-font-weight-bold, 700);
+  --_ds-collection-header-overline-case: var(--ds-page-header-eyebrow-text-transform, uppercase);
+  --_ds-collection-header-accent: var(--ds-collection-header-display-color, var(--ds-color-primary));
+
+  --_ds-collection-header-chip-block-size: var(--ds-spacing-6, 24px);
+  --_ds-collection-header-chip-inline-padding: var(--ds-spacing-2, 8px);
+  --_ds-collection-header-chip-radius: var(--ds-radius-full, 999px);
+  --_ds-collection-header-chip-family: var(--ds-type-caption-font-family, inherit);
+  --_ds-collection-header-chip-size: var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px));
+  --_ds-collection-header-chip-weight: var(--ds-font-weight-bold, 700);
+  --_ds-collection-header-chip-tracking: var(--ds-type-caption-letter-spacing, 0.02em);
+
+  --_ds-collection-header-keycap-block-size: var(--ds-spacing-5, 20px);
+  --_ds-collection-header-keycap-inline-padding: var(--ds-spacing-2, 8px);
+  --_ds-collection-header-keycap-radius: var(--ds-kbd-radius, var(--ds-radius-sm, 4px));
+  --_ds-collection-header-keycap-family: var(--ds-kbd-font-family, var(--ds-font-family-mono));
+  --_ds-collection-header-keycap-size: var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px));
+  --_ds-collection-header-keycap-weight: var(--ds-kbd-font-weight, 500);
+  --_ds-collection-header-keycap-frame: var(--ds-kbd-frame, var(--ds-color-border));
+  --_ds-collection-header-keycap-surface: var(--ds-kbd-surface, var(--ds-surface-inset, var(--ds-color-neutral-100)));
+  --_ds-collection-header-keycap-ink: var(--ds-kbd-ink, var(--ds-color-text-muted));
+  --_ds-collection-header-keycap-depth-width: var(--ds-kbd-depth-width, 2px);
+
+  --_ds-collection-header-title-measure: var(--ds-page-header-title-max-width, 35rem);
+  --_ds-collection-header-title-measure-editorial: var(--ds-page-header-title-max-width, 42.5rem);
+}
 
 /* root -------------------------------------------------------------------------- */
 
@@ -63,7 +128,14 @@
     background-position var(--ds-motion-slow, 320ms) var(--ds-motion-ease-out, ease-out),
     border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
     box-shadow var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease-out);
-  animation: ds-collection-header-enter var(--ds-motion-calm) var(--ds-motion-ease-out, ease-out) both;
+  /* `--ds-motion-calm` has no positive declaration in foundation — it exists
+     there only as the reduced-motion `0s !important` (transitions.css:396) and
+     is otherwise emitted by the tenant artifacts alone. Read bare, the token is
+     invalid at computed-value time on an untenanted page and takes the WHOLE
+     shorthand with it, so the enter never runs. `--ds-motion-slow` is declared
+     (transitions.css:96) and carries the calm cadence. */
+  animation: ds-collection-header-enter var(--ds-motion-calm, var(--ds-motion-slow, 320ms))
+    var(--ds-motion-ease-out, ease-out) both;
   container-type: inline-size;
   container-name: ds-collection-header;
 }
@@ -105,30 +177,54 @@
   box-shadow: var(--ds-collection-header-shadow-hover, var(--ds-elevation-2));
 }
 
-/* eyebrow (Text) ---------------------------------------------------------------- */
+/* eyebrow (Text) = IDENTITY -----------------------------------------------------
+   An overline, not a chip. The frame it used to wear was the same 999px pill,
+   the same panel fill and the same hairline as the neutral meta chip and the
+   two shortcut pills beside it, so the rail read as one undifferentiated strip
+   of grey capsules with no way to tell identity from data from hint. The frame
+   retires; the only mark left is a single accent tick, which is also the one
+   place brand chroma enters the identity column.
+   The Text's typography skin lives in the LATER `rottay-engines` layer, so type
+   stays on the caller channel (engine-side) and this file owns the box. */
 
 .ds-structure.ds-collection-header [data-part='eyebrow'] {
-  border-radius: 999px;
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 76%, transparent);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-spacing-2, 8px);
+  min-block-size: var(--_ds-collection-header-chip-block-size);
 }
-.ds-structure.ds-collection-header[data-part='root'] [data-part='eyebrow'] {
-  border: 1px solid var(--ds-color-border-subtle);
-}
-.ds-structure.ds-collection-header [data-part='eyebrow'][data-embedded='true'] {
-  background: color-mix(in srgb, var(--ds-surface-panel) 72%, transparent);
-}
-.ds-structure.ds-collection-header [data-part='eyebrow'][data-embedded='false'] {
-  background: var(--ds-surface-panel);
+.ds-structure.ds-collection-header [data-part='eyebrow']::before {
+  content: '';
+  flex-shrink: 0;
+  inline-size: var(--ds-edge-emphasis-width, 2px);
+  block-size: 0.75em;
+  border-radius: var(--_ds-collection-header-chip-radius);
+  background: var(--_ds-collection-header-accent);
 }
 .ds-structure.ds-collection-header[data-part='root'] [data-part='eyebrow'][data-embedded] {
   color: var(--ds-color-text-muted);
 }
 
-/* meta-item chips (Box; text child inherits color) ------------------------------ */
+/* meta-item chips (Box; text child inherits color) = DATA -----------------------
+   The chip survives here and nowhere else: meta items are repeated read-only
+   objects carrying counts, which is exactly what a chip is for. Being the only
+   framed object left in the rail is what makes the tone frames legible again.
+   Geometry and the caption type role are owned here (a Box has no competing
+   typography skin), so a tenant's caption family/scale reaches them. */
 
 .ds-structure.ds-collection-header [data-part='meta-item'] {
-  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-spacing-1, 4px);
+  min-block-size: var(--_ds-collection-header-chip-block-size);
+  padding-inline: var(--_ds-collection-header-chip-inline-padding);
+  border-radius: var(--_ds-collection-header-chip-radius);
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 72%, transparent);
+  font-family: var(--_ds-collection-header-chip-family);
+  font-size: var(--_ds-collection-header-chip-size);
+  font-weight: var(--_ds-collection-header-chip-weight);
+  letter-spacing: var(--_ds-collection-header-chip-tracking);
+  white-space: nowrap;
   /* meta chips carry counts ("12 active") — align the figures */
   font-variant-numeric: tabular-nums;
 }
@@ -148,11 +244,79 @@
   color: var(--ds-color-text-secondary);
 }
 
-/* title (Box as h2) ------------------------------------------------------------- */
+/* identity column --------------------------------------------------------------
+   The measure rides the shared page-header group recipe (the same channel
+   PageShell reads) instead of two hardcoded pixel caps, so a tenant that widens
+   its page measure widens this hero with it. */
+
+.ds-structure.ds-collection-header [data-part='identity'][data-compact-layout='false'][data-editorial-tech='false'] {
+  flex: 1 1 clamp(17.5rem, 38%, 28.75rem);
+  max-width: var(--_ds-collection-header-title-measure);
+}
+.ds-structure.ds-collection-header [data-part='identity'][data-compact-layout='false'][data-editorial-tech='true'] {
+  flex: 1 1 clamp(18.75rem, 42%, 35rem);
+  max-width: var(--_ds-collection-header-title-measure-editorial);
+}
+.ds-structure.ds-collection-header [data-part='identity'][data-compact-layout='true'] {
+  flex: 1 1 100%;
+  max-width: 100%;
+}
+
+/* title (Box as h1) -------------------------------------------------------------
+   The full type ladder lands here. The fluid steps are keyed to `cqi`, not
+   `vw`: the root is a query container, and a hero that sizes to the viewport
+   renders at its widest inside a half-width rail — the one place it must be
+   smallest. Rest of the ladder keys on the stamped treatment/posture pair. */
 
 .ds-structure.ds-collection-header [data-part='title'] {
   color: var(--ds-color-text-primary);
   text-wrap: balance;
+  font-family: var(--ds-type-display-font-family, var(--ds-font-family-heading));
+  font-size: var(--ds-font-size-fluid-4xl);
+  font-weight: var(--ds-type-display-font-weight, var(--ds-font-weight-bold, 700));
+  letter-spacing: var(--ds-type-display-letter-spacing, 0);
+  line-height: var(--ds-type-display-line-height, 1.1);
+}
+.ds-structure.ds-collection-header [data-part='title'][data-title-treatment='default'][data-compact-layout='true'] {
+  font-size: var(--ds-font-size-fluid-3xl);
+}
+
+.ds-structure.ds-collection-header [data-part='title'][data-title-treatment='display'] {
+  font-family: var(--ds-font-family-display, var(--ds-font-family-heading));
+  font-size: clamp(2.625rem, 5.4cqi, 3.625rem);
+  font-weight: var(--ds-font-weight-semibold, 600);
+  letter-spacing: 0.015em;
+  line-height: 0.9;
+  text-transform: var(--_ds-collection-header-overline-case);
+}
+
+.ds-structure.ds-collection-header [data-part='title'][data-title-treatment='dotted'] {
+  text-transform: var(--_ds-collection-header-overline-case);
+}
+.ds-structure.ds-collection-header [data-part='title'][data-title-treatment='dotted'][data-compact-layout='true'] {
+  font-size: clamp(1.625rem, 8.8cqi, 2.125rem);
+  font-weight: var(--ds-font-weight-bold, 700);
+  letter-spacing: -0.022em;
+  line-height: 0.92;
+}
+.ds-structure.ds-collection-header [data-part='title'][data-title-treatment='dotted'][data-compact-layout='false'][data-editorial-tech='true'] {
+  font-size: clamp(2.5rem, 5.2cqi, 3.375rem);
+  font-weight: var(--ds-font-weight-semibold, 600);
+  letter-spacing: -0.052em;
+  line-height: 0.84;
+}
+.ds-structure.ds-collection-header [data-part='title'][data-title-treatment='dotted'][data-compact-layout='false'][data-editorial-tech='false'] {
+  font-size: clamp(2.375rem, 4.8cqi, 3.25rem);
+  font-weight: var(--ds-font-weight-extrabold, 800);
+  letter-spacing: -0.04em;
+  line-height: 0.88;
+}
+
+/* Minimal is a posture, not a treatment: it caps the hero on the constrained
+   mobile projection whatever treatment the caller asked for. The root ancestor
+   pair takes it to (0,6,0), over every treatment rule above. */
+.ds-structure.ds-collection-header[data-part='root'][data-minimal='true'] [data-part='title'][data-title-treatment] {
+  font-size: var(--ds-font-size-fluid-3xl);
 }
 .ds-structure.ds-collection-header [data-part='title'][data-title-treatment='dotted'] {
   color: transparent;
@@ -195,9 +359,18 @@
 /* subtitle divider + editorial-tech rule ------------------------------------ */
 
 .ds-structure.ds-collection-header [data-part='subtitle-divider'] {
+  flex-shrink: 0;
+  inline-size: var(--ds-spacing-7, 28px);
+  block-size: var(--ds-edge-hairline-width, 1px);
+  /* Optical: the rule aligns to the supporting copy's first baseline, not to
+     its box top, so it reads as a lead-in rather than a stray tick. */
+  margin-block-start: calc(var(--ds-type-supporting-line-height, 1.56) * 0.5em);
   background: linear-gradient(90deg, color-mix(in srgb, var(--ds-color-border-subtle) 82%, transparent) 0%, color-mix(in srgb, var(--ds-color-border-subtle) 34%, transparent) 100%);
 }
 .ds-structure.ds-collection-header [data-part='editorial-tech-rule'] {
+  margin-block-start: var(--ds-spacing-3, 12px);
+  block-size: var(--ds-edge-hairline-width, 1px);
+  inline-size: min(100%, var(--ds-page-header-subtitle-max-width, 45rem));
   background: linear-gradient(90deg, color-mix(in srgb, var(--ds-color-border-subtle) 76%, transparent) 0%, color-mix(in srgb, var(--ds-color-border-subtle) 40%, transparent) 40%, color-mix(in srgb, var(--ds-color-border-subtle) 18%, transparent) 72%, transparent 100%);
 }
 /* subtitle-row: the default-branch subtitle wrapper. The root ancestor buys
@@ -268,34 +441,61 @@
    prop contract. Flex sizing (no shrink, natural width) rides the caller's
    inline layout style. */
 
-/* shortcuts label + shortcut pills (Box; embedded keyed off the ROOT ancestor) -- */
+/* shortcuts label + key caps = AFFORDANCE --------------------------------------
+   The label is a rail overline with no frame at all (same voice as the eyebrow,
+   without the identity tick — it labels, it does not identify). The caps are
+   the third material: a real key face with a deeper block-end edge and a top
+   specular, on the governed `--ds-kbd-*` channels the Kbd primitive already
+   publishes, so a tenant's key material arrives here for free. Nothing in this
+   region is a 999px capsule any more, which is the whole point. */
 
 .ds-structure.ds-collection-header [data-part='shortcuts-label'] {
-  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-spacing-1, 4px);
+  min-block-size: var(--_ds-collection-header-keycap-block-size);
+  padding-inline-end: var(--ds-spacing-1, 4px);
+  font-size: var(--_ds-collection-header-overline-size);
+  font-weight: var(--_ds-collection-header-overline-weight);
+  letter-spacing: var(--_ds-collection-header-overline-tracking);
+  text-transform: var(--_ds-collection-header-overline-case);
   color: var(--ds-color-text-muted);
 }
-.ds-structure.ds-collection-header[data-part='root'] [data-part='shortcuts-label'] {
-  border: 1px solid var(--ds-color-border-subtle);
-}
-.ds-structure.ds-collection-header[data-embedded='true'] [data-part='shortcuts-label'] {
-  background: color-mix(in srgb, var(--ds-surface-panel) 68%, transparent);
-}
-.ds-structure.ds-collection-header[data-embedded='false'] [data-part='shortcuts-label'] {
-  background: var(--ds-surface-panel);
+/* The glyph was authored at 10px, below the legible floor for a mark that has
+   to read beside 12px capitals. It now tracks the overline's own size. */
+.ds-structure.ds-collection-header [data-part='shortcuts-label-icon'] {
+  flex-shrink: 0;
+  inline-size: var(--_ds-collection-header-overline-size);
+  block-size: var(--_ds-collection-header-overline-size);
 }
 
 .ds-structure.ds-collection-header [data-part='shortcut-pill'] {
-  border-radius: 999px;
-  color: var(--ds-color-text-muted);
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  min-block-size: var(--_ds-collection-header-keycap-block-size);
+  padding-inline: var(--_ds-collection-header-keycap-inline-padding);
+  border-radius: var(--_ds-collection-header-keycap-radius);
+  font-family: var(--_ds-collection-header-keycap-family);
+  font-size: var(--_ds-collection-header-keycap-size);
+  font-weight: var(--_ds-collection-header-keycap-weight);
+  line-height: 1;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  color: var(--_ds-collection-header-keycap-ink);
+  background: var(--_ds-collection-header-keycap-surface);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 55%, transparent);
 }
+/* Shorthand, not a longhand colour: preflight zeroes `border-width` on every
+   element, so a bare `border-color` would leave the cap frameless. The root
+   `data-part` ancestor buys the fourth unit over the tenant border floor. */
 .ds-structure.ds-collection-header[data-part='root'] [data-part='shortcut-pill'] {
-  border: 1px solid var(--ds-color-border-subtle);
-}
-.ds-structure.ds-collection-header[data-embedded='true'] [data-part='shortcut-pill'] {
-  background: color-mix(in srgb, var(--ds-surface-panel) 66%, transparent);
-}
-.ds-structure.ds-collection-header[data-embedded='false'] [data-part='shortcut-pill'] {
-  background: var(--ds-surface-panel);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--_ds-collection-header-keycap-frame);
+  border-block-end-width: var(--_ds-collection-header-keycap-depth-width);
+  border-block-end-color: var(
+    --ds-kbd-depth,
+    color-mix(in srgb, var(--_ds-collection-header-keycap-frame) 72%, var(--ds-color-neutral-900) 28%)
+  );
 }
 
 /* loading skeleton (C0-07): quiet root + per-block geometry keyed on
@@ -368,13 +568,28 @@
         plain system-colored text for that treatment. ---- */
 @media (forced-colors: active) {
   .ds-structure.ds-collection-header[data-part='root'][data-embedded='false'],
-  .ds-structure.ds-collection-header[data-part='root'] [data-part='eyebrow'],
   .ds-structure.ds-collection-header [data-part='meta-item'],
   .ds-structure.ds-collection-header[data-part='root'] [data-part='quick-actions'],
   .ds-structure.ds-collection-header[data-part='root'] [data-part='subtitle-row'],
-  .ds-structure.ds-collection-header[data-part='root'] [data-part='shortcuts-label'],
   .ds-structure.ds-collection-header[data-part='root'] [data-part='shortcut-pill'] {
     border-color: ButtonText;
+  }
+
+  /* The identity tick is the eyebrow's only mark now that its frame is gone —
+     a background is dropped under forced colors, so it re-asserts as a border
+     on system ink. The key cap keeps its depth edge: that edge IS the
+     affordance, and a flat cap is indistinguishable from a chip. */
+  .ds-structure.ds-collection-header [data-part='eyebrow']::before {
+    background: ButtonText;
+    border: var(--ds-edge-emphasis-width, 2px) solid ButtonText;
+  }
+
+  .ds-structure.ds-collection-header[data-part='root'] [data-part='shortcut-pill'] {
+    background: Canvas;
+    color: ButtonText;
+    border-block-end-color: ButtonText;
+    box-shadow: none;
+    forced-color-adjust: auto;
   }
 
   .ds-structure.ds-collection-header [data-part='title'][data-title-treatment='dotted'] {
@@ -394,6 +609,33 @@
   .ds-structure.ds-collection-header [data-part='skeleton'] {
     background: GrayText;
     animation: none;
+  }
+}
+
+/* ---- container posture. The TSX compact branch answers the DEVICE class;
+        this answers the BOX, which is the case a device class cannot see: the
+        same header at half width inside a split view or a rail on a 1440px
+        screen is still `data-compact='false'`. Mobile is a simplified posture,
+        not a compressed desktop, so what retires is decoration, never content:
+        the hero drops to the compact step, the two ornamental rules and the
+        shortcuts glyph (redundant beside its own word) go, and the caps
+        tighten. The identity tick STAYS — on a narrow box the eyebrow leads
+        the identity column, so it is the one mark carrying most. Viewport
+        media queries are forbidden under presentation/components; the root
+        declares the container this queries. ---- */
+@container ds-collection-header (max-width: 34rem) {
+  .ds-structure.ds-collection-header [data-part='title'][data-title-treatment='default'] {
+    font-size: var(--ds-font-size-fluid-3xl);
+  }
+
+  .ds-structure.ds-collection-header [data-part='subtitle-divider'],
+  .ds-structure.ds-collection-header [data-part='editorial-tech-rule'],
+  .ds-structure.ds-collection-header [data-part='shortcuts-label-icon'] {
+    display: none;
+  }
+
+  .ds-structure.ds-collection-header [data-part='shortcut-pill'] {
+    padding-inline: var(--ds-spacing-1, 4px);
   }
 }
 
