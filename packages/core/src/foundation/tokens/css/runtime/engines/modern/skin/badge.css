@@ -368,7 +368,12 @@
   --ds-badge-tone-solid-bg: var(--ds-color-neutral-200);
   --ds-badge-tone-solid-color: var(--ds-color-text-primary);
   --ds-badge-tone-soft-bg: var(--ds-color-alpha-black-100, color-mix(in srgb, var(--ds-color-text-primary) 20%, transparent));
-  --ds-badge-tone-soft-color: var(--ds-color-text-secondary);
+  /* Normal ink on a quiet ground, matching how `primary` reads primary and
+     `secondary` reads secondary-600. This row was the only one pairing a 20%
+     tint with a MUTED ink -- deviating on both axes at once -- and it failed AA
+     in two cells (bithire/light 3.82, evnto/dark 4.39). Measured across all six
+     before changing: the primary ink clears every one, minimum 8.58. */
+  --ds-badge-tone-soft-color: var(--ds-color-text-primary);
   --ds-badge-tone-outline: var(--ds-color-border);
 }
 .rottay-badge.rottay-badge--modern[data-variant='primary'] {

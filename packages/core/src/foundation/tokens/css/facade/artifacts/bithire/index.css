@@ -1734,6 +1734,10 @@
    retire="each channel either gains a semantic contract field or moves to its owning app/component layer" */
 :is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))[data-theme="dark"],
 :is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire'])).dark {
+  /* Info and success share a hue family here, so the soft info chip and its ink
+     were both blue: 3.68 on the dark chip. info-300 is the most muted step of
+     this ramp that clears AA with margin (5.73); 400 reaches only 4.00. */
+  --ds-color-info-ink: var(--ds-color-info-300);
 
   /* Accent for live indicators - dark */
   --ds-color-accent-live: #69a6d5;
