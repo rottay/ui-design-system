@@ -229,7 +229,17 @@ describe("W4 first-class canvas, reading ink and separator emission", () => {
     expect(vars["--ds-color-text-muted"]).toBe(light.foreground.muted);
     expect(vars["--ds-color-text-disabled"]).toBe(light.foreground.disabled);
     expect(vars["--ds-color-border-primary"]).toBe(light.border.primary);
+    expect(vars["--ds-color-border"]).toBe(light.border.primary);
     expect(vars["--ds-color-border-secondary"]).toBe(light.border.secondary);
+  });
+
+  it("leaves the separator channels undeclared when the tenant authors none", () => {
+    const vars = appearanceToVariables({
+      general: { palette: { primary: "#0F766E", backgroundMode: "light" } },
+    });
+    expect(vars["--ds-color-border"]).toBeUndefined();
+    expect(vars["--ds-color-border-primary"]).toBeUndefined();
+    expect(vars["--ds-color-border-secondary"]).toBeUndefined();
   });
 
   it("selects the authored dark hierarchy in dark mode", () => {
@@ -240,6 +250,7 @@ describe("W4 first-class canvas, reading ink and separator emission", () => {
     expect(vars["--ds-color-text-primary"]).toBe(dark.foreground.primary);
     expect(vars["--ds-color-text-muted"]).toBe(dark.foreground.muted);
     expect(vars["--ds-color-border-primary"]).toBe(dark.border.primary);
+    expect(vars["--ds-color-border"]).toBe(dark.border.primary);
   });
 
   it("emits mode-aware foundations under auto without pinning light ink", () => {
@@ -254,6 +265,9 @@ describe("W4 first-class canvas, reading ink and separator emission", () => {
     );
     expect(vars["--ds-color-border-secondary"]).toBe(
       `light-dark(${light.border.secondary}, ${dark.border.secondary})`
+    );
+    expect(vars["--ds-color-border"]).toBe(
+      `light-dark(${light.border.primary}, ${dark.border.primary})`
     );
     expect(vars["--ds-color-scheme"]).toBe("light dark");
   });

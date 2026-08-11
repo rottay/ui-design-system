@@ -388,6 +388,17 @@ export function appearanceGeneralToVariables(
       p.dark?.border?.primary,
       mode,
     );
+    // `--ds-color-border` is the unqualified name of that same separator, and
+    // the one components actually read. The static contract's `borderColor`
+    // and `borderPrimaryColor` carry one value in every first-party artifact
+    // cell that declares both, so the two share one source here as well.
+    setResolvedColor(
+      vars,
+      '--ds-color-border',
+      p.border?.primary,
+      p.dark?.border?.primary,
+      mode,
+    );
     setResolvedColor(
       vars,
       '--ds-color-border-secondary',
