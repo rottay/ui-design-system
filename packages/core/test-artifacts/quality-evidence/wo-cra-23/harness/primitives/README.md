@@ -18,14 +18,14 @@ is eighth by count.
 
 | # | primitive | engine | rules | decls | prod call sites | verdict |
 |---|---|---|---|---|---|---|
-| 1 | `navigation/Segmented` | modern | 29 | 100 | **2** | **LIVE** |
+| 1 | `navigation/Segmented` | modern | 29 | 100 | **2** | **REPAIRED** `ace62230d` |
 | 2 | `inputs/Button` | modern | 7 | 47 | **127** | **LIVE** |
-| 3 | `display/Badge` | modern | 29 | 110 | **16** | **LIVE** |
-| 4 | `display/Tag` | modern + rustic | 70 | 122 | **4** | **LIVE** |
+| 3 | `display/Badge` | modern | 29 | 110 | **16** | **REPAIRED** `a796001ad` |
+| 4 | `display/Tag` | modern + rustic | 70 | 122 | **3** | **LIVE**, adjudicated (task #26) |
 | 5 | `feedback/Spinner` | modern | 1 | 4 | 12 | LIVE |
 | 6 | `display/Avatar` | modern | 1 | 7 | 4 | LIVE |
-| 7 | `navigation/Link` | modern + rustic | 30 | 51 | 1 | LIVE |
 | — | `feedback/Skeleton`, `display/QRCode` | modern | 1 / 3 | 2 / 8 | 2 / 1 | LIVE, marginal |
+| — | `navigation/Link` | modern + rustic | 30 | 51 | **0** | **LATENT** — see trap 9d |
 | — | `navigation/Menu` | modern | **83** | **300** | **0** | LATENT |
 | — | `display/List` | modern | 72 | 132 | 0 | LATENT |
 | — | `display/Descriptions` | modern | 40 | 129 | 0 | LATENT |
@@ -71,6 +71,22 @@ the population instead of overlapping.
 | structurally present | 35 across 13 families |
 | **reachable today** | **3** — `tag:250`, `tag:254`, `semantic-surface:257` |
 | latent | 32, in families that hardcode their root part |
+
+**The coupling has been measured in the good direction.** Both landed severance
+repairs re-key the skin onto something a caller cannot take, which un-orphans
+the declarations rather than stranding them. Attributed by re-running the
+class-A census against the tree at `ace62230d^` rather than by reading the diff:
+
+```
+before (ace62230d^)   16 families · 252 reads · badge 4 · segmented 0
+after  (HEAD)         15 families · 248 reads · badge 0 · segmented 0
+```
+
+So `a796001ad` closed Badge's 4 class-A reads as a side effect of repairing its
+severance, and neither family carries a class-B row before or after. No
+regression entered with either repair. The hazardous direction — a repair that
+makes a root part *more* replaceable — did not occur, and is the one to check
+next time.
 
 **Class B is not an independent backlog — it is the amplifier on the severance
 class.** A fallback fires only when the root-keyed declaration stops matching,
@@ -253,6 +269,17 @@ The first join matched on the base class only, charging 27 rustic Input rules
 and 60 rustic Button rules to modern defects. Attribute by the explicit
 `--modern` / `--rustic` / `--classic` modifier first, then by the skin
 directory, then agnostic.
+
+**9d — the call-site census matches a TAG NAME, and `Link` is usually `next/link`.**
+`navigation/Link` shipped in this ranking as LIVE on the strength of one call
+site — `app-bithire/.../public-header/index.tsx:61`, `data-part="public-header-brand"`.
+That file imports `Link` from **`next/link`**. The DS `navigation/Link` has
+**zero** source importers anywhere outside its own directory, so its 30 rules
+are latent, not live, and the row was wrong in the first published table.
+`callsites.json` resolves nothing: it records the tag as written. Any row whose
+verdict turns on a single call site must have that site's IMPORT resolved before
+the verdict is quoted. Zero importers is still not proof of dead code — that
+law stands — but it is proof of zero severance.
 
 **9b — "family X is a false positive" is a property of a READ, not of a family.**
 `list-toolbar` was handed to the class-B census as a known false positive of the
