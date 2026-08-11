@@ -100,6 +100,11 @@
   --ds-button-primary-border-hover: var(--ds-color-primary-700);
   --ds-button-primary-border-active: var(--ds-color-primary-800);
   --ds-button-primary-border-color: var(--ds-button-primary-border);
+  /* The shadow family never landed in its declared owner: its only :root
+     declaration was an @media print override, so three theme.css readers with
+     no fallback dropped entirely. Base declares the GENERIC scale; the modern
+     skin declares its own material vocabulary in its own scope. */
+  --ds-button-primary-shadow: var(--ds-shadow-sm);
 
   /* SECONDARY - Secondary actions */
   --ds-button-secondary-bg: var(--ds-color-secondary-500);
@@ -111,6 +116,7 @@
   --ds-button-secondary-border: var(--ds-color-secondary-600);
   --ds-button-secondary-border-hover: var(--ds-color-secondary-700);
   --ds-button-secondary-border-active: var(--ds-color-secondary-800);
+  --ds-button-secondary-shadow: var(--ds-shadow-sm);
 
   /* DEFAULT - Neutral actions */
   --ds-button-default-bg: var(--ds-color-white);
@@ -122,6 +128,7 @@
   --ds-button-default-border: var(--ds-color-neutral-300);
   --ds-button-default-border-hover: var(--ds-color-neutral-400);
   --ds-button-default-border-active: var(--ds-color-neutral-500);
+  --ds-button-default-shadow: var(--ds-shadow-sm);
 
   /* GHOST - Minimal appearance */
   --ds-button-ghost-bg: transparent;

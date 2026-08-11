@@ -495,7 +495,9 @@ html[data-tenant="bithire"] {
     color-mix(
       in srgb,
       var(--ds-surface-card) 96%,
-      var(--ds-surface-tone, var(--rt-surface-tone, var(--ds-color-primary))) 4%
+      /* Both `--ds-surface-tone` and `--rt-surface-tone` are declared nowhere,
+         so this chain has always resolved to its last arm. Value-preserving. */
+      var(--ds-color-primary) 4%
     ),
     color-mix(in srgb, var(--ds-surface-panel) 42%, var(--ds-surface-card))
   );

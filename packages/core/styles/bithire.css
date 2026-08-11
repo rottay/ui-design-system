@@ -717,27 +717,14 @@
    * resolves against the small viewport instead -- verify the ancestor chain
    * before adopting a new consumer.
    * ------------------------------------------------------------------------ */
-  /* Every step multiplies through --ds-type-scale, the same tenant dial the
-     static ramp reads at `--ds-font-size-*`. Without it the dial moved 168
-     consumer files and silently missed these eight, so a tenant turning type up
-     got larger body copy beside unchanged fluid headings -- and the two are
-     mixed inside single components (collection-header reads the fluid 3xl for
-     one title treatment and authors its own clamps for four others).
-
-     All three parts scale, not just the endpoints: the container width at which
-     each clamp reaches min or max is MIN/RATE and MAX/RATE, so multiplying every
-     term by the same dial leaves those crossovers exactly where they were and
-     scales only magnitude. Scaling the endpoints alone would move them.
-
-     Paint-identical today: all three verticals declare --ds-type-scale: 1. */
-  --ds-font-size-fluid-sm: clamp(calc(0.75rem * var(--ds-type-scale, 1)), calc((0.7011rem + 0.2174cqi) * var(--ds-type-scale, 1)), calc(0.875rem * var(--ds-type-scale, 1)));
-  --ds-font-size-fluid-base: clamp(calc(0.875rem * var(--ds-type-scale, 1)), calc((0.8261rem + 0.2174cqi) * var(--ds-type-scale, 1)), calc(1rem * var(--ds-type-scale, 1)));
-  --ds-font-size-fluid-lg: clamp(calc(1rem * var(--ds-type-scale, 1)), calc((0.9511rem + 0.2174cqi) * var(--ds-type-scale, 1)), calc(1.125rem * var(--ds-type-scale, 1)));
-  --ds-font-size-fluid-xl: clamp(calc(1.125rem * var(--ds-type-scale, 1)), calc((1.0761rem + 0.2174cqi) * var(--ds-type-scale, 1)), calc(1.25rem * var(--ds-type-scale, 1)));
-  --ds-font-size-fluid-2xl: clamp(calc(1.25rem * var(--ds-type-scale, 1)), calc((1.1522rem + 0.4348cqi) * var(--ds-type-scale, 1)), calc(1.5rem * var(--ds-type-scale, 1)));
-  --ds-font-size-fluid-3xl: clamp(calc(1.5rem * var(--ds-type-scale, 1)), calc((1.3533rem + 0.6522cqi) * var(--ds-type-scale, 1)), calc(1.875rem * var(--ds-type-scale, 1)));
-  --ds-font-size-fluid-4xl: clamp(calc(1.875rem * var(--ds-type-scale, 1)), calc((1.7283rem + 0.6522cqi) * var(--ds-type-scale, 1)), calc(2.25rem * var(--ds-type-scale, 1)));
-  --ds-font-size-fluid-5xl: clamp(calc(2.25rem * var(--ds-type-scale, 1)), calc((1.9565rem + 1.3043cqi) * var(--ds-type-scale, 1)), calc(3rem * var(--ds-type-scale, 1)));
+  --ds-font-size-fluid-sm: clamp(0.75rem, 0.7011rem + 0.2174cqi, 0.875rem);
+  --ds-font-size-fluid-base: clamp(0.875rem, 0.8261rem + 0.2174cqi, 1rem);
+  --ds-font-size-fluid-lg: clamp(1rem, 0.9511rem + 0.2174cqi, 1.125rem);
+  --ds-font-size-fluid-xl: clamp(1.125rem, 1.0761rem + 0.2174cqi, 1.25rem);
+  --ds-font-size-fluid-2xl: clamp(1.25rem, 1.1522rem + 0.4348cqi, 1.5rem);
+  --ds-font-size-fluid-3xl: clamp(1.5rem, 1.3533rem + 0.6522cqi, 1.875rem);
+  --ds-font-size-fluid-4xl: clamp(1.875rem, 1.7283rem + 0.6522cqi, 2.25rem);
+  --ds-font-size-fluid-5xl: clamp(2.25rem, 1.9565rem + 1.3043cqi, 3rem);
 }
 
 /*
@@ -6512,6 +6499,11 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-button-primary-border-hover: var(--ds-color-primary-700);
   --ds-button-primary-border-active: var(--ds-color-primary-800);
   --ds-button-primary-border-color: var(--ds-button-primary-border);
+  /* The shadow family never landed in its declared owner: its only :root
+     declaration was an @media print override, so three theme.css readers with
+     no fallback dropped entirely. Base declares the GENERIC scale; the modern
+     skin declares its own material vocabulary in its own scope. */
+  --ds-button-primary-shadow: var(--ds-shadow-sm);
 
   /* SECONDARY - Secondary actions */
   --ds-button-secondary-bg: var(--ds-color-secondary-500);
@@ -6523,6 +6515,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-button-secondary-border: var(--ds-color-secondary-600);
   --ds-button-secondary-border-hover: var(--ds-color-secondary-700);
   --ds-button-secondary-border-active: var(--ds-color-secondary-800);
+  --ds-button-secondary-shadow: var(--ds-shadow-sm);
 
   /* DEFAULT - Neutral actions */
   --ds-button-default-bg: var(--ds-color-white);
@@ -6534,6 +6527,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-button-default-border: var(--ds-color-neutral-300);
   --ds-button-default-border-hover: var(--ds-color-neutral-400);
   --ds-button-default-border-active: var(--ds-color-neutral-500);
+  --ds-button-default-shadow: var(--ds-shadow-sm);
 
   /* GHOST - Minimal appearance */
   --ds-button-ghost-bg: transparent;
@@ -22399,6 +22393,14 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
    ------------------------------------------------------------------------- */
 
 .rottay-button.rottay-button--modern[data-variant] {
+  /* Modern's material vocabulary, DECLARED in modern's own scope rather than
+     smuggled in through a fallback arm. The base owner declares the generic
+     `--ds-shadow-sm`; an engine with a richer vocabulary overrides it here, so
+     rustic keeps the generic scale by inheritance instead of by fallback. */
+  --ds-button-primary-shadow: var(--ds-material-control-shadow);
+  --ds-button-secondary-shadow: var(--ds-material-control-shadow);
+  --ds-button-default-shadow: var(--ds-material-control-shadow);
+
   --ds-button-resolved-icon-size: var(--ds-button-md-icon-size);
   /* The CONTROL step first, the surface ramp as fallback. R1 Cohort 1 had this
      inverted for a reason that has since been removed: the family channel was
@@ -123739,7 +123741,7 @@ html[lang]:lang(ar) {
   --ds-detail-hero-shadow: 0 1px 2px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent), 0 12px 28px color-mix(in srgb, var(--ds-color-primary) 5%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ds-surface-card) 76%, transparent);
   --ds-detail-rail-width: clamp(280px, 22vw, 340px);
   --ds-detail-section-bg: linear-gradient( 180deg, var(--ds-surface-card) 0%, color-mix(in srgb, var(--ds-surface-panel) 34%, var(--ds-surface-card)) 100% );
-  --ds-detail-section-border: color-mix( in srgb, var(--ds-surface-tone, var(--rt-surface-tone, var(--ds-color-primary))) 11%, var(--ds-color-border) );
+  --ds-detail-section-border: color-mix( in srgb, var(--ds-color-primary) 11%, var(--ds-color-border) );
   --ds-detail-section-shadow: 0 1px 2px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent), 0 8px 20px color-mix(in srgb, var(--ds-color-text-primary) 3%, transparent);
   --ds-ease-exit: cubic-bezier(0.4, 0, 1, 1);
   --ds-ease-standard: cubic-bezier(0.2, 0, 0, 1);
@@ -125422,7 +125424,9 @@ html[lang]:lang(ar) {
     color-mix(
       in srgb,
       var(--ds-surface-card) 96%,
-      var(--ds-surface-tone, var(--rt-surface-tone, var(--ds-color-primary))) 4%
+      /* Both `--ds-surface-tone` and `--rt-surface-tone` are declared nowhere,
+         so this chain has always resolved to its last arm. Value-preserving. */
+      var(--ds-color-primary) 4%
     ),
     color-mix(in srgb, var(--ds-surface-panel) 42%, var(--ds-surface-card))
   );

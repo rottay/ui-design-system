@@ -1708,7 +1708,7 @@ export const bithireBrandTheme: BrandTheme = {
       sectionBg:
         "linear-gradient( 180deg, var(--ds-surface-card) 0%, color-mix(in srgb, var(--ds-surface-panel) 34%, var(--ds-surface-card)) 100% )",
       sectionBorder:
-        "color-mix( in srgb, var(--ds-surface-tone, var(--rt-surface-tone, var(--ds-color-primary))) 11%, var(--ds-color-border) )",
+        "color-mix( in srgb, var(--ds-color-primary) 11%, var(--ds-color-border) )",
       sectionShadow:
         "0 1px 2px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent), 0 8px 20px color-mix(in srgb, var(--ds-color-text-primary) 3%, transparent)",
     },

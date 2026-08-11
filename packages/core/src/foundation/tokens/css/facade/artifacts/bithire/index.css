@@ -338,7 +338,7 @@
   --ds-detail-hero-shadow: 0 1px 2px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent), 0 12px 28px color-mix(in srgb, var(--ds-color-primary) 5%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ds-surface-card) 76%, transparent);
   --ds-detail-rail-width: clamp(280px, 22vw, 340px);
   --ds-detail-section-bg: linear-gradient( 180deg, var(--ds-surface-card) 0%, color-mix(in srgb, var(--ds-surface-panel) 34%, var(--ds-surface-card)) 100% );
-  --ds-detail-section-border: color-mix( in srgb, var(--ds-surface-tone, var(--rt-surface-tone, var(--ds-color-primary))) 11%, var(--ds-color-border) );
+  --ds-detail-section-border: color-mix( in srgb, var(--ds-color-primary) 11%, var(--ds-color-border) );
   --ds-detail-section-shadow: 0 1px 2px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent), 0 8px 20px color-mix(in srgb, var(--ds-color-text-primary) 3%, transparent);
   --ds-ease-exit: cubic-bezier(0.4, 0, 1, 1);
   --ds-ease-standard: cubic-bezier(0.2, 0, 0, 1);
@@ -2021,7 +2021,9 @@
     color-mix(
       in srgb,
       var(--ds-surface-card) 96%,
-      var(--ds-surface-tone, var(--rt-surface-tone, var(--ds-color-primary))) 4%
+      /* Both `--ds-surface-tone` and `--rt-surface-tone` are declared nowhere,
+         so this chain has always resolved to its last arm. Value-preserving. */
+      var(--ds-color-primary) 4%
     ),
     color-mix(in srgb, var(--ds-surface-panel) 42%, var(--ds-surface-card))
   );

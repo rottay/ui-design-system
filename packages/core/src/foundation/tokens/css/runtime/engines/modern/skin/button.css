@@ -49,6 +49,14 @@
    ------------------------------------------------------------------------- */
 
 .rottay-button.rottay-button--modern[data-variant] {
+  /* Modern's material vocabulary, DECLARED in modern's own scope rather than
+     smuggled in through a fallback arm. The base owner declares the generic
+     `--ds-shadow-sm`; an engine with a richer vocabulary overrides it here, so
+     rustic keeps the generic scale by inheritance instead of by fallback. */
+  --ds-button-primary-shadow: var(--ds-material-control-shadow);
+  --ds-button-secondary-shadow: var(--ds-material-control-shadow);
+  --ds-button-default-shadow: var(--ds-material-control-shadow);
+
   --ds-button-resolved-icon-size: var(--ds-button-md-icon-size);
   /* The CONTROL step first, the surface ramp as fallback. R1 Cohort 1 had this
      inverted for a reason that has since been removed: the family channel was
