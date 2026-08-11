@@ -1,19 +1,29 @@
 "use client";
 
 /**
- * @fileoverview ActiveFiltersBar — structures-tier horizontal active filter chip
- * row with clear-all and add-filter affordances.
+ * @fileoverview ActiveFiltersBar — structures-tier horizontal active filter
+ * chip row with clear-all and add-filter affordances.
  *
  * @description
- * Engine-free structures family that renders a row of active filter chips.
- * COMPOSITION LAW (S16): each chip is the certified Tag primitive in its
- * `closable` form (the hand-rolled Box chip + Box-as-button remove are
- * retired) — the close button's accessible name is a parametric i18n
- * message (`Remove filter {field}`), never a translated fragment
- * concatenated with the field name. The clear-all and add-filter
- * affordances are the Button primitive with governed icon roles
- * (`action-close` / `action-add`). The count eyebrow is a parametric
- * `{count} active` message with tabular figures (skin-owned).
+ * Structures family that renders a row of active filter chips.
+ *
+ * ONE SILHOUETTE PER ROLE. The rail carries three different jobs and each one
+ * now has its own form, because a row in which the heading, the removable
+ * objects and the expand affordance are all the same rounded micro-pill is a
+ * row nobody can read:
+ *   - the count is an EYEBROW — typography and a rule, never a pill (the skin
+ *     retires its capsule in the modern engine);
+ *   - each filter is an OBJECT — the certified Tag primitive in its `closable`
+ *     form, designed, dismissible and keyboard-reachable;
+ *   - "+N more" / "Show less" is an ACTION — the Button primitive in its text
+ *     variant with `aria-expanded`, not a third pill pretending to be an
+ *     object that can be removed.
+ *
+ * COMPOSITION LAW (S16): the close button's accessible name is a parametric
+ * i18n message (`Remove filter {field}`), never a translated fragment
+ * concatenated with the field name. Every glyph is a governed semantic role
+ * at a named size token (`action-close` / `action-add` / `status-draft` /
+ * `status-error`) — never a literal pixel size.
  *
  * FILTER LIFECYCLE (C-05): `ActiveFilter.state` renders the applied / draft /
  * invalid grammar — the governed `status-draft` / `status-error` glyph in
@@ -22,51 +32,52 @@
  * never depends on hue and survives forced colors. Absent means applied,
  * which keeps every existing caller byte-identical.
  *
+ * KEYBOARD (APG toolbar, `action-dock` freeform precedent): the chip group is
+ * a `role='toolbar'`; direction-aware ArrowLeft/ArrowRight plus Home/End move
+ * across the chips' dismiss controls and the disclosure toggle, so a rail
+ * carrying twenty filters is traversable without twenty tab stops.
+ *
  * Returns null when no filters are active, so consumers can mount it
  * unconditionally without dealing with empty-state logic; the rail's
  * entrance transition is skin-owned (coordinated, silenced under
  * reduced-motion).
  *
  * Long filter sets wrap onto multiple rows by default; the optional
- * `maxVisible` prop collapses the overflow behind a governed "+N more"
- * disclosure chip (a clickable Tag) that expands the rail in place — no
- * chip is ever hidden behind an unnamed menu. Long values ellipsize inside
- * the chip with native `title` disclosure (skin-owned truncation).
+ * `maxVisible` prop collapses the overflow behind the governed "+N more"
+ * disclosure that expands the rail in place — no chip is ever hidden behind
+ * an unnamed menu. Long values ellipsize inside the chip with native `title`
+ * disclosure (skin-owned truncation).
  *
- * The family stays domain-agnostic. Each chip's label and displayValue
- * are consumer-supplied, so the rail knows nothing about tenants, users,
- * or any specific entity.
+ * The family stays domain-agnostic. Each chip's label and displayValue are
+ * consumer-supplied, so the rail knows nothing about tenants, users, or any
+ * specific entity.
  */
 
 import { useState } from "react";
+import type { KeyboardEvent as ReactKeyboardEvent, ReactElement } from "react";
 
 import { useOptionalTranslation } from "@/infrastructure/runtime/i18n";
-import { Box } from "../../../primitives/layout/Box";
-import { Button } from "../../../primitives/inputs/Button";
-import { Flex } from "../../../primitives/layout/Flex";
-import { Tag } from "../../../primitives/display/Tag";
+import { Box } from "../../../../../primitives/layout/Box";
+import { Button } from "../../../../../primitives/inputs/Button";
+import { Flex } from "../../../../../primitives/layout/Flex";
+import { Tag } from "../../../../../primitives/display/Tag";
 import { ActionAddIcon } from "@/graphics/icons/presentation/semantic/generated/roles/action-add";
 import { ActionCloseIcon } from "@/graphics/icons/presentation/semantic/generated/roles/action-close";
 import { StatusDraftIcon } from "@/graphics/icons/presentation/semantic/generated/roles/status-draft";
 import { StatusErrorIcon } from "@/graphics/icons/presentation/semantic/generated/roles/status-error";
-import type { ActiveFilter } from "@/foundation/contracts/runtime/components/patterns/data";
+import type { ActiveFiltersBarProps } from "../../contracts";
 
-export type { ActiveFilter } from "@/foundation/contracts/runtime/components/patterns/data";
+/** Controls participating in the chip group's arrow-key model. */
+const FOCUSABLE_SELECTOR =
+  'button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])';
 
-export interface ActiveFiltersBarProps {
-  activeFilters: ActiveFilter[];
-  onRemoveFilter: (filterKey: string) => void;
-  onClearAll: () => void;
-  onAddFilter?: () => void;
-  /** When embedded, the rail becomes visually transparent to a parent shell. */
-  surfaceVariant?: "default" | "embedded";
-  /**
-   * Governed overflow for long filter sets: at most `maxVisible` chips render
-   * inline and the remainder collapses behind a "+N more" disclosure chip
-   * (expandable in place, never a hidden action — every chip keeps its own
-   * remove affordance once expanded). Omit to always render every chip.
-   */
-  maxVisible?: number;
+const ARROW_KEYS = new Set(["ArrowRight", "ArrowLeft", "Home", "End"]);
+
+/** Resolve writing direction from semantic markup before computed CSS (Tabs precedent). */
+function elementDirection(element: HTMLElement): "ltr" | "rtl" {
+  const directionOwner = element.closest<HTMLElement>("[dir]");
+  if (directionOwner?.dir === "rtl") return "rtl";
+  return getComputedStyle(element).direction === "rtl" ? "rtl" : "ltr";
 }
 
 export function ActiveFiltersBar({
@@ -76,7 +87,8 @@ export function ActiveFiltersBar({
   onAddFilter,
   surfaceVariant = "default",
   maxVisible,
-}: ActiveFiltersBarProps) {
+  chipsLabel,
+}: ActiveFiltersBarProps): ReactElement | null {
   const i18n = useOptionalTranslation("components");
   // Optional channel with an English floor (parametric): a missing catalog
   // entry never echoes a raw key and fragments are never concatenated.
@@ -88,6 +100,32 @@ export function ActiveFiltersBar({
   // "+N more" disclosure state. Local and uncontrolled: the overflow law is a
   // rendering concern, not filter state, so consumers stay unaware of it.
   const [expanded, setExpanded] = useState(false);
+
+  const handleChipsKeyDown = (event: ReactKeyboardEvent<HTMLElement>): void => {
+    if (!ARROW_KEYS.has(event.key)) return;
+    const container = event.currentTarget;
+    const items = Array.from(
+      container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)
+    );
+    if (items.length === 0) return;
+    const currentIndex = items.indexOf(document.activeElement as HTMLElement);
+    if (currentIndex === -1) return;
+
+    const isRtl = elementDirection(container) === "rtl";
+    const forwardKey = isRtl ? "ArrowLeft" : "ArrowRight";
+    const backwardKey = isRtl ? "ArrowRight" : "ArrowLeft";
+    let nextIndex: number | undefined;
+
+    if (event.key === forwardKey) nextIndex = (currentIndex + 1) % items.length;
+    else if (event.key === backwardKey)
+      nextIndex = (currentIndex - 1 + items.length) % items.length;
+    else if (event.key === "Home") nextIndex = 0;
+    else if (event.key === "End") nextIndex = items.length - 1;
+
+    if (nextIndex === undefined || nextIndex === currentIndex) return;
+    event.preventDefault();
+    items[nextIndex]?.focus();
+  };
 
   if (!activeFilters.length) return null;
 
@@ -103,6 +141,8 @@ export function ActiveFiltersBar({
       : activeFilters;
   const canCollapse =
     collapsible && expanded && activeFilters.length > (maxVisible as number);
+  const resolvedChipsLabel =
+    chipsLabel ?? tOr("activeFiltersBar.chipsLabel", "Applied filters");
 
   return (
     <Box
@@ -112,9 +152,17 @@ export function ActiveFiltersBar({
       role="region"
       aria-label={tOr("activeFiltersBar.regionLabel", "Active filters")}
     >
-      <Flex align="center" gap={12} justify="between" wrap="wrap">
+      <Flex data-part="rail" align="center" gap={12} justify="between" wrap="wrap">
         <Box data-part="chips-region">
-          <Flex align="center" gap={8} wrap="wrap">
+          <Flex
+            align="center"
+            gap={8}
+            wrap="wrap"
+            data-part="chips"
+            role="toolbar"
+            aria-label={resolvedChipsLabel}
+            onKeyDown={handleChipsKeyDown}
+          >
             <Box as="span" data-part="pill">
               {tOr("activeFiltersBar.active_count", "{count} active", {
                 count: activeFilters.length,
@@ -154,9 +202,9 @@ export function ActiveFiltersBar({
                 )}
                 icon={
                   state === "draft" ? (
-                    <StatusDraftIcon decorative size={11} />
+                    <StatusDraftIcon decorative size="xs" />
                   ) : state === "invalid" ? (
-                    <StatusErrorIcon decorative size={11} />
+                    <StatusErrorIcon decorative size="xs" />
                   ) : undefined
                 }
               >
@@ -185,30 +233,33 @@ export function ActiveFiltersBar({
               );
             })}
             {hiddenCount > 0 && (
-              /* Governed "more": a clickable Tag (role=button via the
-                 primitive's clickable contract) that expands the rail in
-                 place — chips are never dropped behind a menu without a
-                 visible, keyboard-operable disclosure. */
-              <Tag
-                tone="neutral"
-                clickable
-                data-part="more-chip"
+              /* Governed "more": an ACTION, so it is the Button primitive in
+                 its text variant with `aria-expanded` — not a third pill in a
+                 row that already carries an eyebrow and removable objects.
+                 Chips are never dropped behind a menu without a visible,
+                 keyboard-operable disclosure. */
+              <Button
+                variant="text"
+                size="sm"
+                data-part="more-toggle"
+                aria-expanded={false}
                 onClick={() => setExpanded(true)}
               >
                 {tOr("activeFiltersBar.more_count", "+{count} more", {
                   count: hiddenCount,
                 })}
-              </Tag>
+              </Button>
             )}
             {canCollapse && (
-              <Tag
-                tone="neutral"
-                clickable
-                data-part="less-chip"
+              <Button
+                variant="text"
+                size="sm"
+                data-part="less-toggle"
+                aria-expanded
                 onClick={() => setExpanded(false)}
               >
                 {tOr("activeFiltersBar.show_less", "Show less")}
-              </Tag>
+              </Button>
             )}
           </Flex>
         </Box>
@@ -227,7 +278,7 @@ export function ActiveFiltersBar({
             variant="ghost"
             size="sm"
             data-part="clear-all"
-            icon={<ActionCloseIcon decorative size={12} />}
+            icon={<ActionCloseIcon decorative size="xs" />}
             onClick={onClearAll}
           >
             {tOr("activeFiltersBar.clearAll", "Clear all")}
@@ -238,7 +289,7 @@ export function ActiveFiltersBar({
               variant="outline"
               size="sm"
               data-part="add-filter"
-              icon={<ActionAddIcon decorative size={12} />}
+              icon={<ActionAddIcon decorative size="xs" />}
               onClick={onAddFilter}
             >
               {tOr("activeFiltersBar.addFilter", "Add filter")}
@@ -250,11 +301,6 @@ export function ActiveFiltersBar({
   );
 }
 
-// Compatibility aliases for pre-Checkpoint-D names. Deprecated —
-// migrate to the canonical new names above. Scheduled for removal
-// in Checkpoint F if no consumers remain.
-export { ActiveFiltersBar as WorkspaceFilterRail };
-export type {
-  ActiveFiltersBarProps as WorkspaceFilterRailProps,
-  ActiveFilter as WorkspaceActiveFilter,
-};
+ActiveFiltersBar.displayName = "ActiveFiltersBar";
+
+export default ActiveFiltersBar;

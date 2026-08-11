@@ -37,11 +37,48 @@
  * rule, both already on family channels with semantic fallbacks
  * (`--ds-active-filters-bar-background` / `-border`); it does not need, and
  * must not acquire, an elevation read.
+ *
+ * ONE SILHOUETTE PER ROLE. The rail carried three jobs in one shape: the
+ * count shipped as a full-radius, primary-tinted, primary-bordered capsule on
+ * the same baseline and scale as the dismissible chips it introduces, and the
+ * overflow affordance was a third pill. Nothing said which pills are objects,
+ * which is a heading and which is an action. The action left the anatomy (it
+ * is the Button primitive with `aria-expanded` now); the heading loses its
+ * capsule here and becomes a flush eyebrow closed by a hairline leader, with
+ * typography — tracking, case, tabular figures — carrying the role instead of
+ * a box. The objects keep the Tag primitive's chrome untouched and gain only
+ * the hit-target floor a dismissible object owes.
+ *
+ * REGION VOCABULARY: ground, rule, seam and rhythm read `--ds-toolbar-*` and
+ * `--ds-list-shell-section-gap` UNDER the family's own channels, so a tenant
+ * can still address the rail alone; when it does not, the rail follows the
+ * collection band its sibling `table-toolbar` also reads.
  */
 
 /* ---- root: quiet hairline strip (padding drained from the engine's inline
         styles, keyed on the embedded variant; logical inline axis) ---- */
 .ds-structure.ds-active-filters-bar[data-part="root"] {
+  /* Seam and stacked-row rhythm, shared with the sibling toolbar so both
+     halves of the collection band breathe on one scale. */
+  --_ds-active-filters-bar-section-gap: var(
+    --ds-toolbar-gap,
+    var(--ds-spacing-3, 0.75rem)
+  );
+  --_ds-active-filters-bar-row-gap: var(
+    --ds-list-shell-section-gap,
+    var(--ds-spacing-2, 0.5rem)
+  );
+  --_ds-active-filters-bar-leader: var(
+    --ds-toolbar-divider,
+    var(--ds-color-border-subtle, var(--ds-color-border))
+  );
+  --_ds-active-filters-bar-chip-target: calc(
+    var(--ds-control-size-sm, 2rem) * var(--ds-density-effective-scale, 1)
+  );
+
+  /* The rail answers its own width: it mounts inside shells of very
+     different widths, so a viewport breakpoint would ask the wrong question. */
+  container: ds-active-filters-bar / inline-size;
   padding-block: var(--ds-active-filters-bar-padding-block, 10px 12px);
   padding-inline: var(--ds-active-filters-bar-padding-inline, 16px);
   animation: ds-active-filters-bar-enter
@@ -51,21 +88,28 @@
 .ds-structure.ds-active-filters-bar[data-part="root"][data-embedded="false"] {
   border-bottom: var(
     --ds-active-filters-bar-border,
-    1px solid color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent)
+    1px solid
+      var(
+        --ds-toolbar-border-bottom,
+        color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent)
+      )
   );
   background: var(
     --ds-active-filters-bar-background,
-    linear-gradient(
-      180deg,
-      color-mix(
-        in srgb,
-        var(--ds-surface-card) 94%,
-        var(--ds-color-bg-primary) 6%
-      ),
-      color-mix(
-        in srgb,
-        var(--ds-surface-card) 90%,
-        var(--ds-color-bg-primary) 10%
+    var(
+      --ds-toolbar-bg,
+      linear-gradient(
+        180deg,
+        color-mix(
+          in srgb,
+          var(--ds-surface-card) 94%,
+          var(--ds-color-bg-primary) 6%
+        ),
+        color-mix(
+          in srgb,
+          var(--ds-surface-card) 90%,
+          var(--ds-color-bg-primary) 10%
+        )
       )
     )
   );
@@ -82,37 +126,48 @@
 }
 .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="actions"] {
   flex: 0 0 auto;
+  padding-inline-start: var(--_ds-active-filters-bar-section-gap);
 }
 
-/* ---- count pill — the uppercase eyebrow (pattern chrome: a status counter,
-        not a filter chip, so it is NOT the Tag primitive; the count scans
-        tabular) ---- */
+/* ---- count eyebrow — the label that introduces the row. NOT a pill: it sat
+        at the same height, radius and tint as the dismissible chips beside
+        it and read as a filter you could not remove. Typography plus a
+        hairline leader carry the role; the capsule, the tint and the border
+        are gone, and with them four reads of channels nothing declares. ---- */
 .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="pill"] {
   display: inline-flex;
   align-items: center;
   min-block-size: var(--ds-active-filters-bar-count-block-size, 24px);
   padding-block: 0;
-  padding-inline: var(--ds-active-filters-bar-count-padding-inline, 9px);
-  border-radius: var(
-    --ds-active-filters-bar-count-radius,
-    var(--ds-radius-full, 9999px)
-  );
+  padding-inline: 0 var(--_ds-active-filters-bar-section-gap);
+  border-inline-end: 1px solid var(--_ds-active-filters-bar-leader);
   font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
   font-weight: 700;
   letter-spacing: 0.11em;
   text-transform: uppercase;
   font-variant-numeric: tabular-nums;
-  color: var(--ds-active-filters-bar-count-color, var(--ds-color-primary));
-  background: var(
-    --ds-active-filters-bar-count-background,
-    color-mix(in srgb, var(--ds-color-primary) 8%, transparent)
-  );
+  color: var(--ds-active-filters-bar-count-color, var(--ds-color-text-muted));
 }
-.ds-structure.ds-active-filters-bar[data-part="root"] [data-part="pill"] {
-  border: var(
-    --ds-active-filters-bar-count-border,
-    1px solid color-mix(in srgb, var(--ds-color-primary) 22%, transparent)
-  );
+
+/* ---- chips lane: a dismissible object owes a hit target that tracks the
+        tenant density plane, and its own row rhythm when the lane wraps ---- */
+.ds-structure.ds-active-filters-bar[data-part="root"] [data-part="chips"] {
+  row-gap: var(--_ds-active-filters-bar-row-gap);
+}
+.ds-structure.ds-active-filters-bar[data-part="root"] [data-part="chip"] {
+  min-block-size: var(--_ds-active-filters-bar-chip-target);
+}
+
+/* ---- the overflow affordance is an ACTION: the Button primitive owns its
+        chrome and its focus ring; the rail states only the voice, so it
+        never reads as one more removable object ---- */
+.ds-structure.ds-active-filters-bar[data-part="root"] [data-part="more-toggle"],
+.ds-structure.ds-active-filters-bar[data-part="root"] [data-part="less-toggle"] {
+  font-size: var(--ds-type-supporting-font-size, 0.8125rem);
+  text-decoration-line: underline;
+  text-decoration-thickness: from-font;
+  text-underline-offset: 0.25em;
+  text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
 }
 
 /* ---- chip content typography INSIDE the composed Tag (the primitive owns
@@ -200,6 +255,53 @@
   color: var(--ds-color-error);
 }
 
+/* ---- posture: tablet. The action pair stops competing with the chips for
+        one line and takes the rail's second row. The documented rail contract
+        holds in every posture: chips flow from the start edge, the clear/add
+        affordances stay at the end. ---- */
+@container ds-active-filters-bar (max-width: 48rem) {
+  .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="rail"] {
+    row-gap: var(--_ds-active-filters-bar-row-gap);
+  }
+  .ds-structure.ds-active-filters-bar[data-part="root"]
+    [data-part="chips-region"] {
+    flex: 1 1 100%;
+  }
+  .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="actions"] {
+    flex: 1 1 100%;
+    padding-inline-start: 0;
+  }
+}
+
+/* ---- posture: phone. Simplified, not compressed: the eyebrow stops being an
+        inline leader and becomes the line that titles the rail, the objects
+        take the coarse-pointer target, and the two affordances become an
+        equal-width decision pair — not a right-edge afterthought and not a
+        horizontal scroller. ---- */
+@container ds-active-filters-bar (max-width: 30rem) {
+  .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="pill"] {
+    flex: 0 0 100%;
+    padding-inline-end: 0;
+    border-inline-end: 0;
+  }
+  .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="chip"] {
+    min-block-size: calc(
+      var(--ds-control-size-md, 2.5rem) * var(--ds-density-effective-scale, 1)
+    );
+  }
+  .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="actions"] {
+    flex-wrap: nowrap;
+  }
+  .ds-structure.ds-active-filters-bar[data-part="root"]
+    [data-part="actions"]
+    > [data-part="clear-all"],
+  .ds-structure.ds-active-filters-bar[data-part="root"]
+    [data-part="actions"]
+    > [data-part="add-filter"] {
+    flex: 1 1 0;
+  }
+}
+
 /* ---- entrance: one coordinated fade-rise, silenced under reduced-motion ---- */
 @keyframes ds-active-filters-bar-enter {
   from {
@@ -231,9 +333,12 @@
     background: Canvas;
   }
   .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="pill"] {
-    border-color: ButtonText;
-    background: Canvas;
+    border-inline-end-color: ButtonText;
     color: CanvasText;
+  }
+  .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="more-toggle"],
+  .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="less-toggle"] {
+    text-decoration-color: CanvasText;
   }
   .ds-structure.ds-active-filters-bar[data-part="root"]
     [data-part="chip"][data-state="draft"]
