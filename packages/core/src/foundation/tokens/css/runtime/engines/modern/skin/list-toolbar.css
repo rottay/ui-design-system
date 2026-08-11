@@ -202,7 +202,7 @@
 /* Shared controls --------------------------------------------------------- */
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__icon-button.rottay-button[data-part='trigger'] {
+  .ds-list-toolbar__icon-button.rottay-button[data-variant] {
   flex: 0 0 auto;
   min-inline-size: var(--ds-button-sm-height, 2rem);
   min-block-size: var(--ds-button-sm-height, 2rem);
@@ -233,7 +233,7 @@
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__icon-button.rottay-button[data-part='trigger']:hover {
+    .ds-list-toolbar__icon-button.rottay-button[data-variant]:hover {
     background: var(
       --ds-filter-pill-hover-bg,
       var(
@@ -253,7 +253,7 @@
    aria-expanded onto the IconButton, and the trigger reads as 'pressed' for
    as long as its panel lives. */
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__icon-button.rottay-button[data-part='trigger'][aria-expanded='true'] {
+  .ds-list-toolbar__icon-button.rottay-button[data-variant][aria-expanded='true'] {
   background: var(
     --ds-filter-pill-hover-bg,
     var(
@@ -278,7 +278,7 @@
     .ds-list-toolbar__clear-all,
     .ds-list-toolbar__primary-action,
     .ds-list-toolbar__primary-action-mobile
-  ).rottay-button[data-part='trigger']:focus-visible {
+  ).rottay-button[data-variant]:focus-visible {
   outline: none;
   box-shadow: var(
     --ds-toolbar-control-focus-ring,
@@ -299,7 +299,7 @@
     .ds-list-toolbar__clear-all,
     .ds-list-toolbar__primary-action,
     .ds-list-toolbar__primary-action-mobile
-  ).rottay-button[data-part='trigger']:active:not(:disabled) {
+  ).rottay-button[data-variant]:active:not(:disabled) {
   transform: scale(var(--ds-toolbar-control-pressed-scale, 0.975));
 }
 
@@ -396,7 +396,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger.rottay-button[data-part='trigger'] {
+  .ds-list-toolbar__filter-trigger.rottay-button[data-variant] {
   flex: 0 0 auto;
   white-space: nowrap;
   border-radius: var(
@@ -432,7 +432,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger.rottay-button[data-part='trigger'][data-active='true'] {
+  .ds-list-toolbar__filter-trigger.rottay-button[data-variant][data-active='true'] {
   border: 1px solid var(--ds-filter-pill-active-border, var(--ds-color-primary));
   background: var(
     --ds-filter-pill-active-bg,
@@ -450,19 +450,19 @@
    dash; an invalid value needs repair, so its frame tightens to a dotted rule
    and the ink shifts to the semantic error role. */
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger.rottay-button[data-part='trigger'][data-state='draft'] {
+  .ds-list-toolbar__filter-trigger.rottay-button[data-variant][data-state='draft'] {
   border-style: dashed;
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger.rottay-button[data-part='trigger'][data-state='invalid'] {
+  .ds-list-toolbar__filter-trigger.rottay-button[data-variant][data-state='invalid'] {
   border-style: dotted;
   border-color: var(--ds-color-error);
   color: var(--ds-color-error);
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger.rottay-button[data-part='trigger'][data-open='true'] {
+  .ds-list-toolbar__filter-trigger.rottay-button[data-variant][data-open='true'] {
   border-color: var(
     --ds-filter-pill-active-border,
     var(--ds-material-control-border-hover, var(--ds-color-primary))
@@ -475,7 +475,7 @@
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-trigger.rottay-button[data-part='trigger']:hover:not(
+    .ds-list-toolbar__filter-trigger.rottay-button[data-variant]:hover:not(
     [data-active='true']
   ) {
     border-color: var(
@@ -494,7 +494,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger.rottay-button[data-part='trigger']:focus-visible {
+  .ds-list-toolbar__filter-trigger.rottay-button[data-variant]:focus-visible {
   box-shadow: var(
     --ds-filter-pill-focus-ring,
     0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 22%, transparent)
@@ -523,7 +523,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-dropdown-item.rottay-button[data-part='trigger'] {
+  .ds-list-toolbar__filter-dropdown-item.rottay-button[data-variant] {
   justify-content: flex-start;
   text-align: start;
   border: none;
@@ -538,7 +538,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-dropdown-item.rottay-button[data-part='trigger'][data-selected='true'] {
+  .ds-list-toolbar__filter-dropdown-item.rottay-button[data-variant][data-selected='true'] {
   background: var(
     --ds-filter-pill-active-bg,
     color-mix(in srgb, var(--ds-color-primary) 8%, transparent)
@@ -555,7 +555,7 @@
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-dropdown-item.rottay-button[data-part='trigger']:hover:not(
+    .ds-list-toolbar__filter-dropdown-item.rottay-button[data-variant]:hover:not(
     [data-selected='true']
   ) {
     background: var(
@@ -574,7 +574,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__density-option.rottay-button[data-part='trigger'] {
+  .ds-list-toolbar__density-option.rottay-button[data-variant] {
   justify-content: flex-start;
   text-align: start;
   border-radius: var(
@@ -588,7 +588,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__density-option.rottay-button[data-part='trigger'][data-active='true'] {
+  .ds-list-toolbar__density-option.rottay-button[data-variant][data-active='true'] {
   border: 1px solid var(--ds-filter-pill-active-border, var(--ds-color-primary));
   background: var(
     --ds-filter-pill-active-bg,
@@ -599,7 +599,7 @@
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__density-option.rottay-button[data-part='trigger']:hover:not(
+    .ds-list-toolbar__density-option.rottay-button[data-variant]:hover:not(
     [data-active='true']
   ) {
     border-color: var(
@@ -642,7 +642,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__mobile-overflow-item.rottay-button[data-part='trigger'] {
+  .ds-list-toolbar__mobile-overflow-item.rottay-button[data-variant] {
   justify-content: flex-start;
   text-align: start;
   border: none;
@@ -653,7 +653,7 @@
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__mobile-overflow-item.rottay-button[data-part='trigger']:hover {
+    .ds-list-toolbar__mobile-overflow-item.rottay-button[data-variant]:hover {
     background: var(
       --ds-filter-pill-hover-bg,
       var(
@@ -803,9 +803,9 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__primary-action.rottay-button[data-part='trigger'],
+  .ds-list-toolbar__primary-action.rottay-button[data-variant],
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__primary-action-mobile.rottay-button[data-part='trigger'] {
+  .ds-list-toolbar__primary-action-mobile.rottay-button[data-variant] {
   flex: 0 0 auto;
   min-block-size: var(--ds-button-sm-height, 2rem);
   max-inline-size: var(--ds-toolbar-primary-action-max-width, 18rem);
@@ -1081,7 +1081,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__clear-all.rottay-button[data-part='trigger'] {
+  .ds-list-toolbar__clear-all.rottay-button[data-variant] {
   border: 1px solid
     var(--ds-toolbar-control-border, var(--ds-toolbar-border, var(--ds-color-border)));
   border-radius: var(
@@ -1106,7 +1106,7 @@
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__clear-all.rottay-button[data-part='trigger']:hover {
+    .ds-list-toolbar__clear-all.rottay-button[data-variant]:hover {
     background: var(
       --ds-filter-pill-hover-bg,
       var(
@@ -1288,7 +1288,7 @@
       .ds-list-toolbar__clear-all,
       .ds-list-toolbar__primary-action,
       .ds-list-toolbar__primary-action-mobile
-    ).rottay-button[data-part='trigger'],
+    ).rottay-button[data-variant],
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__segmented-control
     > [data-part='option'] {
@@ -1382,7 +1382,7 @@
       .ds-list-toolbar__clear-all,
       .ds-list-toolbar__primary-action,
       .ds-list-toolbar__primary-action-mobile
-    ).rottay-button[data-part='trigger'] {
+    ).rottay-button[data-variant] {
     animation: none;
     transition: none;
   }
@@ -1401,24 +1401,24 @@
      the dropdown selection rely on primary-tinted fills, so remap them to the
      system highlight pair and let every control keep a visible border. */
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-trigger.rottay-button[data-part='trigger'],
+    .ds-list-toolbar__filter-trigger.rottay-button[data-variant],
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-part='filter-chip'],
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__icon-button.rottay-button[data-part='trigger'],
+    .ds-list-toolbar__icon-button.rottay-button[data-variant],
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__clear-all.rottay-button[data-part='trigger'] {
+    .ds-list-toolbar__clear-all.rottay-button[data-variant] {
     forced-color-adjust: auto;
     border-color: ButtonText;
     box-shadow: none;
   }
 
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-trigger.rottay-button[data-part='trigger'][data-active='true'],
+    .ds-list-toolbar__filter-trigger.rottay-button[data-variant][data-active='true'],
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-dropdown-item.rottay-button[data-part='trigger'][data-selected='true'],
+    .ds-list-toolbar__filter-dropdown-item.rottay-button[data-variant][data-selected='true'],
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__density-option.rottay-button[data-part='trigger'][data-active='true'] {
+    .ds-list-toolbar__density-option.rottay-button[data-variant][data-active='true'] {
     background: Highlight;
     color: HighlightText;
   }
@@ -1434,7 +1434,7 @@
      rule (wide enough to render both lines) plus the wavy value underline,
      which forced colors preserves by remapping it to CanvasText. */
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-trigger.rottay-button[data-part='trigger'][data-state='draft'],
+    .ds-list-toolbar__filter-trigger.rottay-button[data-variant][data-state='draft'],
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-part='filter-chip'][data-state='draft'] {
     border-style: dashed;
@@ -1443,7 +1443,7 @@
   }
 
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-trigger.rottay-button[data-part='trigger'][data-state='invalid'],
+    .ds-list-toolbar__filter-trigger.rottay-button[data-variant][data-state='invalid'],
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-part='filter-chip'][data-state='invalid'] {
     border-color: ButtonText;

@@ -119,6 +119,10 @@ function primaryChannel(value) {
  * Three of these owners were originally mapped to directories that do not
  * exist, and the miss printed as "no root emission found" — which reads like a
  * fact about the code and was a fact about the map. Own the mapping explicitly.
+ *
+ * This map is keyed on the FILE NAME, which is the right key only when the
+ * severable part is the file's own. Cross-family rows are adjudicated by the
+ * read-liveness pass further down, and file-wide by `crossfamily-parts.mjs`.
  */
 const SEVERABLE_ROOT = {
   tag: true,                // render-proven, 3 shipped call sites (task #26)
