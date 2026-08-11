@@ -651,6 +651,57 @@ whether it is **writable by a TENANT**; static BrandTheme ownership satisfies it
 
 That is the converse of the dead-dial ratchet, and it belongs in the manifest.
 
+### 6.0-pal Can the DS default palette be deleted? No — but half the file does not belong there [M]
+
+Measured by full cascade resolution at the root element (layer rank → specificity → document order),
+across all six cells, counting **what WINS, not what is declared**. Properties left with no
+declaration anywhere in that vertical's bundle if `default.css`'s `:root` were removed:
+
+| vertical | delete all 1,057 | delete only the colour-bearing |
+|---|---:|---:|
+| platform | **391** | 137 |
+| bithire | **666** | 431 |
+| evnto | **811** | 550 |
+
+> **The DS default is the sole authority for 37% / 63% / 77% of what it declares.** For evnto it is
+> load-bearing for four fifths of its own root surface. It cannot be deleted as an act of hygiene.
+
+**And inheritance is inversely proportional to artifact completeness — nobody chose the ratio.**
+
+**The tractable subset is the component tail.** **547 of the 1,057 (51.8%) are component-scoped**,
+across 56 components — menu 28, upload 26, inputnumber 25, tooltip 23, switch 21, textarea 21, table
+20, tag 20. A component channel in a theme file is a layering violation **regardless of its value**,
+and moving it is a **relocation to `presentation/components/`, not a deletion**.
+
+**The split-family rule.** The evnto border hole is not an isolate:
+
+> **Verticals author ramps and primaries; the DS silently supplies the derived roles.**
+
+evnto/dark alone splits nine further colour families — it owns the 50–900 ramps for
+success/warning/error/info while **the DS supplies every `-bg`, `-border` and `-ink`**.
+
+### 6.0-leak Light values leak into dark, and it is one defect with §6.0-pal [M]
+
+DS-default values that **win a dark cell and resolve to a light colour**:
+
+| cell | light-in-dark |
+|---|---:|
+| platform/dark | 17 |
+| bithire/dark | **112** |
+| evnto/dark | **151** |
+
+Mechanism: the component channels parked in the theme layer carry **light-theme values**, and
+`default.css`'s dark block — 66 declarations — covers almost none of them. Concrete:
+`--ds-menu-bg: #ffffff` is inherited into a dark theme. **A white menu background in dark mode.**
+
+**Task #9 on the board — "bithire dark: 32 of 33 surface tokens leak from light" — is one visible
+corner of a 112-property problem in that vertical and 151 in evnto.** Relocating the component tail
+and fixing the dark leak are the same work.
+
+*Colour was classified by VALUE, not by name — which is why `--ds-menu-bg` was caught and a prefix
+classifier would have missed it. Counts are floors: a token carrying colour payload without colour
+syntax classifies structural. The analysis is win-only and proves nothing about reads.*
+
 ### 6.0a The theme layer is not the authority it is documented to be [M]
 
 The semantic type ramp — **9 roles × 7 facets = 63 channels** — is written by **two mechanisms**:
