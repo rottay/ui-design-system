@@ -74,6 +74,27 @@ caller's part wins on the root in modern 22 / rustic 11 / classic 11, with no
 pattern. So every `[data-part]`-keyed rule is inert under classic for 83 of 86
 primitives — **one systemic cause, not 76 findings** (see trap 3).
 
+**Class 5 — paint that reads the void.** Found while adjudicating Badge, and it
+is the only class here that **no "properties lost" measurement can detect**,
+because the rule that suffers it is alive and matching. A skin declares a custom
+property inside a root-keyed rule and reads it from a rule keyed on something
+else — `[data-state~='hovered']`, a class, a media query. Severance kills the
+declaration and leaves the read; the declaration that reads it is invalid at
+computed-value time.
+
+`void-reads.mjs` counts the **shape**: **16 families, 252 reads** at
+`bd8cee1eb`. Shape is not defect — without a caller replacing the part, the
+declaring rule never stops matching. Exposure is shape ∩ severed sites, and only
+Badge and Tag have the second term measured.
+
+Badge's instance is `--_ds-badge-hover-bg-fallback` / `--ds-badge-hover-ink-fallback`
+(`badge.css:466-476` declaring, `:484-503` reading). The author wrote a comment
+at `:499` explaining that pressed must fall through to hover's mix "or an
+unconfigured tenant presses to transparent" — severance reintroduces exactly the
+bug the comment defends against, by a route the comment does not consider. The
+`--ds-badge-tone-*` block is **not** an instance: both its declaration and its
+reads are root-keyed, so they die together.
+
 Filed, out of scope here: `Typography/engines/rustic` still exports
 `ApolloHeading`, `ApolloText`, `ApolloParagraph`, `ApolloLink`. `CLAUDE.md` says
 those names are gone.
@@ -89,6 +110,7 @@ those names are gone.
 | `callsites.mjs` | Every JSX call site passing `data-part` to a component, across 5 corpora. `--control` runs 3 checks over 8 planted shapes. Writes `callsites.json`. |
 | `engine-pin.mjs` | Class 3: pinned engine props and single-engine imports. `--control` scans the planted fixture. |
 | `join.mjs` | Joins the rendered roots against the CSS and writes `FINDINGS.json`, deduped. |
+| `void-reads.mjs` | The second-order class: a custom property declared inside a root-keyed rule and read from a rule that survives severance. `node void-reads.mjs <tree> <pkg-with-postcss>`; point the first argument at `control/void-reads` for the 7 planted shapes. |
 | `render-census.test.tsx` | The render harness. **Copy into `src/ui/primitives/tests/` to run, then delete** — the header carries the exact commands. |
 | `control/` | The three planted fixtures. They are the reason any zero here is reportable. |
 
@@ -200,6 +222,17 @@ Class 3a is zero across 636 files. That is only worth stating because
 `defaultEngine={'rustic'}`, and correctly ignores a dynamic `engine={someVar}`.
 Two instruments here caught themselves before reporting; neither would have
 without a control.
+
+**A control is only as good as the case that motivated the instrument.**
+`void-reads.mjs` shipped its first run with a full control set passing — and
+without Badge, the family it was written for. Its `var()` walker read
+`var(--a, var(--b))` as one read with a fallback and skipped to the closing
+paren, so no nested read was ever enumerated, and every unprotected token
+reached through a fallback chain was invisible. It reported 15 families and 238
+reads, confidently. The blind spot survived six planted shapes because none of
+them nested, and it was caught only by noticing that the founding case was
+missing from the output. Recursing into the fallback: **16 families, 252 reads**.
+Add the motivating case to the control set, not just the shapes you thought of.
 
 ---
 

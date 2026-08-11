@@ -1,0 +1,2 @@
+.rottay-u[data-part="root"] { --ds-u-tone-bg: #eee; }
+.rottay-u:hover { background: var(--ds-u-tone-bg); }

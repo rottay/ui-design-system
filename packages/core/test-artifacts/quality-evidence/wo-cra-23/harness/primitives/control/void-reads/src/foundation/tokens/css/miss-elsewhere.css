@@ -1,0 +1,3 @@
+:root { --ds-z-tone-bg: #ddd; }
+.rottay-z[data-part='root'] { --ds-z-tone-bg: #eee; }
+.rottay-z:hover { background: var(--ds-z-tone-bg); }

@@ -1,0 +1,2 @@
+.rottay-y[data-part='root'] { --ds-y-tone-bg: #eee; }
+.rottay-y:hover { background: var(--ds-y-tone-bg, #fff); }
