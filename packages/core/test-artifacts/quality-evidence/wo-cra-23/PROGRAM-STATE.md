@@ -263,6 +263,25 @@ the hardcoded fallbacks** and strips that vertical's paint from the read-only en
 
 Before retiring any alias, check whether a read-only engine reads the losing spelling.
 
+### Simulate; do not filter by proxy
+
+A rule that predicts whether a change is safe is a **proxy**. Where the change can be *simulated* and
+the corpus re-resolved, the simulation is the measurement and the proxy is lossy — in both directions.
+
+Observed: "move a channel between tiers only when both themes agree" correctly blocks a light-only
+declaration becoming unconditional, and **wrongly blocks 96 provably-safe channels** whose themes
+differ only because a higher-specificity mode block wins regardless of where the unconditional
+declaration sits. The proxy over-blocked by a factor of six.
+
+**Move the declaration, re-resolve everything, compare.** Reason about the result, not about the rule.
+
+### Comparing a generated artifact against a committed one measures regeneration debt
+
+The committed artifacts go stale the moment any compiler changes. A lane that resolves its freshly
+generated output against the committed file is measuring the backlog, not its own change — one lane
+saw ~200 phantom deltas that way. **Generate both sides with the same compiler**, baseline from a
+clean worktree.
+
 ### An eighth unsafe class: a rename can silently disable the guard that watches it
 
 A guard that reconciles two emitters of one channel identifies them **by name**. Change the name one
