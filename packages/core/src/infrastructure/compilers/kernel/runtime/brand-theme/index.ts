@@ -964,9 +964,17 @@ function setTypeRampVariables(vars: Record<string, string>): void {
   vars["--ds-text-eyebrow-transform"] = "uppercase";
 }
 
+/**
+ * `fontSize` is optional here because the `body` role has no builder default:
+ * body size is 14px canonical and its single authority is the theme layer
+ * (foundation/tokens/css/foundation/themes/default.css). A BrandTheme that
+ * wants a different body size still authors it via `typography.roles.body`,
+ * which outranks this table.
+ */
 const DEFAULT_SEMANTIC_TYPOGRAPHY: Record<
   (typeof SEMANTIC_TYPOGRAPHY_ROLES)[number],
-  Required<SemanticTypographyRoleTokens>
+  Required<Omit<SemanticTypographyRoleTokens, "fontSize">> &
+    Pick<SemanticTypographyRoleTokens, "fontSize">
 > = {
   display: {
     fontFamily: "var(--ds-font-family-display, var(--ds-font-family-heading))",
@@ -997,7 +1005,6 @@ const DEFAULT_SEMANTIC_TYPOGRAPHY: Record<
   },
   body: {
     fontFamily: "var(--ds-font-family-base)",
-    fontSize: "calc(0.875rem * var(--ds-type-scale, 1))",
     fontWeight: 400,
     lineHeight: "var(--ds-line-height-body, 1.6)",
     letterSpacing: "var(--ds-letter-spacing-body, 0)",
@@ -1080,7 +1087,12 @@ export function setSemanticTypographyVariables(
     );
     const prefix = `--ds-type-${kebabRole}`;
     vars[`${prefix}-font-family`] = String(value.fontFamily);
-    vars[`${prefix}-font-size`] = String(value.fontSize);
+    // Emitted only when a default or an authored role supplies one, so a role
+    // the theme layer owns is left to the cascade instead of being reasserted
+    // per tenant.
+    if (value.fontSize !== undefined) {
+      vars[`${prefix}-font-size`] = String(value.fontSize);
+    }
     vars[`${prefix}-font-weight`] = String(value.fontWeight);
     vars[`${prefix}-line-height`] = String(value.lineHeight);
     vars[`${prefix}-letter-spacing`] = String(value.letterSpacing);
