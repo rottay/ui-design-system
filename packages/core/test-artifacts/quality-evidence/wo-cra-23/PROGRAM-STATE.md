@@ -263,6 +263,28 @@ the hardcoded fallbacks** and strips that vertical's paint from the read-only en
 
 Before retiring any alias, check whether a read-only engine reads the losing spelling.
 
+### Tenant-paintable is NOT "declared in an artifact"
+
+A name the **chrome compiler can write** is tenant-paintable even when no first-party theme populates
+it. A census built from what the three artifacts declare therefore misses part of the tenant surface,
+and a survivor chosen against that census can sever a DB tenant's paint. This shipped as a wrong
+survivor once and was caught by the lane's own residual sweep before reporting.
+
+**Check every candidate against the emitter set and the override allowlist, not against the
+artifacts.**
+
+### The zero-delta gate cannot express a permutation merge
+
+It has two models: collapse an added channel to its fallback arm, and delete a declaration that
+already loses. **A merge is neither** — it deletes a declaration that WINS while moving that
+declaration's readers to a different name resolving to the same value. Each half is non-inert alone;
+only the pair preserves value, and the gate cannot see the pairing. It reports the deletion as live
+and the repoint as an unrestored collapse.
+
+Until it grows a `--merge <loser>=<survivor>` pairing, merge lanes prove value-preservation by
+**full-corpus resolution across all six cells** — surviving names unchanged, none newly declared,
+removals exactly the retired set × 6.
+
 ### The survivor rule — non-negotiable for every fork
 
 Tenant paint is **unlayered and outranks every layer**, so a tenant override reaches readers only
