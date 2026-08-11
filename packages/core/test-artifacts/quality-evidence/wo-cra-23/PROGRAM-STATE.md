@@ -529,6 +529,57 @@ fallback arm, and the declared-nowhere census. Those stand. But **the instrument
 evidence within its roster**, and a roster of six fixtures is not the component library. Any lane
 quoting `changedRows: 0` must state which fixtures could have moved.
 
+### THE BASE-LAYER BACKLOG: one mechanism, 270 live rows, two waves
+
+Supersedes the 189 and the 26 — both were measured on a pre-rewire tree with a looser rule, and
+re-derived they are **one population of 141 base-involved rows / 245 cells**. Sixth instance of the
+collapse law, found by the lane on its own numbers.
+
+**The mechanism is single:** the base tier declares light-mode literals **unconditionally**, and
+**135 of 141 base-involved rows have no light/dark split in their declaring file at all.** An
+unconditional light literal is wrong in dark; an unconditional dark literal is wrong in light. The two
+populations that looked like separate backlogs are one defect read from opposite ends, so the work is
+"add the missing counterpart" 177 times rather than "reconcile two lists".
+
+```
+declared corpus 4,027 → role rule 721 → exempt 451 → LIVE 270
+  unreadable text (<3:1)        99      wrong ground        83
+  invisible boundary (<1.15:1)  66      low-contrast text   22
+141 base-involved · 129 vertical-owned · worst cell evnto/dark (155 rows)
+```
+
+The worst cluster is one literal: `--ds-form-label-color`, `--ds-popover-title-color`,
+`--ds-checkbox-label-color` and seven more, all `#171717` at `default.css` `:root`, all **1.06:1** in
+two dark themes. `--ds-menu-bg` is in it by name — `#ffffff` unconditionally, no dark counterpart;
+platform escapes only because it declares its own.
+
+**Two waves, split by owner count rather than by size:** `default.css` alone is 98 rows moving 245
+inherited cells, one file and one edit shape; ~12 component files carry 43 more. The **129
+vertical-owned rows are not this work order** — folding them in is how a base wave becomes a repaint
+nobody signed off. Row-level data with per-cell values, roles, fix sites and blast radius lives in
+`harness/`.
+
+### Calibrate a threshold from the healthy population, do not pick one
+
+The invisible-boundary cut is **1.15:1**, derived rather than chosen: healthy hairlines measure
+1.25–1.46 (`--ds-color-border` at 1.34, 1.26, 1.46) and dead ones 1.06, so 1.15 separates them with
+margin on both sides. **At 1.5 the same rule flagged 197 and was condemning every well-designed
+hairline** — a demolition order wearing a backlog's clothes.
+
+### Two more false-zero disguises, and a `grep` that lies about `--` names
+
+**A rule can return zero because it asks the inverted question.** A severity rule tested "is this edge
+on the wrong *side* of the page" and reported `invisible-boundary: 0` — but an invisible edge is
+precisely one on the **same** side. Contrast for edges and ink; side only for grounds.
+
+**A regex parser reported "not declared anywhere"** for names declared 1,057 times: a
+`([^{}]+)\{([^{}]*)\}` pattern found **6 blocks** in a 99 KB file where postcss finds 13,602 rules.
+"Parse, never grep" now has a number.
+
+**And `grep` without `--` silently returns zero for any `--ds-*` name**, because the leading dashes
+parse as options. A lane nearly reported a channel as declared in one artifact only; the bundle text
+refuted it. Inverse of the recorded `rg -r` trap and not previously stated.
+
 ### OPEN, SEVERE: 26 inherited channels unreadable on BitHire's dark ground
 
 Corrected upward from the 6 I first recorded. The blind-spot probe found **26** DS-inherited channels
