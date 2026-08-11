@@ -437,6 +437,41 @@ under §1.4 is always no. Rows c–f above are all this shape.
 Corollary: idling for an answer is itself the defect. An hourly heartbeat now re-enters the programme
 if a lane has stalled waiting on a decision that was never the owner's to make.
 
+### `probe run` is BLIND to a brand-theme edit — it will null-measure the identity wave
+
+Established by measurement, and it invalidates the verification instruction I had given two identity
+lanes. `composeFresh` reads the **committed** `facade/artifacts/<vertical>/index.css`. "Fresh" means
+fresh with respect to the CSS tree and **stale with respect to the TypeScript brand themes**. A lane
+editing `brand-themes/**` and verifying with `probe run` gets `changedRows: 0` **by construction** and
+reads it as safety. Same family as *artifact gates read `dist`, not `src`*.
+
+The working method, proven: run the real compiler **in memory** on the edited theme (no build, no
+writes) and substitute the resulting tenant CSS into the fresh bundle before measuring.
+
+Companion, and it applies to every lane right now: **a before/after in the shared tree is not a
+controlled experiment while other lanes edit CSS.** Record the per-vertical bundle sha256 in every
+run. The lane that did this correctly showed platform and bithire byte-identical across both runs
+while only evnto's moved — which is what makes "the others did not move" a measurement rather than an
+assertion. Pair it with a FULL `--ds-*` census per cell (~7,100 channels), not a check of the names
+you touched: that is how ten downstream aliases reading a changed channel get found instead of missed.
+
+### Removing an override hands the decision to source order — a sibling of class 5
+
+A lane deleted a family's own `:active` rule so a shared premium hover could apply — correct intent —
+but left `background: transparent` at the same specificity in the resting rule. Both files import into
+the same layer, the family file loads last, so the no-op won and the back chip silently lost its hover
+and active tint. It shipped, and it looked fine: the border still warmed and the 1px lift still fired,
+because those sit at different weights. **A partial regression is the hardest kind to see.**
+
+Class 5 is *declaring* a name flipping every read site. This is its mirror: **removing a competing
+declaration hands the decision to whatever else sits at that weight, and at equal specificity that is
+import order.** Before deleting an override, enumerate what else can hit the same element at the same
+weight for the same property — restricted to pairs that can actually co-occur, or the tie list is
+noise. The lane's first pass reported 50 ties and 49 were pairs no element can be both of.
+
+Corollary the lane stated better than I would have: **one instrument run at two resolutions is not two
+opinions.** Only the second pass was worth acting on.
+
 ### BROKERED: both auditors were wrong on D1, in opposite directions
 
 The two-auditor law paying for itself. Fable counted **5** silent evnto border slots. Kimi counted
