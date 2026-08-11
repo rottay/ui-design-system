@@ -24,6 +24,11 @@ The programme's own failure modes are the fastest attack surface, because they r
 4. **A control that mirrors the code rather than the corpus.** Several instruments passed their own
    controls while sharing the implementation's blind spot.
 
+**A claim about a repaired state is not verifiable at HEAD.** Every repair in §2 removed the thing
+it describes. Where a pre-repair commit is needed the section says so; where it does not, ask for one
+before recording the claim as unfounded. This is the failure mode of citing an audit at the wrong
+commit, and it applies to this brief as much as to anything it describes.
+
 **The single most valuable thing you can do:** re-run
 `pnpm --filter @rottay/design-system exec vitest run --project unit src/foundation/tokens` (40 files,
 355 tests) and every gate below at HEAD, then check whether the numbers in §2 still hold. We only
@@ -226,6 +231,10 @@ twice more.
 And Badge `info` dark reaches only **3.68**, still under AA, declared and not repaired.
 
 ### 2.5 A public surface that shipped 2,248 lines and painted no colour
+
+**Verify this one at `646151dc4^`, not at HEAD.** The repair renamed the namespace, so today the
+tree has **zero** `--rh-*` reads and a naive check reads the claim as fabricated. At `646151dc4^` the
+file carries **182** of them.
 
 `oauth-transition` read `--rh-*`, a namespace **declared in zero files**, with no fallbacks — every
 colour-bearing declaration invalid at computed-value time. Partition: 156 declarations lost across 8
