@@ -9,7 +9,7 @@
         ".ds-card.ds-card--modern[data-part='root'][data-radius='md']",
         "--ds-card-border-radius: var(--ds-radius-lg)"
       ],
-      "html": "<div class=\"ds-card ds-card--modern\" data-part=\"root\" data-radius=\"md\" data-variant=\"elevated\" data-size=\"md\" data-padding=\"md\" data-probe=\"card-modern-md\"><div data-part=\"body\">card body</div></div>",
+      "html": "<div class=\"ds-card ds-card--elevated ds-card--modern\" data-variant=\"elevated\" data-radius=\"md\" data-size=\"md\" data-padding=\"md\" data-part=\"root\" data-probe=\"card-modern-md\"><div data-part=\"body\">card body</div></div>",
       "targets": [
         {
           "id": "root",
@@ -85,6 +85,7 @@
     },
     {
       "id": "skeleton-card-line",
+      "synthetic": true,
       "why": "THE POSITIVE CONTROL. This rule reads the dial DIRECTLY -- `calc(4px * var(--ds-radius-scale, 1))` -- with no derived token in between. If this element does not move when the dial turns, the harness itself is broken and every 'inert' verdict in the same run is void.",
       "requiresSelectors": [
         ".rottay-skeleton-card [data-part='line']",
@@ -101,6 +102,7 @@
     },
     {
       "id": "skeleton-form-action",
+      "synthetic": true,
       "why": "Second direct dial consumer on a different literal -- `calc(6px * var(--ds-radius-scale, 1))`. Two controls, two literals: a single moving fixture cannot be a coincidence of one rule.",
       "requiresSelectors": [
         ".rottay-skeleton-form [data-part='action']",
@@ -117,6 +119,7 @@
     },
     {
       "id": "token-readout",
+      "synthetic": true,
       "why": "Not a component: a bare element inside the tenant scope whose custom properties are read directly. It answers 'what value does this token RESOLVE to for this tenant' without an intervening paint rule, which separates 'the token is wrong' from 'the component does not read it'.",
       "requiresSelectors": ["--ds-radius-md: calc(var(--ds-radius-md-base) * var(--ds-radius-scale, 1))"],
       "html": "<div data-probe=\"token-readout\"></div>",

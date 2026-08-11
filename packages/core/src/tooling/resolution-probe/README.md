@@ -51,7 +51,16 @@ run's own controls did not move; `2` bad invocation.
 
 Nothing here is registered in `scripts/ci-gates.manifest.mjs`, and the drill
 file is `.test.mjs` so the vitest project (`src/**/*.test.{ts,tsx}`) cannot
-sweep it into the suite.
+sweep it into the suite — the drills need a browser.
+
+The fixture-drift test is the deliberate exception. It is `.test.tsx` and *is*
+swept into the unit suite, because it needs React and no browser, and because a
+fixture that has stopped describing its component must fail in CI rather than
+wait for someone to run the probe:
+
+```bash
+vitest run --project unit src/tooling/resolution-probe/foundation/roster/tests
+```
 
 ---
 
@@ -104,13 +113,26 @@ accepting its staleness.
 
 Say this out loud rather than discovering it later.
 
-- **Anything that originates in React.** Recipe-profile prop defaults, the
-  attributes a component decides to stamp at render, conditional `data-*`
-  driven by props or state, inline styles a component computes. A CSS fixture
-  states the DOM; it does not derive it. That is a second, smaller instrument.
-  Consequence: this harness can prove a *rule* is dead, and can prove a rule
-  paints value X for an element shaped Y — it cannot prove a component ever
-  produces an element shaped Y.
+- **Anything that originates in React**, at measurement time. Recipe-profile
+  prop defaults, conditional `data-*` driven by state, inline styles a
+  component computes per render. This harness can prove a *rule* is dead, and
+  that a rule paints value X for an element shaped Y — it cannot itself prove a
+  component ever produces an element shaped Y.
+
+  That second, smaller instrument now exists:
+  `foundation/roster/tests/index.test.tsx` renders each component fixture's
+  engine and compares it to the fixture, so staleness fails a test instead of
+  producing confident readings about an element nothing renders. It runs in the
+  unit suite, not here — it needs React, not a browser. It ships with a
+  positive control (six drift shapes that must each be caught *and* named) and
+  a coverage check: a fixture is either registered for a render or declares
+  `"synthetic": true`, so a new component fixture cannot arrive without cover.
+
+  **This gap was not hypothetical.** `button-modern-md` and `input-modern-md`
+  described `.ds-btn` / `.ds-input` — rustic rules no component emits — and
+  were wrong in 4 of 276 readings, all in the one vertical that authors control
+  geometry. `card-modern-md` was missing its variant class, which no selector
+  reads today and so cost nothing yet. Both are replayable against the test.
 - **The spring tail** under `--bundle fresh` (above).
 - **Anything needing layout at more than one viewport.** One pinned viewport
   (1280×800, dpr 1). Responsive divergence is not in v1.
