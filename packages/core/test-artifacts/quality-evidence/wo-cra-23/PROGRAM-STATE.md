@@ -263,6 +263,23 @@ the hardcoded fallbacks** and strips that vertical's paint from the read-only en
 
 Before retiring any alias, check whether a read-only engine reads the losing spelling.
 
+### Two instruments agreeing is not evidence when they share a technique
+
+Two blocking gates neither of which imports the other still derived their answers **from the same
+typed graph** — both computing a variable name from a typed field name. So an emitter writing a
+*derived* name is invisible to both, and the same technique that caught a rename mis-classified its
+result.
+
+> **Not independent confirmation: one shared blind spot, reported twice.**
+
+Before treating concurrence as cross-validation, establish that the two instruments key on different
+things. For the typed-graph class, a genuinely independent check reads the **executed emitter
+output** rather than the typed declaration — which is what three separate lanes reached for
+independently when they wanted certainty.
+
+*This is why the auditor law (§1.1) pairs a diff reader with a repository reader rather than two of
+either: the value is in the difference of technique, not in the second opinion.*
+
 ### Simulate; do not filter by proxy
 
 A rule that predicts whether a change is safe is a **proxy**. Where the change can be *simulated* and
