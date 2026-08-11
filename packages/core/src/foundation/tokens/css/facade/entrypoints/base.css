@@ -463,6 +463,8 @@
   layer(rottay-components);
 @import "../../presentation/components/skin/detail-header.css"
   layer(rottay-components);
+@import "../../presentation/components/skin/header-hero-shared.css"
+  layer(rottay-components);
 @import "../../presentation/components/skin/edit-header.css"
   layer(rottay-components);
 @import "../../presentation/components/skin/form-header.css"

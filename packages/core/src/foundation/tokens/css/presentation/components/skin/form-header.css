@@ -30,13 +30,15 @@
  * only family/tracking/transform are reachable from here — a font-size rule on
  * them would be dead paint.
  *
- * SHARED WITH EditHeader: the archetype hero-panel gradient (`buildPatternStyle`)
- * and the icon-badge tone (`getVariantTone`) are proven byte-identical to
- * EditHeader (contract §2) and are defined ONCE, as grouped
- * `.ds-edit-header , .ds-form-header` selectors, in edit-header.css — they are NOT
- * restated here. The icon-badge tone rides the shared `--ds-header-icon-tone-*`
- * custom property, set inline by this component from `getVariantTone(colorVariant)`
- * because the pre-step stamped no variant attribute to key a CSS rule on.
+ * SHARED WITH EditHeader: the archetype hero-panel gradient (`buildPatternStyle`),
+ * the icon-badge tone (`getVariantTone`), the back-button microinteraction/focus
+ * ring and the `ds-header-enter` keyframes are proven byte-identical to EditHeader
+ * (contract §2) and live in `skin/header-hero-shared.css` — a file named after
+ * NEITHER family, so neither can be repainted by an edit aimed at the other. They
+ * are NOT restated here. The icon-badge tone rides the shared
+ * `--ds-header-icon-tone-*` custom property, set inline by this component from
+ * `getVariantTone(colorVariant)` because the pre-step stamped no variant attribute
+ * to key a CSS rule on.
  *
  * FORMS ARE NOT CARD STACKS (monorepo law). The `context-card` part is a legacy
  * NAME — the §4 anatomy test in `headers/tests/` pins the string, so it stays —
@@ -97,8 +99,8 @@
   background: var(--ds-surface-card, var(--ds-color-bg-elevated));
   border-radius: 20px;
   box-shadow: 0 12px 28px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent);
-  /* shared keyframes defined once in edit-header.css (this file already
-     depends on it for the archetype gradients + icon-badge tone) */
+  /* keyframes live in header-hero-shared.css, with the archetype gradients,
+     the icon-badge tone and the back-button microinteraction */
   animation: ds-header-enter var(--ds-motion-calm, var(--ds-motion-slow, 320ms))
     var(--ds-motion-ease-out, ease-out) both;
 }
@@ -127,10 +129,14 @@
         differently. Only the resting frame is form-specific — the border TOKEN
         still differs from EditHeader's (-secondary), which is the border-naming
         lane's call, not this one's. ---- */
+/* No `background` at rest. `transparent` is the initial value, so the
+   declaration painted nothing — but it sat at (0,4,0), tied with the shared
+   hover/active tint, and this file is imported AFTER the shared paint, so the
+   no-op won and the back chip lost its tint in both states. The frame is all
+   this rule owns. */
 .ds-structure.ds-form-header[data-part='root'] [data-part='back-button'] {
   border: 1px solid var(--ds-color-border);
   border-radius: 10px;
-  background: transparent;
 }
 .ds-structure.ds-form-header[data-part='root'] [data-part='back-icon'] {
   color: var(--ds-color-text-secondary);
