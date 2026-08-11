@@ -457,7 +457,7 @@ export function SavedViewsMenu({
   }, [isOpen, closeMenu]);
 
   return (
-    <Box style={{ position: 'relative', zIndex: isOpen ? 60 : 1 }}>
+    <Box data-part="anchor" data-open={isOpen} className="ds-structure ds-saved-views-menu">
       <Box
         as="button"
         type="button"
@@ -471,7 +471,7 @@ export function SavedViewsMenu({
         aria-haspopup="dialog"
         aria-expanded={isOpen}
       >
-        <Flex align="center" justify="center" style={{ minWidth: 0 }}>
+        <Flex data-part="trigger-body" align="center" justify="center">
           <Box
             data-part="trigger-icon"
             data-open={isOpen}
@@ -505,33 +505,22 @@ export function SavedViewsMenu({
             aria-label={labels.panelLabel}
             ref={panelRef}
             tabIndex={-1}
+            /* Measured viewport clamp only; position/stacking/clipping are skin-owned. */
             style={{
-              position: 'fixed',
               top: panelPosition.top,
               left: panelPosition.left,
               width: panelPosition.width,
-              zIndex: 2000,
-              overflow: 'hidden',
             }}
           >
-            <Box
-              data-part="header"
-              style={{
-                padding: '16px 18px 14px',
-              }}
-            >
+            <Box data-part="header">
               <Flex align="start" justify="between" gap={12}>
-                <Box style={{ minWidth: 0 }}>
-                  <Text data-part="header-title" size="sm" weight="medium" style={{ display: 'block' }}>
+                <Box data-part="header-copy">
+                  <Text data-part="header-title" size="sm" weight="medium">
                     {labels.headerTitle}
                   </Text>
                   <Text
                     data-part="header-description"
                     size="xs"
-                    style={{
-                      display: 'block',
-                      marginTop: 4,
-                    }}
                   >
                     {labels.headerDescription}
                   </Text>
@@ -546,25 +535,17 @@ export function SavedViewsMenu({
               {activeView && (
                 <Box
                   data-part="active-card"
-                  style={{
-                    marginTop: 14,
-                    padding: 14,
-                  }}
                 >
                   <Flex align="start" justify="between" gap={12}>
-                    <Flex align="start" gap={10} style={{ minWidth: 0 }}>
+                    <Flex data-part="active-card-lead" align="start" gap={10}>
                       <ViewGlyph isSystem={activeView.isSystem} active />
-                      <Box style={{ minWidth: 0 }}>
-                        <Text data-part="active-card-label" size="sm" weight="medium" style={{ display: 'block' }}>
+                      <Box data-part="active-card-copy">
+                        <Text data-part="active-card-label" size="sm" weight="medium">
                           {activeView.label}
                         </Text>
                         <Text
                           data-part="active-card-description"
                           size="xs"
-                          style={{
-                            display: 'block',
-                            marginTop: 4,
-                          }}
                         >
                           {describeView(activeView, labels)}
                         </Text>
@@ -580,7 +561,7 @@ export function SavedViewsMenu({
                     </Flex>
                   </Flex>
 
-                  <Flex align="center" gap={8} wrap="wrap" style={{ marginTop: 12 }}>
+                  <Flex data-part="active-card-actions" align="center" gap={8} wrap="wrap">
                     {onViewSave && (
                       <Box
                         as="button"
@@ -627,7 +608,7 @@ export function SavedViewsMenu({
               )}
             </Box>
 
-            <Box style={{ padding: '12px 12px 10px', maxHeight: 420, overflowY: 'auto' }}>
+            <Box data-part="list">
               {systemViews.length > 0 && (
                 <Section title={labels.systemViewsSection} count={systemViews.length}>
                   {systemViews.map((view) => (
@@ -684,23 +665,16 @@ export function SavedViewsMenu({
                 <Box
                   data-part="empty-state"
                   data-empty-state="persona"
-                  style={{
-                    padding: '18px 16px',
-                  }}
                 >
                   <Flex align="start" gap={10}>
-                    <Sparkles data-part="empty-state-icon" style={{ width: 16, height: 16, marginTop: 2 }} />
-                    <Box style={{ minWidth: 0 }}>
-                      <Text data-part="empty-state-title" size="sm" weight="medium" style={{ display: 'block' }}>
+                    <Sparkles data-part="empty-state-icon" />
+                    <Box data-part="empty-state-copy">
+                      <Text data-part="empty-state-title" size="sm" weight="medium">
                         {labels.noPersonaTitle}
                       </Text>
                       <Text
                         data-part="empty-state-description"
                         size="xs"
-                        style={{
-                          display: 'block',
-                          marginTop: 4,
-                        }}
                       >
                         {labels.noPersonaDescription}
                       </Text>
@@ -713,29 +687,14 @@ export function SavedViewsMenu({
                 <Box
                   data-part="empty-state"
                   data-empty-state="all"
-                  style={{
-                    padding: '28px 16px',
-                    textAlign: 'center' as const,
-                  }}
                 >
-                  <Sparkles
-                    data-part="empty-state-icon"
-                    style={{
-                      width: 18,
-                      height: 18,
-                      margin: '0 auto 8px',
-                    }}
-                  />
-                  <Text data-part="empty-state-title" size="sm" weight="medium" style={{ display: 'block' }}>
+                  <Sparkles data-part="empty-state-icon" />
+                  <Text data-part="empty-state-title" size="sm" weight="medium">
                     {labels.noViewsTitle}
                   </Text>
                   <Text
                     data-part="empty-state-description"
                     size="xs"
-                    style={{
-                      display: 'block',
-                      marginTop: 4,
-                    }}
                   >
                     {labels.noViewsDescription}
                   </Text>
@@ -760,8 +719,8 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <Box style={{ marginBottom: 12 }}>
-      <Flex align="center" justify="between" style={{ padding: '0 6px 8px' }}>
+    <Box data-part="section">
+      <Flex data-part="section-bar" align="center" justify="between">
         <Box as="span" data-part="section-header">
           {title}
         </Box>
@@ -789,39 +748,22 @@ function ViewItem({ view, isActive, onSelect, labels, onDelete }: ViewItemProps)
     <Box
       data-part="view-item"
       data-active={isActive}
-      style={{
-        width: '100%',
-        padding: 0,
-      }}
     >
       <Flex align="stretch" justify="between" gap={6}>
         <button
           type="button"
           data-part="view-item-select"
           onClick={() => onSelect(view.key)}
-          style={{
-            minWidth: 0,
-            flex: 1,
-            padding: 12,
-            textAlign: 'start' as const,
-            cursor: 'pointer',
-          }}
         >
           <Flex align="start" justify="between" gap={12}>
-            <Flex align="start" gap={10} style={{ minWidth: 0, flex: 1 }}>
+            <Flex data-part="view-item-lead" align="start" gap={10}>
               <ViewGlyph isSystem={view.isSystem} active={isActive} />
-              <Box style={{ minWidth: 0, flex: 1 }}>
+              <Box data-part="view-item-copy">
                 <Flex align="center" gap={6} wrap="wrap">
                   <Text
                     data-part="view-item-label"
                     size="sm"
                     weight={isActive ? 'medium' : undefined}
-                    style={{
-                      maxWidth: 180,
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap' as const,
-                    }}
                   >
                     {view.label}
                   </Text>
@@ -832,10 +774,6 @@ function ViewItem({ view, isActive, onSelect, labels, onDelete }: ViewItemProps)
                 <Text
                   data-part="view-item-description"
                   size="xs"
-                  style={{
-                    display: 'block',
-                    marginTop: 5,
-                  }}
                 >
                   {describeView(view, labels)}
                 </Text>
@@ -857,16 +795,6 @@ function ViewItem({ view, isActive, onSelect, labels, onDelete }: ViewItemProps)
             data-part="delete"
             onClick={onDelete}
             aria-label={`${labels.deletePrefix} ${view.label}`}
-            style={{
-              alignSelf: 'center',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: 28,
-              height: 28,
-              marginInlineEnd: 8,
-              cursor: 'pointer',
-            }}
           >
             <ActionDeleteIcon decorative />
           </button>
@@ -891,14 +819,6 @@ function CountPill({ label }: { label: string }) {
   return (
     <Box
       data-part="count-pill"
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minWidth: 24,
-        height: 22,
-        padding: '0 8px',
-      }}
     >
       {label}
     </Box>
@@ -916,13 +836,6 @@ function StatusPill({
     <Box
       data-part="status-pill"
       data-tone={tone}
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: 4,
-        height: 20,
-        padding: '0 8px',
-      }}
     >
       {tone === 'primary' ? <StatusFeaturedIcon decorative /> : null}
       {label}

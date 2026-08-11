@@ -488,6 +488,150 @@
    active/current marks read by the checkmark shape and the pill text (never
    tint); the box-shadow focus rings would vanish, so the focusables get a
    real Highlight outline; the dashed empty-state frame survives as ButtonText. */
+/* ─── Geometry drained from the engine (WO-CRA-23) ───────────────────────────
+   The family painted its own layout inline, so none of the 74 rules below could
+   reach it and no tenant posture touched the menu while its four sibling
+   controls in the same toolbar row all resolved through channels. Each value is
+   the exact one the engine painted, now behind a family channel so a tenant can
+   retune it. Only the panel's measured viewport clamp (top/left/width) is still
+   inline — it is runtime data, not a decision. */
+
+.ds-structure.ds-saved-views-menu[data-part='anchor'] {
+  position: relative;
+  z-index: var(--ds-saved-views-menu-anchor-z, 1);
+}
+.ds-structure.ds-saved-views-menu[data-part='anchor'][data-open='true'] {
+  z-index: var(--ds-saved-views-menu-anchor-open-z, 60);
+}
+.ds-structure.ds-saved-views-menu[data-part='trigger'] [data-part='trigger-body'] {
+  min-inline-size: 0;
+}
+
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'] {
+  position: fixed;
+  z-index: var(--ds-saved-views-menu-panel-z, 2000);
+  overflow: hidden;
+}
+
+.ds-structure.ds-saved-views-menu-panel [data-part='header'] {
+  padding: var(--ds-saved-views-menu-header-padding, 16px 18px 14px);
+}
+.ds-structure.ds-saved-views-menu-panel [data-part='header-copy'],
+.ds-structure.ds-saved-views-menu-panel [data-part='active-card-lead'],
+.ds-structure.ds-saved-views-menu-panel [data-part='active-card-copy'],
+.ds-structure.ds-saved-views-menu-panel [data-part='empty-state-copy'] {
+  min-inline-size: 0;
+}
+.ds-structure.ds-saved-views-menu-panel [data-part='header-title'],
+.ds-structure.ds-saved-views-menu-panel [data-part='header-description'],
+.ds-structure.ds-saved-views-menu-panel [data-part='active-card-label'],
+.ds-structure.ds-saved-views-menu-panel [data-part='active-card-description'],
+.ds-structure.ds-saved-views-menu-panel [data-part='empty-state-title'],
+.ds-structure.ds-saved-views-menu-panel [data-part='empty-state-description'],
+.ds-structure.ds-saved-views-menu-panel [data-part='view-item-description'] {
+  display: block;
+}
+.ds-structure.ds-saved-views-menu-panel [data-part='header-description'],
+.ds-structure.ds-saved-views-menu-panel [data-part='active-card-description'],
+.ds-structure.ds-saved-views-menu-panel [data-part='empty-state-description'] {
+  margin-block-start: var(--ds-saved-views-menu-description-gap, 4px);
+}
+
+.ds-structure.ds-saved-views-menu-panel [data-part='active-card'] {
+  margin-block-start: var(--ds-saved-views-menu-active-card-gap, 14px);
+  padding: var(--ds-saved-views-menu-active-card-padding, 14px);
+}
+.ds-structure.ds-saved-views-menu-panel [data-part='active-card-actions'] {
+  margin-block-start: var(--ds-saved-views-menu-actions-gap, 12px);
+}
+
+/* the scroll region: the only part of the menu that owns a scroll frame */
+.ds-structure.ds-saved-views-menu-panel [data-part='list'] {
+  padding: var(--ds-saved-views-menu-list-padding, 12px 12px 10px);
+  max-block-size: var(--ds-saved-views-menu-list-max-block-size, 420px);
+  overflow-y: auto;
+}
+
+.ds-structure.ds-saved-views-menu-panel [data-part='empty-state'][data-empty-state='persona'] {
+  padding: var(--ds-saved-views-menu-empty-persona-padding, 18px 16px);
+}
+.ds-structure.ds-saved-views-menu-panel [data-part='empty-state'][data-empty-state='all'] {
+  padding: var(--ds-saved-views-menu-empty-all-padding, 28px 16px);
+  text-align: center;
+}
+.ds-structure.ds-saved-views-menu-panel [data-empty-state='persona'] [data-part='empty-state-icon'] {
+  inline-size: var(--ds-saved-views-menu-empty-icon-size, 16px);
+  block-size: var(--ds-saved-views-menu-empty-icon-size, 16px);
+  margin-block-start: 2px;
+}
+.ds-structure.ds-saved-views-menu-panel [data-empty-state='all'] > [data-part='empty-state-icon'] {
+  inline-size: var(--ds-saved-views-menu-empty-icon-size-lg, 18px);
+  block-size: var(--ds-saved-views-menu-empty-icon-size-lg, 18px);
+  margin: 0 auto 8px;
+}
+
+.ds-structure.ds-saved-views-menu-panel [data-part='section'] {
+  margin-block-end: var(--ds-saved-views-menu-section-gap, 12px);
+}
+.ds-structure.ds-saved-views-menu-panel [data-part='section-bar'] {
+  padding: var(--ds-saved-views-menu-section-bar-padding, 0 6px 8px);
+}
+
+.ds-structure.ds-saved-views-menu-panel [data-part='view-item'] {
+  inline-size: 100%;
+  padding: 0;
+}
+.ds-structure.ds-saved-views-menu-panel [data-part='view-item-select'] {
+  flex: 1;
+  min-inline-size: 0;
+  padding: var(--ds-saved-views-menu-view-item-padding, 12px);
+  cursor: pointer;
+  text-align: start;
+}
+.ds-structure.ds-saved-views-menu-panel [data-part='view-item-lead'],
+.ds-structure.ds-saved-views-menu-panel [data-part='view-item-copy'] {
+  flex: 1;
+  min-inline-size: 0;
+}
+.ds-structure.ds-saved-views-menu-panel [data-part='view-item-label'] {
+  max-inline-size: var(--ds-saved-views-menu-view-item-label-measure, 180px);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.ds-structure.ds-saved-views-menu-panel [data-part='view-item-description'] {
+  margin-block-start: var(--ds-saved-views-menu-view-item-description-gap, 5px);
+}
+
+.ds-structure.ds-saved-views-menu-panel [data-part='delete'] {
+  display: flex;
+  align-self: center;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--ds-saved-views-menu-delete-size, 28px);
+  block-size: var(--ds-saved-views-menu-delete-size, 28px);
+  margin-inline-end: 8px;
+  cursor: pointer;
+}
+
+.ds-structure.ds-saved-views-menu-panel [data-part='count-pill'] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: var(--ds-saved-views-menu-count-pill-measure, 24px);
+  block-size: var(--ds-saved-views-menu-count-pill-block-size, 22px);
+  padding-block: 0;
+  padding-inline: 8px;
+}
+.ds-structure.ds-saved-views-menu-panel [data-part='status-pill'] {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  block-size: var(--ds-saved-views-menu-status-pill-block-size, 20px);
+  padding-block: 0;
+  padding-inline: 8px;
+}
+
 @media (forced-colors: active) {
   .ds-structure.ds-saved-views-menu[data-part='trigger'][data-open],
   .ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open],
