@@ -186,13 +186,13 @@ const key = (finding: Finding) => `${finding.file} :: ${finding.value}`;
 const KNOWN_TENANT_LITERALS: readonly string[] = [
   'foundation/tokens/css/foundation/themes/default.css :: #0c0c0e',
   'foundation/tokens/css/foundation/themes/default.css :: #0d0d10',
-  // Not new debt: these two ground literals predate the inventory but became
-  // CLASSIFIABLE as tenant values when the rottay palette claimed them
-  // (backgroundSecondaryColor/backgroundTertiaryColor, R1-P ground migration).
-  // File content did not change; the drain belongs to the default.css
-  // neutralization owner decision (wddefault-state.md).
+  // Not new debt: this ground literal predates the inventory but became
+  // CLASSIFIABLE as a tenant value when the rottay palette claimed it
+  // (backgroundSecondaryColor, R1-P ground migration). Its `:root` declaration
+  // drained with the light-seed rewire; what survives is the `.dark` bg-input
+  // pin, which holds dark byte-identical and is the reason it is still observed.
+  // Its sibling #141417 (backgroundTertiaryColor) drained outright.
   'foundation/tokens/css/foundation/themes/default.css :: #0f0f12',
-  'foundation/tokens/css/foundation/themes/default.css :: #141417',
   'foundation/tokens/css/foundation/themes/default.css :: #14532d',
   'foundation/tokens/css/foundation/themes/default.css :: #15803d',
   'foundation/tokens/css/foundation/themes/default.css :: #166534',

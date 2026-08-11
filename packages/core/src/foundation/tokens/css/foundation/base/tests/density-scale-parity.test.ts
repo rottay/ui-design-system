@@ -13,8 +13,8 @@
  * writes only the semantic factor it already represents. Neither writes both,
  * so the two channels can never multiply the same decision twice.
  */
-import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { readFileSync, readdirSync } from 'node:fs';
+import { join, relative, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import {
@@ -72,6 +72,42 @@ function localEffectiveScaleBounds(css: string): { min: number; max: number } | 
   );
   return match ? { min: Number(match[1]), max: Number(match[2]) } : null;
 }
+
+const CSS_ROOT = resolve(process.cwd(), 'src/foundation/tokens/css');
+
+/** Every CSS file the token tree ships, so a census cannot miss a new emitter. */
+function everyTokenCss(): string[] {
+  const files: string[] = [];
+  const walk = (dir: string) => {
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      const full = join(dir, entry.name);
+      if (entry.isDirectory()) walk(full);
+      else if (entry.name.endsWith('.css')) files.push(full);
+    }
+  };
+  walk(CSS_ROOT);
+  return files.sort();
+}
+
+/** Files declaring `channel`, relative to the CSS root. */
+function declarers(channel: string): string[] {
+  const declaration = new RegExp(`^\\s*${channel}\\s*:`, 'm');
+  return everyTokenCss()
+    .filter((file) => declaration.test(readFileSync(file, 'utf8')))
+    .map((file) => relative(CSS_ROOT, file));
+}
+
+/**
+ * The two files allowed to author the effective-scale clamp, and the reason
+ * each is allowed. `themes/default.css` is the `:root` authority; the local
+ * boundary block in `density.css` reprojects it for nested subtrees, because a
+ * factor declared on a descendant cannot recompute a property inherited from
+ * `:root`. Anything else is a second emitter.
+ */
+const EFFECTIVE_SCALE_DECLARERS = [
+  'foundation/base/density.css',
+  'foundation/themes/default.css',
+];
 
 const cssFactors = parseCssFactors(densityCss);
 const rootFactors = parseRootFactors(densityCss);
@@ -163,14 +199,30 @@ describe('density authority contract', () => {
   it.each([
     ['base spacing', spacingCss],
     ['default theme spacing', defaultThemeCss],
-  ])('%s composes structural, appearance and local factors', (_label, css) => {
+  ])('%s multiplies every step by the effective-scale channel', (_label, css) => {
+    // What each declaring file owns: its steps must READ the channel. Whether
+    // the file also DECLARES the channel is a cascade question, settled once
+    // below -- requiring it per file demanded three copies of one declaration,
+    // and `edf91a41f` deleted the copy in spacing.css that never won.
     const declarations = spacingDeclarations(css);
     expect(declarations.length).toBeGreaterThan(0);
-    expect(globalEffectiveScaleBounds(css)).toEqual(DENSITY_SCALE_BOUNDS);
-    expect(localEffectiveScaleBounds(css)).toEqual(DENSITY_SCALE_BOUNDS);
     for (const declaration of declarations) {
       expect(declaration).toContain('var(--ds-density-effective-scale, 1)');
     }
+  });
+
+  it('authors the effective-scale clamp in exactly two places, both canonical', () => {
+    // The census is the anti-second-emitter leg: a step that multiplies by an
+    // undeclared channel falls back to 1 and density goes silently inert, while
+    // a THIRD declarer would let one of them win by document order alone.
+    expect(declarers('--ds-density-global-effective-scale')).toEqual(
+      EFFECTIVE_SCALE_DECLARERS,
+    );
+    expect(declarers('--ds-density-effective-scale')).toEqual(
+      EFFECTIVE_SCALE_DECLARERS,
+    );
+    expect(globalEffectiveScaleBounds(defaultThemeCss)).toEqual(DENSITY_SCALE_BOUNDS);
+    expect(localEffectiveScaleBounds(defaultThemeCss)).toEqual(DENSITY_SCALE_BOUNDS);
   });
 
   it('reprojects the effective ramp at local density boundaries', () => {
