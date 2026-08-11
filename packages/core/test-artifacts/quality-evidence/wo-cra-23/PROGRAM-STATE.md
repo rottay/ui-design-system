@@ -2103,6 +2103,45 @@ overridden in light but not dark still reads as overridden. bithire declaring
 `--ds-color-bg-primary: #ffffff` beside `--ds-color-bg-secondary: #151d2b` is the light/dark split,
 not an inconsistency. Resolving it properly is the same per-cell question the probe answers.
 
+### THE THESIS HELD, AND THE HARNESS ALMOST PROVED THE OPPOSITE
+
+`oauth-transition` captured in six cells after its repair — the one surface where the ambient glow
+derives from `--ds-color-primary` and therefore follows the tenant. The sighted verdict, which no
+counter in this programme could have produced:
+
+- **bithire/dark** — deep navy field, blue glow top-right, accent carrying through to the status dot
+  and progress bars. A designed product surface, not a gradient left switched on.
+- **evnto/light** — near-white with a soft grey vignette; the 8% near-black glow is barely a colour,
+  and lands as **editorial paper** rather than emptiness. That distinction — restraint versus absence
+  — is precisely what no measurement can make.
+- **platform/dark** — near-black, white glow, white accent. Quiet and premium, and clearly not bithire.
+
+Side by side, **three products**. On the one surface built to test it, the programme's thesis holds.
+
+**And the first run of that capture would have proved the exact opposite.** Six cells came out
+**untenanted and identical** — `rootAttributesToHtml` takes the attributes object from
+`rootAttributes(scope)`, and it was passed the scope, yielding an empty string, so every cell
+rendered with no tenant at all. Six screenshots that would have demonstrated the three verticals look
+the same: the opposite of the truth, with images behind it, on the only question this programme
+exists to answer.
+
+> A visual capture is not evidence until **every cell verifies its own scope**. A miswired harness
+> does not produce noise — it produces **uniformity**, which is indistinguishable from the finding
+> you most fear.
+
+Caught by printing the resolved root attribute and primary per cell **as an assertion** rather than
+trusting the loop. Every cell in the kept run names its own scope and primary.
+
+**Correction to my own note**, which I gave the lane as a warning and was wrong: I said the three
+darks would land on one canvas value and not to file that as a defect. They are not identical. The
+canvas literal is shared, but the **composite** is not — the three glows derive from
+`--ds-color-primary`, which in dark is `#1e84e6` / `#E8E8E0` / `#FFFFFF`. *"The three darks land on
+the same value" is true of the channel and false of the screen.*
+
+Declared limits: one family pair (`signal-line-light` / `-dark`, chosen so both vertical-to-vertical
+and light-to-dark stay comparable), one provider, one phase, animations pinned off, 1280×800,
+sha-pinned bundles, Chromium 149.
+
 ### A correctly-named channel in the wrong SCOPE is still a dead read
 
 The best catch of the closing wave, and it was made one step before writing. `progress-compounds`
