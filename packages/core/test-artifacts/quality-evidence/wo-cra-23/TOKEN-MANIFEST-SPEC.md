@@ -635,6 +635,35 @@ whether it is **writable by a TENANT**; static BrandTheme ownership satisfies it
 
 That is the converse of the dead-dial ratchet, and it belongs in the manifest.
 
+### 6.0a The theme layer is not the authority it is documented to be [M]
+
+The semantic type ramp — **9 roles × 7 facets = 63 channels** — is written by **two mechanisms**:
+the brand-theme builder's defaults table and `themes/default.css`. Both write all 63; zero are
+builder-only, zero are CSS-only. **19 of the 63 disagree.**
+
+The consequence is worse than the duplication. **The tenant artifact is unlayered and always
+outranks `layer(rottay-tokens)`, so on every tenanted page all 19 disagreements resolve in the
+BUILDER's favour.** `themes/default.css`'s 19 values paint only untenanted surfaces.
+
+> **For these channels the theme layer is dead on every real page.** It is documented as the
+> authority and is not one. Same defect class as the dead-`:root` sweep, one level up.
+
+Two consequences already realised:
+
+- **This resolves what was filed as open decision (e).** `--ds-type-code-font-variant-numeric`
+  (`tabular-nums` → `normal`) and `--ds-type-numeric-font-weight` (600 → 500) are two of the 19.
+  They are **not accidents of a re-alias sweep** — they are the two mechanisms disagreeing, and what
+  ships is the builder's side. The sighted check queued for them would have compared a tenanted page
+  against a value that never reaches it.
+- **The boundary law cannot see the second writer.** `hooks-manifest.json` classifies all 63 as
+  `foundationTokens` — *"the DS owns the value"* — and none as `tenantChannel`, although the
+  brand-theme emitter is a declared source and writes all 63 per tenant. Either a classifier gap or a
+  precedence rule that masks duplication by design; it must be adjudicated because the manifest is
+  the boundary law.
+
+**Unwinding the other 62 is a wave, not a lane.** Each of the 19 needs a value ruling — which side
+survives — *before* any emission is cut, because for those the cut is class 1, not class 2.
+
 ### 6.0b The artifact gate is blind to unbuilt compiler changes [M]
 
 `build-vertical-artifacts.mjs` imports from `../dist`, so `lint:artifacts` compares a **dist-derived
