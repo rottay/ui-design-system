@@ -95,6 +95,21 @@
   color: var(--ds-color-primary);
 }
 
+/* ─── the two channels this family keeps ──────────────────────────────────────
+   How tall the scroll region grows before it scrolls, and how wide a view name
+   runs before it truncates, are the only two values here a product legitimately
+   re-decides: both depend on how many saved views a tenant keeps and how they
+   name them. Every other value drained in this family is fixed anatomy and now
+   sits in the rules directly.
+
+   Root scope is not a preference — the panel is portalled to `document.body`,
+   so a declaration on the trigger's scope could never reach it. Dual-scope for
+   the `data-ds-root` div path; zero specificity so a tenant always wins. */
+:where(:root, [data-ds-root]) {
+  --ds-saved-views-menu-list-max-block-size: 420px;
+  --ds-saved-views-menu-view-item-label-measure: 180px;
+}
+
 /* standalone portaled panel ---------------------------------------------- */
 
 .ds-structure.ds-saved-views-menu-backdrop[data-part='backdrop'] {
@@ -178,12 +193,12 @@
    inline width/height so a tenant icon posture reaches them. Each host already
    carried its own part, so no new anatomy was needed. */
 .ds-structure.ds-saved-views-menu-panel [data-part='action-button'] svg {
-  inline-size: var(--ds-saved-views-menu-action-icon-size, 12px);
-  block-size: var(--ds-saved-views-menu-action-icon-size, 12px);
+  inline-size: 12px;
+  block-size: 12px;
 }
 .ds-structure.ds-saved-views-menu-panel [data-part='status-pill'] svg {
-  inline-size: var(--ds-saved-views-menu-pill-icon-size, 10px);
-  block-size: var(--ds-saved-views-menu-pill-icon-size, 10px);
+  inline-size: 10px;
+  block-size: 10px;
 }
 
 .ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='neutral'] {
@@ -255,8 +270,8 @@
   color: var(--ds-color-primary);
 }
 .ds-structure.ds-saved-views-menu-panel [data-part='checkmark'] svg {
-  inline-size: var(--ds-saved-views-menu-checkmark-size, 14px);
-  block-size: var(--ds-saved-views-menu-checkmark-size, 14px);
+  inline-size: 14px;
+  block-size: 14px;
 }
 
 .ds-structure.ds-saved-views-menu-panel [data-part='delete'] {
@@ -265,8 +280,8 @@
   color: var(--ds-color-text-muted);
 }
 .ds-structure.ds-saved-views-menu-panel [data-part='delete'] svg {
-  inline-size: var(--ds-saved-views-menu-delete-icon-size, 13px);
-  block-size: var(--ds-saved-views-menu-delete-icon-size, 13px);
+  inline-size: 13px;
+  block-size: 13px;
 }
 
 .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='delete'] {
@@ -279,15 +294,15 @@
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  inline-size: var(--ds-saved-views-menu-glyph-size, 30px);
-  block-size: var(--ds-saved-views-menu-glyph-size, 30px);
+  inline-size: 30px;
+  block-size: 30px;
   border-radius: var(--ds-radius-md, 10px);
   background: color-mix(in srgb, var(--ds-color-bg-primary) 54%, transparent);
   color: var(--ds-color-text-secondary);
 }
 .ds-structure.ds-saved-views-menu-panel [data-part='glyph'] svg {
-  inline-size: var(--ds-saved-views-menu-glyph-icon-size, 14px);
-  block-size: var(--ds-saved-views-menu-glyph-icon-size, 14px);
+  inline-size: 14px;
+  block-size: 14px;
 }
 
 .ds-structure.ds-saved-views-menu-panel [data-part='glyph'][data-active='true'] {
@@ -498,10 +513,10 @@
 
 .ds-structure.ds-saved-views-menu[data-part='anchor'] {
   position: relative;
-  z-index: var(--ds-saved-views-menu-anchor-z, 1);
+  z-index: 1;
 }
 .ds-structure.ds-saved-views-menu[data-part='anchor'][data-open='true'] {
-  z-index: var(--ds-saved-views-menu-anchor-open-z, 60);
+  z-index: 60;
 }
 .ds-structure.ds-saved-views-menu[data-part='trigger'] [data-part='trigger-body'] {
   min-inline-size: 0;
@@ -509,12 +524,12 @@
 
 .ds-structure.ds-saved-views-menu-panel[data-part='panel'] {
   position: fixed;
-  z-index: var(--ds-saved-views-menu-panel-z, 2000);
+  z-index: 2000;
   overflow: hidden;
 }
 
 .ds-structure.ds-saved-views-menu-panel [data-part='header'] {
-  padding: var(--ds-saved-views-menu-header-padding, 16px 18px 14px);
+  padding: 16px 18px 14px;
 }
 .ds-structure.ds-saved-views-menu-panel [data-part='header-copy'],
 .ds-structure.ds-saved-views-menu-panel [data-part='active-card-lead'],
@@ -534,47 +549,47 @@
 .ds-structure.ds-saved-views-menu-panel [data-part='header-description'],
 .ds-structure.ds-saved-views-menu-panel [data-part='active-card-description'],
 .ds-structure.ds-saved-views-menu-panel [data-part='empty-state-description'] {
-  margin-block-start: var(--ds-saved-views-menu-description-gap, 4px);
+  margin-block-start: 4px;
 }
 
 .ds-structure.ds-saved-views-menu-panel [data-part='active-card'] {
-  margin-block-start: var(--ds-saved-views-menu-active-card-gap, 14px);
-  padding: var(--ds-saved-views-menu-active-card-padding, 14px);
+  margin-block-start: 14px;
+  padding: 14px;
 }
 .ds-structure.ds-saved-views-menu-panel [data-part='active-card-actions'] {
-  margin-block-start: var(--ds-saved-views-menu-actions-gap, 12px);
+  margin-block-start: 12px;
 }
 
 /* the scroll region: the only part of the menu that owns a scroll frame */
 .ds-structure.ds-saved-views-menu-panel [data-part='list'] {
-  padding: var(--ds-saved-views-menu-list-padding, 12px 12px 10px);
+  padding: 12px 12px 10px;
   max-block-size: var(--ds-saved-views-menu-list-max-block-size, 420px);
   overflow-y: auto;
 }
 
 .ds-structure.ds-saved-views-menu-panel [data-part='empty-state'][data-empty-state='persona'] {
-  padding: var(--ds-saved-views-menu-empty-persona-padding, 18px 16px);
+  padding: 18px 16px;
 }
 .ds-structure.ds-saved-views-menu-panel [data-part='empty-state'][data-empty-state='all'] {
-  padding: var(--ds-saved-views-menu-empty-all-padding, 28px 16px);
+  padding: 28px 16px;
   text-align: center;
 }
 .ds-structure.ds-saved-views-menu-panel [data-empty-state='persona'] [data-part='empty-state-icon'] {
-  inline-size: var(--ds-saved-views-menu-empty-icon-size, 16px);
-  block-size: var(--ds-saved-views-menu-empty-icon-size, 16px);
+  inline-size: 16px;
+  block-size: 16px;
   margin-block-start: 2px;
 }
 .ds-structure.ds-saved-views-menu-panel [data-empty-state='all'] > [data-part='empty-state-icon'] {
-  inline-size: var(--ds-saved-views-menu-empty-icon-size-lg, 18px);
-  block-size: var(--ds-saved-views-menu-empty-icon-size-lg, 18px);
+  inline-size: 18px;
+  block-size: 18px;
   margin: 0 auto 8px;
 }
 
 .ds-structure.ds-saved-views-menu-panel [data-part='section'] {
-  margin-block-end: var(--ds-saved-views-menu-section-gap, 12px);
+  margin-block-end: 12px;
 }
 .ds-structure.ds-saved-views-menu-panel [data-part='section-bar'] {
-  padding: var(--ds-saved-views-menu-section-bar-padding, 0 6px 8px);
+  padding: 0 6px 8px;
 }
 
 .ds-structure.ds-saved-views-menu-panel [data-part='view-item'] {
@@ -584,7 +599,7 @@
 .ds-structure.ds-saved-views-menu-panel [data-part='view-item-select'] {
   flex: 1;
   min-inline-size: 0;
-  padding: var(--ds-saved-views-menu-view-item-padding, 12px);
+  padding: 12px;
   cursor: pointer;
   text-align: start;
 }
@@ -600,7 +615,7 @@
   text-overflow: ellipsis;
 }
 .ds-structure.ds-saved-views-menu-panel [data-part='view-item-description'] {
-  margin-block-start: var(--ds-saved-views-menu-view-item-description-gap, 5px);
+  margin-block-start: 5px;
 }
 
 .ds-structure.ds-saved-views-menu-panel [data-part='delete'] {
@@ -608,8 +623,8 @@
   align-self: center;
   align-items: center;
   justify-content: center;
-  inline-size: var(--ds-saved-views-menu-delete-size, 28px);
-  block-size: var(--ds-saved-views-menu-delete-size, 28px);
+  inline-size: 28px;
+  block-size: 28px;
   margin-inline-end: 8px;
   cursor: pointer;
 }
@@ -618,8 +633,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-inline-size: var(--ds-saved-views-menu-count-pill-measure, 24px);
-  block-size: var(--ds-saved-views-menu-count-pill-block-size, 22px);
+  min-inline-size: 24px;
+  block-size: 22px;
   padding-block: 0;
   padding-inline: 8px;
 }
@@ -627,7 +642,7 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  block-size: var(--ds-saved-views-menu-status-pill-block-size, 20px);
+  block-size: 20px;
   padding-block: 0;
   padding-inline: 8px;
 }
