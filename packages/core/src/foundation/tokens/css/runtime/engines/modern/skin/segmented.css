@@ -32,7 +32,7 @@
  * DESCENDANTS of that root — those are the engine's, not the caller's.
  *
  * SPECIFICITY (P-48), UNCHANGED BY THAT SUBSTITUTION and deliberately so: the
- * root's `border` shorthand carries a real color, so it must clear the tenant's
+ * root's `border` shorthand carries a real color, so it must clear a tenant's
  * unlayered `* { border-color }` floor at (0,3,1) — it reaches (0,4,0) via the
  * two scope classes + a repeated `role`, and stays a SHORTHAND. The option's
  * `border: none` is a color-free reset, exempt. The option rules inherit the
@@ -41,6 +41,21 @@
  * instead would have dropped every one of the 29 selectors by one weight unit,
  * which is a cascade question jsdom cannot adjudicate; an attribute-for-
  * attribute swap is inert in the cascade and needs no browser pass.
+ *
+ * THE FLOOR ABOVE IS UNVERIFIED, and the ballast is kept BECAUSE it is. Measured
+ * across the token source tree (13,621 rules), `styles/` (68,324) and `dist/`
+ * (54,898): NO rule of that shape exists. Its 47 appearances in the shipped
+ * bundle are all comments — this header and its ~20 siblings, carried in by the
+ * bundler. The one universal border rule that does exist is Tailwind preflight
+ * (`*, ::after, ::before, ::backdrop, ::file-selector-button { border: 0 solid }`),
+ * and it cannot arbitrate by specificity at all: it sits in `@layer
+ * rottay-framework` while this file lands in `@layer rottay-engines`, which the
+ * entrypoint declares LATER — layer order decides first and specificity never
+ * runs. What keeps the ballast is the corpus no instrument here can read: tenant
+ * paint is UNLAYERED (9 such rules in the bithire bundle), so it outranks every
+ * layer, and an unlayered tenant `*` would be answerable by specificity alone.
+ * Do not cite this floor as measured; cite it as the reason weight is preserved
+ * rather than argued about.
  *
  * PASS-2 LAW (batch-28): hover paint (root frame lift, option wash/lift) is
  * gated to `@media (hover: hover)`; the option `:active` dip is the touch
