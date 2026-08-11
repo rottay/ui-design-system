@@ -217,6 +217,10 @@ html[data-tenant="bithire"].dark {
   /* Accent for live indicators - dark */
   --ds-color-accent-live: #69a6d5;
   --ds-color-accent-live-bg: #132b40;
+
+  /* The light block above declares this ground; without a dark counterpart the
+     dropdown falls through to the DS default, which is #ffffff in both themes. */
+  --ds-select-dropdown-bg: var(--ds-surface-card);
 }
 
 /* Command / AI home tenant identity.
