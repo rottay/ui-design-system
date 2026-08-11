@@ -19,17 +19,21 @@
  *
  * 2. The modern search surface was keyed on
  *    `:has(> .rottay-input--modern[data-part='root'])`, but this family passes
- *    `data-part='search-input'` to the Input and the primitive writes
+ *    `data-part='search-input'` to the Input and the modern primitive writes
  *    `data-part={caller ?? 'root'}` — the caller's part REPLACES the default,
- *    so the predicate can never hold. Same root cause as (1) in a second
- *    guise. The modern arm now keys on the node that actually carries the
- *    part. The rustic arm has the same defect and is left as-is: Rustic is
- *    read-only for this programme.
+ *    so the predicate could never hold. Same root cause as (1) in a second
+ *    guise. The family no longer paints that node at all (see below).
+ *    NOTE: the rustic arm never had this defect. Rustic hardcodes
+ *    `partAttributes('root', …)` (`Input/engines/rustic/index.tsx:351`) and
+ *    puts the caller's className on that same node, so the caller's part
+ *    never reaches it and its `[data-part='root']` predicate is live.
  *
- * Search paint lands where caller style landed: in modern the class lands on
- * the Input's outer wrapper and the part on its painted shell, so the inset
- * and the field vocabulary go on the SHELL — the wrapper is never a second
- * frame around the primitive's own.
+ * 3. The family used to hand-tune the Input it composes. It cannot: this file
+ *    is `rottay-components` and the Input skin is `rottay-engines`, a later
+ *    layer, so every property painted on the primitive's node loses no matter
+ *    its specificity. Raising specificity does not help — a ladder against a
+ *    later layer loses anyway. The field's paint is therefore RELAYED through
+ *    `--ds-input-*` and its glyph moved to the primitive's `prefix` slot.
  *
  * REGION VOCABULARY: ground, rule, seam and rhythm read `--ds-toolbar-*` and
  * `--ds-list-shell-section-gap`, the channels the sibling filters rail reads,
@@ -51,10 +55,6 @@
   --_ds-table-toolbar-row-gap: var(
     --ds-list-shell-section-gap,
     var(--ds-spacing-2, 0.5rem)
-  );
-  --_ds-table-toolbar-glyph-inset: var(--ds-spacing-2, 0.5rem);
-  --_ds-table-toolbar-search-inset: calc(
-    var(--_ds-table-toolbar-glyph-inset) * 2 + var(--ds-icon-sm-size, 1rem)
   );
   --_ds-table-toolbar-search-max: 30rem;
   --_ds-table-toolbar-search-min: 10rem;
@@ -118,80 +118,54 @@
   display: none;
 }
 
-/* ---- search field: the positioning context the glyph is placed against ---- */
+/* ---- search field: measure here, paint RELAYED ----------------------------
+ *
+ * This file is `rottay-components`; the Input skin is `rottay-engines`, a
+ * LATER layer. Any property painted here on the Input's own node loses to it
+ * regardless of specificity — and loses invisibly, because
+ * `[data-size='md']` sets `padding-inline`, a shorthand that resets a
+ * `padding-inline-start` well without ever naming it. That is what defeated
+ * the glyph well and left the icon over the placeholder.
+ *
+ * So the family paints none of the field. The glyph rides the primitive's
+ * `prefix` slot (laid out by the Input's own affix gap, no well required),
+ * and the toolbar's vocabulary reaches the control as `--ds-input-*` relays.
+ * A relay cannot lose a layer race: custom properties inherit, and the
+ * primitive resolves them in its own rules.
+ *
+ * Each relay's fallback reproduces the root declaration EXACTLY
+ * (`themes/default.css:2167-2169`), so a tenant that declares no toolbar
+ * channel computes the primitive's own paint and nothing shifts. Only the
+ * type step is a deliberate departure: toolbar controls speak the supporting
+ * step rather than the Input's 14px default.
+ * ------------------------------------------------------------------------ */
 .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__search-field {
-  position: relative;
   flex: 0 1 auto;
   inline-size: 100%;
   max-inline-size: var(--_ds-table-toolbar-search-max);
   min-inline-size: var(--_ds-table-toolbar-search-min);
+
+  --ds-input-bg: var(--ds-toolbar-control-bg, var(--ds-color-bg-tertiary));
+  --ds-input-border: var(--ds-toolbar-control-border, var(--ds-color-border-primary));
+  --ds-input-color: var(--ds-toolbar-control-color, var(--ds-color-text-primary));
+  --ds-input-md-font-size: var(--ds-type-supporting-font-size, 0.8125rem);
 }
 
+/* The glyph is inside the shell now, so it needs ink and size, never
+   position. Its tint follows the field's focus through the primitive's own
+   focus-within, which reaches the affix as a descendant. */
 .ds-structure.ds-table-toolbar
   .ds-table-toolbar__search-field
-  > .ds-table-toolbar__search-icon[data-part='search-icon'] {
-  position: absolute;
-  inset-inline-start: var(--_ds-table-toolbar-glyph-inset);
-  top: 50%;
+  .ds-table-toolbar__search-icon[data-part='search-icon'] {
   inline-size: var(--ds-icon-sm-size, 1rem);
   block-size: var(--ds-icon-sm-size, 1rem);
-  pointer-events: none;
-  transform: translateY(-50%);
   color: var(--ds-search-icon-color, var(--ds-color-text-muted));
   transition: color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
 .ds-structure.ds-table-toolbar
   .ds-table-toolbar__search-field:focus-within
-  > .ds-table-toolbar__search-icon[data-part='search-icon'] {
+  .ds-table-toolbar__search-icon[data-part='search-icon'] {
   color: var(--ds-toolbar-color, var(--ds-color-text-secondary));
-}
-
-/* Search typography: the supporting step of the system scale, on the exact
- * paint node per engine — the native input inside the modern wrapper, and
- * the rustic shell which IS the input root. */
-.ds-structure.ds-table-toolbar
-  .ds-table-toolbar__search-field
-  .ds-table-toolbar__search-input
-  .rottay-input,
-.ds-structure.ds-table-toolbar
-  .ds-table-toolbar__search-field
-  .ds-table-toolbar__search-input.rottay-input {
-  font-size: var(--ds-type-supporting-font-size, 0.8125rem);
-}
-
-/* The modern shell owns the field's one boundary; the toolbar-control
-   vocabulary tunes it, falling through to the Input's own channel, so a
-   tenant that declares no toolbar channel computes what the primitive would
-   have painted alone. The glyph well sits on the shell, not the wrapper. */
-.ds-structure.ds-table-toolbar
-  .ds-table-toolbar__search-field
-  .rottay-input--modern[data-part='search-input'] {
-  padding-inline-start: var(--_ds-table-toolbar-search-inset);
-  background: var(
-    --ds-toolbar-control-bg,
-    var(--ds-input-bg, var(--ds-color-bg-secondary))
-  );
-  border-color: var(
-    --ds-toolbar-control-border,
-    var(--ds-input-border, var(--ds-color-border))
-  );
-  color: var(
-    --ds-toolbar-control-color,
-    var(--ds-input-color, var(--ds-color-text-primary))
-  );
-}
-
-/* Rustic arm, unchanged from the shipped contract (Rustic is read-only for
-   this programme). It carries the same `[data-part='root']` defect as the
-   modern arm did and is reported, not repaired, here. */
-.ds-structure.ds-table-toolbar
-  .ds-table-toolbar__search-field
-  > .ds-table-toolbar__search-icon[data-part='search-icon']
-  + div
-  > .ds-table-toolbar__search-input.rottay-input.rottay-input--rustic[data-part='root'] {
-  padding-inline-start: 32px;
-  background: var(--ds-color-bg-secondary);
-  border: 1px solid var(--ds-color-border);
 }
 
 /* ---- posture: tablet. The search field is the toolbar's primary
@@ -258,14 +232,7 @@
   }
   .ds-structure.ds-table-toolbar
     .ds-table-toolbar__search-field
-    .rottay-input--modern[data-part='search-input'] {
-    background: Field;
-    border-color: ButtonText;
-    color: FieldText;
-  }
-  .ds-structure.ds-table-toolbar
-    .ds-table-toolbar__search-field
-    > .ds-table-toolbar__search-icon[data-part='search-icon'] {
+    .ds-table-toolbar__search-icon[data-part='search-icon'] {
     color: CanvasText;
   }
 }
@@ -274,7 +241,7 @@
 @media (prefers-reduced-motion: reduce) {
   .ds-structure.ds-table-toolbar
     .ds-table-toolbar__search-field
-    > .ds-table-toolbar__search-icon[data-part='search-icon'] {
+    .ds-table-toolbar__search-icon[data-part='search-icon'] {
     transition: none;
   }
 }

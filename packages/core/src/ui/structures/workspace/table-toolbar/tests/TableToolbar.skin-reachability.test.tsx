@@ -122,33 +122,55 @@ describe("TableToolbar skin reachability", () => {
     expect(spacer!.decls.flex).toBe("1");
     expect(container.querySelector(spacer!.selector)).not.toBeNull();
 
-    const field = winningDecl(rules, "position", (r) =>
-      r.selector.endsWith("__search-field")
+    // Unconditional only: the tablet posture deliberately relaxes the cap to
+    // 100%, and it sorts later.
+    const field = winningDecl(
+      rules,
+      "max-inline-size",
+      (r) => r.selector.endsWith("__search-field") && r.conditions === ""
     );
-    expect(
-      field,
-      "without a positioned field the absolutely placed glyph escapes it"
-    ).toBeDefined();
-    expect(field!.decls.position).toBe("relative");
+    expect(field, "the search field had no measure at all").toBeDefined();
+    expect(field!.decls["max-inline-size"]).toContain("search-max");
     expect(container.querySelector(field!.selector)).not.toBeNull();
   });
 
-  it("puts the field vocabulary on the node that carries the part", async () => {
+  it("paints nothing on the primitive it composes, and relays instead", async () => {
     const rules = readRules();
     const container = await renderToolbar(withFilters);
 
-    const shell = winningDecl(
-      rules,
-      "padding-inline-start",
-      (r) => r.selector.includes("--modern") && r.conditions === ""
+    // This file is `rottay-components`; the Input skin is `rottay-engines`, a
+    // LATER layer, so any property painted on the primitive's node loses — and
+    // `[data-size='md']`'s `padding-inline` shorthand resets a
+    // `padding-inline-start` well without naming it, which is how the glyph
+    // ended up over the placeholder. Specificity cannot win this race; only
+    // not painting there can.
+    for (const rule of rules) {
+      if (/rottay-input/.test(rule.selector)) {
+        expect(Object.keys(rule.decls), rule.selector).toEqual([]);
+      }
+    }
+
+    const field = rules.find(
+      (r) => r.selector.endsWith("__search-field") && r.conditions === ""
     );
-    expect(shell).toBeDefined();
-    // The predicate that never held was `[data-part='root']` inside the Input;
-    // the family passes `search-input`, which REPLACES the primitive default.
-    expect(shell!.selector).toContain("[data-part='search-input']");
-    expect(container.querySelector(shell!.selector)).not.toBeNull();
-    expect(shell!.decls.background).toContain("--ds-toolbar-control-bg");
-    expect(shell!.decls["border-color"]).toContain("--ds-toolbar-control-border");
+    expect(field).toBeDefined();
+    // Each relay falls through to the EXACT root declaration, so a tenant with
+    // no toolbar channel computes the primitive's own paint, unshifted.
+    expect(field!.decls["--ds-input-bg"]).toBe(
+      "var(--ds-toolbar-control-bg, var(--ds-color-bg-tertiary))"
+    );
+    expect(field!.decls["--ds-input-border"]).toBe(
+      "var(--ds-toolbar-control-border, var(--ds-color-border-primary))"
+    );
+    expect(field!.decls["--ds-input-color"]).toBe(
+      "var(--ds-toolbar-control-color, var(--ds-color-text-primary))"
+    );
+
+    // The glyph rides the primitive's affix slot, so it sits INSIDE the shell.
+    const glyph = container.querySelector(
+      '[data-part="search-input"] [data-part="search-icon"]'
+    );
+    expect(glyph, "the glyph must sit inside the field, not over it").not.toBeNull();
   });
 
   it("reads ground, rule and rhythm through the shared region channels", () => {

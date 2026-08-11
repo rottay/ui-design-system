@@ -145,15 +145,22 @@ export function TableToolbar({
               role="search"
               aria-label={resolvedSearchLabel}
             >
-              <ActionSearchIcon
-                decorative
-                size="sm"
-                data-part="search-icon"
-                className="ds-table-toolbar__search-icon"
-              />
               <Input
                 data-part="search-input"
                 className="ds-table-toolbar__search-input"
+                /* The glyph rides the primitive's own affix slot. Positioning
+                   it absolutely over the field required a padding well on the
+                   Input's shell, and the Input skin loads in a later layer —
+                   its `padding-inline` shorthand resets that well without
+                   naming it, leaving glyph and placeholder overlapping. */
+                prefix={
+                  <ActionSearchIcon
+                    decorative
+                    size="sm"
+                    data-part="search-icon"
+                    className="ds-table-toolbar__search-icon"
+                  />
+                }
                 aria-label={resolvedSearchLabel}
                 placeholder={resolvedSearchPlaceholder}
                 value={search ?? ''}
