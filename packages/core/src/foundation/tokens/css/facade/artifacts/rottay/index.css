@@ -967,8 +967,8 @@
   --ds-color-text-inverse: #0C0C0E;
 
   /* -- Borders - Nearly invisible on dark (Vercel style) ------- */
-  --ds-color-border: #1C1C20;
-  --ds-color-border-primary: #1C1C20;
+  --ds-color-border: #28282C;
+  --ds-color-border-primary: #28282C;
   --ds-color-border-secondary: #252529;
   --ds-color-border-subtle: #161619;
   --ds-color-border-tertiary: #161619;
@@ -1794,7 +1794,6 @@
   --ds-segmented-bg: #131316;
   --ds-segmented-item-bg: transparent;
   --ds-segmented-item-bg-selected: #222226;
-  --ds-segmented-border: var(--ds-color-border-secondary);
   --ds-segmented-item-color: var(--ds-color-text-muted);
   --ds-segmented-item-color-hover: #A0A0A5;
   --ds-segmented-item-color-selected: #ECECEC;
