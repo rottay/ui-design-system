@@ -1,6 +1,17 @@
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+
 import React from 'react';
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+
+const RUSTIC_DROPDOWN_SKIN = readFileSync(
+  resolve(
+    process.cwd(),
+    'src/foundation/tokens/css/runtime/engines/rustic/skin/dropdown.css'
+  ),
+  'utf8'
+);
 
 import { Dropdown as RusticDropdown } from '../engines/rustic';
 
@@ -43,9 +54,16 @@ describe('Dropdown rustic engine advanced coverage', () => {
     expect(await screen.findByRole('menu')).toBeInTheDocument();
     expect(screen.getByRole('separator')).toBeInTheDocument();
 
+    // The hover ground is CSS, not inline: the rustic engine's mouseEnter only
+    // toggles open state. This asserted an inline contract the CSS-first
+    // migration removed, and passed because jest-dom parses the EXPECTED value
+    // through happy-dom's typed parser, which discards a var() with a fallback
+    // and leaves {} — an expectation that matches any element.
     const editItem = screen.getByRole('menuitem', { name: 'Edit' });
+    expect(RUSTIC_DROPDOWN_SKIN).toContain(
+      "[data-part='item']:hover:not([data-disabled='true']) {\n  background-color: var(--ds-dropdown-item-hover-bg, var(--ds-color-neutral-100, #f3f4f6));"
+    );
     fireEvent.mouseEnter(editItem);
-    expect(editItem).toHaveStyle({ backgroundColor: 'var(--ds-dropdown-item-hover-bg, var(--ds-color-neutral-100, #f3f4f6))' });
     fireEvent.mouseLeave(editItem);
 
     fireEvent.click(editItem);
