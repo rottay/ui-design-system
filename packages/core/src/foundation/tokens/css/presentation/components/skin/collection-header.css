@@ -283,7 +283,7 @@
 
 .ds-structure.ds-collection-header [data-part='title'][data-title-treatment='display'] {
   font-family: var(--ds-font-family-display, var(--ds-font-family-heading));
-  font-size: clamp(2.625rem, 5.4cqi, 3.625rem);
+  font-size: clamp(calc(2.625rem * var(--ds-type-scale, 1)), calc(5.4cqi * var(--ds-type-scale, 1)), calc(3.625rem * var(--ds-type-scale, 1)));
   font-weight: var(--ds-font-weight-semibold, 600);
   letter-spacing: 0.015em;
   line-height: 0.9;
@@ -294,19 +294,19 @@
   text-transform: var(--_ds-collection-header-overline-case);
 }
 .ds-structure.ds-collection-header [data-part='title'][data-title-treatment='dotted'][data-compact-layout='true'] {
-  font-size: clamp(1.625rem, 8.8cqi, 2.125rem);
+  font-size: clamp(calc(1.625rem * var(--ds-type-scale, 1)), calc(8.8cqi * var(--ds-type-scale, 1)), calc(2.125rem * var(--ds-type-scale, 1)));
   font-weight: var(--ds-font-weight-bold, 700);
   letter-spacing: -0.022em;
   line-height: 0.92;
 }
 .ds-structure.ds-collection-header [data-part='title'][data-title-treatment='dotted'][data-compact-layout='false'][data-editorial-tech='true'] {
-  font-size: clamp(2.5rem, 5.2cqi, 3.375rem);
+  font-size: clamp(calc(2.5rem * var(--ds-type-scale, 1)), calc(5.2cqi * var(--ds-type-scale, 1)), calc(3.375rem * var(--ds-type-scale, 1)));
   font-weight: var(--ds-font-weight-semibold, 600);
   letter-spacing: -0.052em;
   line-height: 0.84;
 }
 .ds-structure.ds-collection-header [data-part='title'][data-title-treatment='dotted'][data-compact-layout='false'][data-editorial-tech='false'] {
-  font-size: clamp(2.375rem, 4.8cqi, 3.25rem);
+  font-size: clamp(calc(2.375rem * var(--ds-type-scale, 1)), calc(4.8cqi * var(--ds-type-scale, 1)), calc(3.25rem * var(--ds-type-scale, 1)));
   font-weight: var(--ds-font-weight-extrabold, 800);
   letter-spacing: -0.04em;
   line-height: 0.88;
