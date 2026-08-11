@@ -92,6 +92,9 @@
   --ds-color-bg-primary: #FFFFFF;
   --ds-color-bg-secondary: #fafafa;
   --ds-color-bg-tertiary: #f5f5f5;
+  --ds-color-border: var(--ds-color-border-primary);
+  --ds-color-border-subtle: color-mix(in srgb, var(--ds-color-border-primary) 66.667%, transparent);
+  --ds-color-border-tertiary: color-mix(in srgb, var(--ds-color-border-primary) 66.667%, transparent);
   --ds-color-dark-accent: #A89880;
   --ds-color-dark-bg: #131210;
   --ds-color-dark-primary: #E8E8E0;
@@ -107,6 +110,7 @@
   --ds-color-error-700: #710005;
   --ds-color-error-800: #480002;
   --ds-color-error-900: #230001;
+  --ds-color-error-border: color-mix(in srgb, var(--ds-color-error) 20%, transparent);
   --ds-color-info: #475569;
   --ds-color-info-100: #D4DEED;
   --ds-color-info-200: #B4C1D3;
@@ -118,6 +122,7 @@
   --ds-color-info-700: #2F3A49;
   --ds-color-info-800: #1B232D;
   --ds-color-info-900: #0A0E13;
+  --ds-color-info-border: color-mix(in srgb, var(--ds-color-info) 20%, transparent);
   --ds-color-on-error: #ffffff;
   --ds-color-on-info: #ffffff;
   --ds-color-on-success: #ffffff;
@@ -155,6 +160,7 @@
   --ds-color-success-700: #00461C;
   --ds-color-success-800: #002B0E;
   --ds-color-success-900: #001204;
+  --ds-color-success-border: color-mix(in srgb, var(--ds-color-success) 20%, transparent);
   --ds-color-text-on-primary: #ffffff;
   --ds-color-warning: #A16207;
   --ds-color-warning-100: #FFD5AA;
@@ -167,6 +173,7 @@
   --ds-color-warning-700: #533000;
   --ds-color-warning-800: #341C00;
   --ds-color-warning-900: #170A00;
+  --ds-color-warning-border: color-mix(in srgb, var(--ds-color-warning) 20%, transparent);
   --ds-density-scale: 1.125;
   --ds-ease-exit: cubic-bezier(0.4, 0, 1, 1);
   --ds-ease-standard: cubic-bezier(0.2, 0, 0, 1);
@@ -199,6 +206,8 @@
   --ds-line-height-heading: 1.2;
   --ds-line-height-relaxed: 1.75;
   --ds-line-height-tight: 1.25;
+  --ds-material-card-background-hover: color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-color-bg-elevated));
+  --ds-material-control-background-hover: color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-color-bg-elevated));
   --ds-motion-attention: calc(var(--ds-motion-deliberate) * var(--ds-motion-duration-scale, 1));
   --ds-motion-calm: 350ms;
   --ds-motion-deliberate: 320ms;
@@ -228,6 +237,7 @@
   --ds-shell-grid-line: transparent;
   --ds-shell-grid-size: 0px;
   --ds-sidebar-bg: #fafafa;
+  --ds-sidebar-border: var(--ds-color-border);
   --ds-sidebar-group-color: #737373;
   --ds-sidebar-group-font-size: 11px;
   --ds-sidebar-group-font-weight: 600;
