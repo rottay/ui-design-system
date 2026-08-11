@@ -437,6 +437,42 @@ under §1.4 is always no. Rows c–f above are all this shape.
 Corollary: idling for an answer is itself the defect. An hourly heartbeat now re-enters the programme
 if a lane has stalled waiting on a decision that was never the owner's to make.
 
+### "Has no skin file" is not a defect signal — it has at least three innocent causes
+
+I offered a lane three families as "no skin at all". **All three were false positives**, each for a
+different reason: `record/content` is served by `record.css` (folder name ≠ scope name, the same
+mismatch that fooled a matcher earlier); `dashboard/insights` is a **group**, not a family, and its
+leaves each own a skin; `workspace/connected-command-palette` **owns no DOM at all** — it returns two
+composed patterns, so the paint is one layer down, exactly as `view-mode-switcher` correctly has almost
+none. My error compounded it: I built that candidate list from a matcher I already knew was unreliable.
+
+**The signal that means something is: stamps DOM that no skin selector can reach.**
+
+### CSS→scopes and TSX→scopes are different instruments and find different defects
+
+The census that answers it runs from the **other end**: collect every scope class any skin selector can
+reach, then walk every family and ask which stamp a `data-part` plus a scope class nothing reaches.
+
+Result across 27 structure directories: one genuine orphan —
+`column-menu/index.tsx:1073` stamps `className="ds-column-menu-control"` and **nothing** in the token
+tree or `styles/` targets it. A class on a shipped element that no rule can ever match.
+
+The lane had already triaged that family as "drained" using a CSS→scopes pass, which **structurally
+could not see this**: one direction asks what the skin declares, the other what the DOM stamps. This is
+the matcher-blind-spot-has-a-direction law with a concrete instance, and it argues for a gate: an
+orphan census shares no module with `skin-dead-part-audit` (skin selector → unstamped part versus
+stamped class → unreachable selector), so unlike most of our instruments, **their agreement would carry
+real information.** Authorised, with a positive control required.
+
+One false positive stated by the lane rather than left to be discovered: `ds-sr-only` reads as
+unreachable only because the walk covers the skin directory and that utility is declared in
+`runtime/engines/**`. A census must state which trees it searched, in its output, not in a comment.
+
+**And its positive control independently reproduced the corrected family count**: 27 directories minus
+`shell/contracts` and `shell/styles`, which are support owners rather than families, is **25** — the
+number reached earlier by an unrelated route after miscounting 28. Two techniques, no shared module,
+same answer.
+
 ### Enumerate inline paint WITH its anatomy, or the one site that matters hides among the twenty that do not
 
 An inline-style census finds sites; it does not tell you which ones matter. In a 34-site drain, the
