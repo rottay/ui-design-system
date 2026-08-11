@@ -262,7 +262,7 @@ skin**.
 
 | family | exposure | repair |
 |---|---|---|
-| Button | 123 of 127 production sites, 38 files, 411 declarations | `[data-variant]`, weight-identical at 7 selectors |
+| Button | 123 of 127 production sites, 38 files, 411 declarations | `[data-variant]`, weight-identical at 7 selectors — **a DIFF claim, verify at `cb1e3645f`** |
 | Badge | 16 sites / 9 patterns, 10 truly bare | scope class at (0,2,0), **deliberately below** the (0,3,0)–(0,4,0) pattern rules |
 | Segmented | 2 shipped switchers, 29 selectors / 97 declarations | `[role='radiogroup']`, weight-identical |
 | list-toolbar | 34 selectors / 117 declarations, dead against its own engine | `[data-variant]`, weight-identical |
@@ -271,6 +271,12 @@ skin**.
 Second-order, invisible to any "properties lost" measurement because the suffering rule stays alive
 and matching: **`prefers-reduced-transparency: reduce` was silently not honoured on 123 buttons** —
 its one suppressing declaration lived inside the severed block.
+
+**The "7 selectors" is a property of the repair diff, not of the file.** `git show cb1e3645f` has
+exactly seven `[data-part='trigger']` selector lines re-keyed. At HEAD `button.css` has **one**
+selector block on bare `[data-variant]` and 71 selectors mentioning it, so a naive re-count gets
+anything but 7. The zero-on-`trigger` and zero-on-`root` claims do hold at HEAD — the only remaining
+textual hits are comments.
 
 **Attack it:** Badge's repair drops specificity on purpose. We measured 0 of 6 compensated sites
 losing pattern paint, in Chromium against three shipped bundles. Re-measure. Also check the claim
@@ -381,7 +387,22 @@ copied them unprefixed, which makes them unresolvable — an auditor flagged exa
 | 8 | framework projection | 28 [M] | `framework-token-projection.css` |
 | 9 | runtime TS channels | ~356 **[U]** | `packages/core/src/foundation/tokens/ts/`, `packages/core/src/ui/**` |
 
-**Total distinct declared across `src/**/*.css`: 4,164 [M].**
+**Total distinct declared across `src/**/*.css`: 4,164 — CORRECTED BY AUDIT, read the qualifier.**
+
+> **This figure is `--ds-*` ONLY, at commit `d3cb7dec0`, and the brief did not say so.** Distinct
+> custom properties overall were **4,418** at that commit and are **4,506** at HEAD; the 4,164
+> silently excludes `--_ds-*` (97 then, 182 now) and ~157 names in other namespaces. At HEAD the
+> `--ds-*` count is 4,167.
+>
+> **Two rows of this table reproduce under no counting method and their `[M]` tags are unfounded.**
+> L1 claims 453, measures 320 distinct / 360 occurrences. L4 claims 124 names in 30 files, measures
+> 236 in 147. **No committed script reproducing any layer row was found** — so every `[M]` in this
+> table should be read as `[U]` until one exists. That is exactly the failure §0 warns about, wearing
+> the tag that exists to prevent it.
+>
+> Row 5's numerator survives: 182 exclusive, confirmed exactly. Its denominator was 214 at the spec's
+> commit and is **218 at HEAD**, because `7516eaa37` — this programme's own commit — added three
+> `--ds-button-*-shadow` names after the spec was written.
 
 Two structural facts the spec names, both of which an auditor should press on:
 
