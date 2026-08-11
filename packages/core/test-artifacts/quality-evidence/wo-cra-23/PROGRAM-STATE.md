@@ -437,6 +437,57 @@ under §1.4 is always no. Rows c–f above are all this shape.
 Corollary: idling for an answer is itself the defect. An hourly heartbeat now re-enters the programme
 if a lane has stalled waiting on a decision that was never the owner's to make.
 
+### BROKERED: both auditors were wrong on D1, in opposite directions
+
+The two-auditor law paying for itself. Fable counted **5** silent evnto border slots. Kimi counted
+**2** and said no enumeration of 5 exists anywhere. I measured every `--ds-color-*border*` name
+against all three artifacts:
+
+```
+                              bithire  evnto  rottay   default.css
+--ds-color-border-subtle         2       0       2          1
+--ds-color-border-tertiary       2       0       2          1     <- Fable missed
+--ds-color-error-border          2       0       2          1     ┐
+--ds-color-info-border           2       0       2          1     │ Kimi missed
+--ds-color-success-border        2       0       2          1     │ all four
+--ds-color-warning-border        2       0       2          1     ┘
+--ds-color-border-secondary      2       2       2          2     <- not silent
+```
+
+**Six.** Fable had the status borders and missed `border-tertiary`; Kimi had `border-tertiary` and
+dropped the status borders. Neither number was right, and a merged review would have produced one
+confident wrong count instead of a disagreement worth measuring. This is what §1.1 means by *where
+they disagree is the finding*.
+
+Where they independently AGREE, and that agreement is evidence because their techniques differ:
+
+- The derivation **cannot** land near-black on evnto light. It returns `undefined` on evnto's
+  `rgba(0,0,0,0.08)` light border (the non-hex gate), and composited first yields ≈`#F2F2F2`.
+  My conditional "if it lands near-black, evnto's ink/surface pair is wrong" **never fires** — the
+  pair is documented, deliberate design, used by the derivations module as a calibration example of
+  legitimacy.
+- "The formula the other two verticals already use" is **false**. Both hand-author literals; the
+  formula runs only on the DB appearance path and was fitted *to* rottay, not followed by it.
+- Therefore D1 is **not** a value-preserving derivation. It is a **leak repair**: those six names
+  today resolve to `default.css`'s tenant-less DARK literal, so evnto's light cell paints near-black
+  hairlines on white right now. Repairing it repaints ~305 read sites on `border-subtle` alone. That
+  is a deliberate visual-change wave with sighted review, and must be scheduled as one.
+
+### A tenant-only channel consumed bare — second instance, now a confirmed class
+
+Kimi's independent fifth finding is the same shape a family lane found in `--ds-motion-calm`:
+`--ds-table-header-letter-spacing` and `-text-transform` (`default.css:1690-1691`) reference
+`--ds-text-eyebrow-*`, which **only the tenant compiler emits** — nothing declares them at `:root` —
+and modern consumes both with **no fallback** (`modern/skin/table.css:131-132`). Result: the
+tenant-less table renders initial values, tenants render `0.08em/uppercase`, and Rustic's own
+fallback diverges to a third value. Two instances found independently in one night makes this a class
+to sweep, not an incident.
+
+Kimi also named concrete instances of §2 clause 8 (a rename silently disabling its own guard):
+`engine-token-audit`'s fallback-parity **skips** undefined tokens rather than counting them, and
+`tenant-channel-consumer-gate` treats a rename as "revived" so the next `--seed` erases the debt
+record. Any rename wave must re-key its guards in the same commit.
+
 ### The dead-selector class, and why the finder's own definition would have destroyed 81 good rules
 
 A family lane found that rules written `.ds-<family> [data-part='root'] …` — descendant, note the
