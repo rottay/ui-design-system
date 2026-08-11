@@ -1963,6 +1963,44 @@ Declared blind spot on both halves: they only examine declarations in rules keye
 primitives carry default parts that are not `root` (`item`, `group`, `divider`, `meta`, `anchor`)
 with the same idiom, and neither census sees them.
 
+### The law has a SIGN, and both repairs moved it the safe way
+
+The directional law as I first wrote it was incomplete. Verified by re-running the class-A census
+against the tree at `ace62230d^` rather than reading a diff: Badge carried **4 class-A reads before
+its repair and 0 after** — `a796001ad` closed them as a side effect of fixing its severance — and
+Segmented never had orphan rows in either class. 16 families / 252 reads before, 15 / 248 after.
+
+Both repairs re-anchored the skin onto something the caller cannot take (the scope class in Badge,
+`[role='radiogroup']` in Segmented), which **de-orphans** the declarations instead of stranding them.
+
+> A repair drags orphan rows **in the direction it moves root-replaceability.** Moving it down closes
+> rows; moving it up opens them. "Every repair drags rows" is the wrong statement of it.
+
+The dangerous direction — a repair that makes the root part *more* replaceable — has not happened
+yet, and is the one to check first next time.
+
+### A false LIVE costs a lane; a false zero costs the programme
+
+`navigation/Link` was ranked LIVE on one production call site. The site is
+`app-bithire/…/public-header/index.tsx:61`, and that file does `import Link from "next/link"`. It is
+Next's Link, not ours. Resolved by import rather than by name, `primitives/navigation/Link` has
+**zero importers in source** anywhere in the repo outside its own directory — the only other
+references are in `storybook-static/`, which is build output. The row moves LIVE (1) → LATENT (0) and
+its 30 rules are unreachable.
+
+The cause was a declared limitation whose consequence went unchased: `callsites.json` records the tag
+**as written** and resolves nothing, and `Link` is the most collidable name in the ecosystem.
+Operative rule: **any row whose verdict rests on a single call site needs that site's import resolved
+before the verdict is quoted.**
+
+This is the first false **positive** of the night among a long catalogue of false zeros, and the two
+fail differently. A false LIVE spends a lane on a defect that does not exist and is caught the moment
+someone looks. A false zero licenses duplication and blindness, and is caught only by accident. Both
+are worth fixing; only one of them announces itself.
+
+Note this does not contradict the standing law that zero importers is not dead code. The claim is
+narrower and exact: Link's **severance exposure** is zero, not Link.
+
 ### Two files named for the same vertical, and only one of them has the skins
 
 My error, 2026-08-11. Asked where the cascade layers were, I searched
