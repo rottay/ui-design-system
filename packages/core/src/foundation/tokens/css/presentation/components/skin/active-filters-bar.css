@@ -53,6 +53,24 @@
  * `--ds-list-shell-section-gap` UNDER the family's own channels, so a tenant
  * can still address the rail alone; when it does not, the rail follows the
  * collection band its sibling `table-toolbar` also reads.
+ *
+ * DIVERGED FROM `list-toolbar.css`, DELIBERATELY AND UNRESOLVED.
+ * `PatternListToolbar` renders its OWN active-filter strip
+ * (`patterns/data/list-toolbar/engines/modern/index.tsx:1141-1225`) and
+ * `list-toolbar.css:980` asserts in prose that its count "speaks the same
+ * eyebrow voice as the ActiveFiltersBar count pill (sibling surfaces, one
+ * grammar)". That is no longer true: the count here is an eyebrow and the
+ * strip's is still a capsule, and `collection-workspace` can render both on
+ * one screen (`:1967` from `workspace.filterValues`, `:2544` from
+ * `resolvedActiveFilters`).
+ *
+ * The divergence is recorded rather than repaired. Re-pilling this count
+ * would undo the fix above; propagating the eyebrow would mean a structure
+ * editing a pattern. Prose asserting two files agree, with nothing that fails
+ * when they stop, is the mechanism that let them drift unnoticed — so this
+ * note states that they disagree instead. The real resolution is the
+ * duplication decision (one of the two implementations should not exist),
+ * which is scheduled separately.
  */
 
 /* ---- root: quiet hairline strip (padding drained from the engine's inline
