@@ -148,6 +148,42 @@ function mergeDefinedBranding(
 }
 
 /**
+ * Drop the radius steps the compiled BrandTheme already carries as dial
+ * operands.
+ *
+ * `brandThemeToTokenOverrides` copies `surfaces.borderRadius` into the
+ * structural override map so the merge chain can consume it — by its own
+ * documentation, the path that reaches the artifact "without a tenant manually
+ * authoring a literal override". But `tokenOverrideVariables` emits that map as
+ * flat `--ds-radius-*`, and a flat declaration replaces the foundation's
+ * `calc(base * var(--ds-radius-scale, 1))` entirely. themes/default.css grants
+ * that power to a tenant's own token set ("explicit beats dial"); a value the
+ * theme never authored as an override must not borrow it, or the theme silently
+ * disables its own radius dial.
+ *
+ * Keyed on the operand rather than on the step list: a step is dropped only
+ * where `--ds-radius-{step}-base` is present, so a step inherited from a
+ * vertical preset — which produces no operand — keeps its flat declaration
+ * instead of falling back to the foundation literal.
+ */
+function withoutDialOperandRadius<
+  T extends { borderRadius?: Partial<Record<'sm' | 'md' | 'lg' | 'xl', string>> },
+>(overrides: T, compiledVars: Record<string, string>): T {
+  const authored = overrides.borderRadius;
+  if (!authored) return overrides;
+
+  const kept = Object.fromEntries(
+    Object.entries(authored).filter(
+      ([step]) => compiledVars[`--ds-radius-${step}-base`] === undefined,
+    ),
+  ) as typeof authored;
+
+  return Object.keys(kept).length === Object.keys(authored).length
+    ? overrides
+    : { ...overrides, borderRadius: kept };
+}
+
+/**
  * Resolve the tenant visual bridge used by both runtime and static CSS paths.
  *
  * Precedence:
@@ -185,7 +221,10 @@ export function resolveTenantVisualConfig(
           config.personality ?? {},
         ),
         tokenOverrides: deepMergeTokenOverrides(
-          compiledBrand.tokenOverrides,
+          withoutDialOperandRadius(
+            compiledBrand.tokenOverrides,
+            compiledBrand.cssVariables,
+          ),
           config.tokenOverrides,
         ) as TenantConfig['tokenOverrides'],
       },

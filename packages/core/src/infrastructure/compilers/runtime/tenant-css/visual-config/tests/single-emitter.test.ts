@@ -199,9 +199,9 @@ describe('T6 -- planted second emitter fails the composition closed', () => {
       const actual = await vi.importActual<Record<string, unknown>>(PERSONALITY_MODULE);
       return {
         ...actual,
-        // A structural channel the compiled BrandTheme also authors. The
-        // resolver deep-merges tenant fields over compiled ones on purpose, so
-        // this is precedence, not a second author.
+        // A structural channel the tenant's own token overrides also author.
+        // The resolver deep-merges tenant fields over compiled ones on purpose,
+        // so this is precedence, not a second author.
         resolvePartialPersonalityCssVariables: () => ({ '--ds-radius-md': '99px' }),
       };
     });
