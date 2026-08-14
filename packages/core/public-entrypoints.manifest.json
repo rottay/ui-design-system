@@ -304,8 +304,8 @@
       "output": "entrypoints/public/runtime/i18n/index",
       "budget": {
         "maxDirectSources": 4,
-        "maxReachableModules": 22,
-        "maxSourceBytes": 49826
+        "maxReachableModules": 20,
+        "maxSourceBytes": 59860
       },
       "symbols": [
         {
@@ -454,8 +454,8 @@
       "output": "entrypoints/public/runtime/root-attributes/index",
       "budget": {
         "maxDirectSources": 1,
-        "maxReachableModules": 4,
-        "maxSourceBytes": 16306
+        "maxReachableModules": 2,
+        "maxSourceBytes": 26166
       },
       "symbols": [
         {
@@ -533,7 +533,7 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 6,
-        "maxSourceBytes": 51534
+        "maxSourceBytes": 45320
       },
       "symbols": [
         {
@@ -551,8 +551,8 @@
       "output": "entrypoints/public/runtime/tenant-theme/index",
       "budget": {
         "maxDirectSources": 1,
-        "maxReachableModules": 30,
-        "maxSourceBytes": 420044
+        "maxReachableModules": 2,
+        "maxSourceBytes": 294
       },
       "symbols": [
         {

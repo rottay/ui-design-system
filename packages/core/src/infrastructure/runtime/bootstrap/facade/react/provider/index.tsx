@@ -710,6 +710,29 @@ function isPlainObject(value: unknown): value is Record<string, unknown> {
 }
 
 /**
+ * Pure predicate used by the async tenant effect to decide whether a pending
+ * request still belongs to the committed tree.
+ *
+ * The effect reads `committedAsyncRequestKeyRef` from a layout effect that runs
+ * after every commit, so the ref is authoritative before any child layout
+ * effect can settle a stale request. `cancelled` is the effect's own local
+ * cleanup flag. Both conditions must hold: a mutant that drops the key
+ * comparison (`!cancelled`) survives only because React's passive cleanup may
+ * run before the async continuation in test harnesses.
+ *
+ * Exported only so the integration drill can assert the exact predicate, not
+ * restate it. The facade barrel enumerates its exports by name and keeps this
+ * module-internal.
+ */
+export function isCommittedTenantRequest(
+  cancelled: boolean,
+  requestKey: string,
+  committedKey: string | null,
+): boolean {
+  return !cancelled && committedKey === requestKey;
+}
+
+/**
  * Recursively merges locale dictionaries while preserving namespace structure.
  *
  * A plain object spread would replace an entire translation namespace when an
@@ -737,6 +760,11 @@ function mergeLocaleTranslations(
   };
 
   for (const [key, value] of Object.entries(overrideTranslations)) {
+    // `undefined` means "I wrote nothing here" at every layer of this merge,
+    // just like it does in the config and token override partitions. It must
+    // not erase a base value, a sibling, or a sibling branch.
+    if (value === undefined) continue;
+
     const currentValue = result[key];
 
     if (isPlainObject(currentValue) && isPlainObject(value)) {
@@ -792,14 +820,28 @@ export function DesignSystemProvider({
   // ASYNC PATH: When only tenantSlug is provided, resolve via storage facade
   const asyncRequestSlug = propTenantSlug ?? DEFAULT_TENANT_SLUG;
   const asyncRequestKey = propTenantConfig ? null : asyncRequestSlug;
-  const activeAsyncRequestRef = useRef(asyncRequestKey);
-  activeAsyncRequestRef.current = asyncRequestKey;
   const overridePartitionRef = useRef(overridePartition);
-  overridePartitionRef.current = overridePartition;
   const onTenantResolvedRef = useRef(onTenantResolved);
-  onTenantResolvedRef.current = onTenantResolved;
   const onErrorRef = useRef(onError);
-  onErrorRef.current = onError;
+  // The request key of the committed tree. The async effect belongs to the
+  // tree that committed this key; if a new key commits while it is still
+  // pending, the old effect must not publish state or call callbacks for the
+  // new tree even if its passive cleanup has not run yet.
+  const committedAsyncRequestKeyRef = useRef(asyncRequestKey);
+
+  // Committed-state only: these refs are read from the async effect, so they
+  // must track the props of the committed tree. Writing them during render
+  // would let an abandoned concurrent render overwrite the state that the
+  // running effect belongs to, allowing a discarded request to publish or call
+  // back. The layout effect runs after every commit, which is exactly the
+  // moment the new values become authoritative for this tree.
+  useLayoutEffect(() => {
+    overridePartitionRef.current = overridePartition;
+    onTenantResolvedRef.current = onTenantResolved;
+    onErrorRef.current = onError;
+    committedAsyncRequestKeyRef.current = asyncRequestKey;
+  }, [overridePartition, onTenantResolved, onError, asyncRequestKey]);
+
   const [asyncRequestState, setAsyncRequestState] = useState<{
     key: string | null;
     config: TenantConfig | null;
@@ -818,25 +860,37 @@ export function DesignSystemProvider({
     let cancelled = false;
     setAsyncRequestState({ key: requestKey, config: null, loading: true, error: null });
 
+    // A request may resolve in the window between a new key committing and the
+    // old effect's passive cleanup running. The committed-key ref is updated in
+    // the provider's layout effect, so it is authoritative before any child
+    // layout effect can settle a stale request.
+    const isStillCommitted = () =>
+      isCommittedTenantRequest(
+        cancelled,
+        requestKey,
+        committedAsyncRequestKeyRef.current,
+      );
+
     const loadTenant = async () => {
       let resolvedTenantConfig: TenantConfig;
       let resolvedFromSource = true;
       try {
         resolvedTenantConfig = await resolveTenantConfig(requestKey);
+        if (!isStillCommitted()) return;
         if (resolvedTenantConfig.slug !== requestKey) {
           throw new Error('Resolved tenant payload identity mismatch');
         }
       } catch (error) {
+        if (!isStillCommitted()) return;
         if (error instanceof ReservedTenantIdentityError) {
-          onErrorRef.current?.(error);
-          if (!cancelled && activeAsyncRequestRef.current === requestKey) {
-            setAsyncRequestState({
-              key: requestKey,
-              config: null,
-              loading: false,
-              error,
-            });
-          }
+          onErrorRef.current?.(error as Error);
+          if (!isStillCommitted()) return;
+          setAsyncRequestState({
+            key: requestKey,
+            config: null,
+            loading: false,
+            error,
+          });
           return;
         }
         resolvedFromSource = false;
@@ -844,7 +898,7 @@ export function DesignSystemProvider({
         resolvedTenantConfig = getUnresolvedTenantConfig(requestKey);
       }
 
-      if (cancelled || activeAsyncRequestRef.current !== requestKey) return;
+      if (!isStillCommitted()) return;
       setAsyncRequestState({
         key: requestKey,
         config: resolvedTenantConfig,
@@ -861,8 +915,10 @@ export function DesignSystemProvider({
         );
         try {
           assertProviderTenantConfig(resolvedForCallback);
+          if (!isStillCommitted()) return;
           onTenantResolvedRef.current?.(resolvedForCallback);
         } catch (error) {
+          if (!isStillCommitted()) return;
           onErrorRef.current?.(error as Error);
         }
       }

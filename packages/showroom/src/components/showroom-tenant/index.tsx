@@ -66,7 +66,14 @@
  * with it only because it compiles and renders in one server pass.
  */
 
-import { useEffect, useLayoutEffect, useMemo, type ReactNode } from "react";
+import {
+  useEffect,
+  useInsertionEffect,
+  useLayoutEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
 
 import {
   DensityScope,
@@ -79,7 +86,9 @@ import {
   claimRootAttribute,
   composeRootAttributeReleases,
 } from "@rottay/design-system/runtime/root-attributes";
+import { resolveVisualAuthority } from "@rottay/design-system/runtime/visual-authority";
 import {
+  censusRuntimeVisualPayload,
   compileTenantThemeConfig,
   emitTenantThemeArtifactForSsr,
   getKnownTenantConfig,
@@ -317,6 +326,45 @@ export function seedsOnlyDocument(
 
 /** The testid every probe's artifact element carries, so e2e can find it. */
 export const SHOWROOM_TENANT_ARTIFACT_TESTID = "showroom-tenant-artifact";
+
+/**
+ * Document lease registry. One ShowroomTenantProvider may claim a given
+ * Document; a second provider in the same Document throws. Different Documents
+ * (e.g., iframes) are independent. The token makes release idempotent and
+ * stale-release safe: a release only deletes the entry it itself created.
+ */
+const SHOWROOM_TENANT_DOCUMENT_CLAIMS = new WeakMap<Document, symbol>();
+
+/**
+ * Claim the Document for a single ShowroomTenantProvider instance. Returns an
+ * idempotent release function checked against the claim token. Exported for the
+ * canary's pure document-claim contracts only; real usage is inside the
+ * provider's commit-phase effect.
+ */
+export function claimShowroomTenantDocument(doc: Document): () => void {
+  if (SHOWROOM_TENANT_DOCUMENT_CLAIMS.has(doc)) {
+    throw new Error(
+      "A ShowroomTenantProvider already claims this Document; only one tenant ground may own a document.",
+    );
+  }
+  const token = Symbol();
+  SHOWROOM_TENANT_DOCUMENT_CLAIMS.set(doc, token);
+  return function release(): void {
+    if (SHOWROOM_TENANT_DOCUMENT_CLAIMS.get(doc) !== token) return;
+    SHOWROOM_TENANT_DOCUMENT_CLAIMS.delete(doc);
+  };
+}
+
+/**
+ * The readiness lease written by the commit-phase resolver and revalidated by
+ * every render. It never outlives the exact proof it was minted from: a render
+ * whose current digest, document or node differs discards it and recomputes.
+ */
+interface ShowroomTenantLease {
+  readonly document: Document;
+  readonly digest: string;
+  readonly node: HTMLStyleElement | HTMLLinkElement;
+}
 
 /**
  * The root claim is a commit-phase decision, so it runs before paint; on the
@@ -632,6 +680,18 @@ export function ShowroomTenantProvider({
     [source, density, recipeProfile, theme, seedPrimary],
   );
 
+  // Lease written by the commit-phase resolver and revalidated every render.
+  const [lease, setLease] = useState<ShowroomTenantLease | null>(null);
+
+  // Commit-prelayout document claim. A second provider in the same Document
+  // throws here; different Documents are independent. Cleanup makes StrictMode
+  // remounts safe.
+  useInsertionEffect(() => {
+    if (typeof document === "undefined") return;
+    const release = claimShowroomTenantDocument(document);
+    return () => release();
+  }, []);
+
   // Core claims only `data-tenant`, so the application owns the artifact
   // selector's other two root channels -- as claims, restoring predecessors.
   useIsomorphicLayoutEffect(() => {
@@ -643,32 +703,102 @@ export function ShowroomTenantProvider({
     ]);
   }, []);
 
+  // After the root claims are written, resolve exact proof against the mounted
+  // artifact. On the first client-only commit only the <style> is present, so
+  // this effect captures the lease that enables the second render to mount DSP.
+  useIsomorphicLayoutEffect(() => {
+    if (typeof document === "undefined") return;
+    if (!ground.emission) {
+      setLease(null);
+      return;
+    }
+    const resolution = resolveVisualAuthority({
+      declaration: ground.declaration!,
+      slug: ground.tenantConfig.slug,
+      verticalKey: ground.tenantConfig.vertical,
+      payload: censusRuntimeVisualPayload(ground.tenantConfig),
+      documentRoot: document,
+    });
+    if (resolution.conflict === null && resolution.mountedArtifact) {
+      setLease({
+        document,
+        digest: ground.emission.receipt.digest,
+        node: resolution.mountedArtifact,
+      });
+    } else {
+      setLease(null);
+    }
+  }, [ground]);
+
+  // Render-phase readiness. Each render revalidates exact proof; the lease is
+  // never trusted across a changed digest, document or node.
+  const ready = (() => {
+    // Static ground: no artifact, no lease, DSP mounts immediately.
+    if (!ground.emission) return true;
+    // SSR ground: no document to observe, so DSP mounts with the receipt in the
+    // same markup.
+    if (typeof document === "undefined") return true;
+
+    // Revalidate an existing lease before trusting it.
+    if (
+      lease &&
+      lease.document === document &&
+      lease.digest === ground.emission.receipt.digest
+    ) {
+      const revalidated = resolveVisualAuthority({
+        declaration: ground.declaration!,
+        slug: ground.tenantConfig.slug,
+        verticalKey: ground.tenantConfig.vertical,
+        payload: censusRuntimeVisualPayload(ground.tenantConfig),
+        documentRoot: document,
+      });
+      if (
+        revalidated.conflict === null &&
+        revalidated.mountedArtifact === lease.node
+      ) {
+        return true;
+      }
+    }
+
+    // Hydration or a post-claim commit: synchronous exact proof.
+    const resolution = resolveVisualAuthority({
+      declaration: ground.declaration!,
+      slug: ground.tenantConfig.slug,
+      verticalKey: ground.tenantConfig.vertical,
+      payload: censusRuntimeVisualPayload(ground.tenantConfig),
+      documentRoot: document,
+    });
+    return resolution.conflict === null && resolution.mountedArtifact !== null;
+  })();
+
   return (
     <>
       <ShowroomArtifactStyle emission={ground.emission} />
-      <DesignSystemProvider
-        tenantConfig={ground.tenantConfig}
-        vertical="bithire"
-        forceEngine={engine}
-        forceTheme={theme}
-        {...(locale ? { locale } : {})}
-        {...(customTranslations ? { customTranslations } : {})}
-        {...(ground.declaration ? { visualAuthority: ground.declaration } : {})}
-      >
-        {/*
-          Density is a POSTURE on the static path and a compiled DOCUMENT value
-          on the DB path, and it must never be both: the DB artifact already
-          carries its own density scale, so wrapping it here would apply density
-          twice. `themanagement-seeds` is the third case and takes NEITHER --
-          it emits an artifact, so this gate skips it, and its document does not
-          author density on purpose.
-        */}
-        {ground.emission === null && density ? (
-          <DensityScope posture={density}>{children}</DensityScope>
-        ) : (
-          children
-        )}
-      </DesignSystemProvider>
+      {ready && (
+        <DesignSystemProvider
+          tenantConfig={ground.tenantConfig}
+          vertical="bithire"
+          forceEngine={engine}
+          forceTheme={theme}
+          {...(locale ? { locale } : {})}
+          {...(customTranslations ? { customTranslations } : {})}
+          {...(ground.declaration ? { visualAuthority: ground.declaration } : {})}
+        >
+          {/*
+            Density is a POSTURE on the static path and a compiled DOCUMENT value
+            on the DB path, and it must never be both: the DB artifact already
+            carries its own density scale, so wrapping it here would apply density
+            twice. `themanagement-seeds` is the third case and takes NEITHER --
+            it emits an artifact, so this gate skips it, and its document does not
+            author density on purpose.
+          */}
+          {ground.emission === null && density ? (
+            <DensityScope posture={density}>{children}</DensityScope>
+          ) : (
+            children
+          )}
+        </DesignSystemProvider>
+      )}
     </>
   );
 }

@@ -7,7 +7,6 @@ import {
   Box,
   Button,
   Card,
-  DesignSystemProvider,
   Flex,
   Stack,
   Text,
@@ -219,22 +218,6 @@ function EntranceDemo() {
   );
 }
 
-function MotionProfilePreview({
-  engine,
-  label,
-}: {
-  engine: 'classic' | 'modern' | 'rustic';
-  label: string;
-}) {
-  const { tenantSlug } = useShowroom();
-
-  return (
-    <DesignSystemProvider tenantSlug={tenantSlug} forceEngine={engine}>
-      <MotionProfilePreviewContent label={label} />
-    </DesignSystemProvider>
-  );
-}
-
 function MotionProfilePreviewContent({ label }: { label: string }) {
   const tokens = useTokens();
 
@@ -311,6 +294,8 @@ function MotionProfilePreviewContent({ label }: { label: string }) {
 
 export default function MotionPage() {
   const tokens = useTokens();
+  const { engine } = useShowroom();
+  const engineLabel = engine.charAt(0).toUpperCase() + engine.slice(1);
 
   return (
     <Stack spacing="lg">
@@ -452,9 +437,9 @@ export default function MotionPage() {
       <Stack spacing="md">
         <Flex align="center" justify="between" style={{ flexWrap: 'wrap' }}>
           <Text as={"h2" as any} size="lg" weight="semibold">
-            Engine motion profiles
+            Active motion profile
           </Text>
-          <Badge variant="secondary">Three personalities</Badge>
+          <Badge variant="secondary">{engineLabel}</Badge>
         </Flex>
         <Box
           style={{
@@ -463,9 +448,7 @@ export default function MotionPage() {
             gap: tokens.spacing[4],
           }}
         >
-          <MotionProfilePreview engine="classic" label="Classic" />
-          <MotionProfilePreview engine="modern" label="Modern" />
-          <MotionProfilePreview engine="rustic" label="Rustic" />
+          <MotionProfilePreviewContent label={engineLabel} />
         </Box>
       </Stack>
 

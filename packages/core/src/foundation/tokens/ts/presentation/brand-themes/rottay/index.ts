@@ -514,11 +514,14 @@ export const rottayBrandTheme: FirstPartyBrandTheme = {
     linkColor: '#ECECEC',
     linkHoverColor: '#FFFFFF',
     linkVisitedColor: '#A0A0A5',
-    // Semantic: serious and muted
+    // Semantic: serious and muted. Dark-surface error/info sit at the 400 ramp
+    // step so they clear APCA |Lc| 45 on the page ground while preserving the
+    // automatic --ds-color-on-error / --ds-color-on-info emission. Light mode
+    // keeps the 600-step authority (#DC2626 / #2563EB) via modes.light.palette.
     successColor: '#22C55E',
     warningColor: '#F59E0B',
-    errorColor: '#EF4444',
-    infoColor: '#3B82F6',
+    errorColor: '#F87171',
+    infoColor: '#60A5FA',
   },
 
   /**

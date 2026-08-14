@@ -1,17 +1,17 @@
 {
   "note": "Decrease-only. `capabilityGaps` and `metrics` are volume budgets; `grandfather` is the shape inventory the architecture laws (component-local regions, application/framework selector tokens, !important, media descendant skins, structural component paint, over-budget capability-gap regions, re-declared compiler-emitted channels, capability-gap raw CSS) are allowed to still see on this tree. Both shrink as the extensions drain; neither may grow. Re-seed only with a written exception -- `--seed` refuses growth without --allow-growth.",
   "capabilityGaps": {
-    "bithire": 2,
+    "bithire": 0,
     "evnto": 0,
-    "rottay": 7
+    "rottay": 0
   },
   "metrics": {
     "bithire": {
-      "bytes": 26440,
+      "bytes": 23339,
       "rules": 7,
-      "declarations": 248,
+      "declarations": 209,
       "important": 0,
-      "literals": 154,
+      "literals": 123,
       "appSelectors": 0,
       "engineSelectors": 0
     },
@@ -25,11 +25,11 @@
       "engineSelectors": 0
     },
     "rottay": {
-      "bytes": 71610,
+      "bytes": 66191,
       "rules": 2,
-      "declarations": 1207,
+      "declarations": 1094,
       "important": 0,
-      "literals": 1392,
+      "literals": 1248,
       "appSelectors": 0,
       "engineSelectors": 0
     }
@@ -43,14 +43,11 @@
       "mediaDescendantSelectors": [],
       "structuralPaintSelectors": [],
       "capabilityGapRegionSizes": {
-        "capability-gap#04950ac6#1": 98,
-        "capability-gap#04950ac6#3": 18,
-        "capability-gap#04950ac6#6": 119
+        "capability-gap#04950ac6#1": 90,
+        "capability-gap#04950ac6#3": 12,
+        "capability-gap#04950ac6#6": 93
       },
-      "capabilityGapChannels": [
-        "--ds-color-bg-primary",
-        "--ds-surface-card-border-strong"
-      ],
+      "capabilityGapChannels": [],
       "capabilityGapRawSelectors": []
     },
     "evnto": {
@@ -74,18 +71,10 @@
       "mediaDescendantSelectors": [],
       "structuralPaintSelectors": [],
       "capabilityGapRegionSizes": {
-        "capability-gap#04950ac6#1": 647,
-        "capability-gap#f7c06ae1#1": 560
+        "capability-gap#04950ac6#1": 583,
+        "capability-gap#f7c06ae1#1": 511
       },
-      "capabilityGapChannels": [
-        "--ds-card-shadow-elevated",
-        "--ds-color-bg-input",
-        "--ds-color-error",
-        "--ds-color-info",
-        "--ds-font-family-base",
-        "--ds-font-family-display",
-        "--ds-font-family-heading"
-      ],
+      "capabilityGapChannels": [],
       "capabilityGapRawSelectors": [
         "html[data-tenant='rottay']:not([data-theme='light']):not(.light)"
       ]

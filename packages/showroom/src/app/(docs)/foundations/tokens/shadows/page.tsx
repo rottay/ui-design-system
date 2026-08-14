@@ -5,7 +5,6 @@ import {
   Badge,
   Box,
   Card,
-  DesignSystemProvider,
   Flex,
   Stack,
   Text,
@@ -22,22 +21,6 @@ const SHADOW_DESCRIPTIONS: Record<(typeof SHADOW_STEPS)[number], string> = {
   lg: 'Prominent lift for modals, drawers, and command surfaces.',
   xl: 'Maximum emphasis for spotlight or high-focus overlay layers.',
 };
-
-function EngineShadowPreview({
-  engine,
-  label,
-}: {
-  engine: 'classic' | 'modern' | 'rustic';
-  label: string;
-}) {
-  const { tenantSlug } = useShowroom();
-
-  return (
-    <DesignSystemProvider tenantSlug={tenantSlug} forceEngine={engine}>
-      <EngineShadowPreviewContent label={label} />
-    </DesignSystemProvider>
-  );
-}
 
 function EngineShadowPreviewContent({ label }: { label: string }) {
   const tokens = useTokens();
@@ -84,6 +67,8 @@ function EngineShadowPreviewContent({ label }: { label: string }) {
 
 export default function ShadowsPage() {
   const tokens = useTokens();
+  const { engine } = useShowroom();
+  const engineLabel = engine.charAt(0).toUpperCase() + engine.slice(1);
 
   return (
     <Stack spacing="lg">
@@ -282,9 +267,9 @@ export default function ShadowsPage() {
       <Stack spacing="md">
         <Flex align="center" justify="between" style={{ flexWrap: 'wrap' }}>
           <Text as={"h2" as any} size="lg" weight="semibold">
-            Engine comparison
+            Active engine elevation
           </Text>
-          <Badge variant="secondary">Same elevation semantics</Badge>
+          <Badge variant="secondary">{engineLabel}</Badge>
         </Flex>
         <Box
           style={{
@@ -293,9 +278,7 @@ export default function ShadowsPage() {
             gap: tokens.spacing[4],
           }}
         >
-          <EngineShadowPreview engine="classic" label="Classic" />
-          <EngineShadowPreview engine="modern" label="Modern" />
-          <EngineShadowPreview engine="rustic" label="Rustic" />
+          <EngineShadowPreviewContent label={engineLabel} />
         </Box>
       </Stack>
 

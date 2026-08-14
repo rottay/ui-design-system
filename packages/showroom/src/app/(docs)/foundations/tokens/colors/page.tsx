@@ -5,7 +5,6 @@ import {
   Badge,
   Box,
   Card,
-  DesignSystemProvider,
   Flex,
   Stack,
   Text,
@@ -159,22 +158,6 @@ function ColorScaleCard({
   );
 }
 
-function BrandScalePreview({
-  tenantSlug,
-  label,
-}: {
-  tenantSlug: string;
-  label: string;
-}) {
-  const { engine } = useShowroom();
-
-  return (
-    <DesignSystemProvider tenantSlug={tenantSlug} forceEngine={engine}>
-      <BrandScalePreviewContent label={label} />
-    </DesignSystemProvider>
-  );
-}
-
 function BrandScalePreviewContent({ label }: { label: string }) {
   const tokens = useTokens();
 
@@ -215,6 +198,9 @@ function BrandScalePreviewContent({ label }: { label: string }) {
 
 export default function ColorsPage() {
   const tokens = useTokens();
+  const { tenantSlug } = useShowroom();
+  const tenantLabel =
+    tenantSlug === 'bithire' ? 'BitHire' : tenantSlug === 'evnto' ? 'Evnto' : 'Rottay';
   const semanticPairs = [
     {
       label: 'Text primary',
@@ -272,7 +258,7 @@ export default function ColorsPage() {
           { label: 'Scales', value: `${COLOR_SCALES.length}`, detail: 'Neutral + brand + semantic families' },
           { label: 'Stops', value: '10 each', detail: '50 through 900' },
           { label: 'Semantic pairs', value: `${semanticPairs.length}`, detail: 'Text and state references' },
-          { label: 'Tenant previews', value: '3', detail: 'Same names, different identities' },
+          { label: 'Tenant previews', value: '1', detail: 'Active tenant identity' },
         ]}
       />
 
@@ -376,7 +362,7 @@ export default function ColorsPage() {
         <Flex align="center" justify="between" style={{ flexWrap: 'wrap' }}>
           <Box>
             <Text as={"h2" as any} size="lg" weight="semibold">
-              Same token names, different brands
+              Active brand scale
             </Text>
             <Text
               size="sm"
@@ -386,7 +372,7 @@ export default function ColorsPage() {
               when tenant personality changes.
             </Text>
           </Box>
-          <Badge variant="secondary">Theme comparison</Badge>
+          <Badge variant="secondary">{tenantLabel}</Badge>
         </Flex>
         <Box
           style={{
@@ -395,9 +381,7 @@ export default function ColorsPage() {
             gap: tokens.spacing[4],
           }}
         >
-          <BrandScalePreview tenantSlug="rottay" label="Rottay" />
-          <BrandScalePreview tenantSlug="bithire" label="BitHire" />
-          <BrandScalePreview tenantSlug="evnto" label="Evnto" />
+          <BrandScalePreviewContent label={tenantLabel} />
         </Box>
       </Stack>
 

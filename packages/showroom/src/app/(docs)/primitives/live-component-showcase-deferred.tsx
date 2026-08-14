@@ -1,16 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import {
-  DesignSystemProvider,
-  getKnownTenantConfig,
-} from '@rottay/design-system';
 import { Box, Card, Stack, Text } from '@/components/showroom-ui';
-import {
-  getShowroomProductProfileKey,
-  getShowroomVerticalKey,
-  useShowroom,
-} from '@/components/showroom-context';
 import {
   SHOWROOM_SURFACES,
   mixWithCanvas,
@@ -56,19 +47,5 @@ const LiveComponentShowcase = dynamic(
 );
 
 export function LiveComponentShowcaseDeferred() {
-  const { engine, tenantSlug } = useShowroom();
-  const productProfile = getShowroomProductProfileKey(tenantSlug, engine);
-  const tenantConfig =
-    getKnownTenantConfig(tenantSlug) ?? getKnownTenantConfig('rottay');
-
-  return (
-    <DesignSystemProvider
-      tenantConfig={tenantConfig ?? undefined}
-      forceEngine={engine}
-      productProfile={productProfile}
-      vertical={getShowroomVerticalKey(tenantSlug)}
-    >
-      <LiveComponentShowcase mode="compact" showIntro={false} />
-    </DesignSystemProvider>
-  );
+  return <LiveComponentShowcase mode="compact" showIntro={false} />;
 }

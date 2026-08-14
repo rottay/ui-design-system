@@ -5,7 +5,6 @@ import {
   Badge,
   Box,
   Card,
-  DesignSystemProvider,
   Flex,
   Stack,
   Text,
@@ -24,22 +23,6 @@ const RADIUS_DESCRIPTIONS: Record<(typeof RADIUS_STEPS)[number], string> = {
   xl: 'Hero-level framing for editorial or premium sections.',
   full: 'Circular and pill treatments for avatars, chips, and toggles.',
 };
-
-function EngineRadiusPreview({
-  engine,
-  label,
-}: {
-  engine: 'classic' | 'modern' | 'rustic';
-  label: string;
-}) {
-  const { tenantSlug } = useShowroom();
-
-  return (
-    <DesignSystemProvider forceEngine={engine} tenantSlug={tenantSlug}>
-      <EngineRadiusPreviewContent label={label} />
-    </DesignSystemProvider>
-  );
-}
 
 function EngineRadiusPreviewContent({ label }: { label: string }) {
   const tokens = useTokens();
@@ -110,6 +93,8 @@ function EngineRadiusPreviewContent({ label }: { label: string }) {
 
 export default function RadiusPage() {
   const tokens = useTokens();
+  const { engine } = useShowroom();
+  const engineLabel = engine.charAt(0).toUpperCase() + engine.slice(1);
 
   return (
     <Stack spacing="lg">
@@ -302,9 +287,9 @@ export default function RadiusPage() {
       <Stack spacing="md">
         <Flex align="center" justify="between" style={{ flexWrap: 'wrap' }}>
           <Text as={"h2" as any} size="lg" weight="semibold">
-            Same scene, three engine personalities
+            Active engine personality
           </Text>
-          <Badge variant="secondary">Engine comparison</Badge>
+          <Badge variant="secondary">{engineLabel}</Badge>
         </Flex>
         <Box
           style={{
@@ -313,9 +298,7 @@ export default function RadiusPage() {
             gap: tokens.spacing[4],
           }}
         >
-          <EngineRadiusPreview engine="classic" label="Classic" />
-          <EngineRadiusPreview engine="modern" label="Modern" />
-          <EngineRadiusPreview engine="rustic" label="Rustic" />
+          <EngineRadiusPreviewContent label={engineLabel} />
         </Box>
       </Stack>
 

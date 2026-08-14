@@ -795,3 +795,81 @@ describe('branding overrides: undefined never erases tenant identity', () => {
     expect(observed!.config.branding.companyName).toBe('The Management');
   });
 });
+
+/**
+ * `customTranslations` is merged recursively across three layers: tenant config
+ * -> tenantOverrides -> app prop. An own nested `undefined` in any overlay must
+ * be treated as absence, exactly as it is for the config lane, so a partial
+ * override does not delete a sibling key or an entire namespace the tenant
+ * actually authored.
+ */
+describe('customTranslations: nested undefined is absence, not erasure', () => {
+  const BASE_COPY = {
+    common: {
+      tenantOverridesProbe: 'from-config',
+      sibling: 'base-sibling',
+      nested: { keep: 'deep-base', drop: 'deep-drop' },
+    },
+  } as const;
+
+  it('tenant layer: nested undefined keeps the base value, lands siblings, and preserves empty string', () => {
+    const fromConfig = customerConfig({ customTranslations: BASE_COPY });
+
+    renderSync(fromConfig, {
+      customTranslations: {
+        common: {
+          tenantOverridesProbe: undefined,
+          sibling: 'override-sibling',
+          nested: { keep: undefined, drop: 'deep-override' },
+          empty: '',
+        },
+      },
+    });
+
+    expect(observed!.probeCopy).toBe('from-config');
+    expect(observed!.config.customTranslations).toEqual(BASE_COPY);
+    // Empty string is a deliberate translation, not a deletion.
+    expect(observed!.probeCopy).not.toBe('');
+  });
+
+  it('app layer: nested undefined keeps the tenant value, lands siblings, and preserves empty string', () => {
+    const fromConfig = customerConfig({ customTranslations: BASE_COPY });
+
+    renderSync(
+      fromConfig,
+      { customTranslations: { common: { sibling: 'override-sibling' } } },
+      {
+        customTranslations: {
+          common: {
+            tenantOverridesProbe: undefined,
+            sibling: undefined,
+            nested: { keep: undefined, drop: 'deep-app' },
+            empty: '',
+          },
+        },
+      },
+    );
+
+    expect(observed!.probeCopy).toBe('from-config');
+    expect(observed!.config.customTranslations).toEqual(BASE_COPY);
+  });
+
+  it('empty string survives as a valid translation at both overlay layers', () => {
+    const fromConfig = customerConfig({
+      customTranslations: { common: { tenantOverridesProbe: 'from-config' } },
+    });
+
+    renderSync(fromConfig, {
+      customTranslations: { common: { tenantOverridesProbe: '' } },
+    });
+    expect(observed!.probeCopy).toBe('');
+
+    cleanup();
+    renderSync(
+      fromConfig,
+      { customTranslations: { common: { tenantOverridesProbe: 'from-override' } } },
+      { customTranslations: { common: { tenantOverridesProbe: '' } } },
+    );
+    expect(observed!.probeCopy).toBe('');
+  });
+});

@@ -5,16 +5,13 @@ import {
   Box,
   Button,
   Card,
-  DesignSystemProvider,
   Flex,
-  getKnownTenantConfig,
   Input,
   Stack,
   Text,
 } from '@rottay/design-system';
 import { useTokens } from '@rottay/design-system';
 import {
-  getShowroomVerticalKey,
   type ShowroomTheme,
   useShowroom,
 } from '@/components/showroom-context';
@@ -53,26 +50,6 @@ const TENANT_THEMES: TenantTheme[] = [
     mood: 'Atmospheric and premium',
   },
 ];
-
-function ThemePreviewCard({ theme }: { theme: TenantTheme }) {
-  const { engine } = useShowroom();
-  const tenantConfig =
-    getKnownTenantConfig(theme.slug) ?? getKnownTenantConfig('rottay');
-
-  if (!tenantConfig) {
-    return null;
-  }
-
-  return (
-    <DesignSystemProvider
-      tenantConfig={tenantConfig}
-      vertical={getShowroomVerticalKey(theme.slug)}
-      forceEngine={engine}
-    >
-      <ThemePreviewContent theme={theme} />
-    </DesignSystemProvider>
-  );
-}
 
 function ThemePreviewContent({ theme }: { theme: TenantTheme }) {
   const tokens = useTokens();
@@ -154,6 +131,9 @@ function ThemePreviewContent({ theme }: { theme: TenantTheme }) {
 }
 
 export function ThemePreviewGrid() {
+  const { tenantSlug } = useShowroom();
+  const activeTheme = TENANT_THEMES.find((theme) => theme.slug === tenantSlug) ?? TENANT_THEMES[0];
+
   return (
     <Box
       style={{
@@ -162,9 +142,7 @@ export function ThemePreviewGrid() {
         gap: 20,
       }}
     >
-      {TENANT_THEMES.map((theme) => (
-        <ThemePreviewCard key={theme.slug} theme={theme} />
-      ))}
+      <ThemePreviewContent theme={activeTheme} />
     </Box>
   );
 }

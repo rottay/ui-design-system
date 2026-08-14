@@ -36,7 +36,6 @@ html[data-tenant="bithire"]:not([data-theme="dark"]):not(.dark) {
   --ds-color-neutral-900: #191919;
 
   /* Backgrounds - Light, professional */
-  --ds-color-bg-primary: #ffffff;
   --ds-color-bg-surface: #ffffff;
 
   /* Text - BitHire blue-gray, never inherited browser defaults */
@@ -180,7 +179,6 @@ html[data-tenant="bithire"]:not([data-theme="dark"]):not(.dark) {
 
   /* Accent for live indicators */
   --ds-color-accent-live: #2f7d5e;
-  --ds-color-accent-live-bg: #f0fdf4;
 
   /* Group Headers - Bold, slightly larger than items */
   --ds-sidebar-group-margin-top: 8px;
@@ -209,7 +207,6 @@ html[data-tenant="bithire"].dark {
 
   /* Accent for live indicators - dark */
   --ds-color-accent-live: #69a6d5;
-  --ds-color-accent-live-bg: #132b40;
 
   /* The light block above declares this ground; without a dark counterpart the
      dropdown falls through to the DS default, which is #ffffff in both themes. */
@@ -375,9 +372,6 @@ html[data-tenant="bithire"] {
     var(--ds-color-primary) 22%,
     var(--ds-color-border)
   );
-  --ds-chip-bg: var(--ds-control-brand-tint);
-  --ds-chip-color: var(--ds-color-primary);
-  --ds-chip-border: var(--ds-control-brand-border);
   --ds-premium-card-border: color-mix(
     in srgb,
     var(--ds-color-primary) 12%,
@@ -395,7 +389,6 @@ html[data-tenant="bithire"] {
   );
   --ds-premium-card-selected-ring: 0 0 0 3px
     color-mix(in srgb, var(--ds-color-primary) 12%, transparent);
-  --ds-surface-card-border-strong: var(--ds-color-border-secondary);
   --ds-surface-card-border-soft: var(--ds-color-border-subtle);
   --ds-surface-card-grid-size: 22px;
   --ds-surface-card-grid-line: color-mix(
@@ -545,7 +538,6 @@ html[data-tenant="bithire"] {
     var(--ds-color-primary) 18%,
     var(--ds-control-surface)
   );
-  --ds-button-secondary-border-color: var(--ds-button-secondary-border);
   --ds-button-default-hover-bg: var(--ds-button-default-bg-hover);
   --ds-button-default-bg-active: color-mix(
     in srgb,
@@ -554,7 +546,6 @@ html[data-tenant="bithire"] {
   );
   --ds-button-default-color-hover: var(--ds-control-ink);
   --ds-button-default-color-active: var(--ds-control-ink);
-  --ds-button-default-border-color: var(--ds-button-default-border);
   --ds-button-ghost-hover-bg: var(--ds-button-ghost-bg-hover);
   --ds-button-ghost-bg-active: var(--ds-control-brand-tint-hover);
   --ds-button-ghost-color-hover: var(--ds-control-ink);
@@ -601,24 +592,16 @@ html[data-tenant="bithire"] {
 
   --ds-badge-default-bg: var(--ds-control-surface-raised);
   --ds-badge-default-color: var(--ds-control-ink-muted);
-  --ds-badge-default-border: var(--ds-color-border);
   --ds-badge-primary-bg: var(--ds-control-brand-tint);
   --ds-badge-primary-color: var(--ds-color-primary);
-  --ds-badge-primary-border: var(--ds-control-brand-border);
   --ds-badge-secondary-bg: var(--ds-control-surface-raised);
   --ds-badge-secondary-color: var(--ds-control-ink-muted);
-  --ds-badge-secondary-border: var(--ds-color-border);
   --ds-badge-success-bg: color-mix(
     in srgb,
     var(--ds-color-success) 12%,
     var(--ds-control-surface)
   );
   --ds-badge-success-color: var(--ds-color-success);
-  --ds-badge-success-border: color-mix(
-    in srgb,
-    var(--ds-color-success) 24%,
-    var(--ds-color-border)
-  );
   --ds-badge-warning-bg: color-mix(
     in srgb,
     var(--ds-color-warning) 16%,
@@ -628,22 +611,12 @@ html[data-tenant="bithire"] {
     --ds-color-warning-900,
     var(--ds-color-warning)
   );
-  --ds-badge-warning-border: color-mix(
-    in srgb,
-    var(--ds-color-warning) 28%,
-    var(--ds-color-border)
-  );
   --ds-badge-error-bg: color-mix(
     in srgb,
     var(--ds-color-error) 12%,
     var(--ds-control-surface)
   );
   --ds-badge-error-color: var(--ds-color-error);
-  --ds-badge-error-border: color-mix(
-    in srgb,
-    var(--ds-color-error) 24%,
-    var(--ds-color-border)
-  );
   --ds-badge-info-bg: color-mix(
     in srgb,
     var(--ds-color-info, var(--ds-color-secondary, var(--ds-color-primary))) 12%,
@@ -652,11 +625,6 @@ html[data-tenant="bithire"] {
   --ds-badge-info-color: var(
     --ds-color-info,
     var(--ds-color-secondary, var(--ds-color-primary))
-  );
-  --ds-badge-info-border: color-mix(
-    in srgb,
-    var(--ds-color-info, var(--ds-color-secondary, var(--ds-color-primary))) 24%,
-    var(--ds-color-border)
   );
   --ds-badge-height: 28px;
   --ds-badge-padding-x: 0.625rem;

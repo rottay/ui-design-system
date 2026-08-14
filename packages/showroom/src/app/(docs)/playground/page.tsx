@@ -920,7 +920,6 @@ export default function PlaygroundPage() {
       </ComponentPreview>
 
       <EngineComparison
-        tenantSlug={tenantSlug}
         title="Engine lens"
         description="The same tenant, the same tree, and a live engine swap that should move spacing, shape, and emphasis."
       >

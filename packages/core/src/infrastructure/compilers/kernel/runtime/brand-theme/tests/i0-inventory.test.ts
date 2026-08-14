@@ -8,6 +8,7 @@
  */
 
 import { describe, it, expect } from "vitest";
+import { createHash } from "crypto";
 import { existsSync, readFileSync } from "fs";
 import { resolve } from "path";
 import {
@@ -22,6 +23,7 @@ import {
 import { PRODUCT_PROFILES } from "@/foundation/presets/product-profiles";
 import { VERTICAL_REGISTRY } from "@/foundation/presets/verticals";
 import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import { deriveReadableInk } from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
 
 import { compileBrandTheme } from "../index";
 
@@ -544,10 +546,12 @@ describe("H3 contract: rottay", () => {
       expect(rottayBrandTheme.palette?.successColor).toBe("#22C55E"));
     it("warningColor", () =>
       expect(rottayBrandTheme.palette?.warningColor).toBe("#F59E0B"));
+    // VERTICAL-CONFLICT-9: base error/info seeds moved to the 400 ramp step
+    // so that --ds-color-on-error/info keep their previous dark-on-tone values.
     it("errorColor", () =>
-      expect(rottayBrandTheme.palette?.errorColor).toBe("#EF4444"));
+      expect(rottayBrandTheme.palette?.errorColor).toBe("#F87171"));
     it("infoColor", () =>
-      expect(rottayBrandTheme.palette?.infoColor).toBe("#3B82F6"));
+      expect(rottayBrandTheme.palette?.infoColor).toBe("#60A5FA"));
   });
 
   describe("rottay dark-mode (filled I4)", () => {
@@ -1205,6 +1209,351 @@ describe("H3 contract: evnto", () => {
       expect(css).toContain("--ds-button-default-bg: #FFFFFF");
       expect(css).toContain("--ds-button-disabled-opacity: 0.4");
       expect(css).toContain("--ds-radius-sm-base: 10px");
+    });
+  });
+});
+
+// ══════════════════════════════════════════════════════════
+// SECTION 4: VERTICAL-CONFLICT-9 canaries
+// Roster/hash is computed from raw source strings, not PostCSS.
+// Exact live numbers live ONLY in the receipt/handoff; the gate owns
+// exactness. Tests here assert durable contracts and decrease-only ceilings.
+// ══════════════════════════════════════════════════════════
+
+describe("VERTICAL-CONFLICT-9 · DEAD-61 short atom", () => {
+  const ledger = JSON.parse(
+    readFileSync(resolve(process.cwd(), "src/foundation/tokens/residual-adjudication.json"), "utf-8")
+  );
+
+  const ROSTER = [
+    "--ds-card-shadow-elevated",
+    "--ds-color-bg-input",
+    "--ds-color-bg-primary",
+    "--ds-color-error",
+    "--ds-color-info",
+    "--ds-font-family-base",
+    "--ds-font-family-display",
+    "--ds-font-family-heading",
+    "--ds-surface-card-border-strong",
+  ];
+
+  const ZERO_EFFECTIVE = new Set([
+    "--ds-card-shadow-elevated",
+    "--ds-color-error",
+    "--ds-color-info",
+  ]);
+
+  const SIGHTED_PENDING = new Set([
+    "--ds-color-bg-input (rottay dark)",
+    "--ds-font-family-base (rottay dark)",
+    "--ds-font-family-display (rottay dark)",
+    "--ds-font-family-heading (rottay dark)",
+    "--ds-color-bg-primary (bithire light)",
+    "--ds-surface-card-border-strong (bithire all modes)",
+  ]);
+
+  const EXPECTED_FONT_STACKS: Record<string, string> = {
+    "--ds-font-family-base": `var(--ds-font-pack-humanist-text, 'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif), "Noto Sans Arabic", sans-serif`,
+    "--ds-font-family-heading": `var(--ds-font-pack-humanist-text, 'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif), "Noto Sans Arabic", sans-serif`,
+    "--ds-font-family-display": `var(--ds-font-pack-humanist-text, 'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif), "Noto Sans Arabic", sans-serif`,
+  };
+
+  function expectConflict9Receipt(receipt: unknown) {
+    expect(receipt).toBeDefined();
+    const r = receipt as {
+      rosterSha256: string;
+      zeroEffective: string[];
+      sightedPending: string[];
+      generatedProjection: string;
+    };
+    expect(r.rosterSha256).toBe(
+      "7d9ea09aed4297978cb2e789f6e242a63fb2978639204b371f415dd68ce78cfb"
+    );
+    expect(r.zeroEffective).toHaveLength(ZERO_EFFECTIVE.size);
+    expect(r.sightedPending).toHaveLength(SIGHTED_PENDING.size);
+    expect(new Set(r.zeroEffective)).toEqual(ZERO_EFFECTIVE);
+    expect(new Set(r.sightedPending)).toEqual(SIGHTED_PENDING);
+    expect(r.generatedProjection).toBe("PENDING");
+    for (const entry of r.sightedPending) {
+      expect(entry).not.toMatch(/executed/i);
+    }
+  }
+
+  const rosterHash = (channels: string[]) =>
+    createHash("sha256").update(channels.sort().join("\n") + "\n").digest("hex");
+
+  it("roster is the exact 9 channels and hash matches the live sorted+LF SHA", () => {
+    expect(ROSTER).toHaveLength(9);
+    expect(rosterHash(ROSTER)).toBe(
+      "7d9ea09aed4297978cb2e789f6e242a63fb2978639204b371f415dd68ce78cfb"
+    );
+  });
+
+  it("roster channels are absent from the authored extensions (no PostCSS needed)", () => {
+    for (const tenant of ["rottay", "bithire", "evnto"]) {
+      const ext = readFileSync(
+        resolve(CSS_SRC, `facade/artifacts/${tenant}/_source/extension.css`),
+        "utf-8"
+      );
+      for (const channel of ROSTER) {
+        expect(ext, `${tenant} extension still declares ${channel}`).not.toMatch(
+          new RegExp(`^\\s*${channel.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&")}\\s*:`, "m")
+        );
+      }
+    }
+  });
+
+  describe("rottay base error/info at ramp 400", () => {
+    const compiled = compileBrandTheme({
+      brandTheme: rottayBrandTheme,
+      tenantSlug: "rottay",
+    });
+    const base = compiled.cssVariables;
+    const light = compiled.modeBlocks?.find((b) => b.mode === "light")?.cssVariables ?? {};
+
+    it("base errorColor is the exact hex literal error-400", () => {
+      expect(rottayBrandTheme.palette?.errorColor).toBe("#F87171");
+      expect(base["--ds-color-error"]).toBe("#F87171");
+      expect(base["--ds-color-error-400"]).toBe("#F87171");
+    });
+
+    it("base infoColor is the exact hex literal info-400", () => {
+      expect(rottayBrandTheme.palette?.infoColor).toBe("#60A5FA");
+      expect(base["--ds-color-info"]).toBe("#60A5FA");
+      expect(base["--ds-color-info-400"]).toBe("#60A5FA");
+    });
+
+    it("on-tone channels are derived from the 400-step seeds", () => {
+      expect(base["--ds-color-on-error"]).toBe(deriveReadableInk("#F87171"));
+      expect(base["--ds-color-on-info"]).toBe(deriveReadableInk("#60A5FA"));
+    });
+
+    it("light mode keeps the original 600-step authority", () => {
+      expect(light["--ds-color-error"]).toBe("#DC2626");
+      expect(light["--ds-color-info"]).toBe("#2563EB");
+    });
+
+    it("dark bg-input is the compiled #131316, not the old extension #0F0F12", () => {
+      expect(base["--ds-color-bg-input"]).toBe("#131316");
+      expect(compiled.cssString).not.toContain("--ds-color-bg-input: #0F0F12");
+    });
+  });
+
+  describe("rottay fonts compile to the exact mandatory Arabic tail", () => {
+    const compiled = compileBrandTheme({
+      brandTheme: rottayBrandTheme,
+      tenantSlug: "rottay",
+    });
+    const base = compiled.cssVariables;
+
+    it.each([
+      ["--ds-font-family-base"],
+      ["--ds-font-family-display"],
+      ["--ds-font-family-heading"],
+    ])("%s matches the canonical exact stack", (channel) => {
+      expect(base[channel]).toBe(EXPECTED_FONT_STACKS[channel]);
+    });
+
+    it("rejects a non-canonical stack even when it already carries Arabic", () => {
+      const mutant = {
+        ...rottayBrandTheme,
+        typography: {
+          ...rottayBrandTheme.typography,
+          fontFamilyBase: "'Inter', \"Noto Sans Arabic\", sans-serif",
+          fontFamilyDisplay: "'Inter', \"Noto Sans Arabic\", sans-serif",
+          fontFamilyHeading: "'Inter', \"Noto Sans Arabic\", sans-serif",
+        },
+      };
+      const compiledMutant = compileBrandTheme({ brandTheme: mutant, tenantSlug: "rottay" });
+      expect(compiledMutant.cssVariables["--ds-font-family-base"]).not.toBe(
+        EXPECTED_FONT_STACKS["--ds-font-family-base"]
+      );
+    });
+  });
+
+  describe("bithire base/dark ground and material border", () => {
+    const compiled = compileBrandTheme({
+      brandTheme: bithireBrandTheme,
+      tenantSlug: "bithire",
+    });
+    const base = compiled.cssVariables;
+    const dark = compiled.modeBlocks?.find((b) => b.mode === "dark")?.cssVariables ?? {};
+
+    it("base bg-primary is the authored light ground", () => {
+      expect(bithireBrandTheme.palette?.backgroundColor).toBe("#F4F8FB");
+      expect(base["--ds-color-bg-primary"]).toBe("#F4F8FB");
+    });
+
+    it("dark bg-primary is the authored dark ground", () => {
+      expect(bithireBrandTheme.modes?.dark?.palette?.backgroundColor).toBe("#0f1520");
+      expect(dark["--ds-color-bg-primary"]).toBe("#0f1520");
+    });
+
+    it("surface-card-border-strong resolves to the authored card borderStrong", () => {
+      expect(bithireBrandTheme.surfaces?.surfaceRoles?.card?.borderStrong).toBe("#B9CCDC");
+      // The surface alias points to the material token; the material token carries the literal.
+      expect(base["--ds-surface-card-border-strong"]).toBe("var(--ds-material-card-border-strong)");
+      expect(base["--ds-material-card-border-strong"]).toBe("#B9CCDC");
+    });
+  });
+
+  describe("ledger and baseline receipts", () => {
+    it("receipt validates with exact set equality for zeroEffective/sightedPending", () => {
+      expectConflict9Receipt(ledger.verticalConflict9Execution);
+    });
+
+    it("rejects a sighted-pending entry mutated to an executed state", () => {
+      const mutated = JSON.parse(JSON.stringify(ledger.verticalConflict9Execution));
+      mutated.sightedPending = mutated.sightedPending.map((entry: string) =>
+        entry.startsWith("--ds-color-bg-input") ? `${entry} [EXECUTED]` : entry
+      );
+      expect(() => expectConflict9Receipt(mutated)).toThrow();
+    });
+
+    it("rejects a duplicated zero-effective entry that breaks exact cardinality", () => {
+      const mutated = JSON.parse(JSON.stringify(ledger.verticalConflict9Execution));
+      mutated.zeroEffective = [...mutated.zeroEffective, "--ds-color-error"];
+      expect(() => expectConflict9Receipt(mutated)).toThrow();
+    });
+
+    it("distribution is derived from ledger.entries and receipt does not mutate entries", () => {
+      const entries = Object.values(ledger.entries) as Array<{ finalState: string }>;
+      const computed = entries.reduce<Record<string, number>>((acc, entry) => {
+        acc[entry.finalState] = (acc[entry.finalState] ?? 0) + 1;
+        return acc;
+      }, {});
+      expect(Object.values(computed).reduce((a, b) => a + b, 0)).toBe(entries.length);
+      expect(computed).toEqual(ledger.finalStateVocabulary?.distribution);
+    });
+
+    it("baseline.json accepted values are decrease-only ceilings (exactness delegated to gate)", () => {
+      const baseline = JSON.parse(
+        readFileSync(resolve(process.cwd(), "scripts/artifact-provenance-gate.baseline.json"), "utf-8")
+      );
+      expect(baseline.capabilityGaps).toEqual({ bithire: 0, evnto: 0, rottay: 0 });
+
+      expect(baseline.metrics.rottay.bytes).toBeLessThanOrEqual(66191);
+      expect(baseline.metrics.rottay.declarations).toBeLessThanOrEqual(1094);
+      expect(baseline.metrics.rottay.literals).toBeLessThanOrEqual(1248);
+
+      expect(baseline.metrics.bithire.bytes).toBeLessThanOrEqual(23339);
+      expect(baseline.metrics.bithire.declarations).toBeLessThanOrEqual(209);
+      expect(baseline.metrics.bithire.literals).toBeLessThanOrEqual(123);
+
+      expect(baseline.grandfather.rottay.capabilityGapChannels).toEqual([]);
+      expect(baseline.grandfather.bithire.capabilityGapChannels).toEqual([]);
+    });
+  });
+
+  describe("mutants", () => {
+    it("rejects the old rottay error/info seeds", () => {
+      const mutant = {
+        ...rottayBrandTheme,
+        palette: { ...rottayBrandTheme.palette, errorColor: "#EF4444", infoColor: "#3B82F6" },
+      };
+      const css = compileBrandTheme({ brandTheme: mutant, tenantSlug: "rottay" }).cssString;
+      expect(css).not.toContain("--ds-color-error: #F87171");
+      expect(css).not.toContain("--ds-color-info: #60A5FA");
+    });
+
+    it("rejects a var-alias substitution for the base error channel", () => {
+      const mutant = {
+        ...rottayBrandTheme,
+        palette: { ...rottayBrandTheme.palette, errorColor: "var(--ds-color-error-400)" },
+      };
+      const css = compileBrandTheme({ brandTheme: mutant, tenantSlug: "rottay" }).cssString;
+      expect(css).not.toContain("--ds-color-error: #F87171");
+    });
+
+    it("rejects a wrong ramp step for the base error seed", () => {
+      const mutant = {
+        ...rottayBrandTheme,
+        palette: { ...rottayBrandTheme.palette, errorColor: "#FCA5A5" },
+      };
+      const css = compileBrandTheme({ brandTheme: mutant, tenantSlug: "rottay" }).cssString;
+      expect(css).not.toContain("--ds-color-error: #F87171");
+    });
+
+    it("rejects changed light error/info seeds in the mode block", () => {
+      const mutant = {
+        ...rottayBrandTheme,
+        modes: {
+          ...rottayBrandTheme.modes,
+          light: {
+            ...rottayBrandTheme.modes!.light,
+            palette: {
+              ...rottayBrandTheme.modes!.light.palette,
+              errorColor: "#B91C1C",
+              infoColor: "#1E40AF",
+            },
+          },
+        },
+      };
+      const compiledMutant = compileBrandTheme({ brandTheme: mutant, tenantSlug: "rottay" });
+      const light = compiledMutant.modeBlocks?.find((b) => b.mode === "light")?.cssVariables ?? {};
+      expect(light["--ds-color-error"]).toBe("#B91C1C");
+      expect(light["--ds-color-error"]).not.toBe("#DC2626");
+      expect(light["--ds-color-info"]).toBe("#1E40AF");
+      expect(light["--ds-color-info"]).not.toBe("#2563EB");
+    });
+
+    it("rejects a dark error seed that flips the readable ink", () => {
+      // #7F1D1D is dark enough that deriveReadableInk returns #ffffff,
+      // violating the expected dark-on-tone for --ds-color-on-error.
+      const mutant = {
+        ...rottayBrandTheme,
+        palette: { ...rottayBrandTheme.palette, errorColor: "#7F1D1D" },
+      };
+      const compiled = compileBrandTheme({ brandTheme: mutant, tenantSlug: "rottay" });
+      expect(compiled.cssVariables["--ds-color-on-error"]).not.toBe(deriveReadableInk("#F87171"));
+      expect(compiled.cssVariables["--ds-color-on-error"]).toBe(deriveReadableInk("#7F1D1D"));
+    });
+
+    it("neutralizes a font mutant by re-injecting the exact Arabic tail", () => {
+      // The compiler injects "Noto Sans Arabic" fail-closed; an author-provided
+      // non-Arabic stack is repaired rather than accepted as-is.
+      const planted = "'Inter', sans-serif";
+      const mutant = {
+        ...rottayBrandTheme,
+        typography: {
+          ...rottayBrandTheme.typography,
+          fontFamilyBase: planted,
+          fontFamilyDisplay: planted,
+          fontFamilyHeading: planted,
+        },
+      };
+      const compiled = compileBrandTheme({ brandTheme: mutant, tenantSlug: "rottay" });
+      expect(compiled.cssVariables["--ds-font-family-base"]).toBe(
+        `'Inter', "Noto Sans Arabic", sans-serif`
+      );
+    });
+
+    it("rejects a sighted field change that alters the compiled channel", () => {
+      const mutant = {
+        ...bithireBrandTheme,
+        surfaces: {
+          ...bithireBrandTheme.surfaces,
+          surfaceRoles: {
+            ...bithireBrandTheme.surfaces?.surfaceRoles,
+            card: {
+              ...bithireBrandTheme.surfaces?.surfaceRoles?.card,
+              borderStrong: "#FF0000",
+            },
+          },
+        },
+      };
+      const compiled = compileBrandTheme({ brandTheme: mutant, tenantSlug: "bithire" });
+      expect(compiled.cssVariables["--ds-material-card-border-strong"]).not.toBe("#B9CCDC");
+      expect(compiled.cssVariables["--ds-material-card-border-strong"]).toBe("#FF0000");
+    });
+
+    it("rejects the old bithire alias values", () => {
+      const css = compileBrandTheme({
+        brandTheme: bithireBrandTheme,
+        tenantSlug: "bithire",
+      }).cssString;
+      expect(css).not.toContain("--ds-color-bg-primary: #ffffff");
+      expect(css).not.toContain("--ds-surface-card-border-strong: var(--ds-color-border-secondary)");
     });
   });
 });

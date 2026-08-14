@@ -71,27 +71,12 @@ function renderArtifact(slug: string, extensionOverride?: string): string {
 /**
  * Same-state re-declarations that survive TODAY (decrease-only).
  *
- * These are NOT green. Each entry is a compiler-emitted channel whose authored
- * BrandTheme value is dead on arrival because the extension restates it in the
- * base state. They live under a declared `capability-gap` header — the one
- * exception kind allowed to re-declare — and the gate grandfathers them by
- * name, which is why the committed tree is green while the property this test
- * describes is not yet true.
- *
- * Draining one means deleting its entry here in the same change; the staleness
- * assertion refuses a pin that no longer matches reality.
+ * VERTICAL-CONFLICT-9 drained the 9-channel roster from DEAD-61, so the
+ * inventory is now empty. The staleness assertion refuses any pin that does
+ * not match reality, which is why this array must stay empty until a new
+ * capability-gap re-declaration is honestly introduced.
  */
-const KNOWN_SAME_STATE_REDECLARATIONS: readonly string[] = [
-  'bithire :: --ds-color-bg-primary',
-  'bithire :: --ds-surface-card-border-strong',
-  'rottay :: --ds-card-shadow-elevated',
-  'rottay :: --ds-color-bg-input',
-  'rottay :: --ds-color-error',
-  'rottay :: --ds-color-info',
-  'rottay :: --ds-font-family-base',
-  'rottay :: --ds-font-family-display',
-  'rottay :: --ds-font-family-heading',
-];
+const KNOWN_SAME_STATE_REDECLARATIONS: readonly string[] = [];
 
 const key = (conflict: Conflict) => `${conflict.slug} :: ${conflict.channel}`;
 
@@ -143,10 +128,23 @@ describe('EXTENSION-CANNOT-BEAT-TENANT · rendered first-party artifacts', () =>
       const states = compiled.get(channel);
       return states !== undefined && states.size === 1 && states.has('dark');
     });
-    // 40 today, down from 44 as the extension drains. The floor only has to
-    // prove the case is real and not a fluke, so it tracks the drain downward
-    // rather than pinning a count the retirement waves are meant to reduce.
-    expect(darkOnlyOverlap.length).toBeGreaterThan(30);
+
+    // The retired VERTICAL-CONFLICT-9 roster lived in the default state; none of
+    // those channels may reappear as dark-only overlap. The positive control
+    // below proves the set is still populated with real channels, not a fluke.
+    const retiredRoster = new Set([
+      '--ds-card-shadow-elevated',
+      '--ds-color-bg-input',
+      '--ds-color-bg-primary',
+      '--ds-color-error',
+      '--ds-color-info',
+      '--ds-font-family-base',
+      '--ds-font-family-display',
+      '--ds-font-family-heading',
+      '--ds-surface-card-border-strong',
+    ]);
+    expect(darkOnlyOverlap.filter((channel) => retiredRoster.has(channel))).toEqual([]);
+    expect(darkOnlyOverlap.length).toBeGreaterThan(0);
 
     const reported = new Set(conflicts('bithire', artifact).map((c) => c.channel));
     expect(darkOnlyOverlap.filter((channel) => reported.has(channel))).toEqual([]);
@@ -204,5 +202,62 @@ describe('EXTENSION-CANNOT-BEAT-TENANT · drill', () => {
     const plantedIndex = artifact.lastIndexOf('--ds-color-primary: #123456;');
     expect(compiledIndex).toBeGreaterThan(-1);
     expect(plantedIndex).toBeGreaterThan(compiledIndex);
+  });
+});
+
+describe('EXTENSION-CANNOT-BEAT-TENANT · VERTICAL-CONFLICT-9 mutants', () => {
+  const RETIRED_ROSTER = new Set([
+    '--ds-card-shadow-elevated',
+    '--ds-color-bg-input',
+    '--ds-color-bg-primary',
+    '--ds-color-error',
+    '--ds-color-info',
+    '--ds-font-family-base',
+    '--ds-font-family-display',
+    '--ds-font-family-heading',
+    '--ds-surface-card-border-strong',
+  ]);
+
+  it('reinserting any retired roster channel into a default-state rule is caught', () => {
+    for (const channel of RETIRED_ROSTER) {
+      const slug = channel.startsWith('--ds-surface-card-border-strong') || channel === '--ds-color-bg-primary'
+        ? 'bithire'
+        : 'rottay';
+      const planted = `html[data-tenant='${slug}'] {\n  ${channel}: #123456;\n}\n`;
+      const found = conflicts(slug, renderArtifact(slug, planted)).map((c) => c.channel);
+      expect(found).toContain(channel);
+    }
+  });
+
+  it('reinserting a retired roster channel in the wrong mode is still a conflict for rottay', () => {
+    // rottay's compiled base block is unconditional, so a light-gated reinsertion
+    // competes with it. This is stricter than bithire, and the law is deliberate.
+    const planted = [
+      "html[data-tenant='rottay'][data-theme='light'] {",
+      '  --ds-color-error: #123456;',
+      '}',
+      '',
+    ].join('\n');
+    expect(conflicts('rottay', renderArtifact('rottay', planted)).map((c) => c.channel)).toContain(
+      '--ds-color-error'
+    );
+  });
+
+  it('reinserting the old bithire aliases is caught as a default-state conflict', () => {
+    const planted = [
+      'html[data-tenant="bithire"]:not([data-theme="dark"]):not(.dark) {',
+      '  --ds-color-bg-primary: #ffffff;',
+      '  --ds-surface-card-border-strong: var(--ds-color-border-secondary);',
+      '}',
+      '',
+    ].join('\n');
+    const found = new Set(conflicts('bithire', renderArtifact('bithire', planted)).map((c) => c.channel));
+    expect(found).toContain('--ds-color-bg-primary');
+    expect(found).toContain('--ds-surface-card-border-strong');
+  });
+
+  it('the committed inventory is empty and stays empty', () => {
+    expect(KNOWN_SAME_STATE_REDECLARATIONS).toEqual([]);
+    expect(observed()).toEqual([]);
   });
 });

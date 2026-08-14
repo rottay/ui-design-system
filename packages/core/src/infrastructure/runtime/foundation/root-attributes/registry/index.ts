@@ -28,8 +28,7 @@ interface ClaimRecord {
    * The latest value this claim owns, kept CANONICAL: every time this claim's
    * value goes live (initial claim, `update`, or a release handing the
    * channel down to it), it is re-synced from `adapter.read()` rather than
-   * left as the raw string a caller passed in. See `canonicalizeAfterLive` in
-   * `claimChannel`. `update` moves it in place.
+   * left as the raw string a caller passed in. `update` moves it in place.
    */
   value: string;
 }
@@ -37,6 +36,8 @@ interface ClaimRecord {
 interface ChannelState {
   baseline: Baseline;
   stack: ClaimRecord[];
+  /** Snapshot that a failed transition could not roll back to; repair first. */
+  recovery?: Baseline;
 }
 
 /**
@@ -49,6 +50,41 @@ export type ChannelKey = string;
 
 const registry = new WeakMap<object, Map<ChannelKey, ChannelState>>();
 
+const HTML_NS = 'http://www.w3.org/1999/xhtml';
+
+/**
+ * Returns the canonical attribute name for the given element's namespace.
+ *
+ * In the HTML namespace in an HTML document the attribute name is
+ * ASCII-case-insensitive: `DATA-THEME` and `data-theme` address the same node,
+ * and the DOM canonicalizes to lowercase. In all other namespaces (SVG,
+ * MathML, null, XML) names are case-sensitive and must be preserved exactly as
+ * written.
+ *
+ * `ownerDocument.createAttribute` supplies the canonical spelling; a one-off
+ * `setAttribute` on a throwaway node of the same namespace validates the name
+ * without touching the live element, because some engines do not reject invalid
+ * names at `createAttribute` time.
+ */
+function canonicalAttributeName(element: Element, name: string): string {
+  const attr = element.ownerDocument.createAttribute(name);
+  const isHTMLDocument = element.ownerDocument.contentType === 'text/html';
+  const ns = isHTMLDocument && element.namespaceURI === HTML_NS ? HTML_NS : element.namespaceURI;
+  const dummy = element.ownerDocument.createElementNS(ns, 'div');
+  dummy.setAttribute(name, '');
+  return dummy.attributes[0]?.name ?? attr.name;
+}
+
+function makeAggregateError(errors: unknown[], message: string): Error {
+  const ctor = (globalThis as Record<string, unknown>).AggregateError as
+    | (new (errors: Iterable<unknown>, message?: string) => Error)
+    | undefined;
+  if (typeof ctor === 'function') return new ctor(errors, message);
+  const err = new Error(message);
+  (err as Error & { cause: unknown }).cause = errors;
+  return err;
+}
+
 export interface ChannelAdapter {
   /** Current live value, or ABSENT. */
   read(): Baseline;
@@ -60,12 +96,6 @@ export interface ChannelAdapter {
    * Refuses a value that cannot BE a claim on this channel, evaluated before
    * anything is mutated. Returns the rejection message, or null when the value
    * is claimable.
-   *
-   * The motivating case is `claimRootStyleProperty`: in CSSOM an empty
-   * declaration is not a value, it is `removeProperty()`. A claim of `''`
-   * would therefore DELETE the baseline it was supposed to be able to hand
-   * back. A removal is not something a claim can own, so the channel refuses
-   * it rather than performing it.
    */
   validate?(value: string): string | null;
 }
@@ -80,104 +110,228 @@ export interface ChannelClaim {
   readonly update: (value: string) => void;
 }
 
-export function claimChannel(
+interface InternalClaim {
+  readonly element: object;
+  readonly key: ChannelKey;
+  readonly adapter: ChannelAdapter;
+  readonly record: ClaimRecord;
+  released: boolean;
+  update: (value: string) => void;
+  release: ReleaseRootAttribute;
+}
+
+interface TransitionSuccess {
+  ok: true;
+  live: string;
+}
+
+interface TransitionFailure {
+  ok: false;
+  error: Error | null;
+  /** Live snapshot the rollback could not restore to. */
+  recovery?: Baseline;
+}
+
+interface RollbackFailure {
+  error: Error;
+  recovery: Baseline;
+}
+
+/**
+ * Performs a verified rollback to `snapshot`: restore, then read back and
+ * require exact identity `live === snapshot` (including ABSENT). Returns the
+ * primary error when rollback succeeds, or an ordered AggregateError
+ * [primary, rollbackFailure] plus the snapshot as recovery when it does not.
+ */
+function verifiedRollback(
+  adapter: ChannelAdapter,
+  snapshot: Baseline,
+  primaryError: Error,
+  message: string,
+): { error: Error; recovery?: Baseline } {
+  let rollbackError: Error;
+  try {
+    adapter.restore(snapshot);
+    const live = adapter.read();
+    if (live === snapshot) {
+      return { error: primaryError };
+    }
+    const snapshotLabel = snapshot === ABSENT ? 'ABSENT' : String(snapshot);
+    const liveLabel = live === ABSENT ? 'ABSENT' : String(live);
+    rollbackError = new Error(
+      `rollback verify failed: expected ${snapshotLabel}, got ${liveLabel}`,
+    );
+  } catch (err) {
+    rollbackError = err as Error;
+  }
+  const aggregate = makeAggregateError([primaryError, rollbackError], message);
+  return { error: aggregate, recovery: snapshot };
+}
+
+/**
+ * Atomically transitions a channel to `next` and returns the canonical live
+ * value. The snapshot `before` that this helper reads is restored and verified
+ * on every failure, so the channel is never left in a half-written state and a
+ * failed overlay never falls back to an older historical baseline. A rollback
+ * that throws or silently fails carries an ordered AggregateError and
+ * `recovery` set to `before`, so the caller can leave a tombstone instead of
+ * silently dropping the live owner.
+ */
+function transition(
+  adapter: ChannelAdapter,
+  next: string,
+): TransitionSuccess | TransitionFailure {
+  let before: Baseline;
+  try {
+    before = adapter.read();
+  } catch (readError) {
+    return { ok: false, error: readError as Error };
+  }
+
+  if (before === next) {
+    let live: Baseline;
+    try {
+      live = adapter.read();
+    } catch (postReadError) {
+      const rollback = verifiedRollback(
+        adapter,
+        before,
+        postReadError as Error,
+        'claim post-read failed on no-op transition and rollback failed',
+      );
+      return { ok: false, error: rollback.error, recovery: rollback.recovery };
+    }
+    if (live === before) {
+      return { ok: true, live };
+    }
+    const drift = new Error('channel drifted on no-op transition');
+    const rollback = verifiedRollback(
+      adapter,
+      before,
+      drift,
+      'claim no-op transition drifted and rollback failed',
+    );
+    return { ok: false, error: rollback.error, recovery: rollback.recovery };
+  }
+
+  try {
+    adapter.write(next);
+  } catch (writeError) {
+    const rollback = verifiedRollback(
+      adapter,
+      before,
+      writeError as Error,
+      'claim write failed and rollback failed',
+    );
+    return { ok: false, error: rollback.error, recovery: rollback.recovery };
+  }
+
+  let live: Baseline;
+  try {
+    live = adapter.read();
+  } catch (postReadError) {
+    const rollback = verifiedRollback(
+      adapter,
+      before,
+      postReadError as Error,
+      'claim post-write read failed and rollback failed',
+    );
+    return { ok: false, error: rollback.error, recovery: rollback.recovery };
+  }
+
+  if (live === next) {
+    return { ok: true, live };
+  }
+
+  const didNotTake = new Error('channel read did not match claimed value after write');
+  const rollback = verifiedRollback(
+    adapter,
+    before,
+    didNotTake,
+    'claim write did not take and rollback failed',
+  );
+  return { ok: false, error: rollback.error, recovery: rollback.recovery };
+}
+
+/** Restores a channel from a recovery tombstone before it is used again. */
+function repairRecovery(adapter: ChannelAdapter, state: ChannelState): void {
+  const recovery = state.recovery;
+  if (recovery === undefined) return;
+
+  try {
+    adapter.restore(recovery);
+  } catch (restoreError) {
+    throw makeAggregateError([restoreError], 'recovery restore failed');
+  }
+
+  try {
+    const live = adapter.read();
+    if (live !== recovery) {
+      const recoveryLabel = recovery === ABSENT ? 'ABSENT' : String(recovery);
+      const liveLabel = live === ABSENT ? 'ABSENT' : String(live);
+      throw new Error(
+        `recovery restore did not take: expected ${recoveryLabel}, got ${liveLabel}`,
+      );
+    }
+  } catch (readError) {
+    throw makeAggregateError([readError], 'recovery verify failed');
+  }
+
+  state.recovery = undefined;
+}
+
+function claimChannelInternal(
   element: object,
   key: ChannelKey,
   value: string,
   adapter: ChannelAdapter,
-): ChannelClaim {
-  /**
-   * Makes `next` the live value of this channel and re-syncs `target.value`
-   * from what the channel ACTUALLY holds afterwards. Returns whether the value
-   * went live.
-   *
-   * WHY RE-SYNC. The browser is free to canonicalize a declaration on write --
-   * trim whitespace, reserialize a custom property, normalize a shorthand --
-   * so the RAW string a caller handed to `claimChannel`/`update` is not
-   * necessarily the string a later `adapter.read()` returns. Every comparison
-   * below (`update`'s redundant-write guard, `release`'s "did an external
-   * writer take over" check, and its hand-back to the claim underneath) diffs
-   * a FRESH `adapter.read()` against a STORED value. If that stored value is
-   * the pre-write raw string instead of the canonical one, the comparison is
-   * live-canonical-vs-raw and can go wrong in both directions: a spurious
-   * mismatch forces a redundant write (each one wakes every MutationObserver
-   * on the root), or -- worse -- `release` reads the mismatch as external
-   * interference and abandons the hand-back entirely, leaking the outgoing
-   * value forever instead of restoring the claim below.
-   *
-   * WHY A FAILED WRITE IS UNDONE RATHER THAN RECORDED. If the read-back comes
-   * back ABSENT the write did not take, and the channel may now be WORSE than
-   * it was: in CSSOM `setProperty(prop, '')` IS `removeProperty(prop)`, so an
-   * empty declaration deletes whatever was there. The earlier implementation
-   * returned at this point and left `target.value` as the string it had failed
-   * to write, which made `release` diff ABSENT against that string, classify
-   * it as external interference, and skip the baseline restore -- destroying
-   * the SSR stamp this module exists to protect. So a failed write is rolled
-   * back to the value observed immediately before it, and reported, never
-   * recorded as live. `claimRootStyleProperty` also refuses the empty
-   * declaration up front, which makes this path defence in depth for values
-   * the ENGINE rejects: an invalid value for a standard property is a silent
-   * CSSOM no-op.
-   */
-  const goLive = (target: ClaimRecord, next: string): boolean => {
-    // Writing a value the channel already carries -- the ordinary shape of
-    // hydration over an SSR stamp -- must not mutate the DOM. A redundant
-    // write is observable: it wakes every MutationObserver watching the root
-    // and re-runs whatever they recompute.
-    const before = adapter.read();
-    if (before !== next) adapter.write(next);
-
-    const live = adapter.read();
-    if (live === ABSENT) {
-      if (before !== ABSENT) adapter.restore(before);
-      return false;
-    }
-
-    target.value = live;
-    return true;
-  };
-
-  // Refuse an unclaimable value BEFORE the registry or the DOM is touched, so
-  // a rejected claim cannot leave a half-built stack entry or a mutated
-  // channel behind.
+): InternalClaim {
   const rejection = adapter.validate?.(value);
   if (rejection) throw new Error(rejection);
 
-  let channels = registry.get(element);
+  const existingChannels = registry.get(element);
+  const existingState = existingChannels?.get(key);
+  let baseline: Baseline;
+  try {
+    baseline = existingState ? existingState.baseline : adapter.read();
+  } catch (error) {
+    throw error;
+  }
+
+  let channels = existingChannels;
   if (!channels) {
     channels = new Map();
     registry.set(element, channels);
   }
 
-  let state = channels.get(key);
+  let state = existingState;
   if (!state) {
-    // First claim on this channel: whatever is there now is the baseline, and
-    // that is precisely the SSR stamp we must be able to hand back. This read
-    // happens before the write just below, so it can never be canonicalized
-    // output from THIS claim.
-    state = { baseline: adapter.read(), stack: [] };
+    state = { baseline, stack: [] };
     channels.set(key, state);
   }
+
+  repairRecovery(adapter, state);
 
   const record: ClaimRecord = { token: {}, value };
   state.stack.push(record);
 
-  // A claim whose value never went live owns nothing, so it must not stay on
-  // the stack: leaving it there would make a later release hand the channel
-  // down to a value the channel never held. It is popped again and the caller
-  // gets an inert handle, so `release` on it is a no-op rather than a second
-  // chance to disturb a channel it does not own.
-  if (!goLive(record, value)) {
+  const result = transition(adapter, value);
+  if (!result.ok) {
     const index = state.stack.indexOf(record);
     if (index !== -1) state.stack.splice(index, 1);
     if (state.stack.length === 0) {
-      channels.delete(key);
-      if (channels.size === 0) registry.delete(element);
+      if (result.recovery !== undefined) {
+        state.recovery = result.recovery;
+      } else {
+        channels.delete(key);
+        if (channels.size === 0) registry.delete(element);
+      }
+    } else if (result.recovery !== undefined) {
+      state.recovery = result.recovery;
     }
-    return { release: () => {}, update: () => {} };
+    throw result.error ?? new Error('claim transition failed');
   }
-
-  let released = false;
+  record.value = result.live;
 
   interface Located {
     channels: Map<ChannelKey, ChannelState>;
@@ -185,7 +339,6 @@ export function claimChannel(
     index: number;
   }
 
-  /** Locates this claim in the live stack, or null once it is gone. */
   const locate = (): Located | null => {
     const currentChannels = registry.get(element);
     const current = currentChannels?.get(key);
@@ -194,75 +347,159 @@ export function claimChannel(
     return index === -1 ? null : { channels: currentChannels, state: current, index };
   };
 
-  return {
-    update: (next) => {
-      if (released) return;
-      // Same fail-closed boundary as the initial claim: an unclaimable value
-      // is refused before it can reach the DOM.
-      const rejected = adapter.validate?.(next);
-      if (rejected) throw new Error(rejected);
+  const drain = (located: Located): void => {
+    if (located.state.stack.length > 0) return;
+    located.channels.delete(key);
+    if (located.channels.size === 0) registry.delete(element);
+  };
 
-      const found = locate();
-      if (!found) return;
+  const handle: InternalClaim = {
+    element,
+    key,
+    adapter,
+    record,
+    released: false,
+    update: () => {},
+    release: () => {},
+  };
 
-      const previous = record.value;
+  handle.update = (next) => {
+    if (handle.released) return;
+    const rejected = adapter.validate?.(next);
+    if (rejected) throw new Error(rejected);
+
+    const found = locate();
+    if (!found) return;
+
+    if (found.index !== found.state.stack.length - 1) {
       record.value = next;
+      return;
+    }
 
-      // Only the top claim owns the live value; a covered claim just records
-      // what it will re-apply if the claim above it is released.
-      if (found.index !== found.state.stack.length - 1) return;
-      // A write the engine refused leaves the channel on `previous`. Recording
-      // `next` regardless would make `release` diff live-against-stored, read
-      // the difference as external interference, and skip the hand-back.
-      if (!goLive(record, next)) record.value = previous;
-    },
-    release: () => {
-      if (released) return;
-      released = true;
+    repairRecovery(adapter, found.state);
 
-      const found = locate();
-      if (!found) return;
+    const updated = transition(adapter, next);
+    if (!updated.ok) {
+      if (updated.recovery !== undefined) {
+        found.state.recovery = updated.recovery;
+      }
+      throw updated.error ?? new Error('update transition failed');
+    }
+    record.value = updated.live;
+  };
 
-      const wasTop = found.index === found.state.stack.length - 1;
+  handle.release = () => {
+    const found = locate();
+    if (!found) {
+      handle.released = true;
+      return;
+    }
+
+    const wasTop = found.index === found.state.stack.length - 1;
+
+    if (!wasTop) {
       found.state.stack.splice(found.index, 1);
+      drain(found);
+      handle.released = true;
+      return;
+    }
 
-      const drain = () => {
-        if (found.state.stack.length > 0) return;
-        found.channels.delete(key);
-        if (found.channels.size === 0) registry.delete(element);
-      };
+    repairRecovery(adapter, found.state);
 
-      // Releasing a claim that something else has since covered must not touch
-      // the DOM. Only the top claim owns the live value.
-      if (!wasTop) return;
+    const outgoingValue = record.value;
 
-      // An external writer (an app effect, a devtool) may have taken over. If the
-      // live value is not what this claim wrote, we are no longer the owner and
-      // must leave it alone. `record.value` is kept canonical (see
-      // `canonicalizeAfterLive` above) every time this claim was top, so a
-      // mismatch here is genuine external interference, not stale
-      // whitespace/priority formatting left over from the claim-time raw string.
-      if (adapter.read() !== record.value) {
-        drain();
+    let current: Baseline;
+    try {
+      current = adapter.read();
+    } catch (readError) {
+      throw readError;
+    }
+
+    if (current !== outgoingValue) {
+      found.state.stack.splice(found.index, 1);
+      drain(found);
+      handle.released = true;
+      return;
+    }
+
+    const nextRecord = found.state.stack[found.index - 1];
+
+    if (nextRecord) {
+      const handedDown = transition(adapter, nextRecord.value);
+      if (handedDown.ok) {
+        nextRecord.value = handedDown.live;
+        found.state.stack.splice(found.index, 1);
+        drain(found);
+        handle.released = true;
         return;
       }
+      if (handedDown.recovery !== undefined) {
+        found.state.recovery = handedDown.recovery;
+      }
+      throw handedDown.error ?? new Error('release hand-down failed');
+    }
 
-      // Handing down and handing back share the claim-time guard: a value that
-      // is already live is not rewritten. `goLive` also re-syncs the incoming
-      // claim's stored value the same way the initial claim and `update` do,
-      // so if IT is later released (or handed down further), its comparisons
-      // are canonical-against-live rather than against whatever raw string it
-      // happened to be created or last updated with.
-      const next = found.state.stack[found.state.stack.length - 1];
-      if (next && goLive(next, next.value)) return;
+    try {
+      adapter.restore(found.state.baseline);
+    } catch (restoreError) {
+      const rollback = verifiedRollback(
+        adapter,
+        outgoingValue,
+        restoreError as Error,
+        'baseline restore failed and rollback failed',
+      );
+      if (rollback.recovery !== undefined) {
+        found.state.recovery = rollback.recovery;
+      }
+      throw rollback.error;
+    }
 
-      // Either nothing is left underneath, or handing down did not take. Both
-      // resolve to the baseline: the one value this channel is always entitled
-      // to fall back to, rather than leaving the outgoing claim's value live.
-      if (adapter.read() !== found.state.baseline) adapter.restore(found.state.baseline);
-      drain();
-    },
+    let afterBaseline: Baseline;
+    try {
+      afterBaseline = adapter.read();
+    } catch (verifyError) {
+      const rollback = verifiedRollback(
+        adapter,
+        outgoingValue,
+        verifyError as Error,
+        'baseline verify failed and rollback failed',
+      );
+      if (rollback.recovery !== undefined) {
+        found.state.recovery = rollback.recovery;
+      }
+      throw rollback.error;
+    }
+
+    if (afterBaseline !== found.state.baseline) {
+      const didNotTake = new Error('baseline restore did not take');
+      const rollback = verifiedRollback(
+        adapter,
+        outgoingValue,
+        didNotTake,
+        'baseline restore did not take and rollback failed',
+      );
+      if (rollback.recovery !== undefined) {
+        found.state.recovery = rollback.recovery;
+      }
+      throw rollback.error;
+    }
+
+    found.state.stack.splice(found.index, 1);
+    drain(found);
+    handle.released = true;
   };
+
+  return handle;
+}
+
+export function claimChannel(
+  element: object,
+  key: ChannelKey,
+  value: string,
+  adapter: ChannelAdapter,
+): ChannelClaim {
+  const handle = claimChannelInternal(element, key, value, adapter);
+  return { update: handle.update, release: handle.release };
 }
 
 function attributeAdapter(element: Element, name: string): ChannelAdapter {
@@ -282,7 +519,13 @@ export function claimRootAttribute(
   name: string,
   value: string,
 ): ReleaseRootAttribute {
-  return claimChannel(element, `attr:${name}`, value, attributeAdapter(element, name)).release;
+  const canonicalName = canonicalAttributeName(element, name);
+  return claimChannel(
+    element,
+    `attr:${canonicalName}`,
+    value,
+    attributeAdapter(element, canonicalName),
+  ).release;
 }
 
 /**
@@ -300,6 +543,18 @@ export interface RootAttributeSetClaim {
   reconcile(next: Readonly<Record<string, string>>): void;
   /** Releases every key the claim still holds. */
   release: ReleaseRootAttribute;
+}
+
+interface SetJournalEntry {
+  name: string;
+  key: ChannelKey;
+  adapter: ChannelAdapter;
+  live: Baseline;
+  existed: boolean;
+  baseline: Baseline;
+  recovery: Baseline | undefined;
+  stack: { record: ClaimRecord; value: string }[];
+  handle: InternalClaim | null;
 }
 
 /**
@@ -326,6 +581,12 @@ export interface RootAttributeSetClaim {
  * The prefix is enforced, not decorative: a set claim is an owner of one
  * namespace, and a `reconcile` that could reach `data-theme` would be a second
  * authority over a channel with a different owner.
+ *
+ * The whole reconcile/release is a single transaction: every requested key is
+ * canonicalized and validated before any DOM write, and a failure at any point
+ * rolls the DOM, the registry stacks, and the held map back to the exact
+ * pre-call snapshot. A rollback that fails is aggregated with the primary error
+ * and leaves recovery tombstones so a later retry repairs before acting.
  */
 export function claimRootAttributeSet(
   element: Element,
@@ -334,34 +595,215 @@ export function claimRootAttributeSet(
 ): RootAttributeSetClaim {
   if (!namespace) throw new Error('claimRootAttributeSet requires a non-empty attribute namespace');
 
-  const held = new Map<string, ChannelClaim>();
+  const canonicalNamespace = canonicalAttributeName(element, namespace);
+
+  const held = new Map<string, InternalClaim>();
+  const recovering = new Set<string>();
   let released = false;
+
+  const channelKey = (name: string): ChannelKey => `attr:${name}`;
+
+  const repairUnion = (names: Iterable<string>): void => {
+    for (const name of names) {
+      const key = channelKey(name);
+      const channels = registry.get(element);
+      const state = channels?.get(key);
+      if (state?.recovery !== undefined) {
+        const adapter = held.get(name)?.adapter ?? attributeAdapter(element, name);
+        repairRecovery(adapter, state);
+        recovering.delete(name);
+        if (state.stack.length === 0) {
+          channels?.delete(key);
+          if (channels?.size === 0) registry.delete(element);
+        }
+      }
+    }
+  };
+
+  const buildJournal = (names: Iterable<string>): SetJournalEntry[] => {
+    const entries: SetJournalEntry[] = [];
+    for (const name of names) {
+      const key = channelKey(name);
+      const adapter = attributeAdapter(element, name);
+      const live = adapter.read();
+      const channels = registry.get(element);
+      const state = channels?.get(key);
+      entries.push({
+        name,
+        key,
+        adapter,
+        live,
+        existed: state !== undefined,
+        baseline: state ? state.baseline : live,
+        recovery: state ? state.recovery : undefined,
+        stack: state ? state.stack.map((record) => ({ record, value: record.value })) : [],
+        handle: held.get(name) ?? null,
+      });
+    }
+    return entries;
+  };
+
+  const restoreSnapshot = (journal: SetJournalEntry[], primaryError: unknown): Error => {
+    const rollbackErrors: Error[] = [];
+
+    for (const entry of journal) {
+      const { name, key, adapter, live, existed, baseline, recovery, stack, handle } = entry;
+
+      let domOk = false;
+      try {
+        adapter.restore(live);
+        const current = adapter.read();
+        if (current !== live) {
+          throw new Error(
+            `rollback verify failed for ${name}: expected ${String(live)}, got ${String(current)}`,
+          );
+        }
+        domOk = true;
+      } catch (err) {
+        rollbackErrors.push(err as Error);
+      }
+
+      let channels = registry.get(element);
+      if (!channels) {
+        channels = new Map();
+        registry.set(element, channels);
+      }
+
+      let state = channels.get(key);
+      if (!existed) {
+        if (!domOk) {
+          if (!state) {
+            state = { baseline: live, stack: [] };
+            channels.set(key, state);
+          }
+          state.baseline = live;
+          state.stack = [];
+          state.recovery = live;
+        } else {
+          if (state) channels.delete(key);
+        }
+      } else {
+        if (!state) {
+          state = { baseline, stack: [] };
+          channels.set(key, state);
+        }
+        state.baseline = baseline;
+        state.stack = stack.map(({ record }) => record);
+        state.recovery = domOk ? recovery : live;
+        for (const { record, value } of stack) record.value = value;
+      }
+
+      if (domOk) {
+        recovering.delete(name);
+      } else if (!handle) {
+        recovering.add(name);
+      }
+
+      if (channels.size === 0) registry.delete(element);
+
+      if (existed && handle) {
+        handle.released = false;
+        held.set(name, handle);
+      } else {
+        held.delete(name);
+      }
+    }
+
+    const primary = primaryError instanceof Error ? primaryError : new Error(String(primaryError));
+    if (rollbackErrors.length === 0) return primary;
+    return makeAggregateError(
+      [primary, ...rollbackErrors],
+      'claimRootAttributeSet transition failed and rollback failed',
+    );
+  };
 
   const reconcile = (next: Readonly<Record<string, string>>): void => {
     if (released) return;
 
-    for (const name of Object.keys(next)) {
-      if (name.startsWith(namespace)) continue;
-      throw new Error(
-        `claimRootAttributeSet(${namespace}) cannot write "${name}": it is outside the claimed namespace`,
-      );
-    }
-
-    // Keys that disappeared go back to their own baseline first, so a
-    // reconciliation never leaves a key the owner no longer declares.
-    for (const [name, claim] of [...held]) {
-      if (name in next) continue;
-      claim.release();
-      held.delete(name);
-    }
-
-    for (const [name, value] of Object.entries(next)) {
-      const existing = held.get(name);
-      if (existing) {
-        existing.update(value);
-        continue;
+    const canonicalNext = new Map<string, string>();
+    for (const [rawName, value] of Object.entries(next)) {
+      const canonicalName = canonicalAttributeName(element, rawName);
+      if (!canonicalName.startsWith(canonicalNamespace)) {
+        throw new Error(
+          `claimRootAttributeSet(${namespace}) cannot write "${rawName}" ` +
+            `(canonical "${canonicalName}"): it is outside the claimed namespace`,
+        );
       }
-      held.set(name, claimChannel(element, `attr:${name}`, value, attributeAdapter(element, name)));
+      if (canonicalNext.has(canonicalName)) {
+        throw new Error(
+          `claimRootAttributeSet(${namespace}) has a canonical collision: ` +
+            `"${[...canonicalNext.entries()].find(([k]) => k === canonicalName)?.[1] ?? rawName}" ` +
+            `and "${rawName}" both map to "${canonicalName}"`,
+        );
+      }
+      canonicalNext.set(canonicalName, value);
+    }
+
+    const toUpdate = new Map<string, string>();
+    const toRelease: string[] = [];
+    for (const [name, handle] of held) {
+      const nextValue = canonicalNext.get(name);
+      if (nextValue === undefined) {
+        toRelease.push(name);
+      } else if (nextValue !== handle.record.value) {
+        toUpdate.set(name, nextValue);
+      }
+    }
+
+    const toClaim: string[] = [];
+    for (const name of canonicalNext.keys()) {
+      if (!held.has(name)) toClaim.push(name);
+    }
+
+    const union = new Set([...held.keys(), ...canonicalNext.keys(), ...recovering]);
+    repairUnion(union);
+
+    if (toClaim.length === 0 && toUpdate.size === 0 && toRelease.length === 0) return;
+
+    const journal = buildJournal(union);
+
+    try {
+      for (const [name, value] of toUpdate) {
+        held.get(name)!.update(value);
+      }
+
+      for (const name of toClaim) {
+        const value = canonicalNext.get(name)!;
+        const key = channelKey(name);
+        const handle = claimChannelInternal(element, key, value, attributeAdapter(element, name));
+        held.set(name, handle);
+        recovering.delete(name);
+      }
+
+      for (const name of toRelease) {
+        held.get(name)!.release();
+        held.delete(name);
+      }
+    } catch (primary) {
+      throw restoreSnapshot(journal, primary);
+    }
+  };
+
+  const release = (): void => {
+    if (released) return;
+    if (held.size === 0 && recovering.size === 0) {
+      released = true;
+      return;
+    }
+
+    const union = new Set([...held.keys(), ...recovering]);
+    repairUnion(union);
+    const journal = buildJournal(union);
+
+    try {
+      for (const handle of [...held.values()].reverse()) {
+        handle.release();
+      }
+      held.clear();
+      recovering.clear();
+      released = true;
+    } catch (primary) {
+      throw restoreSnapshot(journal, primary);
     }
   };
 
@@ -369,14 +811,7 @@ export function claimRootAttributeSet(
 
   return {
     reconcile,
-    release: () => {
-      if (released) return;
-      released = true;
-      // Reverse order mirrors composeRootAttributeReleases: the last claim
-      // taken is the first handed back.
-      for (const claim of [...held.values()].reverse()) claim.release();
-      held.clear();
-    },
+    release,
   };
 }
 

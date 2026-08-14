@@ -333,3 +333,286 @@ test.describe("canary B · seeds-only, proven structurally then downstream", () 
     expect(mutatedFont).toBe(seedsFont);
   });
 });
+
+// -----------------------------------------------------------------------------
+// Document-claim lease contract (pure, no browser)
+// -----------------------------------------------------------------------------
+
+test.describe("canary · document claim lease is fail-closed and idempotent", () => {
+  test("second claim on the same Document throws", async () => {
+    const { claimShowroomTenantDocument } = await import(
+      "../../src/components/showroom-tenant"
+    );
+    const doc = { nodeType: 9 } as unknown as Document;
+    const release = claimShowroomTenantDocument(doc);
+    expect(() => claimShowroomTenantDocument(doc)).toThrow(
+      /already claims this Document/,
+    );
+    release();
+  });
+
+  test("different Documents claim independently", async () => {
+    const { claimShowroomTenantDocument } = await import(
+      "../../src/components/showroom-tenant"
+    );
+    const docA = { nodeType: 9 } as unknown as Document;
+    const docB = { nodeType: 9 } as unknown as Document;
+    const releaseA = claimShowroomTenantDocument(docA);
+    const releaseB = claimShowroomTenantDocument(docB);
+    expect(releaseA).not.toBe(releaseB);
+    releaseA();
+    releaseB();
+  });
+
+  test("release is idempotent, stale release is safe, and reclaim works", async () => {
+    const { claimShowroomTenantDocument } = await import(
+      "../../src/components/showroom-tenant"
+    );
+    const doc = { nodeType: 9 } as unknown as Document;
+
+    const release1 = claimShowroomTenantDocument(doc);
+    release1();
+    release1(); // idempotent
+
+    const release2 = claimShowroomTenantDocument(doc);
+    release1(); // stale: must not delete release2's claim
+    expect(() => claimShowroomTenantDocument(doc)).toThrow(
+      /already claims this Document/,
+    );
+
+    release2();
+    const release3 = claimShowroomTenantDocument(doc);
+    expect(release3).toBeTypeOf("function");
+    release3();
+  });
+});
+
+// -----------------------------------------------------------------------------
+// SPA transition contract: one hard load, then pushState inside the same Document
+// -----------------------------------------------------------------------------
+
+declare global {
+  interface Window {
+    __canaryDocSentinel: string;
+    __canarySnapshots: Array<{
+      source: string | null;
+      artifactCount: number;
+      rootPresent: boolean;
+      digest: string | null;
+    }>;
+    __canaryArtifactSet?: Set<Element>;
+    __canaryRootSet?: Set<Element>;
+    __canaryObserver?: MutationObserver;
+  }
+}
+
+test.describe("canary · SPA transition keeps one Document and style-before-root order", () => {
+  test(
+    "static hard-load then pushState transitions prove same Document, lease renewal, and lawful artifact counts",
+    { tag: ["@browser-not-run"] },
+    async ({ page }) => {
+      const { SHOWROOM_TENANT_ARTIFACT_TESTID } = await import(
+        "../../src/components/showroom-tenant"
+      );
+      const DIGEST_ATTR = "data-ds-tenant-theme-digest";
+      const ROOT_TESTID = "wc-root";
+
+      await page.goto(`${ROUTE}?source=bithire-static`, { waitUntil: "networkidle" });
+      await expect(root(page)).toBeVisible();
+      await expect(root(page)).toHaveAttribute("data-canary-source", "bithire-static");
+
+      const sentinel = await page.evaluate(
+        (artifactTestid: string, digestAttr: string, rootTestid: string) => {
+          const id = Math.random().toString(36).slice(2) + Date.now().toString(36);
+          window.__canaryDocSentinel = id;
+          window.__canarySnapshots = [];
+          const artifactSet = new Set<Element>();
+          const rootSet = new Set<Element>();
+          window.__canaryArtifactSet = artifactSet;
+          window.__canaryRootSet = rootSet;
+
+          const takeSnapshot = () => {
+            const artifacts = Array.from(artifactSet);
+            const rootEl = rootSet.size > 0 ? Array.from(rootSet)[0] : null;
+            window.__canarySnapshots.push({
+              source: rootEl?.getAttribute("data-canary-source") ?? null,
+              artifactCount: artifacts.length,
+              rootPresent: rootEl !== null,
+              digest: artifacts.length === 1 ? artifacts[0].getAttribute(digestAttr) : null,
+            });
+          };
+
+          const visitAdded = (node: Node) => {
+            if (node.nodeType !== Node.ELEMENT_NODE) return;
+            const el = node as Element;
+            const walk = (n: Element) => {
+              const testid = n.getAttribute("data-testid");
+              if (testid === artifactTestid) artifactSet.add(n);
+              if (testid === rootTestid) rootSet.add(n);
+            };
+            walk(el);
+            el.querySelectorAll("*").forEach(walk);
+          };
+
+          const visitRemoved = (node: Node) => {
+            if (node.nodeType !== Node.ELEMENT_NODE) return;
+            const el = node as Element;
+            const walk = (n: Element) => {
+              artifactSet.delete(n);
+              rootSet.delete(n);
+            };
+            walk(el);
+            el.querySelectorAll("*").forEach(walk);
+          };
+
+          const observer = new MutationObserver((records) => {
+            for (const record of records) {
+              for (const node of record.removedNodes) visitRemoved(node);
+              for (const node of record.addedNodes) visitAdded(node);
+              if (record.type === "attributes") {
+                const target = record.target as Element;
+                const testid = target.getAttribute("data-testid");
+                if (testid === artifactTestid) artifactSet.add(target);
+                else artifactSet.delete(target);
+                if (testid === rootTestid) rootSet.add(target);
+                else rootSet.delete(target);
+              }
+              takeSnapshot();
+            }
+          });
+
+          window.__canaryObserver = observer;
+          observer.observe(document.documentElement, {
+            childList: true,
+            subtree: true,
+            attributes: true,
+            attributeOldValue: true,
+          });
+
+          return id;
+        },
+        SHOWROOM_TENANT_ARTIFACT_TESTID,
+        DIGEST_ATTR,
+        ROOT_TESTID,
+      );
+
+      async function pushAndReport(
+        query: string,
+        expectedSource: string,
+      ): Promise<{
+        snapshots: typeof window.__canarySnapshots;
+        liveFinal: {
+          source: string | null;
+          artifactCount: number;
+          rootPresent: boolean;
+          digest: string | null;
+        };
+      }> {
+        await page.evaluate((q: string) => {
+          window.__canarySnapshots = [];
+          const url = new URL(window.location.href);
+          url.search = q;
+          window.history.pushState({}, "", url);
+        }, query);
+
+        await expect(root(page)).toHaveAttribute("data-canary-source", expectedSource);
+        await expect(root(page)).toBeVisible();
+
+        return page.evaluate(
+          (artifactTestid: string, digestAttr: string, rootTestid: string) =>
+            new Promise<{
+              snapshots: typeof window.__canarySnapshots;
+              liveFinal: {
+                source: string | null;
+                artifactCount: number;
+                rootPresent: boolean;
+                digest: string | null;
+              };
+            }>((resolve) => {
+              Promise.resolve().then(() => {
+                requestAnimationFrame(() => {
+                  requestAnimationFrame(() => {
+                    const liveRoot = document.querySelector(`[data-testid='${rootTestid}']`);
+                    const liveArtifacts = document.querySelectorAll(
+                      `[data-testid='${artifactTestid}']`,
+                    );
+                    resolve({
+                      snapshots: window.__canarySnapshots,
+                      liveFinal: {
+                        source: liveRoot?.getAttribute("data-canary-source") ?? null,
+                        artifactCount: liveArtifacts.length,
+                        rootPresent: liveRoot !== null,
+                        digest:
+                          liveArtifacts.length === 1
+                            ? liveArtifacts[0].getAttribute(digestAttr)
+                            : null,
+                      },
+                    });
+                  });
+                });
+              });
+            }),
+          SHOWROOM_TENANT_ARTIFACT_TESTID,
+          DIGEST_ATTR,
+          ROOT_TESTID,
+        );
+      }
+
+      const dbReport = await pushAndReport("?source=themanagement-db", "themanagement-db");
+      const dbMax = dbReport.snapshots.reduce((m, s) => Math.max(m, s.artifactCount), 0);
+      expect(dbMax, "DB transition logical artifact count exceeded 1").toBeLessThanOrEqual(1);
+      expect(
+        dbReport.snapshots.find((s) => s.artifactCount === 1 && s.rootPresent === false),
+        "DB transition missing style-before-root logical snapshot",
+      ).toBeDefined();
+      expect(dbReport.liveFinal.source).toBe("themanagement-db");
+      expect(dbReport.liveFinal.rootPresent).toBe(true);
+      expect(dbReport.liveFinal.artifactCount).toBe(1);
+      expect(dbReport.liveFinal.digest, "DB final digest is empty").toBeTruthy();
+
+      const seedsReport = await pushAndReport("?source=themanagement-seeds", "themanagement-seeds");
+      const seedsMax = seedsReport.snapshots.reduce((m, s) => Math.max(m, s.artifactCount), 0);
+      expect(seedsMax, "seeds transition logical artifact count exceeded 1").toBeLessThanOrEqual(1);
+      expect(
+        seedsReport.snapshots.find((s) => s.artifactCount === 1 && s.rootPresent === false),
+        "seeds transition missing style-before-root logical snapshot",
+      ).toBeDefined();
+      expect(seedsReport.liveFinal.source).toBe("themanagement-seeds");
+      expect(seedsReport.liveFinal.rootPresent).toBe(true);
+      expect(seedsReport.liveFinal.artifactCount).toBe(1);
+      expect(seedsReport.liveFinal.digest, "seeds final digest is empty").toBeTruthy();
+
+      const seedPrimaryReport = await pushAndReport(
+        "?source=themanagement-seeds&seedPrimary=%23AA0000",
+        "themanagement-seeds",
+      );
+      const seedPrimaryMax = seedPrimaryReport.snapshots.reduce(
+        (m, s) => Math.max(m, s.artifactCount),
+        0,
+      );
+      expect(seedPrimaryMax, "seedPrimary transition logical artifact count exceeded 1").toBeLessThanOrEqual(1);
+      expect(
+        seedPrimaryReport.snapshots.find((s) => s.artifactCount === 1 && s.rootPresent === false),
+        "seedPrimary transition missing style-before-root logical snapshot",
+      ).toBeDefined();
+      expect(seedPrimaryReport.liveFinal.source).toBe("themanagement-seeds");
+      expect(seedPrimaryReport.liveFinal.rootPresent).toBe(true);
+      expect(seedPrimaryReport.liveFinal.artifactCount).toBe(1);
+      expect(seedPrimaryReport.liveFinal.digest, "seedPrimary final digest is empty").toBeTruthy();
+
+      const staticReport = await pushAndReport("?source=bithire-static", "bithire-static");
+      expect(staticReport.liveFinal.source).toBe("bithire-static");
+      expect(staticReport.liveFinal.rootPresent).toBe(true);
+      expect(staticReport.liveFinal.artifactCount).toBe(0);
+
+      const dbDigest = dbReport.liveFinal.digest!;
+      const seedsDigest = seedsReport.liveFinal.digest!;
+      const seedPrimaryDigest = seedPrimaryReport.liveFinal.digest!;
+      expect(dbDigest, "DB and seeds final digests are identical").not.toBe(seedsDigest);
+      expect(dbDigest, "DB and seedPrimary final digests are identical").not.toBe(seedPrimaryDigest);
+      expect(seedsDigest, "seeds and seedPrimary final digests are identical").not.toBe(seedPrimaryDigest);
+
+      await expect(page.evaluate(() => window.__canaryDocSentinel)).resolves.toBe(sentinel);
+    },
+  );
+});

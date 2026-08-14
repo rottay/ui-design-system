@@ -1568,24 +1568,31 @@
           "platform": "#e5e5e5",
           "evnto": "#e5e5e5"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "#2A2A2F",
             "#E5E5E3"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-async-skeleton-after": {
       "provenanceClass": "B-modern-current",
@@ -1691,24 +1698,31 @@
           "platform": "#f5f5f5",
           "evnto": "#f5f5f5"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "#2A2A2F",
             "#F4F4F3"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-avatar-default-border": {
       "provenanceClass": "C-legacy-mirror",
@@ -1758,24 +1772,31 @@
           "platform": "#e5e5e5",
           "evnto": "#e5e5e5"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "#2A2A2F",
             "#E5E5E3"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-avatar-default-border-width": {
       "provenanceClass": "C-legacy-mirror",
@@ -2123,24 +2144,31 @@
           "platform": "#fecaca",
           "evnto": "#fecaca"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "rgba(239, 68, 68, 0.22)",
             "rgba(220, 38, 38, 0.20)"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-avatar-gradient-border": {
       "provenanceClass": "C-legacy-mirror",
@@ -2190,24 +2218,31 @@
           "platform": "transparent",
           "evnto": "transparent"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "transparent",
             "transparent"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-avatar-group-border-color": {
       "provenanceClass": "C-legacy-mirror",
@@ -2257,24 +2292,31 @@
           "platform": "#ffffff",
           "evnto": "#ffffff"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "#18181B",
             "#FFFFFF"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-avatar-hover-enabled": {
       "provenanceClass": "C-legacy-mirror",
@@ -2369,24 +2411,31 @@
           "platform": "#171717",
           "evnto": "#171717"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "#FFFFFF",
             "#0A0A0A"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-avatar-secondary-border": {
       "provenanceClass": "C-legacy-mirror",
@@ -2436,24 +2485,31 @@
           "platform": "#e5e5e5",
           "evnto": "#e5e5e5"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "#2A2A2F",
             "#E5E5E3"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-avatar-success-border": {
       "provenanceClass": "C-legacy-mirror",
@@ -2503,24 +2559,31 @@
           "platform": "#bbf7d0",
           "evnto": "#bbf7d0"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "rgba(34, 197, 94, 0.22)",
             "rgba(22, 163, 74, 0.20)"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-avatar-warning-border": {
       "provenanceClass": "C-legacy-mirror",
@@ -2570,24 +2633,31 @@
           "platform": "#fde68a",
           "evnto": "#fde68a"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "rgba(245, 158, 11, 0.22)",
             "rgba(217, 119, 6, 0.20)"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-backtop-bg-hover": {
       "provenanceClass": "C-legacy-mirror",
@@ -2637,24 +2707,31 @@
           "platform": "#000000",
           "evnto": "#000000"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "#E0E0E0",
             "#2A2A2A"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-backtop-radius": {
       "provenanceClass": "C-legacy-mirror",
@@ -2754,23 +2831,30 @@
           "platform": "var(--ds-badge-border-color)",
           "evnto": "var(--ds-badge-border-color)"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/bithire/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/bithire/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "bithire": [
             "var(--ds-color-border)"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-badge-default-font-size": {
       "provenanceClass": "C-legacy-mirror",
@@ -3070,23 +3154,30 @@
           "platform": "var(--ds-badge-error-bg)",
           "evnto": "var(--ds-badge-error-bg)"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/bithire/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/bithire/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "bithire": [
             "color-mix(\n    in srgb,\n    var(--ds-col"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-badge-info-border": {
       "provenanceClass": "C-legacy-mirror",
@@ -3136,23 +3227,30 @@
           "platform": "var(--ds-badge-info-bg)",
           "evnto": "var(--ds-badge-info-bg)"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/bithire/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/bithire/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "bithire": [
             "color-mix(\n    in srgb,\n    var(--ds-col"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-badge-primary-border": {
       "provenanceClass": "C-legacy-mirror",
@@ -3202,23 +3300,30 @@
           "platform": "var(--ds-badge-primary-bg)",
           "evnto": "var(--ds-badge-primary-bg)"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/bithire/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/bithire/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "bithire": [
             "var(--ds-control-brand-border)"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-badge-pulse-opacity": {
       "provenanceClass": "C-legacy-mirror",
@@ -3318,23 +3423,30 @@
           "platform": "var(--ds-badge-secondary-bg)",
           "evnto": "var(--ds-badge-secondary-bg)"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/bithire/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/bithire/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "bithire": [
             "var(--ds-color-border)"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-badge-success-border": {
       "provenanceClass": "C-legacy-mirror",
@@ -3384,23 +3496,30 @@
           "platform": "var(--ds-badge-success-bg)",
           "evnto": "var(--ds-badge-success-bg)"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/bithire/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/bithire/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "bithire": [
             "color-mix(\n    in srgb,\n    var(--ds-col"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-badge-warning-border": {
       "provenanceClass": "C-legacy-mirror",
@@ -3450,23 +3569,30 @@
           "platform": "var(--ds-badge-warning-bg)",
           "evnto": "var(--ds-badge-warning-bg)"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/bithire/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/bithire/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "bithire": [
             "color-mix(\n    in srgb,\n    var(--ds-col"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-bg-active": {
       "provenanceClass": "B-modern-current",
@@ -3516,24 +3642,31 @@
           "platform": "var(--ds-color-neutral-200)",
           "evnto": "var(--ds-color-neutral-200)"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "rgba(255, 255, 255, 0.06)",
             "rgba(0, 0, 0, 0.05)"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "DERIVE",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-bg-disabled": {
       "provenanceClass": "B-modern-current",
@@ -3583,24 +3716,31 @@
           "platform": "var(--ds-color-bg-subtle)",
           "evnto": "var(--ds-color-bg-subtle)"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "#131316",
             "#F4F4F3"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "DERIVE",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-bg-hover": {
       "provenanceClass": "B-modern-current",
@@ -3650,24 +3790,31 @@
           "platform": "var(--ds-color-bg-hover)",
           "evnto": "var(--ds-color-bg-hover)"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "#1E1E22",
             "#F0EFEE"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "DERIVE",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-bg-tertiary": {
       "provenanceClass": "B-modern-current",
@@ -3717,24 +3864,31 @@
           "platform": "var(--ds-color-bg-tertiary)",
           "evnto": "var(--ds-color-bg-tertiary)"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "#1A1A1E",
             "#EDEDEC"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "DERIVE",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-bottom-tab-bar-reserved-block-end": {
       "provenanceClass": "E-reserved-frontier",
@@ -4109,23 +4263,30 @@
           "platform": "var(--ds-button-default-border)",
           "evnto": "var(--ds-button-default-border)"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/bithire/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/bithire/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "bithire": [
             "var(--ds-button-default-border)"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "DERIVE",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-button-default-font-size": {
       "provenanceClass": "B-modern-current",
@@ -4653,23 +4814,30 @@
           "platform": "var(--ds-button-secondary-border)",
           "evnto": "var(--ds-button-secondary-border)"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/bithire/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/bithire/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "bithire": [
             "var(--ds-button-secondary-border)"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "DERIVE",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-button-success-border-color": {
       "provenanceClass": "B-modern-current",
@@ -4869,24 +5037,31 @@
           "platform": "#f5f5f5",
           "evnto": "#f5f5f5"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "rgba(255, 255, 255, 0.04)",
             "#FAFAF9"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-calendar-day-bg-selected": {
       "provenanceClass": "C-legacy-mirror",
@@ -4936,24 +5111,31 @@
           "platform": "#171717",
           "evnto": "#171717"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "#FFFFFF",
             "#0A0A0A"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-calendar-day-bg-today": {
       "provenanceClass": "C-legacy-mirror",
@@ -5003,24 +5185,31 @@
           "platform": "#f5f5f5",
           "evnto": "#f5f5f5"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "#2A2A2F",
             "#F4F4F3"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-calendar-day-color": {
       "provenanceClass": "C-legacy-mirror",
@@ -5070,24 +5259,31 @@
           "platform": "#171717",
           "evnto": "#171717"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "#ECECEC",
             "#1A1A1A"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-calendar-day-color-selected": {
       "provenanceClass": "C-legacy-mirror",
@@ -5137,24 +5333,31 @@
           "platform": "#ffffff",
           "evnto": "#ffffff"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "#0C0C0E",
             "#FFFFFF"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-card-badge-margin-top": {
       "provenanceClass": "B-modern-current",
@@ -5837,24 +6040,31 @@
           "platform": "#e5e5e5",
           "evnto": "#e5e5e5"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "#222226",
             "#EDEDEC"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-checkbox-default-border-width": {
       "provenanceClass": "C-legacy-mirror",
@@ -6336,16 +6546,17 @@
           "platform": "rgba(34, 197, 94, 0.08)",
           "evnto": "rgba(34, 197, 94, 0.08)"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/bithire/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/bithire/index.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "bithire": [
             "#f0fdf4",
@@ -6356,10 +6567,16 @@
             "rgba(22, 163, 74, 0.06)"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-color-alpha-info-20": {
       "provenanceClass": "B-modern-current",
@@ -6409,24 +6626,31 @@
           "platform": "rgba(59, 130, 246, 0.20)",
           "evnto": "rgba(59, 130, 246, 0.20)"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "rgba(59, 130, 246, 0.18)",
             "rgba(37, 99, 235, 0.14)"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-color-bg": {
       "provenanceClass": "B-modern-current",
@@ -7309,24 +7533,31 @@
           "platform": "#525252",
           "evnto": "#525252"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "#A0A0A5",
             "#6B6B6B"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-datepicker-color-placeholder": {
       "provenanceClass": "C-legacy-mirror",
@@ -7376,25 +7607,32 @@
           "platform": "#a3a3a3",
           "evnto": "#a3a3a3"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "faseBCitationFix": "The recorded successor was --ds-input-placeholder-color, which is itself dead: it is emitted only by the runtime tenant dark map, floored in no bundle and read by nothing, and FASE B retired that emission. The live canonical placeholder channel is --ds-input-color-placeholder (14 reads in DS source), with --ds-input-placeholder nested above it by the executed defect fix in engines/modern/skin/input.css. Three near-identical names in one family is the naming defect underneath both rows.",
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "#6B6B72",
             "#9C9C9C"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-density-card-padding": {
       "provenanceClass": "B-modern-current",
@@ -7524,24 +7762,31 @@
           "platform": "#e5e5e5",
           "evnto": "#e5e5e5"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "#2A2A2F",
             "#E5E5E3"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-duration-gentle": {
       "provenanceClass": "B-modern-current",
@@ -8606,24 +8851,31 @@
           "platform": "#f5f5f5",
           "evnto": "#f5f5f5"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "#131316",
             "#F4F4F3"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-image-border": {
       "provenanceClass": "C-legacy-mirror",
@@ -8673,24 +8925,31 @@
           "platform": "#e5e5e5",
           "evnto": "#e5e5e5"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "#2A2A2F",
             "#E5E5E3"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-input-count-font-size": {
       "provenanceClass": "B-modern-current",
@@ -9810,24 +10069,31 @@
           "platform": "#d4d4d4",
           "evnto": "#d4d4d4"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "#3A3A40",
             "#D4D4D2"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-inputnumber-control-color-hover": {
       "provenanceClass": "C-legacy-mirror",
@@ -9877,24 +10143,31 @@
           "platform": "#171717",
           "evnto": "#171717"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "#ECECEC",
             "#1A1A1A"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-letter-spacing-snug": {
       "provenanceClass": "B-modern-current",
@@ -10084,24 +10357,31 @@
           "platform": "#e5e5e5",
           "evnto": "#e5e5e5"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "#2A2A2F",
             "#E5E5E3"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-list-item-padding": {
       "provenanceClass": "C-legacy-mirror",
@@ -10394,24 +10674,31 @@
           "platform": "#e5e5e5",
           "evnto": "#e5e5e5"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "#2A2A2F",
             "#E5E5E3"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-notification-content-color": {
       "provenanceClass": "C-legacy-mirror",
@@ -10461,24 +10748,31 @@
           "platform": "#525252",
           "evnto": "#525252"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "#A0A0A5",
             "#6B6B6B"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-pagination-item-border-active": {
       "provenanceClass": "C-legacy-mirror",
@@ -10528,24 +10822,31 @@
           "platform": "#171717",
           "evnto": "#171717"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "#FFFFFF",
             "#0A0A0A"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-pill-bg": {
       "provenanceClass": "B-modern-current",
@@ -10871,24 +11172,31 @@
           "platform": "#e5e5e5",
           "evnto": "#e5e5e5"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "#222226",
             "#EDEDEC"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-radio-button-bg": {
       "provenanceClass": "C-legacy-mirror",
@@ -10938,24 +11246,31 @@
           "platform": "#ffffff",
           "evnto": "#ffffff"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "#18181B",
             "#FFFFFF"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-radio-button-bg-checked": {
       "provenanceClass": "C-legacy-mirror",
@@ -11005,24 +11320,31 @@
           "platform": "#171717",
           "evnto": "#171717"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "#FFFFFF",
             "#0A0A0A"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-radio-button-border": {
       "provenanceClass": "C-legacy-mirror",
@@ -11072,24 +11394,31 @@
           "platform": "#e5e5e5",
           "evnto": "#e5e5e5"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "#2A2A2F",
             "#E5E5E3"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-radio-button-color-checked": {
       "provenanceClass": "C-legacy-mirror",
@@ -11139,24 +11468,31 @@
           "platform": "#ffffff",
           "evnto": "#ffffff"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "#0C0C0E",
             "#FFFFFF"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-radio-button-radius": {
       "provenanceClass": "C-legacy-mirror",
@@ -11758,24 +12094,31 @@
           "platform": "0 4px 14px 0 rgba(239, 68, 68, 0.15), 0 8px 24px rgba(239, 68, 68, 0.08)",
           "evnto": "0 4px 14px 0 rgba(239, 68, 68, 0.15), 0 8px 24px rgba(239, 68, 68, 0.08)"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "0 4px 14px rgba(239, 68, 68, 0.12), 0 8p",
             "0 2px 8px rgba(220, 38, 38, 0.12), 0 4px"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-shadow-primary": {
       "provenanceClass": "B-modern-current",
@@ -11855,24 +12198,31 @@
           "platform": "0 4px 14px 0 rgba(34, 197, 94, 0.15), 0 8px 24px rgba(34, 197, 94, 0.08)",
           "evnto": "0 4px 14px 0 rgba(34, 197, 94, 0.15), 0 8px 24px rgba(34, 197, 94, 0.08)"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "0 4px 14px rgba(34, 197, 94, 0.12), 0 8p",
             "0 2px 8px rgba(22, 163, 74, 0.12), 0 4px"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-shadow-warning": {
       "provenanceClass": "B-modern-current",
@@ -11922,24 +12272,31 @@
           "platform": "0 4px 14px 0 rgba(245, 158, 11, 0.15), 0 8px 24px rgba(245, 158, 11, 0.08)",
           "evnto": "0 4px 14px 0 rgba(245, 158, 11, 0.15), 0 8px 24px rgba(245, 158, 11, 0.08)"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "0 4px 14px rgba(245, 158, 11, 0.12), 0 8",
             "0 2px 8px rgba(217, 119, 6, 0.12), 0 4px"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-shell-active-gradient": {
       "provenanceClass": "D-compiler-generated",
@@ -12166,24 +12523,31 @@
           "platform": "0 2px 4px rgba(0, 0, 0, 0.2)",
           "evnto": "0 2px 4px rgba(0, 0, 0, 0.2)"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "0 2px 6px rgba(255, 255, 255, 0.12)",
             "0 2px 6px rgba(0, 0, 0, 0.16)"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-slider-tooltip-bg": {
       "provenanceClass": "C-legacy-mirror",
@@ -12233,24 +12597,31 @@
           "platform": "#171717",
           "evnto": "#171717"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "#ECECEC",
             "#1A1A1A"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-slider-tooltip-color": {
       "provenanceClass": "C-legacy-mirror",
@@ -12300,24 +12671,31 @@
           "platform": "#ffffff",
           "evnto": "#ffffff"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "#0C0C0E",
             "#FAFAF9"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-slider-tooltip-radius": {
       "provenanceClass": "C-legacy-mirror",
@@ -12747,24 +13125,31 @@
           "platform": "var(--ds-shadow-md)",
           "evnto": "var(--ds-shadow-md)"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "0 4px 16px rgba(0, 0, 0, 0.30)",
             "0 4px 12px rgba(0, 0, 0, 0.06)"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-steps-item-bg-complete": {
       "provenanceClass": "C-legacy-mirror",
@@ -12814,24 +13199,31 @@
           "platform": "#171717",
           "evnto": "#171717"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "#22C55E",
             "#16A34A"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-steps-item-color-complete": {
       "provenanceClass": "C-legacy-mirror",
@@ -13047,24 +13439,31 @@
           "platform": "#e5e5e5",
           "evnto": "#e5e5e5"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "#222226",
             "#EDEDEC"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-table-action-slots-width": {
       "provenanceClass": "B-modern-current",
@@ -13909,24 +14308,31 @@
           "platform": "#e5e5e5",
           "evnto": "#e5e5e5"
         },
-        "stillShipsFrom": [
+        "partialRetirement": "The name was also declared in the listed generated artifact/_source input, which FASE B did not touch. It kept shipping on those verticals until VERTICAL-DEAD-61 drained the _source/extension.css declarations on 2026-08-14. Generated artifacts regenerate on the next build (GENERATED-PENDING).",
+        "partialRetirementHistoricalSnapshot": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained.",
+        "shippedFromUntilResidueDrain": [
           "src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css",
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
-        ],
-        "partialRetirement": "The name is also declared in the listed generated artifact/_source input, which FASE B did not touch. It therefore still ships on those verticals until the artifact source is drained."
+        ]
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "rottay": [
             "#2A2A2F",
             "#E5E5E3"
           ]
         },
-        "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        "meaning": "The DS-side declaration was retired in FASE B, and this vertical's hand-authored _source/extension.css kept writing the channel with its own brand values until VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed those declarations source-only. The pre-retirement brand values above are preserved as historical provenance. Generated artifacts were not edited here; parity regenerates on the next build (GENERATED-PENDING).",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "The DS-side declaration is retired, but this vertical's hand-authored _source/extension.css still writes the channel with its own brand values, so it keeps shipping in that vertical's artifact. Those are brand decisions, not mechanical residue: removing them is an owner call, never a sweep. FASE B did not edit any artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-typography-body-letter-spacing": {
       "provenanceClass": "B-modern-current",
@@ -14470,16 +14876,22 @@
         "collisionCheck": "patterns.css is not layout-primitives.css and carries no Flex/Grid contract, so no overlap with the FASE-N rhythm work."
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "bithire": [
             "var(--ds-control-brand-tint)"
           ]
         },
-        "meaning": "bithire hand-authored this alias in its own _source/extension.css, so it keeps shipping in the bithire artifact even though nothing reads it -- an inert brand decision. Removing it is an owner call; FASE B/L edited no artifact or _source input."
+        "meaning": "bithire hand-authored this alias in its own _source/extension.css; it kept shipping in the bithire artifact even though nothing read it. VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed it source-only. The pre-retirement alias value is preserved as historical provenance above.",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "bithire hand-authored this alias in its own _source/extension.css, so it keeps shipping in the bithire artifact even though nothing reads it -- an inert brand decision. Removing it is an owner call; FASE B/L edited no artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-chip-border": {
       "provenanceClass": "B-modern-current",
@@ -14529,16 +14941,22 @@
         "collisionCheck": "patterns.css is not layout-primitives.css and carries no Flex/Grid contract, so no overlap with the FASE-N rhythm work."
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "bithire": [
             "var(--ds-control-brand-border)"
           ]
         },
-        "meaning": "bithire hand-authored this alias in its own _source/extension.css, so it keeps shipping in the bithire artifact even though nothing reads it -- an inert brand decision. Removing it is an owner call; FASE B/L edited no artifact or _source input."
+        "meaning": "bithire hand-authored this alias in its own _source/extension.css; it kept shipping in the bithire artifact even though nothing read it. VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed it source-only. The pre-retirement alias value is preserved as historical provenance above.",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "bithire hand-authored this alias in its own _source/extension.css, so it keeps shipping in the bithire artifact even though nothing reads it -- an inert brand decision. Removing it is an owner call; FASE B/L edited no artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-chip-color": {
       "provenanceClass": "B-modern-current",
@@ -14588,16 +15006,22 @@
         "collisionCheck": "patterns.css is not layout-primitives.css and carries no Flex/Grid contract, so no overlap with the FASE-N rhythm work."
       },
       "brandAuthoredResidue": {
-        "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+        "verdict": "RETIRED_SOURCE_ONLY",
         "authoredIn": {
           "bithire": [
             "var(--ds-color-primary)"
           ]
         },
-        "meaning": "bithire hand-authored this alias in its own _source/extension.css, so it keeps shipping in the bithire artifact even though nothing reads it -- an inert brand decision. Removing it is an owner call; FASE B/L edited no artifact or _source input."
+        "meaning": "bithire hand-authored this alias in its own _source/extension.css; it kept shipping in the bithire artifact even though nothing read it. VERTICAL-DEAD-61 (2026-08-14, GO Fable+Turing) removed it source-only. The pre-retirement alias value is preserved as historical provenance above.",
+        "historicalSnapshot": {
+          "verdict": "KEEP_BRAND_AUTHORED_PENDING_OWNER",
+          "meaning": "bithire hand-authored this alias in its own _source/extension.css, so it keeps shipping in the bithire artifact even though nothing reads it -- an inert brand decision. Removing it is an owner call; FASE B/L edited no artifact or _source input."
+        },
+        "retiredBy": "VERTICAL-DEAD-61",
+        "retiredOn": "2026-08-14"
       },
       "historicalVerdict": "RETIRE_PROPOSED",
-      "finalState": "OWNER_DECISION"
+      "finalState": "EXECUTED"
     },
     "--ds-collection-border": {
       "provenanceClass": "B-modern-current",
@@ -16005,14 +16429,14 @@
     "KEEP_ACTIVE": "Deliberately kept, with an executable law or a live consumer on the row that says why.",
     "OWNER_DECISION": "Something is still owed by the owner: an unexecuted proposal, a capability gap, or a residue that still ships from a brand-authored input.",
     "SIGHTED_PENDING": "Executed and it PAINTS; awaiting browser confirmation in FASE M.",
-    "note": "60 of the OWNER_DECISION rows already have their DS-side action EXECUTED (executed:true is preserved on each). They sit in OWNER_DECISION rather than EXECUTED because the channel still ships from a vertical's hand-authored _source/extension.css, so the retirement is not closed until the owner rules on that residue.",
+    "note": "HISTORICAL SNAPSHOT, SUPERSEDED 2026-08-14 by VERTICAL-DEAD-61: 60 of the OWNER_DECISION rows already have their DS-side action EXECUTED (executed:true is preserved on each). They sit in OWNER_DECISION rather than EXECUTED because the channel still ships from a vertical's hand-authored _source/extension.css, so the retirement is not closed until the owner rules on that residue.",
     "distribution": {
-      "EXECUTED": 135,
+      "EXECUTED": 196,
       "KEEP_ACTIVE": 64,
-      "OWNER_DECISION": 96,
+      "OWNER_DECISION": 35,
       "SIGHTED_PENDING": 6
     },
-    "reconciliation": "301 rows = 135 EXECUTED + 64 KEEP_ACTIVE + 96 OWNER_DECISION + 6 SIGHTED_PENDING",
+    "reconciliation": "301 rows = 196 EXECUTED + 64 KEEP_ACTIVE + 35 OWNER_DECISION + 6 SIGHTED_PENDING",
     "flagCorrection": "6 rows carried an EXECUTED_* verdict with executed:false -- the 4 FASE-H zero-delta swaps and the 2 defect fixes. Left alone, a mapping keyed on the boolean would have filed six landed actions as open ones. Flags corrected: --ds-card-border-default, --ds-input-placeholder, --ds-modern-table-divider, --ds-state-hover-shift, --ds-transition-fade, --ds-z-fixed."
   },
   "dispositionRetirements": {
@@ -16022,5 +16446,75 @@
       "why": "dist/commercial.css and its producer scripts/build-commercial-css.mjs were deleted by the taxonomy clean cut; 'commercial' is a marketing adjective and never was an architectural owner. The five rows carrying it were re-adjudicated to KEEP_RAMP_MEMBER_FLOOR_RELOCATED against the ramp's real new home.",
       "replacedBy": "KEEP_RAMP_MEMBER_FLOOR_RELOCATED"
     }
+  },
+  "verticalDeadOnlySourceDrain": {
+    "id": "VERTICAL-DEAD-61",
+    "date": "2026-08-14",
+    "mandate": "GO Fable+Turing",
+    "scope": "source-only",
+    "names": 61,
+    "verticalMemberships": 62,
+    "declarationsRemoved": 112,
+    "perVertical": {
+      "rottay": {
+        "names": 49,
+        "declarations": 98
+      },
+      "bithire": {
+        "names": 13,
+        "declarations": 14
+      },
+      "evnto": {
+        "names": 0,
+        "declarations": 0
+      }
+    },
+    "rosterSha256": {
+      "global": "0c77ff663d25e076723f77e729c4f2b1c7407ae3ac1b24bb445a44fd87767a27",
+      "rottay": "ae3ce9da1d3a980834e19d6dd5400559a22f58c2d7465b38bf93b0e739efb4e1",
+      "bithire": "27d1edc6685f3e3edcc8eef64af8ffadbe146501bc2037d161f25b8074909b9e"
+    },
+    "generatedParity": "GENERATED-PENDING"
+  },
+  "verticalConflict9Execution": {
+    "id": "VERTICAL-CONFLICT-9",
+    "checkpoint": "DEAD-61",
+    "date": "2026-08-14",
+    "scope": "source-only",
+    "note": "Short atom: drain 9 compiler-emitted channel re-declarations from the first-party artifact extensions and align Rottay dark base error/info seeds to their ramp-400 literals so the compiled value is identical to the retired extension value.",
+    "roster": [
+      "--ds-card-shadow-elevated",
+      "--ds-color-bg-input",
+      "--ds-color-bg-primary",
+      "--ds-color-error",
+      "--ds-color-info",
+      "--ds-font-family-base",
+      "--ds-font-family-display",
+      "--ds-font-family-heading",
+      "--ds-surface-card-border-strong"
+    ],
+    "rosterSha256": "7d9ea09aed4297978cb2e789f6e242a63fb2978639204b371f415dd68ce78cfb",
+    "seedChanges": {
+      "rottay": {
+        "errorColor": "#EF4444 → #F87171 (error ramp 400)",
+        "infoColor": "#3B82F6 → #60A5FA (info ramp 400)",
+        "lightErrorColor": "unchanged #DC2626",
+        "lightInfoColor": "unchanged #2563EB"
+      }
+    },
+    "zeroEffective": [
+      "--ds-card-shadow-elevated",
+      "--ds-color-error",
+      "--ds-color-info"
+    ],
+    "sightedPending": [
+      "--ds-color-bg-input (rottay dark)",
+      "--ds-font-family-base (rottay dark)",
+      "--ds-font-family-display (rottay dark)",
+      "--ds-font-family-heading (rottay dark)",
+      "--ds-color-bg-primary (bithire light)",
+      "--ds-surface-card-border-strong (bithire all modes)"
+    ],
+    "generatedProjection": "PENDING"
   }
 }

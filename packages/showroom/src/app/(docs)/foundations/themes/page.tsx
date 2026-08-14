@@ -49,9 +49,9 @@ export default function ThemesPage() {
       <Stack spacing="md" fullWidth>
         <Flex align="center" justify="between" style={{ flexWrap: 'wrap' }}>
           <Text as={"h2" as any} size="xl" weight="semibold">
-            Tenant comparison
+            Active tenant preview
           </Text>
-          <Badge variant="secondary">Same engine, all first-party tenants</Badge>
+          <Badge variant="secondary">Current tenant</Badge>
         </Flex>
         <Card
           style={{
@@ -66,20 +66,20 @@ export default function ThemesPage() {
             <Flex align="center" justify="between" gap={12} style={{ flexWrap: 'wrap' }}>
               <Box style={{ minWidth: 0, maxWidth: 760 }}>
                 <Text as={"h3" as any} size="lg" weight="semibold">
-                  Real side-by-side tenant previews
+                  Active tenant preview
                 </Text>
                 <Text
                   size="sm"
                   style={{ marginTop: 6, color: 'var(--ds-color-text-secondary)', lineHeight: 1.55 }}
                 >
-                  Each card below renders the same DS primitives under a different tenant preset.
-                  Use this section to compare brand signal, surface chemistry, and action posture
+                  The card below renders the same DS primitives under the active tenant preset.
+                  Use this section to inspect brand signal, surface chemistry, and action posture
                   without relying on showroom-local styling.
                 </Text>
               </Box>
               <Flex gap={8} style={{ flexWrap: 'wrap' }}>
-                <Badge variant="primary">Live providers</Badge>
-                <Badge variant="secondary">Three tenant presets</Badge>
+                <Badge variant="primary">Live provider</Badge>
+                <Badge variant="secondary">Active tenant</Badge>
               </Flex>
             </Flex>
 

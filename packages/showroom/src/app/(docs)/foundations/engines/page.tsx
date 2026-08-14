@@ -9,12 +9,10 @@ import {
   Input,
   Stack,
   Text,
-  DesignSystemProvider,
-  getKnownTenantConfig,
 } from '@rottay/design-system';
 import { useTokens } from '@rottay/design-system';
 import { CodeBlock } from '@/components/playground';
-import { getShowroomVerticalKey, useShowroom } from '@/components/showroom-context';
+import { useShowroom } from '@/components/showroom-context';
 import { FoundationTopRail } from '../foundation-top-rail';
 
 type EngineName = 'classic' | 'modern' | 'rustic';
@@ -57,29 +55,6 @@ const ENGINES: EngineInfo[] = [
     bestFor: 'Low-noise workflows, premium restraint, bespoke white-label UI.',
   },
 ];
-
-function EnginePreviewColumn({ engine }: { engine: EngineInfo }) {
-  const { tenantSlug } = useShowroom();
-  const resolvedTenantSlug = tenantSlug === 'bithire' || tenantSlug === 'evnto'
-    ? tenantSlug
-    : 'rottay';
-  const tenantConfig =
-    getKnownTenantConfig(resolvedTenantSlug) ?? getKnownTenantConfig('rottay');
-
-  if (!tenantConfig) {
-    return null;
-  }
-
-  return (
-    <DesignSystemProvider
-      forceEngine={engine.name}
-      tenantConfig={tenantConfig}
-      vertical={getShowroomVerticalKey(resolvedTenantSlug)}
-    >
-      <EnginePreviewContent engine={engine} />
-    </DesignSystemProvider>
-  );
-}
 
 function EnginePreviewContent({ engine }: { engine: EngineInfo }) {
   const tokens = useTokens();
@@ -175,6 +150,9 @@ function EnginePreviewContent({ engine }: { engine: EngineInfo }) {
 
 export default function EnginesPage() {
   const tokens = useTokens();
+  const { engine } = useShowroom();
+  const activeEngine = ENGINES.find((e) => e.name === engine)!;
+  const engineLabel = activeEngine.label;
 
   return (
     <Stack spacing="lg" fullWidth>
@@ -246,9 +224,9 @@ export default function EnginesPage() {
       <Stack spacing="md" fullWidth>
         <Flex align="center" justify="between" style={{ flexWrap: 'wrap' }}>
           <Text as={"h2" as any} size="xl" weight="semibold">
-            Side-by-side engine previews
+            Active engine preview
           </Text>
-          <Badge variant="secondary">Same workflow frame</Badge>
+          <Badge variant="secondary">{engineLabel}</Badge>
         </Flex>
         <Box
           style={{
@@ -257,9 +235,7 @@ export default function EnginesPage() {
             gap: tokens.spacing[5],
           }}
         >
-          {ENGINES.map((engine) => (
-            <EnginePreviewColumn key={engine.name} engine={engine} />
-          ))}
+          <EnginePreviewContent engine={activeEngine} />
         </Box>
       </Stack>
 

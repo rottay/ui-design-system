@@ -34,11 +34,11 @@
  * ---------------------------------------------------------------------------
  * WHY THE CONTROL ROUTE IS /foundations AND NOT /foundations/engines
  *
- * `/foundations/engines` mounts THREE nested providers (one per engine preview
- * column). Its root tuple is whatever the last column claimed, and leaving the
- * route releases three claims — so it is neither a stable state nor a clean
- * navigation origin, and equality against it would fail or pass for reasons
- * that have nothing to do with this atom.
+ * `/foundations/engines` renders active engine preview content bound to the
+ * shell provider; its state depends on the active engine selector and therefore
+ * is neither a stable neutral state nor a clean navigation origin, and equality
+ * against it would fail or pass for reasons that have nothing to do with this
+ * atom.
  *
  * `/foundations` was source-censused for this role. It is a server component
  * whose entire transitive import closure is `showroom-link` (rewrites hrefs,

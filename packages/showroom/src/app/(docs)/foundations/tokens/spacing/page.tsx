@@ -4,7 +4,6 @@ import {
   Badge,
   Box,
   Card,
-  DesignSystemProvider,
   Flex,
   Stack,
   Text,
@@ -111,22 +110,6 @@ function SpacingRow({
   );
 }
 
-function EngineSpacingSnapshot({
-  engine,
-  label,
-}: {
-  engine: 'classic' | 'modern' | 'rustic';
-  label: string;
-}) {
-  const { tenantSlug } = useShowroom();
-
-  return (
-    <DesignSystemProvider tenantSlug={tenantSlug} forceEngine={engine}>
-      <EngineSpacingSnapshotContent label={label} />
-    </DesignSystemProvider>
-  );
-}
-
 function EngineSpacingSnapshotContent({ label }: { label: string }) {
   const tokens = useTokens();
 
@@ -173,6 +156,8 @@ function EngineSpacingSnapshotContent({ label }: { label: string }) {
 
 export default function SpacingPage() {
   const tokens = useTokens();
+  const { engine } = useShowroom();
+  const engineLabel = engine.charAt(0).toUpperCase() + engine.slice(1);
 
   return (
     <Stack spacing="lg" fullWidth>
@@ -246,16 +231,16 @@ export default function SpacingPage() {
         <Flex align="center" justify="between" style={{ flexWrap: 'wrap' }}>
           <Box>
             <Text as={"h2" as any} size="lg" weight="semibold">
-              Engine density comparison
+              Active engine density
             </Text>
             <Text
               size="sm"
               style={{ color: 'var(--ds-color-text-secondary)' }}
             >
-              Same semantic spacing keys, different tactile feel.
+              Same semantic spacing keys rendered by the currently selected engine.
             </Text>
           </Box>
-          <Badge variant="secondary">Classic vs Modern vs Rustic</Badge>
+          <Badge variant="secondary">{engineLabel}</Badge>
         </Flex>
         <Box
           style={{
@@ -264,9 +249,7 @@ export default function SpacingPage() {
             gap: tokens.spacing[4],
           }}
         >
-          <EngineSpacingSnapshot engine="classic" label="Classic" />
-          <EngineSpacingSnapshot engine="modern" label="Modern" />
-          <EngineSpacingSnapshot engine="rustic" label="Rustic" />
+          <EngineSpacingSnapshotContent label={engineLabel} />
         </Box>
       </Stack>
 

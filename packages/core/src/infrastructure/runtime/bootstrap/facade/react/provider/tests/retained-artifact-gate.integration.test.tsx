@@ -550,6 +550,16 @@ describe('DesignSystemProvider two-phase retained artifact gate', () => {
       return <ConfigProbe />;
     }
 
+    const fallbackCommit = commitSignal();
+    let fallbackWitness = 0;
+    function FallbackProbe(): React.ReactElement {
+      useLayoutEffect(() => {
+        fallbackWitness += 1;
+        fallbackCommit.reach();
+      }, []);
+      return <output data-testid="fallback" />;
+    }
+
     const root = createRoot(container);
     let blockedAtFrame: boolean | null = null;
     let fallbackWhilePending: boolean | null = null;
@@ -557,16 +567,16 @@ describe('DesignSystemProvider two-phase retained artifact gate', () => {
       await withoutActEnvironment(async () => {
         root.render(
           <Tree>
-            <Suspense fallback={<output data-testid="fallback" />}>
+            <Suspense fallback={<FallbackProbe />}>
               <Gate><TamperingReveal /></Gate>
             </Suspense>
           </Tree>,
         );
-        // The provider's own commit: the fallback is mounted, which is the
-        // proof that the provider is committed and armed before the reveal.
-        await nextFrame();
+        await fallbackCommit.reached;
+        expect(fallbackWitness).toBe(1);
         fallbackWhilePending =
           container.querySelector('[data-testid="fallback"]') !== null;
+        expect(fallbackWhilePending).toBe(true);
 
         settle();
         await reveal.reached;
@@ -701,14 +711,19 @@ describe('DesignSystemProvider two-phase retained artifact gate', () => {
     await act(async () => {
       style.remove();
       mountArtifact();
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await Promise.resolve();
     });
-    await waitFor(() => expect(screen.queryByTestId('resolved-config')).toBeNull());
+    expect(screen.queryByTestId('resolved-config')).toBeNull();
+    expect(document.documentElement.hasAttribute('data-tenant')).toBe(false);
 
-    // Any re-render at all. The artifact identity on screen is byte-identical
-    // and mounted exactly once, so admission alone would say yes.
-    view.rerender(<Tree />);
-    await act(async () => { await new Promise((resolve) => setTimeout(resolve, 0)); });
+    const byteIdenticalClone = structuredClone(ARTIFACT) as TenantThemeArtifact;
+    expect(byteIdenticalClone).not.toBe(ARTIFACT);
+    expect(byteIdenticalClone.digest).toBe(ARTIFACT.digest);
+    expect(byteIdenticalClone.css).toBe(ARTIFACT.css);
+    expect(byteIdenticalClone).toEqual(ARTIFACT);
+
+    view.rerender(<Tree artifact={byteIdenticalClone} />);
+    await act(async () => { await Promise.resolve(); });
 
     expect(screen.queryByTestId('resolved-config')).toBeNull();
     expect(document.documentElement.hasAttribute('data-tenant')).toBe(false);
