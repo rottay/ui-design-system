@@ -49,15 +49,22 @@ export interface TortureTenantFixture {
 export const EDITORIAL_FLAT_BRAND_THEME = {
   id: "quality-editorial-flat",
   name: "Quality evidence · Editorial flat",
+  appearance: { defaultMode: "light" },
+  modes: {
+    dark: {
+      palette: {
+        primaryColor: "#7DB4D9",
+        secondaryColor: "#D3A77F",
+        accentColor: "#E3A76E",
+        backgroundColor: "#171A1D",
+      },
+    },
+  },
   palette: {
     primaryColor: "#174E77",
     secondaryColor: "#8C5E38",
     accentColor: "#C67C3B",
     backgroundColor: "#F7F2E8",
-    darkPrimaryColor: "#7DB4D9",
-    darkSecondaryColor: "#D3A77F",
-    darkAccentColor: "#E3A76E",
-    darkBackgroundColor: "#171A1D",
     successColor: "#286B4A",
     warningColor: "#8A5B16",
     errorColor: "#A33A32",
@@ -112,15 +119,22 @@ export const EDITORIAL_FLAT_BRAND_THEME = {
 export const TECHNICAL_DARK_BRAND_THEME = {
   id: "quality-technical-dark",
   name: "Quality evidence · Technical dark",
+  appearance: { defaultMode: "dark" },
+  modes: {
+    light: {
+      palette: {
+        primaryColor: "#77B7FF",
+        secondaryColor: "#61D4C8",
+        accentColor: "#F0A45D",
+        backgroundColor: "#07101C",
+      },
+    },
+  },
   palette: {
-    primaryColor: "#77B7FF",
-    secondaryColor: "#61D4C8",
-    accentColor: "#F0A45D",
+    primaryColor: "#8DC4FF",
+    secondaryColor: "#78E4D8",
+    accentColor: "#FFC07D",
     backgroundColor: "#07101C",
-    darkPrimaryColor: "#8DC4FF",
-    darkSecondaryColor: "#78E4D8",
-    darkAccentColor: "#FFC07D",
-    darkBackgroundColor: "#07101C",
     successColor: "#58C99A",
     warningColor: "#F0B45D",
     errorColor: "#FF7D7D",
@@ -180,15 +194,22 @@ export const TECHNICAL_DARK_BRAND_THEME = {
 export const HUMANIST_SOFT_BRAND_THEME = {
   id: "quality-humanist-soft",
   name: "Quality evidence · Humanist soft",
+  appearance: { defaultMode: "light" },
+  modes: {
+    dark: {
+      palette: {
+        primaryColor: "#91BED9",
+        secondaryColor: "#B4C0A5",
+        accentColor: "#D7A88D",
+        backgroundColor: "#172126",
+      },
+    },
+  },
   palette: {
     primaryColor: "#315F83",
     secondaryColor: "#6C7661",
     accentColor: "#A96D4E",
     backgroundColor: "#F3F0E9",
-    darkPrimaryColor: "#91BED9",
-    darkSecondaryColor: "#B4C0A5",
-    darkAccentColor: "#D7A88D",
-    darkBackgroundColor: "#172126",
     successColor: "#37745B",
     warningColor: "#9A6B2F",
     errorColor: "#A94F4A",
@@ -351,7 +372,11 @@ export const TECHNICAL_DARK_DOCUMENT = {
         layout: { anatomy: "floating" },
       },
       tokenOverrides: {
-        "--ds-color-dark-bg": "#07101C",
+        // `--ds-color-dark-bg` stood here too. It was the same ground written
+        // a second time under a mode-prefixed name that no compiler emits and
+        // nothing reads; the three canonical ground channels below are the
+        // whole surface. A fixture that keeps a dead channel alive teaches the
+        // shape it was removed for.
         "--ds-color-bg-primary": "#07101C",
         "--ds-color-bg": "#07101C",
         "--ds-color-background": "#07101C",

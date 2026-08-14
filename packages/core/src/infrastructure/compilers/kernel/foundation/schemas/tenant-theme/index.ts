@@ -1502,8 +1502,8 @@ export const TENANT_THEME_CONFIG_SCHEMA = deepFreeze({
     maxCompiledVariables: 512,
     maxCompiledVariableBytes: 90_112,
     // Single authority for the raw tokenOverrides entry cap. The appearance
-    // compiler and the skin-pack registrar import this value; a second literal
-    // 200 anywhere is a cascade-integrity defect.
+    // compiler imports this value; a second literal 200 anywhere is a
+    // cascade-integrity defect.
     maxTokenOverrides: 200,
     maxStringLength: 512,
     maxFontFamilyLength: 200,

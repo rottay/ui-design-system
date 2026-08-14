@@ -20,7 +20,7 @@
  * child combinator off `panel-pagination`, the item text via a child
  * combinator off `panel-item`, the list `<ul>` off `panel-list`.
  *
- * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
+ * SPECIFICITY (P-48): the Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
  * (0,3,1). Rules that paint a border COLOR reach (0,4,0) via the two root
  * classes + the target's own `data-part` REPEATED (or a repeated `:has()`,

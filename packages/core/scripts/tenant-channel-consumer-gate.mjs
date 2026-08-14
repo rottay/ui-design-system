@@ -192,9 +192,6 @@ export function reasonFor(name) {
   ) {
     return 'premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)';
   }
-  if (name.startsWith('--ds-color-dark-')) {
-    return 'dark-seed override token; consumed once dual-ramp light-dark derivation lands (W4-C2 / W6)';
-  }
   if (name === '--ds-surface-border-width' || name === '--ds-surface-border-style') {
     return 'surface border dial with no skin consumer; a bordered-surface skin or a contract removal is a later increment';
   }

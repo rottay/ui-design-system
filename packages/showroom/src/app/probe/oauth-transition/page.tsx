@@ -56,7 +56,7 @@ function OAuthTransitionProbeContent() {
         ground: '#ece6dc',
       }
     : {
-        appId: 'platform' as const,
+        appId: 'rottay' as const,
         variantId: 'watchtower-sweep-dark' as const,
         ground: '#040404',
       };

@@ -4,11 +4,39 @@
  * K0.6 first-party recipe-profile evidence probe.
  *
  * Renders one identical tree of already-accepted families (Button, Card,
- * Tabs, Tag, Input, Typography) under a first-party static BrandTheme with
- * an optional governed recipe-profile override, so the profile decision for
- * each vertical is made from sighted geometry/anatomy evidence — never by
- * blindly filling the field. The profile override is applied at runtime
- * through the tenantConfig object only; the theme source file is untouched.
+ * Tabs, Tag, Input, Typography) under each first-party vertical AS IT ACTUALLY
+ * SHIPS: the code-owned registry tenant, unspread, with the recipe profile its
+ * own checked-in BrandTheme authored.
+ *
+ * IT USED TO ASK A QUESTION THE CONTRACT NO LONGER PERMITS. The original probe
+ * swept a `profile` URL axis by cloning the vertical's BrandTheme, writing
+ * `recipes.profile` onto the clone, and handing the result to the provider as
+ * `tenantConfig.brandTheme`. Measured against the real resolver, a runtime
+ * BrandTheme is unrenderable under EVERY declaration -- `undefined` and
+ * `authority: 'provider'` both resolve `uncompiled-visual-payload`, and
+ * `compiled-artifact` lists a raw tenant brandTheme as a hard conflict. A
+ * blocked resolution renders `<LoadingScreen />`, so every capture this probe
+ * has ever produced was a photograph of a spinner. Worse, code-owned identity
+ * is WeakSet object identity, so even spreading the registry config forfeits
+ * it. There is exactly one legal home for a hand-authored BrandTheme: the
+ * checked-in registry, where `getCodeOwnedRuntimeConfig` strips it before the
+ * visual-payload census. So the probe now READS the registry instead of
+ * simulating it.
+ *
+ * The `profile` axis is therefore gone rather than renamed. What each vertical
+ * has authored is a fact of the source tree, not a URL parameter:
+ * `rottay` -> `rottay/technical-sharp@1`, `bithire` ->
+ * `rottay/network-professional@1`, `evnto` -> none. Those are stamped on the
+ * frame as `data-pe-authored-profile` so a capture states its own subject.
+ *
+ * THE EVNTO CELL RENDERS ITS REAL GAP, on purpose. `evntoBrandTheme` leaves
+ * `palette.textPrimaryColor` / `textSecondaryColor` and `chrome.tabs`
+ * undeclared, so dark-first foundation defaults land on evnto's light canvas
+ * (washed title and body, dark-gradient tab tray). A previous version of this
+ * file carried an `EVNTO_PROBE_COMPLETION` patch that filled those channels in
+ * so "the profile comparison stays legible" -- which made the probe render a
+ * vertical that does not exist. The gap belongs to the app-evnto identity
+ * program; this probe's job is to show it, not to cover it.
  */
 
 import {
@@ -22,99 +50,16 @@ import {
   Tabs,
   Tag,
   Text,
-  bithireBrandTheme,
-  evntoBrandTheme,
-  rottayBrandTheme,
-  type BrandTheme,
-  type TenantConfig,
 } from "@rottay/design-system";
+import { getKnownTenantConfig } from "@rottay/design-system/server";
 
-export type ProfileEvidenceTheme = "platform" | "bithire" | "evnto";
-export type ProfileEvidenceProfile =
-  | "none"
-  | "technical-sharp"
-  | "editorial-round";
+export type ProfileEvidenceVertical = "rottay" | "bithire" | "evnto";
 export type ProfileEvidenceLocale = "en" | "es" | "ar";
 
 export interface K0ProfileEvidenceProps {
-  theme: ProfileEvidenceTheme;
-  profile: ProfileEvidenceProfile;
+  vertical: ProfileEvidenceVertical;
   locale: ProfileEvidenceLocale;
 }
-
-const BASE_THEMES: Record<ProfileEvidenceTheme, BrandTheme> = {
-  platform: rottayBrandTheme,
-  bithire: bithireBrandTheme,
-  evnto: evntoBrandTheme,
-};
-
-/**
- * Each vertical theme must render under its own vertical key: the merge
- * chain applies the vertical baseline/preset (evnto owns an
- * experience-baseline preset) before the BrandTheme. A mismatched vertical
- * renders washed text and wrong chrome — proven by the first evnto capture.
- */
-const VERTICALS: Record<ProfileEvidenceTheme, string> = {
-  platform: "rottay",
-  bithire: "bithire",
-  evnto: "evnto",
-};
-
-/**
- * Probe-local completion of evnto's under-declared tokens, applied to the
- * clone only — the evnto source file is NOT touched (it is co-owned by the
- * app-evnto identity program). The source gap is REPORTED in the wave
- * handoff: `palette.textPrimaryColor` / `textSecondaryColor` and
- * `chrome.tabs` are undeclared, so dark-first foundation defaults leak onto
- * evnto's light canvas (washed title/body, dark-gradient tab tray) under
- * the runtime compile path. Values below are modeled on evnto's own
- * declared chrome (#171717 ink, rgba(0,0,0,0.06-0.12) borders, #FFFFFF /
- * #FAFAFA surfaces) so the profile comparison stays legible.
- */
-const EVNTO_PROBE_COMPLETION: {
-  palette: Pick<
-    NonNullable<BrandTheme["palette"]>,
-    "textPrimaryColor" | "textSecondaryColor"
-  >;
-  surfaces: NonNullable<BrandTheme["surfaces"]>;
-  chrome: BrandTheme["chrome"];
-} = {
-  palette: {
-    textPrimaryColor: "#171717",
-    textSecondaryColor: "#57534A",
-  },
-  surfaces: {
-    ...evntoBrandTheme.surfaces,
-    surfaceRoles: {
-      card: {
-        background: "#FFFFFF",
-        border: "rgba(0, 0, 0, 0.08)",
-        shadow: "0 1px 3px rgba(0, 0, 0, 0.06)",
-      },
-      inset: {
-        background: "#FAFAFA",
-        border: "rgba(0, 0, 0, 0.06)",
-      },
-    },
-  } as NonNullable<BrandTheme["surfaces"]>,
-  chrome: {
-    tabs: {
-      border: "rgba(0, 0, 0, 0.08)",
-      color: "var(--ds-color-text-secondary)",
-      colorHover: "#171717",
-      colorActive: "#171717",
-      bgHover: "#FAFAFA",
-      borderActive: "#171717",
-      listBg: "color-mix(in srgb, #FAFAFA 82%, #FFFFFF)",
-      listBorder: "rgba(0, 0, 0, 0.08)",
-      itemRadius: "10px",
-      activeBg: "#FFFFFF",
-      indicatorHeight: "2px",
-      panelBg: "#FFFFFF",
-      panelBorder: "rgba(0, 0, 0, 0.08)",
-    },
-  } as BrandTheme["chrome"],
-};
 
 const COPY: Record<ProfileEvidenceLocale, Record<string, string>> = {
   en: {
@@ -161,52 +106,31 @@ const COPY: Record<ProfileEvidenceLocale, Record<string, string>> = {
   },
 };
 
-function themeFor(
-  theme: ProfileEvidenceTheme,
-  profile: ProfileEvidenceProfile
-): BrandTheme {
-  const base = BASE_THEMES[theme];
-  const completed: BrandTheme =
-    theme === "evnto"
-      ? {
-          ...base,
-          palette: {
-            ...(base.palette as NonNullable<BrandTheme["palette"]>),
-            ...EVNTO_PROBE_COMPLETION.palette,
-          },
-          surfaces: EVNTO_PROBE_COMPLETION.surfaces,
-          chrome: { ...base.chrome, ...EVNTO_PROBE_COMPLETION.chrome },
-        }
-      : base;
-  if (profile === "none") return completed;
-  return {
-    ...completed,
-    recipes: { schemaVersion: 1, profile: `rottay/${profile}@1` },
-  };
-}
-
 export function K0ProfileEvidence({
-  theme,
-  profile,
+  vertical,
   locale,
 }: K0ProfileEvidenceProps) {
   const copy = COPY[locale];
-  const tenantConfig: TenantConfig = {
-    slug: `k0-${theme}`,
-    name: `K0 ${theme}`,
-    vertical: VERTICALS[theme],
-    engine: "modern",
-    theme: "light",
-    plan: "enterprise",
-    features: ["*"],
-    branding: { companyName: `K0 ${theme}` },
-    brandTheme: themeFor(theme, profile),
-  };
+
+  // The registry's OWN object. Not a literal that copies its fields and not a
+  // spread of it: code-owned identity is object identity, and either
+  // alternative produces an ordinary tenant carrying an uncompiled BrandTheme,
+  // which blocks. `locale` travels on the provider prop below for the same
+  // reason -- the code-owned projection keeps only
+  // `branding | engine | features | name | plan | slug | theme | vertical`.
+  const tenantConfig = getKnownTenantConfig(vertical);
+  if (!tenantConfig) {
+    throw new Error(`The bundled ${vertical} tenant is missing from the registry`);
+  }
+
+  // Read for the stamp only. The BrandTheme never reaches the provider from
+  // here -- the registry hands it to the compiler through the code-owned path.
+  const authoredProfile = tenantConfig.brandTheme?.recipes?.profile ?? "none";
 
   return (
     <DesignSystemProvider
-      tenantConfig={{ ...tenantConfig, locale }}
-      vertical={VERTICALS[theme]}
+      tenantConfig={tenantConfig}
+      vertical={tenantConfig.vertical}
       locale={locale}
       forceEngine="modern"
       forceTheme="light"
@@ -222,8 +146,8 @@ export function K0ProfileEvidence({
       >
         <Box
           data-testid="pe-frame"
-          data-pe-theme={theme}
-          data-pe-profile={profile}
+          data-pe-vertical={vertical}
+          data-pe-authored-profile={authoredProfile}
           data-pe-locale={locale}
           dir={locale === "ar" ? "rtl" : "ltr"}
           style={{

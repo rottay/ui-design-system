@@ -6,7 +6,7 @@
  * and theme choices during onboarding or admin editing flows.
  *
  * @remarks
- * This pattern is one of the key bridges between app-platform and the DS: it
+ * This pattern is one of the key bridges between the Rottay app and the DS: it
  * demonstrates what runtime theming will look like before a tenant config is saved.
  *
  * @example

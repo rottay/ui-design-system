@@ -30,8 +30,8 @@ import { StatusWarningIcon } from '@/graphics/icons/presentation/semantic/genera
 import { StatusSuccessIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-success';
 import { StatusErrorIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-error';
 import { hasSurfaceError } from '../../../../runtime/helpers';
-import { SurfaceEmptyState, SurfaceErrorState } from '../../../../runtime/helpers/states';
-import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
+import { SurfaceEmptyState, SurfaceErrorState } from '../../../../../structures/feedback/surface-lifecycle';
+import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
 
 // ---------------------------------------------------------------------------
 // Types

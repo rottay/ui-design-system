@@ -29,12 +29,13 @@ import {
   tortureDarkBrandTheme,
   tortureLightBrandTheme,
   TORTURE_PROBE_VARS,
-} from '@/foundation/tokens/ts/presentation/brand-themes/fixtures/torture';
+} from '@/tooling/testing/fixtures/brand-themes/torture';
 import {
   getKnownTenantSlugs,
   isBundledTenant,
 } from '@/infrastructure/runtime/tenant/foundation/configuration/registry';
 import { FIRST_PARTY_ARTIFACT_SPECS } from '@/infrastructure/compilers/runtime/tenant-css';
+import { FIRST_PARTY_VERTICAL_ROSTER } from '@/foundation/tokens/ts/presentation/brand-themes';
 
 const TEST_DIR = dirname(fileURLToPath(import.meta.url));
 
@@ -125,18 +126,25 @@ describe('torture fixtures are not product tenants', () => {
     expect(serialized).not.toContain('torture');
   });
 
-  it('is absent from the FIRST_PARTY_ARTIFACT_SPECS block in its source file', () => {
-    // FIRST_PARTY_ARTIFACT_SPECS is authored in the generator source (not in
-    // build-vertical-artifacts.mjs, which only imports the compiled array
-    // from dist) -- that source file is the real single point of truth this
-    // gate must read to be meaningful.
-    const generatorSourcePath = resolve(
-      process.cwd(),
-      'src/infrastructure/compilers/runtime/tenant-css/artifact-renderer/index.ts',
-    );
-    const source = readFileSync(generatorSourcePath, 'utf-8');
-    const blockMatch = source.match(/export const FIRST_PARTY_ARTIFACT_SPECS[\s\S]*?\n\];/);
-    expect(blockMatch, 'could not locate the FIRST_PARTY_ARTIFACT_SPECS array literal').not.toBeNull();
-    expect(blockMatch![0].toLowerCase()).not.toContain('torture');
+  it('is absent from the roster the artifact specs are derived from', () => {
+    // The SECOND leg of the same law, aimed one level up.
+    //
+    // It used to regex-scrape the FIRST_PARTY_ARTIFACT_SPECS array literal out
+    // of the generator source, so that a torture fixture could not be authored
+    // into the specs even if the runtime check above were somehow satisfied.
+    // The specs are now PROJECTED from the first-party roster, so there is no
+    // literal left to scrape — the regex matched nothing and the test failed
+    // with "could not locate", which is at least honest: a source-text gate
+    // stops being a gate the moment the source stops being written the way it
+    // expected.
+    //
+    // The roster is now the place a fixture would have to sneak into to reach
+    // an artifact, so that is what this leg reads.
+    expect(FIRST_PARTY_VERTICAL_ROSTER.length).toBeGreaterThan(0);
+    for (const row of FIRST_PARTY_VERTICAL_ROSTER) {
+      expect(row.slug.toLowerCase()).not.toContain('torture');
+      expect(row.name.toLowerCase()).not.toContain('torture');
+      expect(row.themeSourcePath.toLowerCase()).not.toContain('fixtures');
+    }
   });
 });

@@ -4,7 +4,7 @@
  * and table toolbars used in collection/list workspace screens.
  */
 
-export * from './connected-command-palette/search-command-bar';
+export * from './search-command-bar';
 export * from './active-filters-bar';
 export * from './field-filters-panel';
 export * from './column-menu';

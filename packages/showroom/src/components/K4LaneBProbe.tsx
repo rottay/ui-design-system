@@ -4,11 +4,10 @@
  * K4 Lane B probe (showroom): AI-adjacent families.
  *
  * One identical component tree for the four Lane-B families (CodeBlock,
- * MarkdownView, VoiceInputButton, Calendar) rendered under two opposing
- * governed sources:
- *  - `bithire-static`: the checked-in BitHire BrandTheme (file-first path);
- *  - `themanagement-db`: the DB Appearance construction mirrored from
- *    `@/components/brand-locale-evidence` (DB-owned runtime path).
+ * MarkdownView, VoiceInputButton, Calendar) rendered under the two opposing
+ * governed sources `@/components/showroom-tenant` owns:
+ *  - `bithire-static`: the bundled BitHire vertical, code-owned;
+ *  - `themanagement-db`: a published customer document, compiled and proven.
  *
  * Axes: locale EN/ES/AR (AR renders `dir="rtl"` -- the CodeBlock gutter,
  * MarkdownView blockquote/list indentation and Calendar nav-glyph flip are
@@ -30,17 +29,14 @@ import {
   Box,
   Calendar,
   CodeBlock,
-  DesignSystemProvider,
   Heading,
   MarkdownView,
   Stack,
   Text,
   VoiceInputButton,
-  bithireBrandTheme,
-  type TenantConfig,
 } from "@rottay/design-system";
 
-import { tenantConfigFor as brandLocaleTenantConfigFor } from "@/components/brand-locale-evidence";
+import { ShowroomTenantProvider } from "@/components/showroom-tenant";
 
 export type LaneBSource = "bithire-static" | "themanagement-db";
 export type LaneBLocale = "en" | "es" | "ar";
@@ -54,66 +50,6 @@ export interface K4LaneBProbeProps {
   density: LaneBDensity;
   state: LaneBState;
   theme: LaneBTheme;
-}
-
-/**
- * The tenant-facing Appearance vocabulary has no `comfortable` literal:
- * `normal` is the canonical alias (TenantAppearanceGeneral['density']).
- */
-function toAppearanceDensity(
-  density: LaneBDensity
-): "compact" | "normal" | "spacious" {
-  return density === "comfortable" ? "normal" : density;
-}
-
-function tenantConfig(
-  source: LaneBSource,
-  locale: LaneBLocale,
-  density: LaneBDensity,
-  theme: LaneBTheme
-): TenantConfig {
-  if (source === "themanagement-db") {
-    const base = brandLocaleTenantConfigFor("themanagementmiami", locale);
-    return {
-      ...base,
-      theme,
-      appearance: {
-        ...base.appearance,
-        general: {
-          ...base.appearance?.general,
-          density: toAppearanceDensity(density),
-          // Dark rides the DB Appearance channel: with a static BrandTheme
-          // the runtime-injected light compile overrides the artifact's dark
-          // blocks even when forceTheme sets data-theme="dark" (verified
-          // live: tokens stayed light). backgroundMode is the General-tier
-          // field that drives the dark projection.
-          ...(theme === "dark" ? { backgroundMode: "dark" as const } : {}),
-        },
-      },
-    };
-  }
-
-  return {
-    slug: "bithire",
-    name: "BitHire",
-    vertical: "bithire",
-    engine: "modern",
-    theme,
-    plan: "enterprise",
-    features: ["*"],
-    branding: { companyName: "BitHire" },
-    // BitHire is first-party vertical identity and therefore comes from the
-    // checked-in DS theme, never from a customer DB fixture. The semantic
-    // posture enters exclusively through the Appearance channel.
-    brandTheme: bithireBrandTheme,
-    appearance: {
-      general: {
-        density: toAppearanceDensity(density),
-        // See the comment on the DB branch: dark enters through Appearance.
-        ...(theme === "dark" ? { backgroundMode: "dark" as const } : {}),
-      },
-    },
-  };
 }
 
 const COPY: Record<
@@ -368,12 +304,11 @@ function SpecimenTree({
 
 export function K4LaneBProbe({ source, locale, density, state, theme }: K4LaneBProbeProps) {
   return (
-    <DesignSystemProvider
-      tenantConfig={{ ...tenantConfig(source, locale, density, theme), locale }}
-      vertical="bithire"
+    <ShowroomTenantProvider
+      source={source}
       locale={locale}
-      forceEngine="modern"
-      forceTheme={theme}
+      density={density}
+      theme={theme}
     >
       <Box
         data-testid="k4b-canvas"
@@ -418,6 +353,6 @@ export function K4LaneBProbe({ source, locale, density, state, theme }: K4LaneBP
           </main>
         </Box>
       </Box>
-    </DesignSystemProvider>
+    </ShowroomTenantProvider>
   );
 }

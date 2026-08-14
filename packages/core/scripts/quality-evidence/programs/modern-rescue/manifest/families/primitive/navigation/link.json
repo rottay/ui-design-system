@@ -4,19 +4,19 @@
   "identity": {
     "layer": "primitive",
     "category": "navigation",
-    "name": "Link",
+    "name": "NavLink",
     "components": [
-      "Link"
+      "NavLink"
     ],
     "sourceRoot": "packages/core/src/ui/primitives",
     "sourceOwner": "packages/core/src/ui/primitives/navigation/Link",
     "publicComponents": [
-      "Link"
+      "NavLink"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "9836d0c97dea46895c3de9a14ec8d06116376267228cd161cc7609c9ce253a8e"
+    "inventoryRowDigest": "11f4bbc620d74b93e78cf28a9f9b0abde149afa0d9868a76bcc14cc4fa37a3fd"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

@@ -16,7 +16,7 @@
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "e8718df6e474b60572bc50f8b957330d02e1ee4fa1a1ceff2fd49ac75bdefe9b"
+    "inventoryRowDigest": "2a7ad88c4b81e71d98d916ac339aa9b427e27342a1e2216e73a1da87cef4520d"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

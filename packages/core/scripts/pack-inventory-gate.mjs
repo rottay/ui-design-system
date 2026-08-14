@@ -47,7 +47,7 @@ const packageRootDefault = resolve(scriptDir, '..');
 const BASELINE_PATH = resolve(scriptDir, 'pack-inventory.baseline.json');
 const ADDITIONS_PATH = resolve(scriptDir, 'pack-inventory.additions.json');
 const LUCIDE_ALLOWLIST_PATH = resolve(scriptDir, 'pack-inventory.lucide-allowlist.json');
-const FIXTURES_DIR_REL = 'src/foundation/tokens/ts/presentation/brand-themes/fixtures';
+const FIXTURES_DIR_REL = 'src/tooling/testing/fixtures/brand-themes';
 const SEED_HINT =
   'Seed it after a clean build: pnpm --filter @rottay/design-system build && ' +
   'pnpm --filter @rottay/design-system packinv:write';

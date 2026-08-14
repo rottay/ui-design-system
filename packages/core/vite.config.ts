@@ -77,7 +77,6 @@ export default defineConfig({
         spatial: resolve(__dirname, 'src/entrypoints/graphics/spatial/index.ts'),
         'spatial-spec': resolve(__dirname, 'src/entrypoints/graphics/spatial/spec/index.ts'),
         eslint: resolve(__dirname, 'src/entrypoints/eslint/index.ts'),
-        commercial: resolve(__dirname, 'src/entrypoints/commercial/index.ts'),
         // Only real package.json exports are listed as entries.
         // Component code is included via the root barrel and
         // preserveModules handles per-file output automatically.

@@ -155,21 +155,23 @@ export type { ExpressiveEmphasisResult } from './infrastructure/runtime/foundati
 // ============================================
 // ADAPTIVE SOLVER (C2 — the ONE layout engine)
 // ============================================
+// The solver is shared support under `ui/patterns/runtime/adaptive-layout`;
+// only the legacy-vocabulary adapter stays with the board.
+export { LEGACY_SIZE_SPANS } from './ui/patterns/runtime/adaptive-layout/foundation';
 export {
-  LEGACY_SIZE_SPANS,
+  placementsToGridStyles,
   resolveAdaptiveLayout,
   resolveContainerPosture,
-} from './ui/patterns/data/widget-board/runtime/solver';
-export {
-  heightPxToRows,
-  placementsToGridStyles,
-  widgetItemsToAdaptiveInputs,
-} from './ui/patterns/data/widget-board/runtime/solver/policy';
+} from './ui/patterns/runtime/adaptive-layout/runtime';
 export {
   normalizeLayoutRevision,
   resolveActiveResponsivePosture,
   useActiveResponsivePosture,
-} from './ui/patterns/data/widget-board/runtime/solver/react';
+} from './ui/patterns/runtime/adaptive-layout/presentation/react';
+export {
+  heightPxToRows,
+  widgetItemsToAdaptiveInputs,
+} from './ui/patterns/data/widget-board/runtime/adaptive/policy';
 export type {
   AdaptiveContentMode,
   AdaptiveItemContract,
@@ -183,7 +185,7 @@ export type {
   ResizePolicy,
   ResolvedPlacement,
   ResponsivePostureProfile,
-} from './ui/patterns/data/widget-board/runtime/solver';
+} from './ui/patterns/runtime/adaptive-layout/foundation';
 
 // ============================================
 // DENSITY (public scoped visual-density contract)
@@ -232,7 +234,7 @@ export type {
 } from './infrastructure/runtime/foundation/root-attributes';
 
 // ============================================
-// NAVIGATION (framework-agnostic Link adapter)
+// NAVIGATION (NavigationLinkProvider -- adapter for the host router's Link)
 // ============================================
 export * from './infrastructure/runtime/adapters/presentation/react/navigation';
 

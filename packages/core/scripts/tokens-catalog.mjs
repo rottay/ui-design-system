@@ -279,7 +279,6 @@ function cssLayerOf(rel) {
     if (tail.startsWith('facade/')) return 'entrypoints';
     return 'tokens';
   }
-  if (path.startsWith('ui/patterns/commercial')) return 'commercial';
   return path.split('/')[0];
 }
 

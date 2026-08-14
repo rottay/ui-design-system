@@ -1,20 +1,22 @@
-'use client';
-
 /**
- * @fileoverview TreeView pattern -- engine-aware interactive tree hierarchy
- * with expand/collapse, checkboxes, drag-and-drop, and search filtering.
+ * @fileoverview TreeView family barrel.
+ *
+ * The family ships two presentations of one hierarchy grammar:
+ * `PatternTreeView` (engine-dispatched, interactive, a client boundary) and
+ * `TreeViewConnector` (static ASCII connectors, server-safe, used by
+ * landing/docs layouts). Both are owned here; neither is published through the
+ * `visualization` group barrel's deep paths any more.
+ *
+ * This file aggregates child owners and nothing else -- it authors no
+ * component, so it carries no `'use client'` directive and a server page
+ * importing the connector never crosses the interactive presentation's
+ * boundary.
  */
 
-import { createEngineComponent } from '../../../../infrastructure/runtime/engines/presentation/component-factory';
-import type { TreeViewProps } from './contracts';
-
 export type { TreeViewProps, TreeNode } from './contracts';
-
-export const PatternTreeView = createEngineComponent<TreeViewProps>(
-  'PatternTreeView',
-  {
-    classic: () => import('./engines/classic'),
-    modern: () => import('./engines/modern'),
-    rustic: () => import('./engines/rustic'),
-  }
-);
+export { PatternTreeView } from './presentation/interactive';
+export {
+  TreeViewConnector,
+  type TreeViewConnectorNode,
+  type TreeViewConnectorProps,
+} from './presentation/connector';

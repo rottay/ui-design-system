@@ -9,14 +9,14 @@
       "SearchCommandBar"
     ],
     "sourceRoot": "packages/core/src/ui/structures",
-    "sourceOwner": "packages/core/src/ui/structures/workspace/connected-command-palette/search-command-bar",
+    "sourceOwner": "packages/core/src/ui/structures/workspace/search-command-bar",
     "publicComponents": [
       "SearchCommandBar"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "39b2b6222d58e1d8c7859ee3dfe2ccc055768af75c8bc8724883a3ddd09b64e2"
+    "inventoryRowDigest": "a868d433de086e98d6a96f9e9c74d12b5d004d42886acc6b51cbc9a6c50d5df7"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

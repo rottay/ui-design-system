@@ -47,17 +47,17 @@ import type {
   ListSurfaceView,
   SurfaceAction,
 } from "../../../../foundation/contracts";
-import { PageShellSurface } from "../../../../composition/layout/page-shell";
-import { useSurfaceTranslations } from "../../../../runtime/helpers/states/i18n";
-import { useSurfaceProfileDefaultsWithOverrides } from "../../../../runtime/profile-defaults/overrides";
+import { PageShellSurface } from "../../../../../structures/shell/page-shell-surface";
+import { useSurfaceTranslations } from "../../../../../structures/foundation/chrome/runtime/i18n";
+import { useSurfaceProfileDefaultsWithOverrides } from "../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides";
 import {
   resolveStackSpacing,
   SurfaceAccentBarWrapper,
-} from "../../../../runtime/profile-defaults/personality";
+} from "../../../../../structures/foundation/chrome/runtime/profile-defaults/personality";
 import {
   SurfaceEmptyState,
   SurfaceErrorState,
-} from "../../../../runtime/helpers/states";
+} from "../../../../../structures/feedback/surface-lifecycle";
 
 // ---------------------------------------------------------------------------
 // View-mode bridging helpers

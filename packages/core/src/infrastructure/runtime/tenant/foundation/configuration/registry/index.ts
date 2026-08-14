@@ -18,7 +18,71 @@
  */
 
 import type { TenantConfig } from '../../../../../../foundation/contracts';
-import { rottayBrandTheme, bithireBrandTheme, evntoBrandTheme } from '@/foundation/tokens';
+import type {
+  BrandExpressiveSelection,
+} from '@/foundation/contracts/composition/tenants/themes';
+import { FIRST_PARTY_VERTICAL_ROSTER } from '@/foundation/tokens/ts/presentation/brand-themes';
+
+function deepFreeze<T>(value: T): T {
+  if (value === null || typeof value !== 'object') {
+    return value;
+  }
+  for (const nested of Object.values(value as Record<string, unknown>)) {
+    deepFreeze(nested);
+  }
+  return Object.isFrozen(value) ? value : Object.freeze(value);
+}
+
+/**
+ * The bounded, NON-VISUAL behavior a code-owned theme governs.
+ *
+ * Stripping `brandTheme` off the runtime projection is what keeps static CSS
+ * the sole visual emitter, but the same field also carried three governed
+ * BEHAVIOR channels that no stylesheet can express: the motion dial, the
+ * root density posture, and the icon expressive posture. Stripping it
+ * wholesale silently demoted every first-party vertical to its motion-profile
+ * envelope default -- bithire's authored 0.55 intensity fell to calm's 0.3.
+ *
+ * This is deliberately NOT a `TenantConfig` field. Adding one would widen the
+ * public/DB-writable contract and give a customer tenant a second, uncensused
+ * behavior channel. It is instead keyed off the projection's IDENTITY, so only
+ * an object this module itself produced can ever carry it, and it is narrowed
+ * to exactly the fields the runtime resolvers read: `intensity` and
+ * `entranceDuration` from the authored dial, plus the governed expressive
+ * selection. Visual personality (`entrance`, `hoverLift`, `skeletonStyle`,
+ * palette, chrome, ...) does not ride along.
+ */
+export interface CodeOwnedGovernedBehavior {
+  /** Authored static motion inputs, narrowed to the dial the runtime resolves. */
+  readonly motion?: {
+    readonly intensity?: number;
+    readonly entranceDuration?: number;
+  };
+  /** Governed expressive selection: density posture, icon posture, motion defaults. */
+  readonly expressive?: BrandExpressiveSelection;
+}
+
+const CODE_OWNED_GOVERNED_BEHAVIOR = new WeakMap<object, CodeOwnedGovernedBehavior>();
+
+function projectGovernedBehavior(
+  theme: TenantConfig['brandTheme'],
+): CodeOwnedGovernedBehavior | undefined {
+  const intensity = theme?.motion?.intensity;
+  const entranceDuration = theme?.motion?.entranceDuration;
+  const expressive = theme?.expressive;
+  const motion =
+    intensity === undefined && entranceDuration === undefined
+      ? undefined
+      : {
+          ...(intensity === undefined ? {} : { intensity }),
+          ...(entranceDuration === undefined ? {} : { entranceDuration }),
+        };
+  if (motion === undefined && expressive === undefined) return undefined;
+  return deepFreeze({
+    ...(motion === undefined ? {} : { motion }),
+    ...(expressive === undefined ? {} : { expressive }),
+  }) as CodeOwnedGovernedBehavior;
+}
 
 /**
  * First-party tenants that ship with the DS.
@@ -28,79 +92,99 @@ import { rottayBrandTheme, bithireBrandTheme, evntoBrandTheme } from '@/foundati
  * chart rendering, typography casing, accent decorations, and card behavior --
  * without any per-tenant branching in component code.
  */
-const KNOWN_TENANTS: Readonly<Record<string, TenantConfig>> = {
-  /**
-   * Rottay - Default tenant
-   * Professional dark IT/AI SaaS aesthetic
-   * Monochrome dark, matte premium
-   * References: Vercel, Linear, GitHub Dark, OpenAI
-   */
-  rottay: {
-    slug: 'rottay',
-    name: 'Rottay',
+function createKnownTenant(
+  entry: (typeof FIRST_PARTY_VERTICAL_ROSTER)[number],
+): TenantConfig {
+  const config = deepFreeze({
+    slug: entry.slug,
+    name: entry.name,
+    engine: entry.engine,
+    vertical: entry.verticalKey,
     theme: 'base',
     plan: 'enterprise',
     features: ['*'],
-    branding: {
-      companyName: 'Rottay',
-      // Colors intentionally omitted -- defined in CSS tenant tokens
-      // (foundation/tokens/css/facade/artifacts/rottay/index.css). Runtime color scale generation
-      // is skipped when branding colors are undefined, letting the CSS layer
-      // control the full monochrome dark palette without inline style overrides.
-      logo: undefined,
-    },
-    brandTheme: rottayBrandTheme,
-    // personality and tokenOverrides removed — brandTheme is the canonical
-    // source. The merge chain (useTokens) derives personality and structural
-    // tokens from brandTheme when it is present.
-  },
+    branding: { companyName: entry.name },
+    brandTheme: entry.theme,
+  }) as TenantConfig;
+  const behavior = projectGovernedBehavior(config.brandTheme);
+  if (behavior) CODE_OWNED_GOVERNED_BEHAVIOR.set(config, behavior);
+  return config;
+}
 
-  /**
-   * BitHire - Tech recruitment platform
-   * Formal, LinkedIn-style, professional
-   * Corporate blue, subtle animations, structured borders
-   */
-  bithire: {
-    slug: 'bithire',
-    name: 'BitHire',
-    theme: 'base',
-    plan: 'enterprise',
-    features: ['*'],
-    branding: {
-      companyName: 'BitHire',
-      // Colors intentionally omitted -- defined in CSS tenant tokens
-      // (foundation/tokens/css/facade/artifacts/bithire/index.css). The runtime should only
-      // inject visual branding when an app explicitly overrides it.
-      logo: undefined,
-    },
-    brandTheme: bithireBrandTheme,
-    // personality and tokenOverrides removed — brandTheme is the canonical source.
-  },
+const KNOWN_TENANTS: Readonly<Record<string, TenantConfig>> = Object.freeze(
+  Object.fromEntries(
+    FIRST_PARTY_VERTICAL_ROSTER.map((entry) => [
+      entry.slug,
+      createKnownTenant(entry),
+    ]),
+  ),
+);
 
-  /**
-   * Evnto - Event management platform
-   * Light minimal, elegant
-   * Black text on white backgrounds, warm beige accents
-   */
-  evnto: {
-    slug: 'evnto',
-    name: 'Evnto',
-    theme: 'base',
-    plan: 'enterprise',
-    features: ['*'],
-    branding: {
-      companyName: 'Evnto',
-      // Colors intentionally omitted -- defined in CSS tenant tokens
-      // (foundation/tokens/css/facade/artifacts/evnto/index.css). The runtime should only
-      // inject visual branding when an app explicitly overrides it.
-      logo: undefined,
-    },
-    brandTheme: evntoBrandTheme,
-    // personality and tokenOverrides removed — brandTheme is the canonical source.
-    // evntoBrandTheme.surfaces already contains densityScale: 1.125 and borderRadius.
-  },
+const CODE_OWNED_TENANT_CONFIGS = new WeakSet<object>(
+  Object.values(KNOWN_TENANTS),
+);
+const CODE_OWNED_RUNTIME_CONFIGS = new WeakMap<object, TenantConfig>();
 
-};
+/**
+ * Proves that a config is the exact immutable object projected by this module.
+ * A caller-provided object with a reserved slug is deliberately not trusted.
+ */
+export function isCodeOwnedTenantConfig(
+  config: unknown,
+): config is TenantConfig {
+  return typeof config === 'object'
+    && config !== null
+    && CODE_OWNED_TENANT_CONFIGS.has(config);
+}
+
+/**
+ * Returns the immutable, identity-only runtime projection of an exact
+ * code-owned config. Static CSS remains the sole visual emitter.
+ */
+export function getCodeOwnedRuntimeConfig(config: TenantConfig): TenantConfig {
+  if (!isCodeOwnedTenantConfig(config)) {
+    throw new TypeError('[design-system] Cannot project a non-code-owned tenant config.');
+  }
+  const cached = CODE_OWNED_RUNTIME_CONFIGS.get(config);
+  if (cached) return cached;
+
+  const {
+    branding,
+    tokenOverrides: _tokenOverrides,
+    appearance: _appearance,
+    personality: _personality,
+    brandTheme: _brandTheme,
+    ...identityAndBehavior
+  } = config;
+  const projected = deepFreeze({
+    ...identityAndBehavior,
+    branding: {
+      companyName: branding.companyName,
+      ...(branding.logo === undefined ? {} : { logo: branding.logo }),
+      ...(branding.logoMark === undefined ? {} : { logoMark: branding.logoMark }),
+      ...(branding.favicon === undefined ? {} : { favicon: branding.favicon }),
+    },
+  }) as TenantConfig;
+  CODE_OWNED_TENANT_CONFIGS.add(projected);
+  CODE_OWNED_RUNTIME_CONFIGS.set(config, projected);
+  // Governed behavior travels with the projection's identity, not inside it.
+  const behavior = CODE_OWNED_GOVERNED_BEHAVIOR.get(config)
+    ?? projectGovernedBehavior(config.brandTheme);
+  if (behavior) CODE_OWNED_GOVERNED_BEHAVIOR.set(projected, behavior);
+  return projected;
+}
+
+/**
+ * The governed, non-visual behavior attached to an exact code-owned config or
+ * its runtime projection. Returns `undefined` for every caller-provided object,
+ * including one that forged a reserved slug: membership is proven by identity.
+ */
+export function getCodeOwnedGovernedBehavior(
+  config: unknown,
+): CodeOwnedGovernedBehavior | undefined {
+  if (!isCodeOwnedTenantConfig(config)) return undefined;
+  return CODE_OWNED_GOVERNED_BEHAVIOR.get(config as object);
+}
 
 /**
  * Slug used when no tenant is specified. Rottay is the flagship product so it
@@ -118,21 +202,19 @@ export const DEFAULT_TENANT_SLUG = 'rottay';
  * foundation/tokens/css/facade/artifacts/<slug>/index.css; host-tenancy-boundary.test.ts asserts
  * this mechanically so the set cannot silently drift from the shipped bundle.
  */
-export const BUNDLED_TENANT_SLUGS: ReadonlySet<string> = new Set([
-  'rottay',
-  'bithire',
-  'evnto',
-]);
+export const BUNDLED_TENANT_SLUGS: ReadonlySet<string> = new Set(
+  FIRST_PARTY_VERTICAL_ROSTER.map((entry) => entry.slug),
+);
 
 /** Check if a tenant has pre-bundled CSS in the DS styles output. */
 export function isBundledTenant(slug: string): boolean {
-  return BUNDLED_TENANT_SLUGS.has(slug.toLowerCase());
+  return BUNDLED_TENANT_SLUGS.has(slug);
 }
 
 /**
  * Looks up a first-party tenant by slug.
  *
- * Slugs are case-insensitive -- the registry normalizes to lowercase internally.
+ * Only canonical code-owned slugs resolve; display-name variants are not aliases.
  * Returns `undefined` for customer tenants that are not in the built-in set;
  * the storage facade will then fall through to static/remote sources.
  *
@@ -140,7 +222,7 @@ export function isBundledTenant(slug: string): boolean {
  * @returns The full TenantConfig if found, otherwise `undefined`.
  */
 export function getKnownTenantConfig(slug: string): TenantConfig | undefined {
-  return KNOWN_TENANTS[slug.toLowerCase()];
+  return KNOWN_TENANTS[slug];
 }
 
 /**
@@ -150,7 +232,7 @@ export function getKnownTenantConfig(slug: string): TenantConfig | undefined {
  * @returns `true` if the tenant ships with the DS bundle.
  */
 export function isKnownTenant(slug: string): boolean {
-  return slug.toLowerCase() in KNOWN_TENANTS;
+  return slug in KNOWN_TENANTS;
 }
 
 /**

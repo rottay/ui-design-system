@@ -36,7 +36,7 @@ const CASE_IDS = [
   'patterns-stats',
   'patterns-gallery',
   'patterns-grid',
-  'patterns-cell-renderers',
+  'patterns-data-table-cell-helpers',
   'patterns-bulk-select',
   'foundation-shared',
   'foundation-personality',
@@ -197,7 +197,7 @@ async function assertFixtureCoverage(root: Locator, engine: Engine): Promise<voi
   await expect(grid.locator('[data-part="card-shell"][data-selected="true"]')).toHaveCount(1);
   await expect(grid.locator('[data-part="card-shell"][data-selected="false"]')).toHaveCount(2);
 
-  const cells = root.locator('[data-long-tail-case="patterns-cell-renderers"]');
+  const cellHelpers = root.locator('[data-long-tail-case="patterns-data-table-cell-helpers"]');
   for (const part of [
     'avatar-name',
     'name-stack',
@@ -212,7 +212,7 @@ async function assertFixtureCoverage(root: Locator, engine: Engine): Promise<voi
     'boolean',
     'truncated',
   ]) {
-    await expect(cells.locator(`[data-part="${part}"]`).first()).toBeVisible();
+    await expect(cellHelpers.locator(`[data-part="${part}"]`).first()).toBeVisible();
   }
 
   const bulk = root.locator('[data-long-tail-case="patterns-bulk-select"]');

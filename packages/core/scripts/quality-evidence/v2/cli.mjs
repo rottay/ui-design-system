@@ -51,13 +51,45 @@ try {
   switch (command) {
     case 'inventory': {
       if (argument === '--write') {
-        const check = checkInventoryCorrespondence();
-        if (!check.valid) {
-          print({ written: false, ...check });
+        // Preflight on SOURCE only. Gating the writer on `valid` deadlocked it: `valid`
+        // includes drift between the file and source, and drift is precisely what running
+        // the writer repairs, so the one command able to fix the file refused to run
+        // exactly when the file needed fixing.
+        const preflight = checkInventoryCorrespondence();
+        if (!preflight.sourceValid) {
+          print({
+            written: false,
+            reason: 'source blockers must be resolved by hand; the writer cannot repair them',
+            ...preflight,
+          });
           process.exitCode = 1;
           break;
         }
-        print({ written: true, ...writeResolvedInventory(), ...check });
+
+        const written = writeResolvedInventory();
+
+        // Postcheck reads the file back from disk (`fresh: true` defeats the contracts
+        // cache, which still holds the pre-write parse). Reporting success from the
+        // in-memory value the writer just serialized would certify the write against
+        // itself.
+        const postcheck = checkInventoryCorrespondence({
+          contracts: loadProgramContracts({ fresh: true }),
+          // The source graph is mutable in a multi-agent worktree. Reusing the
+          // preflight surface here could certify JSON written for a barrel that
+          // changed between the two reads.
+          cache: false,
+        });
+        if (!postcheck.valid) {
+          print({
+            written: false,
+            target: written.target,
+            note: 'the file WAS rewritten but the postcheck rejects it; re-run after resolving the reported drift',
+            ...postcheck,
+          });
+          process.exitCode = 1;
+          break;
+        }
+        print({ written: true, ...written, ...postcheck });
         break;
       }
       const result = checkInventoryCorrespondence();

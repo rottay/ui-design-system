@@ -9,14 +9,14 @@
       "PatternStatsGrid"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/data",
+    "sourceOwner": "packages/core/src/ui/patterns/data/stats-grid",
     "publicComponents": [
       "PatternStatsGrid"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "bca4f6ffe4917825d7ce7b101a25a1c7cfe7309e21689a67f7b45082c23334b2"
+    "inventoryRowDigest": "d49b73deca134b38ae36ff02e44520daa4365ce0a27162b225ea86d6cbc033e8"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

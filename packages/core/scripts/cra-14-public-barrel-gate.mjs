@@ -21,14 +21,14 @@ if (!existsSync(packageJsonPath)) fail(`missing package.json under ${packageRoot
 
 const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf8'));
 const rootEntry = resolve(packageRoot, packageJson.exports?.['.']?.import ?? 'dist/index.js');
-const platformCss = resolve(packageRoot, 'dist/platform.css');
+const rottayCss = resolve(packageRoot, 'dist/rottay.css');
 const particleBoundary = resolve(packageRoot, 'dist/graphics/motion/react/presentation/effects/particles/index.js');
 
 if (!existsSync(rootEntry)) fail(`missing built public entry ${rootEntry}`);
-if (!existsSync(platformCss)) fail(`missing consumable CSS ${platformCss}`);
+if (!existsSync(rottayCss)) fail(`missing consumable CSS ${rottayCss}`);
 if (!existsSync(particleBoundary)) fail(`missing public ParticleField boundary ${particleBoundary}`);
-if (!readFileSync(platformCss, 'utf8').includes('.ds-collection-shell__static-particle-field')) {
-  fail('dist/platform.css does not contain the CRA-14 static fallback selector');
+if (!readFileSync(rottayCss, 'utf8').includes('.ds-collection-shell__static-particle-field')) {
+  fail('dist/rottay.css does not contain the CRA-14 static fallback selector');
 }
 if (/style\s*:\s*\{/.test(readFileSync(particleBoundary, 'utf8'))) {
   fail('public ParticleField boundary adds inline style objects outside the governed census');

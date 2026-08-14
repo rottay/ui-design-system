@@ -44,6 +44,7 @@ import { conclude, createFindings, EXIT, parseArgs } from '../../foundation/repo
 
 export const DEFAULT_TARGET = 'packages/core/scripts/quality-evidence/programs/modern-rescue/README.md';
 export const MANIFEST_INDEX_PATH = 'packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/index.json';
+export const FAMILY_INVENTORY_PATH = 'packages/core/scripts/quality-evidence/programs/modern-rescue/family-inventory.json';
 const SECTION_HEADING = '## Current checkpoint';
 const STAMP_OPEN = '<!-- lane-control:program-state v1';
 const STAMP_CLOSE = '-->';
@@ -82,7 +83,7 @@ function digest(text) {
  *
  * Removing these from the body does not weaken the check — it is what lets the
  * check be READ. While the checkpoint was permanently red over HEAD drift, a real
- * `ledger.families` disagreement was invisible underneath it.
+ * `inventory.families` disagreement was invisible underneath it.
  */
 export const PINNED = 'pinned';
 export const PROVENANCE = 'provenance';
@@ -90,11 +91,19 @@ export const PROVENANCE = 'provenance';
 export function derive({ root, planPath }) {
   const head = headMeta(root);
   const context = loadContext({ root });
-  const ledger = context.rows.ledger;
   const manifestIndex = JSON.parse(readFileSync(`${root}/${MANIFEST_INDEX_PATH}`, 'utf8'));
+  // The denominator is READ from the active family inventory, never restated here. This check
+  // used to compare against a literal 252; when the catalog moved to 253 the literal became a
+  // second, stale authority that could only fail. The inventory is the one place a family id
+  // is declared, so agreement with it is the real invariant.
+  const familyInventory = JSON.parse(readFileSync(`${root}/${FAMILY_INVENTORY_PATH}`, 'utf8'));
+  const inventoryFamilies = familyInventory.rows.length;
+  const inventoryCounts = familyInventory.counts ?? {};
   const familyReviews = manifestIndex?.rollups?.familyReviews;
-  if (!familyReviews || manifestIndex?.denominators?.canonicalFamilies !== 252) {
-    throw new Error('lane-control: customization manifest index is missing the canonical 252-family review rollup');
+  if (!familyReviews || manifestIndex?.denominators?.canonicalFamilies !== inventoryFamilies) {
+    throw new Error(
+      `lane-control: customization manifest index must carry a ${inventoryFamilies}-family review rollup, found ${manifestIndex?.denominators?.canonicalFamilies ?? 'none'}`,
+    );
   }
   const reviewTotal =
     familyReviews.unreviewed
@@ -120,25 +129,31 @@ export function derive({ root, planPath }) {
     },
 
     // Pinned — a claim about the programme, byte-verified on every check.
-    'ledger.families': { value: context.rows.familyRows.length, how: 'family-ledger.json rows.length', volatility: PINNED },
-    'ledger.syntheticRows': {
+    //
+    // Every figure below is sourced from an ACTIVE, regenerated document. They were previously
+    // read from `family-ledger.json` — sealed historical evidence from an earlier era of the
+    // catalog. That made the archive an authority on the present: the checkpoint could not state
+    // today's denominator until somebody rewrote history to agree with it, which is the opposite
+    // of what an archive is for. The archive is now an input to nothing, including the lane
+    // bounds; family lanes are bounded by the same inventory these figures come from.
+    'inventory.families': {
+      value: inventoryFamilies,
+      how: `${FAMILY_INVENTORY_PATH} rows.length`,
+      volatility: PINNED,
+    },
+    'manifest.controlFamilyCells': {
+      value: manifestIndex.denominators.controlFamilyCells,
+      how: `${MANIFEST_INDEX_PATH} denominators.controlFamilyCells`,
+      volatility: PINNED,
+    },
+    'ownership.syntheticRows': {
       value: context.rows.syntheticRows.length,
-      how: 'synthetic-rows.json rows.length',
-      volatility: PINNED,
-    },
-    'ledger.sharedSkinFiles': {
-      value: context.rows.derivedSharedSkinFiles.size,
-      how: 're-derived from rows[].skinFiles: files claimed by more than one family',
-      volatility: PINNED,
-    },
-    'ledger.driftClean': {
-      value: context.rows.drift.clean ? 'yes' : 'no',
-      how: 'derived sharedSkinFiles vs the recorded map',
+      how: 'synthetic-rows.json rows.length — the non-family lanes',
       volatility: PINNED,
     },
     'singleOwner.entries': {
-      value: buildSingleOwnerSet(context.rows.derivedSharedSkinFiles).length,
-      how: 'seeded single-owner regions + files derived as multi-owner from the ledger',
+      value: buildSingleOwnerSet().length,
+      how: 'architecturally shared regions no family source owner contains',
       volatility: PINNED,
     },
   };
@@ -158,10 +173,13 @@ export function derive({ root, planPath }) {
     how: `${MANIFEST_INDEX_PATH} rollups.familyReviews.unreviewed`,
     volatility: PINNED,
   };
-  for (const [layer, count] of Object.entries(ledger.counts?.byLayer ?? {})) {
-    derived[`ledger.byLayer.${layer}`] = {
+  // Per-layer counts follow the same rule as the total: derived from the active inventory,
+  // whose five canonical layers are the ones the catalog actually has. The ledger's byLayer
+  // table still carries the retired `commercial` and `surface-composition` buckets.
+  for (const [layer, count] of Object.entries(inventoryCounts)) {
+    derived[`inventory.byLayer.${layer}`] = {
       value: count,
-      how: `family-ledger.json counts.byLayer.${layer}`,
+      how: `${FAMILY_INVENTORY_PATH} counts.${layer}`,
       volatility: PINNED,
     };
   }
@@ -184,7 +202,11 @@ export function isProvenance(derived, key) {
   return derived[key]?.volatility === PROVENANCE;
 }
 
-const SHA_SHAPED = /\b[0-9a-f]{7,40}\b/g;
+// CASE-INSENSITIVE, because git is. `git rev-parse 68F258690` resolves the
+// same commit as `68f258690`, so a lowercase-only rule refused one spelling of
+// a frozen HEAD and wrote the other into the checkpoint. Hex is hex whichever
+// case it is typed in.
+const SHA_SHAPED = /\b[0-9a-f]{7,40}\b/gi;
 const INTEGER = /\b\d+\b/g;
 const PLACEHOLDER = /\{\{derived\.[a-zA-Z0-9_.]+\}\}/g;
 
@@ -237,11 +259,20 @@ export function auditIntentForTypedFigures(intent, derived) {
 
   for (const { path, text } of collectRenderedStrings(intent)) {
     const prose = text.replace(PLACEHOLDER, ' ');
+    // A SHA IS REFUSED UNCONDITIONALLY, AND `allowedLiterals` CANNOT REACH IT.
+    //
+    // The exception list exists for one situation and one only: an integer that
+    // happens to equal a derived figure while meaning something else — a wave
+    // number colliding with a family count. A sha has no such reading. It is
+    // always derivable, it is always provenance, and it is stale the moment it
+    // is typed, so "explaining" one cannot make it correct. Consulting the
+    // allowlist first made the unconditional rule conditional: `allowedLiterals:
+    // [{value: "68f2586", reason: "…"}]` walked a frozen HEAD straight into a
+    // document whose whole purpose is to not carry one.
     for (const match of prose.match(SHA_SHAPED) ?? []) {
-      if (allowed.has(match)) continue;
       findings.push({
         rule: 'P1-typed-figure',
-        message: `${path}: "${match}" is commit-sha-shaped. A sha is always derivable; use {{derived.head.short}}.`,
+        message: `${path}: "${match}" is commit-sha-shaped. A sha is always derivable; use {{derived.head.short}}. allowedLiterals does not apply to shas — it covers integer collisions only.`,
       });
     }
     for (const match of prose.match(INTEGER) ?? []) {
@@ -256,6 +287,15 @@ export function auditIntentForTypedFigures(intent, derived) {
   }
 
   for (const [value, reason] of allowed) {
+    // The list is scoped at its own edge, not only where it is consulted: an
+    // exception that is not an integer collision has nothing to be an exception
+    // TO, and the only reason to write one is to launder a sha.
+    if (!/^\d+$/.test(value)) {
+      findings.push({
+        rule: 'P1-typed-figure',
+        message: `allowedLiterals entry "${value}" is not an integer. This list covers one case — an integer that collides with a derived figure while meaning something else. A sha, a path or a name is never an allowed literal.`,
+      });
+    }
     if (reason.trim().length < 20) {
       findings.push({
         rule: 'P1-typed-figure',

@@ -9,7 +9,7 @@ import userEvent from '@testing-library/user-event';
 import { LOCALE_CONFIGS, TRANSLATION_CATALOG } from '@/foundation/i18n/runtime/catalog';
 import { resolveTranslation } from '@/foundation/i18n/runtime/resolution';
 import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes';
-import { themanagementmiamiBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/fixtures/themanagementmiami';
+import { themanagementmiamiBrandTheme } from '@/tooling/testing/fixtures/brand-themes/themanagementmiami';
 import { compileBrandTheme } from '@/infrastructure/compilers/kernel/runtime/brand-theme';
 
 import ModernBadge from '../engines/modern';

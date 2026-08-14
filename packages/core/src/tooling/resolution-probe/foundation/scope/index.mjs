@@ -30,34 +30,30 @@
  * @module Tooling/ResolutionProbe/Foundation/Scope
  */
 
-/** The three code-owned verticals, with the slug/key pair their rules key on. */
+import { resolve } from 'node:path';
+
+import { readFirstPartyRosterSource } from '../../../../../scripts/lib/first-party-roster-source.mjs';
+import { CORE_ROOT } from '../paths/index.mjs';
+
+const rosterPath = resolve(
+  CORE_ROOT,
+  'src/foundation/tokens/ts/presentation/brand-themes/index.ts',
+);
+const rosterScopes = readFirstPartyRosterSource(rosterPath).map((row) => [
+  row.slug,
+  Object.freeze({
+    vertical: row.slug,
+    tenantSlug: row.slug,
+    distBundle: row.bundleFile,
+    stylesBundle: row.bundleFile,
+    artifactDir: row.slug,
+    fontPacks: row.fontPacks,
+  }),
+]);
+
+/** The code-owned vertical scopes projected from the authored roster. */
 export const VERTICALS = Object.freeze({
-  platform: Object.freeze({
-    vertical: 'platform',
-    /** `data-tenant` value. NOT equal to the vertical key for platform. */
-    tenantSlug: 'rottay',
-    distBundle: 'platform.css',
-    stylesBundle: 'platform.css',
-    /** `facade/artifacts/<dir>/index.css` under src/foundation/tokens/css. */
-    artifactDir: 'rottay',
-    fontPacks: [],
-  }),
-  bithire: Object.freeze({
-    vertical: 'bithire',
-    tenantSlug: 'bithire',
-    distBundle: 'bithire.css',
-    stylesBundle: 'bithire.css',
-    artifactDir: 'bithire',
-    fontPacks: ['humanist-text', 'grotesk-display', 'plex-mono'],
-  }),
-  evnto: Object.freeze({
-    vertical: 'evnto',
-    tenantSlug: 'evnto',
-    distBundle: 'evnto.css',
-    stylesBundle: 'evnto.css',
-    artifactDir: 'evnto',
-    fontPacks: [],
-  }),
+  ...Object.fromEntries(rosterScopes),
   none: Object.freeze(TENANT_LESS_SPEC()),
 });
 

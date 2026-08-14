@@ -6,17 +6,17 @@
     "category": "workflow",
     "name": "ApprovalInbox",
     "components": [
-      "ApprovalInbox"
+      "PatternApprovalInbox"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
     "sourceOwner": "packages/core/src/ui/patterns/workflow/approval-inbox",
-    "publicComponents": [],
-    "unresolvedPublicComponents": [
-      "ApprovalInbox"
+    "publicComponents": [
+      "PatternApprovalInbox"
     ],
+    "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "ac91b4e0efb56e63089d5339df8e6b67fc15987a6653c415db98b35a292a0caa"
+    "inventoryRowDigest": "855a2c54ff40741ad210089d9c4692e6c40497582b2be4296f7eb9fb0fb08cc8"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

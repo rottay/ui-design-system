@@ -72,11 +72,11 @@ export function surfaceGroundFor(fixture: TortureFixture): 'dark' | 'light' {
 /**
  * Vertical scope key per fixture whose compiled CSS already ships inside the DS
  * bundle. The key is the VERTICAL, not the slug: rottay's bundled artifact is
- * scoped to `data-vertical='platform'`, and stamping its slug there would ship
+ * scoped to `data-vertical='rottay'`, and stamping its slug there would ship
  * a scope no rule matches.
  */
 const BUNDLED_VERTICAL_BY_FIXTURE: Partial<Record<TortureFixture, string>> = {
-  rottay: 'platform',
+  rottay: 'rottay',
   bithire: 'bithire',
   evnto: 'evnto',
 };
@@ -133,9 +133,11 @@ export interface TortureFirstPaintPlan {
   /**
    * The governed root attribute set, or `null` when this fixture's settled
    * ground is not deterministic from bundled or compiled CSS. A null plan
-   * stamps nothing: the torture fixtures compile their BrandTheme inside the
-   * provider at render time, so an early stamp would activate a scope whose
-   * declarations do not exist yet and could not match the settled render.
+   * stamps nothing: the torture fixtures compile their BrandTheme inside
+   * TortureSurface itself at render time (client-side, via `compileBrandTheme`,
+   * mounted as a `<style>` element), so an early server stamp would activate a
+   * scope whose declarations do not exist yet and could not match the settled
+   * render.
    */
   rootAttributes: DocumentRootAttributes | null;
   /** Compiled artifact CSS to embed. Empty when the tenant's CSS is bundled. */

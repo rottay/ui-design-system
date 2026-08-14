@@ -54,6 +54,31 @@
             "font-size",
             "font-weight"
           ]
+        },
+        {
+          "id": "hitbox",
+          "why": "The button root IS its own hit target -- no separate expanded touch-area wrapper exists in the modern engine's markup, so this target reads the same element as `root` under a name that says what it is being asked for: real sizing geometry rather than paint. `@rect-inline-size`/`@rect-block-size` are read from getBoundingClientRect, so a padding/border/transform mutation that changes what actually renders cannot hide behind an unmoved computed longhand.",
+          "selector": "[data-probe='button-modern-md']",
+          "properties": [
+            "block-size",
+            "height",
+            "min-block-size",
+            "min-height",
+            "max-block-size",
+            "max-height",
+            "inline-size",
+            "width",
+            "min-inline-size",
+            "max-inline-size",
+            "min-width",
+            "max-width",
+            "aspect-ratio",
+            "scale",
+            "zoom",
+            "contain-intrinsic-size",
+            "@rect-inline-size",
+            "@rect-block-size"
+          ]
         }
       ]
     },
@@ -120,8 +145,12 @@
     {
       "id": "token-readout",
       "synthetic": true,
-      "why": "Not a component: a bare element inside the tenant scope whose custom properties are read directly. It answers 'what value does this token RESOLVE to for this tenant' without an intervening paint rule, which separates 'the token is wrong' from 'the component does not read it'.",
-      "requiresSelectors": ["--ds-radius-md: calc(var(--ds-radius-md-base) * var(--ds-radius-scale, 1))"],
+      "why": "Not a component: a bare element inside the tenant scope whose custom properties are read directly. It answers 'what value does this token RESOLVE to for this tenant' without an intervening paint rule, which separates 'the token is wrong' from 'the component does not read it'. Extended 2026-08-11 with the rhythm pair -- --ds-rhythm-scale is the raw tenant input (enum stop or override), --ds-rhythm-effective-scale is the clamped 0.8..1.25 channel every consume site reads -- so a causal rhythm run has a direct-read control fixture on the SAME element as the radius readout, rather than needing a second synthetic fixture for a second control.",
+      "requiresSelectors": [
+        "--ds-radius-md: calc(var(--ds-radius-md-base) * var(--ds-radius-scale, 1))",
+        "--ds-rhythm-scale: 1",
+        "--ds-rhythm-effective-scale: clamp(0.8, var(--ds-rhythm-scale, 1), 1.25)"
+      ],
       "html": "<div data-probe=\"token-readout\"></div>",
       "targets": [
         {
@@ -149,8 +178,145 @@
             "--ds-table-header-text-transform",
             "--ds-letter-spacing-body",
             "--ds-type-scale",
-            "--ds-font-size-xs"
+            "--ds-font-size-xs",
+            "--ds-rhythm-scale",
+            "--ds-rhythm-effective-scale"
           ]
+        }
+      ]
+    },
+    {
+      "id": "flex-modern-preset-gap",
+      "why": "The modern Flex as the engine actually renders it, with a preset ('md') uniform gap. Chain: gap <- calc(--ds-flex-gap * --ds-rhythm-effective-scale). One hop: the scaled rule multiplies the md rung directly by the tenant rhythm dial in the gap declaration itself, held at the base rule's specificity by `:where()` so source order -- not escalation -- decides. Proves the rhythm dial reaches Flex's layout gap the way the six fixtures above prove the radius dial reaches radius.",
+      "requiresSelectors": [
+        ".rottay-flex[data-gap=\"uniform\"]:where(",
+        "[data-gap-preset=\"md\"]",
+        "gap: calc(var(--ds-flex-gap) * var(--ds-rhythm-effective-scale, 1))"
+      ],
+      "html": "<div class=\"rottay-flex rottay-flex--modern\" style=\"min-inline-size:0;--ds-flex-gap:var(--ds-spacing-4, 1rem)\" data-gap=\"uniform\" data-gap-preset=\"md\" data-component=\"flex\" data-probe=\"flex-modern-preset-gap\"><span>a</span><span>b</span></div>",
+      "targets": [
+        {
+          "id": "root",
+          "selector": "[data-probe='flex-modern-preset-gap']",
+          "properties": ["gap", "column-gap", "row-gap"]
+        }
+      ]
+    },
+    {
+      "id": "grid-modern-preset-gap",
+      "why": "The modern Grid as the engine actually renders it, with a preset ('md') gap routed through --ds-grid-gap rather than the inline gap a numeric measurement would use. Chain: gap <- calc(--ds-grid-gap * --ds-rhythm-effective-scale). One hop, anchored on the engine class (rottay-grid--modern) rather than a repeated attribute, so the scaled rule outranks the unscaled base rule by source order alone -- the same law Flex's `:where()` enforces by specificity parity instead.",
+      "requiresSelectors": [
+        ".rottay-grid.rottay-grid--modern:where(",
+        "[data-gap-preset=\"md\"]",
+        "gap: calc(var(--ds-grid-gap) * var(--ds-rhythm-effective-scale, 1))"
+      ],
+      "html": "<div class=\"rottay-grid rottay-grid--modern\" style=\"display:grid;min-inline-size:0;grid-template-columns:repeat(2, minmax(0, 1fr));--ds-grid-gap:var(--ds-spacing-4, 1rem)\" data-component=\"grid\" data-gap-preset=\"md\" data-probe=\"grid-modern-preset-gap\"><div>a</div><div>b</div></div>",
+      "targets": [
+        {
+          "id": "root",
+          "selector": "[data-probe='grid-modern-preset-gap']",
+          "properties": ["gap", "column-gap", "row-gap"]
+        }
+      ]
+    },
+    {
+      "id": "stack-modern-preset-gap",
+      "why": "The modern Stack as the engine actually renders it, with a preset ('md') spacing rung -- the one layout primitive where rhythm reaches the paint with no inline value at all: the data-spacing attribute alone selects the scaled rule. Chain: gap <- var(--_ds-stack-gap-current) <- calc(--ds-spacing-4 * --ds-rhythm-effective-scale). Two hops, one more than Flex/Grid/Space, because the rung is mirrored into a private channel so the divider can center itself inside the same governed rhythm instead of adding its own separation on top of it.",
+      "requiresSelectors": [
+        ".rottay-stack[data-spacing=\"md\"]",
+        "--_ds-stack-gap-current: calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1))",
+        "gap: var(--_ds-stack-gap-current)"
+      ],
+      "html": "<div class=\"rottay-stack rottay-stack--modern\" style=\"min-inline-size:0\" data-spacing=\"md\" data-component=\"stack\" data-probe=\"stack-modern-preset-gap\"><div>a</div><div>b</div></div>",
+      "targets": [
+        {
+          "id": "root",
+          "selector": "[data-probe='stack-modern-preset-gap']",
+          "properties": ["gap", "column-gap", "row-gap"]
+        }
+      ]
+    },
+    {
+      "id": "space-modern-preset-gap",
+      "why": "The modern Space as the engine actually renders it, with a preset ('md') gap. Chain: gap <- calc(--ds-space-instance-gap * --ds-density-effective-scale * --ds-rhythm-effective-scale). One hop, but the only one of the four where rhythm compounds with density in the same declaration -- density sizes the md token, rhythm sizes the room around it -- held at the base rule's specificity by `:where()` so source order decides, exactly as Flex's split-gap rules do.",
+      "requiresSelectors": [
+        ".rottay-space.rottay-space--modern[data-part=\"root\"]:where(",
+        "[data-size=\"md\"]",
+        "gap: calc(var(--ds-space-instance-gap, var(--ds-space-small-size, var(--ds-spacing-2))) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1))"
+      ],
+      "html": "<div class=\"rottay-space rottay-space--modern\" style=\"--ds-space-instance-gap:var(--ds-space-middle-size)\" data-part=\"root\" data-direction=\"horizontal\" data-align=\"center\" data-size=\"md\" data-with-split=\"false\" data-component=\"space\" data-probe=\"space-modern-preset-gap\"><span>a</span><span>b</span></div>",
+      "targets": [
+        {
+          "id": "root",
+          "selector": "[data-probe='space-modern-preset-gap']",
+          "properties": ["gap", "column-gap", "row-gap"]
+        }
+      ]
+    },
+    {
+      "id": "flex-modern-numeric-gap",
+      "why": "The negative half of flex-modern-preset-gap: the modern Flex with a NUMERIC gap (8), not a preset rung. `resolveFlexAttributes`/`flexGapPresetSpelling` stamp NO data-gap-preset for a number (the function returns undefined for typeof 'number'), so the rhythm-scaled rule cannot match at all -- only the unscaled base rule `.rottay-flex[data-gap='uniform'] { gap: var(--ds-flex-gap); }` reaches it. Proves numeric-instance-gaps-exact instead of asserting it in prose.",
+      "requiresSelectors": [
+        ".rottay-flex[data-gap=\"uniform\"] {",
+        "gap: var(--ds-flex-gap)",
+        "gap: calc(var(--ds-flex-gap) * var(--ds-rhythm-effective-scale, 1))"
+      ],
+      "html": "<div class=\"rottay-flex rottay-flex--modern\" style=\"min-inline-size:0;--ds-flex-gap:8px\" data-gap=\"uniform\" data-component=\"flex\" data-probe=\"flex-modern-numeric-gap\"><span>a</span><span>b</span></div>",
+      "targets": [
+        {
+          "id": "root",
+          "selector": "[data-probe='flex-modern-numeric-gap']",
+          "properties": ["gap", "column-gap", "row-gap"]
+        }
+      ]
+    },
+    {
+      "id": "grid-modern-numeric-gap",
+      "why": "The negative half of grid-modern-preset-gap: the modern Grid with a NUMERIC gap (8), not a preset rung. A numeric grid gap never reaches --ds-grid-gap or a data-gap-preset attribute at all -- `buildGridStyles` writes it as a plain inline `gap` CSS property, the strongest position in the cascade, so no stylesheet rule (scaled or not) can reach it. Proves numeric-instance-gaps-exact instead of asserting it in prose.",
+      "requiresSelectors": [
+        ".rottay-grid.rottay-grid--modern:where(",
+        "gap: calc(var(--ds-grid-gap) * var(--ds-rhythm-effective-scale, 1))"
+      ],
+      "html": "<div class=\"rottay-grid rottay-grid--modern\" style=\"display:grid;min-inline-size:0;grid-template-columns:repeat(2, minmax(0, 1fr));gap:8px\" data-component=\"grid\" data-probe=\"grid-modern-numeric-gap\"><div>a</div><div>b</div></div>",
+      "targets": [
+        {
+          "id": "root",
+          "selector": "[data-probe='grid-modern-numeric-gap']",
+          "properties": ["gap", "column-gap", "row-gap"]
+        }
+      ]
+    },
+    {
+      "id": "stack-modern-numeric-gap",
+      "why": "The negative half of stack-modern-preset-gap: the modern Stack with a NUMERIC gap (8), which stamps `data-spacing='custom'` rather than a named rung. `.rottay-stack[data-spacing='custom']` has specificity (0,2,0) and carries no `:where(.rottay-stack--modern)` scaled companion, so it outranks the unscoped modern-default override at (0,1,0) and reads the caller's own --ds-stack-gap channel with no rhythm multiplication anywhere in the chain. Proves numeric-instance-gaps-exact instead of asserting it in prose.",
+      "requiresSelectors": [
+        ".rottay-stack[data-spacing=\"custom\"]",
+        "--_ds-stack-gap-current: var(--ds-stack-gap)",
+        "--_ds-stack-gap-current: calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1))"
+      ],
+      "html": "<div class=\"rottay-stack rottay-stack--modern\" style=\"min-inline-size:0;--ds-stack-gap:8px\" data-spacing=\"custom\" data-component=\"stack\" data-probe=\"stack-modern-numeric-gap\"><div>a</div><div>b</div></div>",
+      "targets": [
+        {
+          "id": "root",
+          "selector": "[data-probe='stack-modern-numeric-gap']",
+          "properties": ["gap", "column-gap", "row-gap"]
+        }
+      ]
+    },
+    {
+      "id": "space-modern-numeric-gap",
+      "why": "The negative half of space-modern-preset-gap: the modern Space with a NUMERIC size (8), not a preset spelling. The bare number lands in `data-size` unmatched by the enumerated `:where([data-size='small'], ..., [data-size='lg'])` scaled-rule list, so only the unscaled root rule `gap: var(--ds-space-instance-gap, ...)` reaches it. Proves numeric-instance-gaps-exact instead of asserting it in prose.",
+      "requiresSelectors": [
+        ".rottay-space.rottay-space--modern[data-part=\"root\"] {",
+        "gap: var(--ds-space-instance-gap, var(--ds-space-small-size, var(--ds-spacing-2)))",
+        "gap: calc(var(--ds-space-instance-gap, var(--ds-space-small-size, var(--ds-spacing-2))) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1))"
+      ],
+      "html": "<div class=\"rottay-space rottay-space--modern\" style=\"--ds-space-instance-gap:8px\" data-part=\"root\" data-direction=\"horizontal\" data-align=\"center\" data-size=\"8\" data-with-split=\"false\" data-component=\"space\" data-probe=\"space-modern-numeric-gap\"><span>a</span><span>b</span></div>",
+      "targets": [
+        {
+          "id": "root",
+          "selector": "[data-probe='space-modern-numeric-gap']",
+          "properties": ["gap", "column-gap", "row-gap"]
         }
       ]
     }

@@ -54,13 +54,18 @@ test('engine audit wires full runtime/fleet censuses and rejects vanished keys',
   );
   const embedded = JSON.parse(embeddedRun.stdout);
   assert.equal(Object.keys(embedded.files).length, runtimeFileCount);
-  assert.equal(embedded.total, 7);
-  assert.equal(embedded.classifiedPaint, 7);
+  /* Zero, and the zero is real: the package's last embedded-CSS producer was TableCheckboxStyles,
+     whose seven paint declarations are the 7 this line used to pin. It had no consumer, so it was
+     retired rather than migrated, and no `<style>` element in packages/core paints any more. The
+     file-count assert above is the anti-vacuity guard -- a zero from scanning nothing would fail
+     there first, because the embedded census must still cover every file the runtime census sees. */
+  assert.equal(embedded.total, 0);
+  assert.equal(embedded.classifiedPaint, 0);
   assert.equal(embedded.unclassified, 0);
   assert.equal(embedded.parseFailures, 0);
   assert.equal(embedded.dynamicProperties, 0);
   assert.equal(embedded.unknownSinks, 0);
-  assert.equal(Object.values(embedded.files).filter(({ count }) => count > 0).length, 1);
+  assert.equal(Object.values(embedded.files).filter(({ count }) => count > 0).length, 0);
 
   const run = spawnSync(process.execPath, [join(scriptsDir, 'engine-token-audit.mjs'), '--check'], {
     cwd: packageRoot,
@@ -152,12 +157,11 @@ test('engine audit wires full runtime/fleet censuses and rejects vanished keys',
   assert.equal(baseline['embeddedCssPaint.parseFailures'], 0);
   assert.equal(baseline['embeddedCssPaint.dynamicProperties'], 0);
   assert.equal(baseline['embeddedCssPaint.unknownSinks'], 0);
-  assert.equal(baseline['embeddedCssPaint.patterns/data/table-checkbox-styles/index.tsx'], 7);
-  assert.equal(
-    exemptions['SKIN-EXEMPT-EMBEDDED-CSS-CONTRACT'].files['patterns/data/table-checkbox-styles/index.tsx']
-      .embeddedCssFloor,
-    7
-  );
+  assert.equal(baseline['embeddedCssPaint.total'], 0);
+  /* The embedded-CSS contract exemption is gone with its only file. Asserting its ABSENCE keeps
+     this line load-bearing: a re-added component `<style>` block would have to re-open a written
+     exemption, and that re-opening now fails here instead of passing silently. */
+  assert.equal(exemptions['SKIN-EXEMPT-EMBEDDED-CSS-CONTRACT'], undefined);
   assert.ok(Object.keys(embedded.files).length >= embeddedPerFileKeys.length);
   assert.deepEqual(collectMissingPrefixedCounters(counters, baseline, 'embeddedCssPaint.'), []);
   assert.equal(
@@ -187,7 +191,12 @@ test('engine audit wires full runtime/fleet censuses and rejects vanished keys',
     fleetPerFileKeys.reduce((sum, key) => sum + baseline[key], 0)
   );
   assert.equal(baseline['fleet.inlinePaint.surfaces/foundation/common/story-helpers/index.tsx'], 6);
-  assert.equal(baseline['fleet.inlinePaint.surfaces/foundation/common/test-utils/index.tsx'], 1);
+  /* test-utils reached zero when its unused raw tenant-color payload was removed from the anatomy
+     fixture. The line stays and
+     the ceiling locks at 0 rather than being deleted: a completed drain must not leave slack behind
+     it. Re-earning even a single inline literal in the shared test surface fails here, instead of
+     silently spending a ceiling the file no longer has any cause to hold. */
+  assert.equal(baseline['fleet.inlinePaint.surfaces/foundation/common/test-utils/index.tsx'], 0);
   assert.deepEqual(collectMissingPrefixedCounters(counters, baseline, 'fleet.inlinePaint.'), []);
   for (const relativePath of ARC09_INLINE_PAINT_FILES) {
     assert.ok(`arc09.inlinePaint.${relativePath}` in counters, `${relativePath} must remain covered by ARC-09`);
@@ -207,8 +216,13 @@ test('engine audit wires full runtime/fleet censuses and rejects vanished keys',
     fleetRepresentative,
   ]);
 
-  const embeddedRepresentative = embeddedPerFileKeys.find((key) => baseline[key] > 0);
-  assert.ok(embeddedRepresentative, 'the baseline must contain a non-zero embedded CSS file counter');
+  /* The runtime and fleet drills above pick a NON-ZERO file so the removal they simulate is
+     visibly a loss of real paint. Embedded CSS has no non-zero file left to pick, so this one
+     takes the first key instead: what it proves is that a vanished KEY is reported, which is a
+     presence check and never read the value. Requiring `> 0` here would only assert that the
+     package still paints from a `<style>` block, which is precisely what it must not do. */
+  const embeddedRepresentative = embeddedPerFileKeys[0];
+  assert.ok(embeddedRepresentative, 'the baseline must contain per-file embedded CSS counters');
   const withOneEmbeddedFileRemoved = { ...counters };
   delete withOneEmbeddedFileRemoved[embeddedRepresentative];
   assert.deepEqual(collectMissingPrefixedCounters(withOneEmbeddedFileRemoved, baseline, 'embeddedCssPaint.'), [

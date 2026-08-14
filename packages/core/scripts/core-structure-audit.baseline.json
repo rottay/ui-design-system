@@ -42,7 +42,6 @@
         "entrypoints/charts/index.ts",
         "entrypoints/charts/renderers/index.ts",
         "entrypoints/charts/spec/index.ts",
-        "entrypoints/commercial/index.ts",
         "entrypoints/eslint/index.ts",
         "entrypoints/graphics/effects/index.ts",
         "entrypoints/graphics/marks/index.ts",

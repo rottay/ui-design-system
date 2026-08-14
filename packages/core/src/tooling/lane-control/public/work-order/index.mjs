@@ -21,16 +21,27 @@
  *
  * USAGE
  *   node .../work-order/index.mjs --work-order <wo.json> [--json]
- *   node .../work-order/index.mjs --work-order <wo.json> --skip-repo-checks
+ *
+ * The command always loads the canonical catalog. There is no flag that turns
+ * the repository checks off: a verdict reached without the catalog is not a
+ * verdict about a lane, and issuing one as exit 0 is worse than not running.
  *
  * EXIT 0 valid · 1 invalid · 2 could not run.
  */
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { isUnderOrEqual, normalizePath } from '../../foundation/glob/index.mjs';
+import {
+  isUnderOrEqual,
+  normalizePath,
+  pathEscapeReason,
+  territoryOf,
+  territoryOverlap,
+} from '../../foundation/glob/index.mjs';
 import { repoRoot } from '../../foundation/git/index.mjs';
-import { loadContext, resolveLane } from '../../composition/plan/index.mjs';
+import { assertNoCatalogOverride } from '../../runtime/ownership-rows/index.mjs';
+import { buildSingleOwnerSet, singleOwnerHits } from '../../runtime/shared-files/index.mjs';
+import { laneCovers, loadContext, resolveLane } from '../../composition/plan/index.mjs';
 import { conclude, createFindings, EXIT, parseArgs } from '../../foundation/report/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -116,6 +127,20 @@ function staticAnchor(pattern) {
     anchor.push(segment);
   }
   return anchor.join('/');
+}
+
+/**
+ * A territory printed back as the pattern it stands for. Resolved territories
+ * normally carry the `source` string they were compiled from; this is the
+ * fallback for the ones that do not, so a finding never has to describe a
+ * region as `[object Object]`.
+ */
+function describeTerritory(territory) {
+  if (territory.kind === 'file') return territory.path;
+  if (!territory.filter) return territory.dir;
+  return territory.kind === 'shallow'
+    ? `${territory.dir}/${territory.filter}`
+    : `${territory.dir}/**/${territory.filter}`;
 }
 
 /** Minimal JSON Schema shape checker: enough for this schema, nothing more. */
@@ -284,7 +309,56 @@ export function validateWorkOrder(workOrder, { root, schema, context = null, ski
     });
   }
 
+  // THE LANE IS RESOLVED HERE, BEFORE W5 — not with W7 where it used to be.
+  //
+  // W5 asks whether a commit pathspec can reach a file this lane may not write,
+  // and that question cannot be answered from the document. The document lists
+  // the exclusions its author typed; the CATALOG derives the rest — every family
+  // nested inside this one carves itself out of the outer subtree. Reading only
+  // the typed half is how an outer directory pathspec walked over a nested
+  // family and exited 0. Same resolution the plan checker performs, so a work
+  // order cannot be admissible here and inadmissible there.
+  const claims = (workOrder.claimsSharedFiles ?? []).map((entry) => normalizePath(entry));
+  const singleOwner = buildSingleOwnerSet();
+  let lane = null;
+  let laneError = null;
+  if (context) {
+    try {
+      lane = resolveLane(
+        {
+          id: workOrder.id,
+          laneRole: workOrder.laneRole,
+          row: workOrder.row,
+          writeRoot: workOrder.writeRoot,
+          writeSet: workOrder.writeSet,
+          writeExcludes: workOrder.writeExcludes,
+          claimsSharedFiles: workOrder.claimsSharedFiles,
+        },
+        context,
+      );
+    } catch (error) {
+      laneError = error;
+    }
+  }
+
   // W5 — commit pathspecs may not reach outside the write set.
+  //
+  // THE UNIT OF THIS RULE IS THE TERRITORY, NOT THE STRING. `git commit --
+  // <path>` stages the working tree under that path, so a directory pathspec
+  // commits its whole subtree: every file in it, whoever wrote them. Two shapes
+  // defeated the earlier string test, both reproduced as exit 0:
+  //
+  //   · `writeSet: [".../Avatar/**/*.test.tsx"]` with pathspec `.../Avatar`.
+  //     The pattern's static anchor IS that directory, so containment held —
+  //     while the grant covered 2 of the 16 files the commit would stage.
+  //   · a row whose DERIVED excludes carve a nested family out of an outer
+  //     subtree, with the outer directory as the pathspec. Exclusions were read
+  //     off `workOrder.writeExcludes`, so the ones only the catalog knows about
+  //     were invisible to this check.
+  //
+  // A directory therefore passes only when the write set grants the ENTIRE
+  // subtree and nothing inside it is excluded. Narrower grants are still
+  // legitimate lanes — they just cannot be committed by naming the directory.
   for (const pathspec of workOrder.commitPathspecs) {
     const normalized = normalizePath(pathspec);
     if (['.', '..', '-A', '-a', '*', './'].includes(normalized)) {
@@ -294,22 +368,128 @@ export function validateWorkOrder(workOrder, { root, schema, context = null, ski
       });
       continue;
     }
-    const inside = workOrder.writeSet.some((pattern) => isUnderOrEqual(normalized, staticAnchor(pattern)));
-    if (!inside) {
+    // Canonical BEFORE containment. The containment test below is a prefix
+    // relation over strings, and `Avatar/../../inputs/Button` satisfies it
+    // while git commits Button. Refuse the shape rather than trying to compare
+    // around it.
+    const escape = pathEscapeReason(pathspec);
+    if (escape) {
       add({
         rule: 'W5-commit-pathspec',
-        message: `commitPathspec "${pathspec}" is not inside any writeSet pattern; committing it would carry files this lane never declared`,
+        message: `commitPathspec "${pathspec}" ${escape}; it would be checked as one path and committed as another`,
       });
       continue;
     }
-    // `git commit -- <path>` commits the WORKING TREE under that path, so a
-    // pathspec that contains an excluded region carries that region too —
-    // even though the lane was never allowed to write it.
-    const swallowed = (workOrder.writeExcludes ?? []).filter((entry) => isUnderOrEqual(staticAnchor(entry), normalized));
+    if (!lane) {
+      // DOCUMENT-ONLY FALLBACK, and strictly weaker than the check below: it
+      // sees the typed exclusions and not the derived ones, and it compares a
+      // string prefix instead of a territory. It runs only where there is no
+      // catalog to resolve against — the in-process drill path — which is
+      // exactly why the public command refuses to run without one.
+      const inside = workOrder.writeSet.some((pattern) => isUnderOrEqual(normalized, staticAnchor(pattern)));
+      if (!inside) {
+        add({
+          rule: 'W5-commit-pathspec',
+          message: `commitPathspec "${pathspec}" is not inside any writeSet pattern; committing it would carry files this lane never declared`,
+        });
+        continue;
+      }
+      const typedExcludes = (workOrder.writeExcludes ?? []).filter((entry) => isUnderOrEqual(staticAnchor(entry), normalized));
+      if (typedExcludes.length > 0) {
+        add({
+          rule: 'W5-commit-pathspec',
+          message: `commitPathspec "${pathspec}" contains excluded region(s) ${typedExcludes.join(', ')}; \`git commit -- <path>\` stages the working tree under that path, excluded or not`,
+        });
+      }
+      continue;
+    }
+
+    const spec = territoryOf(normalized, { isDirectory: context.isDirectory });
+    if (spec.kind === 'file') {
+      if (!laneCovers(lane, spec.path)) {
+        add({
+          rule: 'W5-commit-pathspec',
+          message: `commitPathspec "${pathspec}" is not granted by this lane's resolved write set; committing it would carry a file this lane never declared`,
+        });
+      }
+      continue;
+    }
+
+    // Every exclusion of the RESOLVED lane — the row's derived ones included —
+    // that INTERSECTS the subtree this pathspec would stage. This is a territory
+    // intersection, not a prefix test, and the difference is a third false green:
+    // an exclusion ANCHORED ABOVE the pathspec still reaches inside it whenever
+    // it carries a filter. `packages/core/scripts/**/*-gate.mjs` is anchored at
+    // `packages/core/scripts`, which is NOT under `packages/core/scripts/codemods`,
+    // so the prefix reading called them disjoint and let the directory through —
+    // and the first `codemods/foo-gate.mjs` anyone adds is a file this lane may
+    // not write, staged by a pathspec that passed.
+    //
+    // The witness may name a file that does not exist yet. That is the point: a
+    // boundary is a property of the region, and a pathspec justified only by
+    // today's `ls` is not bounded, merely lucky.
+    const swallowed = [];
+    for (const exclude of lane.excludeTerritories) {
+      const overlap = territoryOverlap(spec, exclude, []);
+      if (!overlap) continue;
+      const region = exclude.source ?? describeTerritory(exclude);
+      if (swallowed.some((entry) => entry.region === region)) continue;
+      swallowed.push({
+        region,
+        witness: overlap.witness.replace(/\/$/, ''),
+        anchoredAbove: !isUnderOrEqual(exclude.kind === 'file' ? exclude.path : exclude.dir, spec.dir),
+        declared: (workOrder.writeExcludes ?? []).map((entry) => normalizePath(entry)).includes(region),
+      });
+    }
     if (swallowed.length > 0) {
       add({
         rule: 'W5-commit-pathspec',
-        message: `commitPathspec "${pathspec}" contains excluded region(s) ${swallowed.join(', ')}; \`git commit -- <path>\` stages the working tree under that path, excluded or not`,
+        message: `commitPathspec "${pathspec}" overlaps excluded region(s) ${swallowed.map((entry) => entry.region).join(', ')}; \`git commit -- <path>\` stages the working tree under that path, excluded or not`,
+        details: swallowed.map(({ region, witness, anchoredAbove, declared }) => {
+          const head = declared
+            ? `· ${region}`
+            : `· ${region} is derived from row "${workOrder.row}", not declared in this work order`;
+          return anchoredAbove
+            ? `${head} — anchored above this pathspec, it still reaches inside it: ${witness} would be staged`
+            : head;
+        }),
+      });
+      continue;
+    }
+
+    const staged = context.universe.filter((file) => file === spec.dir || file.startsWith(`${spec.dir}/`));
+    const ungranted = staged.filter((file) => !laneCovers(lane, file));
+    if (ungranted.length > 0) {
+      add({
+        rule: 'W5-commit-pathspec',
+        message: `commitPathspec "${pathspec}" names a directory, so the commit stages its whole subtree — ${staged.length} file(s), of which ${ungranted.length} are outside this lane's write set`,
+        details: ungranted.slice(0, 8).map((file) => `· ${file}`),
+      });
+      continue;
+    }
+
+    // The subtree holds no ungranted file TODAY. That is a fact about the tree
+    // this afternoon, not a boundary: a filtered grant such as `dir/**/*.test.tsx`
+    // starts granting the whole directory the moment somebody adds a file that
+    // does not match. Require the grant itself to cover the subtree. An
+    // APPROXIMATED territory is a widened reading of a narrower pattern, so it
+    // cannot be the thing that grants — widening is safe when it blocks and
+    // unsafe when it permits.
+    const grantsWholeSubtree = lane.territories.some(
+      (territory) =>
+        territory.kind === 'subtree' &&
+        !territory.filter &&
+        !territory.approximated &&
+        isUnderOrEqual(spec.dir, territory.dir),
+    );
+    if (!grantsWholeSubtree) {
+      add({
+        rule: 'W5-commit-pathspec',
+        message: `commitPathspec "${pathspec}" names a directory, but no writeSet pattern grants that whole subtree — only filtered or partial claims reach into it, and \`git commit -- <path>\` does not honour a filter`,
+        details: [
+          `writeSet as resolved: ${lane.declaredWriteSet.join(', ')}`,
+          `${staged.length} file(s) sit under this pathspec today; the grant is narrower than the directory`,
+        ],
       });
     }
   }
@@ -327,46 +507,125 @@ export function validateWorkOrder(workOrder, { root, schema, context = null, ski
 
   // W7 — the write set must sit inside the row's bound. Same machinery the
   // intersection checker uses, so a work order cannot be admissible here and
-  // inadmissible there.
-  if (context) {
-    try {
-      const lane = resolveLane(
-        {
-          id: workOrder.id,
-          row: workOrder.row,
-          writeSet: workOrder.writeSet,
-          writeExcludes: workOrder.writeExcludes,
-        },
-        context,
-      );
-      for (const violation of lane.boundViolations) {
-        add({
-          rule: 'W7-bound',
-          message:
-            violation.kind === 'pattern-escapes-writeRoot'
-              ? `writeSet pattern "${violation.pattern}" reaches outside the row's writeRoot (${violation.writeRoot})`
-              : `writeSet pattern "${violation.pattern}" lands inside writeExclude ${violation.exclude}`,
-        });
-      }
-      if (lane.files.length === 0 && workOrder.editClass !== 'headers-only') {
-        add({
-          rule: 'W7-bound',
-          message: 'the write set matches no file that exists today; a lane that scans nothing passes everything',
-        });
-      }
-    } catch (error) {
-      add({ rule: 'W7-bound', message: `write set could not be resolved against row "${workOrder.row}": ${error.message}` });
+  // inadmissible there. The resolution itself happened above, because W5 needs
+  // it; this is where its bound verdicts are reported.
+  if (laneError) {
+    add({ rule: 'W7-bound', message: `write set could not be resolved against row "${workOrder.row}": ${laneError.message}` });
+  }
+  if (lane) {
+    for (const violation of lane.boundViolations) {
+      add({
+        rule: 'W7-bound',
+        message:
+          violation.kind === 'pattern-escapes-writeRoot'
+            ? `writeSet pattern "${violation.pattern}" reaches outside the row's writeRoot (${violation.writeRoot})`
+            : `writeSet pattern "${violation.pattern}" lands inside writeExclude ${violation.exclude}`,
+      });
+    }
+    if (lane.files.length === 0 && workOrder.editClass !== 'headers-only') {
+      add({
+        rule: 'W7-bound',
+        message: 'the write set matches no file that exists today; a lane that scans nothing passes everything',
+      });
     }
   }
 
-  return { findings, summary: `${workOrder.id} · ${workOrder.editClass} · ${workOrder.model.name} · ${table.length} substitution(s)` };
+  // W8 — the lane role. A plan may INFER a role from the row a lane names; a
+  // work order may not. This is the delegable unit — it is handed to an agent
+  // that will not be present for the inference — so the role is declared, and
+  // it decides which bound fields are mandatory.
+  //
+  // These conditions are computed WITHOUT the repo on purpose: role legality is
+  // a property of the document, and `--skip-repo-checks` must not be the way an
+  // unbounded lane gets through. The two conditions that genuinely need the
+  // catalog — whether the named row is really a family, and whether a declared
+  // root really lies in a shared region — come from `resolveLane` below, which
+  // is the same computation the plan checker runs.
+  const role = workOrder.laneRole;
+  if (role === 'family' || role === 'domain') {
+    if (workOrder.row === undefined) {
+      add({
+        rule: 'W8-lane-role',
+        message: `a ${role} lane must name an ownership row — that row IS its bound, and an unbounded lane cannot be checked`,
+      });
+    }
+    if (workOrder.writeRoot !== undefined) {
+      add({
+        rule: 'W8-lane-role',
+        message: `a ${role} lane may not declare writeRoot "${workOrder.writeRoot}" — it inherits the row's bound, and a declared root is how the catalog gets bypassed`,
+      });
+    }
+  }
+  if (role === 'integrator') {
+    if (workOrder.writeRoot === undefined) {
+      add({ rule: 'W8-lane-role', message: 'an integrator lane must declare its writeRoot' });
+    }
+    if (workOrder.row !== undefined) {
+      add({
+        rule: 'W8-lane-role',
+        message: `an integrator lane may not name row "${workOrder.row}" — it exists to hold shared regions no row owns`,
+      });
+    }
+    if (claims.length === 0) {
+      add({
+        rule: 'W8-lane-role',
+        message: 'an integrator lane claims nothing; holding a shared region is the whole reason this role may declare its own root, so a claimless integrator is an undeclared root with a label on it',
+      });
+    }
+  }
+  if (lane) {
+    // Only the catalog-dependent verdicts — the rest are already reported above
+    // and would arrive twice.
+    for (const violation of lane.roleViolations) {
+      if (violation.kind !== 'role-row-mismatch' && violation.kind !== 'root-outside-integrator-domains') continue;
+      add({ rule: 'W8-lane-role', message: `[${lane.laneRole}] ${violation.message}` });
+    }
+  }
+
+  // W9 — shared-region claims, the half a single work order can decide. The
+  // other half is cross-lane (one claimant per file, one integrator per shared
+  // domain) and belongs to write-set-intersection, which is the only checker
+  // that sees the batch's siblings.
+  for (const claim of claims) {
+    if (singleOwnerHits(claim, singleOwner).length === 0) {
+      add({
+        rule: 'W9-shared-claim',
+        message: `claimsSharedFiles names "${claim}", which is not in an architecturally shared region — the claim is meaningless and hides what the lane is really writing`,
+      });
+      continue;
+    }
+    const covered = lane
+      ? lane.files.includes(claim) || lane.declaredWriteSet.includes(claim)
+      : workOrder.writeSet.map((entry) => normalizePath(entry)).includes(claim);
+    if (!covered) {
+      add({ rule: 'W9-shared-claim', message: `claimsSharedFiles names "${claim}" but the writeSet does not cover it` });
+    }
+  }
+  if (lane) {
+    const claimed = new Set(claims);
+    const silent = lane.files.filter((file) => !claimed.has(file) && singleOwnerHits(file, singleOwner).length > 0);
+    if (silent.length > 0) {
+      add({
+        rule: 'W9-shared-claim',
+        message: `the write set covers ${silent.length} file(s) in an architecturally shared region without claiming them`,
+        details: silent.slice(0, 12).map((file) => `· ${file}`),
+      });
+    }
+  }
+
+  const certification = skipRepoChecks ? 'NOT CERTIFIED (repo checks skipped) · ' : '';
+  return {
+    findings,
+    certified: !skipRepoChecks,
+    summary: `${certification}${workOrder.id} · ${workOrder.editClass} · ${workOrder.model.name} · ${table.length} substitution(s)`,
+  };
 }
 
 function main(argv) {
   const { flags } = parseArgs(argv);
   const target = flags.get('work-order') ?? flags.get('wo');
   if (!target || target === true) {
-    console.error('usage: work-order --work-order <wo.json> [--json] [--skip-repo-checks]');
+    console.error('usage: work-order --work-order <wo.json> [--json]');
     return EXIT.USAGE;
   }
 
@@ -374,20 +633,30 @@ function main(argv) {
   let schema;
   let root = null;
   let context = null;
-  const skipRepoChecks = Boolean(flags.get('skip-repo-checks'));
   try {
+    // THERE IS NO PUBLIC SUCCESS WITHOUT THE CATALOG. `--skip-repo-checks` used
+    // to answer "valid, exit 0" for a work order naming a row that does not
+    // exist and a write set outside every bound — a green certificate for a
+    // document nothing had been checked against. The skip survives only as an
+    // in-process argument to `validateWorkOrder`, where the caller is a drill
+    // that holds no repository, and even there the summary says NOT CERTIFIED.
+    assertNoCatalogOverride(flags);
+    if (flags.get('skip-repo-checks') !== undefined) {
+      throw new Error(
+        '--skip-repo-checks is refused: it produced a passing verdict for work orders that were never checked against the catalog. '
+          + 'Run this command in the repository, where the row, the bound and the shared-file claims are real.',
+      );
+    }
     workOrder = JSON.parse(readFileSync(String(target), 'utf8'));
     schema = JSON.parse(readFileSync(SCHEMA_PATH, 'utf8'));
-    if (!skipRepoChecks) {
-      root = repoRoot();
-      context = loadContext({ root });
-    }
+    root = repoRoot();
+    context = loadContext({ root });
   } catch (error) {
     console.error(`✗ work-order could not run: ${error.message}`);
     return EXIT.USAGE;
   }
 
-  const result = validateWorkOrder(workOrder, { root, schema, context, skipRepoChecks });
+  const result = validateWorkOrder(workOrder, { root, schema, context });
   return conclude({ name: 'work-order', findings: result.findings, json: flags.get('json'), summary: result.summary });
 }
 

@@ -321,6 +321,18 @@ export function censusTenantStyleBranches(source) {
   );
 }
 
+/**
+ * Return the DS custom properties an application writes without a shipped DS
+ * declaration/read. Kept pure so the decrease-only integration census has a
+ * causal fixture: comments and known names may never hide an unknown write.
+ */
+export function censusUndocumentedDsWrites(source, shippedDsNames) {
+  const uncommented = stripCssComments(source);
+  return [...uncommented.matchAll(DS_DECLARATION_PATTERN)]
+    .map((match) => match[1])
+    .filter((property) => !shippedDsNames.has(property));
+}
+
 /** Census the OLA-5 boundary categories (excludes private-anatomy above). */
 export function censusBoundaryCategories() {
   const shippedDsNames = collectShippedDsNames();
@@ -349,12 +361,13 @@ export function censusBoundaryCategories() {
         }
       }
 
-      for (const match of source.matchAll(DS_DECLARATION_PATTERN)) {
-        if (!shippedDsNames.has(match[1])) {
-          sites["undocumented-ds-writes"].push(
-            `${relativeFile} :: ${match[1]}`
-          );
-        }
+      for (const property of censusUndocumentedDsWrites(
+        source,
+        shippedDsNames
+      )) {
+        sites["undocumented-ds-writes"].push(
+          `${relativeFile} :: ${property}`
+        );
       }
 
       for (const signature of censusTenantStyleBranches(source)) {

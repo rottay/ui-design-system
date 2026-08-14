@@ -12,13 +12,13 @@
  * build:vertical-css`; hand-edits fail `lint:artifacts`.
  */
 
-import type { BrandTheme } from '../../../../../contracts/composition/tenants/themes';
+import type { FirstPartyBrandTheme } from '../../../../../contracts/composition/tenants/themes';
 import {
   EVNTO_CANONICAL_MOTION,
   EVNTO_CANONICAL_SURFACES,
 } from '@/foundation/presets/policy/experience-baselines/evnto';
 
-export const evntoBrandTheme: BrandTheme = {
+export const evntoBrandTheme: FirstPartyBrandTheme = {
   id: 'evnto',
   name: 'Evnto',
 
@@ -57,6 +57,9 @@ export const evntoBrandTheme: BrandTheme = {
         borderPrimaryColor: "#2E2C24",
         borderSecondaryColor: "#222018",
         borderFocusColor: "#A89880",
+        linkColor: "var(--ds-color-primary)",
+        linkHoverColor: "var(--ds-color-primary-hover)",
+        linkVisitedColor: "var(--ds-color-neutral-600)",
         ramps: {
           primary: {
             50: "#FCFCFC",
@@ -207,14 +210,10 @@ export const evntoBrandTheme: BrandTheme = {
     primaryColor: '#171717',
     secondaryColor: '#7A6A5A',
     accentColor: '#7A6A5A',
-    darkPrimaryColor: '#E8E8E0',
-    darkSecondaryColor: '#A89880',
-    darkAccentColor: '#A89880',
     backgroundColor: '#FFFFFF',
     backgroundSecondaryColor: '#fafafa',
     backgroundTertiaryColor: '#f5f5f5',
     backgroundElevatedColor: '#ffffff',
-    darkBackgroundColor: '#131210',
     onPrimaryColor: '#ffffff',
     successColor: '#15803D',
     warningColor: '#A16207',
@@ -251,7 +250,7 @@ export const evntoBrandTheme: BrandTheme = {
      * still resolves to the DS dark fallback in dark mode.
      *
      * `-tertiary` repeats the formula rather than aliasing `-subtle`: the two
-     * are one value in `themes/default.css` and in the platform theme, so the
+     * are one value in `themes/default.css` and in the former default theme, so the
      * equality this vertical already paints is preserved, but as two
      * independent channels a tenant can still move apart.
      *
@@ -275,13 +274,33 @@ export const evntoBrandTheme: BrandTheme = {
     warningBorderColor: 'color-mix(in srgb, var(--ds-color-warning) 20%, transparent)',
     errorBorderColor: 'color-mix(in srgb, var(--ds-color-error) 20%, transparent)',
     infoBorderColor: 'color-mix(in srgb, var(--ds-color-info) 20%, transparent)',
+    borderFocusColor: '#171717',
+    linkColor: '#171717',
+    linkHoverColor: '#525252',
+    linkVisitedColor: '#737373',
   },
 
+  /**
+   * Editorial ticketing/wallet posture: a geometric display face carries the
+   * headline register, a humanist face carries reading copy, mono carries
+   * codes and times. That split is what makes the type feel graphic rather
+   * than administrative.
+   *
+   * Every family named here is physically shipped as a font pack (see
+   * FONT_PACK_MANIFEST). This previously named 'Inter', 'JetBrains Mono' and
+   * 'Fira Code' — none of which the package ships, so the "contemporary
+   * strong typography" this vertical claims resolved to the visitor's OS
+   * default in practice.
+   */
   typography: {
-    fontFamilyBase: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-    fontFamilyHeading: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-    fontFamilyMono: "'JetBrains Mono', 'SF Mono', 'Fira Code', Menlo, monospace",
-    fontFamilyDisplay: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    fontFamilyBase:
+      "var(--ds-font-pack-humanist-text, 'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif)",
+    fontFamilyHeading:
+      "var(--ds-font-pack-geometric-display, 'Outfit', ui-sans-serif, system-ui, -apple-system, sans-serif)",
+    fontFamilyMono:
+      "var(--ds-font-pack-plex-mono, 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace)",
+    fontFamilyDisplay:
+      "var(--ds-font-pack-geometric-display, 'Outfit', ui-sans-serif, system-ui, -apple-system, sans-serif)",
     headingWeightBias: 'heavier',
     headingLetterSpacing: '-0.02em',
     labelStyle: 'capitalize',
@@ -473,6 +492,43 @@ export const evntoBrandTheme: BrandTheme = {
       border: 'rgba(0, 0, 0, 0.08)',
       shadow: '0 1px 3px rgba(0, 0, 0, 0.06)',
       shadowHover: '0 4px 12px rgba(0, 0, 0, 0.1)',
+    },
+  },
+
+  /**
+   * Explicit disposition for every optional capability family. Evnto authored
+   * NONE of these keys before; absence read as "nothing selected" and as
+   * "nobody looked" simultaneously.
+   */
+  capabilities: {
+    // ACTIVE. See the note on rottay's disposition. EVNTO_CANONICAL_MOTION is
+    // shared with the vertical preset, but sharing a source does not make the
+    // BrandTheme read of it inert: it still lowers through
+    // `brandThemeToTokenOverrides` onto `--ds-motion-spring` and through
+    // `brandThemeToPersonality` onto the animation personality.
+    motion: { status: 'active' },
+    // Evnto is the one vertical with no governed recipe profile. It is a real
+    // gap, not a decision: rottay selects technical-sharp and bithire selects
+    // network-professional, so evnto currently inherits engine defaults.
+    recipes: {
+      status: 'unassigned',
+      reason: 'pending-selection',
+      note: 'No governed recipe profile authored for the editorial ticketing posture yet; falls back to engine defaults.',
+    },
+    expressive: {
+      status: 'unassigned',
+      reason: 'pending-selection',
+      note: 'No expressive profile sighted against the high-contrast editorial canvas yet.',
+    },
+    responsive: {
+      status: 'disabled',
+      reason: 'not-authored',
+      note: 'Evnto rides the baseline container ladder; no posture override.',
+    },
+    engineBridge: {
+      status: 'disabled',
+      reason: 'not-authored',
+      note: 'No engine-specific bridge values; modern reads the compiled tokens directly.',
     },
   },
 };

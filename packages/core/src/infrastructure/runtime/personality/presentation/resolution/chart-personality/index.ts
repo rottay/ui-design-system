@@ -6,7 +6,12 @@ import { useContext, useMemo } from 'react';
 
 import type { ChartPersonalityTokens } from '../../../../../../foundation/contracts/kernel/tokens/personality';
 import { ProductProfileContext } from '../../../../product-profiles';
-import { TenantContext } from '../../../../tenant';
+// The Context OBJECT, from the module that owns the single `createContext`
+// call -- not the tenant facade. A chart renderer needs the identity to read
+// through and nothing else; importing the facade dragged provider validation,
+// root-attribute claiming and the first-party registry into every leaf that
+// only wanted `useContext`.
+import { TenantContext } from '../../../../tenant/foundation/context';
 import { resolveChartPersonality } from '../../../runtime/resolution/chart';
 
 /**

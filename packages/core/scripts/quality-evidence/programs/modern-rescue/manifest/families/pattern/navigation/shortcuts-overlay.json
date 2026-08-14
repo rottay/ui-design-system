@@ -6,17 +6,17 @@
     "category": "navigation",
     "name": "ShortcutsOverlay",
     "components": [
-      "ShortcutsOverlay"
+      "PatternShortcutsOverlay"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
     "sourceOwner": "packages/core/src/ui/patterns/navigation/shortcuts-overlay",
-    "publicComponents": [],
-    "unresolvedPublicComponents": [
-      "ShortcutsOverlay"
+    "publicComponents": [
+      "PatternShortcutsOverlay"
     ],
+    "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "fe09e4ece66afbebc9de879a570838bef3822fb2ee311b684fcfb1c643ea747b"
+    "inventoryRowDigest": "f8dce6c65f99c0a9257886dfc34196c7a56909d9a2cf08d8c8ad0ef4c65a2069"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

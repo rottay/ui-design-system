@@ -19,7 +19,7 @@
  * shadow; identity-card mixes 88/12 with an 8%/48px shadow), so the two roots and
  * their two cards are separate rules — a merged rule would be a silent pixel change.
  *
- * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
+ * SPECIFICITY (P-48): the Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
  * `border-color` on every element. Border paint reaches (0,4,0) through the
  * always-stamped root `data-part` + contract `data-preview` on the roots, and

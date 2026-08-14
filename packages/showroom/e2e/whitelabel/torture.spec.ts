@@ -115,9 +115,15 @@ const PROBES: readonly Probe[] = [
   // surface its product sits on: `palette.darkBackgroundColor` compiled only to
   // --ds-color-dark-bg, which nothing consumes, and the generator's dark block
   // wrote a literal. torture-dark asked for #050307 and the canvas painted
-  // #0a0a0a. The differential runs on torture-dark, so the channel named here is
-  // the dark ground; torture-light's clear ground is `palette.backgroundColor`.
-  { key: 'ground/canvas/background-color', selector: '[data-testid="probe-ground"]', property: 'background-color', themePath: 'palette.darkBackgroundColor', kind: 'color' },
+  // #0a0a0a.
+  //
+  // The path is now `palette.backgroundColor`, not `palette.darkBackgroundColor`:
+  // the `dark*Color` twins were removed from BrandPalette, and torture-dark
+  // declares `appearance.defaultMode: 'dark'` so its plain palette holds the
+  // dark values. The old path resolved to `undefined`, which `atPath` cannot
+  // distinguish from "this channel was not asked for" — so the row silently
+  // stopped checking the derivation it exists to check.
+  { key: 'ground/canvas/background-color', selector: '[data-testid="probe-ground"]', property: 'background-color', themePath: 'palette.backgroundColor', kind: 'color' },
 
   // Select — the gallery's simple select takes the NATIVE <select> path. It
   // reads --ds-select-bg falling back to --ds-surface-control, which derives
@@ -136,7 +142,7 @@ const PROBES: readonly Probe[] = [
   // Badge — probed through the extras block's `content` badge, the only form
   // that reaches Badge's standalone branch and actually paints chrome. It reads
   // the palette directly, and the dark fixture's palette is the dark side.
-  { key: 'badge/primary/background-color', selector: '[data-testid="probe-extras"] .rottay-badge', property: 'background-color', themePath: 'palette.darkPrimaryColor', kind: 'color' },
+  { key: 'badge/primary/background-color', selector: '[data-testid="probe-extras"] .rottay-badge', property: 'background-color', themePath: 'palette.primaryColor', kind: 'color' },
   { key: 'badge/primary/font-family', selector: '[data-testid="probe-extras"] .rottay-badge', property: 'font-family', themePath: 'typography.fontFamilyBase', kind: 'font' },
   { key: 'badge/primary/border-radius', selector: '[data-testid="probe-extras"] .rottay-badge', property: 'border-top-left-radius', themePath: 'surfaces.borderRadius.sm', kind: 'length' },
 

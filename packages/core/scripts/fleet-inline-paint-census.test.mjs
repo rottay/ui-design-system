@@ -523,7 +523,7 @@ test("counter pins the productive recovered residuals", () => {
     ["primitives/layout/Flex/engines/rustic/index.tsx", 0],
     ["primitives/layout/Stack/engines/modern/index.tsx", 0],
     ["primitives/layout/Stack/engines/rustic/index.tsx", 0],
-    ["surfaces/runtime/profile-defaults/personality/index.tsx", 0],
+    ["structures/foundation/chrome/runtime/profile-defaults/personality/index.tsx", 0],
     ["primitives/display/Card/engines/rustic/index.tsx", 1],
   ]);
   for (const [relativePath, expected] of cases) {

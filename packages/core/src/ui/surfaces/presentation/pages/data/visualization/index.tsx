@@ -16,14 +16,14 @@ import { Box, Card, Flex, Grid, Stack, Tabs, Text } from '../../../../../primiti
 import type { GridColumns } from '../../../../../primitives/layout/Grid/contracts';
 import { PatternStatsGrid } from '../../../../../patterns';
 import { filterSurfaceTabbedViews, hasSurfaceError } from '../../../../runtime/helpers';
-import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
+import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
 import type { VisualizationSurfaceConfig } from '../../../../foundation/contracts';
-import { PageShellSurface } from '../../../../composition/layout/page-shell';
-import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
-import { resolveStackSpacing } from '../../../../runtime/profile-defaults/personality';
-import { resolveResponsiveColumnCount, useSurfaceResponsiveLayout } from '../../../../runtime/responsive';
-import { SurfaceActionBar, SurfaceTabbedLabel } from '../../../../runtime/helpers/rendering';
-import { SurfaceEmptyState, SurfaceErrorState } from '../../../../runtime/helpers/states';
+import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
+import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
+import { resolveStackSpacing } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
+import { resolveResponsiveColumnCount, useSurfaceResponsiveLayout } from '../../../../../structures/foundation/chrome/runtime/responsive';
+import { SurfaceActionBar, SurfaceTabbedLabel } from '../../../../../structures/shell/surface-chrome';
+import { SurfaceEmptyState, SurfaceErrorState } from '../../../../../structures/feedback/surface-lifecycle';
 import { FadeIn, StaggerChildren } from '@/graphics/motion';
 
 type SurfaceCardVariant = 'outlined' | 'elevated' | 'filled' | 'ghost';

@@ -17,7 +17,7 @@
  * English fallbacks from `getErrorMessage` — byte-identical behavior until
  * the locale JSONs land (K4-B).
  *
- * Originally lived in app-platform's `_shared/voice-input/` and was
+ * Originally lived in the Rottay app's `_shared/voice-input/` and was
  * relocated to the design system as part of Wave 4.2 of the canonical
  * execution plan (correcting the Wave 1 misclassification — voice
  * input has zero domain semantics, only a browser API dependency).

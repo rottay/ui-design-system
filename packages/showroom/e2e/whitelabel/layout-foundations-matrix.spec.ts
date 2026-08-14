@@ -197,7 +197,6 @@ async function readLayout(page: Page) {
     const dividerStyle = getComputedStyle(divider);
     const headingStyle = getComputedStyle(heading);
     const primaryActionStyle = getComputedStyle(primaryAction);
-    const htmlStyle = getComputedStyle(document.documentElement);
     const spaceSeparators = space.querySelectorAll('[data-part="separator"]');
     const wrappingFlexChildren = Array.from(
       wrappingFlex.children
@@ -283,18 +282,34 @@ async function readLayout(page: Page) {
         primaryActionStyle.height,
         primaryActionStyle.fontFamily,
       ],
-      density: htmlStyle.getPropertyValue("--ds-density-scale").trim(),
-      radiusToken: htmlStyle.getPropertyValue("--ds-radius-lg").trim(),
-      surfaceToken: htmlStyle.getPropertyValue("--ds-surface-card").trim(),
-      primaryToken: htmlStyle.getPropertyValue("--ds-color-primary").trim(),
-      effectIntensity: htmlStyle
+      // Tokens are read on the tenant root rather than on <html>. Custom
+      // properties inherit, so a value declared at the document level is still
+      // observed here, while a compiled artifact scoped to the tenant root --
+      // which is where the DB-owned ground now declares it -- is observed too.
+      // Reading only <html> would report an empty token for a tenant whose CSS
+      // is correct and mounted.
+      density: rootStyle.getPropertyValue("--ds-density-scale").trim(),
+      radiusToken: rootStyle.getPropertyValue("--ds-radius-lg").trim(),
+      surfaceToken: rootStyle.getPropertyValue("--ds-surface-card").trim(),
+      primaryToken: rootStyle.getPropertyValue("--ds-color-primary").trim(),
+      effectIntensity: rootStyle
         .getPropertyValue("--ds-effect-intensity")
         .trim(),
       internalOverflows,
       viewportOverflow:
         document.documentElement.scrollWidth >
         document.documentElement.clientWidth,
-      tenant: document.documentElement.dataset.tenant,
+      // The mount proof for the DB-owned ground: the compiled artifact <style>
+      // the provider verifies during its own render. Exactly one per tenant
+      // scope on the compiled path, and none at all on the bundled one.
+      artifactCount: document.querySelectorAll(
+        '[data-testid="showroom-tenant-artifact"]'
+      ).length,
+      // The tenant scope is whatever element carries the identity attribute at
+      // or above the evidence root, not <html> by assumption.
+      tenant:
+        root.closest<HTMLElement>("[data-tenant]")?.dataset.tenant ??
+        document.documentElement.dataset.tenant,
       documentLang: document.documentElement.lang,
       documentDirection: document.documentElement.dir,
       inlinePrimary:
@@ -445,9 +460,16 @@ for (const viewport of Object.keys(CONTEXTS) as Viewport[]) {
               expect(reading.headerDirection).toBe("row");
               expect(reading.headerAlign).toBe("center");
             }
+            // Authority, stated the way the two grounds actually differ. The
+            // DB-owned tenant is a compiled artifact: exactly one mounted
+            // <style>, and its authored primary reaching the tenant scope. The
+            // bundled vertical is code-owned and carries no visual payload at
+            // all, so it mounts no artifact and emits no runtime layer.
             if (fixture === "themanagementmiami") {
-              expect(reading.inlinePrimary.toLowerCase()).toBe("#0f766e");
+              expect(reading.artifactCount).toBe(1);
+              expect(reading.primaryToken.toLowerCase()).toBe("#0f766e");
             } else {
+              expect(reading.artifactCount).toBe(0);
               expect(reading.inlinePrimary).toBe("");
             }
 
@@ -495,26 +517,31 @@ for (const viewport of Object.keys(CONTEXTS) as Viewport[]) {
   });
 }
 
-test("static to Appearance to static cleans every measured runtime channel", async ({
+test("static to compiled artifact to static leaves no residue in any measured channel", async ({
   page,
 }) => {
   await gotoCell(page, "bithire", "en");
   const initial = await readLayout(page);
+  expect(initial.artifactCount).toBe(0);
   expect(initial.inlinePrimary).toBe("");
   expect(initial.inlineDensity).toBe("");
   expect(initial.inlineEffectIntensity).toBe("");
 
   await switchCell(page, "themanagementmiami", "ar");
   const appearance = await readLayout(page);
-  expect(appearance.inlinePrimary.toLowerCase()).toBe("#0f766e");
-  expect(appearance.inlineDensity).not.toBe("");
-  expect(appearance.inlineEffectIntensity).toBe("0.45");
+  // The customer's authored values arrive through the compiled artifact, so
+  // this leg is proven by the mounted bytes and the tokens they declare -- not
+  // by a provider-emitted inline layer, which a compiled authority forbids.
+  expect(appearance.artifactCount).toBe(1);
+  expect(appearance.primaryToken.toLowerCase()).toBe("#0f766e");
+  expect(Number.parseFloat(appearance.effectIntensity)).toBeCloseTo(0.45, 5);
   await expect(page.getByTestId("layout-foundations-evidence")).toContainText(
     EXPECTED_EMPTY_COPY.themanagementmiami.ar
   );
 
   await switchCell(page, "bithire", "es");
   const restored = await readLayout(page);
+  expect(restored.artifactCount).toBe(0);
   expect(restored.inlinePrimary).toBe("");
   expect(restored.inlineDensity).toBe("");
   expect(restored.inlineEffectIntensity).toBe("");

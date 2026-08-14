@@ -32,9 +32,9 @@ describe('the vertical owns the engine, end to end', () => {
   it.each([
     ['evnto', 'modern'],
     ['bithire', 'modern'],
-    ['platform', 'modern'],
+    ['rottay', 'modern'],
   ] as const)('renders %s with its vertical engine (%s), no forceEngine', async (vertical, expected) => {
-    const tenantConfig = getKnownTenantConfig(vertical === 'platform' ? 'rottay' : vertical);
+    const tenantConfig = getKnownTenantConfig(vertical);
     expect(tenantConfig).toBeDefined();
 
     render(

@@ -4,7 +4,7 @@ import React from 'react';
 import { fireEvent, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { RecordField } from '../content';
+import { RecordField } from '../field';
 import { renderWithEngine } from '../../../../tooling/testing/helpers/engine';
 
 function stubClipboard(): ReturnType<typeof vi.fn> {

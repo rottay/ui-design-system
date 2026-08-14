@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "ed06c5a7fb7dc7e90ff04eef914c94a48a2f6eaff749c1e8ed7995639e2319f3"
+    "registryDigest": "7543b5262d4a58c1f80ed954a7177008f450be9bfb3c0554b7f3993fcacb6fc7"
   },
   "title": "Layout rhythm",
   "valueType": "enum",
@@ -44,18 +44,6 @@
   },
   "calibration": {
     "assessmentState": "UNKNOWN",
-    "representativeFamilyIds": [
-      "primitive/layout/flex",
-      "primitive/layout/grid",
-      "primitive/layout/stack",
-      "primitive/layout/space"
-    ],
-    "mountClassIds": [
-      "ds-flex",
-      "ds-grid",
-      "ds-stack",
-      "ds-space"
-    ],
     "normalizedStops": [
       {
         "id": "tight",
@@ -94,16 +82,111 @@
     "knownDefects": [
       {
         "familyId": "structure/dashboard/dashboard-insights",
-        "finding": "Eight current block-size fallbacks multiply 415px by rhythm and therefore change panel capacity instead of spacing.",
-        "sourceCensusRequired": true
+        "finding": "Eight block-size fallbacks multiplied 415px by rhythm and therefore changed panel capacity instead of spacing.",
+        "sourceCensusRequired": true,
+        "sourceState": "RETIRED_AT_SOURCE_COMPUTED_PROOF_PENDING",
+        "remediation": "The private socket --_ds-dashboard-panel-block-size survives with the byte-exact 415px fallback and reads no rhythm channel."
+      },
+      {
+        "familyId": "GLOBAL_COMPAT_SURFACE",
+        "finding": "appearanceAdvancedToVariables filters raw tokenOverrides on the --ds- prefix and an entry-count cap only, with no name allowlist, so a hand-built TenantAppearanceAdvanced payload can write --ds-rhythm-scale directly and escape the tight/normal/airy vocabulary. Two productive callers reach it unvalidated: infrastructure/runtime/bootstrap/facade/react/provider/index.tsx and infrastructure/compilers/runtime/tenant-css/visual-config/index.ts.",
+        "sourceCensusRequired": false,
+        "sourceState": "OPEN_SCOPED_COMPAT_SURFACE",
+        "boundedBy": "The 0.8-1.25 envelope still holds, because the clamp lives in --ds-rhythm-effective-scale in default.css and not in the compiler. A raw override can pick an arbitrary in-envelope factor; it cannot leave the envelope.",
+        "remediation": "Requires owner adjudication: enforcing the exact allowlist at that site would drop every --ds- name outside the list on the legacy compat path, which is far wider than this control."
+      },
+      {
+        "familyId": "GLOBAL_STATIC_INGRESS",
+        "finding": "The static BrandTheme lowering read the rhythm factor table with a bare bracket index and emitted String(factor) with no own-property guard, no numeric guard and no clamp. BrandTheme is typed but arrives as plain JSON, so the type erases: surfaces.rhythm='toString' emitted a function body and {toString:()=>'tight'} coerced to 0.85, while the DB path rejected both at document validation.",
+        "sourceCensusRequired": false,
+        "sourceState": "RETIRED_AT_SOURCE_COMPUTED_PROOF_PENDING",
+        "remediation": "Own-property, typeof-number and Number.isFinite guards plus a clamp through TENANT_THEME_RHYTHM_SCALE_BOUNDS, mirroring the DB lowering exactly.",
+        "subsequentFinding": "THE MIRROR WAS ASSERTED, NOT MADE. Fixing the static lowering did not fix the DB lowering: appearanceGeneralToVariables in infrastructure/compilers/kernel/runtime/appearance/index.ts still read TENANT_THEME_RHYTHM_FACTORS[general.rhythm] with a bare bracket index. That function is EXPORTED and reachable without validateTenantThemeDocument through the legacy TenantConfig.appearance compat path, so an inherited member name resolved to a function, `factor != null` passed, clampValue coerced it through Math.min/Math.max to NaN, and setVar wrote the literal text NaN into --ds-rhythm-scale -- which makes clamp(0.8, var(--ds-rhythm-scale, 1), 1.25) invalid at computed-value time for every consumer of the effective channel. The existing parity test could not see this: its DB arm consulted validateTenantThemeDocument and returned early, so it compared a COMPILER against a VALIDATOR.",
+        "subsequentRemediation": "The own-property + typeof-number + Number.isFinite guard is now mirrored into appearanceGeneralToVariables, and the parity test gained a COMPILER-versus-COMPILER block that drives compileBrandTheme and appearanceGeneralToVariables on the same valid/absent/hostile matrix with no schema on either side, plus a counterfactual that reproduces the unguarded arithmetic and proves it really did emit 'NaN' while both guarded lowerings refuse the same input.",
+        "subsequentSourceState": "RETIRED_AT_SOURCE_COMPUTED_PROOF_PENDING"
       }
     ],
     "openContractQuestions": [
-      "Prove static and DB invalid-input behavior, not merely equal valid enum output.",
-      "Generalize the existing density five-plane harness instead of creating a second authority harness.",
-      "Add a fail-closed census that rejects every block-size, height, touch-target and icon-size read of the effective rhythm channel."
+      "Confirm which existing harness the causal calibration generalizes. The calibration sourceBindings name packages/showroom/e2e/whitelabel/density-authority-matrix.spec.ts as the existing five-plane harness, while the causal baseline-mutation-removal work extends packages/core/src/tooling/resolution-probe instead. Both are existing instruments, so neither is a second authority harness, but only one may own this control's computed receipts.",
+      "Prove the computed 0.85/1/1.2 gap deltas, monotonicity and exact restore in a browser. Every result so far is authored-source and compiler-output evidence only."
     ],
-    "nextAction": "BUILD_FAIL_CLOSED_CONSUMER_CLASSIFIER_THEN_CALIBRATE_STATIC_DB_COMPUTED_NEGATIVES_AND_EXACT_RESTORE"
+    "dischargedContractQuestions": [
+      {
+        "question": "Prove static and DB invalid-input behavior, not merely equal valid enum output.",
+        "outcome": "Discharged, and discharging it required a source fix: the two paths were NOT equivalent for invalid input at HEAD. See the GLOBAL_STATIC_INGRESS known defect.",
+        "evidence": "packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/spacing-rhythm-static-db-parity.test.ts"
+      },
+      {
+        "question": "Add a fail-closed census that rejects every block-size, height, touch-target and icon-size read of the effective rhythm channel.",
+        "outcome": "Discharged and widened. The census also watches the unclamped --ds-rhythm-scale spelling, classifies physical inline sides as forbidden, and closes over transitive var() carriers so a single rename cannot launder a forbidden read.",
+        "evidence": "packages/core/scripts/spacing-rhythm-contract-gate.mjs plus 28 mutation drills in its sibling test"
+      },
+      {
+        "question": "Adjudicate whether border-radius is inside the declared 'border remains fixed' negative control. Rhythm reaches border-radius in eight declarations through the nested-radius idiom (--ds-card-padding-current to --_ds-card-nest-radius and --_surface-radius-current) in runtime/engines/modern/skin/card.css, presentation/components/semantic-surface.css and presentation/components/skin/card-compounds.css. A nested radius derived from padding arguably must move with padding to stay concentric; the contract arguably says it must not move at all. The gate records these as indirectUnclassified and stays green pending the ruling.",
+        "outcome": "Discharged by owner ruling, then RE-ADJUDICATED when the first encoding was found to license the ruling's own counterexample. spacing.rhythm does not govern visual/outer radius. It may affect ONLY an INTERNAL DESCENDANT radius whose sole purpose is concentric geometry inside a parent with rhythm-scaled padding. It must not affect a component's own/outer border-radius, EVEN WHEN THAT COMPONENT CAN BE NESTED. A direct rhythm radius, a generic carrier and an outer-radius change all fail. The gate no longer records an unblocking indirectUnclassified bucket -- that bucket now fails the gate.",
+        "evidence": "packages/core/scripts/spacing-rhythm-contract-gate.mjs classifies DERIVED_CONCENTRIC_GEOMETRY structurally in SIX clauses and discovers the concentric channel set from the corpus rather than naming it: (a) internal/private channel, (b) radius-semantic, (c) derives-not-scales, (d) demonstrably contained -- the SELECTOR must prove the subject sits inside another element through a descendant or child combinator, so a bare compound leaning on inheritance and a sibling combinator both fail, (e) not the subject's own root -- the subject compound must carry no [data-part='root'] marker and must not repeat an ancestor's class, and (f) publishes for descendants not for self -- a private channel loses the allowance when a border-radius under the SAME selector drinks from it. 49 mutation drills in the sibling test, including inner/outer mutation PAIRS for (d), (e) and (f) and a counterfactual control on the exact fixture whose verdict the ruling flipped.",
+        "mechanizedRuling": {
+          "licensedToday": 3,
+          "concentricChannels": [
+            "--_ds-card-nest-radius"
+          ],
+          "residualOwnerQuestionResolved": "The first encoding read 'internal' as 'privately named' when the ruling means 'inner geometry', and so licensed `.ds-semantic-surface`'s own border-radius through the re-published `--_surface-radius-current` carrier. The owner resolved the flagged question in favour of the stricter reading and directed that the grammar fail direct, outer and generic carriers. Clauses (d), (e) and (f) mechanize that; the source was corrected in the same packet.",
+          "retiredAtSource": [
+            "presentation/components/semantic-surface.css: the `--_surface-radius-current` carrier is deleted and `.ds-semantic-surface` paints the role radius unconditionally (FORBIDDEN_GENERIC_RADIUS_CARRIER + FORBIDDEN_OUTER_RADIUS).",
+            "presentation/components/semantic-surface.css: `.ds-semantic-surface .ds-semantic-surface` subtracts the nest inset from the ROLE radius instead of from a rhythm carrier (FORBIDDEN_OUTER_RADIUS -- a nested instance is still the component's own root).",
+            "presentation/components/skin/card-compounds.css: the `.rottay-card-header` border-radius declaration is removed; its bare compound proved no containment (FORBIDDEN_OUTER_RADIUS).",
+            "runtime/engines/modern/skin/card.css: a nested card root keeps its own resolved corner instead of deriving from the parent body's nest radius (FORBIDDEN_OUTER_RADIUS)."
+          ],
+          "stillLicensed": "Only the Card body's `--_ds-card-nest-radius` producer and the two genuinely inner parts of that rhythm-padded body -- the header zone and the actions zone -- whose selectors prove containment and whose subjects are parts rather than component roots.",
+          "counterfactualUnchanged": "Classic and Rustic are byte-identical: neither engine ever published `--_ds-card-nest-radius`, so every retired site resolved to exactly the value it now states literally. No Classic or Rustic file was edited.",
+          "openForSightedReview": "The retired visual intent -- a panel/well nested in a Card reading as RELATED to the card corner rather than as a second unrelated rounded rectangle -- is now unimplemented. It is recorded here rather than smuggled back through a radius. If the intent is still wanted it needs a mechanism that is not spacing.rhythm, and it needs sighted adjudication."
+        }
+      }
+    ],
+    "redTestClassificationsScopeNote": "Records the red tests THIS calibration lane actually observed while running its focal suites. It is not a repair queue, not a program-wide red-test registry, and not a second WO status -- the validator's own contract refuses that reading. Two facts are recorded because both are load-bearing: (1) five of the six failures the R1 cohort receipt attributed as INHERITED are GREEN when re-run against the current tree, so they must NOT be carried forward as red; (2) four failures in EmbeddedCssRecovery.contract.test.ts ARE red and are disjoint from every path this lane edited. Re-measured on the current working tree, base HEAD 68f258690f39100c91f981735b51bfb47dc16f09. Verified green on re-run and therefore deliberately NOT classified below: Spinner.modern-engine/Spinner tests (75 passed), premium-regression.test.ts, sidebar-group-channels.test.ts.",
+    "redTestClassifications": [
+      {
+        "testRef": "packages/core/src/ui/primitives/tests/EmbeddedCssRecovery.contract.test.ts#pins all six audited stylesheets byte-for-byte",
+        "class": "UNVERIFIED",
+        "allowedAction": "NONE",
+        "authorityRef": "WO-SKIN-06 embedded CSS recovery. That authority pins the AUDITED bytes; it does not certify the bytes the stylesheet carries today, so no authority currently covers the observed value.",
+        "measuredScope": "sha256 of data-table-interactions.css measured 41eeae3e2bcc8a9602d509e1f3f671328bc73... against the pinned 9953c5f5f05eba406f82eb6ffbbcb5298417d.... The file is CLEAN in the working tree, so the divergence was introduced by a committed change, not by this packet.",
+        "sourceSha": "68f258690f39100c91f981735b51bfb47dc16f09",
+        "positiveControl": "The same spec file's other 24 assertions pass in the same run, so the harness loads and hashes stylesheets correctly and the failure is a value divergence rather than a broken instrument.",
+        "notCausedByThisLane": "This lane edited semantic-surface.css, card.css, card-compounds.css and the layout skin. data-table-interactions.css is in none of those sets."
+      },
+      {
+        "testRef": "packages/core/src/ui/primitives/tests/EmbeddedCssRecovery.contract.test.ts#accounts for every classified declaration across the audited and relocated owners",
+        "class": "UNVERIFIED",
+        "allowedAction": "NONE",
+        "authorityRef": "WO-SKIN-06 embedded CSS recovery declaration census. No authority certifies the current per-owner declaration counts.",
+        "measuredScope": "Per-owner declaration tally diverges from the pinned tally (observed { dataTable: 34, ...(5) } against an expected object of the same shape). The exact diverging owner is not yet isolated, which is itself why this is UNVERIFIED rather than AGED.",
+        "sourceSha": "68f258690f39100c91f981735b51bfb47dc16f09",
+        "positiveControl": "The tally is produced for six owners and five of the six shapes still match, so the classifier runs and attributes declarations rather than returning an empty census.",
+        "notCausedByThisLane": "Disjoint from this packet's edit set."
+      },
+      {
+        "testRef": "packages/core/src/ui/primitives/tests/EmbeddedCssRecovery.contract.test.ts#pins every DataTable interaction selector and animation body",
+        "class": "UNVERIFIED",
+        "allowedAction": "NONE",
+        "authorityRef": "WO-SKIN-06 DataTable interaction pin. The authority names the selectors; it does not certify the current declaration set.",
+        "measuredScope": "Observed { outline: 'none', ...(1) } against an expected { outline: 'none', ...(2) } -- one pinned declaration is absent from the current DataTable interaction body.",
+        "sourceSha": "68f258690f39100c91f981735b51bfb47dc16f09",
+        "positiveControl": "`outline: none` still matches, so the selector resolves and the body is parsed; the failure is a missing declaration rather than a missing rule.",
+        "notCausedByThisLane": "Disjoint from this packet's edit set."
+      },
+      {
+        "testRef": "packages/core/src/ui/primitives/tests/EmbeddedCssRecovery.contract.test.ts#pins the independent Input and Select placeholder contracts",
+        "class": "UNVERIFIED",
+        "allowedAction": "NONE",
+        "authorityRef": "WO-SKIN-06 independent placeholder contract for Input and Select. No authority certifies removing the modern Input placeholder rule.",
+        "measuredScope": "Selector `.rottay-input--modern::placeholder` matched ZERO rules where the pin expects exactly 1. A vanished selector is a stronger signal than a changed value and is the reason this row is recorded rather than left to a suite summary.",
+        "sourceSha": "68f258690f39100c91f981735b51bfb47dc16f09",
+        "positiveControl": "The companion Select placeholder arm of the same assertion is evaluated in the same run, so the matcher can find placeholder rules when they exist.",
+        "notCausedByThisLane": "Disjoint from this packet's edit set."
+      }
+    ],
+    "nextAction": "CALIBRATE_COMPUTED_STATIC_DB_DELTAS_NEGATIVES_AND_EXACT_RESTORE_IN_A_BROWSER_THEN_OBTAIN_CODEX_SIGHTED_ACCEPTANCE"
   },
   "retiredAliases": []
 }

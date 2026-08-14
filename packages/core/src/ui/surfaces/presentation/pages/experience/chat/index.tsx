@@ -41,18 +41,18 @@ import {
   type AssistantMessagePart,
 } from '../../../../../patterns';
 import { FadeIn, StaggerChildren } from '@/graphics/motion';
-import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
-import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
-import { useSurfaceResponsiveLayout } from '../../../../runtime/responsive';
+import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
+import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
+import { useSurfaceResponsiveLayout } from '../../../../../structures/foundation/chrome/runtime/responsive';
 import {
   resolveStackSpacing,
   SurfaceAccentBarWrapper,
-} from '../../../../runtime/profile-defaults/personality';
+} from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
 import type { ChatSurfaceConfig, ChatSurfaceMessage } from '../../../../foundation/contracts';
-import { PageShellSurface } from '../../../../composition/layout/page-shell';
-import { SurfaceActionBar, SurfaceSectionCard } from '../../../../runtime/helpers/rendering';
+import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
+import { SurfaceActionBar, SurfaceSectionCard } from '../../../../../structures/shell/surface-chrome';
 import { hasSurfaceError } from '../../../../runtime/helpers';
-import { SurfaceEmptyState, SurfaceErrorState } from '../../../../runtime/helpers/states';
+import { SurfaceEmptyState, SurfaceErrorState } from '../../../../../structures/feedback/surface-lifecycle';
 import { useResponsive } from '@/infrastructure/runtime/responsive';
 
 /** Default transcript renderer used when consumers do not provide a custom message slot. */

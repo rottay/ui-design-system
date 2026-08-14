@@ -33,6 +33,8 @@ export const CI_GATES = Object.freeze([
   // the parent barrel; no other gate in this list can see that edge.
   { id: 'import-binding-integrity-drill', run: ['node', '--test', 'scripts/import-binding-integrity-gate.test.mjs'], blocking: true },
   { id: 'import-binding-integrity', run: ['node', 'scripts/import-binding-integrity-gate.mjs'], blocking: true },
+  { id: 'platform-identity-zero-drill', run: ['node', '--test', 'scripts/platform-identity-zero-gate.test.mjs'], blocking: true },
+  { id: 'platform-identity-zero', run: ['node', 'scripts/platform-identity-zero-gate.mjs'], blocking: true },
   { id: 'cra17:licenses', run: ['pnpm', 'run', 'cra17:licenses'], blocking: true },
   { id: 'effects:provenance', run: ['pnpm', 'run', 'effects:provenance'], blocking: true },
   { id: 'contract:check', run: ['pnpm', 'run', 'contract:check'], blocking: true },
@@ -40,12 +42,75 @@ export const CI_GATES = Object.freeze([
   // WO-CRA-23 quality tooling. These live under `scripts/quality-evidence/v2/`,
   // which the `scripts/*.test.mjs` glob cannot reach -- a non-recursive glob is
   // exactly how a gate ends up looking enforced without ever running.
+  // The drills for the two modern-rescue production gates below
+  // (`modern-rescue-program-contract` and
+  // `modern-rescue-customization-manifest-freshness`). They sit under
+  // `scripts/quality-evidence/programs/modern-rescue/`, which NEITHER glob in
+  // `test:scripts` reaches: `scripts/quality-evidence/v2/*.test.mjs` stops at
+  // the v2 folder and `scripts/*.test.mjs` is non-recursive. So 48 assertions
+  // that read as the safety net for those two gates were never executed by any
+  // command -- the same "enforced but never run" defect this manifest exists to
+  // close, one level down.
+  //
+  // Drill first, exactly as everywhere else in this file: program-check and the
+  // generator both COMPUTE a verdict, and a computation that has silently
+  // stopped detecting anything reports zero findings and looks identical to a
+  // clean tree. Proving the detectors still fail on planted defects is only
+  // evidence if it happens BEFORE the verdicts they vouch for.
+  //
+  // One entry, both files: they are a single drill cohort for a single pair of
+  // gates, and `node --test` takes multiple paths.
+  {
+    id: 'modern-rescue-tooling-drills',
+    run: [
+      'node',
+      '--test',
+      'scripts/quality-evidence/programs/modern-rescue/program-check.test.mjs',
+      'scripts/quality-evidence/programs/modern-rescue/manifest/generator.test.mjs',
+    ],
+    blocking: true,
+  },
   { id: 'modern-rescue-program-contract', run: ['node', 'scripts/quality-evidence/programs/modern-rescue/program-check.mjs'], blocking: true },
   { id: 'quality-evidence-v2-drills', run: ['node', '--test', 'scripts/quality-evidence/v2/drills.test.mjs'], blocking: true },
+  // The `spacing.rhythm` control census the modern-rescue manifest asks for:
+  // rhythm owns the room around a control, never the control's size, capacity,
+  // touch target, icon, type or motion -- and never a physical inline side,
+  // which would break RTL. It ships with NO baseline and NO file list: the
+  // corpus is walked from the authored source root and the offending family is
+  // resolved from `family-inventory.json`, so a NEW off-contract reader is a
+  // failure rather than an unchanged count. Drill first: a classifier that
+  // returned "allowed" for everything would report zero findings and look
+  // exactly like a clean tree.
+  { id: 'spacing-rhythm-contract-drill', run: ['node', '--test', 'scripts/spacing-rhythm-contract-gate.test.mjs'], blocking: true },
+  { id: 'spacing-rhythm-contract', run: ['node', 'scripts/spacing-rhythm-contract-gate.mjs'], blocking: true },
+  // The channel-liveness producer for the modern-rescue evidence-contract
+  // artifact `channel-liveness.json` (execution gate 5: "complete
+  // control/family edges, recipe groups and CHANNEL LIVENESS"). Scoped to
+  // TENANT_THEME_OVERRIDE_TOKENS / TENANT_THEME_REFERENCE_TOKENS / the
+  // brand-theme compiler's own emissions -- NOT a restatement of
+  // customization-surface-census.mjs, tenant-channel-consumer-gate.mjs or
+  // theme-channel-parity-gate.mjs (see the producer's own docblock for the
+  // boundary). A false negative here looks like: the tint-4/tint-16
+  // protected bucket (a channel on the public tenant-reference var()
+  // allowlist) silently collapsing into an unprotected "no known route"
+  // verdict, the word "dead" reappearing in a classification, a NEW
+  // off-contract unread channel shipping without tripping the
+  // self-referential ratchet against the previously written evidence
+  // artifact, or a family-inventory drift (a new component folder landing
+  // before its family row) going unreported because the unknown-family
+  // check stopped firing. Drill first: a classifier that returned a
+  // live/protected verdict for everything would report zero findings and
+  // look exactly like a clean tree.
+  { id: 'channel-liveness-drill', run: ['node', '--test', 'scripts/channel-liveness-gate.test.mjs'], blocking: true },
+  { id: 'channel-liveness', run: ['node', 'scripts/channel-liveness-gate.mjs', '--check'], blocking: true },
 
-  // --- artifact freshness: a stale artifact invalidates every census below ---
-  { id: 'build-vertical-artifacts', run: ['node', 'scripts/build-vertical-artifacts.mjs', '--check'], blocking: true },
-  { id: 'build-vertical-css', run: ['node', 'scripts/build-vertical-css.mjs', '--check'], blocking: true },
+  // --- source-owned artifact freshness: this manifest runs before Build ---
+  // These gates execute the authored TypeScript roster and compile CSS from
+  // source in memory. A dist/-backed check here is invalid on a clean clone and
+  // can also compare committed output against a stale local build.
+  { id: 'first-party-roster-source-drill', run: ['node', '--test', 'scripts/lib/first-party-roster-source.test.mjs'], blocking: true },
+  { id: 'first-party-artifacts-source-staleness', run: ['pnpm', 'exec', 'vitest', 'run', 'src/foundation/tokens/__tests__/first-party-artifacts-generated.test.ts'], blocking: true },
+  { id: 'vertical-css-source-staleness', run: ['node', '--test', 'scripts/vertical-css-staleness.gate.mjs'], blocking: true },
   // Reads the compiled block out of the artifact above, so it runs after the
   // freshness check: on a stale artifact its channel set would be last build's.
   { id: 'artifact-provenance-drill', run: ['node', '--test', 'scripts/artifact-provenance-gate.test.mjs'], blocking: true },
@@ -165,6 +230,68 @@ export const CI_GATES = Object.freeze([
   // carry their own motion debt and own their own rows.
   { id: 'cra12-motion-governance', run: ['node', 'scripts/cra-12-motion-governance.mjs', '--repositories', 'ui-design-system'], blocking: true },
   { id: 'cra12-motion-governance-drill', run: ['node', '--test', 'scripts/cra-12-motion-governance.reanchor.test.mjs'], blocking: true },
+
+  // --- canonical taxonomy parity (WO-CRA-23 source-plumbing item 10) ---
+  //
+  // The gate is blocking. Every condition its exclusion was owed to is closed.
+  //
+  // All four bindings compute on all 255 rows. `public` is the one a wrong
+  // inventory cannot fake: `lib/root-public-resolver.mjs` reads source and
+  // never consults a row about itself, so `sourceResolution` and
+  // `declaredComponentsPublic` are deliberately not read.
+  //
+  // The reverse projection is fail-closed. A public name that does not resolve
+  // to a declaration is reported BY NAME -- `MISSING`, `UNRESOLVED`,
+  // `AMBIGUOUS`, `CYCLE_ONLY`, and any state the resolver grows later, via the
+  // fallback at the call site. `TYPE_ONLY` is the single explicit skip, because
+  // a published type is legal public API that owes no family row. The earlier
+  // `state !== 'VALUE' -> continue` was the opposite: it hid 21 exports whose
+  // terminal file nobody could see, and printed OK.
+  //
+  // Freshness is a PREREQUISITE, not a nicety, and it is listed here rather
+  // than left to the `validateCustomizationManifest()` side effect inside
+  // program-check. Taxonomy reads `manifest/index.json` and the per-family
+  // cells as evidence; against a manifest nobody regenerated it can green on
+  // stale rows. The explicit entry below, and its position ahead of this
+  // chain, are the CI-level contract -- a hidden side effect is not one.
+  {
+    id: 'modern-rescue-customization-manifest-freshness',
+    run: ['node', 'scripts/quality-evidence/programs/modern-rescue/manifest/generator.mjs', '--check'],
+    blocking: true,
+  },
+  // The drill runs on synthetic fixtures and fails if the gate stops detecting
+  // any planted category, wrong component name or wrong group -- which is what
+  // keeps the gate from decaying into a file nobody has run.
+  {
+    id: 'taxonomy-parity-drill',
+    run: ['node', '--test', 'scripts/taxonomy-parity-gate.test.mjs'],
+    blocking: true,
+  },
+  // A nested sourceOwner is not a style question: the inner family's folder sits
+  // inside the outer family's declared territory, so every containment-based
+  // reading -- ownership, reverse attribution, derived lane exclusion -- has two
+  // defensible answers. Its planted negative is the real
+  // connected-command-palette/search-command-bar defect this drill was written
+  // against, so a regression to `return []` fails rather than reporting clean.
+  {
+    id: 'owner-nesting-drill',
+    run: ['node', '--test', 'scripts/lib/owner-nesting.test.mjs'],
+    blocking: true,
+  },
+  // The resolver is the taxonomy gate's only binding an incorrect inventory
+  // cannot fake, which makes its own blind spots the weakest link in the chain.
+  // Both drilled defects were live: alias re-exports invented ambiguity that did
+  // not exist, and `Object.assign` compounds read as plain values.
+  {
+    id: 'root-public-resolver-drill',
+    run: ['node', '--test', 'scripts/lib/root-public-resolver.test.mjs'],
+    blocking: true,
+  },
+  {
+    id: 'taxonomy-parity',
+    run: ['node', 'scripts/taxonomy-parity-gate.mjs'],
+    blocking: true,
+  },
 ]);
 
 /** Gates the runner will actually enforce. */

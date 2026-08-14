@@ -7,7 +7,7 @@
  * "deliberately unlayered" note predates the wiring).
  *
  * TWO SPECIFICITY FLOORS, not one:
- *  - BORDER-COLOR (P-48): the Platform-only Rottay artifact ships an unlayered
+ *  - BORDER-COLOR (P-48): the Rottay artifact ships an unlayered
  *    `html[data-tenant]:not([data-theme]):not(.light) *` border-color rule at
  *    (0,3,1). Every rule below that paints a real border colour reaches (0,4,0)
  *    WITHOUT repeating a class or attribute: the section chain already buys

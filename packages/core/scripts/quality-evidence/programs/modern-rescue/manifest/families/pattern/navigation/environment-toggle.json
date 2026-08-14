@@ -6,17 +6,17 @@
     "category": "navigation",
     "name": "EnvironmentToggle",
     "components": [
-      "EnvironmentToggle"
+      "PatternEnvironmentToggle"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
     "sourceOwner": "packages/core/src/ui/patterns/navigation/environment-toggle",
-    "publicComponents": [],
-    "unresolvedPublicComponents": [
-      "EnvironmentToggle"
+    "publicComponents": [
+      "PatternEnvironmentToggle"
     ],
+    "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "fed74ebc4c0030794d00e7a0e7d8c967aff3c0c9bae347d266559bd287496dc5"
+    "inventoryRowDigest": "299e792297dbf7a6b621945af1dc5a3bad7f2a88e23c909dba8eaba3e6b19cc1"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

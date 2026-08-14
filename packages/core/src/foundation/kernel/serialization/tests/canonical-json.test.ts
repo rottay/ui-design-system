@@ -12,6 +12,7 @@ import { describe, expect, it } from 'vitest';
 import {
   CanonicalJsonError,
   canonicalizeJsonValue,
+  cloneJsonValueExact,
   compareCodeUnits,
   isCanonicalJsonObject,
   normalizeCanonicalJsonValue,
@@ -275,5 +276,98 @@ describe('isCanonicalJsonObject', () => {
     expect(isCanonicalJsonObject(new Tagged())).toBe(false);
     expect(isCanonicalJsonObject(Object.create(Tagged.prototype))).toBe(false);
     expect(isCanonicalJsonObject(inRealm('new (class Foo { })()'))).toBe(false);
+  });
+});
+
+describe('cloneJsonValueExact', () => {
+  it('preserves the bytes canonical form deliberately discards', () => {
+    // The exact loss that made every compiled tenant artifact unverifiable: the
+    // rendered CSS ends in a newline, and canonical form trims string edges.
+    const artifact = { css: ':root {\n  --ds-color-primary: #2F6B9A;\n}\n' };
+
+    expect(JSON.parse(canonicalizeJsonValue(artifact)).css).not.toBe(artifact.css);
+    expect(cloneJsonValueExact(artifact).css).toBe(artifact.css);
+  });
+
+  it('preserves key order rather than sorting it', () => {
+    const source = { b: 1, a: 2 };
+
+    expect(Object.keys(cloneJsonValueExact(source))).toEqual(['b', 'a']);
+    expect(Object.keys(JSON.parse(canonicalizeJsonValue(source)))).toEqual(['a', 'b']);
+  });
+
+  it('clones deeply, sharing no container with the source', () => {
+    const source = { nested: { list: [{ value: 'a' }] } };
+    const clone = cloneJsonValueExact(source);
+
+    expect(clone).toEqual(source);
+    expect(clone).not.toBe(source);
+    expect(clone.nested).not.toBe(source.nested);
+    expect(clone.nested.list).not.toBe(source.nested.list);
+    expect(clone.nested.list[0]).not.toBe(source.nested.list[0]);
+
+    source.nested.list[0].value = 'mutated';
+    expect(clone.nested.list[0].value).toBe('a');
+  });
+
+  it('reads every property exactly once', () => {
+    let reads = 0;
+    const source = {
+      get token() {
+        reads += 1;
+        return reads === 1 ? 'first' : 'second';
+      },
+    };
+
+    expect(cloneJsonValueExact(source).token).toBe('first');
+    expect(reads).toBe(1);
+  });
+
+  it('rejects everything outside the JSON data model, with stable codes', () => {
+    const failure = (value: unknown): string | null => {
+      try {
+        cloneJsonValueExact(value);
+        return null;
+      } catch (error) {
+        return error instanceof CanonicalJsonError ? error.failure : `unexpected:${String(error)}`;
+      }
+    };
+
+    expect(failure(new Date())).toBe('unsupported-value');
+    expect(failure(new Map())).toBe('unsupported-value');
+    expect(failure(undefined)).toBe('unsupported-value');
+    expect(failure({ a: undefined })).toBe('unsupported-property');
+    expect(failure({ a: () => 1 })).toBe('unsupported-property');
+    expect(failure({ a: 1n })).toBe('unsupported-property');
+    expect(failure({ a: Number.NaN })).toBe('non-finite-number');
+
+    const circular: Record<string, unknown> = {};
+    circular.self = circular;
+    expect(failure(circular)).toBe('circular-reference');
+  });
+
+  it('rejects array holes, which ordered comparisons silently skip', () => {
+    const holed = ['a', 'b'];
+    delete holed[0];
+    // `every` skips holes, so a verifier comparing element-by-element would
+    // never see that the first channel is missing.
+    expect(holed.every((value, index) => value === ['a', 'b'][index])).toBe(true);
+
+    expect(() => cloneJsonValueExact(holed)).toThrow(CanonicalJsonError);
+    expect(() => cloneJsonValueExact({ coverage: holed })).toThrow(/\$\.coverage\[0\]/);
+  });
+
+  it('accepts a plain object from another realm, like the canonical path does', () => {
+    const foreign = inRealm<{ a: number }>('({ a: 1 })');
+
+    expect(cloneJsonValueExact(foreign)).toEqual({ a: 1 });
+    expect(cloneJsonValueExact(foreign)).not.toBe(foreign);
+  });
+
+  it('shares a directed acyclic graph without reporting a cycle', () => {
+    const shared = { value: 1 };
+
+    expect(cloneJsonValueExact({ left: shared, right: shared }))
+      .toEqual({ left: { value: 1 }, right: { value: 1 } });
   });
 });

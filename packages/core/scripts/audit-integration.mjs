@@ -329,24 +329,28 @@ for (const tokenFile of componentTokenFiles) {
 }
 
 // ============================================================================
-// Rule 6: Personality variable duplication guard
+// Rule 6: Personality variable canonical-source guard
 // ============================================================================
 // resolvePartialPersonalityCssVariables
 // (foundation/tokens/ts/runtime/personality/index.ts) is
-// the single canonical source of personality-derived CSS variable names.
-// resolvePersonalityCssVariables (the runtime bridge) and personalityVariables
-// (the tenant visual compiler, infrastructure/compilers/runtime/tenant-css/visual-config) both
-// delegate to it rather than each declaring these keys by hand. A literal
-// '--ds-...' key reappearing directly inside the generator's function, or the
-// delegation call disappearing, is the WO-TOK-09 defect regenerating: a third
-// hand-written copy the gate would otherwise not see.
+// the single canonical source of personality-derived CSS variable names. Rule
+// 7 below reads directly from it; this rule only certifies the file exists.
+//
+// This used to also assert that a SECOND emitter -- the personality helper
+// inside the retired TenantConfig-shaped runtime tenant-CSS generator -- kept
+// delegating to the canonical function instead of re-declaring `--ds-...`
+// keys by hand (the WO-TOK-09 defect: a hand-written duplicate emitter). That
+// module was removed outright, not fixed in place, as part of the BrandTheme
+// / TenantThemeDocument compiler consolidation, so
+// resolvePartialPersonalityCssVariables() is now the ONLY personality-variable
+// emitter left in the tree -- there is no second copy left to drift out of
+// sync. If a new hand-written personality emitter appears anywhere, this is
+// the rule to extend with an equivalent delegation check pointed at that file.
 
 const PERSONALITY_CANONICAL_PATH = join(
   SRC_ROOT,
   'foundation/tokens/ts/runtime/personality/index.ts',
 );
-const PERSONALITY_GENERATOR_PATH = join(SRC_ROOT, 'infrastructure/compilers/runtime/tenant-css/visual-config/index.ts');
-const PERSONALITY_DELEGATION_CALL = 'resolvePartialPersonalityCssVariables(';
 
 function extractDsObjectKeysFrom(text) {
   const keys = new Set();
@@ -356,40 +360,12 @@ function extractDsObjectKeysFrom(text) {
   return keys;
 }
 
-const generatorSource = readSafe(PERSONALITY_GENERATOR_PATH);
-const generatorFnStart = generatorSource.indexOf('function personalityVariables(config: TenantConfig)');
-
 if (!readSafe(PERSONALITY_CANONICAL_PATH)) {
   violations.push({
     rule: 'personality-emitter-duplication',
     path: relPath(PERSONALITY_CANONICAL_PATH),
     message: 'resolvePartialPersonalityCssVariables not found. This is the canonical personality-variable emitter every other emitter must delegate to.',
   });
-} else if (generatorFnStart < 0) {
-  violations.push({
-    rule: 'personality-emitter-duplication',
-    path: relPath(PERSONALITY_GENERATOR_PATH),
-    message: 'personalityVariables() not found. The static tenant generator must keep a personality-variable function that delegates to resolvePartialPersonalityCssVariables().',
-  });
-} else {
-  const generatorFnEnd = generatorSource.indexOf('\n}\n', generatorFnStart);
-  const generatorFnBody = generatorSource.slice(generatorFnStart, generatorFnEnd >= 0 ? generatorFnEnd : undefined);
-
-  if (!generatorFnBody.includes(PERSONALITY_DELEGATION_CALL)) {
-    violations.push({
-      rule: 'personality-emitter-duplication',
-      path: relPath(PERSONALITY_GENERATOR_PATH),
-      message: 'personalityVariables() no longer delegates to resolvePartialPersonalityCssVariables(). This is the WO-TOK-09 defect: a hand-written duplicate personality emitter.',
-    });
-  }
-
-  for (const key of extractDsObjectKeysFrom(generatorFnBody)) {
-    violations.push({
-      rule: 'personality-emitter-duplication',
-      path: relPath(PERSONALITY_GENERATOR_PATH),
-      message: `personalityVariables() declares "${key}" directly instead of solely through resolvePartialPersonalityCssVariables(). This re-creates the WO-TOK-09 duplicate-emitter defect.`,
-    });
-  }
 }
 
 // ============================================================================
@@ -419,8 +395,11 @@ if (!readSafe(PERSONALITY_CANONICAL_PATH)) {
 //     of a variable's name there is production -- an object key assigning
 //     it a value, or that value's own string embedding a DIFFERENT
 //     variable's var() reference to build a fallback -- never consumption.
-//     Rule 6 above already owns the one dangerous shape here (a second
-//     hand-written emitter re-declaring the same keys).
+//     Rule 6 above already owns the dangerous shape here (the canonical
+//     emitter file going missing); with the one-time second hand-written
+//     emitter it used to also guard against retired outright (see Rule 6),
+//     a re-declared key inside the canonical file itself has no other file
+//     left that could re-declare the same keys as a competing producer.
 //   - a bare re-declaration of the same key elsewhere, e.g. `'--ds-x': ...`
 //     as an object-literal key, or `--ds-x: ...` as a CSS custom-property
 //     declaration. Under a plain substring search this LOOKS like the name

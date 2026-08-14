@@ -10,11 +10,28 @@
  * removed. Runtime code may only CONSUME the channel through `var(...)`
  * fallback chains.
  *
- * The gate scans authored runtime sources under src/ and fails on any
- * occurrence of the reserved name that is not a `var(` consumption:
- *   - CSS:    `--ds-chart-series-3: <value>` declarations
- *   - TS/TSX: `'--ds-chart-series-3': value` style keys, template-built
- *             assignments such as `vars[`--ds-chart-series-${n}`] = color`
+ * ADJUDICATION MODEL (syntactic, not textual)
+ * -------------------------------------------
+ * The gate never decides from raw text. It parses each candidate file and
+ * reports only nodes that are DEFINITION positions for the reserved name:
+ *
+ *   - CSS  (postcss AST): a declaration whose `prop` IS the reserved name.
+ *           `var(--ds-chart-series-3, …)` appearing in a declaration VALUE is a
+ *           consumption; comments and strings are not declarations at all.
+ *   - TS/TSX (TypeScript AST):
+ *           * `PropertyAssignment` / `PropertyDeclaration` whose name is a
+ *             reserved string literal or a reserved computed key,
+ *           * an assignment whose left-hand side is an element access with a
+ *             reserved argument (`vars[`--ds-chart-series-${n}`] = color`),
+ *           * `…​.setProperty(<reserved>, …)`.
+ *           A bare string literal (metadata, an enum of derived channel names,
+ *           a documentation table), a read, a comparison, a JSDoc block or a
+ *           `var(` template are NOT definitions and stay green.
+ *
+ * `source.includes(RESERVED_NAME)` is used ONLY as a lossless prefilter: every
+ * classifier below requires literal text (or a template head) that starts with
+ * the reserved prefix, so a file without that substring cannot hold a finding.
+ * The prefilter never adjudicates.
  *
  * Excluded from the scan (not authored runtime):
  *   - test files and tests/ folders (fixtures may stub tenant scopes)
@@ -31,11 +48,18 @@ import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import postcss from 'postcss';
+import ts from 'typescript';
+
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, '..');
 const srcDir = join(root, 'src');
 
 export const RESERVED_NAME = '--ds-chart-series-';
+
+/** The reserved channel has exactly ten slots. */
+const FIRST_SLOT = 1;
+const LAST_SLOT = 10;
 
 /** Sanctioned definers of the reserved channel, relative to src/. */
 export const DEFINER_ALLOWLIST = [
@@ -72,45 +96,186 @@ function isAllowlisted(relPath) {
   return DEFINER_ALLOWLIST.includes(posix);
 }
 
-/** Strip block comments and line comments so prose mentions never flag. */
-export function stripComments(source, extension) {
-  let out = source.replace(/\/\*[\s\S]*?\*\//g, (match) =>
-    match.replace(/[^\n]/g, ' '),
-  );
-  if (extension !== '.css') {
-    // Line comments: good enough for this codebase's authored sources; a `//`
-    // inside a string literal (a URL) cannot contain the reserved name in a
-    // definition position anyway — a false NEGATIVE there is impossible
-    // because URLs are not custom-property definitions.
-    out = out.replace(/(^|[^:])\/\/[^\n]*/gm, (match, lead) =>
-      `${lead}${' '.repeat(match.length - lead.length)}`,
-    );
+/* ------------------------------------------------------------------ */
+/* Name classification                                                 */
+/* ------------------------------------------------------------------ */
+
+/**
+ * True when `text` is a complete, canonical reserved slot name:
+ * the reserved prefix followed by a canonical decimal integer in 1..10.
+ *
+ * Canonical means `String(slot) === suffix`, which rejects `01`, `1.0`,
+ * `+1`, `1e1`, ` 1` and the empty suffix without pattern matching.
+ */
+export function isStaticReservedName(text) {
+  if (typeof text !== 'string') return false;
+  if (!text.startsWith(RESERVED_NAME)) return false;
+  const suffix = text.slice(RESERVED_NAME.length);
+  const slot = Number(suffix);
+  if (!Number.isInteger(slot)) return false;
+  if (slot < FIRST_SLOT || slot > LAST_SLOT) return false;
+  return String(slot) === suffix;
+}
+
+/** Peel parentheses/assertions so `(x as string)` classifies like `x`. */
+function unwrapExpression(node) {
+  let current = node;
+  while (current) {
+    if (
+      ts.isParenthesizedExpression(current) ||
+      ts.isAsExpression(current) ||
+      ts.isNonNullExpression(current) ||
+      ts.isTypeAssertionExpression(current) ||
+      ts.isSatisfiesExpression(current)
+    ) {
+      current = current.expression;
+      continue;
+    }
+    return current;
   }
-  return out;
+  return current;
 }
 
 /**
- * Find reserved-name occurrences that are not `var(` consumptions.
- * Returns [{ line, column, excerpt }].
+ * True when the expression names the reserved channel as a KEY:
+ *   - a static string / no-substitution template whose text is a reserved slot
+ *   - a template whose HEAD is exactly the reserved prefix, i.e. the slot is
+ *     interpolated (`` `--ds-chart-series-${n}` ``)
+ *
+ * A template such as `` `var(--ds-chart-series-${n}, …)` `` has head text
+ * `var(--ds-chart-series-` and is therefore a consumption, not a key.
+ */
+export function isReservedKeyExpression(node) {
+  const expression = unwrapExpression(node);
+  if (!expression) return false;
+  if (ts.isStringLiteralLike(expression)) {
+    return isStaticReservedName(expression.text);
+  }
+  if (ts.isTemplateExpression(expression)) {
+    return expression.head.text === RESERVED_NAME;
+  }
+  return false;
+}
+
+/** True when a property NAME node names the reserved channel. */
+function isReservedPropertyName(name) {
+  if (!name) return false;
+  if (ts.isComputedPropertyName(name)) {
+    return isReservedKeyExpression(name.expression);
+  }
+  if (ts.isStringLiteralLike(name)) {
+    return isStaticReservedName(name.text);
+  }
+  return false;
+}
+
+/** True for `<anything>.setProperty(...)`. */
+function isSetPropertyCall(node) {
+  const callee = unwrapExpression(node.expression);
+  if (!callee) return false;
+  if (ts.isPropertyAccessExpression(callee)) {
+    return callee.name.text === 'setProperty';
+  }
+  if (ts.isElementAccessExpression(callee)) {
+    const argument = unwrapExpression(callee.argumentExpression);
+    return Boolean(
+      argument && ts.isStringLiteralLike(argument) && argument.text === 'setProperty',
+    );
+  }
+  return false;
+}
+
+/* ------------------------------------------------------------------ */
+/* Positions                                                           */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Build a finding from a character offset in `source`.
+ * `line` and `column` are 1-based; `excerpt` is the trimmed source line.
+ */
+export function findingAtOffset(source, offset) {
+  const safeOffset = Math.max(0, Math.min(offset, source.length));
+  const lineStart = safeOffset === 0 ? 0 : source.lastIndexOf('\n', safeOffset - 1) + 1;
+  const lineEnd = source.indexOf('\n', safeOffset);
+  let line = 1;
+  for (let index = 0; index < lineStart; index += 1) {
+    if (source[index] === '\n') line += 1;
+  }
+  return {
+    line,
+    column: safeOffset - lineStart + 1,
+    excerpt: source.slice(lineStart, lineEnd === -1 ? undefined : lineEnd).trim(),
+  };
+}
+
+/* ------------------------------------------------------------------ */
+/* Per-language scanners                                               */
+/* ------------------------------------------------------------------ */
+
+function findCssViolations(source) {
+  const offsets = [];
+  const rootNode = postcss.parse(source, { from: undefined });
+  rootNode.walkDecls((decl) => {
+    if (!isStaticReservedName(decl.prop)) return;
+    const start = decl.source?.start;
+    if (!start) return;
+    offsets.push(start.offset);
+  });
+  return offsets;
+}
+
+function scriptKindFor(extension) {
+  return extension === '.tsx' ? ts.ScriptKind.TSX : ts.ScriptKind.TS;
+}
+
+function findTypeScriptViolations(source, extension) {
+  const sourceFile = ts.createSourceFile(
+    `chart-series-gate${extension}`,
+    source,
+    ts.ScriptTarget.Latest,
+    /* setParentNodes */ true,
+    scriptKindFor(extension),
+  );
+
+  const offsets = new Set();
+  const report = (node) => {
+    offsets.add(node.getStart(sourceFile));
+  };
+
+  const visit = (node) => {
+    if (ts.isPropertyAssignment(node) || ts.isPropertyDeclaration(node)) {
+      if (isReservedPropertyName(node.name)) report(node.name);
+    } else if (ts.isBinaryExpression(node) && ts.isAssignmentExpression(node)) {
+      const left = unwrapExpression(node.left);
+      if (left && ts.isElementAccessExpression(left)) {
+        if (isReservedKeyExpression(left.argumentExpression)) {
+          report(left.argumentExpression);
+        }
+      }
+    } else if (ts.isCallExpression(node) && isSetPropertyCall(node)) {
+      const first = node.arguments[0];
+      if (first && isReservedKeyExpression(first)) report(first);
+    }
+    ts.forEachChild(node, visit);
+  };
+
+  ts.forEachChild(sourceFile, visit);
+  return [...offsets];
+}
+
+/**
+ * Find DEFINITIONS of the reserved name in `source`.
+ * Returns [{ line, column, excerpt }] sorted by position.
  */
 export function findViolations(source, extension) {
-  const stripped = stripComments(source, extension);
-  const violations = [];
-  const pattern = /--ds-chart-series-(?:\d+|\$\{)/g;
-  for (const match of stripped.matchAll(pattern)) {
-    const index = match.index ?? 0;
-    const before = stripped.slice(Math.max(0, index - 4), index);
-    if (before === 'var(') continue;
-    const lineStart = stripped.lastIndexOf('\n', index - 1) + 1;
-    const lineEnd = stripped.indexOf('\n', index);
-    const line = stripped.slice(0, index).split('\n').length;
-    violations.push({
-      line,
-      column: index - lineStart + 1,
-      excerpt: stripped.slice(lineStart, lineEnd === -1 ? undefined : lineEnd).trim(),
-    });
-  }
-  return violations;
+  const offsets =
+    extension === '.css'
+      ? findCssViolations(source)
+      : findTypeScriptViolations(source, extension);
+  return offsets
+    .slice()
+    .sort((a, b) => a - b)
+    .map((offset) => findingAtOffset(source, offset));
 }
 
 function* walk(dir) {
@@ -137,8 +302,17 @@ export function runGate() {
     if (isExcluded(relPath)) continue;
     scanned += 1;
     const source = readFileSync(file, 'utf8');
+    // Lossless prefilter only: every classifier requires the literal prefix.
     if (!source.includes(RESERVED_NAME)) continue;
-    const violations = findViolations(source, extension);
+    let violations;
+    try {
+      violations = findViolations(source, extension);
+    } catch (error) {
+      throw new Error(
+        `chart-series-reserved-name-gate: failed to parse ${relPath.split(sep).join('/')}: ${error.message}`,
+        { cause: error },
+      );
+    }
     if (violations.length === 0) continue;
     if (isAllowlisted(relPath)) {
       allowlistedHits += violations.length;

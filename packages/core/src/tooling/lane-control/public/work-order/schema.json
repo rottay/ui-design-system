@@ -9,7 +9,7 @@
     "id",
     "wave",
     "batch",
-    "row",
+    "laneRole",
     "model",
     "writeSet",
     "writeExcludes",
@@ -38,9 +38,22 @@
       "type": "string",
       "description": "The parallel batch this lane runs in. Every work order sharing a batch string must pass write-set-intersection together — that is what the batch NAME is for."
     },
+    "laneRole": {
+      "enum": ["family", "domain", "integrator"],
+      "description": "What KIND of lane this is, from the same closed set the lane plan uses. REQUIRED, and required precisely because this is the delegable unit: a plan may infer a role from the row it names, but a work order is handed to an agent that will not be present for the inference, so no role here is silent. `family` — bounded by an inventory row, which is the family's exact sourceOwner subtree. `domain` — bounded by a synthetic row over a region no family owns. `integrator` — the only role permitted to declare its own writeRoot, and only inside a declared shared region. The role is what stops a work order from pointing an undeclared root at a family's subtree and inheriting none of that family's exclusions. It also decides which of the three fields below are mandatory: family and domain REQUIRE row and forbid writeRoot; integrator REQUIRES writeRoot and a non-empty claimsSharedFiles, and forbids row."
+    },
     "row": {
       "type": "string",
-      "description": "The ledger row that bounds this lane: a family id from family-ledger.json, or a synthetic id from synthetic-rows.json. The bound is what makes writeSet checkable; a work order without one is a promise."
+      "description": "The ownership row that bounds this lane: a family id from family-inventory.json, whose bound is that family's exact sourceOwner subtree, or a synthetic id from synthetic-rows.json. The bound is what makes writeSet checkable; a work order without one is a promise. Mandatory for a family or domain lane and forbidden for an integrator — the validator enforces that, because the rule depends on laneRole and a shape check cannot see the role."
+    },
+    "writeRoot": {
+      "type": "string",
+      "description": "An explicitly declared bound, permitted ONLY for an integrator lane and only inside a declared shared region. Every other lane inherits its bound from its row. A declared root is how the catalog gets bypassed, so it is a role-gated field rather than a convenience."
+    },
+    "claimsSharedFiles": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Files in an architecturally shared region this lane is claiming for the duration of the batch. Claiming is mandatory, not optional: a lane that covers such a file WITHOUT naming it here is refused for silence, and an integrator lane that claims NOTHING is refused for existing — holding a shared region is the entire reason that role may declare its own root. Two lanes claiming the same file — or holding the same shared DOMAIN, even on different files — is refused across the batch by write-set-intersection, which is the only checker that can see the siblings."
     },
     "model": {
       "type": "object",

@@ -254,7 +254,7 @@
   /* ─────────────────────────────────────────────────────────────────────────────
      1.11 MATERIAL ROLES - canonical cross-engine defaults
 
-     These are platform fallbacks, not tenant identity. BrandTheme and compiled
+     These are system fallbacks, not tenant identity. BrandTheme and compiled
      Appearance override the same canonical `--ds-*` roles later in the cascade;
      Modern, Classic and Rustic only consume them. Keeping the material grammar
      here prevents an engine adapter from becoming a second theming system.

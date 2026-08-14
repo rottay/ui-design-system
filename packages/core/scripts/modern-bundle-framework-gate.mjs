@@ -71,7 +71,6 @@ export const DERIVED_FROM_DAISY_VERSION = '5.5.19';
  */
 const REQUIRED_BUNDLES = [
   'styles/modern.css',
-  'styles/platform.css',
   'styles/rottay.css',
   'styles/bithire.css',
   'styles/evnto.css',
@@ -86,7 +85,7 @@ const REQUIRED_BUNDLES = [
  */
 const OPTIONAL_BUNDLES = [
   'dist/modern-engine.css',
-  'dist/platform.css',
+  'dist/rottay.css',
   'dist/bithire.css',
   'dist/evnto.css',
   'dist/styles.css',

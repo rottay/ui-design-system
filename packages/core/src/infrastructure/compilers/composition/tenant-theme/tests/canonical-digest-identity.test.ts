@@ -124,9 +124,34 @@ describe("digest identity across the canonicalization extraction", () => {
     expect(TENANT_THEME_COMPILER_VERSION).toBe(PINNED.compilerVersion);
   });
 
-  it("keeps both schema drift sentinels byte-identical", () => {
-    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(PINNED.documentSchemaDigest);
-    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(PINNED.configSchemaDigest);
+  it("moves both schema drift sentinels exactly once, for the declared narrowing", () => {
+    // `TENANT_THEME_OVERRIDE_TOKENS` stopped publishing the four
+    // `--ds-color-dark-primary|-secondary|-accent|-bg` rows: no compiler emits
+    // that family and no stylesheet reads it, so the allowlist was granting a
+    // tenant a knob wired to nothing. The re-anchor and its full rationale are
+    // recorded at the primary sentinel site in `tenant-theme-compiler.test.ts`;
+    // this file's job is to prove the move happened HERE too and is the
+    // declared one, not a silent second drift.
+    //
+    // The pre-change values stay pinned and stay asserted. This suite's other
+    // pins -- the null-override and W4-absent artifact digests, and the
+    // compiler version -- are untouched, which is what confines the narrowing
+    // to the schema surface.
+    const POST_DARK_TOKEN_NARROWING_DOCUMENT_DIGEST =
+      "sha256-4beabac2c0147b671abf92236230584950c5ba900d4f8750e3d036e84e088ce2";
+    const POST_DARK_TOKEN_NARROWING_CONFIG_DIGEST =
+      "sha256-2c4c6e60732ca8fee64938eb1e4959508408b22391f60c9d373f1c138bd10c53";
+
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).not.toBe(
+      PINNED.documentSchemaDigest
+    );
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).not.toBe(PINNED.configSchemaDigest);
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
+      POST_DARK_TOKEN_NARROWING_DOCUMENT_DIGEST
+    );
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
+      POST_DARK_TOKEN_NARROWING_CONFIG_DIGEST
+    );
   });
 
   it("keeps the null-override artifact digest byte-identical", () => {
@@ -139,14 +164,45 @@ describe("digest identity across the canonicalization extraction", () => {
     );
   });
 
-  it("keeps the populated simple artifact digest byte-identical", () => {
+  it("moves the populated simple artifact digest exactly once, for the declared reason", () => {
+    // THE ONE SANCTIONED MOVE. A document that authors a primary seed now also
+    // receives the shared interaction floor -- `--ds-color-primary-foreground`,
+    // `--ds-color-border-focus`, `--ds-color-link`, `--ds-color-link-hover`,
+    // derived by `color-math/interaction-floor`, the same function the static
+    // BrandTheme path uses. Four more variables in the emission is four more
+    // bytes under the hash, so this digest legitimately changed.
+    //
+    // The pre-change value stays pinned and stays asserted: proving the digest
+    // is no longer the old one is what makes this a DECLARED move rather than
+    // a refreshed baseline. The `null-override` and `W4-absent` documents
+    // author no primary seed, receive no floor, and are still asserted
+    // byte-identical above and below -- so the move is confined to exactly the
+    // documents the new derivation reaches.
+    //
+    // OPERATIONAL NOTE: a digest move invalidates artifacts already persisted
+    // against a tenant row. Every such row must be recompiled.
+    const POST_INTERACTION_FLOOR_DIGEST =
+      "sha256-04c7dac06febfd205c12545ccb7a67144cdbfcff283479d168e8ee887d017985";
+
     const artifact = compileTenantThemeConfig(
       hydrateTenantThemeConfig(POPULATED_SIMPLE_DOCUMENT, { ...IDENTITY })
     );
-    expect(artifact.digest).toBe(PINNED.populatedSimpleDigest);
+    expect(artifact.digest).not.toBe(PINNED.populatedSimpleDigest);
+    expect(artifact.digest).toBe(POST_INTERACTION_FLOOR_DIGEST);
+    // The envelope digest is untouched by an emission change, so it is still
+    // held to the pre-change value.
     expect(artifact.verticalEnvelopeDigest).toBe(
       PINNED.populatedSimpleEnvelopeDigest
     );
+    // The four channels that moved it, named rather than implied.
+    for (const channel of [
+      "--ds-color-primary-foreground",
+      "--ds-color-border-focus",
+      "--ds-color-link",
+      "--ds-color-link-hover",
+    ]) {
+      expect(artifact.variables[channel], channel).toBeDefined();
+    }
   });
 
   it("keeps the W4-absent advanced artifact digest byte-identical", () => {
@@ -189,7 +245,15 @@ describe("digest identity across the canonicalization extraction", () => {
       hydrateTenantThemeConfig(reordered, { ...IDENTITY })
     );
 
-    expect(artifact.digest).toBe(PINNED.populatedSimpleDigest);
+    // Compared against the SAME document compiled in its declared key order,
+    // not against a pinned literal. Key-order independence is a property of
+    // the two compilations relative to each other; pinning it to a captured
+    // hash made it break every time the emission legitimately changed, which
+    // is a different fact wearing this test's name.
+    const declaredOrder = compileTenantThemeConfig(
+      hydrateTenantThemeConfig(POPULATED_SIMPLE_DOCUMENT, { ...IDENTITY })
+    );
+    expect(artifact.digest).toBe(declaredOrder.digest);
   });
 
   it("still publishes canonicalizeTenantThemeValue as a working alias", () => {

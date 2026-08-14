@@ -243,10 +243,6 @@ describe('animation hooks', () => {
           features: [],
           branding: {
             companyName: 'Motion Test',
-            primaryColor: '#0a66c2',
-            darkPrimaryColor: '#60a5fa',
-            accentColor: '#0f766e',
-            darkAccentColor: '#5eead4',
           },
         }}
         productProfile="events.organizer"

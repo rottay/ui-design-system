@@ -39,18 +39,36 @@ const FORBIDDEN_PREFIXES = ['premium-', 'workspace-'];
 const SURFACE_PREFIX_OUTSIDE_SURFACES = 'surface-';
 const SHIM_MAX_LINES = 5;
 
-// Known exceptions — families that still carry a forbidden prefix but
-// were intentionally left as-is in the audit's Checkpoint D rename wave.
-// Each entry: `category/folder-name`. Add a comment explaining why.
-const ALLOWED_EXCEPTIONS = new Set([
+// Exact-path exceptions to Rule 1 (forbidden prefixes) ONLY. This set never
+// governs Rule 2 (repeated parent-child) — see ALLOWED_REPEATED_PARENT.
+//
+// Membership is tested with exact `Set.has(qualifiedPath)`: no wildcard, no
+// prefix match, no whole-category escape hatch. A listed owner is exempted for
+// itself alone — the walk still recurses into it, so a forbidden-prefix child
+// under an allowed owner stays red.
+//
+// Each entry is the full `category/.../folder-name` path plus a reason.
+const ALLOWED_FORBIDDEN_PREFIX_PATHS = new Set([
   // workspace-switcher was not in the audit's D rename target list.
   // Now lives inside patterns/navigation/ after the TR-E regroup.
   'patterns/navigation/workspace-switcher',
+  // The one lifecycle-state family (CLAUDE.md Wave 5): `SurfaceLoadingSkeleton`,
+  // `SurfaceEmptyState`, `SurfaceErrorState`, `SurfaceStaleBanner`,
+  // `SurfaceOfflineBanner`, `SurfaceErrorBoundary`. "surface-" names the surface
+  // whose lifecycle it renders, not a misplaced surfaces/ owner.
+  'structures/feedback/surface-lifecycle',
+  // Page chrome accompanying a surface; classified structure/shell per the
+  // canonical family taxonomy, so it cannot move under surfaces/.
+  'structures/shell/surface-chrome',
+  // The workspace layout shell — structure/shell/*, named for the workspace
+  // page-structure role it fills.
+  'structures/shell/workspace-shell',
 ]);
 
-// Known exceptions for the repeated-parent-child rule.
-// These were created by taxonomy grouping. Codex should decide whether
-// to rename them before they can be removed from here.
+// Exact-path exceptions to Rule 2 (repeated parent-child) ONLY. Disjoint from
+// ALLOWED_FORBIDDEN_PREFIX_PATHS; also exact `Set.has`, no prefix matching.
+// The `structures/record/record-*` owners are deliberately NOT listed: they are
+// live debt and must stay red until they are renamed.
 const ALLOWED_REPEATED_PARENT = new Set([
   // `data-table` is a concrete control name, not a duplicated owner such as
   // `dashboard/dashboard-insights` or `record/record`.
@@ -81,7 +99,7 @@ function checkForbiddenPrefixes(dir, relPath, relativeRoot, category) {
 
   for (const d of dirs) {
     const qualifiedPath = relPath ? `${relPath}/${d.name}` : `${relativeRoot}/${d.name}`;
-    if (ALLOWED_EXCEPTIONS.has(qualifiedPath)) {
+    if (ALLOWED_FORBIDDEN_PREFIX_PATHS.has(qualifiedPath)) {
       // Still recurse into allowed exceptions — the exception covers
       // the folder itself, not its children.
       checkForbiddenPrefixes(join(dir, d.name), qualifiedPath, relativeRoot, category);

@@ -64,8 +64,11 @@ export { Anchor } from './Anchor';
 export type { AnchorProps, AnchorLinkProps } from './Anchor';
 export { ANCHOR_DEFAULTS } from './Anchor';
 
-// Link (exported as NavLink to avoid conflict with Typography.Link)
-export { Link as NavLink } from './Link';
+// NavLink is the canonical navigation-primitive name. Typography.Link is a
+// separate compound owned by the Typography primitive; this module declares
+// `NavLink` directly (no rename-on-export alias) so nothing here ever
+// competes with or blurs into that name.
+export { NavLink } from './Link';
 export type { LinkProps as NavLinkProps, LinkType as NavLinkType } from './Link';
 export { LINK_DEFAULTS as NAV_LINK_DEFAULTS, LINK_TYPE_COLORS as NAV_LINK_TYPE_COLORS } from './Link';
 

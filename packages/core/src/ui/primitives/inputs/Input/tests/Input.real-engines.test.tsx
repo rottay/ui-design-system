@@ -18,7 +18,7 @@ import { renderWithEngine } from "../../../../../tooling/testing/helpers/engine"
 import { I18nProvider } from "@/infrastructure/runtime/i18n";
 import { compileBrandTheme } from "@/infrastructure/compilers/kernel/runtime/brand-theme";
 import { bithireBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes";
-import { themanagementmiamiBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes/fixtures/themanagementmiami";
+import { themanagementmiamiBrandTheme } from "@/tooling/testing/fixtures/brand-themes/themanagementmiami";
 
 describe("Input real engine coverage", () => {
   // WO-CNF-01: `type="hidden"` renders a bare, form-participating input with no

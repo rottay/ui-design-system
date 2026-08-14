@@ -42,19 +42,39 @@
         "visual.profileOverrides"
       ],
       "disposition": "active",
-      "runtimeStatus": "declared-33-applied-11",
+      "runtimeStatus": "declared-32-applied-31",
       "affirmativeBehaviorClaimAllowed": true,
       "productionConsumers": [
-        "src/ui/surfaces/composition/layout/page-shell/header/index.tsx",
+        "src/ui/structures/headers/header-surface/index.tsx",
+        "src/ui/surfaces/presentation/pages/admin/audit/index.tsx",
+        "src/ui/surfaces/presentation/pages/admin/billing/index.tsx",
+        "src/ui/surfaces/presentation/pages/admin/file-browser/index.tsx",
+        "src/ui/surfaces/presentation/pages/admin/import-export/index.tsx",
+        "src/ui/surfaces/presentation/pages/admin/integration/index.tsx",
+        "src/ui/surfaces/presentation/pages/admin/profile/index.tsx",
         "src/ui/surfaces/presentation/pages/admin/settings/index.tsx",
+        "src/ui/surfaces/presentation/pages/admin/team/index.tsx",
         "src/ui/surfaces/presentation/pages/data/compare/index.tsx",
         "src/ui/surfaces/presentation/pages/data/dashboard/index.tsx",
         "src/ui/surfaces/presentation/pages/data/detail/index.tsx",
         "src/ui/surfaces/presentation/pages/data/list/index.tsx",
+        "src/ui/surfaces/presentation/pages/data/report/index.tsx",
+        "src/ui/surfaces/presentation/pages/data/search/index.tsx",
         "src/ui/surfaces/presentation/pages/data/visualization/index.tsx",
+        "src/ui/surfaces/presentation/pages/experience/auth/index.tsx",
         "src/ui/surfaces/presentation/pages/experience/chat/index.tsx",
+        "src/ui/surfaces/presentation/pages/experience/editor/index.tsx",
+        "src/ui/surfaces/presentation/pages/experience/empty-state/index.tsx",
+        "src/ui/surfaces/presentation/pages/experience/marketing/index.tsx",
+        "src/ui/surfaces/presentation/pages/experience/media/index.tsx",
+        "src/ui/surfaces/presentation/pages/experience/notification/index.tsx",
+        "src/ui/surfaces/presentation/pages/experience/pricing/index.tsx",
+        "src/ui/surfaces/presentation/pages/forms/detail-form/index.tsx",
         "src/ui/surfaces/presentation/pages/forms/form/index.tsx",
         "src/ui/surfaces/presentation/pages/forms/wizard/index.tsx",
+        "src/ui/surfaces/presentation/pages/operations/activity/index.tsx",
+        "src/ui/surfaces/presentation/pages/operations/kanban/index.tsx",
+        "src/ui/surfaces/presentation/pages/operations/operational/index.tsx",
         "src/ui/surfaces/presentation/pages/operations/scheduler/index.tsx"
       ],
       "executableAssertions": [
@@ -65,19 +85,48 @@
         "sourceId": "DS-IMP-022",
         "owner": "design-system-program",
         "targetPhase": "2A",
-        "decision": "maintain exact declaration-to-consumer parity with executable evidence"
+        "decision": "maintain the exact declaration and applied-consumer census with executable evidence; close or retire the declared-not-applied gap"
       },
       "definitionFiles": [
+        "src/ui/structures/foundation/chrome/contracts/index.ts",
+        "src/ui/structures/foundation/chrome/runtime/profile-defaults/overrides/index.ts",
         "src/ui/surfaces/foundation/contracts/index.ts",
-        "src/ui/surfaces/runtime/profile-defaults/overrides/index.ts",
-        "src/ui/surfaces/runtime/profile-defaults/attributes/index.ts",
         "src/ui/surfaces/index.ts"
       ],
+      "authority": {
+        "declarationOwners": {
+          "src/ui/structures/foundation/chrome/contracts/index.ts": 2,
+          "src/ui/surfaces/foundation/contracts/index.ts": 30
+        },
+        "pinnedEnclosingTypes": [
+          {
+            "enclosingType": "SidebarSurfaceVisualConfig",
+            "path": "src/ui/structures/foundation/chrome/contracts/index.ts",
+            "declarations": 1
+          },
+          {
+            "enclosingType": "HeaderSurfaceVisualConfig",
+            "path": "src/ui/structures/foundation/chrome/contracts/index.ts",
+            "declarations": 1
+          }
+        ],
+        "absentEnclosingTypes": [
+          "HeaderSurfacePresentationConfig"
+        ],
+        "declaredNotApplied": [
+          {
+            "enclosingType": "SidebarSurfaceVisualConfig",
+            "path": "src/ui/structures/foundation/chrome/contracts/index.ts",
+            "wireOrRemove": "OPEN"
+          }
+        ]
+      },
       "requiredAssertions": {
-        "profileOverrideDeclarations": 33,
-        "staticallyResolvedSurfaceHookCalls": 11,
+        "profileOverrideDeclarations": 32,
+        "staticallyResolvedSurfaceHookCalls": 31,
+        "staticallyResolvedSurfaceProfileApplications": 31,
         "staticallyResolvedShowroomProfileOverrideReferences": 0,
-        "staticallyResolvedPotentialConsumers": 12,
+        "staticallyResolvedPotentialConsumers": 31,
         "unsupportedGovernedReferences": 0,
         "registeredExecutableEvidence": 2
       }

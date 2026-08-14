@@ -35,8 +35,8 @@ import { hasSurfaceError } from '../../../../runtime/helpers';
 import {
   SurfaceEmptyState,
   SurfaceErrorState,
-} from '../../../../runtime/helpers/states';
-import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
+} from '../../../../../structures/feedback/surface-lifecycle';
+import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
 
 // ---------------------------------------------------------------------------
 // Types

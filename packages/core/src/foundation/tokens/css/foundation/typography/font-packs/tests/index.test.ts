@@ -10,6 +10,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
+import { FIRST_PARTY_VERTICAL_ROSTER } from "@/foundation/tokens/ts/presentation/brand-themes";
 import {
   FONT_PACK_MANIFEST,
   FONT_PACK_IDS,
@@ -106,23 +107,18 @@ describe("first-party vertical font ownership", () => {
   const readBundle = (name: string): string =>
     readFileSync(resolve(coreRoot, "styles", name), "utf8");
 
-  it("ships the BitHire-authored font packs inside the BitHire vertical bundle", () => {
-    const css = readBundle("bithire.css");
-
-    expect(css).toContain("font-family: 'Public Sans'");
-    expect(css).toContain("font-family: 'Space Grotesk'");
-    expect(css).toContain("font-family: 'IBM Plex Mono'");
-    expect(css).toContain("url('./fonts/public-sans-latin-variable.woff2')");
-    expect(css).toContain("url('./fonts/space-grotesk-latin-variable.woff2')");
-    expect(css).toContain("url('./fonts/ibm-plex-mono-latin-400.woff2')");
-  });
-
-  it("does not contaminate other vertical bundles with BitHire font ownership", () => {
-    for (const name of ["platform.css", "evnto.css"]) {
-      const css = readBundle(name);
-      expect(css, name).not.toContain("font-family: 'Public Sans'");
-      expect(css, name).not.toContain("font-family: 'Space Grotesk'");
-      expect(css, name).not.toContain("font-family: 'IBM Plex Mono'");
+  it("projects each roster row's exact font-pack ownership into its bundle", () => {
+    for (const row of FIRST_PARTY_VERTICAL_ROSTER) {
+      const css = readBundle(row.bundleFile);
+      for (const id of FONT_PACK_IDS) {
+        const expected = row.fontPacks.includes(id);
+        for (const face of FONT_PACK_MANIFEST[id].files) {
+          expect(
+            css.includes(`url('./fonts/${face.path.slice(2)}')`),
+            `${row.slug} ${id} ${face.path}`,
+          ).toBe(expected);
+        }
+      }
     }
   });
 });

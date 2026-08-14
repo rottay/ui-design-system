@@ -4,7 +4,7 @@
   "cardinalityLaw": "One public control has one semantic lowering authority, emits many governed internal channels, and reaches many canonical families, parts and states. Internal channels may have many productive consumers but never competing semantic owners.",
   "executionTraversal": {
     "strategy": "control-calibration-then-family-once",
-    "designFirst": "Materialize every active Standard and Pro control against all 252 canonical family IDs before broad propagation. Every certifying cell is APPLICABLE, INVARIANT_WITH_REASON, NOT_APPLICABLE_WITH_REASON or UNKNOWN; UNKNOWN blocks family completion. Proposed controls live only in the target model and never create certifying cells or block R0-R6.",
+    "designFirst": "Materialize every active Standard and Pro control against all 255 canonical family IDs before broad propagation. Every certifying cell is APPLICABLE, INVARIANT_WITH_REASON, NOT_APPLICABLE_WITH_REASON or UNKNOWN; UNKNOWN blocks family completion. Proposed controls live only in the target model and never create certifying cells or block R0-R6.",
     "controlCalibration": "For each operational control, prove domain, stops, static and DB lowering, representative family computed deltas, negative controls and exact restore before treating propagation as mechanical.",
     "familyClosure": "After the control matrix and harness are stable, visit each family once and close every applicable control, part, state, property group and stress case in one packet.",
     "testCadence": "Run focal causal gates per control or family packet. Run the full suite only at reconciliation boundaries and classify every red result before changing source or expectations."
@@ -51,7 +51,7 @@
     "enabled": false,
     "contract": "rounds.json#R7",
     "entryLaw": "R7 begins only from a Codex-accepted R6 frozen baseline and cannot silently reclassify R0-R6 history.",
-    "familyDispositionDenominator": 252,
+    "familyDispositionDenominator": 255,
     "benchmarkLaw": "External systems provide ideas, edge cases and capability comparisons only. Existing Rottay semantic names and authorities win; no wholesale source, styling, markup, naming or trade-dress copy.",
     "benchmarkDispositions": [
       "ALREADY_EQUIVALENT",
@@ -96,7 +96,7 @@
       "minimumNonColorAxesPerPair": 6,
       "grayscaleAndNeutralizedPrimaryRequired": true
     },
-    "catalogLaw": "The certified 252-family denominator remains fixed during R7. A genuine missing-family proposal requires a separate owner-approved follow-on.",
+    "catalogLaw": "The certified 255-family denominator remains fixed during R7. A genuine missing-family proposal requires a separate owner-approved follow-on.",
     "exit": {
       "deadOrUnownedModernCss": 0,
       "dormantPublicChannels": 0,
@@ -285,7 +285,7 @@
   },
   "controlImpactContract": {
     "familyDispositionAuthority": "family-inventory.json rows[].id",
-    "requiredFamilyDispositionCountPerControl": 252,
+    "requiredFamilyDispositionCountPerControl": 255,
     "familyDispositionVocabulary": [
       "APPLICABLE",
       "INVARIANT_WITH_REASON",
@@ -293,21 +293,39 @@
       "UNKNOWN"
     ],
     "unknownBlocksCertification": true,
-    "requiredFields": [
+    "authorshipLaw": "These fields describe the GENERATED control -> family/part/channel view, never the authored control manifest. Read as a requirement on the authored segment they contradicted schema.json#segments.control.forbidden and the generator, which both refuse a control that hand-lists a family edge; nothing enforced either half, so `representativeFamilyIds` and a factually wrong `mountClassIds` survived inside `calibration` unchecked. Families own the edge; manifest/index.json#generatedControlFamilyView projects it.",
+    "forbiddenControlSegmentFields": [
+      "consumerFamilyIds",
+      "families",
+      "familyGroups",
+      "familyIds",
+      "mountClassIds",
+      "parts",
+      "propertyGroups",
+      "representativeFamilyIds"
+    ],
+    "authoredControlFields": [
       "controlId",
       "tier",
       "scope",
       "domain",
-      "emittedChannels",
-      "familyGroups",
+      "staticPath",
+      "dbPath",
+      "editorMetadata"
+    ],
+    "generatedControlViewFields": [
+      "controlId",
+      "declaredFamilies",
+      "unknownCells",
+      "applicableFamilyIds",
       "families",
       "parts",
       "propertyGroups",
-      "staticPath",
-      "dbPath",
+      "channels"
+    ],
+    "notYetDerivableAtCertification": [
       "restoreDigest",
-      "causalProbes",
-      "editorMetadata"
+      "causalProbes"
     ],
     "applicableFamilyFields": [
       "familyId",
@@ -372,7 +390,7 @@
         "primitive": 3,
         "pattern-chart": 4,
         "structure": 5,
-        "surface-composition-canary": 6
+        "surface-canary": 6
       }
     },
     "resilience": {

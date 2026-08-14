@@ -46,18 +46,18 @@ import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/
 import { useResponsive } from '@/infrastructure/runtime/responsive';
 import { useTokens } from '@/infrastructure/runtime/theming/composition/react/tokens';
 import { useAdaptivePosture } from '../../../../runtime/adaptive-posture';
-import { useSurfaceProfileDefaults } from '../../../../runtime/profile-defaults';
+import { useSurfaceProfileDefaults } from '../../../../../structures/foundation/chrome/runtime/profile-defaults';
 import {
   resolveStackSpacing,
   resolveHeadingFontWeight,
   SurfaceAccentBarWrapper,
-} from '../../../../runtime/profile-defaults/personality';
-import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
+} from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
+import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
 import { hasSurfaceError } from '../../../../runtime/helpers';
 import {
   SurfaceEmptyState,
   SurfaceErrorState,
-} from '../../../../runtime/helpers/states';
+} from '../../../../../structures/feedback/surface-lifecycle';
 
 // ---------------------------------------------------------------------------
 // Types

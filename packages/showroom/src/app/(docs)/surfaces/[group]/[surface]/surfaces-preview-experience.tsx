@@ -9,7 +9,7 @@ import {
   MarketingSurface,
   MediaSurface,
   NotificationSurface,
-  OnboardingSurface,
+  OAuthTransitionScreen,
   PricingSurface,
   createAuthSurfaceConfig,
   createMarketingSurfaceConfig,
@@ -23,6 +23,23 @@ import {
 import { createThumbnail, noop } from './surfaces-preview-shared';
 
 export const EXPERIENCE_SURFACE_PREVIEWS: Record<string, ReactNode> = {
+  // `compact` is the surface's own embedded contract (a 560px-tall rounded
+  // panel instead of the 100vh full-bleed page), so this is the real screen at
+  // an embeddable size -- not a mock of it. It carries its own --rh-* variant
+  // palette by design, which is why it does not follow the docs theme.
+  'oauth-transition': (
+    <Box style={{ width: '100%' }}>
+      <OAuthTransitionScreen
+        appId="rottay"
+        provider="google"
+        variantId="quiet-beam-light"
+        phase="redirect"
+        activeStep={1}
+        transitionState="idle"
+        compact
+      />
+    </Box>
+  ),
   auth: (
     <Box style={{ width: '100%' }}>
       <AuthSurface
@@ -265,46 +282,6 @@ export const EXPERIENCE_SURFACE_PREVIEWS: Record<string, ReactNode> = {
             onMarkAllRead: noop,
             onDelete: noop,
             onPreferenceChange: noop,
-          },
-        }}
-      />
-    </Box>
-  ),
-  onboarding: (
-    <Box style={{ width: '100%' }}>
-      <OnboardingSurface
-        config={{
-          visual: { orientation: 'vertical', showProgress: true, heroPosition: 'start', maxWidth: 1080 },
-          presentation: {
-            chrome: { title: 'Set up your workspace', subtitle: 'A few quick steps' },
-            description: 'Complete these steps to finish setting up your account.',
-            hero: (
-              <Stack spacing="xs">
-                <Text weight="semibold">Welcome</Text>
-                <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)' }}>
-                  Get your projects and reports ready in minutes.
-                </Text>
-              </Stack>
-            ),
-            checklist: (
-              <Stack spacing="xs">
-                <Text size="sm">Create your account</Text>
-                <Text size="sm">Add your first project</Text>
-                <Text size="sm">Invite people</Text>
-              </Stack>
-            ),
-          },
-          behavior: {
-            steps: [
-              { key: 'profile', title: 'Your details', description: 'Basic information',
-                content: <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)' }}>Tell us your name and time zone.</Text> },
-              { key: 'workspace', title: 'Create a project', description: 'Name your first project',
-                content: <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)' }}>Projects group your records and documents.</Text> },
-              { key: 'invite', title: 'Invite people', description: 'Optional', optional: true,
-                content: <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)' }}>Add teammates by email.</Text> },
-            ],
-            submitAction: { id: 'finish', label: 'Finish setup', variant: 'primary', onClick: noop },
-            cancelAction: { id: 'cancel', label: 'Cancel', variant: 'ghost', onClick: noop },
           },
         }}
       />

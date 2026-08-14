@@ -26,16 +26,14 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { isDarkSurfacePalette } from '../dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js';
+import { isDarkSurfaceTheme } from '../dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js';
 import { apcaContrast, APCA_BODY_TEXT_MIN_LC } from '../dist/foundation/kernel/accessibility/branding-contrast/index.js';
 import {
   renderFirstPartyArtifact,
   FIRST_PARTY_ARTIFACT_SPECS,
   FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
 } from '../dist/infrastructure/compilers/runtime/tenant-css/artifact-renderer/index.js';
-import { bithireBrandTheme } from '../dist/foundation/tokens/ts/presentation/brand-themes/bithire/index.js';
-import { evntoBrandTheme } from '../dist/foundation/tokens/ts/presentation/brand-themes/evnto/index.js';
-import { rottayBrandTheme } from '../dist/foundation/tokens/ts/presentation/brand-themes/platform/index.js';
+import { FIRST_PARTY_VERTICAL_ROSTER } from '../dist/foundation/tokens/ts/presentation/brand-themes/index.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = resolve(__dirname, '..');
@@ -43,18 +41,20 @@ const check = process.argv.includes('--check');
 
 const REGENERATE_COMMAND = FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND;
 
-/** Resolve the authored BrandTheme for each first-party artifact slug. */
-const BRAND_THEMES = {
-  bithire: bithireBrandTheme,
-  evnto: evntoBrandTheme,
-  rottay: rottayBrandTheme,
-};
-
 /** First-party artifacts this generator owns (spec is the shared source of truth). */
-const artifacts = FIRST_PARTY_ARTIFACT_SPECS.map((spec) => ({
-  ...spec,
-  brandTheme: BRAND_THEMES[spec.slug],
-}));
+const artifacts = FIRST_PARTY_VERTICAL_ROSTER.map((row, index) => {
+  const spec = FIRST_PARTY_ARTIFACT_SPECS[index];
+  if (!spec || spec.slug !== row.slug) {
+    throw new Error(`First-party artifact order drift at index ${index}: ${spec?.slug ?? '<missing>'} !== ${row.slug}`);
+  }
+  if (row.theme.id !== row.slug) {
+    throw new Error(`First-party roster mismatch: theme.id ${row.theme.id} !== slug ${row.slug}`);
+  }
+  return { ...spec, brandTheme: row.theme };
+});
+if (artifacts.length !== FIRST_PARTY_ARTIFACT_SPECS.length) {
+  throw new Error('First-party artifact projection length differs from the roster');
+}
 
 function firstDiff(a, b) {
   const al = a.split('\n');
@@ -123,8 +123,15 @@ function checkRampApcaAgainstGround(scope, label, ground, cssVariables) {
 }
 
 function checkGeneratedRampApca(slug, brandTheme, compiled) {
-  const dark = isDarkSurfacePalette(brandTheme.palette);
-  const baseGround = dark ? brandTheme.palette?.darkBackgroundColor : (brandTheme.palette?.backgroundColor ?? '#FFFFFF');
+  // A theme's ground for the mode it compiles is always its own
+  // `palette.backgroundColor`. When a theme omits it, the fallback is keyed
+  // to the theme's DECLARED default mode (`brandTheme.appearance.defaultMode
+  // === 'dark'`, via isDarkSurfaceTheme) rather than inferred from which
+  // palette fields happen to be populated -- these two literals are the
+  // compiler's own DARK_DEFAULT_GROUND / LIGHT_DEFAULT_GROUND.
+  const baseGround =
+    brandTheme.palette?.backgroundColor ??
+    (isDarkSurfaceTheme(brandTheme) ? '#0A0A0A' : '#FFFFFF');
   const failures = checkRampApcaAgainstGround(slug, slug, baseGround, compiled.cssVariables);
 
   // A mode block ships its own ramp on its own ground. Checking authored ramps

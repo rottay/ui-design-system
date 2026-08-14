@@ -6,7 +6,7 @@
  * symlinked apps consume through the public `styles/*` entrypoints.
  *
  * This avoids the "local DS works only after a manual build" trap while
- * preserving the production contract (`styles/platform` -> built bundle).
+ * preserving the production contract (`styles/rottay` -> built bundle).
  */
 
 import { spawn } from 'node:child_process';

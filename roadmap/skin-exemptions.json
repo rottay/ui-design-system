@@ -83,7 +83,7 @@
         "floor": 1,
         "why": "The legend swatch consumes per-datum or caller-palette colours. The former single D3 slice-fill runtime-SVG sink moved to the chart-engine SvgPieRenderer (W5 CLASS-R-BAR recount, measured runtimeSvgPaint 0); the renderer paints slices through the data-series-index CSS channel."
       },
-      "patterns/visualization/charts/families/treemap/index.tsx": {
+      "patterns/visualization/charts/families/tree-map/index.tsx": {
         "floor": 1,
         "why": "The legend swatch consumes the caller-supplied palette. The former D3 tile-fill runtime-SVG sink moved to the chart-engine treemap renderer (W5 recount, measured runtimeSvgPaint 0); its floor lives on the renderer file."
       },
@@ -167,19 +167,11 @@
     },
     "$excluded": "use-chart-theme's four background-shaped domain fields belong to SKIN-EXEMPT-NOT-PAINT below. Static chart paint is intentionally absent from this family and must migrate to scoped skins."
   },
-  "SKIN-EXEMPT-EMBEDDED-CSS-CONTRACT": {
-    "$why": "Source-authored CSS that intentionally remains inside a component because moving it to the global skin would change selector reach or activate behavior for unrelated consumers.",
-    "files": {
-      "patterns/data/table-checkbox-styles/index.tsx": {
-        "embeddedCssFloor": 7,
-        "why": "TableCheckboxStyles is itself an opt-in CSS injector. Its seven paint declarations belong to that explicit mounted contract; globalizing them would broaden selector reach and can activate animations or hover behavior where the component was never mounted. The embedded-CSS AST/PostCSS census measures exactly 7 paint declarations."
-      }
-    }
-  },
+  "$retired-SKIN-EXEMPT-EMBEDDED-CSS-CONTRACT": "The embedded-CSS family held exactly one file: TableCheckboxStyles, an opt-in `<style>` injector whose seven paint declarations were exempted because globalizing them would have broadened selector reach. The 2026-08 taxonomy adjudication retired the component instead -- it had no consumer, its own source declared itself a merge/retire candidate, and its capabilities were already owned by the governed table and checkbox skins. Embedded CSS paint in packages/core is now zero, so this family has no members and the exemption is withdrawn rather than left standing over a deleted path.",
   "SKIN-EXEMPT-CRASH-SAFE-FALLBACK": {
     "$why": "Paint that must render when the theming provider itself has crashed. It cannot depend on a token, a skin, or anything the failure might have taken down.",
     "files": {
-      "surfaces/runtime/error-boundary/index.tsx": {
+      "structures/feedback/surface-lifecycle/error-boundary/index.tsx": {
         "floor": 8,
         "why": "Hardcoded hex values, deliberately. The component's own comment says it must render even when the theme provider crashes -- a token would resolve to nothing in exactly the situation this component exists for."
       }

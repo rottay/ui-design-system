@@ -4,10 +4,8 @@ import {
   springLinearEasingGentle,
 } from '@/infrastructure/compilers/kernel/foundation/motion/spring-easing';
 import { brandThemeToTokenOverrides, compileBrandTheme } from '../index';
-import { generateTenantCss } from '@/infrastructure/compilers/runtime/tenant-css/visual-config';
 import { bithireBrandTheme, evntoBrandTheme, rottayBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes';
 import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
-import type { TenantConfig } from '@/foundation/contracts';
 
 /** Parse `linear(0, 0.1, ..., 1)` back into its numeric stops for assertions. */
 function parseLinearStops(value: string): number[] {
@@ -164,61 +162,40 @@ describe('compileBrandTheme: spring-gentle CSS variable', () => {
   });
 });
 
-// ── End-to-end: real first-party tenants through the static generator ──────
-// generateTenantCss() is exercised live (not by reading the prebuilt
-// foundation/tokens/css/facade/artifacts/**/index.css snapshot) so this test is correct
-// immediately, without requiring `pnpm build:vertical-css` to have re-run.
-
-describe('generateTenantCss: real tenants get a generated --ds-motion-spring', () => {
-  it('rottay (useSpring: true, tension 170 / friction 26) gets a linear() --ds-motion-spring derived from its own theme', () => {
-    const config: TenantConfig = {
-      slug: 'rottay',
-      name: 'Rottay',
-      engine: 'classic',
-      theme: 'base',
-      plan: 'enterprise',
-      features: ['*'],
-      branding: { companyName: 'Rottay' },
-      brandTheme: rottayBrandTheme,
-    };
-    const css = generateTenantCss(config, { includeDarkSelector: false });
-    const match = /--ds-motion-spring:\s*(linear\([^;]*\));/.exec(css);
-    expect(match, 'expected a generated --ds-motion-spring: linear(...) declaration').not.toBeNull();
-    expect(match![1]).toBe(springLinearEasing(rottayBrandTheme.motion!.springTension!, rottayBrandTheme.motion!.springFriction!));
+// ── End-to-end: real first-party tenants through compileBrandTheme ─────────
+//
+// This used to run each tenant through the static generator
+// (the retired runtime tenant-CSS generator, fully retired) and regex-match the LITERAL
+// `--ds-motion-spring: linear(...)` declaration out of its CSS string. That
+// generator owned the one conversion from `TenantTokenOverrides.motion.spring`
+// (a raw curve string) into a `--ds-motion-spring` custom property; with it
+// gone, `compileBrandTheme` itself is the closest a compiler-level test gets
+// to that value -- `tokenOverrides.motion.spring` IS the curve the eventual
+// CSS declaration is built from (see `--ds-motion-spring-gentle` immediately
+// below for the sibling channel this compiler DOES emit as CSS directly).
+// The property under test -- each real tenant's own tension/friction produces
+// its own correct, distinct curve, and a spring-disabled tenant produces none
+// -- still holds at this layer.
+describe('compileBrandTheme: real tenants get a derived tokenOverrides.motion.spring', () => {
+  it('rottay (useSpring: true, tension 170 / friction 26) derives its own linear() curve', () => {
+    const result = compileBrandTheme({ brandTheme: rottayBrandTheme, tenantSlug: 'rottay' });
+    expect(result.tokenOverrides.motion?.spring).toBe(
+      springLinearEasing(rottayBrandTheme.motion!.springTension!, rottayBrandTheme.motion!.springFriction!),
+    );
   });
 
-  it('evnto (useSpring: true, tension 200 / friction 18) gets its own distinct linear() curve', () => {
-    const config: TenantConfig = {
-      slug: 'evnto',
-      name: 'Evnto',
-      engine: 'classic',
-      theme: 'base',
-      plan: 'enterprise',
-      features: ['*'],
-      branding: { companyName: 'Evnto' },
-      vertical: 'evnto',
-      brandTheme: evntoBrandTheme,
-    };
-    const css = generateTenantCss(config, { includeDarkSelector: false });
-    const match = /--ds-motion-spring:\s*(linear\([^;]*\));/.exec(css);
-    expect(match).not.toBeNull();
-    expect(match![1]).toBe(springLinearEasing(evntoBrandTheme.motion!.springTension!, evntoBrandTheme.motion!.springFriction!));
+  it('evnto (useSpring: true, tension 200 / friction 18) derives its own distinct linear() curve', () => {
+    const result = compileBrandTheme({ brandTheme: evntoBrandTheme, tenantSlug: 'evnto' });
+    expect(result.tokenOverrides.motion?.spring).toBe(
+      springLinearEasing(evntoBrandTheme.motion!.springTension!, evntoBrandTheme.motion!.springFriction!),
+    );
     // rottay and evnto have different tension/friction, so their curves differ.
-    expect(match![1]).not.toBe(springLinearEasing(rottayBrandTheme.motion!.springTension!, rottayBrandTheme.motion!.springFriction!));
+    const rottayResult = compileBrandTheme({ brandTheme: rottayBrandTheme, tenantSlug: 'rottay' });
+    expect(result.tokenOverrides.motion?.spring).not.toBe(rottayResult.tokenOverrides.motion?.spring);
   });
 
-  it('bithire (useSpring: false) gets NO generated --ds-motion-spring override -- falls back to the foundation default', () => {
-    const config: TenantConfig = {
-      slug: 'bithire',
-      name: 'BitHire',
-      engine: 'classic',
-      theme: 'base',
-      plan: 'enterprise',
-      features: ['*'],
-      branding: { companyName: 'BitHire' },
-      brandTheme: bithireBrandTheme,
-    };
-    const css = generateTenantCss(config, { includeDarkSelector: false });
-    expect(css).not.toMatch(/--ds-motion-spring:/);
+  it('bithire (useSpring: false) derives no motion.spring override -- falls back to the foundation default', () => {
+    const result = compileBrandTheme({ brandTheme: bithireBrandTheme, tenantSlug: 'bithire' });
+    expect(result.tokenOverrides.motion?.spring).toBeUndefined();
   });
 });

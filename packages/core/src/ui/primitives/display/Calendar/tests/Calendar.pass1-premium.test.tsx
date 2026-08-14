@@ -7,7 +7,7 @@ import { cleanup, render, screen } from '@testing-library/react';
 
 import { I18nProvider } from '@/infrastructure/runtime/i18n';
 import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes';
-import { themanagementmiamiBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/fixtures/themanagementmiami';
+import { themanagementmiamiBrandTheme } from '@/tooling/testing/fixtures/brand-themes/themanagementmiami';
 import { compileBrandTheme } from '@/infrastructure/compilers/kernel/runtime/brand-theme';
 
 import CalendarModern from '../engines/modern';

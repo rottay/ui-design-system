@@ -9,3 +9,4 @@ export * from './map-view';
 export * from './timeline';
 export * from './tree-view';
 export * from './kanban-board';
+export * from './ascii-diagram';

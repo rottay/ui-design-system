@@ -432,43 +432,20 @@ export interface WorkspaceResponsiveConfig {
   mobileView?: string;
 }
 
-/** Visual presentation configuration. */
-export interface WorkspaceShellParticleFieldConfig {
-  /**
-   * Runtime state for the optional ParticleField enhancement.
-   *
-   * The shell deliberately fails closed: omitted and unrecognized values use
-   * the static fallback. `live` is an explicit opt-in reserved for routes that
-   * have passed the complete ParticleField lifecycle gate.
-   * @default 'quarantined'
-   */
-  mode?: 'quarantined' | 'live';
-  /** Accessible name that explains the meaning of the static alternative. */
-  fallbackLabel?: string;
-}
+/**
+ * The workspace shell's own presentation contract, authored by the component
+ * that implements it (`structure/shell/workspace-shell`). A collection surface
+ * embeds it below; it is re-exported here so the published type name keeps its
+ * existing home in the surfaces API. Surfaces may depend on structures — the
+ * edge only reads oddly if you expect every contract to be authored in this
+ * file, and the shell is chrome, not a page recipe.
+ */
+export type {
+  WorkspaceShellParticleFieldConfig,
+  WorkspaceShellPresentationConfig,
+} from '../../../../../structures/shell/workspace-shell';
 
-/** Visual presentation configuration. */
-export interface WorkspaceShellPresentationConfig {
-  /** Visual shell variant applied around premium workspaces. */
-  variant?: 'default' | 'ai-field';
-  /** Overall atmospheric character for the shell. */
-  mood?: 'calm' | 'active' | 'focus';
-  /** Spatial field pattern used by the shell background. */
-  fieldPattern?: 'ambient' | 'orbital' | 'hybrid';
-  /** Intensity of the ambient field and overlays. */
-  intensity?: 'low' | 'medium' | 'high';
-  /** How strongly sections blend into a single continuous surface. */
-  continuity?: 'segmented' | 'seamless';
-  /** Whether focused rows can subtly influence the atmospheric field. */
-  focusReaction?: boolean;
-  /** Whether preview rails receive extra visual emphasis within the shell. */
-  previewEmphasis?: boolean;
-  /**
-   * Independently controlled ParticleField runtime and static alternative.
-   * Omission is intentionally equivalent to `{ mode: 'quarantined' }`.
-   */
-  particleField?: WorkspaceShellParticleFieldConfig;
-}
+import type { WorkspaceShellPresentationConfig } from '../../../../../structures/shell/workspace-shell';
 
 /** Visual presentation configuration. */
 export interface CollectionPresentationConfig {

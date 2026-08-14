@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import test from 'node:test';
@@ -100,6 +100,38 @@ test('raw timing scanner covers camelCase CSS-in-JS duration and delay propertie
       "'transitionDuration'",
     ],
   );
+});
+
+/*
+ * A `var()` fallback is not a lookup -- it is a literal the token canon does not own. The OAuth
+ * transition skin regressed exactly this way post-baseline: `var(--step-delay)` grew a `, 0ms`
+ * fallback, which is raw motion debt even though it reads as indirection. The fallback also buys
+ * nothing: `animation-delay` is not inherited, so an unset custom property already computes to
+ * the initial `0s`. The control proves the gate stays silent on the tokenized form.
+ */
+test('a raw time inside a var() fallback is motion debt, but the bare lookup is not', () => {
+  /*
+   * The fixture is assembled from fragments and never written as a contiguous literal. A gate
+   * that scans source for raw motion timings must not plant the exact debt it asserts on: the
+   * scan roots are `packages/core/src` and `packages/showroom/src` today, so `scripts/` is out
+   * of range, but a widened root must not turn this proof into two new findings of its own.
+   */
+  const property = ['animation', 'delay'].join('-');
+  const literalZero = ['0', 'ms'].join('');
+  const lookup = 'var(--step-delay';
+
+  const planted = sourceFindings(`.x { ${property}: ${lookup}, ${literalZero}); }\n`, '.css');
+  const raw = planted.findings.filter((entry) => entry.channel === 'raw-motion-timing');
+
+  assert.deepEqual(
+    raw.map((entry) => ({ channel: entry.channel, kind: entry.kind, symbol: entry.symbol })),
+    [{ channel: 'raw-motion-timing', kind: 'css-or-style-time', symbol: property }],
+  );
+  assert.equal(raw[0].evidence, `${property}: ${lookup}, ${literalZero})`);
+
+  const control = sourceFindings(`.x { ${property}: ${lookup}); }\n`, '.css');
+
+  assert.equal(control.findings.filter((entry) => entry.channel === 'raw-motion-timing').length, 0);
 });
 
 test('transition and animation scanners cover quoted CSS-in-JS keys', () => {
@@ -266,6 +298,160 @@ test('exact snapshot passes unchanged and fails new, stale, expired, and body dr
   contract.baselines['transition-all'].expires = '2020-01-01';
   assert(auditFindings({ findings: [finding], registry: contract, now: new Date('2026-07-15T00:00:00Z') })
     .some((failure) => /expired/.test(failure)));
+});
+
+/*
+ * CRA12-REGISTRY-RECONCILIATION, 2026-08-13. The reconciliation these three drills defend is
+ * recorded in `cra-12-motion-governance.registry.json` under
+ * `baselines['raw-motion-timing'].modernRescueRegistryReconciliation`. Two of its claims are
+ * mechanical, so they are provable here in memory -- no workspace scan, no temp tree, no file
+ * mutation:
+ *
+ *   1. the ui-design-system/test row moved by PATH ONLY. Count, file count and body are all
+ *      unchanged, which is exactly why the digest must still go red: a relocation the gate
+ *      waves through is a relocation that could be hiding a swap. The registry states the
+ *      proof constructively -- rewriting the one path back reconstructs the superseded digest
+ *      -- and the first drill executes that same round trip.
+ *   2. the two TableCheckboxStyles bodies were retired exactly, 2 rows in 1 file. Under the
+ *      lowered ds-internal ceiling, either one coming back must fail.
+ *
+ * Every motion body below is assembled from fragments and never written as a contiguous
+ * literal, for the reason the var()-fallback drill above states: a gate that scans source for
+ * raw motion timings must not plant the exact debt it asserts on. The bodies are not hand-typed
+ * either -- each drill first makes the scanner emit the string it is about to assert on, so a
+ * typo shows up as a dead fixture instead of as a passing test about nothing.
+ */
+const durationKey = ['transition', 'Duration'].join('');
+const transitionKey = ['transi', 'tion'].join('');
+const millis = (amount) => `${amount}${['m', 's'].join('')}`;
+const brandThemeBody = (amount) => `${durationKey}: "${millis(amount)}",`;
+const checkboxBody = (property) => `${transitionKey}: ${property} ${['0.', '15', 's'].join('')} ease`;
+
+const RELOCATED_FROM =
+  'packages/core/src/foundation/tokens/ts/presentation/brand-themes/fixtures/themanagementmiami/index.ts';
+const RELOCATED_TO = 'packages/core/src/tooling/testing/fixtures/brand-themes/themanagementmiami/index.ts';
+const CHECKBOX_PATH = 'packages/core/src/ui/patterns/data/table-checkbox-styles/index.tsx';
+const COLLECTION_WORKSPACE_PATH =
+  'packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css';
+
+function dsFinding({ path, scope, symbol, evidence, line = 1 }) {
+  return {
+    channel: 'raw-motion-timing', kind: 'css-or-style-time', repo: 'ui-design-system',
+    path, scope, line, symbol, evidence,
+  };
+}
+
+function reconciliationContract(findings) {
+  const contract = registry();
+  contract.baselines = buildBaselines(findings, {
+    'raw-motion-timing': {
+      owner: 'design-system', reason: 'reconciliation drill', expires: '2099-12-31',
+    },
+  });
+  return contract;
+}
+
+test('the reconciled test row moved by path only, and the digest still refuses to ignore it', () => {
+  const emitted = sourceFindings(`const theme = {\n  ${brandThemeBody(220)}\n};\n`, '.ts');
+  assert.deepEqual(
+    emitted.findings
+      .filter((entry) => entry.channel === 'raw-motion-timing')
+      .map((entry) => ({ symbol: entry.symbol, evidence: entry.evidence })),
+    [{ symbol: durationKey, evidence: brandThemeBody(220) }],
+  );
+
+  const before = [
+    dsFinding({ path: RELOCATED_FROM, scope: 'test', symbol: durationKey, evidence: brandThemeBody(220) }),
+    dsFinding({
+      path: 'packages/core/src/tooling/testing/fixtures/tenants/quality-evidence/index.ts',
+      scope: 'test', symbol: durationKey, evidence: brandThemeBody(180),
+    }),
+  ];
+  const contract = reconciliationContract(before);
+  assert.deepEqual(auditFindings({ findings: before, registry: contract }), []);
+
+  const relocated = before.map((entry) => (
+    entry.path === RELOCATED_FROM ? { ...entry, path: RELOCATED_TO } : entry
+  ));
+  // The relocation is invisible to every ratchet: same findings, same files, same bodies.
+  assert.equal(relocated.length, before.length);
+  assert.equal(new Set(relocated.map((entry) => entry.path)).size, new Set(before.map((entry) => entry.path)).size);
+  assert.deepEqual(
+    relocated.map((entry) => entry.evidence).sort(),
+    before.map((entry) => entry.evidence).sort(),
+  );
+
+  const failures = auditFindings({ findings: relocated, registry: contract });
+  assert.equal(failures.length, 1);
+  assert.match(failures[0], /^raw-motion-timing: path\/body hash drift at ui-design-system\/test:/);
+
+  const reverted = relocated.map((entry) => (
+    entry.path === RELOCATED_TO ? { ...entry, path: RELOCATED_FROM } : entry
+  ));
+  assert.deepEqual(auditFindings({ findings: reverted, registry: contract }), []);
+});
+
+test('a single millisecond of body drift in the relocated fixture is hash drift, not a free pass', () => {
+  const before = [
+    dsFinding({ path: RELOCATED_TO, scope: 'test', symbol: durationKey, evidence: brandThemeBody(220) }),
+  ];
+  const contract = reconciliationContract(before);
+  assert.deepEqual(auditFindings({ findings: before, registry: contract }), []);
+
+  const mutated = before.map((entry) => ({ ...entry, evidence: brandThemeBody(221) }));
+  assert.notEqual(mutated[0].evidence, before[0].evidence);
+  assert.equal(mutated.length, before.length);
+
+  const failures = auditFindings({ findings: mutated, registry: contract });
+  assert.equal(failures.length, 1);
+  assert.match(failures[0], /^raw-motion-timing: path\/body hash drift at ui-design-system\/test:/);
+  assert(!failures.some((failure) => /ratchet grew/.test(failure)));
+});
+
+test('the retired TableCheckboxStyles bodies cannot come back under the lowered ds-internal ceiling', () => {
+  const retired = [checkboxBody('background'), checkboxBody('opacity')];
+  const emitted = sourceFindings(`.x { ${retired[0]}; ${retired[1]}; }\n`, '.css');
+  assert.deepEqual(
+    emitted.findings
+      .filter((entry) => entry.channel === 'raw-motion-timing')
+      .map((entry) => entry.evidence),
+    retired,
+  );
+
+  // The reconciled ceiling is real, not a fixture: pin the row this drill is about.
+  const contract = JSON.parse(readFileSync(new URL('./cra-12-motion-governance.registry.json', import.meta.url), 'utf8'));
+  const row = contract.baselines['raw-motion-timing'].files
+    .find((entry) => entry.repo === 'ui-design-system' && entry.scope === 'ds-internal');
+  assert.deepEqual(
+    { maxCount: row.maxCount, maxFiles: row.maxFiles, digest: row.digest },
+    {
+      maxCount: 346,
+      maxFiles: 139,
+      digest: 'b2a4ab937aea40d1b14a0af74b22a0b809d0c70376e27c7ca29d9e3c2fb5a8db',
+    },
+  );
+
+  const lowered = [dsFinding({
+    path: COLLECTION_WORKSPACE_PATH, scope: 'ds-internal', symbol: transitionKey,
+    evidence: `${transitionKey}: width var(--ds-list-preview-motion-duration, var(--ds-motion-fast, ${millis(120)}))`,
+  })];
+  const drill = reconciliationContract(lowered);
+  assert.deepEqual(auditFindings({ findings: lowered, registry: drill }), []);
+
+  for (const evidence of retired) {
+    const failures = auditFindings({
+      findings: [...lowered, dsFinding({
+        path: CHECKBOX_PATH, scope: 'ds-internal', symbol: transitionKey, evidence,
+      })],
+      registry: drill,
+    });
+    assert(failures.some((failure) => (
+      /raw-motion-timing: ratchet grew at ui-design-system\/ds-internal: 2 > 1/.test(failure)
+    )), evidence);
+    assert(failures.some((failure) => (
+      /raw-motion-timing: path\/body hash drift at ui-design-system\/ds-internal/.test(failure)
+    )), evidence);
+  }
 });
 
 test('dependency drift is a hard failure and can never be converted into baseline debt', () => {

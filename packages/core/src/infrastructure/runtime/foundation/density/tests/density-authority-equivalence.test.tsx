@@ -179,12 +179,21 @@ describe('density posture equivalence across every authority', () => {
     );
     await view.findByTestId('js-posture');
 
-    // Same element, same channel: two writers of one custom property resolve by
-    // cascade to a single value and can never compose.
-    const inlineFactor = document.documentElement.style.getPropertyValue(
-      DENSITY_MODE_FACTOR_VARIABLE,
-    );
-    expect(inlineFactor).toBe(String(DENSITY_MODE_FACTORS.compact));
+    // The mode factor is no longer stamped inline by the provider: it compiles
+    // into the tenant's artifact along with every other appearance channel,
+    // and the provider only READS the posture to set `data-density`. So the
+    // two authorities to compare are the CSS boundary and the COMPILER, which
+    // is the pair the double-apply regression was ever about -- the inline
+    // stamp was a third, provider-owned copy of the same number, and it is
+    // gone rather than merely agreeing.
+    expect(
+      document.documentElement.style.getPropertyValue(DENSITY_MODE_FACTOR_VARIABLE),
+    ).toBe('');
+    expect(
+      compileAppearanceVariables({ general: { density: POSTURE } }).variables[
+        DENSITY_MODE_FACTOR_VARIABLE
+      ],
+    ).toBe(String(DENSITY_MODE_FACTORS.compact));
     expect(cssRootModeFactor(POSTURE)).toBe(DENSITY_MODE_FACTORS.compact);
 
     // And the root never contributes a local multiplier, so the second factor

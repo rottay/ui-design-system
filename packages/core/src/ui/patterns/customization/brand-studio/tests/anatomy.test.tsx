@@ -29,7 +29,11 @@ const TEST_TENANT: TenantConfig = {
 const THEME: BrandTheme = {
   id: 'anatomy',
   name: 'Anatomy',
-  palette: { primary: '#2563eb', text: '#111111', surfaceCard: '#ffffff' },
+  palette: {
+    primaryColor: '#2563eb',
+    textPrimaryColor: '#111111',
+    backgroundSurfaceColor: '#ffffff',
+  },
 };
 
 /** Every part that must resolve to exactly one node inside the root.

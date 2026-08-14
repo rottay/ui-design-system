@@ -268,10 +268,10 @@ test("a trusted producer path suffix outside the current core package is not cer
 test("a local shadow of a certified producer name is analyzed normally", () => {
   const result = analyzeEmbeddedCssPaint(
     source([
-      "function generateTenantCss() {",
+      "function generateResponsiveCSS() {",
       "  return '.local { color: red; transform: scale(1) }';",
       "}",
-      "export const Example = () => <style>{generateTenantCss()}</style>;",
+      "export const Example = () => <style>{generateResponsiveCSS()}</style>;",
     ]),
     "/repo/packages/core/src/ui/example.tsx"
   );

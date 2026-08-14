@@ -23,13 +23,16 @@
 import type { ReactNode } from 'react';
 
 import { DesignSystemProvider } from '@rottay/design-system';
-import { bithireBrandTheme } from '@rottay/design-system';
+import type { TenantConfig, VisualAuthorityDeclaration } from '@rottay/design-system';
 import {
   buildThemePrepaintScript,
   compileTenantThemeConfig,
+  emitTenantThemeArtifactForSsr,
+  getKnownTenantConfig,
   getTenantThemeVerticalEnvelope,
   hydrateTenantThemeConfig,
   resolveDocumentRootAttributes,
+  type TenantThemeArtifactSsrEmission,
 } from '@rottay/design-system/server';
 import tenantThemeCanaryFixtures from '@rottay/design-system/tenant-theme-canary-fixtures';
 
@@ -66,6 +69,16 @@ export type LabLocale = 'en' | 'es' | 'ar';
  * would create a competing visual layer, which the tenancy law forbids.
  */
 function bithireGround(judge: JudgeMode, locale: LabLocale) {
+  // The REGISTRY's own object, not a literal that copies its fields. Code-owned
+  // identity is proven by object identity, so a hand-authored twin carrying
+  // `brandTheme` is an ordinary tenant with uncompiled visual payload and the
+  // provider refuses it. Without an explicit tenantConfig at all the provider
+  // resolves the DEFAULT tenant ("rottay"), which is how the first attempt
+  // produced near-black BitHire buttons: the ground said bithire and the
+  // provider said rottay.
+  const tenantConfig = getKnownTenantConfig('bithire');
+  if (!tenantConfig) throw new Error('The bundled bithire tenant is missing from the registry');
+
   return {
     rootAttributes: resolveDocumentRootAttributes({
       themeMode: 'light',
@@ -73,24 +86,9 @@ function bithireGround(judge: JudgeMode, locale: LabLocale) {
       locale,
       tenant: { slug: 'bithire', verticalKey: 'bithire' },
     }),
-    css: '',
-    digest: null as string | null,
-    artifact: null as unknown,
-    // The static tenant carries its code-owned BrandTheme. Without an explicit
-    // tenantConfig the provider resolves the DEFAULT tenant ("rottay"), which
-    // is how the first attempt produced near-black BitHire buttons: the ground
-    // said bithire and the provider said rottay.
-    tenantConfig: {
-      slug: 'bithire',
-      name: 'BitHire',
-      vertical: 'bithire',
-      engine: 'modern',
-      theme: 'light',
-      plan: 'enterprise',
-      features: ['*'],
-      branding: { companyName: 'BitHire' },
-      brandTheme: bithireBrandTheme,
-    } as unknown,
+    emission: null as TenantThemeArtifactSsrEmission | null,
+    declaration: undefined as VisualAuthorityDeclaration | undefined,
+    tenantConfig,
     judgeCss: judgeModeStyle(judge),
     locale,
   };
@@ -113,6 +111,15 @@ function themanagementGround(judge: JudgeMode, locale: LabLocale) {
   const artifact = compileTenantThemeConfig(hydrated, {
     verticalEnvelope: getTenantThemeVerticalEnvelope(specimen.identity.verticalKey),
   });
+  // The style element AND the receipt come from one call, so the bytes the
+  // resolver hashes are the bytes this ground embeds and the attributes it
+  // looks for are the attributes this ground writes. Hand-writing either half
+  // is how the first version ended up stamping `data-tenant`/`data-digest`,
+  // which the mount proof does not read.
+  const emission = emitTenantThemeArtifactForSsr(artifact, {
+    slug: artifact.slug,
+    verticalKey: artifact.verticalKey,
+  });
 
   return {
     rootAttributes: resolveDocumentRootAttributes({
@@ -121,9 +128,12 @@ function themanagementGround(judge: JudgeMode, locale: LabLocale) {
       locale,
       tenant: { slug: artifact.slug, verticalKey: artifact.verticalKey },
     }),
-    css: artifact.css,
-    digest: artifact.digest,
-    artifact: artifact as unknown,
+    emission,
+    declaration: {
+      authority: 'compiled-artifact',
+      artifact,
+      ssrReceipt: emission.receipt,
+    } satisfies VisualAuthorityDeclaration as VisualAuthorityDeclaration,
     // The DB tenant's config is DERIVED FROM THE ARTIFACT, never re-authored:
     // the compiled artifact is the single authority for the channels it owns,
     // and `normalizedAppearance` is the compiler's own normalization of the
@@ -139,7 +149,7 @@ function themanagementGround(judge: JudgeMode, locale: LabLocale) {
       features: ['*'],
       branding: { companyName: 'The Management' },
       appearance: artifact.normalizedAppearance,
-    } as unknown,
+    } as TenantConfig,
     judgeCss: judgeModeStyle(judge),
     locale,
   };
@@ -171,10 +181,12 @@ export interface LabGroundProps {
  * plainly so the captures taken before this fix are not mistaken for evidence
  * about the DS.
  *
- * `visualAuthority: 'compiled-artifact'` is required, not optional: the server
- * has already embedded this artifact, so without the declaration the provider
- * resolves `origin: 'db-tenant'` and paints a SECOND visual layer over a ground
- * that is already correct — two authorities for one surface.
+ * The typed `visualAuthority` declaration is required for the DB tenant, not
+ * optional: the artifact is already embedded below, so without it the provider
+ * sees a tenant carrying an uncompiled visual payload and blocks the surface
+ * outright. It is equally required to be ABSENT for BitHire, whose CSS is a
+ * bundled static stylesheet and not a v1 artifact — declaring one would name an
+ * artifact the mount proof could never find.
  */
 export function LabGround({ tenant, judge = 'none', locale = 'en', children }: LabGroundProps) {
   const ground = tenant === 'bithire' ? bithireGround(judge, locale) : themanagementGround(judge, locale);
@@ -190,12 +202,11 @@ export function LabGround({ tenant, judge = 'none', locale = 'en', children }: L
           __html: `${buildLabRootStampScript(ground.rootAttributes as unknown as Record<string, string>)};${buildThemePrepaintScript()}`,
         }}
       />
-      {ground.css ? (
+      {ground.emission ? (
         <style
-          id="rottay-runtime-tenant-theme"
-          data-tenant={tenant}
-          data-digest={ground.digest ?? undefined}
-          dangerouslySetInnerHTML={{ __html: ground.css }}
+          {...ground.emission.attributes}
+          data-testid="lab-tenant-artifact-style"
+          dangerouslySetInnerHTML={{ __html: ground.emission.css }}
         />
       ) : null}
       {/* Judging transforms are last so they win, and they carry a testid so a
@@ -207,10 +218,8 @@ export function LabGround({ tenant, judge = 'none', locale = 'en', children }: L
         forceEngine="modern"
         forceTheme="light"
         locale={ground.locale}
-        tenantConfig={ground.tenantConfig as never}
-        {...(ground.artifact
-          ? { visualAuthority: { authority: 'compiled-artifact', artifact: ground.artifact } as never }
-          : {})}
+        tenantConfig={ground.tenantConfig}
+        {...(ground.declaration ? { visualAuthority: ground.declaration } : {})}
       >
         {children}
       </DesignSystemProvider>

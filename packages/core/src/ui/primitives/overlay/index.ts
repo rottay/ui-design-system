@@ -2,41 +2,14 @@
  * @fileoverview Overlay primitives barrel export.
  * Re-exports all overlay-category primitive components.
  *
- * Note: `feedback/Modal` is the sole Modal owner. `OverlayModal` remains only
- * as a deprecated compatibility alias; shared portal/focus utilities continue
- * to be exported from the runtime-owned compatibility module.
+ * `feedback/Modal` is the sole Modal owner, and it is the only one. The
+ * `OverlayModal` alias that used to sit at the top of this file is retired: it
+ * re-exported the identical component object through a folder of pure
+ * forwarding shims, so the package advertised two dialog primitives while
+ * shipping one. Its compatibility constants went with it — a second
+ * `MODAL_PADDING_MAP` that disagreed with the canonical one is a trap, not a
+ * contract. Consumers use `Modal` from feedback/.
  */
-
-/** @deprecated Use the canonical `Modal` export from feedback/Modal. */
-export { Modal as OverlayModal } from './Modal';
-
-
-// Export utility components (unique to overlay)
-export {
-  Portal,
-  usePortalContainer,
-  Overlay,
-  FocusTrap,
-  useFocusTrap,
-} from './Modal';
-
-// Export defaults with alias to avoid conflict
-export {
-  MODAL_DEFAULTS as OVERLAY_MODAL_DEFAULTS,
-  SIZE_MAP as MODAL_SIZE_MAP,
-  MAX_HEIGHT_MAP as MODAL_MAX_HEIGHT_MAP,
-  PADDING_MAP as MODAL_PADDING_MAP,
-  RADIUS_MAP as MODAL_RADIUS_MAP,
-} from './Modal';
-
-// Re-export types with aliases where needed
-export type {
-  ModalProps as OverlayModalProps,
-  ModalSize as OverlayModalSize,
-  PortalProps,
-  OverlayProps,
-  FocusTrapProps,
-} from './Modal';
 
 // Dropdown
 export { Dropdown } from './Dropdown';
@@ -131,16 +104,3 @@ export type {
   OverlayLayerProps,
   OverlayLayerHandle,
 } from '../runtime/overlay/layer-stack';
-
-// Portal scope re-stamping (tenant/locale/DS variables across the portal boundary)
-export {
-  readPortalScope,
-  readLocaleContext,
-  usePortalScope,
-  PortalScope,
-} from '../runtime/overlay/portal-scope';
-export type {
-  PortalScopeAttributes,
-  PortalScopeSnapshot,
-  PortalScopeProps,
-} from '../runtime/overlay/portal-scope';

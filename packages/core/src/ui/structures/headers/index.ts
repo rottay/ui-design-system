@@ -3,6 +3,8 @@
  * collection, dashboard, detail, edit, and form pages.
  */
 
+export * from './header-surface';
+
 export {
   DashboardHeader,
   type DashboardMetric,
@@ -14,3 +16,4 @@ export * from './detail';
 export * from './edit';
 export * from './form';
 export * from './mobile-header';
+export * from './section-frame';

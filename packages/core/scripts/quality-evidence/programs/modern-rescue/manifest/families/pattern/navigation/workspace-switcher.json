@@ -6,17 +6,17 @@
     "category": "navigation",
     "name": "WorkspaceSwitcher",
     "components": [
-      "WorkspaceSwitcher"
+      "PatternWorkspaceSwitcher"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
     "sourceOwner": "packages/core/src/ui/patterns/navigation/workspace-switcher",
-    "publicComponents": [],
-    "unresolvedPublicComponents": [
-      "WorkspaceSwitcher"
+    "publicComponents": [
+      "PatternWorkspaceSwitcher"
     ],
+    "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "2c691ca2eaaf07804673ec3b75c7e970645e4dd6567c8501a4364fbfae71ce2f"
+    "inventoryRowDigest": "b035ac5e164ccc7b8d2eb50b21eceff23662aca9510a6a73c6b4e5ce37289426"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

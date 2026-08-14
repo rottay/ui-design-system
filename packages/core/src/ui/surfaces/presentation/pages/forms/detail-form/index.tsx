@@ -24,14 +24,14 @@ import {
   resolveSurfaceButtonVariant,
   hasSurfaceError,
 } from '../../../../runtime/helpers';
-import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
-import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
-import { resolveStackSpacing, SurfaceAccentBarWrapper } from '../../../../runtime/profile-defaults/personality';
+import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
+import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
+import { resolveStackSpacing, SurfaceAccentBarWrapper } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
 import type { DetailFormSurfaceConfig } from '../../../../foundation/contracts';
-import { PageShellSurface } from '../../../../composition/layout/page-shell';
-import { useSurfaceResponsiveLayout } from '../../../../runtime/responsive';
-import { SurfaceActionBar, SurfaceSectionCard } from '../../../../runtime/helpers/rendering';
-import { SurfaceErrorState } from '../../../../runtime/helpers/states';
+import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
+import { useSurfaceResponsiveLayout } from '../../../../../structures/foundation/chrome/runtime/responsive';
+import { SurfaceActionBar, SurfaceSectionCard } from '../../../../../structures/shell/surface-chrome';
+import { SurfaceErrorState } from '../../../../../structures/feedback/surface-lifecycle';
 
 export interface DetailFormSurfaceProps {
   config: DetailFormSurfaceConfig;

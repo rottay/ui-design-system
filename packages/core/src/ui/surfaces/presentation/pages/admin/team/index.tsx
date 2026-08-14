@@ -27,18 +27,18 @@ import { ActionEditIcon } from '@/graphics/icons/presentation/semantic/generated
 import { densityScopeAttributes } from '@/infrastructure/runtime/foundation/density';
 import { useCollectionStagger } from '../../../../../patterns/foundation/motion';
 import type { TeamMember, TeamSurfaceConfig } from '../../../../foundation/contracts';
-import { PageShellSurface } from '../../../../composition/layout/page-shell';
-import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
-import { resolveStackSpacing } from '../../../../runtime/profile-defaults/personality';
-import { useSurfaceResponsiveLayout } from '../../../../runtime/responsive';
-import { SurfaceActionBar } from '../../../../runtime/helpers/rendering';
+import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
+import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
+import { resolveStackSpacing } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
+import { useSurfaceResponsiveLayout } from '../../../../../structures/foundation/chrome/runtime/responsive';
+import { SurfaceActionBar } from '../../../../../structures/shell/surface-chrome';
 import { hasSurfaceError } from '../../../../runtime/helpers';
 import {
   SurfaceEmptyState,
   SurfaceErrorState,
   SurfaceLoadingSkeleton,
-} from '../../../../runtime/helpers/states';
-import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
+} from '../../../../../structures/feedback/surface-lifecycle';
+import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
 
 export interface TeamSurfaceProps {
   config: TeamSurfaceConfig;

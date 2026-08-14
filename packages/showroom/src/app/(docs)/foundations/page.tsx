@@ -55,7 +55,7 @@ const FOUNDATION_AREAS: FoundationArea[] = [
     description:
       'Themes layer tenant branding on top of engine and vertical defaults without forking the component set.',
     whenToUse:
-      'You need to explain how one system becomes Platform, BitHire, or Evnto at runtime.',
+      'You need to explain how one system becomes Rottay, BitHire, or Evnto at runtime.',
     samples: ['rottay', 'bithire', 'evnto', 'brand themes'],
     icon: <SparklesIcon size={22} />,
     tint: 'var(--ds-color-warning-bg)',

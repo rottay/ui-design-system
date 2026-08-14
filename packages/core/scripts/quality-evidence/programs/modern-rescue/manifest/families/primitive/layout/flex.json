@@ -16,9 +16,9 @@
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "98364626f5ae66a131c3fc8396e52423ccbb55069be2d2e0dceed56ead2c228a"
+    "inventoryRowDigest": "22441654f817337297308c1ec42a71d4910fd0ff479b47bfed66efc27487458e"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,216 +26,591 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
-    "propertyGroups": [],
-    "invariants": [],
+    "assessmentState": "SOURCE_BOUND",
+    "partCensusCompleteness": "MODERN_ROOT_BOUND_RESPONSIVE_STYLE_ARTIFACT_REQUIRES_BROWSER_PROOF",
+    "sourceBindings": [
+      "packages/core/src/ui/primitives/layout/Flex/contracts/index.ts",
+      "packages/core/src/ui/primitives/layout/Flex/engines/modern/index.tsx",
+      "packages/core/src/ui/primitives/layout/Flex/runtime/presentation/index.ts",
+      "packages/core/src/ui/primitives/layout/Flex/runtime/responsive/index.ts",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+    ],
+    "stableParts": [
+      "root"
+    ],
+    "states": [
+      "scalar",
+      "responsive",
+      "wrapped",
+      "inline",
+      "reversed-axis",
+      "rearranging"
+    ],
+    "propertyGroups": [
+      "axis-and-flow",
+      "alignment-and-distribution",
+      "uniform-and-split-gap",
+      "responsive-projection",
+      "intrinsic-sizing-and-overflow",
+      "layout-motion",
+      "semantic-root"
+    ],
+    "invariants": [
+      "Modern owns one div root stamped data-component=flex and min-inline-size:0.",
+      "Omitted scalar layout props remain omitted from data attributes so declarative CSS defaults stay cascade-overridable.",
+      "A gap tuple is public [column,row] order and is projected to CSS column-gap and row-gap respectively.",
+      "Preset gaps stay on the tenant spacing ramp; numeric gaps are exact instance geometry.",
+      "Consumer style is merged after engine parameters and therefore remains the final inline override.",
+      "Flex never reorders DOM children; reverse direction changes visual flow only."
+    ],
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "BROWSER_PROVE_ROOT_GEOMETRY_RESPONSIVE_RULE_PRECEDENCE_RTL_AND_LARGE_TEXT_WITH_SOURCE_HASH"
   },
   "themeControls": [
     {
       "controlId": "palette.seeds",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "NEGATIVE_COMPUTED_PROOF_MISSING",
+      "applicabilityHypothesis": "INVARIANT_CANDIDATE: Flex owns layout geometry and no family selector reads palette channels; inherited descendant paint is outside the root layout contract.",
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Flex/engines/modern/index.tsx",
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+      ],
+      "computedProperties": [
+        "display",
+        "flex-direction",
+        "gap"
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFF_PALETTE_STOPS_AND_PROVE_ROOT_LAYOUT_GEOMETRY_AND_ENGINE_OWNED_PAINT_ARE_UNCHANGED"
     },
     {
       "controlId": "typography.pairing",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "DESCENDANT_AND_NEGATIVE_PROOF_MISSING",
+      "applicabilityHypothesis": "INVARIANT_CANDIDATE: the root declares no font family; descendant typography may change intrinsic content size but not Flex-owned typography.",
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Flex/contracts/index.ts",
+        "packages/core/src/ui/primitives/layout/Flex/engines/modern/index.tsx"
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "PROVE_NO_ROOT_FONT_BINDING_AND_STRESS_WRAP_MIN_INLINE_SIZE_WITH_EACH_PAIRING"
     },
     {
       "controlId": "typography.families",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "DESCENDANT_AND_NEGATIVE_PROOF_MISSING",
+      "applicabilityHypothesis": "INVARIANT_CANDIDATE: family stacks inherit into children but Flex does not own text presentation.",
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Flex/engines/modern/index.tsx"
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "PROVE_ROOT_HAS_NO_FAMILY_SPECIFIC_FONT_CONSUMER_AND_LONG_CONTENT_REMAINS_OVERFLOW_SAFE"
     },
     {
       "controlId": "typography.scale",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "LARGE_TEXT_STRESS_AND_NEGATIVE_PROOF_MISSING",
+      "applicabilityHypothesis": "INVARIANT_CANDIDATE_WITH_DESCENDANT_STRESS: scale changes child metrics, while the root must preserve safe shrink, wrap and overflow behavior.",
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Flex/contracts/index.ts",
+        "packages/core/src/ui/primitives/layout/Flex/engines/modern/index.tsx"
+      ],
+      "stressCases": [
+        "200-percent-text",
+        "unbreakable-token",
+        "wrapped-row-and-column",
+        "consumer-overflow-policy"
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "RUN_LARGE_TEXT_AND_LONG_TOKEN_GEOMETRY_PROBE_AT_ALL_DIRECTIONS_AND_WRAP_STATES"
     },
     {
       "controlId": "shape.radius-scale",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "NEGATIVE_COMPUTED_PROOF_MISSING",
+      "applicabilityHypothesis": "NOT_APPLICABLE_CANDIDATE: Flex owns no radius, border or clipping surface.",
+      "sourceBindings": [
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "PROVE_BORDER_RADIUS_AND_OVERFLOW_CLIP_DO_NOT_CHANGE_ACROSS_RADIUS_STOPS"
     },
     {
       "controlId": "shape.button-style",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "NEGATIVE_COMPUTED_PROOF_MISSING",
+      "applicabilityHypothesis": "NOT_APPLICABLE_CANDIDATE: no button anatomy or button-radius consumer exists in Flex.",
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Flex/engines/modern/index.tsx"
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "NEGATIVE_CENSUS_BUTTON_CHANNELS_AND_PROVE_IDENTICAL_ROOT_GEOMETRY"
     },
     {
       "controlId": "density.mode",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "COMPUTED_STATIC_DB_AND_RESTORE_PROOF_MISSING",
+      "applicabilityHypothesis": "APPLICABLE_CANDIDATE_FOR_PRESET_GAPS: preset channels resolve through density-scaled --ds-spacing-*; numeric gaps must remain exact.",
+      "outputBindings": [
+        "--ds-spacing-1",
+        "--ds-spacing-2",
+        "--ds-spacing-4",
+        "--ds-spacing-6",
+        "--ds-spacing-8",
+        "--ds-spacing-10",
+        "--ds-spacing-12",
+        "--ds-spacing-16"
+      ],
+      "computedProperties": [
+        "gap",
+        "column-gap",
+        "row-gap"
+      ],
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Flex/contracts/index.ts#FLEX_GAP_MAP",
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+      ],
+      "negativeControls": [
+        "numeric gaps remain exact",
+        "direction wrap align justify and touch ownership remain unchanged"
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "PROVE_PRESET_COMPUTED_GAPS_FOR_COMPACT_NORMAL_SPACIOUS_STATIC_AND_DB_PLUS_EXACT_RESET"
     },
     {
       "controlId": "spacing.rhythm",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "COMPUTED_STATIC_DB_AND_RESTORE_EVIDENCE_MISSING",
+      "applicabilityHypothesis": "APPLICABLE_CANDIDATE_FOR_SCALAR_AND_RESPONSIVE_PRESET_GAPS: scalar uniform and split preset axes multiply by tight=0.85 normal=1 airy=1.2 through data-gap-preset stamping; responsive preset axes multiply through a Modern-only opt-in in the generated breakpoint rule; numeric axes are exact in every engine.",
+      "axisDispositions": [
+        {
+          "axis": "scalar-uniform-preset",
+          "hypothesis": "APPLICABLE",
+          "expectedComputed": "gap = computed(--ds-flex-gap) * rhythm factor; neutral-density md baseline 16px yields 13.6px / 16px / 19.2px"
+        },
+        {
+          "axis": "scalar-split-preset",
+          "hypothesis": "APPLICABLE_PER_AXIS",
+          "expectedComputed": "column-gap and row-gap independently multiply their stamped preset channel by the rhythm factor"
+        },
+        {
+          "axis": "numeric-uniform-or-split",
+          "hypothesis": "INVARIANT",
+          "expectedComputed": "finite non-negative number remains exact px; negative, NaN and Infinity normalize to 0px"
+        },
+        {
+          "axis": "responsive-preset",
+          "hypothesis": "APPLICABLE_MODERN_ONLY",
+          "expectedComputed": "the generated breakpoint rule emits gap: calc(<rung> * var(--ds-rhythm-effective-scale, 1)) per axis under Modern; a mixed [numeric, preset] tuple scales only the preset axis and emits calc(<rung> * var(--ds-rhythm-effective-scale, 1)) 8px; Classic and Rustic emit the unscaled rung and never reference the rhythm channel"
+        },
+        {
+          "axis": "responsive-invalid-or-none",
+          "hypothesis": "INVARIANT",
+          "expectedComputed": "none emits 0 and negative, NaN and Infinity emit 0px, in every engine, with no calc wrapper"
+        }
+      ],
+      "outputBindings": [
+        "data-gap",
+        "data-gap-preset",
+        "data-column-gap-preset",
+        "data-row-gap-preset",
+        "--ds-flex-gap",
+        "--ds-flex-column-gap",
+        "--ds-flex-row-gap",
+        "--ds-rhythm-effective-scale"
+      ],
+      "stableParts": [
+        "root"
+      ],
+      "propertyGroups": [
+        "uniform-and-split-gap",
+        "responsive-projection"
+      ],
+      "computedProperties": [
+        "gap",
+        "column-gap",
+        "row-gap"
+      ],
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Flex/contracts/index.ts#FLEX_GAP_RHYTHM_PRESETS",
+        "packages/core/src/ui/primitives/layout/Flex/runtime/presentation/index.ts",
+        "packages/core/src/ui/primitives/layout/Flex/runtime/responsive/index.ts",
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
+        "packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/controls/spacing.rhythm.json"
+      ],
+      "negativeControls": [
+        "gap=-8, NaN or Infinity normalizes to 0px and stamps no preset",
+        "gap=[numeric,preset] scales only the preset row axis",
+        "gap=[preset,numeric] scales only the preset column axis",
+        "gap=none remains zero",
+        "direction wrap alignment width overflow font color border and motion remain unchanged"
+      ],
+      "stressCases": [
+        "rtl-row-and-row-reverse",
+        "wrap-and-wrap-reverse",
+        "nested-flex-with-independent-gaps",
+        "large-text",
+        "responsive-gap-at-xs-and-md",
+        "mixed-preset-numeric-tuple"
+      ],
+      "restoreRequirements": [
+        "Unset static and DB rhythm must restore factor 1 and byte-equivalent computed gap for the same source tree.",
+        "No stale data attribute or instance channel may survive rerender from preset to numeric or unset.",
+        "Responsive gap remediation must preserve consumer style precedence and exact numeric geometry."
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "PROVE_0_85_1_1_2_COMPUTED_GAPS_FOR_SCALAR_AND_RESPONSIVE_PRESET_AXES_STATIC_DB_NEGATIVES_AND_EXACT_RESTORE"
     },
     {
       "controlId": "motion.dial",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "COMPUTED_MOTION_AND_REDUCED_MOTION_PROOF_MISSING",
+      "applicabilityHypothesis": "APPLICABLE_CANDIDATE_WHEN motion=rearrange: transition resolves through --ds-transition-rearrange; motion=none must remain none.",
+      "outputBindings": [
+        "data-layout-motion",
+        "--ds-transition-rearrange",
+        "--ds-motion-rearrange"
+      ],
+      "computedProperties": [
+        "transition-duration",
+        "transition-property",
+        "transition-timing-function"
+      ],
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Flex/runtime/presentation/index.ts",
+        "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css"
+      ],
+      "negativeControls": [
+        "motion=none remains transition:none",
+        "prefers-reduced-motion forces rearrange duration to zero"
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "PROVE_DIAL_STOPS_ONLY_CHANGE_REARRANGE_CADENCE_AND_REDUCED_MOTION_WINS_STATIC_AND_DB"
     },
     {
       "controlId": "surfaces.elevation-posture",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "NEGATIVE_COMPUTED_PROOF_MISSING",
+      "applicabilityHypothesis": "NOT_APPLICABLE_CANDIDATE: Flex is a transparent structural root with no shadow ownership.",
+      "sourceBindings": [
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "PROVE_BOX_SHADOW_BACKGROUND_AND_BORDER_ARE_UNCHANGED_ACROSS_ELEVATION_POSTURES"
     },
     {
       "controlId": "surfaces.effect-intensity",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "NEGATIVE_COMPUTED_PROOF_MISSING",
+      "applicabilityHypothesis": "NOT_APPLICABLE_CANDIDATE: Flex owns no blur, texture, gradient or glass effect.",
+      "sourceBindings": [
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "NEGATIVE_CENSUS_EFFECT_CHANNELS_AND_COMPUTED_PAINT"
     },
     {
       "controlId": "navigation.sidebar-tone",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "NEGATIVE_COMPUTED_PROOF_MISSING",
+      "applicabilityHypothesis": "NOT_APPLICABLE_CANDIDATE: generic Flex has no sidebar role or sidebar color consumer.",
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Flex/contracts/index.ts"
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "PROVE_SIDEBAR_TONE_CANNOT_SELECT_OR_PAINT_GENERIC_FLEX"
     },
     {
       "controlId": "experience.profile",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "COMPOSED_PROFILE_DIFFERENTIAL_PROOF_MISSING",
+      "applicabilityHypothesis": "INVARIANT_CANDIDATE_EXCEPT_THROUGH_EXPLICIT_CHILD_OR_SPACING_AXES: Flex reads no experience-profile channel directly.",
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Flex/engines/modern/index.tsx",
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFF_EACH_PROFILE_AND_ATTRIBUTE_ANY_GEOMETRY_DELTA_TO_A_GOVERNED_UNDERLYING_AXIS"
     },
     {
       "controlId": "chrome.families",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "NEGATIVE_COMPUTED_PROOF_MISSING",
+      "applicabilityHypothesis": "NOT_APPLICABLE_CANDIDATE: no button, table or modal chrome channel is consumed by Flex.",
+      "sourceBindings": [
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "NEGATIVE_CENSUS_CHROME_FAMILY_CHANNELS"
     },
     {
       "controlId": "chrome.anatomy",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "ROOT_ATTRIBUTE_NEGATIVE_PROOF_MISSING",
+      "applicabilityHypothesis": "NOT_APPLICABLE_CANDIDATE: data-anatomy-layout currently targets shells and headers, not the Flex primitive root.",
+      "sourceBindings": [
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "PROVE_LAYOUT_ANATOMY_ROOT_ATTRIBUTE_HAS_NO_FLEX_SELECTOR_OR_COMPUTED_DELTA"
     },
     {
       "controlId": "token-overrides",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "ALLOWLIST_MEMBERSHIP_AND_EXACT_RESTORE_PROOF_MISSING",
+      "applicabilityHypothesis": "APPLICABLE_CANDIDATE_ONLY_FOR_ALLOWLISTED_LAYOUT_CHANNELS: spacing and motion token overrides may reach preset gaps and rearrange cadence; structural props remain instance-owned.",
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Flex/contracts/index.ts#FLEX_GAP_MAP",
+        "packages/core/src/ui/primitives/layout/Flex/runtime/presentation/index.ts",
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+      ],
+      "negativeControls": [
+        "cannot override direction wrap justify align inline width overflow or numeric gap",
+        "unknown and non-allowlisted channels fail closed"
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "RESOLVE_EXPERT_ALLOWLIST_MEMBERSHIP_THEN_PROVE_ONLY_AUTHORIZED_GAP_OR_MOTION_CHANNELS_MOVE_AND_RESET_EXACTLY"
     },
     {
       "controlId": "recipe-profile",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "NEGATIVE_BINDING_PROOF_MISSING",
+      "applicabilityHypothesis": "INVARIANT_CANDIDATE: Flex exposes no recipe prop, group or recipe-profile consumer.",
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Flex/contracts/index.ts",
+        "packages/core/src/ui/primitives/layout/Flex/engines/modern/index.tsx"
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "PROVE_RECIPE_PROFILE_SELECTION_PRESERVES_IDENTICAL_FLEX_ROOT_AND_LAYOUT"
     },
     {
       "controlId": "profiles.expressive",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "COMPOSED_AXIS_NEGATIVE_PROOF_MISSING",
+      "applicabilityHypothesis": "INVARIANT_CANDIDATE: expressive type, edge and material outputs are not directly consumed by Flex.",
+      "sourceBindings": [
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFF_EXPRESSIVE_AXES_AND_PROVE_NO_DIRECT_FLEX_SELECTOR_OR_PAINT_BINDING"
     },
     {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "NEGATIVE_BINDING_PROOF_MISSING",
+      "applicabilityHypothesis": "NOT_APPLICABLE_CANDIDATE: Flex renders no owned icon and does not choose descendant glyph policy.",
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Flex/engines/modern/index.tsx"
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "PROVE_ICON_PROFILE_CHANGES_DESCENDANT_ICONS_ONLY_AND_NOT_FLEX_OWNED_ANATOMY"
     },
     {
       "controlId": "responsive.posture",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "CONTROL_TO_FAMILY_NEGATIVE_PROOF_MISSING",
+      "applicabilityHypothesis": "INVARIANT_CANDIDATE: Flex has its own viewport-breakpoint ResponsiveValue API and does not consume the WidgetBoard responsive posture control.",
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Flex/runtime/responsive/index.ts",
+        "packages/core/src/infrastructure/runtime/responsive/runtime/style-properties"
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "PROVE_RESPONSIVE_POSTURE_CONTROL_DOES_NOT_CHANGE_FLEX_BREAKPOINTS_OR_ROOT_GEOMETRY"
     }
   ],
   "retiredThemeControls": [],
   "recipeAnatomy": {
-    "assessmentState": "UNKNOWN",
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/primitives/layout/Flex/contracts/index.ts",
+      "packages/core/src/ui/primitives/layout/Flex/engines/modern/index.tsx",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+    ],
     "groupBindings": [],
     "variants": [],
     "deprecatedAliases": [],
     "evidenceIds": [],
-    "nextAction": "CENSUS_TYPED_RECIPE_AND_ANATOMY_VARIANTS"
+    "nextAction": "NEGATIVE_PROVE_NO_RECIPE_PROFILE_OR_LAYOUT_ANATOMY_SELECTOR_TARGETS_FLEX"
   },
   "instanceApi": {
-    "assessmentState": "UNKNOWN",
-    "props": [],
-    "slots": [],
-    "callbacks": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/primitives/layout/Flex/contracts/index.ts#FlexProps",
+      "packages/core/src/ui/primitives/layout/Flex/index.ts"
+    ],
+    "contractSymbol": "FlexProps",
+    "props": [
+      "direction",
+      "wrap",
+      "justify",
+      "align",
+      "gap",
+      "flex",
+      "inline",
+      "children",
+      "className",
+      "style",
+      "engine",
+      "role",
+      "width",
+      "minWidth",
+      "maxWidth",
+      "overflow",
+      "motion",
+      "id",
+      "dir",
+      "data-*",
+      "aria-*",
+      "remaining HTMLAttributes<HTMLDivElement>"
+    ],
+    "slots": [
+      "children"
+    ],
+    "callbacks": [
+      "native HTMLAttributes event callbacks forwarded to root"
+    ],
     "controlledState": [],
     "evidenceIds": [],
-    "nextAction": "CENSUS_PUBLIC_PROPS_SLOTS_CALLBACKS_AND_CONTROLLED_STATE"
+    "nextAction": "VERIFY_PUBLIC_ENTRYPOINT_TYPE_EXPORTS_REF_TYPE_AND_NATIVE_ATTRIBUTE_PRECEDENCE"
   },
   "hostAdaptation": {
-    "assessmentState": "UNKNOWN",
-    "contexts": [],
-    "containerRules": [],
-    "invariants": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/primitives/layout/Flex/engines/modern/index.tsx",
+      "packages/core/src/ui/primitives/layout/Flex/runtime/responsive/index.ts",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+    ],
+    "contexts": [
+      "standalone-page",
+      "embedded-workbench",
+      "narrow-region",
+      "rtl-subtree"
+    ],
+    "containerRules": [
+      "Modern pins min-inline-size:0 for safe nesting and ellipsis.",
+      "ResponsiveValue emits scoped viewport media rules; it is not container-query based.",
+      "Consumer inline style wins over engine parameter and responsive stylesheet declarations.",
+      "width, minWidth, maxWidth and overflow may be scalar or ResponsiveValue."
+    ],
+    "invariants": [
+      "RTL is forwarded and logical flex-start/flex-end semantics follow the writing direction.",
+      "Flex owns no touch target or keyboard model; interactive descendants remain responsible.",
+      "Role, aria-* and data-* reach the root without changing layout ownership."
+    ],
+    "sourceTests": [
+      "packages/core/src/ui/primitives/layout/Flex/tests/Flex.modern-quality.test.tsx",
+      "packages/core/src/ui/primitives/layout/Flex/tests/Flex.responsive.test.tsx",
+      "packages/core/src/ui/primitives/layout/Flex/tests/Flex.modern-consumer-data-attributes.test.tsx",
+      "packages/core/src/ui/primitives/layout/Flex/tests/Flex.rhythm-preset-contract.test.tsx"
+    ],
     "evidenceIds": [],
-    "nextAction": "PROVE_PAGE_EMBED_CONTAINER_VIEWPORT_AND_HOST_POSTURES"
+    "nextAction": "BROWSER_PROVE_WIDE_VIEWPORT_NARROW_HOST_RTL_LARGE_TEXT_AND_CONSUMER_STYLE_PRECEDENCE"
   },
   "statesMotion": {
-    "assessmentState": "UNKNOWN",
-    "states": [],
-    "transitions": [],
-    "inputModes": [],
-    "reducedMotion": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/primitives/layout/Flex/runtime/presentation/index.ts",
+      "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+    ],
+    "states": [
+      "default",
+      "wrapped",
+      "responsive-breakpoint",
+      "rearranging",
+      "motion-none"
+    ],
+    "transitions": [
+      "motion=rearrange -> --ds-transition-rearrange",
+      "motion=none -> transition:none"
+    ],
+    "inputModes": [
+      "passive-layout",
+      "native-pointer-events-forwarded",
+      "native-keyboard-events-forwarded"
+    ],
+    "reducedMotion": [
+      "global reduced-motion authority forces --ds-motion-rearrange to 0s"
+    ],
     "evidenceIds": [],
-    "nextAction": "CENSUS_STATES_TRANSITIONS_INPUTS_AND_REDUCED_MOTION"
+    "nextAction": "COMPUTED_PROVE_MOTION_DIAL_REDUCED_MOTION_AND_NO_LAYOUT_SHIFT_AT_REST"
   },
   "invariants": {
-    "assessmentState": "UNKNOWN",
-    "entries": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/primitives/layout/Flex/contracts/index.ts",
+      "packages/core/src/ui/primitives/layout/Flex/engines/modern/index.tsx",
+      "packages/core/src/ui/primitives/layout/Flex/runtime/presentation/index.ts",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+    ],
+    "entries": [
+      "One stable root owns all Flex geometry.",
+      "Responsive projection never duplicates or reorders children.",
+      "Preset and numeric gap paths are mutually distinguishable; exact numeric geometry never acquires a preset marker.",
+      "Invalid scalar and responsive numeric gaps normalize to zero rather than emitting NaN, Infinity or a negative gap.",
+      "min-inline-size:0 remains unless the consumer explicitly overrides it.",
+      "Theme controls never select direction, wrapping, alignment or content order.",
+      "Unset tenant controls must exactly restore the same root attributes, instance channels and computed geometry."
+    ],
     "evidenceIds": [],
-    "nextAction": "AUTHOR_STRUCTURAL_BEHAVIORAL_ACCESSIBILITY_AND_RESTORE_INVARIANTS"
+    "nextAction": "BIND_EACH_INVARIANT_TO_NEGATIVE_DRILLS_COMPUTED_OUTPUT_AND_SIGHTED_HOST_RECEIPTS"
   },
-  "premiumCandidates": []
+  "premiumCandidates": [
+    {
+      "id": "container-responsive-flex-values",
+      "proposalState": "PROPOSAL",
+      "countsAsCapability": false,
+      "gap": "ResponsiveValue is viewport-media based, so a narrow embedded workbench inside a wide viewport cannot select a compact axis or gap from host width.",
+      "mechanism": "additive responsiveBasis=viewport|container contract backed by named-container rules; default remains viewport",
+      "candidateVariants": [
+        "viewport",
+        "container"
+      ],
+      "blockedBy": [
+        "two-consumer-demand",
+        "SSR-and-hydration-contract",
+        "container-name-ownership",
+        "browser-resize-evidence"
+      ]
+    },
+    {
+      "id": "named-axis-gap-props",
+      "proposalState": "PROPOSAL",
+      "countsAsCapability": false,
+      "gap": "The [column,row] tuple is compact but opaque and the responsive rhythm defect shows axis provenance needs a stronger contract.",
+      "mechanism": "additive rowGap and columnGap props with explicit precedence over gap and per-axis preset stamping",
+      "candidateVariants": [
+        "uniform",
+        "split",
+        "responsive-split"
+      ],
+      "blockedBy": [
+        "tuple-backward-compatibility",
+        "precedence-law",
+        "rhythm-remediation",
+        "static-db-computed-proof"
+      ]
+    }
+  ]
 }

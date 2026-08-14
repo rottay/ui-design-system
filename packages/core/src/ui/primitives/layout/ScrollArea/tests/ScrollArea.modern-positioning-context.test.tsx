@@ -27,7 +27,9 @@ function rootDeclarations(property: string): string[] {
   postcss.parse(modernSkin).walkRules((rule) => {
     if (rule.parent?.type !== 'root') return;
     if (!rule.selectors.some((selector) => selector.replace(/\s+/g, ' ').trim() === MODERN_ROOT)) return;
-    rule.walkDecls(property, (declaration) => values.push(declaration.value.trim()));
+    rule.walkDecls(property, (declaration) => {
+      values.push(declaration.value.trim());
+    });
   });
   return values;
 }

@@ -9,14 +9,14 @@
       "PatternPageShell"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/shell",
+    "sourceOwner": "packages/core/src/ui/patterns/shell/page-shell",
     "publicComponents": [
       "PatternPageShell"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "481a2d99c0c0809041af27e530abebb9759964ce829d9fe92581d362a65235b6"
+    "inventoryRowDigest": "b6fced4c9260c77e78ed2060b5560db3b33bbd3b766afc41de703aabc3376bad"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

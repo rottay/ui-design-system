@@ -153,9 +153,58 @@ test('reasonFor classifies the known debt buckets', () => {
   assert.match(reasonFor('--ds-tall-card-shadow'), /redundancy hand-off/);
   assert.match(reasonFor('--ds-chart-series-3'), /chart-series/);
   assert.match(reasonFor('--ds-collection-card-footer-bg'), /partly consumed/);
-  assert.match(reasonFor('--ds-color-dark-primary'), /dark-seed/);
   assert.match(reasonFor("[data-anatomy-card='ghost']"), /anatomy variant selector/);
   assert.match(reasonFor('--ds-something-unknown'), /accepted debt/);
+});
+
+// The `--ds-color-dark-*` family had its own `reasonFor` bucket ("dark-seed
+// override token; consumed once dual-ramp light-dark derivation lands"). The
+// family was REMOVED from TENANT_THEME_OVERRIDE_TOKENS — a theme now declares
+// the mode it is authored in and the other mode rides `modes.{light,dark}` —
+// so the bucket went with it and both baselines dropped their four entries.
+//
+// This case replaces the stale assertion rather than deleting it. Asserting
+// only "reasonFor no longer says dark-seed" would still pass if someone
+// re-added the four channels to the contract, so the real invariant is pinned
+// too: the family is not in the emitted inventory at all.
+test('the retired --ds-color-dark-* family has no reason bucket and no inventory row', () => {
+  for (const name of [
+    '--ds-color-dark-primary',
+    '--ds-color-dark-secondary',
+    '--ds-color-dark-accent',
+    '--ds-color-dark-bg',
+  ]) {
+    assert.doesNotMatch(
+      reasonFor(name),
+      /dark-seed/,
+      `${name} must not carry a dark-seed debt reason: the family is retired, not deferred`,
+    );
+    assert.match(reasonFor(name), /accepted debt/);
+  }
+
+  // Hermetic: reads the contract SOURCE as text, so this stays runnable in the
+  // pre-build test:scripts slot exactly like the rest of this suite.
+  const contract = readFileSync(
+    join(
+      dirname(dirname(fileURLToPath(import.meta.url))),
+      'src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts',
+    ),
+    'utf-8',
+  );
+  const block = /export const TENANT_THEME_OVERRIDE_TOKENS = \[([\s\S]*?)\]/.exec(contract);
+  assert.ok(block, 'TENANT_THEME_OVERRIDE_TOKENS must still be declared as an array literal');
+  for (const name of [
+    '--ds-color-dark-primary',
+    '--ds-color-dark-secondary',
+    '--ds-color-dark-accent',
+    '--ds-color-dark-bg',
+  ]) {
+    assert.equal(
+      block[1].includes(`"${name}"`) || block[1].includes(`'${name}'`),
+      false,
+      `${name} must not be re-introduced into TENANT_THEME_OVERRIDE_TOKENS`,
+    );
+  }
 });
 
 test('CHART_SERIES_CHANNELS enumerates ten slots', () => {

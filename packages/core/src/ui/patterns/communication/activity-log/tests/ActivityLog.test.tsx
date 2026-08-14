@@ -111,7 +111,7 @@ describe('PatternActivityLog', () => {
           {...createProps({
             onFilterChange: vi.fn(),
             actionTypes: ['created', 'updated'],
-            users: [{ id: 'u1', name: 'Alice' }],
+            users: [{ name: 'Alice' }],
           })}
         />,
         'modern',

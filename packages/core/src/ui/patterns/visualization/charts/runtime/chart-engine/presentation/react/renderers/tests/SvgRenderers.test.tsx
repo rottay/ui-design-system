@@ -48,9 +48,6 @@ function testTenant(slug: string, primaryColor: string): TenantConfig {
     branding: {
       companyName: slug,
       primaryColor,
-      accentColor: '#0f766e',
-      darkPrimaryColor: '#93c5fd',
-      darkAccentColor: '#5eead4',
     },
   };
 }

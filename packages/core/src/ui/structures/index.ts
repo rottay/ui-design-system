@@ -11,7 +11,7 @@
  * - `record/`     — record field grids, summary strips, action bars,
  *                   panels, form sections
  * - `dashboard/`  — dashboard insight variants, stats headers, metric cards
- * - `feedback/`   — loading overlays
+ * - `feedback/`   — loading overlays, surface lifecycle state chrome, capability anatomy
  * - `shell/`      — application shell (sidebar + header + content)
  *
  * The tier is editorial structure for the source tree, not part of the
@@ -32,6 +32,13 @@ export {
   SHELL_DEFAULTS,
   BottomTabBar,
   BOTTOM_TAB_BAR_DEFAULTS,
+  PageShellSurface,
+  SidebarSurface,
+  SurfaceActionBar,
+  SurfaceTabbedLabel,
+  SurfaceSectionCard,
+  surfaceSectionCardRecipe,
+  WorkspaceShell,
 } from './shell';
 export type {
   AppShellProps,
@@ -44,4 +51,10 @@ export type {
   ShellContextValue,
   BottomTabBarProps,
   BottomTabBarItem,
+  PageShellSurfaceProps,
+  SidebarSurfaceProps,
+  SurfaceActionBarProps,
+  SurfaceTabbedLabelProps,
+  SurfaceSectionCardProps,
+  WorkspaceShellProps,
 } from './shell';

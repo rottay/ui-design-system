@@ -22,6 +22,15 @@
  * current three files and is what makes the relocation safe; a future rule
  * added here that a family file also sets at equal specificity would break it.
  *
+ * MOTION OWNERSHIP IS LOCAL, and that is the same property stated for motion:
+ * the file that DECLARES a transition or animation is the file that collapses
+ * it under `prefers-reduced-motion`. This file declares the back chip's
+ * transition, so the reduce guard for the back chip is here; each family file
+ * declares its own root's `ds-header-enter` run, so each guards its own root
+ * there. No selector is guarded from two files. When the back-button paint
+ * moved here the guard did NOT move with it — the families kept guarding a
+ * `back-button` they no longer painted, and this file animated unguarded.
+ *
  * CHANNELS: the tone rides `--ds-header-icon-tone-{bg,bd,fg}`, set inline by
  * both engines from `getVariantTone(...)` because the pre-step stamped no
  * variant attribute to key on. The focus ring rides
@@ -154,6 +163,21 @@
 .ds-structure.ds-form-header a:has(> [data-part='breadcrumb-link']) {
   text-decoration: none;
 }
+/* ─── SHARED EDIT+FORM: reduced motion for the back chip ─────────────────────
+   This file declares the chip's transition, so this file collapses it. The
+   durations go near-zero rather than `none`: `transitionend` still fires, so a
+   hover/active sequence waiting on the event resolves instead of stalling.
+   Longhands, so the shorthand's property list and easing survive. Both family
+   roots are guarded in their own files — this block owns the chip only. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-structure.ds-edit-header [data-part='back-button'],
+  .ds-structure.ds-form-header [data-part='back-button'] {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
 /* the back arrow is the governed `navigation.back` semantic icon with
    autoMirror in BOTH families — it flips itself under RTL. The old manual
    scaleX(-1) rule is retired: after FormHeader's migration it DOUBLE-flipped

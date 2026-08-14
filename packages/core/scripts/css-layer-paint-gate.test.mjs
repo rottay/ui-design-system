@@ -118,6 +118,7 @@ test("every owned channel maps to its canonical layer and root authorities stay 
       canonical,
       "@import './foundation/base/index.css' layer(rottay-tokens);",
       "@import './foundation/base/properties.css';",
+      "@import './foundation/monochrome/index.css' layer(rottay-tokens);",
       "@import './foundation/animations/index.css' layer(rottay-motion);",
       "@import './presentation/components/skin/card.css' layer(rottay-components);",
       "@import './runtime/engines/modern/skin/card.css' layer(rottay-engines);",
@@ -133,6 +134,51 @@ test("every owned channel maps to its canonical layer and root authorities stay 
     assert.equal(result.status, 0, result.stderr || result.stdout);
   } finally {
     f.cleanup();
+  }
+});
+
+test("the monochrome channel is owned by rottay-tokens, and only that exact channel", () => {
+  // The monochrome scale authors `--ds-*` tokens, so rottay-tokens owns it.
+  // Ownership must be enforced in both directions -- escaping the cascade and
+  // claiming the wrong owner both fail -- and it must be scoped to this exact
+  // channel rather than a broad `foundation/` catch-all that would silently
+  // adopt any future sibling.
+  const unlayered = fixture(
+    `${canonical}\n@import './foundation/monochrome/index.css';\n`
+  );
+  const wrong = fixture(
+    `${canonical}\n@import './foundation/monochrome/index.css' layer(rottay-components);\n`
+  );
+  const sibling = fixture(
+    `${canonical}\n@import './foundation/monochrome-legacy/index.css' layer(rottay-tokens);\n`
+  );
+  try {
+    const escaped = run(unlayered.entry);
+    assert.equal(escaped.status, 1, escaped.stdout);
+    assert.match(
+      escaped.stderr,
+      /unlayered first-party import: \.\/foundation\/monochrome\/index\.css; expected layer\(rottay-tokens\)/
+    );
+
+    const misplaced = run(wrong.entry);
+    assert.equal(misplaced.status, 1, misplaced.stdout);
+    assert.match(
+      misplaced.stderr,
+      /wrong cascade owner: \.\/foundation\/monochrome\/index\.css uses layer\(rottay-components\); expected layer\(rottay-tokens\)/
+    );
+
+    // A prefix-sibling is NOT the monochrome channel: it has no declared owner
+    // and stays a defect even though it names the layer the real channel uses.
+    const undeclared = run(sibling.entry);
+    assert.equal(undeclared.status, 1, undeclared.stdout);
+    assert.match(
+      undeclared.stderr,
+      /first-party import has no cascade owner: \.\/foundation\/monochrome-legacy\/index\.css/
+    );
+  } finally {
+    unlayered.cleanup();
+    wrong.cleanup();
+    sibling.cleanup();
   }
 });
 

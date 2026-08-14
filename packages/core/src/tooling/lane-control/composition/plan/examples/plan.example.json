@@ -1,34 +1,40 @@
 {
   "planId": "example-batch",
-  "note": "An example lane plan. It mixes the three shapes a batch really has: family lanes bounded by a ledger row, a synthetic lane over a non-family region, and one lane that legitimately owns a single-owner file and says so. The three nested writeRoot pairs in the ledger are the interesting case — `structure/shell/app-shell` and `structure/shell/bottom-tab-bar` are nested, and only the row's writeExcludes keeps them apart.",
+  "note": "An example lane plan. `laneRole` is closed: a `family` lane is bounded by an ownership row derived from the canonical inventory, a `domain` lane by a synthetic row over a region no family owns, and an `integrator` — the only role that may declare its own writeRoot — by a declared shared region. F2/F3 are the interesting case: `structure/workspace/search-command-bar` lives INSIDE `structure/workspace/connected-command-palette`'s source owner, and the two lanes are disjoint only because the outer row's writeExcludes is derived from that nesting. Nothing declares it; move either family in the inventory and the bound moves with it. B is the shared-CSS holder for this plan, and it is the only one: a shared domain admits one claimant even when the files differ.",
   "lanes": [
     {
       "id": "F1",
+      "laneRole": "family",
       "row": "primitive/display/avatar",
       "model": "sonnet"
     },
     {
       "id": "F2",
-      "row": "structure/shell/app-shell",
+      "laneRole": "family",
+      "row": "structure/workspace/connected-command-palette",
       "model": "sonnet"
     },
     {
       "id": "F3",
-      "row": "structure/shell/bottom-tab-bar",
+      "laneRole": "family",
+      "row": "structure/workspace/search-command-bar",
       "model": "sonnet"
     },
     {
       "id": "G",
+      "laneRole": "domain",
       "row": "tooling:gates",
       "model": "opus"
     },
     {
       "id": "H",
+      "laneRole": "domain",
       "row": "tooling:generator",
       "model": "opus"
     },
     {
       "id": "B",
+      "laneRole": "domain",
       "row": "layer:base",
       "model": "opus",
       "claimsSharedFiles": [

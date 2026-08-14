@@ -14,13 +14,13 @@ import type {
   CompareSurfaceRow,
 } from "../../../../foundation/contracts";
 import { useOptionalDirection } from "@/infrastructure/runtime/i18n";
-import { useSurfaceTranslations } from "../../../../runtime/helpers/states/i18n";
-import { PageShellSurface } from "../../../../composition/layout/page-shell";
-import { useSurfaceProfileDefaultsWithOverrides } from "../../../../runtime/profile-defaults/overrides";
-import { useSurfaceResponsiveLayout } from "../../../../runtime/responsive";
-import { SurfaceActionBar } from "../../../../runtime/helpers/rendering";
+import { useSurfaceTranslations } from "../../../../../structures/foundation/chrome/runtime/i18n";
+import { PageShellSurface } from "../../../../../structures/shell/page-shell-surface";
+import { useSurfaceProfileDefaultsWithOverrides } from "../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides";
+import { useSurfaceResponsiveLayout } from "../../../../../structures/foundation/chrome/runtime/responsive";
+import { SurfaceActionBar } from "../../../../../structures/shell/surface-chrome";
 import { hasSurfaceError } from "../../../../runtime/helpers";
-import { SurfaceEmptyState, SurfaceErrorState } from "../../../../runtime/helpers/states";
+import { SurfaceEmptyState, SurfaceErrorState } from "../../../../../structures/feedback/surface-lifecycle";
 
 export interface CompareSurfaceProps {
   config: CompareSurfaceConfig;

@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, resolve } from 'node:path';
 import test from 'node:test';
@@ -49,6 +49,21 @@ const TEST_TIERS = {
   fixture: ['feature', 'generated', 'layered'],
 };
 
+/**
+ * A scoped-rank fixture only proves what it claims when every planted import
+ * actually resolves. An unresolved specifier is silently dropped before the
+ * peer rules run, so a typo would read as "no finding" — the same shape as a
+ * granted permission.
+ */
+function assertEveryImportResolved(result) {
+  assert.deepEqual(
+    result.findings
+      .filter(({ rule }) => rule === 'unresolved-local-import')
+      .map(({ id }) => id),
+    [],
+  );
+}
+
 test('barrel classifier distinguishes aggregators from index implementations', () => {
   assert.equal(isBarrelSource("'use client';\nexport { Widget } from './Widget';\n"), true);
   assert.equal(isBarrelSource('export const Widget = () => null;\n'), false);
@@ -91,12 +106,23 @@ test('default macro roots match the governed graphics and UI taxonomy', () => {
     structures: 2,
     surfaces: 3,
   });
+  // Mirrored in source order. Every entry here is proved load-bearing by a
+  // causal test below; this literal only keeps the table reviewable in one
+  // place, so it must stay complete rather than track the entries someone
+  // happened to touch.
   assert.deepEqual(SCOPED_OWNER_RANKS, {
     foundation: { contracts: 0, presets: 1 },
     'foundation/i18n/runtime': { catalog: 0, resolution: 1 },
     'foundation/kernel': { color: 0, accessibility: 1 },
     'foundation/kernel/color': { contrast: 0, oklch: 1 },
     infrastructure: { compilers: 0, runtime: 1 },
+    'infrastructure/compilers/kernel/foundation/css/color-math': {
+      'palette-derivations': 0,
+      'readable-ink': 0,
+      'interaction-floor': 1,
+    },
+    'tooling/resolution-probe/foundation': { paths: 0, scope: 1 },
+    'tooling/resolution-probe/composition': { receipt: 0, run: 1 },
     'ui/primitives/runtime/overlay': {
       'top-layer-host': 0,
       portal: 1,
@@ -104,6 +130,16 @@ test('default macro roots match the governed graphics and UI taxonomy', () => {
     'ui/primitives/feedback/Toast/runtime/state': {
       'method-registry': 0,
       provider: 1,
+    },
+    'ui/structures': { shell: 0, headers: 1 },
+    'ui/structures/shell': { 'surface-chrome': 0, navigation: 1 },
+    'ui/structures/workspace': {
+      'connected-command-palette': 0,
+      'search-command-bar': 1,
+    },
+    'ui/structures/feedback/surface-lifecycle': {
+      states: 0,
+      'use-surface-state': 1,
     },
   });
   assert.deepEqual(UI_COMPONENT_BRANCH_RANKS, {
@@ -116,6 +152,232 @@ test('default macro roots match the governed graphics and UI taxonomy', () => {
   });
   assert.equal(Object.hasOwn(LOCAL_LAYER_RANKS, 'engines'), false);
   assert.equal(Object.hasOwn(LOCAL_LAYER_RANKS, 'compound'), false);
+});
+
+test('every scoped owner and ranked child resolves to a real directory', () => {
+  const sourceRoot = resolve(import.meta.dirname, '../src');
+  const owners = Object.keys(SCOPED_OWNER_RANKS);
+  const rankedChildren = owners.flatMap((owner) => (
+    Object.keys(SCOPED_OWNER_RANKS[owner]).map((child) => `${owner}/${child}`)
+  ));
+
+  // Pinned before the loop: an entry silently deleted from the table would
+  // otherwise leave a passing loop over whatever survived.
+  assert.equal(owners.length, 14);
+  assert.equal(rankedChildren.length, 29);
+
+  for (const path of [...owners, ...rankedChildren]) {
+    assert.equal(
+      statSync(resolve(sourceRoot, path), { throwIfNoEntry: false })?.isDirectory(),
+      true,
+      `SCOPED_OWNER_RANKS declares "${path}", which is not a directory under src/.`,
+    );
+  }
+});
+
+test('the colour floor outranks nothing: equal-rank seeds stay peers under the interaction floor', () => {
+  const { packageRoot, sourceRoot } = fixture();
+  try {
+    const owner = 'infrastructure/compilers/kernel/foundation/css/color-math';
+    write(
+      resolve(sourceRoot, `${owner}/readable-ink/index.ts`),
+      'export const ink = true;\n',
+    );
+    write(
+      resolve(sourceRoot, `${owner}/interaction-floor/index.ts`),
+      "import { seeds } from '../palette-derivations';\nimport { ink } from '../readable-ink';\nexport const floor = seeds && ink;\n",
+    );
+    // Both an inversion and a same-rank control leave this one file: the floor
+    // is rank 1 above it, readable-ink is rank 0 beside it.
+    write(
+      resolve(sourceRoot, `${owner}/palette-derivations/index.ts`),
+      "import { floor } from '../interaction-floor';\nimport { ink } from '../readable-ink';\nexport const seeds = floor && ink;\n",
+    );
+
+    const result = auditCoreStructure({ packageRoot, sourceRoot });
+    assertEveryImportResolved(result);
+    const ids = new Set(result.findings.map(({ id }) => id));
+
+    for (const edge of [
+      `${owner}/interaction-floor/index.ts->${owner}/palette-derivations/index.ts`,
+      `${owner}/interaction-floor/index.ts->${owner}/readable-ink/index.ts`,
+    ]) {
+      assert(!ids.has(`sibling-owner-dependency:${edge}`));
+      assert(!ids.has(`local-layer-inversion:${edge}`));
+    }
+    assert(ids.has(
+      `local-layer-inversion:${owner}/palette-derivations/index.ts->${owner}/interaction-floor/index.ts`,
+    ));
+    // Equal rank is not permission. Two rank-0 peers remain sibling debt.
+    assert(ids.has(
+      `sibling-owner-dependency:${owner}/palette-derivations/index.ts->${owner}/readable-ink/index.ts`,
+    ));
+  } finally {
+    rmSync(packageRoot, { recursive: true, force: true });
+  }
+});
+
+test('resolution-probe ranks bind their own owner without ranking its unlisted siblings', () => {
+  const { packageRoot, sourceRoot } = fixture();
+  try {
+    const foundation = 'tooling/resolution-probe/foundation';
+    const composition = 'tooling/resolution-probe/composition';
+    write(
+      resolve(sourceRoot, `${foundation}/scope/index.ts`),
+      "import { paths } from '../paths';\nexport const scope = paths;\n",
+    );
+    write(
+      resolve(sourceRoot, `${foundation}/paths/index.ts`),
+      "import { scope } from '../scope';\nexport const paths = scope;\n",
+    );
+    write(
+      resolve(sourceRoot, `${composition}/run/index.ts`),
+      "import { receipt } from '../receipt';\nexport const run = receipt;\n",
+    );
+    write(
+      resolve(sourceRoot, `${composition}/receipt/index.ts`),
+      "import { run } from '../run';\nexport const receipt = run;\n",
+    );
+    // Control: two unranked owners inside a ranked owner are still peers. The
+    // table ranks the children it names, not the directory they sit in.
+    write(resolve(sourceRoot, `${foundation}/roster/index.ts`), 'export const roster = true;\n');
+    write(
+      resolve(sourceRoot, `${foundation}/guards/index.ts`),
+      "import { roster } from '../roster';\nexport const guards = roster;\n",
+    );
+
+    const result = auditCoreStructure({ packageRoot, sourceRoot });
+    assertEveryImportResolved(result);
+    const ids = new Set(result.findings.map(({ id }) => id));
+
+    for (const edge of [
+      `${foundation}/scope/index.ts->${foundation}/paths/index.ts`,
+      `${composition}/run/index.ts->${composition}/receipt/index.ts`,
+    ]) {
+      assert(!ids.has(`sibling-owner-dependency:${edge}`));
+      assert(!ids.has(`local-layer-inversion:${edge}`));
+    }
+    assert(ids.has(
+      `local-layer-inversion:${foundation}/paths/index.ts->${foundation}/scope/index.ts`,
+    ));
+    assert(ids.has(
+      `local-layer-inversion:${composition}/receipt/index.ts->${composition}/run/index.ts`,
+    ));
+    assert(ids.has(
+      `sibling-owner-dependency:${foundation}/guards/index.ts->${foundation}/roster/index.ts`,
+    ));
+  } finally {
+    rmSync(packageRoot, { recursive: true, force: true });
+  }
+});
+
+test('the structures shell is declared substrate for headers only, not for every structure group', () => {
+  const { packageRoot, sourceRoot } = fixture();
+  try {
+    write(resolve(sourceRoot, 'ui/structures/shell/page-shell-surface/index.ts'), 'export const pageShell = true;\n');
+    write(resolve(sourceRoot, 'ui/structures/shell/surface-chrome/index.ts'), 'export const surfaceChrome = true;\n');
+    write(
+      resolve(sourceRoot, 'ui/structures/headers/header-surface/index.ts'),
+      "import { pageShell } from '../../shell/page-shell-surface';\nimport { surfaceChrome } from '../../shell/surface-chrome';\nexport const headerSurface = pageShell && surfaceChrome;\n",
+    );
+    write(
+      resolve(sourceRoot, 'ui/structures/shell/navigation/sidebar-surface/index.ts'),
+      "import { surfaceChrome } from '../../surface-chrome';\nexport const sidebarSurface = surfaceChrome;\n",
+    );
+    write(resolve(sourceRoot, 'ui/structures/workspace/connected-command-palette/index.ts'), 'export const palette = true;\n');
+    write(
+      resolve(sourceRoot, 'ui/structures/workspace/search-command-bar/index.ts'),
+      "import { palette } from '../connected-command-palette';\nexport const searchBar = palette;\n",
+    );
+    write(resolve(sourceRoot, 'ui/structures/feedback/surface-lifecycle/states/index.ts'), 'export const states = true;\n');
+    write(
+      resolve(sourceRoot, 'ui/structures/feedback/surface-lifecycle/use-surface-state/index.ts'),
+      "import { states } from '../states';\nexport const useSurfaceState = states;\n",
+    );
+
+    // The substrate never reaches back up into the group it carries.
+    write(
+      resolve(sourceRoot, 'ui/structures/shell/app-shell/index.ts'),
+      "import { headerSurface } from '../../headers/header-surface';\nexport const appShell = headerSurface;\n",
+    );
+    // Control A: two unranked groups under the same ranked owner stay peers,
+    // so the `ui/structures` entry did not make the whole tier permissive.
+    write(resolve(sourceRoot, 'ui/structures/dashboard/stats-header/index.ts'), 'export const statsHeader = true;\n');
+    write(
+      resolve(sourceRoot, 'ui/structures/record/record-panel/index.ts'),
+      "import { statsHeader } from '../../dashboard/stats-header';\nexport const recordPanel = statsHeader;\n",
+    );
+    // Control B: the shell is substrate for `headers`. The first workspace,
+    // record, dashboard or feedback caller is still reported.
+    write(
+      resolve(sourceRoot, 'ui/structures/workspace/table-toolbar/index.ts'),
+      "import { surfaceChrome } from '../../shell/surface-chrome';\nexport const tableToolbar = surfaceChrome;\n",
+    );
+
+    const result = auditCoreStructure({ packageRoot, sourceRoot });
+    assertEveryImportResolved(result);
+    const ids = new Set(result.findings.map(({ id }) => id));
+
+    for (const edge of [
+      'ui/structures/headers/header-surface/index.ts->ui/structures/shell/page-shell-surface/index.ts',
+      'ui/structures/headers/header-surface/index.ts->ui/structures/shell/surface-chrome/index.ts',
+      'ui/structures/shell/navigation/sidebar-surface/index.ts->ui/structures/shell/surface-chrome/index.ts',
+      'ui/structures/workspace/search-command-bar/index.ts->ui/structures/workspace/connected-command-palette/index.ts',
+      'ui/structures/feedback/surface-lifecycle/use-surface-state/index.ts->ui/structures/feedback/surface-lifecycle/states/index.ts',
+    ]) {
+      assert(!ids.has(`sibling-owner-dependency:${edge}`));
+      assert(!ids.has(`local-layer-inversion:${edge}`));
+    }
+    assert(ids.has(
+      'local-layer-inversion:ui/structures/shell/app-shell/index.ts->ui/structures/headers/header-surface/index.ts',
+    ));
+    assert(ids.has(
+      'sibling-owner-dependency:ui/structures/record/record-panel/index.ts->ui/structures/dashboard/stats-header/index.ts',
+    ));
+    assert(ids.has(
+      'sibling-owner-dependency:ui/structures/workspace/table-toolbar/index.ts->ui/structures/shell/surface-chrome/index.ts',
+    ));
+  } finally {
+    rmSync(packageRoot, { recursive: true, force: true });
+  }
+});
+
+test('tooling may read the product while the product may not read the tools', () => {
+  const { packageRoot, sourceRoot } = fixture();
+  try {
+    // No real edge between `ui` and `tooling` exists today, so this rank is
+    // carried by declaration alone. The fixture makes the declared direction
+    // executable in both directions instead of assumed in neither.
+    write(resolve(sourceRoot, 'ui/primitives/probe-target/index.ts'), 'export const probeTarget = true;\n');
+    write(
+      resolve(sourceRoot, 'tooling/lane-control/inspector/index.ts'),
+      "import { probeTarget } from '../../../ui/primitives/probe-target';\nexport const inspector = probeTarget;\n",
+    );
+    write(
+      resolve(sourceRoot, 'ui/primitives/probe-consumer/index.ts'),
+      "import { inspector } from '../../../tooling/lane-control/inspector';\nexport const probeConsumer = inspector;\n",
+    );
+
+    const result = auditCoreStructure({ packageRoot, sourceRoot });
+    assertEveryImportResolved(result);
+    const ids = new Set(result.findings.map(({ id }) => id));
+
+    assert(ids.has(
+      'architecture-layer-inversion:ui/primitives/probe-consumer/index.ts->tooling/lane-control/inspector/index.ts',
+    ));
+    for (const rule of [
+      'architecture-layer-inversion',
+      'same-tier-domain-dependency',
+      'sibling-owner-dependency',
+      'local-layer-inversion',
+    ]) {
+      assert(!ids.has(
+        `${rule}:tooling/lane-control/inspector/index.ts->ui/primitives/probe-target/index.ts`,
+      ));
+    }
+  } finally {
+    rmSync(packageRoot, { recursive: true, force: true });
+  }
 });
 
 test('infrastructure runtime may consume compilers but compilers cannot consume runtime state', () => {

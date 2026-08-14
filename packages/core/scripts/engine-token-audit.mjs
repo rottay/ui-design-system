@@ -2659,7 +2659,7 @@ function countSkinParseErrors() {
  * other signal stays green (the counter reads the component's TSX, `tsc` does
  * not read CSS, jsdom does not read stylesheets). The two entrypoints are not
  * interchangeable -- `facade/entrypoints/base.css` is inlined into the
- * per-tenant bundles (dist/platform.css, dist/bithire.css) that the apps
+ * per-tenant bundles (dist/rottay.css, dist/bithire.css) that the apps
  * actually load, while `facade/entrypoints/styles.css` feeds dist/styles.css. A skin wired into only
  * one of them is dark for half the fleet.
  *

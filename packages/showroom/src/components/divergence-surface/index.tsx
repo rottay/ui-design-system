@@ -16,6 +16,7 @@ import {
 } from '@rottay/design-system';
 import {
   compileTenantThemeConfig,
+  emitTenantThemeArtifactForSsr,
   getTenantThemeVerticalEnvelope,
   tenantThemeAnatomyAttributes,
   tenantThemeArtifactRootAttributes,
@@ -37,11 +38,12 @@ import { DIVERGENCE_FIXTURES, type DivergenceFixtureId } from './fixtures';
 //
 // Renders one bithire demo route under ONE compiled TenantThemeArtifact per
 // load. The artifact travels the sanctioned provider path a production app
-// takes: `compileTenantThemeConfig` produces the immutable artifact, its
-// `css` block mounts as a style element, and the artifact's own root/anatomy
-// attribute projections are spread on the DS root wrapper. The provider runs
-// with `visualAuthority="compiled-artifact"`, so the artifact is the single
-// visual owner — no provider-side emitter competes with it (CMP-02 law).
+// takes: `compileTenantThemeConfig` produces the immutable artifact,
+// `emitTenantThemeArtifactForSsr` produces the style element carrying its
+// three proof attributes plus the receipt for the server pass, and the
+// artifact's own root/anatomy attribute projections are spread on the DS root
+// wrapper. The provider receives the TYPED declaration, so the artifact is the
+// single visual owner — no provider-side emitter competes with it (CMP-02 law).
 //
 // App-side wiring this surface performs (the same wiring app-bithire's SSR
 // spread performs in production, per the W4 landlord handoff):
@@ -166,6 +168,20 @@ export function DivergenceSurface({
     [spec],
   );
 
+  // The artifact element the resolver will look for, produced by the design
+  // system rather than hand-written here: `attributes` carries the three
+  // `data-ds-tenant-theme-*` proof attributes and `css` the exact bytes the
+  // digest was taken over. `receipt` covers the SSR pass, where there is no
+  // document to observe.
+  const emission = useMemo(
+    () =>
+      emitTenantThemeArtifactForSsr(artifact, {
+        slug: artifact.slug,
+        verticalKey: artifact.verticalKey,
+      }),
+    [artifact],
+  );
+
   const rootAttributes = tenantThemeArtifactRootAttributes(artifact);
   const anatomyAttributes = tenantThemeAnatomyAttributes(artifact);
   const sidebarAnatomy = anatomyAttributes['data-anatomy-sidebar'] ?? 'default';
@@ -204,141 +220,155 @@ export function DivergenceSurface({
   }, [artifact]);
 
   return (
-    <DesignSystemProvider
-      forceEngine="modern"
-      forceTheme={ground}
-      vertical="bithire"
-      tenantConfig={tenantConfig}
-      visualAuthority="compiled-artifact"
-    >
-      {/* The exact compiled artifact, mounted once — the same block SSR embeds. */}
-      <style data-testid="divergence-artifact-style" dangerouslySetInnerHTML={{ __html: artifact.css }} />
-      <Box
-        {...rootAttributes}
-        {...anatomyAttributes}
-        data-testid="divergence-root"
-        style={{
-          minHeight: '100vh',
-          position: 'relative',
-          colorScheme: `var(--ds-color-scheme, ${ground})`,
-          background: 'var(--ds-color-bg-primary)',
-          fontFamily: 'var(--ds-font-family-base)',
+    <>
+      {/* The exact compiled artifact, mounted once — the same block SSR embeds.
+          It sits OUTSIDE the provider on purpose: the provider resolves during
+          its own render, before any of its children have been committed, so an
+          artifact mounted as a child is invisible to the proof and the surface
+          would block on an artifact that is sitting right there. */}
+      <style
+        {...emission.attributes}
+        data-testid="divergence-artifact-style"
+        dangerouslySetInnerHTML={{ __html: emission.css }}
+      />
+      <DesignSystemProvider
+        forceEngine="modern"
+        forceTheme={ground}
+        vertical="bithire"
+        tenantConfig={tenantConfig}
+        visualAuthority={{
+          authority: 'compiled-artifact',
+          artifact,
+          ssrReceipt: emission.receipt,
         }}
       >
-        {/* Machine probe swatch, DIRECTLY under the scope root: inside
-            Layout.Sider the modern engine pins color-scheme light, which
-            forces light-dark() to its light branch — the dual-scheme
-            assertion must read an element outside that subtree. */}
         <Box
-          aria-hidden
-          data-testid="divergence-primary-swatch"
+          {...rootAttributes}
+          {...anatomyAttributes}
+          data-testid="divergence-root"
           style={{
-            position: 'absolute',
-            insetBlockEnd: 4,
-            insetInlineEnd: 4,
-            width: 8,
-            height: 8,
-            background: 'var(--ds-color-primary)',
+            minHeight: '100vh',
+            position: 'relative',
+            colorScheme: `var(--ds-color-scheme, ${ground})`,
+            background: 'var(--ds-color-bg-primary)',
+            fontFamily: 'var(--ds-font-family-base)',
           }}
-        />
-        <Layout hasSider style={{ minHeight: '100vh' }}>
-          {/* Probe target: `.rottay-layout-sider` inside [data-testid=divergence-root].
-              The shell consumes the compiled sidebar-tone channels: the
-              compiler emits --ds-sidebar-bg/--ds-sidebar-text for
-              navigation.sidebarTone and the app shell owns painting them. */}
-          <Layout.Sider
-            width={siderWidth}
+        >
+          {/* Machine probe swatch, DIRECTLY under the scope root: inside
+              Layout.Sider the modern engine pins color-scheme light, which
+              forces light-dark() to its light branch — the dual-scheme
+              assertion must read an element outside that subtree. */}
+          <Box
+            aria-hidden
+            data-testid="divergence-primary-swatch"
             style={{
-              background: 'var(--ds-sidebar-bg, var(--ds-color-bg-container))',
-              color: 'var(--ds-sidebar-text, var(--ds-color-text-primary))',
+              position: 'absolute',
+              insetBlockEnd: 4,
+              insetInlineEnd: 4,
+              width: 8,
+              height: 8,
+              background: 'var(--ds-color-primary)',
             }}
-          >
-            <Stack spacing="sm" style={{ padding: isRail ? '16px 8px' : '16px 12px' }}>
-              <Flex align="center" justify={isRail ? 'center' : 'start'} gap={8} style={{ minHeight: 32 }}>
-                {/* Painted with the tenant primary: under a dual-scheme artifact
-                    this is a light-dark() value, so its computed color is the
-                    end-to-end proof that color-scheme wiring resolves. */}
-                <Box
-                  aria-hidden
-                  data-testid="divergence-logo"
-                  style={{
-                    width: 24,
-                    height: 24,
-                    borderRadius: 'var(--ds-radius-sm)',
-                    background: 'var(--ds-color-primary)',
-                    flexShrink: 0,
-                  }}
-                />
-                {!isRail && (
-                  <Text size="sm" weight="bold" style={{ whiteSpace: 'nowrap', color: 'var(--ds-sidebar-text, inherit)' }}>
-                    {spec.displayName}
-                  </Text>
-                )}
-              </Flex>
-              <Stack spacing="xs" as="nav">
-                {NAV_ITEMS.map((item, index) => (
-                  <Flex
-                    key={item.key}
-                    align="center"
-                    justify={isRail ? 'center' : 'start'}
-                    gap={10}
+          />
+          <Layout hasSider style={{ minHeight: '100vh' }}>
+            {/* Probe target: `.rottay-layout-sider` inside [data-testid=divergence-root].
+                The shell consumes the compiled sidebar-tone channels: the
+                compiler emits --ds-sidebar-bg/--ds-sidebar-text for
+                navigation.sidebarTone and the app shell owns painting them. */}
+            <Layout.Sider
+              width={siderWidth}
+              style={{
+                background: 'var(--ds-sidebar-bg, var(--ds-color-bg-container))',
+                color: 'var(--ds-sidebar-text, var(--ds-color-text-primary))',
+              }}
+            >
+              <Stack spacing="sm" style={{ padding: isRail ? '16px 8px' : '16px 12px' }}>
+                <Flex align="center" justify={isRail ? 'center' : 'start'} gap={8} style={{ minHeight: 32 }}>
+                  {/* Painted with the tenant primary: under a dual-scheme artifact
+                      this is a light-dark() value, so its computed color is the
+                      end-to-end proof that color-scheme wiring resolves. */}
+                  <Box
+                    aria-hidden
+                    data-testid="divergence-logo"
                     style={{
-                      padding: isRail ? '10px 0' : '8px 10px',
+                      width: 24,
+                      height: 24,
                       borderRadius: 'var(--ds-radius-sm)',
-                      color: index === 0 ? 'var(--ds-sidebar-item-color-active, var(--ds-color-primary))' : 'var(--ds-sidebar-text, var(--ds-color-text-secondary))',
-                      background: index === 0 ? 'var(--ds-sidebar-item-bg-active, transparent)' : 'transparent',
+                      background: 'var(--ds-color-primary)',
+                      flexShrink: 0,
                     }}
-                  >
-                    {item.icon}
-                    {!isRail && <Text size="sm" style={{ color: 'inherit' }}>{item.label}</Text>}
-                  </Flex>
-                ))}
-              </Stack>
-            </Stack>
-          </Layout.Sider>
-          {/* flex:1 + minWidth:0 — the inner column must FILL the row beside the
-              fixed-width sider; without it the column shrink-wraps narrow routes
-              (the list table clipped at ~583px in the first sighted pass). */}
-          <Layout style={{ flex: 1, minWidth: 0 }}>
-            {/* Probe target: `.rottay-layout-header` inside [data-testid=divergence-root]. */}
-            <Layout.Header>
-              <Flex align="center" justify="between" style={{ width: '100%', minHeight: 48 }}>
-                <Flex align="center" gap={12}>
-                  {/* Wrapper carries the testid: engine components may not
-                      forward data-* (P-79), a Box always does. */}
-                  <Box data-testid="divergence-title">
-                    <Text
-                      size="lg"
-                      weight="bold"
-                      style={{ fontFamily: 'var(--ds-font-family-heading)', margin: 0 }}
-                    >
-                      {spec.displayName} Recruiting
+                  />
+                  {!isRail && (
+                    <Text size="sm" weight="bold" style={{ whiteSpace: 'nowrap', color: 'var(--ds-sidebar-text, inherit)' }}>
+                      {spec.displayName}
                     </Text>
-                  </Box>
-                  {/* `content` form: the children form takes Badge's hidden-badge
-                      branch and paints no chrome (WO-GAT-03 finding). */}
-                  <Badge variant="primary" badgeStyle="solid" content="bithire" />
+                  )}
                 </Flex>
-                <Flex align="center" gap={8}>
-                  <Button variant="secondary" size="sm">
-                    Import
-                  </Button>
-                  <Box data-testid="divergence-primary-button">
-                    <Button variant="primary" size="sm">
-                      New requisition
+                <Stack spacing="xs" as="nav">
+                  {NAV_ITEMS.map((item, index) => (
+                    <Flex
+                      key={item.key}
+                      align="center"
+                      justify={isRail ? 'center' : 'start'}
+                      gap={10}
+                      style={{
+                        padding: isRail ? '10px 0' : '8px 10px',
+                        borderRadius: 'var(--ds-radius-sm)',
+                        color: index === 0 ? 'var(--ds-sidebar-item-color-active, var(--ds-color-primary))' : 'var(--ds-sidebar-text, var(--ds-color-text-secondary))',
+                        background: index === 0 ? 'var(--ds-sidebar-item-bg-active, transparent)' : 'transparent',
+                      }}
+                    >
+                      {item.icon}
+                      {!isRail && <Text size="sm" style={{ color: 'inherit' }}>{item.label}</Text>}
+                    </Flex>
+                  ))}
+                </Stack>
+              </Stack>
+            </Layout.Sider>
+            {/* flex:1 + minWidth:0 — the inner column must FILL the row beside the
+                fixed-width sider; without it the column shrink-wraps narrow routes
+                (the list table clipped at ~583px in the first sighted pass). */}
+            <Layout style={{ flex: 1, minWidth: 0 }}>
+              {/* Probe target: `.rottay-layout-header` inside [data-testid=divergence-root]. */}
+              <Layout.Header>
+                <Flex align="center" justify="between" style={{ width: '100%', minHeight: 48 }}>
+                  <Flex align="center" gap={12}>
+                    {/* Wrapper carries the testid: engine components may not
+                        forward data-* (P-79), a Box always does. */}
+                    <Box data-testid="divergence-title">
+                      <Text
+                        size="lg"
+                        weight="bold"
+                        style={{ fontFamily: 'var(--ds-font-family-heading)', margin: 0 }}
+                      >
+                        {spec.displayName} Recruiting
+                      </Text>
+                    </Box>
+                    {/* `content` form: the children form takes Badge's hidden-badge
+                        branch and paints no chrome (WO-GAT-03 finding). */}
+                    <Badge variant="primary" badgeStyle="solid" content="bithire" />
+                  </Flex>
+                  <Flex align="center" gap={8}>
+                    <Button variant="secondary" size="sm">
+                      Import
                     </Button>
-                  </Box>
+                    <Box data-testid="divergence-primary-button">
+                      <Button variant="primary" size="sm">
+                        New requisition
+                      </Button>
+                    </Box>
+                  </Flex>
                 </Flex>
-              </Flex>
-            </Layout.Header>
-            <Layout.Content style={{ padding: 'var(--ds-spacing-6, 24px)' }}>
-              {route === 'dashboard' && <RecruiterDashboardDemo />}
-              {route === 'list' && <PipelineListRoute />}
-              {route === 'detail' && <ScorecardDemo />}
-            </Layout.Content>
+              </Layout.Header>
+              <Layout.Content style={{ padding: 'var(--ds-spacing-6, 24px)' }}>
+                {route === 'dashboard' && <RecruiterDashboardDemo />}
+                {route === 'list' && <PipelineListRoute />}
+                {route === 'detail' && <ScorecardDemo />}
+              </Layout.Content>
+            </Layout>
           </Layout>
-        </Layout>
-      </Box>
-    </DesignSystemProvider>
+        </Box>
+      </DesignSystemProvider>
+    </>
   );
 }

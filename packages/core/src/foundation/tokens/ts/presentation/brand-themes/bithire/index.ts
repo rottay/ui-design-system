@@ -15,9 +15,9 @@
  * and is PENDING REGENERATION for these Evidence Ledger deltas (WO-DES-02).
  */
 
-import type { BrandTheme } from "../../../../../contracts/composition/tenants/themes";
+import type { FirstPartyBrandTheme } from "../../../../../contracts/composition/tenants/themes";
 
-export const bithireBrandTheme: BrandTheme = {
+export const bithireBrandTheme: FirstPartyBrandTheme = {
   id: "bithire",
   name: "BitHire",
 
@@ -724,9 +724,6 @@ export const bithireBrandTheme: BrandTheme = {
     primaryColor: "#3A6FB0",
     secondaryColor: "#315F86",
     accentColor: "#86A6C2",
-    darkPrimaryColor: "#6BB5F5",
-    darkSecondaryColor: "#7CB7E8",
-    darkAccentColor: "#A6C6DF",
     backgroundColor: "#F4F8FB",
     backgroundSecondaryColor: "#f3f2ef",
     backgroundTertiaryColor: "#e8eef6",
@@ -738,6 +735,10 @@ export const bithireBrandTheme: BrandTheme = {
     onPrimaryColor: "#ffffff",
     borderPrimaryColor: "#D4E0EA",
     borderSecondaryColor: "#c4d2de",
+    borderFocusColor: "#3a6fb0",
+    linkColor: "#3a6fb0",
+    linkHoverColor: "#2c5587",
+    linkVisitedColor: "#6b3fa0",
     successColor: "#327CA8",
     warningColor: "#D6A04E",
     errorColor: "#C5504C",
@@ -1792,6 +1793,35 @@ export const bithireBrandTheme: BrandTheme = {
       lgPadding: "0 14px",
       lgFontSize: "14px",
       lgIconSize: "16px",
+    },
+  },
+
+  /**
+   * Explicit disposition for every optional capability family. BitHire is the
+   * vertical that authored the most of these, which is exactly why the
+   * catalog matters: without it, "bithire has expressive and the others do
+   * not" reads as a capability gap in the siblings rather than as three
+   * separate decisions.
+   */
+  capabilities: {
+    // ACTIVE. See the note on rottay's disposition: the authored block is read
+    // by `brandThemeToTokenOverrides` and `brandThemeToPersonality`, both of
+    // which are on the shipped artifact path. BitHire additionally sets
+    // `useSpring: false`, which is itself a live decision the compiler reads
+    // to SUPPRESS spring lowering — a channel that can be switched off is by
+    // definition a channel that is on.
+    motion: { status: 'active' },
+    recipes: { status: 'active' },
+    expressive: { status: 'active' },
+    responsive: {
+      status: 'disabled',
+      reason: 'not-authored',
+      note: 'BitHire rides the baseline container ladder; no posture override.',
+    },
+    engineBridge: {
+      status: 'disabled',
+      reason: 'not-authored',
+      note: 'No engine-specific bridge values; modern reads the compiled tokens directly.',
     },
   },
 };

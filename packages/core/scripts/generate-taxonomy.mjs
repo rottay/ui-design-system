@@ -37,7 +37,10 @@ const PRIMITIVE_CATEGORIES = Object.freeze([
   'overlay',
 ]);
 const PATTERN_SUPPORT_OWNERS = new Set(['foundation', 'runtime', 'tooling']);
-const LAYERED_PATTERN_OWNERS = new Set(['commercial']);
+// `ui/patterns/commercial` was the only owner that carried a second nesting level,
+// and it existed to hold a layer that is not one. Its 11 families were split into
+// the groups their behaviour actually belongs to, so no pattern owner nests again.
+const LAYERED_PATTERN_OWNERS = new Set();
 const STRUCTURE_SUPPORT_OWNERS = new Set(['contracts']);
 const LOCAL_LAYER_ORDER = Object.freeze([
   'foundation',

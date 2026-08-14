@@ -33,7 +33,7 @@ const TENANT_THEMES: TenantTheme[] = [
     label: 'Rottay',
     description:
       'The enterprise default: balanced, credible, and dense enough for admin-heavy workflows.',
-    vertical: 'Platform',
+    vertical: 'Rottay',
     mood: 'Professional and stable',
   },
   {

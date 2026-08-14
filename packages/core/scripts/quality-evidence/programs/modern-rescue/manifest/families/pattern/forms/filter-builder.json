@@ -6,17 +6,17 @@
     "category": "forms",
     "name": "FilterBuilder",
     "components": [
-      "FilterBuilder"
+      "PatternFilterBuilder"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
     "sourceOwner": "packages/core/src/ui/patterns/forms/filter-builder",
-    "publicComponents": [],
-    "unresolvedPublicComponents": [
-      "FilterBuilder"
+    "publicComponents": [
+      "PatternFilterBuilder"
     ],
+    "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "1861ec507270687059662260dff709f9f1423681423d9f913b29d82b4faad0ab"
+    "inventoryRowDigest": "3a08219d117c4d0d4ca52cc14cadfd6cb7ca63ec875646773547453f38457612"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

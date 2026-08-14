@@ -27,7 +27,7 @@
  * root's `data-disabled`), and the error wrapper gap + message typography
  * (`margin-block-start`, logical). No inline styles remain on any part.
  *
- * SPECIFICITY (P-48 + 4th-wave recount): the Platform-only Rottay artifact
+ * SPECIFICITY (P-48 + 4th-wave recount): the Rottay artifact
  * ships an unlayered border floor at (0,3,1). The base slot border clears it
  * at (0,4,0) via the two scope classes plus the root's always-present
  * `[data-part='root']` and the slot's own part attribute -- no repetition.

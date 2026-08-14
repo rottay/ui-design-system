@@ -6,13 +6,15 @@
  * One identical component tree for the eight Lane-B families (Input,
  * Textarea, PasswordInput, FormField, Checkbox, Radio, Switch, Toggle)
  * rendered under two opposing governed sources:
- *  - `bithire-static`: the checked-in BitHire BrandTheme (file-first path);
- *  - `themanagement-db`: the DB Appearance construction mirrored from
- *    `@/components/brand-locale-evidence` (DB-owned runtime path).
+ *  - `bithire-static`: the bundled BitHire vertical, code-owned;
+ *  - `themanagement-db`: a published customer document, compiled and proven.
  *
- * The density posture sweeps compact | comfortable | spacious through
- * `appearance.general.density` only (`comfortable` maps to the canonical
- * `normal` alias at the Appearance boundary), and the locale sweep renders
+ * Both grounds are built by `@/components/showroom-tenant`; this probe states
+ * WHICH one it wants and nothing about how one is made.
+ *
+ * The density posture sweeps compact | comfortable | spacious -- carried by
+ * `DensityScope` on the code-owned source and by the compiled document's own
+ * density on the DB one, never by both, and the locale sweep renders
  * EN/ES/AR with `dir="rtl"` for Arabic. Every cell is deterministic and
  * URL-addressable; no fixture value here is product content.
  */
@@ -20,7 +22,6 @@
 import {
   Box,
   Checkbox,
-  DesignSystemProvider,
   FormField,
   Heading,
   Input,
@@ -31,11 +32,9 @@ import {
   Text,
   Textarea,
   Toggle,
-  bithireBrandTheme,
-  type TenantConfig,
 } from "@rottay/design-system";
 
-import { tenantConfigFor as brandLocaleTenantConfigFor } from "@/components/brand-locale-evidence";
+import { ShowroomTenantProvider } from "@/components/showroom-tenant";
 
 export type LaneBSource = "bithire-static" | "themanagement-db";
 export type LaneBLocale = "en" | "es" | "ar";
@@ -47,52 +46,6 @@ export interface K1LaneBProbeProps {
   locale: LaneBLocale;
   density: LaneBDensity;
   state: LaneBState;
-}
-
-/**
- * The tenant-facing Appearance vocabulary has no `comfortable` literal:
- * `normal` is the canonical alias (TenantAppearanceGeneral['density']).
- */
-function toAppearanceDensity(
-  density: LaneBDensity
-): "compact" | "normal" | "spacious" {
-  return density === "comfortable" ? "normal" : density;
-}
-
-function tenantConfig(
-  source: LaneBSource,
-  locale: LaneBLocale,
-  density: LaneBDensity
-): TenantConfig {
-  if (source === "themanagement-db") {
-    const base = brandLocaleTenantConfigFor("themanagementmiami", locale);
-    return {
-      ...base,
-      appearance: {
-        ...base.appearance,
-        general: {
-          ...base.appearance?.general,
-          density: toAppearanceDensity(density),
-        },
-      },
-    };
-  }
-
-  return {
-    slug: "bithire",
-    name: "BitHire",
-    vertical: "bithire",
-    engine: "modern",
-    theme: "light",
-    plan: "enterprise",
-    features: ["*"],
-    branding: { companyName: "BitHire" },
-    // BitHire is first-party vertical identity and therefore comes from the
-    // checked-in DS theme, never from a customer DB fixture. The semantic
-    // posture enters exclusively through the Appearance channel.
-    brandTheme: bithireBrandTheme,
-    appearance: { general: { density: toAppearanceDensity(density) } },
-  };
 }
 
 const COPY: Record<LaneBLocale, Record<string, string>> = {
@@ -335,13 +288,7 @@ function SpecimenTree({
 
 export function K1LaneBProbe({ source, locale, density, state }: K1LaneBProbeProps) {
   return (
-    <DesignSystemProvider
-      tenantConfig={{ ...tenantConfig(source, locale, density), locale }}
-      vertical="bithire"
-      locale={locale}
-      forceEngine="modern"
-      forceTheme="light"
-    >
+    <ShowroomTenantProvider source={source} locale={locale} density={density}>
       <Box
         data-testid="lb-canvas"
         style={{
@@ -367,6 +314,6 @@ export function K1LaneBProbe({ source, locale, density, state }: K1LaneBProbePro
           <SpecimenTree locale={locale} state={state} />
         </Box>
       </Box>
-    </DesignSystemProvider>
+    </ShowroomTenantProvider>
   );
 }

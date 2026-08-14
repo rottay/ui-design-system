@@ -35,7 +35,7 @@ import type {
   WidgetBoardProps,
   WidgetBoardSize,
 } from "../../contracts";
-import { useAdaptiveBoardLayout } from "../../runtime/solver/react";
+import { useAdaptiveBoardLayout } from "../../runtime/adaptive/react";
 
 /* Private, not exported: constraint defaults are permissive so an unconstrained item is unchanged. */
 const isWidgetMovable = (item: WidgetBoardItem): boolean => item.movable !== false;
@@ -264,7 +264,9 @@ export function WidgetBoardEngine({
 
   /*
    * C2b: measurement, tier/posture, epoch invalidation and solving live in
-   * the ONE shared adaptive runtime (`../../runtime/solver/react`) —
+   * the board's adaptive adapter (`../../runtime/adaptive/react`), which is
+   * itself a thin consumer of the ONE shared adaptive runtime under
+   * `patterns/runtime/adaptive-layout` —
    * a single ResizeObserver per board container, a real layoutEpoch over
    * direction/locale/density/type-scale/font-readiness, bounded ≤3-pass
    * convergence with hysteresis, and the pure deterministic solver. The

@@ -315,7 +315,7 @@ export function ScorecardDemo() {
               </Text>
               <Text size="sm" style={{ color: TEXT_SECONDARY }}>
                 This scorecard should still feel intentional and premium when
-                Platform or Evnto is active. The mood can change, but the
+                Rottay or Evnto is active. The mood can change, but the
                 scoring clarity cannot.
               </Text>
             </Stack>

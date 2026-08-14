@@ -21,7 +21,16 @@ export type OAuthTransitionVariantId =
 
 export type OAuthTransitionFamily = 'quiet-beam' | 'watchtower-sweep' | 'signal-line' | 'halo-orbit';
 
-export type OAuthTransitionAppId = 'bithire' | 'evnto' | 'platform' | 'auth';
+/**
+ * Which Rottay app the user is being handed back to.
+ *
+ * A SUPERSET of `FirstPartyVerticalId`, not a copy of it: `auth` is svc-auth,
+ * which is an app you can return to but not a vertical you can theme. The
+ * three vertical members must still spell the vertical identity, so `platform`
+ * became `rottay` here for the same reason it did everywhere else — it named
+ * the same product under a second name.
+ */
+export type OAuthTransitionAppId = 'bithire' | 'evnto' | 'rottay' | 'auth';
 
 export interface OAuthTransitionPalette {
   bg: string;

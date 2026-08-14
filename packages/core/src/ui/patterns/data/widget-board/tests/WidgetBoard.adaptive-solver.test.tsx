@@ -9,7 +9,7 @@ import { describe, expect, it } from 'vitest';
 
 import { WidgetBoardEngine } from '../engines/foundation';
 import type { WidgetBoardItem, WidgetBoardLabels } from '../contracts';
-import { heightPxToRows, widgetItemsToAdaptiveInputs } from '../runtime/solver/policy';
+import { heightPxToRows, widgetItemsToAdaptiveInputs } from '../runtime/adaptive/policy';
 
 const LABELS: WidgetBoardLabels = {
   customize: 'Customize',

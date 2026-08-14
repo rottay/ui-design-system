@@ -25,19 +25,19 @@ function springOverride(css: string): string | null {
 }
 
 describe('first-party spring precompute (useSpring-gated)', () => {
-  it('platform (rottay, useSpring: true) ships a precomputed linear() --ds-motion-spring', () => {
-    const spring = springOverride(read('platform.css'));
+  it('rottay (useSpring: true) ships a precomputed linear() --ds-motion-spring', () => {
+    const spring = springOverride(read('rottay.css'));
     expect(spring, 'expected a tenant-scoped linear() spring override').not.toBeNull();
     expect(spring).toMatch(/^linear\(0,/);
   });
 
   it('evnto (useSpring: true) ships its own distinct linear() curve', () => {
     const evnto = springOverride(read('evnto.css'));
-    const platform = springOverride(read('platform.css'));
+    const rottay = springOverride(read('rottay.css'));
     expect(evnto).not.toBeNull();
-    // evnto tunes a bouncier spring (tension 200 / friction 18) than platform
+    // evnto tunes a bouncier spring (tension 200 / friction 18) than Rottay
     // (170 / 26), so the curves differ.
-    expect(evnto).not.toBe(platform);
+    expect(evnto).not.toBe(rottay);
   });
 
   it('bithire (useSpring: false) ships NO precomputed override -- keeps the foundation cubic-bezier', () => {
@@ -48,7 +48,7 @@ describe('first-party spring precompute (useSpring-gated)', () => {
   });
 
   it('the primary spring override is scoped to the tenant root, never bare :root', () => {
-    for (const name of ['platform.css', 'evnto.css']) {
+    for (const name of ['rottay.css', 'evnto.css']) {
       const css = read(name);
       // Every linear() --ds-motion-spring must sit inside a tenant :is(...) block,
       // never leak onto a bare :root that would cross tenant boundaries.

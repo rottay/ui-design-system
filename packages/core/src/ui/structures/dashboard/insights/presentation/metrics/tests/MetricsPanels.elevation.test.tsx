@@ -96,7 +96,9 @@ function declarationsFor(root: Root, part: string, prop: string): string[] {
   const values: string[] = [];
   root.walkRules((rule) => {
     if (!rule.selector.includes(`[data-part='${part}']`)) return;
-    rule.walkDecls(prop, (decl) => values.push(decl.value));
+    rule.walkDecls(prop, (decl) => {
+      values.push(decl.value);
+    });
   });
   return values;
 }
@@ -133,7 +135,9 @@ describe('metrics panel elevation', () => {
     expect(containerValue).toContain(scope);
 
     const cuts: string[] = [];
-    root.walkAtRules('container', (at) => cuts.push(at.params));
+    root.walkAtRules('container', (at) => {
+      cuts.push(at.params);
+    });
     expect(cuts.length).toBeGreaterThan(0);
     for (const cut of cuts) expect(cut).toContain(scope);
 
@@ -149,7 +153,9 @@ describe('metrics panel elevation', () => {
 
     const stepped: string[] = [];
     root.walkAtRules('container', (at) => {
-      at.walkDecls('--_ds-metric-value-size', (decl) => stepped.push(decl.value));
+      at.walkDecls('--_ds-metric-value-size', (decl) => {
+        stepped.push(decl.value);
+      });
     });
     expect(stepped).toHaveLength(1);
     // A step DOWN, not merely a step: the narrow posture must not enlarge the

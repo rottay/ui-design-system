@@ -9,14 +9,14 @@
       "PatternCalendarView"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/visualization",
+    "sourceOwner": "packages/core/src/ui/patterns/visualization/calendar-view",
     "publicComponents": [
       "PatternCalendarView"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "65dac81a0b74a7f688bb6b1e3c80ed5564d1e2220b3e5c476d6f29665c7c0674"
+    "inventoryRowDigest": "7777ea49f1ffb7761725a480c5fd6c72dea620296a2ff655742189307b873ee6"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

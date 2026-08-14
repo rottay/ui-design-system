@@ -3,7 +3,7 @@
  *
  * This is a REFERENCE MIRROR — typed `var(--ds-*)` catalog for discovery
  * and component code. It is NOT the canonical authored premium source.
- * The authored source is `foundation/tokens/ts/presentation/brand-themes/platform/index.ts`.
+ * The authored source is `foundation/tokens/ts/presentation/brand-themes/rottay/index.ts`.
  *
  * Mirrors only the CSS custom properties that actually exist in the shipped
  * stylesheets. Organized by semantic role: brand colors, backgrounds, text,

@@ -6,17 +6,17 @@
     "category": "data",
     "name": "SavedViews",
     "components": [
-      "SavedViews"
+      "PatternSavedViewsBar"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
     "sourceOwner": "packages/core/src/ui/patterns/data/saved-views",
-    "publicComponents": [],
-    "unresolvedPublicComponents": [
-      "SavedViews"
+    "publicComponents": [
+      "PatternSavedViewsBar"
     ],
+    "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "2c9708922dbae82f0fa593f290f59aa8d286a190dfd56b9311d3b8ec362fe10c"
+    "inventoryRowDigest": "16f4b0159ed254ef89032ccdc3d3d44d44cad1ceb1208132c5596c3fcf8b2ebd"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

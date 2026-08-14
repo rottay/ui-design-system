@@ -6,8 +6,9 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { AuthSurface, SearchSurface, SidebarSurface } from '../..';
+import { AuthSurface, SearchSurface } from '../..';
 import { Badge, Box, Stack, Text } from '../../../primitives';
+import { SidebarSurface } from '../../../structures/shell/navigation/sidebar-surface';
 import { StoryViewport, SurfaceStoryProvider } from './story-helpers';
 
 const meta: Meta = {

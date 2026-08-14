@@ -31,7 +31,7 @@ export function ConfigInheritedASurface({ only }: { only: string }): ReactNode {
             presentation: {
               chrome: {
                 title: 'Audit trail',
-                subtitle: 'SOC 2 Type II activity log for the Platform workspace',
+                subtitle: 'SOC 2 Type II activity log for the Rottay workspace',
               },
             },
             behavior: {
@@ -337,7 +337,7 @@ export function ConfigInheritedASurface({ only }: { only: string }): ReactNode {
                   description: 'Workspace name, timezone, and locale defaults',
                   content: (
                     <Stack spacing="sm">
-                      <Text>Workspace name: Rottay Platform</Text>
+                      <Text>Workspace name: Rottay</Text>
                       <Text size="sm" color="muted">Default timezone: UTC-05:00 (Eastern)</Text>
                     </Stack>
                   ),

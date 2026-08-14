@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, type ReactNode } from 'react';
+import { useState, type ComponentProps, type ReactNode } from 'react';
 import {
   AdaptiveOverlay,
+  AsciiDiagram,
   AssistantStatusBadge,
   AssistantStatusIndicator,
   Avatar,
@@ -11,11 +12,11 @@ import {
   BulkSelectToggle,
   Button,
   Card,
-  cellRenderers,
   ConfirmActionCard,
   Flex,
   LiveCursor,
   MessageBubble,
+  MonoStat,
   PatternActivityLog,
   PatternApprovalInbox,
   PatternApprovalWorkflow,
@@ -23,8 +24,9 @@ import {
   PatternCockpitHeader,
   PatternColumnSettings,
   PatternCommentThread,
+  PatternBrandStudio,
   PatternCommandPalette,
-  PatternDataTable,
+  PatternDecisionComparison,
   PatternDetailPanel,
   PatternEmptyState,
   PatternEnvironmentToggle,
@@ -45,6 +47,7 @@ import {
   PatternOperationalLedger,
   PatternPageShell,
   PatternPricingTable,
+  PatternRecordFacts,
   PatternSavedViewsBar,
   PatternShiftMatrix,
   PatternShortcutsOverlay,
@@ -61,11 +64,19 @@ import {
   Stack,
   StatusFilterPills,
   StreamingText,
+  TerminalBlock,
   Text,
   ToolCallCard,
   TypingIndicator,
+  WidgetBoard,
+  type DecisionComparisonSubject,
+  type DiagramEdge,
+  type DiagramNode,
+  type RecordFact,
+  type TerminalBlockLine,
+  type WidgetBoardItem,
 } from '@rottay/design-system';
-import PlatformUserListDemo from '@/components/demos/platform/user-list';
+import PlatformUserListDemo from '@/components/demos/rottay/user-list';
 
 export const SINGLE_RUNTIME_PATTERN_SLUGS = new Set([
   'command-palette',
@@ -80,38 +91,6 @@ type GalleryAsset = {
   subtitle: string;
   image: string;
 };
-
-type SimpleUser = {
-  id: string;
-  name: string;
-  email: string;
-  status: 'active' | 'paused' | 'review';
-  createdAt: string;
-};
-
-const SIMPLE_USERS: SimpleUser[] = [
-  {
-    id: 'usr-1',
-    name: 'Ana Porter',
-    email: 'ana@rottay.com',
-    status: 'active',
-    createdAt: '2026-04-17T09:00:00Z',
-  },
-  {
-    id: 'usr-2',
-    name: 'Marco Silva',
-    email: 'marco@bithire.io',
-    status: 'review',
-    createdAt: '2026-04-18T11:30:00Z',
-  },
-  {
-    id: 'usr-3',
-    name: 'Jules Carter',
-    email: 'jules@evnto.app',
-    status: 'paused',
-    createdAt: '2026-04-19T14:20:00Z',
-  },
-];
 
 const GALLERY_ITEMS: GalleryAsset[] = [
   {
@@ -234,7 +213,9 @@ function HonestMigrationNote({
             <Text size="sm" weight="semibold">
               {title}
             </Text>
-            <Badge variant="secondary">Real DS export</Badge>
+            {/* "Real DS export" read as "this is the real export, rendering".
+                It is the export that is real; nothing of it renders here. */}
+            <Badge variant="secondary">Export exists · not rendered</Badge>
           </Flex>
           <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)' }}>
             {description}
@@ -529,57 +510,6 @@ function StatusFilterPillsPreview() {
       onChange={setValue}
       showCounts
     />
-  );
-}
-
-function CellRenderersPreview() {
-  return (
-    <Box style={{ width: '100%', maxWidth: 860 }}>
-      <PatternDataTable<SimpleUser>
-        data={SIMPLE_USERS}
-        rowKey="id"
-        compact
-        bordered
-        hoverable
-        columns={[
-          {
-            key: 'name',
-            header: 'Person',
-            accessorKey: 'name',
-            render: (_value: unknown, row: SimpleUser) =>
-              cellRenderers.avatarName(row.name, row.email),
-          },
-          {
-            key: 'status',
-            header: 'Status',
-            accessorKey: 'status',
-            render: (_value: unknown, row: SimpleUser) =>
-              cellRenderers.statusBadge(
-                row.status === 'review' ? 'Needs review' : row.status,
-                row.status === 'active'
-                  ? 'success'
-                  : row.status === 'paused'
-                    ? 'warning'
-                    : 'primary',
-              ),
-          },
-          {
-            key: 'createdAt',
-            header: 'Created',
-            accessorKey: 'createdAt',
-            render: (_value: unknown, row: SimpleUser) => cellRenderers.date(row.createdAt),
-          },
-        ]}
-        toolbar={
-          <Flex align="center" justify="between" gap={12} style={{ width: '100%' }}>
-            <Text size="sm" weight="semibold">
-              Cell renderer helpers inside PatternDataTable
-            </Text>
-            <Badge variant="secondary">avatarName / statusBadge / date</Badge>
-          </Flex>
-        }
-      />
-    </Box>
   );
 }
 
@@ -1068,7 +998,337 @@ function AdaptiveOverlayPreview() {
   );
 }
 
+// ---------------------------------------------------------------------------
+// Decision, record and board patterns
+// ---------------------------------------------------------------------------
+
+const DECISION_SUBJECTS: DecisionComparisonSubject[] = [
+  {
+    key: 'moreau',
+    title: 'Alice Moreau',
+    subtitle: 'Programme lead — currently covering two venues through the summer season',
+    score: '86',
+    scoreLabel: 'Weighted against the operations rubric, band 6',
+    leading: true,
+    facts: [
+      { key: 'availability', label: 'Weekend availability', value: '38 of 42 dates', tone: 'positive' },
+      { key: 'venues', label: 'Venues managed', value: '2 (Lisbon, Porto)', tone: 'neutral' },
+      { key: 'notice', label: 'Notice period', value: '8 weeks', tone: 'warning' },
+      {
+        key: 'compensation',
+        label: 'Compensation band',
+        value: 'Band 6 + on-call',
+        tone: 'neutral',
+        supporting: 'Approved without conditions',
+      },
+    ],
+  },
+  {
+    key: 'okonkwo',
+    title: 'Daniel Okonkwo',
+    subtitle: 'Operations lead, single-site — deputising on the northern rotation',
+    score: '81',
+    scoreLabel: 'Weighted against the operations rubric, band 5',
+    facts: [
+      { key: 'availability', label: 'Weekend availability', value: '41 of 42 dates', tone: 'positive' },
+      { key: 'venues', label: 'Venues managed', value: '1 (Madrid)', tone: 'neutral' },
+      { key: 'notice', label: 'Notice period', value: '4 weeks', tone: 'positive' },
+      { key: 'compensation', label: 'Compensation band', value: 'Band 5', tone: 'neutral' },
+    ],
+  },
+];
+
+const RECORD_FACTS: RecordFact[] = [
+  {
+    key: 'inspection',
+    label: 'Rigging inspection window and safety-officer sign-off',
+    value: '12 July 2026',
+    span: 4,
+    supporting: 'Rebooked once',
+  },
+  { key: 'covers', label: 'Confirmed covers', value: '240', span: 4 },
+  { key: 'owner', label: 'Programme owner', value: 'Ana Ruiz', span: 4, emphasis: 'strong' },
+];
+
+function DecisionComparisonPreview() {
+  return (
+    <PatternDecisionComparison
+      subjects={DECISION_SUBJECTS}
+      context="Panel debrief — REQ-4821"
+      contextMeta="Operations rubric v4"
+      ariaLabel="Candidate comparison"
+      density="comfortable"
+    />
+  );
+}
+
+function RecordFactsPreview() {
+  return (
+    <PatternRecordFacts
+      title="Sala Norte — July roster"
+      description="What this section covers: the operational facts a venue lead needs before publishing the July roster, including the outstanding safety sign-off."
+      facts={RECORD_FACTS}
+    />
+  );
+}
+
+function MonoStatPreview() {
+  return (
+    <Flex gap={48} wrap="wrap">
+      <MonoStat value={9} label="domain modules" />
+      <MonoStat value={601} label="use cases documented" />
+      <MonoStat value={253} label="catalogued components" />
+    </Flex>
+  );
+}
+
+const DIAGRAM_NODES: DiagramNode[] = [
+  { id: 'client', label: 'CLIENT', col: 1, row: 0 },
+  { id: 'gateway', label: 'API GATEWAY', col: 1, row: 1, emphasis: true },
+  { id: 'auth', label: 'AUTH', col: 0, row: 2 },
+  { id: 'core', label: 'CORE SERVICES', col: 1, row: 2 },
+  { id: 'events', label: 'EVENTS', col: 2, row: 2 },
+];
+
+const DIAGRAM_EDGES: DiagramEdge[] = [
+  { from: 'client', to: 'gateway' },
+  { from: 'gateway', to: 'auth', label: 'verify' },
+  { from: 'gateway', to: 'core' },
+  { from: 'gateway', to: 'events', label: 'emit' },
+];
+
+function AsciiDiagramPreview() {
+  return (
+    <AsciiDiagram
+      nodes={DIAGRAM_NODES}
+      edges={DIAGRAM_EDGES}
+      description="The client calls the API gateway, which verifies the request with auth, then routes to core services and emits domain events."
+    />
+  );
+}
+
+const TERMINAL_LINES: TerminalBlockLine[] = [
+  { prompt: true, text: 'pnpm --filter @rottay/design-system typecheck' },
+  { text: 'tsc --noEmit' },
+  { text: 'no errors found' },
+  { text: 'done in 4.1s' },
+];
+
+function TerminalBlockPreview() {
+  return (
+    <TerminalBlock
+      streaming={false}
+      title="pnpm --filter @rottay/design-system typecheck"
+      lines={TERMINAL_LINES}
+    />
+  );
+}
+
+const WIDGET_LABELS = {
+  context: 'Workspace signals',
+  heading: 'Your widgets',
+  customize: 'Customize',
+  done: 'Done',
+  addWidget: 'Add widget',
+  reset: 'Reset',
+  emptyCatalog: 'No more widgets available',
+  editHint: 'Drag to reorder, resize from the edges',
+  readHint: 'Switch to customize mode to edit',
+  move: 'Move',
+  resize: 'Resize',
+  remove: 'Remove',
+  catalogHeading: 'Add a widget',
+  catalogDescription: 'Pick the signals you want on this board',
+  recommended: 'Recommended',
+};
+
+function buildWidgetBoardItems(): WidgetBoardItem[] {
+  return [
+    {
+      id: 'w-throughput',
+      accessibleTitle: 'Throughput by stage',
+      title: 'Throughput by stage',
+      header: { eyebrow: 'THROUGHPUT' },
+      catalog: { description: 'Stage distribution for open work', category: 'Operations' },
+      content: (
+        <Stack spacing={8}>
+          {[62, 38, 21].map((percent) => (
+            <Box
+              key={percent}
+              style={{
+                height: 8,
+                borderRadius: 999,
+                background: 'var(--ds-color-bg-secondary)',
+                overflow: 'hidden',
+              }}
+            >
+              <Box
+                style={{
+                  width: `${percent}%`,
+                  height: '100%',
+                  background: 'var(--ds-color-primary)',
+                }}
+              />
+            </Box>
+          ))}
+        </Stack>
+      ),
+      size: 'wide',
+      order: 0,
+      visible: true,
+    },
+    {
+      id: 'w-average',
+      accessibleTitle: 'Average review time',
+      title: 'Average review time',
+      header: { eyebrow: 'QUALITY' },
+      catalog: { description: 'Mean time to a decision', category: 'Quality', recommended: true },
+      content: (
+        <Stack spacing={4}>
+          <Text size="xl" weight="bold">
+            2.4 days
+          </Text>
+          <Text size="xs" color="muted">
+            Down from 3.1 last quarter
+          </Text>
+        </Stack>
+      ),
+      size: 'sm',
+      order: 1,
+      visible: true,
+    },
+    {
+      id: 'w-queue',
+      accessibleTitle: 'Queue depth',
+      title: 'Queue depth',
+      header: { eyebrow: 'QUEUE' },
+      catalog: { description: 'Items awaiting a first pass', category: 'Operations' },
+      content: (
+        <Stack spacing={4}>
+          <Text size="xl" weight="bold">
+            18
+          </Text>
+          <Text size="xs" color="muted">
+            4 older than the target window
+          </Text>
+        </Stack>
+      ),
+      size: 'sm',
+      order: 2,
+      visible: true,
+    },
+  ];
+}
+
+function WidgetBoardPreview() {
+  const [items, setItems] = useState<WidgetBoardItem[]>(() => buildWidgetBoardItems());
+
+  return (
+    <WidgetBoard
+      items={items}
+      labels={WIDGET_LABELS}
+      editable
+      onItemsChange={setItems}
+      onReset={buildWidgetBoardItems}
+    />
+  );
+}
+
+type BrandStudioValue = ComponentProps<typeof PatternBrandStudio>['value'];
+
+function BrandStudioPreview() {
+  // Controlled on purpose: an uncontrolled studio would render the editor and
+  // then swallow every edit, which is exactly the kind of preview that shows
+  // chrome instead of behavior.
+  const [theme, setTheme] = useState<BrandStudioValue>({
+    palette: { primaryColor: '#2f6feb' },
+  });
+
+  return <PatternBrandStudio value={theme} onChange={(next) => setTheme(next)} />;
+}
+
+/**
+ * Adapter state, declared instead of inferred.
+ *
+ * A pattern preview is `live` when a real DS export renders here, `pending`
+ * when the export exists but the showroom cannot yet feed it a truthful
+ * payload, and `absent` when nothing is registered at all.
+ *
+ * The middle state used to be invisible. A pending slug returned a ReactNode
+ * like any other, so every consumer read it as a rendered preview: the docs
+ * route wrapped it in live-runtime chrome -- component badge, accent frame,
+ * and a note asking the reader to check "whether the runtime is coming from
+ * the real DS export" -- around a card admitting there is no runtime, and the
+ * design-card harvester counted six of these as valid cards because a note is
+ * not `data-missing`. Both claimed render parity for a placeholder.
+ *
+ * So the state is declared here and the note is derived from it. A pending
+ * entry cannot exist without a stated reason, and the two cannot drift apart
+ * because there is only one of them. `pattern-adapter-state.unit.test.mjs`
+ * pins this roster.
+ */
+export const PATTERN_ADAPTER_PENDING: Record<
+  string,
+  { title: string; description: string }
+> = {
+  'decision-panorama': {
+    title: 'DecisionPanorama adapter pending',
+    description:
+      'The DS exports the pattern, but an honest preview needs a context/identity/active-decision payload that the showroom does not own yet. A generic mock here would show layout the component does not actually produce.',
+  },
+  'virtual-list': {
+    title: 'PatternVirtualList adapter pending',
+    description:
+      'Windowing and end-reached loading only mean anything against a dataset large enough to window. The showroom needs a real generated dataset and a scroll container sized for it before this preview says anything true.',
+  },
+  'feature-workspace-frame': {
+    title: 'FeatureWorkspaceFrame adapter pending',
+    description:
+      'The frame is placement-only: gutters, a navigation lane, and a content boundary. Previewing it inside the docs preview box would show the box, not the frame -- it needs a full-width route adapter.',
+  },
+  'branding-preview-sandbox': {
+    title: 'BrandingPreviewSandbox adapter pending',
+    description:
+      'This developer-oriented preview exists in the DS, but it still needs a dedicated showroom adapter with a real tenant appearance payload instead of a fake local mock.',
+  },
+  'tenant-preview': {
+    title: 'PatternTenantPreview adapter pending',
+    description:
+      'The DS export is real, but this showroom route still needs a proper TenantCreationConfig fixture so the tenant preview reflects actual token authoring instead of a hardcoded local shell.',
+  },
+  'token-inspector': {
+    title: 'TokenInspector adapter pending',
+    description:
+      'This dev-only inspector activates from the live app with Ctrl+Shift+T, so the honest showroom treatment is a dedicated developer page rather than a fake static card.',
+  },
+};
+
+export type PatternAdapterState = 'live' | 'pending' | 'absent';
+
+/**
+ * Pending wins over live on purpose: if a slug is ever declared pending while
+ * a stale fixture still sits in the map, the honest answer is the declaration,
+ * not the leftover.
+ */
+export function getPatternAdapterState(slug: string): PatternAdapterState {
+  if (PATTERN_ADAPTER_PENDING[slug]) return 'pending';
+  return PATTERN_PREVIEWS[slug] ? 'live' : 'absent';
+}
+
+export function renderPatternAdapterPendingNote(slug: string): ReactNode {
+  const pending = PATTERN_ADAPTER_PENDING[slug];
+  if (!pending) return null;
+  return <HonestMigrationNote title={pending.title} description={pending.description} />;
+}
+
 const PATTERN_PREVIEWS: Record<string, ReactNode> = {
+  'ascii-diagram': <AsciiDiagramPreview />,
+  'decision-comparison': <DecisionComparisonPreview />,
+  'mono-stat': <MonoStatPreview />,
+  'record-facts': <RecordFactsPreview />,
+  'terminal-block': <TerminalBlockPreview />,
+  'pattern-brand-studio': <BrandStudioPreview />,
+  'widget-board': <WidgetBoardPreview />,
   'adaptive-overlay': <AdaptiveOverlayPreview />,
   'activity-log': (
     <PatternActivityLog
@@ -1105,12 +1365,6 @@ const PATTERN_PREVIEWS: Record<string, ReactNode> = {
       footer={<Text size="xs">Escalation path stays available for enterprise tenants.</Text>}
     />
   ),
-  'branding-preview-sandbox': (
-    <HonestMigrationNote
-      title="BrandingPreviewSandbox adapter pending"
-      description="This developer-oriented preview exists in the DS, but it still needs a dedicated showroom adapter with a real tenant appearance payload instead of a fake local mock."
-    />
-  ),
   'bulk-select-toggle': <BulkSelectPreview />,
   'calendar-view': (
     <PatternCalendarView
@@ -1122,7 +1376,6 @@ const PATTERN_PREVIEWS: Record<string, ReactNode> = {
       view="week"
     />
   ),
-  'cell-renderers': <CellRenderersPreview />,
   'cockpit-header': <CockpitHeaderPreview />,
   'column-settings': <ColumnSettingsPreview />,
   'command-palette': <CommandPalettePreview />,
@@ -1368,12 +1621,6 @@ const PATTERN_PREVIEWS: Record<string, ReactNode> = {
       ]}
     />
   ),
-  'tenant-preview': (
-    <HonestMigrationNote
-      title="PatternTenantPreview adapter pending"
-      description="The DS export is real, but this showroom route still needs a proper TenantCreationConfig fixture so the tenant preview reflects actual token authoring instead of a hardcoded local shell."
-    />
-  ),
   timeline: (
     <PatternTimeline
       items={[
@@ -1392,12 +1639,6 @@ const PATTERN_PREVIEWS: Record<string, ReactNode> = {
           type: 'info',
         },
       ]}
-    />
-  ),
-  'token-inspector': (
-    <HonestMigrationNote
-      title="TokenInspector is runtime-driven"
-      description="This dev-only inspector activates from the live app with Ctrl+Shift+T, so the honest showroom treatment is a dedicated developer page rather than a fake static card."
     />
   ),
   'tree-view': (
@@ -1432,6 +1673,16 @@ const PATTERN_PREVIEWS: Record<string, ReactNode> = {
   'workspace-switcher': <WorkspaceSwitcherPreview />,
 };
 
+/**
+ * Live previews only. A pending slug returns null here, which is what makes
+ * every consumer honest without having to remember to ask: the docs route
+ * renders the pending notice instead of the live-runtime chrome, and the
+ * design-card harvester emits its `data-missing` sentinel instead of
+ * photographing a placeholder card and counting it as valid. Callers that
+ * genuinely want to show the reason ask for it with
+ * `renderPatternAdapterPendingNote`.
+ */
 export function renderPatternPreview(slug: string) {
+  if (PATTERN_ADAPTER_PENDING[slug]) return null;
   return PATTERN_PREVIEWS[slug] ?? null;
 }

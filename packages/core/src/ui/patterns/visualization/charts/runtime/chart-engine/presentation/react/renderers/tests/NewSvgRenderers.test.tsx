@@ -23,10 +23,6 @@ function testTenant(): TenantConfig {
     features: ['all'],
     branding: {
       companyName: 'nr1',
-      primaryColor: '#0f766e',
-      accentColor: '#0f766e',
-      darkPrimaryColor: '#93c5fd',
-      darkAccentColor: '#5eead4',
     },
   };
 }

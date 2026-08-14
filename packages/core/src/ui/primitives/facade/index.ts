@@ -72,8 +72,3 @@ export { default as ModernCheckbox } from '../inputs/Checkbox/engines/modern';
  * boundary, preserving its rendered anatomy without a facade cycle.
  */
 export { default as ModernButton } from '../inputs/Button/engines/modern';
-
-/** Engine-locked Modal adapters for the deprecated overlay/Modal paths. */
-export { default as ClassicModal } from '../feedback/Modal/engines/classic';
-export { default as ModernModal } from '../feedback/Modal/engines/modern';
-export { default as RusticModal } from '../feedback/Modal/engines/rustic';

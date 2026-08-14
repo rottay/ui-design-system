@@ -6,17 +6,19 @@
     "category": "visualization",
     "name": "PatternTreeView",
     "components": [
-      "PatternTreeView"
+      "PatternTreeView",
+      "TreeViewConnector"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
     "sourceOwner": "packages/core/src/ui/patterns/visualization/tree-view",
     "publicComponents": [
-      "PatternTreeView"
+      "PatternTreeView",
+      "TreeViewConnector"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "d38b3c2cbf511ed0437ff660e09b8dae4620a99e25ab7864319552d4e23af555"
+    "inventoryRowDigest": "e53ba6ee342dd03f17fbdedd23628b3f2f17c26b722d11de6aa145fd1e1c6a92"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

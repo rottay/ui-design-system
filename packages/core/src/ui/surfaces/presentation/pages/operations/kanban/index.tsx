@@ -20,13 +20,13 @@ import { PatternKanbanBoard, PatternFilterPanel } from '../../../../../patterns'
 import type { KanbanColumnDef } from '../../../../../patterns';
 import type { KanbanSurfaceConfig, KanbanSurfaceCard } from '../../../../foundation/contracts';
 import { countActiveFilters, hasSurfaceError } from '../../../../runtime/helpers';
-import { PageShellSurface } from '../../../../composition/layout/page-shell';
-import { SurfaceActionBar } from '../../../../runtime/helpers/rendering';
-import { SurfaceEmptyState, SurfaceErrorState } from '../../../../runtime/helpers/states';
-import { useSurfaceResponsiveLayout } from '../../../../runtime/responsive';
-import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
-import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
-import { resolveStackSpacing } from '../../../../runtime/profile-defaults/personality';
+import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
+import { SurfaceActionBar } from '../../../../../structures/shell/surface-chrome';
+import { SurfaceEmptyState, SurfaceErrorState } from '../../../../../structures/feedback/surface-lifecycle';
+import { useSurfaceResponsiveLayout } from '../../../../../structures/foundation/chrome/runtime/responsive';
+import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
+import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
+import { resolveStackSpacing } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
 import { FadeIn, StaggerChildren } from '@/graphics/motion';
 
 /** Loading placeholder that mirrors the board's geometry: a row of columns

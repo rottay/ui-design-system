@@ -15,7 +15,8 @@ premium status for the design system.
 
 Specifically, v1:
 
-- does not reach the 252-family denominator;
+- does not reach the canonical family denominator declared by
+  `programs/modern-rescue/family-inventory.json`;
 - composes its score in a way that lets contract/binary checks carry weight that
   the current rubric reserves for sighted craft;
 - proves no receipt freshness against source digests.
@@ -42,7 +43,8 @@ It adds, as executable checks rather than prose:
   never write);
 - the per-round minimum reliable evidence policy, including R0 being
   capture-free;
-- 252-of-252 inventory correspondence against real source and public exports.
+- total inventory correspondence — every declared family, with no denominator
+  restated here — against real source and public exports.
 
 ```sh
 node packages/core/scripts/quality-evidence/v2/cli.mjs inventory

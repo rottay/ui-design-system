@@ -26,7 +26,7 @@
  * render — the same idiom, and repetition stays prohibited. The forced-colors
  * override is raised in step: a specificity raise that leaves an override
  * behind hands forced-colors mode to the rule it was written to beat.
- * Measured scope, stated rather than implied: the composed `styles/platform.css`
+ * Measured scope, stated rather than implied: the composed `styles/rottay.css`
  * bundle carries ZERO unlayered border-colour rules today, so the floor does
  * not reproduce there; the unit is bought because the consuming app's own
  * preflight is outside that bundle and outside anything this lane can read.

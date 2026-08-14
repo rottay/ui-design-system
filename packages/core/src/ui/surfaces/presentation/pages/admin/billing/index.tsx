@@ -26,15 +26,15 @@ import { DataChartIcon } from '@/graphics/icons/presentation/semantic/generated/
 import React from 'react';
 import { Button, Card, Flex, Heading, Progress, Stack, Tabs, Tag, Text } from '../../../../../primitives';
 import type { BillingSurfaceConfig, BillingInvoice } from '../../../../foundation/contracts';
-import { PageShellSurface } from '../../../../composition/layout/page-shell';
+import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
 import { hasSurfaceError } from '../../../../runtime/helpers';
 import {
   SurfaceErrorState,
   SurfaceLoadingSkeleton,
-} from '../../../../runtime/helpers/states';
-import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
-import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
-import { resolveStackSpacing } from '../../../../runtime/profile-defaults/personality';
+} from '../../../../../structures/feedback/surface-lifecycle';
+import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
+import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
+import { resolveStackSpacing } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
 import type { CardVariant } from '../../../../../primitives/display/Card/contracts';
 
 export interface BillingSurfaceProps {

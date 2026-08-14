@@ -1,16 +1,16 @@
 /**
- * Link Stories
+ * NavLink Stories
  * Colocated with component following approved architecture
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { Link } from './';
+import { NavLink } from './';
 import { DesignSystemProvider } from '../../../../infrastructure/runtime/bootstrap';
 import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../.storybook/helpers';
 
-const meta: Meta<typeof Link> = {
-  title: 'Primitives/Navigation/Link',
-  component: Link,
+const meta: Meta<typeof NavLink> = {
+  title: 'Primitives/Navigation/NavLink',
+  component: NavLink,
   decorators: [
     (Story) => (
       <DesignSystemProvider>
@@ -21,7 +21,7 @@ const meta: Meta<typeof Link> = {
   parameters: {
     docs: {
       description: {
-        component: 'Link component for navigation with support for multiple engines.',
+        component: 'NavLink component for navigation with support for multiple engines.',
       },
     },
   },
@@ -29,7 +29,7 @@ const meta: Meta<typeof Link> = {
     type: {
       control: 'select',
       options: ['default', 'primary', 'secondary', 'success', 'warning', 'danger'],
-      description: 'Link color type',
+      description: 'NavLink color type',
     },
     disabled: {
       control: 'boolean',
@@ -53,12 +53,12 @@ const meta: Meta<typeof Link> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof Link>;
+type Story = StoryObj<typeof NavLink>;
 
 export const Default: Story = {
   args: {
     href: 'https://example.com',
-    children: 'Default Link',
+    children: 'Default NavLink',
     type: 'default',
   },
 };
@@ -66,7 +66,7 @@ export const Default: Story = {
 export const Disabled: Story = {
   args: {
     href: 'https://example.com',
-    children: 'Disabled Link',
+    children: 'Disabled NavLink',
     disabled: true,
   },
 };
@@ -74,16 +74,16 @@ export const Disabled: Story = {
 export const External: Story = {
   args: {
     href: 'https://example.com',
-    children: 'External Link (opens in new tab)',
+    children: 'External NavLink (opens in new tab)',
     external: true,
   },
 };
 
 export const WithIcon: Story = {
   render: () => (
-    <Link href="https://example.com" external>
+    <NavLink href="https://example.com" external>
       Visit Site <span style={{ marginLeft: 4 }}>-&gt;</span>
-    </Link>
+    </NavLink>
   ),
 };
 
@@ -91,9 +91,9 @@ export const Types: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
       {(['default', 'primary', 'secondary', 'success', 'warning', 'danger'] as const).map((type) => (
-        <Link key={type} href="#" type={type}>
-          {type.charAt(0).toUpperCase() + type.slice(1)} Link
-        </Link>
+        <NavLink key={type} href="#" type={type}>
+          {type.charAt(0).toUpperCase() + type.slice(1)} NavLink
+        </NavLink>
       ))}
     </div>
   ),
@@ -102,7 +102,7 @@ export const Types: Story = {
 export const NoUnderline: Story = {
   args: {
     href: 'https://example.com',
-    children: 'Link without underline',
+    children: 'NavLink without underline',
     underline: false,
   },
 };
@@ -112,23 +112,23 @@ export const NoUnderline: Story = {
 // ============================================================================
 
 /**
- * Side-by-side comparison of Link across all 3 engines.
+ * Side-by-side comparison of NavLink across all 3 engines.
  */
 export const CompareEngines: Story = {
   name: '🔄 Engine Comparison',
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Link rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
+        story: 'Compare the same NavLink rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
       },
     },
   },
   render: () => (
     <EngineComparisonHelper
-      component={Link}
+      component={NavLink}
       props={{
         href: '#',
-        children: 'Example Link',
+        children: 'Example NavLink',
         type: 'primary',
       }}
       showDescriptions
@@ -162,43 +162,43 @@ export const StateMatrix: Story = {
         <div style={matrixLabel}>Types</div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16 }}>
           {(['default', 'primary', 'secondary', 'success', 'warning', 'danger'] as const).map((type) => (
-            <Link key={type} href="#" type={type}>
+            <NavLink key={type} href="#" type={type}>
               {type}
-            </Link>
+            </NavLink>
           ))}
         </div>
       </div>
       <div>
         <div style={matrixLabel}>Underline policy</div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16 }}>
-          <Link href="#">Underlined (default)</Link>
-          <Link href="#" underline={false}>
+          <NavLink href="#">Underlined (default)</NavLink>
+          <NavLink href="#" underline={false}>
             Standalone (reveals on hover)
-          </Link>
+          </NavLink>
         </div>
       </div>
       <div>
         <div style={matrixLabel}>External & disabled</div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, alignItems: 'baseline' }}>
-          <Link href="https://example.com" external>
+          <NavLink href="https://example.com" external>
             External with affordance
-          </Link>
-          <Link href="https://example.com" external externalIcon={false}>
+          </NavLink>
+          <NavLink href="https://example.com" external externalIcon={false}>
             External, icon suppressed
-          </Link>
-          <Link href="/blocked" disabled>
+          </NavLink>
+          <NavLink href="/blocked" disabled>
             Disabled
-          </Link>
+          </NavLink>
         </div>
       </div>
       <div>
         <div style={matrixLabel}>Inline within body copy</div>
         <p style={{ margin: 0, maxWidth: 420, lineHeight: 1.6 }}>
-          Review the <Link href="#">shortlisted candidates</Link> before Friday, or open the{' '}
-          <Link href="https://example.com" external>
+          Review the <NavLink href="#">shortlisted candidates</NavLink> before Friday, or open the{' '}
+          <NavLink href="https://example.com" external>
             public job posting
-          </Link>{' '}
-          in a new tab. Disabled entries such as <Link href="/archived" disabled>archived searches</Link>{' '}
+          </NavLink>{' '}
+          in a new tab. Disabled entries such as <NavLink href="/archived" disabled>archived searches</NavLink>{' '}
           stay muted and unreachable.
         </p>
       </div>

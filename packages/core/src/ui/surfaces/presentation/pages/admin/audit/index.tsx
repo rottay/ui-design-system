@@ -26,15 +26,15 @@ import { Button, Card, Flex, Stack, Text } from '../../../../../primitives';
 import { PatternDataTable, PatternFilterPanel } from '../../../../../patterns';
 import { countActiveFilters, hasSurfaceError } from '../../../../runtime/helpers';
 import type { AuditSurfaceConfig, AuditEntry } from '../../../../foundation/contracts';
-import { PageShellSurface } from '../../../../composition/layout/page-shell';
+import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
 import {
   SurfaceEmptyState,
   SurfaceErrorState,
   SurfaceLoadingSkeleton,
-} from '../../../../runtime/helpers/states';
-import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
-import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
-import { resolveStackSpacing } from '../../../../runtime/profile-defaults/personality';
+} from '../../../../../structures/feedback/surface-lifecycle';
+import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
+import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
+import { resolveStackSpacing } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
 
 /**
  * Export formats the contract callback supports. Kept in surface vocabulary:

@@ -12,11 +12,47 @@ import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { parseRegistry } from '../../../../customization-surface-census.mjs';
+import { loadProgramContracts } from '../../../v2/contracts.mjs';
+import {
+  APPLICABLE_FAMILY_FIELDS,
+  ASSESSMENT_STATE_RANK,
+  CELL_MECHANISMS,
+  CHANNEL_PREFIXES,
+  CHANNEL_REPLACEMENT_STATES,
+  EVIDENCE_PROOF_ROLES,
+  FAMILY_SECTION_KEYS,
+  INTERNAL_CHANNEL_FIELDS,
+  RED_TEST_ALLOWED_ACTIONS,
+  RED_TEST_CLASSES,
+  RED_TEST_REQUIRED_FIELDS,
+  checkSourceInventoryCorrespondence,
+  findForbiddenFamilyEdgeFields,
+  validateCell,
+  validateControlOrthogonality,
+  validateInternalChannelLaws,
+  validateMaximumClaim,
+  validateRedTestClassifications,
+  validateSection,
+  validateSourceBindings,
+} from './rules.mjs';
+
+export {
+  APPLICABLE_FAMILY_FIELDS,
+  CELL_MECHANISMS,
+  CHANNEL_PREFIXES,
+  CHANNEL_REPLACEMENT_STATES,
+  EVIDENCE_PROOF_ROLES,
+  INTERNAL_CHANNEL_FIELDS,
+  RED_TEST_ALLOWED_ACTIONS,
+  RED_TEST_CLASSES,
+  RED_TEST_REQUIRED_FIELDS,
+};
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const PROGRAM_ROOT = resolve(HERE, '..');
 const REPOSITORY_ROOT = resolve(HERE, '../../../../../../..');
 const INVENTORY_PATH = join(PROGRAM_ROOT, 'family-inventory.json');
+const PROGRAM_PATH = join(PROGRAM_ROOT, 'program.json');
 const SCHEMA_PATH = join(HERE, 'schema.json');
 const INDEX_PATH = join(HERE, 'index.json');
 const CONTROLS_ROOT = join(HERE, 'controls');
@@ -26,11 +62,14 @@ const REGISTRY_SOURCE = join(
   REPOSITORY_ROOT,
   'packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts',
 );
-const LEDGER_PATH = join(
-  REPOSITORY_ROOT,
-  'packages/core/test-artifacts/quality-evidence/wo-cra-23/family-ledger.json',
-);
-
+// There is deliberately no ledger path here. `test-artifacts/.../wo-cra-23/family-ledger.json`
+// is sealed historical evidence: it records git-derived SOURCE_TOUCHED coverage facts from the
+// 252-family era and makes no quality claim. This generator used to hash it into the source
+// digest and require exact id parity with the inventory, which promoted history to an active
+// authority -- a renamed family could not land until the historical record was rewritten to
+// agree with it, so the archive tracked the present and stopped being an archive. Active
+// identity comes from the family inventory and the manifest cells; the denominator comes from
+// the program contract. History is read as evidence, never executed as law.
 const ACTIVE_PUBLIC_TIERS = new Set(['standard', 'pro']);
 const DISPOSITIONS = new Set([
   'UNKNOWN',
@@ -114,7 +153,6 @@ function sourceInputsDigest() {
   return jsonDigest({
     inventory: sha256(readFileSync(INVENTORY_PATH)),
     registry: sha256(readFileSync(REGISTRY_SOURCE)),
-    ledger: sha256(readFileSync(LEDGER_PATH)),
     schema: sha256(readFileSync(SCHEMA_PATH)),
   });
 }
@@ -122,7 +160,6 @@ function sourceInputsDigest() {
 function defaultCalibration() {
   return {
     assessmentState: 'UNKNOWN',
-    representativeFamilyIds: [],
     normalizedStops: [],
     staticDbParityEvidenceIds: [],
     exactRestoreEvidenceIds: [],
@@ -292,6 +329,71 @@ function groupRecords() {
   return filesBelow(GROUPS_ROOT).map((pathname) => ({ pathname, value: readJson(pathname) }));
 }
 
+/**
+ * The reverse control -> family/part/channel view, DERIVED from family cells.
+ *
+ * This is the only place the edge may be read from, and it is generated rather than authored:
+ * `customization-model.json#controlImpactContract` used to REQUIRE `families`, `parts` and
+ * `propertyGroups` on a control while `schema.json` and this generator FORBADE them, so the
+ * contract contradicted itself and nothing enforced either half. Families own the edge; this
+ * function projects it.
+ *
+ * A row is emitted for every cell that has said anything at all -- a disposition or a
+ * verificationState above UNKNOWN. Emitting a row is not progress: `unknownCells` and each row's
+ * own disposition/verificationState travel with it, so a reader cannot mistake a declared edge
+ * for a verified one.
+ */
+function buildControlFamilyView(controls, familyRecords) {
+  const sorted = (values) => [...new Set(values)].sort();
+  const view = [];
+
+  for (const control of controls) {
+    const rows = [];
+    let unknownCells = 0;
+
+    for (const { value: family } of familyRecords) {
+      const cell = family.themeControls.find((entry) => entry.controlId === control.id);
+      if (!cell) continue;
+      const declared =
+        cell.disposition !== 'UNKNOWN' ||
+        (ASSESSMENT_STATE_RANK[cell.verificationState] ?? 0) > ASSESSMENT_STATE_RANK.UNKNOWN;
+      if (!declared) {
+        unknownCells += 1;
+        continue;
+      }
+      rows.push({
+        familyId: family.familyId,
+        layer: family.identity.layer,
+        disposition: cell.disposition,
+        verificationState: cell.verificationState,
+        stableParts: sorted(cell.stableParts ?? []),
+        propertyGroups: sorted(cell.propertyGroups ?? []),
+        computedProperties: sorted(cell.computedProperties ?? []),
+        channels: sorted([
+          ...(cell.outputBindings ?? []),
+          ...(cell.internalChannels ?? []).map((channel) => channel.channelId),
+        ]),
+      });
+    }
+
+    rows.sort((left, right) => left.familyId.localeCompare(right.familyId));
+    view.push({
+      controlId: control.id,
+      declaredFamilies: rows.length,
+      unknownCells,
+      applicableFamilyIds: rows
+        .filter((row) => row.disposition === 'APPLICABLE')
+        .map((row) => row.familyId),
+      parts: sorted(rows.flatMap((row) => row.stableParts)),
+      propertyGroups: sorted(rows.flatMap((row) => row.propertyGroups)),
+      channels: sorted(rows.flatMap((row) => row.channels)),
+      families: rows,
+    });
+  }
+
+  return view;
+}
+
 function buildIndex(inventory, controls, familyRecords, controlRecords, groups) {
   const dispositionCounts = Object.fromEntries([...DISPOSITIONS].map((key) => [key, 0]));
   const claimCounts = Object.fromEntries([...MAXIMUM_CLAIMS].map((key) => [key, 0]));
@@ -347,6 +449,10 @@ function buildIndex(inventory, controls, familyRecords, controlRecords, groups) 
       familyReviews: reviewCounts,
       controlFamilyDispositions: dispositionCounts,
       skeletonsCountAsProgress: false,
+    },
+    generatedControlFamilyView: {
+      law: 'Generated from family cells. Controls must not hand-author a family edge; a declared row is not progress, and every row carries its own disposition and verificationState.',
+      controls: buildControlFamilyView(controls, familyRecords),
     },
     paths: {
       schema: relativeManifestPath(SCHEMA_PATH),
@@ -420,15 +526,48 @@ export function bootstrapCustomizationManifest() {
   writeCustomizationManifest();
 }
 
-function validateControl(value, expected, label, errors) {
+function validateControl(value, expected, label, errors, context) {
   if (value.controlId !== expected.id) errors.push(`${label}: controlId must equal ${expected.id}`);
   if (value.lifecycleState !== 'OPERATIONAL') errors.push(`${label}: active registry row must be OPERATIONAL`);
   if (value.tier !== expected.tier) errors.push(`${label}: tier drifted from registry`);
-  if (Object.hasOwn(value, 'families') || Object.hasOwn(value, 'familyIds')) {
-    errors.push(`${label}: controls must not own family edges`);
+  for (const where of findForbiddenFamilyEdgeFields(value)) {
+    errors.push(
+      `${label}: controls must not own family edges; found ${where} (families own edges, the index generates the reverse view)`,
+    );
   }
   if (!ASSESSMENT_STATES.has(value.calibration?.assessmentState)) {
     errors.push(`${label}: invalid calibration assessmentState`);
+  }
+  // Calibration bindings are graded whenever they are present, and required from SOURCE_BOUND.
+  const calibrationLabel = `${label}: calibration`;
+  const calibrationBindings = value.calibration?.sourceBindings;
+  const calibrationRank = ASSESSMENT_STATE_RANK[value.calibration?.assessmentState] ?? -1;
+  if (calibrationRank >= ASSESSMENT_STATE_RANK.SOURCE_BOUND) {
+    const declared = Array.isArray(calibrationBindings)
+      ? calibrationBindings.length
+      : calibrationBindings && typeof calibrationBindings === 'object'
+        ? Object.keys(calibrationBindings).length
+        : 0;
+    if (declared === 0) {
+      errors.push(
+        `${calibrationLabel}: assessmentState ${value.calibration.assessmentState} requires non-empty sourceBindings`,
+      );
+    }
+  }
+  errors.push(
+    ...validateSourceBindings(calibrationBindings, {
+      label: calibrationLabel,
+      repositoryRoot: REPOSITORY_ROOT,
+    }),
+  );
+  errors.push(
+    ...validateRedTestClassifications(value.calibration?.redTestClassifications, {
+      label: calibrationLabel,
+      repositoryRoot: REPOSITORY_ROOT,
+    }),
+  );
+  if (context) {
+    context.independentInvariantByControl.set(expected.id, value.independentSemanticInvariant ?? null);
   }
   const consumer = value.productiveConsumerWitness?.consumer;
   const symbol = value.productiveConsumerWitness?.symbol;
@@ -443,7 +582,7 @@ function validateControl(value, expected, label, errors) {
   }
 }
 
-function validateFamily(value, row, controlIds, label, errors) {
+function validateFamily(value, row, controlIds, label, errors, context) {
   if (value.familyId !== row.id) errors.push(`${label}: familyId must equal ${row.id}`);
   if (!MAXIMUM_CLAIMS.has(value.maximumClaim)) errors.push(`${label}: invalid maximumClaim`);
   if (!REVIEW_VERDICTS.has(value.review?.verdict)) errors.push(`${label}: invalid review verdict`);
@@ -461,15 +600,39 @@ function validateFamily(value, row, controlIds, label, errors) {
     if (cell.disposition === 'UNKNOWN' && !cell.unknownReason) {
       errors.push(`${label}: ${cell.controlId} UNKNOWN requires unknownReason`);
     }
-    if (cell.disposition === 'NOT_APPLICABLE_WITH_REASON' && cell.evidenceIds.length === 0) {
-      errors.push(`${label}: ${cell.controlId} N/A requires negative proof evidence`);
+    const graded = validateCell(cell, {
+      label,
+      familyId: row.id,
+      anatomy: value.anatomy,
+      repositoryRoot: REPOSITORY_ROOT,
+      contracts: context.contracts,
+      activeControlIds: controlIds,
+      familyIds: context.familyIds,
+      now: context.now,
+    });
+    errors.push(...graded.errors);
+    context.channelDeclarations.push(...graded.declared);
+    if (cell.disposition === 'APPLICABLE') {
+      const consumers = context.consumerSetsByControl.get(cell.controlId) ?? new Set();
+      for (const group of cell.propertyGroups ?? []) consumers.add(`${row.id}::${group}`);
+      context.consumerSetsByControl.set(cell.controlId, consumers);
     }
   }
-  for (const key of ['anatomy', 'recipeAnatomy', 'instanceApi', 'hostAdaptation', 'statesMotion', 'invariants']) {
+  for (const key of FAMILY_SECTION_KEYS) {
     if (!ASSESSMENT_STATES.has(value[key]?.assessmentState)) {
       errors.push(`${label}: ${key} has invalid assessmentState`);
     }
+    errors.push(
+      ...validateSection(value[key], key, {
+        label,
+        familyId: row.id,
+        repositoryRoot: REPOSITORY_ROOT,
+        contracts: context.contracts,
+        now: context.now,
+      }),
+    );
   }
+  errors.push(...validateMaximumClaim(value, { label }));
   for (const candidate of value.premiumCandidates ?? []) {
     if (candidate.countsAsCapability !== false) {
       errors.push(`${label}: premium candidate ${candidate.id ?? '<missing>'} must set countsAsCapability=false`);
@@ -496,11 +659,13 @@ export function validateCustomizationManifest() {
   const expectedFamilyPaths = new Set(inventory.rows.map((row) => familyPath(row.id)));
 
   const inventoryIds = inventory.rows.map((row) => row.id);
-  const ledger = readJson(LEDGER_PATH);
-  const ledgerIds = (ledger.rows ?? []).map((row) => row.id);
-  if (new Set(ledgerIds).size !== ledgerIds.length) errors.push('family ledger ids must be unique');
-  if ([...inventoryIds].sort().join('|') !== [...ledgerIds].sort().join('|')) {
-    errors.push('family inventory and family ledger must contain the exact same 252 ids');
+  // Uniqueness is asserted on the inventory itself. It used to ride on the ledger's id list,
+  // which meant the invariant lived in the archive; and it cannot be inferred from the path
+  // checks below, because `expectedFamilyPaths` is a Set -- two rows sharing an id collapse to
+  // one path and every downstream check still passes while the denominator silently drops.
+  const duplicateIds = [...new Set(inventoryIds.filter((id, index) => inventoryIds.indexOf(id) !== index))];
+  if (duplicateIds.length > 0) {
+    errors.push(`family inventory ids must be unique; duplicated: ${duplicateIds.join(', ')}`);
   }
 
   const expectedPaths = [...expectedControlPaths, ...expectedFamilyPaths];
@@ -526,18 +691,34 @@ export function validateCustomizationManifest() {
 
   if (errors.length > 0) return errors;
 
+  const context = {
+    contracts: loadProgramContracts(),
+    familyIds: new Set(inventoryIds),
+    now: new Date(),
+    channelDeclarations: [],
+    consumerSetsByControl: new Map(),
+    independentInvariantByControl: new Map(),
+  };
+
   const controlRecords = controls.map((entry) => {
     const pathname = controlPath(entry.id);
     const value = readJson(pathname);
-    validateControl(value, entry, relativeManifestPath(pathname), errors);
+    validateControl(value, entry, relativeManifestPath(pathname), errors, context);
     return { pathname, value };
   });
   const familyRecords = inventory.rows.map((row) => {
     const pathname = familyPath(row.id);
     const value = readJson(pathname);
-    validateFamily(value, row, controlIds, relativeManifestPath(pathname), errors);
+    validateFamily(value, row, controlIds, relativeManifestPath(pathname), errors, context);
     return { pathname, value };
   });
+  errors.push(...validateInternalChannelLaws(context.channelDeclarations));
+  errors.push(
+    ...validateControlOrthogonality({
+      consumerSetsByControl: context.consumerSetsByControl,
+      independentInvariantByControl: context.independentInvariantByControl,
+    }),
+  );
   const groups = groupRecords();
   for (const { pathname, value } of groups) {
     validateGroup(value, relativeManifestPath(pathname), errors);
@@ -551,13 +732,22 @@ export function validateCustomizationManifest() {
   if (controls.filter((entry) => entry.tier === 'pro').length !== 7) {
     errors.push('active Pro capability denominator must remain 7');
   }
-  if (inventory.rows.length !== 252) errors.push('canonical family denominator must remain 252');
+  // The denominator is read from the program contract rather than restated here, so a
+  // recount lands in one place. It was hardcoded twice (here and in program-check), which
+  // is exactly how the two authorities drifted apart during the taxonomy adjudication.
+  const expectedFamilyTotal = readJson(PROGRAM_PATH).denominators.visibleFamilies;
+  if (inventory.rows.length !== expectedFamilyTotal) {
+    errors.push(`canonical family denominator must remain ${expectedFamilyTotal} (inventory holds ${inventory.rows.length})`);
+  }
+  // Inventory -> source.
   for (const row of inventory.rows) {
     const owner = join(REPOSITORY_ROOT, row.sourceOwner ?? '');
     if (!row.sourceOwner || !existsSync(owner)) {
       errors.push(`family ${row.id} sourceOwner does not resolve: ${row.sourceOwner ?? '<missing>'}`);
     }
   }
+  // Source -> inventory: a new family under a canonical root cannot sit outside the catalog.
+  errors.push(...checkSourceInventoryCorrespondence({ repositoryRoot: REPOSITORY_ROOT, inventory }));
 
   if (existsSync(INDEX_PATH)) {
     const expectedIndex = buildIndex(inventory, controls, familyRecords, controlRecords, groups);

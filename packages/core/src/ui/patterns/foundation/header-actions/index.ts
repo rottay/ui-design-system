@@ -23,7 +23,7 @@
  *     (falls back to label when no explicit tooltip is set)
  *
  * The naming retains the `Shared` prefix for backwards-compatibility with
- * the original app-platform extraction; consumers continue to import the
+ * the original Rottay-app extraction; consumers continue to import the
  * exact same symbol names from `@rottay/design-system`.
  */
 

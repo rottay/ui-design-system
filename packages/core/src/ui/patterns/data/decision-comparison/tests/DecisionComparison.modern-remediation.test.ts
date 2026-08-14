@@ -1,8 +1,12 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
-import postcss, { type AtRule, type Rule } from "postcss";
+import postcss, { type AtRule, type Document, type Root, type Rule } from "postcss";
 import { describe, expect, it } from "vitest";
+
+/** Exactly the node types that can sit above a rule. Closed under `.parent`,
+    and every member carries a literal `type`, so `'atrule'` narrows here. */
+type SkinAncestor = AtRule | Document | Root | Rule | undefined;
 
 const SKIN = resolve(
   process.cwd(),
@@ -59,10 +63,9 @@ function collect(property: string): Declaration[] {
     const rule = decl.parent as Rule | undefined;
     if (!rule || rule.type !== "rule") return;
     const conditions: string[] = [];
-    for (let node = rule.parent; node; node = node.parent) {
-      if ((node as AtRule).type === "atrule") {
-        const at = node as AtRule;
-        conditions.push(`@${at.name} ${at.params}`);
+    for (let node: SkinAncestor = rule.parent; node !== undefined; node = node.parent) {
+      if (node.type === "atrule") {
+        conditions.push(`@${node.name} ${node.params}`);
       }
     }
     for (const selector of rule.selectors) {

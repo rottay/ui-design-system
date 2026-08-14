@@ -24,7 +24,7 @@ export type {
   WidgetBoardItem,
   WidgetBoardSize,
 } from "../../../../ui/patterns/data/widget-board/contracts";
-export type { LayoutIntent } from "../../../../ui/patterns/data/widget-board/runtime/solver";
+export type { LayoutIntent } from "../../../../ui/patterns/runtime/adaptive-layout/foundation";
 export type { CommandItem } from "../../../../ui/patterns/navigation/command-palette/contracts";
 export type { ShortcutDisplayItem } from "../../../../ui/patterns/navigation/shortcuts-overlay/contracts";
 export type { Series } from "../../../../ui/patterns/visualization/charts/contracts";

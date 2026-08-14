@@ -63,6 +63,23 @@ describe('compileTenantThemePreview', () => {
     expect(result.issues!.length).toBeGreaterThan(0);
   });
 
+  it.each([
+    ['tenantId', IDENTITY.tenantId],
+    ['slug', IDENTITY.slug],
+    ['verticalKey', IDENTITY.verticalKey],
+    ['rowVersion', IDENTITY.rowVersion],
+  ] as const)('rejects a document-carried identity key instead of overwriting %s', (key, value) => {
+    const result = compileTenantThemePreview({
+      document: { ...makeDocument('#2F6B9A'), [key]: value } as TenantThemeDocument,
+      identity: IDENTITY,
+    });
+
+    expect(result.artifact).toBeNull();
+    expect(result.issues).toContainEqual(
+      expect.objectContaining({ code: 'unknown_key', path: `$.${key}` }),
+    );
+  });
+
   it('returns issues for an unknown vertical (no registered envelope) rather than throwing', () => {
     const result = compileTenantThemePreview({
       document: makeDocument('#2F6B9A'),
@@ -163,45 +180,41 @@ describe('useTenantThemePreview result shape', () => {
 });
 
 describe('buildTenantThemePreviewScope', () => {
-  it('re-anchors compiled variables onto the CMP-02 preview scope and drops unsafe values', () => {
-    const scope = buildTenantThemePreviewScope({
-      slug: 'acme-co',
-      variables: {
-        '--ds-color-primary': '#2F6B9A',
-        '--ds-font-family-heading': "'Fraunces', Georgia, serif",
-        // A value that could escape the block must be dropped by the shared whitelist.
-        '--ds-evil': 'red; } * { color: red',
-      },
+  function compiledArtifact() {
+    const result = compileTenantThemePreview({
+      document: makeDocument('#2F6B9A'),
+      identity: IDENTITY,
     });
+    expect(result.artifact).not.toBeNull();
+    return result.artifact!;
+  }
 
-    expect(scope.safeSlug).toBe('acme-co');
-    expect(scope.scopeSelector).toBe(`[${PREVIEW_SCOPE_ATTRIBUTE}='acme-co']`);
-    expect(scope.css).toContain(`[${PREVIEW_SCOPE_ATTRIBUTE}='acme-co'] {`);
+  it('verifies and re-anchors a compiler artifact onto the CMP-02 preview scope', () => {
+    const artifact = compiledArtifact();
+    const scope = buildTenantThemePreviewScope(artifact);
+
+    expect(scope.safeSlug).toBe('preview-tenant');
+    expect(scope.scopeSelector).toBe(`[${PREVIEW_SCOPE_ATTRIBUTE}='preview-tenant']`);
+    expect(scope.css).toContain(`[${PREVIEW_SCOPE_ATTRIBUTE}='preview-tenant'] {`);
     expect(scope.css).toContain('--ds-color-primary: #2F6B9A;');
-    // Never the document-root selector, and never a block-escaping declaration.
     expect(scope.css).not.toContain('data-ds-root');
-    expect(scope.css).not.toContain('--ds-evil');
-    expect(scope.css).not.toContain('* {');
   });
 
-  it('sanitizes a hostile slug before it reaches the scope attribute', () => {
-    const scope = buildTenantThemePreviewScope({
-      slug: "x'] , * { --pwn: 1 } [q='",
-      variables: { '--ds-color-primary': '#000000' },
-    });
-    // The hostile punctuation is stripped to inert attribute-value characters,
-    // so the block stays a single well-formed rule anchored to the preview root:
-    // no wildcard selector escapes and no injected declaration appears.
-    expect(scope.safeSlug).toMatch(/^[a-z0-9-]+$/);
-    expect(scope.scopeSelector).toBe(`[${PREVIEW_SCOPE_ATTRIBUTE}='${scope.safeSlug}']`);
-    expect(scope.css.startsWith(`[${PREVIEW_SCOPE_ATTRIBUTE}='${scope.safeSlug}'] {`)).toBe(true);
-    expect(scope.css).not.toContain('* {');
-    expect(scope.css).not.toContain('--pwn:');
+  it('rejects a counterfeit artifact whose variables no longer match its digest', () => {
+    const artifact = compiledArtifact();
+    const counterfeit = {
+      ...artifact,
+      variables: { ...artifact.variables, '--ds-color-primary': '#000000' },
+    };
+
+    expect(() => buildTenantThemePreviewScope(counterfeit)).toThrow(/digest/);
   });
 
-  it('emits an empty stylesheet when no declaration survives', () => {
-    const scope = buildTenantThemePreviewScope({ slug: 'empty', variables: {} });
-    expect(scope.css).toBe('');
+  it('rejects a reserved slug before any preview CSS can be emitted', () => {
+    const artifact = compiledArtifact();
+    const reserved = { ...artifact, slug: 'Bit-Hire' };
+
+    expect(() => buildTenantThemePreviewScope(reserved)).toThrow(/reserved/);
   });
 });
 

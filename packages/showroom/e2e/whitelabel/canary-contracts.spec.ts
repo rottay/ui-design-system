@@ -154,7 +154,7 @@ test.describe("canary · controls move dependents and restore exactly", () => {
   });
 });
 
-test.describe("canary A · the DB FULL-APPEARANCE path works", () => {
+test.describe("canary A · the DB FULL-APPEARANCE path works, under proven authority", () => {
   /**
    * RENAMED. This block previously read "the TMM fixture authors seeds only",
    * which was false: the fixture's appearance comes from
@@ -174,6 +174,42 @@ test.describe("canary A · the DB FULL-APPEARANCE path works", () => {
     );
     expect(primary).not.toBe("");
   });
+
+  /**
+   * The authority ledger, per source. A DB-owned document may only paint
+   * through a COMPILED artifact that the provider verified as mounted, and the
+   * proof is quantitative on both sides:
+   *
+   *  - exactly ONE artifact for each DB source. Zero means the visual authority
+   *    was refused, and a refusal renders `<LoadingScreen />` — a healthy-looking
+   *    spinner, not an error. Two is the same failure from the other side: the
+   *    provider's own mount proof rejects `candidates.length !== 1`, so a second
+   *    element blocks the tenant it was meant to serve.
+   *  - exactly ZERO for the bundled vertical. Its CSS ships in the bundle; an
+   *    artifact appearing there would mean the probe compiled a customer
+   *    document for a code-owned identity, which is the substitution this whole
+   *    file exists to make impossible.
+   */
+  const EXPECTED_ARTIFACTS: readonly { source: string; count: number }[] = [
+    { source: "bithire-static", count: 0 },
+    { source: "themanagement-db", count: 1 },
+    { source: "themanagement-seeds", count: 1 },
+  ];
+
+  for (const { source, count } of EXPECTED_ARTIFACTS) {
+    test(`${source} mounts exactly ${count} proof-stamped artifact(s)`, async ({ page }) => {
+      const { SHOWROOM_TENANT_ARTIFACT_TESTID } = await import(
+        "../../src/components/showroom-tenant"
+      );
+      await open(page, `?source=${source}`);
+      // Positive control FIRST: the tree committed. Without it, a blocked
+      // authority renders a spinner and "zero artifacts" reads as a pass.
+      await expect(root(page)).toBeVisible();
+      await expect(
+        page.locator(`[data-testid='${SHOWROOM_TENANT_ARTIFACT_TESTID}']`)
+      ).toHaveCount(count);
+    });
+  }
 });
 
 // ---------------------------------------------------------------------------
@@ -182,23 +218,27 @@ test.describe("canary A · the DB FULL-APPEARANCE path works", () => {
 
 /**
  * Same React tree, same vertical, same engine — only the configuration differs.
- * The authored document is built from literal keys with zero BrandTheme
- * projection, and the first test proves that STRUCTURALLY, before any compiler
- * runs. Everything the tenant then sees beyond four colours is derived, which
- * is the whole claim.
+ *
+ * The subject is now the PUBLISHED DB DOCUMENT the seeds arm actually compiles,
+ * not a hand-authored appearance literal standing in for one. That change is
+ * the point: a payload the DB channel would refuse to accept can prove nothing
+ * about the DB channel, however few keys it carries. The first test proves the
+ * authored key set STRUCTURALLY, before any compiler runs; everything the
+ * tenant then sees beyond four colours is derived, which is the whole claim.
  */
 test.describe("canary B · seeds-only, proven structurally then downstream", () => {
-  test("the authored key set is EXACTLY the canonical seeds allowlist", async () => {
-    const { seedsOnlyAppearance, SEEDS_ONLY_ALLOWLIST } = await import(
-      "../../src/components/brand-locale-evidence"
+  test("the authored document key set is EXACTLY the canonical seeds allowlist", async () => {
+    const { seedsOnlyDocument, SEEDS_ONLY_DOCUMENT_ALLOWLIST } = await import(
+      "../../src/components/showroom-tenant"
     );
-    const authored = seedsOnlyAppearance() as Record<string, unknown>;
+    // The same builder the seeds ground publishes — not a transcription of it.
+    const authored = seedsOnlyDocument() as unknown as Record<string, unknown>;
 
     // Recursive exact-key comparison: presence AND absence, at every level.
     // A subset check would pass on a payload carrying advanced/chrome, which
     // is precisely the failure that made the old claim false.
     const walk = (node: unknown, path: string): void => {
-      const expected = SEEDS_ONLY_ALLOWLIST[path];
+      const expected = SEEDS_ONLY_DOCUMENT_ALLOWLIST[path];
       expect(expected, `no allowlist entry for "${path}" — unauthorised branch`).toBeDefined();
       const actual = Object.keys(node as object).sort();
       expect(actual, `keys at "${path}"`).toEqual([...expected].sort());
@@ -212,9 +252,15 @@ test.describe("canary B · seeds-only, proven structurally then downstream", () 
     walk(authored, "");
 
     // Explicit negative controls on the exact fields that made A untrue.
-    const serialised = JSON.stringify(authored);
+    // Scoped to `visualFoundation`, which is the whole of the document's visual
+    // authoring surface and the only place any of these can appear: the two
+    // fields outside it are `schemaVersion` and the authoring-tier `mode`,
+    // whose value is the literal string "advanced" and is not an appearance
+    // branch. Serialising the envelope with them would make this check assert
+    // against its own vocabulary rather than against the payload.
+    const serialised = JSON.stringify(authored.visualFoundation);
     for (const forbidden of ["advanced", "chrome", "tokenOverrides", "typography", "density", "motion", "surfaces", "shape"]) {
-      expect(serialised, `seeds-only payload must not carry "${forbidden}"`).not.toContain(forbidden);
+      expect(serialised, `seeds-only document must not carry "${forbidden}"`).not.toContain(forbidden);
     }
   });
 

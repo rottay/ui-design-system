@@ -662,7 +662,7 @@
   border: 1px solid var(--_ds-oauth-line);
   background: color-mix(in srgb, var(--_ds-oauth-ink) 4%, transparent);
   animation: rottay-transition-step-glow 3.4s ease-in-out infinite;
-  animation-delay: var(--step-delay, 0ms);
+  animation-delay: var(--step-delay);
   transition:
     opacity 220ms ease,
     transform 320ms ease,

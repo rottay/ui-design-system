@@ -52,16 +52,16 @@ import type {
   NotificationPreference,
   NotificationSurfaceConfig,
 } from '../../../../foundation/contracts';
-import { PageShellSurface } from '../../../../composition/layout/page-shell';
+import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
 import { hasSurfaceError } from '../../../../runtime/helpers';
-import { SurfaceEmptyState, SurfaceErrorState } from '../../../../runtime/helpers/states';
-import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
-import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
-import { useSurfaceResponsiveLayout } from '../../../../runtime/responsive';
+import { SurfaceEmptyState, SurfaceErrorState } from '../../../../../structures/feedback/surface-lifecycle';
+import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
+import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
+import { useSurfaceResponsiveLayout } from '../../../../../structures/foundation/chrome/runtime/responsive';
 import {
   resolveStackSpacing,
   SurfaceAccentBarWrapper,
-} from '../../../../runtime/profile-defaults/personality';
+} from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
 import { FadeIn, StaggerChildren } from '@/graphics/motion';
 
 export interface NotificationSurfaceProps {

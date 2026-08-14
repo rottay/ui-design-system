@@ -6,17 +6,17 @@
     "category": "shell",
     "name": "CockpitHeader",
     "components": [
-      "CockpitHeader"
+      "PatternCockpitHeader"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
     "sourceOwner": "packages/core/src/ui/patterns/shell/cockpit-header",
-    "publicComponents": [],
-    "unresolvedPublicComponents": [
-      "CockpitHeader"
+    "publicComponents": [
+      "PatternCockpitHeader"
     ],
+    "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "764615ec9dd0a19f1bbbd65a6ecc16ca6677b6959c4e7453318dde41aac1f7b3"
+    "inventoryRowDigest": "0a98556df8fe966e01ba2dc409ce52b639731d3980234042a7bfc1945cefa5a1"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

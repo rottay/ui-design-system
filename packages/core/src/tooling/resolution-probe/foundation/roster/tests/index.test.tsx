@@ -27,10 +27,14 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
 import ModernCard from '@/ui/primitives/display/Card/engines/modern';
-import ModernButton from '@/ui/primitives/inputs/button/engines/modern';
-import ModernInput from '@/ui/primitives/inputs/input/engines/modern';
+import ModernButton from '@/ui/primitives/inputs/Button/engines/modern';
+import ModernInput from '@/ui/primitives/inputs/Input/engines/modern';
+import ModernFlex from '@/ui/primitives/layout/Flex/engines/modern';
+import ModernGrid from '@/ui/primitives/layout/Grid/engines/modern';
+import ModernSpace from '@/ui/primitives/layout/Space/engines/modern';
+import ModernStack from '@/ui/primitives/layout/Stack/engines/modern';
 
-import { FIXTURES } from '..';
+import { FIXTURES } from '../index.mjs';
 
 /**
  * The render each component fixture claims to represent. A fixture is either
@@ -50,6 +54,54 @@ const COMPONENT_RENDERS: Readonly<Record<string, () => React.ReactElement>> = {
     </ModernButton>
   ),
   'input-modern-md': () => <ModernInput size="md" defaultValue="input" />,
+  'flex-modern-preset-gap': () => (
+    <ModernFlex gap="md">
+      <span>a</span>
+      <span>b</span>
+    </ModernFlex>
+  ),
+  'flex-modern-numeric-gap': () => (
+    <ModernFlex gap={8}>
+      <span>a</span>
+      <span>b</span>
+    </ModernFlex>
+  ),
+  'grid-modern-preset-gap': () => (
+    <ModernGrid columns={2} gap="md">
+      <div>a</div>
+      <div>b</div>
+    </ModernGrid>
+  ),
+  'grid-modern-numeric-gap': () => (
+    <ModernGrid columns={2} gap={8}>
+      <div>a</div>
+      <div>b</div>
+    </ModernGrid>
+  ),
+  'stack-modern-preset-gap': () => (
+    <ModernStack spacing="md">
+      <div>a</div>
+      <div>b</div>
+    </ModernStack>
+  ),
+  'stack-modern-numeric-gap': () => (
+    <ModernStack spacing={8}>
+      <div>a</div>
+      <div>b</div>
+    </ModernStack>
+  ),
+  'space-modern-preset-gap': () => (
+    <ModernSpace size="md">
+      <span>a</span>
+      <span>b</span>
+    </ModernSpace>
+  ),
+  'space-modern-numeric-gap': () => (
+    <ModernSpace size={8}>
+      <span>a</span>
+      <span>b</span>
+    </ModernSpace>
+  ),
 };
 
 /** Attributes that differ between a render and a fixture for reasons no selector can see. */

@@ -11,14 +11,17 @@
  * - `generic.default`     — Safe baseline for new products
  * - `events.organizer`    — Expressive, spacious, media-first (Evnto)
  * - `recruiting.operator` — Compact, formal, data-dense (BitHire)
- * - `platform.admin`      — Neutral, comfortable, operational (Platform)
- * - `platform.flagship`   — Premium flagship for modern engine showcase
+ * - `rottay.admin`      — Neutral, comfortable, operational (Rottay)
+ * - `rottay.flagship`   — Premium flagship for modern engine showcase
  *
- * Custom product profiles can be registered at runtime via the open-ended
- * `ProductProfileKey = string & {}` type. The five presets here exist
- * because Rottay's own apps use them. They are not the only profiles the
- * DS supports — they are the only ones bundled for zero-latency use in
- * development, Storybook, and CI.
+ * `ProductProfileKey` is a CLOSED union: these five ARE the profiles that
+ * exist. This paragraph used to promise that "custom product profiles can be
+ * registered at runtime via the open-ended `ProductProfileKey = string & {}`
+ * type". No registration API ever backed that promise; the open tail only
+ * meant an unknown key type-checked and then resolved silently to
+ * `generic.default`, so a caller asking for a profile that did not exist got
+ * the fallback and no signal. Closing the union turns that into a compile
+ * error at the call site.
  */
 
 import type {
@@ -204,9 +207,9 @@ export const PRODUCT_PROFILES: Record<string, ProductProfile> = {
       schedulerView: "week",
     },
   },
-  "platform.admin": {
-    key: "platform.admin",
-    label: "Platform Admin",
+  "rottay.admin": {
+    key: "rottay.admin",
+    label: "Rottay Admin",
     description:
       "Compact admin profile tuned for breadth, tooling, and operational dashboards.",
     personality: {
@@ -263,16 +266,16 @@ export const PRODUCT_PROFILES: Record<string, ProductProfile> = {
   /**
    * Premium flagship profile for the modern engine showcase.
    *
-   * Based on `platform.admin` but with slightly higher animation intensity,
+   * Based on `rottay.admin` but with slightly higher animation intensity,
    * a slideUp entrance, and explicit border radius overrides for a more
    * polished, contemporary feel. Intended for tenants opting into the modern
-   * rendering engine on the Platform vertical.
+   * rendering engine on the Rottay vertical.
    */
-  "platform.flagship": {
-    key: "platform.flagship",
-    label: "Platform Flagship",
+  "rottay.flagship": {
+    key: "rottay.flagship",
+    label: "Rottay Flagship",
     description:
-      "Premium flagship profile for the modern engine showcase on Platform.",
+      "Premium flagship profile for the modern engine showcase on Rottay.",
     personality: {
       animation: {
         intensity: 0.5,

@@ -1,0 +1,66 @@
+/**
+ * InvertSection — full-black / full-white inversion boundary (spec section 1).
+ *
+ * The section language of the monochrome surfaces: full-black ("ink") sections alternate with
+ * full-white ("paper") ones, and every crossing must read as deliberate. The base rule below
+ * mirrors the cohort-wide ink default (`:where(.ds-mono-surface)` in foundation/tokens/css/foundation/monochrome/index.css); the
+ * `[data-surface="paper"]` rule mirrors that same file's
+ * `:where(.ds-mono-surface[data-surface="paper"])` override — the identical ink/paper token
+ * pairing, reassigned locally so an `InvertSection` is a self-contained inversion boundary
+ * wherever it is dropped, with no dependency on an ancestor carrying the shared class. A top
+ * hairline marks every crossing explicitly, so no boundary is left to read as accidental.
+ * Logical properties throughout: the boundary reads identically in RTL.
+ */
+
+/* Re-keys the generic `--ds-color-text-*`/`-border*` roles too, not just the cohort's own fg/bg
+   pair, so a composed DS primitive gets surface-correct ink instead of page-theme ink. */
+
+.rt-invert-section {
+  --ds-surface-fg: var(--ds-color-mono-1000);
+  --ds-surface-bg: var(--ds-color-surface-ink);
+
+  --ds-color-text-primary: var(--ds-surface-fg);
+  --ds-color-text-secondary: var(--ds-color-mono-600);
+  --ds-color-text-tertiary: var(--ds-color-mono-600);
+  --ds-color-text-muted: var(--ds-color-mono-600);
+  --ds-color-text-inverse: var(--ds-surface-bg);
+  --ds-color-text-disabled: var(--ds-color-mono-500);
+  --ds-color-border: var(--ds-color-hairline-strong);
+  --ds-color-border-primary: var(--ds-color-hairline-strong);
+  --ds-color-border-secondary: var(--ds-color-hairline-strong);
+  --ds-color-border-subtle: var(--ds-color-hairline-strong);
+  --ds-color-border-tertiary: var(--ds-color-hairline-strong);
+
+  position: relative;
+  display: block;
+  inline-size: 100%;
+  color: var(--ds-surface-fg);
+  background: var(--ds-surface-bg);
+  border-block-start: 1px solid var(--ds-color-hairline);
+}
+
+.rt-invert-section[data-surface="paper"] {
+  --ds-surface-fg: var(--ds-color-mono-0);
+  --ds-surface-bg: var(--ds-color-surface-paper);
+
+  --ds-color-text-secondary: var(--ds-color-mono-400);
+  --ds-color-text-tertiary: var(--ds-color-mono-400);
+  --ds-color-text-muted: var(--ds-color-mono-400);
+}
+
+/* Print drops background colours by default, which would leave this surface's own foreground
+   printing on blank paper - white-on-white for an ink section. */
+@media print {
+  .rt-invert-section {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}
+
+/* Forced colors: the UA re-keys the surface pairing itself, but the crossing hairline is
+   pinned to system ink so the section boundary never reads as accidental. */
+@media (forced-colors: active) {
+  .rt-invert-section {
+    border-block-start-color: CanvasText;
+  }
+}

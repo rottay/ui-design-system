@@ -38,6 +38,32 @@ function withoutComments(source) {
     .replace(/^\s*\/\/.*$/gm, '');
 }
 
+function escapeForRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/**
+ * Returns the body of the ONE top-level rule the selector opens, and fails if
+ * the selector opens zero or more than one. Multi-line selectors and wrapped
+ * declarations are whitespace-normalized first, so the selector is written the
+ * way it reads rather than the way it happens to be line-wrapped.
+ *
+ * `(?:^|\})` anchors to a top-level rule: `tr[data-row-index]:focus-visible`
+ * also appears as one arm of the `forced-colors` comma list, and that arm is a
+ * different contract. A permissive match would read the wrong body and could
+ * report a ring that the base rule does not paint.
+ */
+function soleRuleBody(css, selector, label) {
+  const flattened = css.replace(/\s+/g, ' ');
+  const pattern = new RegExp(
+    `(?:^|\\})\\s*${escapeForRegExp(selector)}\\s*\\{([^{}]*)\\}`,
+    'g'
+  );
+  const bodies = [...flattened.matchAll(pattern)].map((match) => match[1].trim());
+  assert.equal(bodies.length, 1, `${label}: expected exactly one top-level rule for ${selector}`);
+  return bodies[0];
+}
+
 test('production anatomy renders no decorative accent-strip parts', () => {
   const forbiddenPart = /data-part\s*=\s*["'](?:accent-bar|top-accent|title-accent|insight-accent)["']/;
 
@@ -111,11 +137,42 @@ test('legacy compatibility is inert while functional affordances remain availabl
     /\[data-part=["']preview-rail["']\]\s*\{([\s\S]*?)\}/,
   )?.[1] ?? '';
   assert.match(previewRailRule, /\bborder:\s*1px solid/);
-  assert.doesNotMatch(previewRailRule, /border-(?:left|inline-start)\s*:/);
-  const focusedRowRule = tableInteractions.match(
-    /tr\[data-row-index\]:focus-visible\s*\{([\s\S]*?)\}/,
-  )?.[1] ?? '';
-  assert.match(focusedRowRule, /box-shadow:\s*inset 0 0 0 1px/);
-  assert.doesNotMatch(focusedRowRule, /inset\s+[1-9][^;]*\s0\s+0\s+0/);
+  // Every one-sided spelling is banned, not just the two that happened to be
+  // removed: the physical pair, the logical pair, and the `-width`/`-style`/
+  // `-color` longhands each reconstruct the same rail on their own.
+  assert.doesNotMatch(
+    previewRailRule,
+    /\bborder-(?:left|right|inline-start|inline-end)(?:-(?:width|style|color))?\s*:/,
+  );
+
+  // The focused row is TWO rules, and each carries a different half of the
+  // contract. The <tr> owns the tint and kills the native outline; it must not
+  // own the ring, because a box-shadow on a <tr> does not render under
+  // border-collapse -- asserting the ring there passed on a rule that painted
+  // nothing.
+  const focusedRowSelector =
+    '.ds-engine-modern:where(.ds-pattern-data-table) tr[data-row-index]:focus-visible';
+  const focusedRowRule = soleRuleBody(tableInteractions, focusedRowSelector, 'focused row');
+  assert.match(focusedRowRule, /background-color:\s*var\(\s*--ds-table-row-bg-selected/);
+  assert.match(focusedRowRule, /outline:\s*none;/);
+  assert.doesNotMatch(focusedRowRule, /box-shadow/);
+
+  // The cell owns the ring, and it is a FULL boundary: one declaration, an
+  // even `inset 0 0 0 1px` on all four edges. Exact equality is the point --
+  // a rail spelling such as `inset 3px 0 0 0` is a valid box-shadow with a
+  // valid `inset` prefix, so only the exact geometry separates the ring the
+  // contract allows from the decorative edge it prohibits.
+  const focusedCellRule = soleRuleBody(
+    tableInteractions,
+    `${focusedRowSelector} > td`,
+    'focused cell ring',
+  );
+  const focusedCellShadows = focusedCellRule.match(/box-shadow:[^;]*;/g) ?? [];
+  assert.equal(focusedCellShadows.length, 1, 'the focused cell paints exactly one ring');
+  assert.equal(
+    focusedCellShadows[0],
+    'box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 48%, transparent);',
+  );
+
   assert.match(tableInteractions, /td\[data-cell-dirty=["']true["']\]::before/);
 });

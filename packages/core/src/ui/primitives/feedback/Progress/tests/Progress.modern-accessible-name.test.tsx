@@ -18,7 +18,7 @@ describe('Progress modern engine accessible name', () => {
   });
 
   it('line: names the indeterminate meter without an explicit aria-label', () => {
-    const { container } = renderWithEngine(<ModernProgress indeterminate />, 'modern');
+    const { container } = renderWithEngine(<ModernProgress percent={0} indeterminate />, 'modern');
 
     const meter = container.querySelector('progress[data-part="fill"]') as HTMLElement;
     expect(meter.getAttribute('aria-label')).toBe('In progress');

@@ -31,8 +31,20 @@ const INITIAL_BRAND_THEME: BrandTheme = {
     warningColor: '#d97706',
     errorColor: '#dc2626',
     infoColor: '#2563eb',
-    darkPrimaryColor: '#818cf8',
-    darkBackgroundColor: '#0b1020',
+  },
+  // The dark ground, as a typed overlay rather than `dark`-prefixed twins on
+  // the palette. A palette authors exactly ONE mode -- this draft declares no
+  // `appearance`, so its base block is light -- and the non-default mode is
+  // authored here, where the compiler merges it over the base and runs the
+  // same family compilers. That is what makes the dark preview below a
+  // compiled second mode instead of two loose fields nothing reads.
+  modes: {
+    dark: {
+      palette: {
+        primaryColor: '#818cf8',
+        backgroundColor: '#0b1020',
+      },
+    },
   },
   typography: {
     fontFamilyBase: 'Inter, system-ui, sans-serif',

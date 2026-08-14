@@ -2,51 +2,84 @@
  * OLA-5 F2 — density same-tree proof (compiler ↔ CSS ↔ DOM ↔ JS ↔ geometry).
  *
  * The /probe/density-authority route renders ONE identical public DS tree for
- * every cell, sweeping theme source (static BitHire BrandTheme vs The
- * Management Miami DB Appearance vs DB-over-static) × semantic density
- * posture (compact | comfortable | spacious, always through
- * `appearance.general.density` — the only channel the root provider derives
- * `data-density` from) × locale (en | es | ar). This spec proves the five
- * density planes agree in every cell:
+ * every cell, mounted through the shared `ShowroomTenantProvider`, sweeping
+ * theme source (`bithire-static` | `themanagement-db`) × semantic density
+ * posture (compact | comfortable | spacious) × locale (en | es | ar).
  *
- *   1. compiler output   — computed `--ds-density-mode-factor` on <html>;
- *   2. DOM plane         — root `data-density` attribute;
- *   3. CSS plane         — `--ds-density-effective-scale` (numeric read via
- *                          the px probe, see group C) and the structural
- *                          `--ds-density-scale`;
- *   4. JS plane          — `useDensity()` context readouts;
- *   5. geometry plane    — rendered Button/Input block sizes.
+ * THE TWO LEGAL SEMANTICS. Density is requested the same way in both cells and
+ * lands on a different authority, and this spec asserts each one for what it
+ * is instead of forcing a uniform claim:
  *
- * No screenshot baselines: this spec asserts DOM attributes, computed styles
- * and measured geometry only (it takes no entries from snapshotPathTemplate).
+ *   `themanagement-db`   ROOT/ARTIFACT authority. The customer document authors
+ *                        `general.density`; the tenant-theme compiler emits
+ *                        `--ds-density-mode-factor` into the proof-stamped
+ *                        artifact; the provider derives the root `data-density`
+ *                        from the SAME normalized appearance. The nearest
+ *                        density boundary above the tree is `<html>`, and the
+ *                        cell mounts exactly ONE proof-stamped artifact.
+ *
+ *   `bithire-static`     VIEWER-BOUNDARY authority. A code-owned tenant config
+ *                        is object identity and cannot be copied or edited, so
+ *                        the shared provider expresses a viewer's density as a
+ *                        non-root `DensityScope` inside the provider. The root
+ *                        keeps its code-owned authored posture and its
+ *                        code-owned mode factor — this spec proves they do NOT
+ *                        move with the request — and the cell mounts ZERO
+ *                        proof-stamped artifacts.
+ *
+ * The planes proven in both cells, at the boundary each cell legitimately owns:
+ *
+ *   1. compiler plane  — the emitted mode factor (artifact bytes on the DB
+ *                        path; the invariant code-owned root value on the
+ *                        static one);
+ *   2. DOM plane       — `data-density` on the governing boundary;
+ *   3. CSS plane       — `--ds-density-local-factor` on that boundary and the
+ *                        composed `--ds-density-effective-scale` (numeric read
+ *                        via the px probe, see group C);
+ *   4. JS plane        — `useDensity()` context readouts;
+ *   5. geometry plane  — rendered Button/Input block sizes.
+ *
+ * Structural `--ds-density-scale` stays a separate axis in both cells -- not
+ * because a customer document could never reach it. A bounded
+ * `advanced.tokenOverrides['--ds-density-scale']` is legal: the global advanced
+ * schema allows 0.75-1.25, and the BitHire vertical envelope narrows that to
+ * 0.85-1.15. THIS fixture's document authors none. What the matrix proves is
+ * therefore the narrower, true claim: a semantic POSTURE never moves the
+ * structural channel on either path.
+ *
+ * No screenshot baselines: this spec asserts DOM attributes, computed styles,
+ * mounted artifact bytes and measured geometry only.
  *
  * Project matrix note: playwright.visual.config.ts runs whitelabel specs on
  * Desktop Chromium only (the mobile-chromium project matches
- * *.mobile.spec.ts exclusively), so the CDP coarse-pointer group H needs no
+ * *.mobile.spec.ts exclusively), so the coarse-pointer group H needs no
  * browserName skip.
  */
 import { expect, test, type Page } from "@playwright/test";
 
-type Source = "bithire-static" | "themanagement-db" | "db-over-static";
+type Source = "bithire-static" | "themanagement-db";
 type Density = "compact" | "comfortable" | "spacious";
 type Locale = "en" | "es" | "ar";
 
-/** Sources swept by the posture matrix (A/C) and the geometry groups (D/H). */
-const MATRIX_SOURCES: readonly Source[] = ["bithire-static", "themanagement-db"];
-/** Sources carrying the static BitHire BrandTheme (structural scale axis, B). */
-const STATIC_CARRYING_SOURCES: readonly Source[] = [
-  "bithire-static",
-  "db-over-static",
-];
+const SOURCES: readonly Source[] = ["bithire-static", "themanagement-db"];
 const DENSITIES: readonly Density[] = ["compact", "comfortable", "spacious"];
 const LOCALES: readonly Locale[] = ["en", "es", "ar"];
+
+/**
+ * Sources whose requested posture is ROOT authority. The static source is
+ * deliberately absent: its requested posture lives on a non-root viewer
+ * boundary and asserting it on `<html>` would be a false claim.
+ */
+const ROOT_AUTHORITY_SOURCES: readonly Source[] = ["themanagement-db"];
+const VIEWER_BOUNDARY_SOURCES: readonly Source[] = ["bithire-static"];
 
 /**
  * Canonical semantic factors — DENSITY_MODE_FACTORS in
  * packages/core/src/foundation/tokens/ts/foundation/base/density/index.ts
  * (`normal` is the tenant-facing alias of `comfortable` and never appears in
- * this matrix). The appearance compiler emits String(factor) as
- * `--ds-density-mode-factor`.
+ * this matrix). The compilers emit String(factor); the CSS cascade law
+ * projects the same literals onto `--ds-density-local-factor` for a non-root
+ * boundary.
  */
 const MODE_FACTORS: Record<Density, { factor: number; css: string }> = {
   compact: { factor: 0.85, css: "0.85" },
@@ -55,51 +88,47 @@ const MODE_FACTORS: Record<Density, { factor: number; css: string }> = {
 };
 
 /**
- * BitHire structural scale, authored at
- * packages/core/src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts
- * (`surfaces.densityScale: 0.9`). It reaches <html> through the bundled
- * bithire artifact (bithire-static) or the runtime-generated tenant CSS
- * (db-over-static) and is an independent axis from the semantic posture.
- *
- * The Management Miami fixture authors `surfaces.densityScale: 1.05`, but the
- * bounded DB projection (`brandThemeToTenantAppearance`) deliberately has no
- * density-scale channel, so the pure-DB source compiles to NO structural
- * override: `--ds-density-scale` is unset on <html> and the CSS clamp math
- * falls back to 1.
+ * A proof-stamped tenant artifact is the `<style>` carrying the three
+ * attributes `emitTenantThemeArtifactForSsr` writes
+ * (packages/core/src/infrastructure/runtime/theming/foundation/visual-authority).
+ * Matching on those attributes rather than on the showroom's own testid keeps
+ * the count a statement about the RUNTIME's proof, not about probe markup.
  */
-const BITHIRE_STRUCTURAL_SCALE = 0.9;
-const STRUCTURAL_TOLERANCE = 0.001;
+const ARTIFACT_SELECTOR =
+  "style[data-ds-tenant-theme-digest][data-ds-tenant-theme-slug]" +
+  "[data-ds-tenant-theme-vertical]";
+
+const DB_TENANT_SLUG = "themanagementmiami";
+const DB_TENANT_VERTICAL = "bithire";
+
+/**
+ * The customer artifact's own `--ds-color-primary`, and the causal witness for
+ * the whole DB path. Its combined selector needs `data-ds-root`,
+ * `data-vertical` and `data-tenant` live together on `<html>`; the bundled
+ * bithire baseline declares #3A6FB0 on that same element. So this value
+ * computing on the live root proves the rule PAINTS, which mounted bytes alone
+ * never did.
+ */
+const DB_TENANT_PRIMARY = "#0f766e";
+
+/** Custom properties keep their authored token stream; compare case-folded. */
+function normalizeColor(value: string): string {
+  return value.trim().toLowerCase();
+}
+
 const EFFECTIVE_TOLERANCE = 0.01;
 
 interface Cell {
   source: Source;
   density: Density;
   locale?: Locale;
-  profile?: string;
 }
 
 function cellUrl(cell: Cell): string {
   const params = new URLSearchParams({ source: cell.source });
   params.set("density", cell.density);
   if (cell.locale) params.set("locale", cell.locale);
-  if (cell.profile) params.set("profile", cell.profile);
   return `/probe/density-authority?${params.toString()}`;
-}
-
-async function openCell(page: Page, cell: Cell): Promise<void> {
-  await page.goto(cellUrl(cell), { waitUntil: "networkidle" });
-  await expect(page.getByTestId("da-frame")).toHaveAttribute(
-    "data-da-source",
-    cell.source
-  );
-  await expect(page.getByTestId("da-button")).toBeVisible();
-  // RootDensityProvider stamps the root attribute in an effect after mount;
-  // polling for it also covers the ThemeProvider inline-variable flush, so
-  // every computed read below is taken from the settled tree.
-  await expect(page.locator("html")).toHaveAttribute(
-    "data-density",
-    cell.density
-  );
 }
 
 /** Computed custom-property value on <html>, trimmed ("" when unset). */
@@ -111,6 +140,81 @@ async function rootComputedVar(page: Page, name: string): Promise<string> {
   );
 }
 
+async function rootDensityAttribute(page: Page): Promise<string> {
+  return page.evaluate(
+    () => document.documentElement.getAttribute("data-density") ?? ""
+  );
+}
+
+/**
+ * An unset factor/scale channel means the identity value: every consumer reads
+ * it as `var(--ds-density-…, 1)`. Resolving "" to 1 here keeps the arithmetic
+ * below identical to the CSS the browser actually evaluated.
+ */
+function numericChannel(value: string): number {
+  const parsed = Number.parseFloat(value);
+  return Number.isFinite(parsed) ? parsed : 1;
+}
+
+interface BoundaryReading {
+  /** True when the governing boundary is the document element itself. */
+  readonly isRoot: boolean;
+  /** `data-density` on that boundary ("" when no boundary exists at all). */
+  readonly posture: string;
+  /** Computed `--ds-density-local-factor` on that boundary. */
+  readonly localFactor: string;
+  /** Computed `--ds-density-effective-scale` text (kept unevaluated by CSS). */
+  readonly structural: string;
+  readonly modeFactor: string;
+}
+
+/**
+ * The ONE locator rule for the density boundary governing the probe tree,
+ * resolved from `da-boundary-anchor`. It returns `<html>` on the DB path and
+ * the shared provider's viewer `DensityScope` on the static path; which one it
+ * returned is itself an assertion below, never an assumption.
+ */
+async function readBoundary(page: Page): Promise<BoundaryReading> {
+  return page.getByTestId("da-boundary-anchor").evaluate((anchor) => {
+    const node = (anchor as HTMLElement).closest("[data-density]");
+    const read = (element: Element, prop: string) =>
+      getComputedStyle(element as HTMLElement).getPropertyValue(prop).trim();
+    if (!node) {
+      return {
+        isRoot: false,
+        posture: "",
+        localFactor: "",
+        structural: "",
+        modeFactor: "",
+      };
+    }
+    return {
+      isRoot: node === document.documentElement,
+      posture: node.getAttribute("data-density") ?? "",
+      localFactor: read(node, "--ds-density-local-factor"),
+      structural: read(node, "--ds-density-scale"),
+      modeFactor: read(node, "--ds-density-mode-factor"),
+    };
+  });
+}
+
+async function openCell(page: Page, cell: Cell): Promise<void> {
+  await page.goto(cellUrl(cell), { waitUntil: "networkidle" });
+  await expect(page.getByTestId("da-frame")).toHaveAttribute(
+    "data-da-source",
+    cell.source
+  );
+  await expect(page.getByTestId("da-button")).toBeVisible();
+  // Settling signal that holds for BOTH semantics: the boundary governing the
+  // tree carries the requested posture. On the DB path that boundary is <html>,
+  // whose attribute RootDensityProvider stamps in an effect -- and the root
+  // scope attributes the artifact selector needs are claimed in an effect too,
+  // so polling here keeps every computed read below on a settled tree.
+  await expect
+    .poll(async () => (await readBoundary(page)).posture)
+    .toBe(cell.density);
+}
+
 async function heightOf(page: Page, testId: string): Promise<number> {
   const box = await page.getByTestId(testId).boundingBox();
   expect(box, `${testId} bounding box`).not.toBeNull();
@@ -118,13 +222,12 @@ async function heightOf(page: Page, testId: string): Promise<number> {
 }
 
 /**
- * Numeric effective-scale read. `--ds-density-effective-scale` IS exposed on
- * <html> (declared by foundation/themes/default.css :root), but computed
- * custom properties keep calc()/clamp() unevaluated, so the spec reads the
- * resolved used width of the probe element
+ * Numeric effective-scale read. `--ds-density-effective-scale` is declared on
+ * :root and redeclared on every non-root density boundary, but computed custom
+ * properties keep calc()/clamp() unevaluated, so the spec reads the resolved
+ * used width of the probe element
  * (`calc(var(--ds-density-effective-scale, 1) * 100px)`) and divides by 100.
- * All matrix products stay inside the clamp bounds (0.5..3), so the effective
- * scale equals structural scale × mode factor exactly.
+ * All matrix products stay inside the clamp bounds (0.5..3).
  */
 async function effectiveScale(page: Page): Promise<number> {
   const width = await page
@@ -147,48 +250,75 @@ async function assertNoHorizontalOverflow(page: Page): Promise<void> {
   expect(overflow.body, "body horizontal overflow").toBeLessThanOrEqual(1);
 }
 
+async function artifactCount(page: Page, selector: string): Promise<number> {
+  return page.evaluate(
+    (css) => document.querySelectorAll(css).length,
+    selector
+  );
+}
+
 test.describe("OLA-5 F2: density authority over one identical tree", () => {
-  test.describe("A. posture sweep: compiler ↔ DOM ↔ JS agreement", () => {
-    for (const source of MATRIX_SOURCES) {
+  test.describe("A. posture sweep: each cell on its own authority", () => {
+    for (const source of SOURCES) {
       for (const density of DENSITIES) {
         for (const locale of LOCALES) {
           test(`${source} / ${density} / ${locale}`, async ({ page }) => {
             await openCell(page, { source, density, locale });
+            const boundary = await readBoundary(page);
+            const rootPosture = await rootDensityAttribute(page);
 
-            // 1. DOM plane: the root attribute mirrors the semantic posture.
-            await expect(page.locator("html")).toHaveAttribute(
-              "data-density",
-              density
-            );
+            if (source === "themanagement-db") {
+              // Root/artifact authority: the governing boundary IS the root.
+              expect(
+                boundary.isRoot,
+                "the compiled DB posture must govern from <html>"
+              ).toBe(true);
+              await expect(page.locator("html")).toHaveAttribute(
+                "data-density",
+                density
+              );
+              // The root writes the SEMANTIC channel, never a second local
+              // multiplier: the cascade law declares --ds-density-local-factor
+              // only under [data-density]:not(:root).
+              expect(
+                boundary.localFactor === "" || boundary.localFactor === "1",
+                `root local factor must be unset or 1, got "${boundary.localFactor}"`
+              ).toBe(true);
+              await expect
+                .poll(() => rootComputedVar(page, "--ds-density-mode-factor"))
+                .toBe(MODE_FACTORS[density].css);
+            } else {
+              // Viewer-boundary authority: the requested posture lives on a
+              // NON-root boundary and the root is not asked to pretend.
+              expect(
+                boundary.isRoot,
+                "the static viewer posture must govern from a non-root boundary"
+              ).toBe(false);
+              expect(
+                numericChannel(boundary.localFactor),
+                `viewer boundary local factor for ${density}`
+              ).toBeCloseTo(MODE_FACTORS[density].factor, 5);
+              // The root keeps the code-owned authored posture. Its exact value
+              // is code-owned, not a matrix input, so the claim here is that it
+              // is a real posture; group B proves it does not follow the
+              // request.
+              expect(
+                DENSITIES as readonly string[],
+                "root posture must remain a code-owned posture"
+              ).toContain(rootPosture);
+            }
 
-            // 2. Compiler plane: appearance compilation emitted the canonical
-            // semantic factor (inline-stamped by ThemeProvider; polled).
-            await expect
-              .poll(() => rootComputedVar(page, "--ds-density-mode-factor"))
-              .toBe(MODE_FACTORS[density].css);
-
-            // 3. JS plane: useDensity() context agrees with the attribute.
+            // JS plane. The readout is identical in both cells and means two
+            // different things: the root context on the DB path, the viewer
+            // boundary's context on the static one.
             await expect(page.getByTestId("da-context")).toHaveAttribute(
               "data-density-context",
               density
             );
 
-            // 4. The root boundary must NOT apply a local factor: the
-            // `--ds-density-local-factor` cascade law only declares it under
-            // `[data-density]:not(:root)`, so on <html> it is unset (or the
-            // identity factor if a default ever lands).
-            const localFactor = await rootComputedVar(
-              page,
-              "--ds-density-local-factor"
-            );
-            expect(
-              localFactor === "" || localFactor === "1",
-              `root local factor must be unset or 1, got "${localFactor}"`
-            ).toBe(true);
-
-            // 5. RTL cells: direction contract. The overflow guard runs in
-            // every cell (the overlong string is always on); the brief
-            // requires it at minimum for ar.
+            // RTL cells: direction contract. The overflow guard runs in every
+            // cell (the overlong string is always on); the brief requires it at
+            // minimum for ar.
             if (locale === "ar") {
               await expect(page.getByTestId("da-frame")).toHaveAttribute(
                 "dir",
@@ -203,9 +333,55 @@ test.describe("OLA-5 F2: density authority over one identical tree", () => {
     }
   });
 
-  test.describe("B. structural scale invariance across postures", () => {
-    for (const source of STATIC_CARRYING_SOURCES) {
-      test(`structural scale is posture-independent: ${source}`, async ({
+  test.describe("B. root authority moves only where it legally may", () => {
+    for (const source of ROOT_AUTHORITY_SOURCES) {
+      test(`root posture and mode factor follow the request: ${source}`, async ({
+        page,
+      }) => {
+        const postures: string[] = [];
+        const factors: string[] = [];
+        for (const density of DENSITIES) {
+          await openCell(page, { source, density, locale: "en" });
+          postures.push(await rootDensityAttribute(page));
+          factors.push(await rootComputedVar(page, "--ds-density-mode-factor"));
+        }
+        expect(postures).toEqual([...DENSITIES]);
+        expect(factors).toEqual(DENSITIES.map((d) => MODE_FACTORS[d].css));
+      });
+    }
+
+    for (const source of VIEWER_BOUNDARY_SOURCES) {
+      test(`root posture and mode factor stay code-owned: ${source}`, async ({
+        page,
+      }) => {
+        const postures: string[] = [];
+        const factors: string[] = [];
+        for (const density of DENSITIES) {
+          await openCell(page, { source, density, locale: "en" });
+          postures.push(await rootDensityAttribute(page));
+          factors.push(await rootComputedVar(page, "--ds-density-mode-factor"));
+        }
+        // The whole point of the static path: a viewer's density request must
+        // not restamp the tenant root or retune the compiled mode factor.
+        expect(
+          new Set(postures).size,
+          `root posture must not follow the request: ${postures.join(", ")}`
+        ).toBe(1);
+        expect(
+          new Set(factors).size,
+          `root mode factor must not follow the request: ${factors.join(", ")}`
+        ).toBe(1);
+        expect(
+          DENSITIES as readonly string[],
+          "root posture must be a real code-owned posture"
+        ).toContain(postures[0]);
+      });
+    }
+  });
+
+  test.describe("C. structural scale is code-owned and posture-independent", () => {
+    for (const source of SOURCES) {
+      test(`structural scale never moves with the request: ${source}`, async ({
         page,
       }) => {
         const readings: string[] = [];
@@ -213,51 +389,68 @@ test.describe("OLA-5 F2: density authority over one identical tree", () => {
           await openCell(page, { source, density, locale: "en" });
           readings.push(await rootComputedVar(page, "--ds-density-scale"));
         }
-        for (const value of readings) {
-          expect(
-            value,
-            `${source} must emit the BitHire structural scale`
-          ).not.toBe("");
-          expect(
-            Math.abs(Number.parseFloat(value) - BITHIRE_STRUCTURAL_SCALE)
-          ).toBeLessThanOrEqual(STRUCTURAL_TOLERANCE);
-        }
+        // A semantic posture is not a structural-scale channel on either path:
+        // the static tenant's scale is authored in its BrandTheme, and this
+        // fixture's DB document authors none. A bounded override would be
+        // legal -- 0.75-1.25 by the global advanced schema, 0.85-1.15 inside
+        // the BitHire envelope -- and would still not be a posture.
         expect(
           new Set(readings).size,
           `structural scale must not move with posture: ${readings.join(", ")}`
         ).toBe(1);
+        if (source === "bithire-static") {
+          // Non-vacuous. The bundled bithire artifact declares
+          // --ds-density-scale: 0.9 and reaches <html> through its own
+          // html[data-tenant='bithire'] arm, so ["", "", ""] means a DEAD
+          // ground, not a stable one, and must fail here rather than pass
+          // Set-size-1.
+          expect(
+            readings.every((reading) => reading !== ""),
+            `bithire-static structural scale must be a real value: ${readings.join(", ")}`
+          ).toBe(true);
+        }
       });
     }
   });
 
-  test.describe("C. CSS effective scale = structural × semantic factor", () => {
-    for (const source of MATRIX_SOURCES) {
+  test.describe("D. effective scale composes structural × mode × local", () => {
+    for (const source of SOURCES) {
       test(`effective scale agreement: ${source}`, async ({ page }) => {
         for (const density of DENSITIES) {
           for (const locale of LOCALES) {
             await openCell(page, { source, density, locale });
-            const structuralRaw = await rootComputedVar(
-              page,
-              "--ds-density-scale"
-            );
-            // Unset (pure-DB source) falls back to the identity scale 1,
-            // exactly like the CSS clamp math's var(--ds-density-scale, 1).
-            const structural =
-              structuralRaw === "" ? 1 : Number.parseFloat(structuralRaw);
-            const expected = structural * MODE_FACTORS[density].factor;
+            const boundary = await readBoundary(page);
+            // Read every input from the DOM rather than pinning it: the two
+            // paths legitimately carry the requested factor in different
+            // channels (mode on the DB root, local on the static boundary), and
+            // this asserts the CSS math composes them into one plane either way.
+            const expected =
+              numericChannel(boundary.structural) *
+              numericChannel(boundary.modeFactor) *
+              numericChannel(boundary.localFactor);
             const actual = await effectiveScale(page);
             expect(
               Math.abs(actual - expected),
               `${source} ${density} ${locale}: effective ${actual} vs expected ${expected}`
             ).toBeLessThanOrEqual(EFFECTIVE_TOLERANCE);
+            // And the requested posture is what moved it: exactly one of the
+            // two channels carries the semantic factor for this cell.
+            const carried =
+              source === "themanagement-db"
+                ? numericChannel(boundary.modeFactor)
+                : numericChannel(boundary.localFactor);
+            expect(
+              carried,
+              `${source} ${density}: requested factor channel`
+            ).toBeCloseTo(MODE_FACTORS[density].factor, 5);
           }
         }
       });
     }
   });
 
-  test.describe("D. rendered geometry is monotonic in the posture", () => {
-    for (const source of MATRIX_SOURCES) {
+  test.describe("E. rendered geometry is monotonic in the posture", () => {
+    for (const source of SOURCES) {
       for (const locale of LOCALES) {
         test(`geometry monotonic: ${source} / ${locale}`, async ({ page }) => {
           const buttonHeights: number[] = [];
@@ -285,108 +478,161 @@ test.describe("OLA-5 F2: density authority over one identical tree", () => {
     }
   });
 
-  test.describe("E. nested DensityScope applies and restores", () => {
-    test("compact scope inside a spacious cell", async ({ page }) => {
-      await openCell(page, {
-        source: "bithire-static",
-        density: "spacious",
-        locale: "en",
+  test.describe("F. nested DensityScope applies and restores", () => {
+    for (const source of SOURCES) {
+      test(`compact scope inside a spacious cell: ${source}`, async ({
+        page,
+      }) => {
+        await openCell(page, { source, density: "spacious", locale: "en" });
+
+        const nested = await heightOf(page, "da-nested-button");
+        const surrounding = await heightOf(page, "da-root-button");
+        const unscoped = await heightOf(page, "da-button");
+
+        // Relative, not absolute: the nested boundary recomputes from the
+        // global structural × mode plane and its own local factor, so it is
+        // smaller than the plane it sits in without composing with that plane's
+        // own local factor.
+        expect(
+          surrounding - nested,
+          `nested compact button (${nested}) must be smaller than the surrounding spacious one (${surrounding})`
+        ).toBeGreaterThanOrEqual(1);
+
+        await expect(page.getByTestId("da-context-nested")).toHaveAttribute(
+          "data-density-context",
+          "compact"
+        );
+        await expect(page.getByTestId("da-context-after")).toHaveAttribute(
+          "data-density-context",
+          "spacious"
+        );
+
+        // An element outside the nested boundary is untouched by it.
+        expect(Math.abs(surrounding - unscoped)).toBeLessThanOrEqual(0.01);
       });
-
-      const nested = await heightOf(page, "da-nested-button");
-      const rootScoped = await heightOf(page, "da-root-button");
-      const unscoped = await heightOf(page, "da-button");
-
-      expect(
-        rootScoped - nested,
-        `nested compact button (${nested}) must be smaller than the root-scope spacious one (${rootScoped})`
-      ).toBeGreaterThanOrEqual(1);
-
-      await expect(page.getByTestId("da-context-nested")).toHaveAttribute(
-        "data-density-context",
-        "compact"
-      );
-      await expect(page.getByTestId("da-context-after")).toHaveAttribute(
-        "data-density-context",
-        "spacious"
-      );
-
-      // An element outside the boundary is unchanged: the root-scope pair
-      // renders with exactly the posture-sweep geometry of da-button in this
-      // same cell (both are 36px chrome height × 0.9 structural × 1.15 mode).
-      expect(Math.abs(rootScoped - unscoped)).toBeLessThanOrEqual(0.01);
-    });
+    }
   });
 
-  test.describe("F. density never changes layout structure", () => {
+  test.describe("G. density never changes layout structure", () => {
     test.use({ viewport: { width: 1280, height: 800 } });
 
-    test("grid-template-columns identical across postures", async ({
-      page,
-    }) => {
-      const templates: string[] = [];
-      for (const density of DENSITIES) {
-        await openCell(page, { source: "bithire-static", density, locale: "en" });
-        templates.push(
-          await page
-            .getByTestId("da-layout")
-            .evaluate(
-              (element) =>
-                getComputedStyle(element as HTMLElement).gridTemplateColumns
-            )
+    for (const source of SOURCES) {
+      test(`grid-template-columns identical across postures: ${source}`, async ({
+        page,
+      }) => {
+        const templates: string[] = [];
+        for (const density of DENSITIES) {
+          await openCell(page, { source, density, locale: "en" });
+          templates.push(
+            await page
+              .getByTestId("da-layout")
+              .evaluate(
+                (element) =>
+                  getComputedStyle(element as HTMLElement).gridTemplateColumns
+              )
+          );
+        }
+        expect(templates[0], "layout witness must be a rendered grid").not.toBe(
+          "none"
         );
-      }
-      expect(templates[0], "layout witness must be a rendered grid").not.toBe(
-        "none"
-      );
-      expect(
-        new Set(templates).size,
-        `layout structure must be posture-independent: ${templates.join(" | ")}`
-      ).toBe(1);
-    });
+        expect(
+          new Set(templates).size,
+          `layout structure must be posture-independent: ${templates.join(" | ")}`
+        ).toBe(1);
+      });
+    }
   });
 
-  test.describe("G. DB appearance precedence over the static theme", () => {
-    test("db-over-static paints the TMM palette and posture", async ({
+  test.describe("H. visual-authority proof per source", () => {
+    test("bithire-static mounts zero proof-stamped tenant artifacts", async ({
       page,
     }) => {
-      await openCell(page, {
-        source: "db-over-static",
-        density: "spacious",
-        locale: "en",
-      });
-
-      await expect(page.locator("html")).toHaveAttribute(
-        "data-density",
-        "spacious"
-      );
-
-      // The DB appearance layer is layered last by the runtime: TMM's
-      // general.palette.primary (#0F766E, projected from the fixture palette)
-      // must win over the static BitHire brandTheme primary (#3A6FB0).
-      // Chromium serializes computed custom properties either as the literal
-      // hex or as rgb(); accept both serializations of the same value.
-      const normalizeColor = (value: string) =>
-        value.toLowerCase().replace(/\s/g, "");
-      await expect
-        .poll(async () =>
-          normalizeColor(await rootComputedVar(page, "--ds-color-primary"))
-        )
-        .toMatch(/^(#0f766e|rgb\(15,118,110\))$/);
-      const primary = normalizeColor(
-        await rootComputedVar(page, "--ds-color-primary")
-      );
-      expect(primary).not.toBe("#3a6fb0");
-      expect(primary).not.toBe("rgb(58,111,176)");
-
-      await expect(page.getByTestId("da-context")).toHaveAttribute(
-        "data-density-context",
-        "spacious"
-      );
+      for (const density of DENSITIES) {
+        await openCell(page, {
+          source: "bithire-static",
+          density,
+          locale: "en",
+        });
+        expect(
+          await artifactCount(page, ARTIFACT_SELECTOR),
+          `bithire-static ${density}: code-owned identity is bundled CSS, not a compiled tenant artifact`
+        ).toBe(0);
+      }
     });
+
+    for (const density of DENSITIES) {
+      test(`themanagement-db mounts exactly one artifact carrying the ${density} factor`, async ({
+        page,
+      }) => {
+        await openCell(page, {
+          source: "themanagement-db",
+          density,
+          locale: "en",
+        });
+
+        expect(await artifactCount(page, ARTIFACT_SELECTOR)).toBe(1);
+        const artifact = page.locator(ARTIFACT_SELECTOR);
+        await expect(artifact).toHaveAttribute(
+          "data-ds-tenant-theme-slug",
+          DB_TENANT_SLUG
+        );
+        await expect(artifact).toHaveAttribute(
+          "data-ds-tenant-theme-vertical",
+          DB_TENANT_VERTICAL
+        );
+
+        // CAUSAL, and it must come before the byte reads: a mounted artifact is
+        // not a painting one. The rule only matches when data-ds-root,
+        // data-vertical and data-tenant are all live on <html>, so a non-density
+        // channel of this artifact computing on the live root is what certifies
+        // the compiler plane below is being read from CSS that applies.
+        await expect
+          .poll(async () =>
+            normalizeColor(await rootComputedVar(page, "--ds-color-primary"))
+          )
+          .toBe(DB_TENANT_PRIMARY);
+
+        const css = await artifact.evaluate(
+          (element) => element.textContent ?? ""
+        );
+        // The compiler plane, read from the bytes that were actually mounted.
+        expect(
+          css,
+          `artifact must compile the ${density} posture`
+        ).toContain(`--ds-density-mode-factor: ${MODE_FACTORS[density].css};`);
+        // This fixture's document authors no structural-density override, so
+        // its artifact must not carry one. A bounded advanced
+        // `--ds-density-scale` would be legal for a customer -- 0.75-1.25 by
+        // the global advanced schema, 0.85-1.15 inside the BitHire envelope --
+        // it is simply not published here.
+        expect(
+          css,
+          "this fixture's document authors no structural density channel"
+        ).not.toContain("--ds-density-scale");
+      });
+    }
+
+    for (const source of SOURCES) {
+      test(`the probe never mounts, styles or injects locally: ${source}`, async ({
+        page,
+      }) => {
+        await openCell(page, { source, density: "compact", locale: "en" });
+        const inside = await page
+          .getByTestId("da-canvas")
+          .evaluate(
+            (element, selector) =>
+              (element as HTMLElement).querySelectorAll(selector).length,
+            ARTIFACT_SELECTOR
+          );
+        expect(
+          inside,
+          "artifacts belong outside the provider, emitted by the shared ground"
+        ).toBe(0);
+      });
+    }
   });
 
-  test.describe("H. coarse-pointer 44px floor", () => {
+  test.describe("I. coarse-pointer 44px floor", () => {
     test("compact geometry never shrinks below the touch floor", async ({
       browser,
     }) => {
@@ -402,14 +648,19 @@ test.describe("OLA-5 F2: density authority over one identical tree", () => {
       });
       try {
         const coarsePage = await context.newPage();
-        for (const source of MATRIX_SOURCES) {
-          await openCell(coarsePage, { source, density: "compact", locale: "en" });
+        for (const source of SOURCES) {
+          await openCell(coarsePage, {
+            source,
+            density: "compact",
+            locale: "en",
+          });
           // The skins enforce the floor with min-block-size under
-          // @media (pointer: coarse) — deliberately outside the density scale.
+          // @media (pointer: coarse) — deliberately outside the density scale,
+          // so it holds whichever plane the compact request landed on.
           await expect
             .poll(() =>
-              coarsePage.evaluate(() =>
-                window.matchMedia("(pointer: coarse)").matches
+              coarsePage.evaluate(
+                () => window.matchMedia("(pointer: coarse)").matches
               )
             )
             .toBe(true);

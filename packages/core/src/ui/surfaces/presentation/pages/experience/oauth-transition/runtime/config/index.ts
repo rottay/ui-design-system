@@ -22,11 +22,11 @@ export const OAUTH_TRANSITION_APPS: Record<OAuthTransitionAppId, OAuthTransition
     label: 'Events vertical',
     routeLabel: 'Default dark transition',
   },
-  platform: {
-    id: 'platform',
-    name: 'Rottay Platform',
+  rottay: {
+    id: 'rottay',
+    name: 'Rottay',
     mark: 'R',
-    label: 'Platform vertical',
+    label: 'Rottay vertical',
     routeLabel: 'Default dark transition',
   },
   auth: {
@@ -210,14 +210,14 @@ export const OAUTH_TRANSITION_VARIANTS: Record<OAuthTransitionVariantId, OAuthTr
 export const OAUTH_TRANSITION_POOLS: Record<OAuthTransitionAppId, OAuthTransitionVariantId[]> = {
   bithire: ['quiet-beam-light', 'signal-line-light', 'halo-orbit-light'],
   evnto: ['watchtower-sweep-dark', 'signal-line-dark', 'halo-orbit-dark'],
-  platform: ['watchtower-sweep-dark', 'signal-line-dark', 'halo-orbit-dark'],
+  rottay: ['watchtower-sweep-dark', 'signal-line-dark', 'halo-orbit-dark'],
   auth: ['watchtower-sweep-dark', 'signal-line-dark', 'halo-orbit-dark'],
 };
 
 export const OAUTH_TRANSITION_DEFAULT_VARIANTS: Record<OAuthTransitionAppId, OAuthTransitionVariantId> = {
   bithire: 'quiet-beam-light',
   evnto: 'watchtower-sweep-dark',
-  platform: 'watchtower-sweep-dark',
+  rottay: 'watchtower-sweep-dark',
   auth: 'watchtower-sweep-dark',
 };
 

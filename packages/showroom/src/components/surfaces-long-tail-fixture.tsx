@@ -36,11 +36,8 @@ import {
   SidebarSurface,
   Stack,
   SurfaceEmptyState,
-  SurfaceEmptyStateCard,
   SurfaceErrorState,
-  SurfaceErrorStateCard,
   SurfaceLoadingSkeleton,
-  SurfaceLoadingState,
   SurfaceOfflineBanner,
   SurfaceStaleBanner,
   TeamSurface,
@@ -226,7 +223,10 @@ function PatternsFamily() {
         />
       </Case>
 
-      <Case id="patterns-cell-renderers" label="cell-renderers: all reusable value branches">
+      <Case
+        id="patterns-data-table-cell-helpers"
+        label="data-table cell helpers: reusable value branches"
+      >
         <Box style={{ ...MINI_GRID_STYLE, gridTemplateColumns: 'repeat(4, minmax(0, 1fr))' }}>
           {cellRenderers.avatarName('Ari Chen', 'ari@example.test')}
           {cellRenderers.nameStack('Beta record', 'Muted subtitle')}
@@ -310,20 +310,13 @@ function FoundationFamily() {
         />
       </Case>
 
-      <Case id="foundation-states-core" label="states/index: loading, empty and error/retry">
-        <Box style={MINI_GRID_STYLE}>
-          <SurfaceLoadingState title="Loading records" description="Skeleton remains visible" lines={3} />
-          <SurfaceEmptyState title="No records" description="Create the first one" action={{ id: 'create', label: 'Create', onClick: noop }} />
-          <SurfaceErrorState error={new Error('Records unavailable')} onRetry={noop} />
-        </Box>
-      </Case>
-
-      <Case id="foundation-states-lifecycle" label="surface-states: skeleton, empty, error, stale refreshing and offline cached">
+      {/* The case id is load-bearing for e2e/visual/surfaces-long-tail-batch.spec.ts; only the label vocabulary moved to surface-lifecycle. */}
+      <Case id="foundation-states-lifecycle" label="surface-lifecycle: skeleton, empty, error, stale refreshing and offline cached">
         <Stack spacing="sm">
           <SurfaceLoadingSkeleton rows={3} showHeader />
           <Box style={MINI_GRID_STYLE}>
-            <SurfaceEmptyStateCard title="Nothing here" description="Lifecycle empty state" icon="\u2205" action={{ label: 'Add record', onClick: noop }} />
-            <SurfaceErrorStateCard error="Lifecycle failed" onRetry={noop} />
+            <SurfaceEmptyState title="Nothing here" description="Lifecycle empty state" icon="\u2205" action={{ id: 'add-record', label: 'Add record', onClick: noop }} />
+            <SurfaceErrorState error="Lifecycle failed" onRetry={noop} />
           </Box>
           <SurfaceStaleBanner message="Data may be stale" onRefresh={noop} refreshing />
           <SurfaceOfflineBanner message="You are offline" showCachedNotice />

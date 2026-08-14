@@ -32,6 +32,7 @@
 import { pathToFileURL } from 'node:url';
 import { compilePatterns, isUnderOrEqual, matchesAny, matchesCompiled, normalizePath } from '../../foundation/glob/index.mjs';
 import { changedPaths, repoRoot } from '../../foundation/git/index.mjs';
+import { assertNoCatalogOverride } from '../../runtime/ownership-rows/index.mjs';
 import { loadContext, laneCovers, readPlan, resolveLane } from '../../composition/plan/index.mjs';
 import { conclude, createFindings, EXIT, parseArgs } from '../../foundation/report/index.mjs';
 
@@ -111,6 +112,7 @@ function main(argv) {
   let changes;
 
   try {
+    assertNoCatalogOverride(flags);
     const root = repoRoot();
     const adHoc = laneFromFlags(flags);
     if (adHoc) {
@@ -128,11 +130,7 @@ function main(argv) {
       const plan = readPlan(String(planPath));
       const declared = plan.lanes.find((entry) => entry.id === String(laneId));
       if (!declared) throw new Error(`plan "${planPath}" declares no lane "${laneId}"`);
-      const context = loadContext({
-        root,
-        ledgerPath: typeof flags.get('ledger') === 'string' ? flags.get('ledger') : undefined,
-        syntheticPath: typeof flags.get('synthetic') === 'string' ? flags.get('synthetic') : undefined,
-      });
+      const context = loadContext({ root });
       lane = resolveLane(declared, context);
     }
 

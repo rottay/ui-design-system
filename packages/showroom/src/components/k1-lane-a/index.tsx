@@ -4,15 +4,15 @@
  * K1 Lane A probe (showroom): identity & compact chrome families.
  *
  * One identical component tree for the five Lane-A families (Avatar, Badge,
- * Tag, Link, Kbd) rendered under two opposing governed sources:
- *  - `bithire-static`: the checked-in BitHire BrandTheme (file-first path);
- *  - `themanagement-db`: the DB Appearance construction mirrored from
- *    `@/components/brand-locale-evidence` (DB-owned runtime path).
+ * Tag, Link, Kbd) rendered under the two opposing governed sources that
+ * `@/components/showroom-tenant` owns: the checked-in BitHire vertical
+ * (file-first path) and the compiled `themanagementmiami` document (DB-owned
+ * runtime path). This probe states WHICH ground it wants and nothing about how
+ * one is built -- the previous hand-built tenant literals here resolved to a
+ * blocked authority, which renders as a spinner rather than as an error.
  *
- * The density posture sweeps compact | comfortable | spacious through
- * `appearance.general.density` only (`comfortable` maps to the canonical
- * `normal` alias at the Appearance boundary), the locale sweep renders
- * EN/ES/AR with `dir="rtl"` for Arabic, and the state sweep applies
+ * The density posture sweeps compact | comfortable | spacious, the locale sweep
+ * renders EN/ES/AR with `dir="rtl"` for Arabic, and the state sweep applies
  * rest | disabled | loading to the families that expose those states.
  * Every cell is deterministic and URL-addressable; no fixture value here is
  * product content.
@@ -22,18 +22,15 @@ import {
   Avatar,
   Badge,
   Box,
-  DesignSystemProvider,
   Heading,
   Kbd,
   NavLink,
   Stack,
   Tag,
   Text,
-  bithireBrandTheme,
-  type TenantConfig,
 } from "@rottay/design-system";
 
-import { tenantConfigFor as brandLocaleTenantConfigFor } from "@/components/brand-locale-evidence";
+import { ShowroomTenantProvider } from "@/components/showroom-tenant";
 
 export type LaneASource = "bithire-static" | "themanagement-db";
 export type LaneALocale = "en" | "es" | "ar";
@@ -45,52 +42,6 @@ export interface K1LaneAProbeProps {
   locale: LaneALocale;
   density: LaneADensity;
   state: LaneAState;
-}
-
-/**
- * The tenant-facing Appearance vocabulary has no `comfortable` literal:
- * `normal` is the canonical alias (TenantAppearanceGeneral['density']).
- */
-function toAppearanceDensity(
-  density: LaneADensity
-): "compact" | "normal" | "spacious" {
-  return density === "comfortable" ? "normal" : density;
-}
-
-function tenantConfig(
-  source: LaneASource,
-  locale: LaneALocale,
-  density: LaneADensity
-): TenantConfig {
-  if (source === "themanagement-db") {
-    const base = brandLocaleTenantConfigFor("themanagementmiami", locale);
-    return {
-      ...base,
-      appearance: {
-        ...base.appearance,
-        general: {
-          ...base.appearance?.general,
-          density: toAppearanceDensity(density),
-        },
-      },
-    };
-  }
-
-  return {
-    slug: "bithire",
-    name: "BitHire",
-    vertical: "bithire",
-    engine: "modern",
-    theme: "light",
-    plan: "enterprise",
-    features: ["*"],
-    branding: { companyName: "BitHire" },
-    // BitHire is first-party vertical identity and therefore comes from the
-    // checked-in DS theme, never from a customer DB fixture. The semantic
-    // posture enters exclusively through the Appearance channel.
-    brandTheme: bithireBrandTheme,
-    appearance: { general: { density: toAppearanceDensity(density) } },
-  };
 }
 
 const COPY: Record<LaneALocale, Record<string, string>> = {
@@ -258,13 +209,7 @@ function SpecimenTree({
 
 export function K1LaneAProbe({ source, locale, density, state }: K1LaneAProbeProps) {
   return (
-    <DesignSystemProvider
-      tenantConfig={{ ...tenantConfig(source, locale, density), locale }}
-      vertical="bithire"
-      locale={locale}
-      forceEngine="modern"
-      forceTheme="light"
-    >
+    <ShowroomTenantProvider source={source} locale={locale} density={density}>
       <Box
         data-testid="la-canvas"
         style={{
@@ -290,6 +235,6 @@ export function K1LaneAProbe({ source, locale, density, state }: K1LaneAProbePro
           <SpecimenTree locale={locale} state={state} />
         </Box>
       </Box>
-    </DesignSystemProvider>
+    </ShowroomTenantProvider>
   );
 }

@@ -1,11 +1,10 @@
 "use client";
 
 /**
- * P1 ActionDock probe (showroom): structured-action dock under two opposing
- * governed sources:
- *  - `bithire-static`: the checked-in BitHire BrandTheme (file-first path);
- *  - `themanagement-db`: the DB Appearance construction mirrored from
- *    `@/components/brand-locale-evidence` (DB-owned runtime path).
+ * P1 ActionDock probe (showroom): structured-action dock under the two opposing
+ * governed sources `@/components/showroom-tenant` owns:
+ *  - `bithire-static`: the bundled BitHire vertical, code-owned;
+ *  - `themanagement-db`: a published customer document, compiled and proven.
  *
  * The probe exists to give Pass-1/Pass-2 evidence a URL-addressable render of
  * the ActionDock elevation:
@@ -23,8 +22,8 @@
  *  - local density boundary: compact | comfortable | spacious re-projects the
  *    canonical spacing channels inside the dock chrome and its Buttons.
  *
- * Density sweeps through `appearance.general.density` only, locale sweeps
- * EN/ES/AR with `dir="rtl"` for Arabic, theme sweeps light | dark, and
+ * Density sweeps compact | comfortable | spacious, locale sweeps EN/ES/AR with
+ * `dir="rtl"` for Arabic, theme sweeps light | dark, and
  * `state` retunes the dock posture on the SAME markup: rest -> all enabled,
  * loading -> primary pending, error -> primary disabled + leading Retry
  * secondary. No fixture value here is product content.
@@ -33,17 +32,14 @@
 import {
   ActionDock,
   Box,
-  DesignSystemProvider,
   Heading,
   Stack,
   Text,
-  bithireBrandTheme,
   type ActionDockAction,
-  type TenantConfig,
 } from "@rottay/design-system";
 import { Icon } from "@rottay/design-system/icons";
 
-import { tenantConfigFor as brandLocaleTenantConfigFor } from "@/components/brand-locale-evidence";
+import { ShowroomTenantProvider } from "@/components/showroom-tenant";
 
 export type P1ActionDockSource = "bithire-static" | "themanagement-db";
 export type P1ActionDockLocale = "en" | "es" | "ar";
@@ -57,52 +53,6 @@ export interface P1ActionDockProbeProps {
   density: P1ActionDockDensity;
   state: P1ActionDockState;
   theme?: P1ActionDockTheme;
-}
-
-/**
- * The tenant-facing Appearance vocabulary has no `comfortable` literal:
- * `normal` is the canonical alias (TenantAppearanceGeneral['density']).
- */
-function toAppearanceDensity(
-  density: P1ActionDockDensity
-): "compact" | "normal" | "spacious" {
-  return density === "comfortable" ? "normal" : density;
-}
-
-function tenantConfig(
-  source: P1ActionDockSource,
-  locale: P1ActionDockLocale,
-  density: P1ActionDockDensity
-): TenantConfig {
-  if (source === "themanagement-db") {
-    const base = brandLocaleTenantConfigFor("themanagementmiami", locale);
-    return {
-      ...base,
-      appearance: {
-        ...base.appearance,
-        general: {
-          ...base.appearance?.general,
-          density: toAppearanceDensity(density),
-        },
-      },
-    };
-  }
-
-  return {
-    slug: "bithire",
-    name: "BitHire",
-    vertical: "bithire",
-    engine: "modern",
-    theme: "light",
-    plan: "enterprise",
-    features: ["*"],
-    branding: { companyName: "BitHire" },
-    // BitHire is first-party vertical identity and therefore comes from the
-    // checked-in DS theme, never from a customer DB fixture. The semantic
-    // posture enters exclusively through the Appearance channel.
-    brandTheme: bithireBrandTheme,
-    appearance: { general: { density: toAppearanceDensity(density) } },
-  };
 }
 
 const COPY: Record<P1ActionDockLocale, Record<string, string>> = {
@@ -285,12 +235,11 @@ export function P1ActionDockProbe({
   theme = "light",
 }: P1ActionDockProbeProps) {
   return (
-    <DesignSystemProvider
-      tenantConfig={{ ...tenantConfig(source, locale, density), locale }}
-      vertical="bithire"
+    <ShowroomTenantProvider
+      source={source}
       locale={locale}
-      forceEngine="modern"
-      forceTheme={theme}
+      density={density}
+      theme={theme}
     >
       <Box
         data-testid="p1ad-canvas"
@@ -335,7 +284,7 @@ export function P1ActionDockProbe({
           </main>
         </Box>
       </Box>
-    </DesignSystemProvider>
+    </ShowroomTenantProvider>
   );
 }
 

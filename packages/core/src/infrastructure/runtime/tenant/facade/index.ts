@@ -92,20 +92,12 @@ export {
   preloadTenantConfig,
 } from '../runtime/store';
 export {
-  generateTenantCss,
-  generateTenantCssFile,
-  buildTenantSelector,
-} from '../../../compilers/runtime/tenant-css/visual-config';
-export {
   renderFirstPartyArtifact,
   renderVerticalArtifact,
   GENERATED_ARTIFACT_BANNER,
   FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
   FIRST_PARTY_ARTIFACT_SPECS,
 } from '../../../compilers/runtime/tenant-css';
-export type {
-  GenerateTenantCssOptions,
-} from '../../../compilers/runtime/tenant-css/visual-config';
 export type {
   RenderFirstPartyArtifactInput,
   RenderVerticalArtifactInput,

@@ -6,17 +6,17 @@
     "category": "communication",
     "name": "LiveFeed",
     "components": [
-      "LiveFeed"
+      "PatternLiveFeed"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
     "sourceOwner": "packages/core/src/ui/patterns/communication/live-feed",
-    "publicComponents": [],
-    "unresolvedPublicComponents": [
-      "LiveFeed"
+    "publicComponents": [
+      "PatternLiveFeed"
     ],
+    "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "45a994143d07a31773dbbf5ff05d2f2b8f148934fd3549644995aac5432f504f"
+    "inventoryRowDigest": "4589179469a10cadce99c8f16028c986e2be722bbbdd35d0af2e307b591678af"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

@@ -1,70 +1,93 @@
 import React from 'react';
-import { render, waitFor, type RenderResult } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
-
+import { cleanup, render, screen } from '@testing-library/react';
+import { afterEach, describe, expect, it } from 'vitest';
 import type { TenantConfig, TenantMotionDial } from '../../../../../../../foundation/contracts';
+import type { TenantThemeArtifact } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
+import {
+  compileTenantThemeConfig,
+  getTenantThemeVerticalEnvelope,
+  hydrateTenantThemeConfig,
+} from '@/infrastructure/compilers/composition/tenant-theme';
+import {
+  TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE,
+  TENANT_THEME_ARTIFACT_SLUG_ATTRIBUTE,
+  TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE,
+} from '@/infrastructure/runtime/theming';
 import { useMotionPolicy } from '../../../../../motion';
 import { DesignSystemProvider } from '..';
 
-interface MotionPolicyProjection {
-  profile: string;
-  intensity: number;
-  durationScale: number;
-  ambient: string;
+function artifact(slug: string, verticalKey: 'evnto' | 'rottay', motion: TenantMotionDial) {
+  return compileTenantThemeConfig(
+    hydrateTenantThemeConfig({
+      schemaVersion: 1,
+      mode: 'simple',
+      appearance: { motion },
+    }, {
+      tenantId: `tenant_${slug}`,
+      slug,
+      verticalKey,
+      rowVersion: 1,
+    }),
+    { verticalEnvelope: getTenantThemeVerticalEnvelope(verticalKey) },
+  );
 }
 
-function tenantConfig(slug: string, motion: TenantMotionDial): TenantConfig {
+function config(value: TenantThemeArtifact): TenantConfig {
   return {
-    slug,
-    name: slug,
+    slug: value.slug,
+    name: value.slug,
     engine: 'modern',
     theme: 'base',
     plan: 'enterprise',
     features: [],
-    branding: { companyName: slug },
-    appearance: { general: { motion } },
-  };
+    branding: { companyName: value.slug },
+    appearance: value.normalizedAppearance,
+  } as TenantConfig;
+}
+
+function mountArtifact(value: TenantThemeArtifact): HTMLStyleElement {
+  const style = document.createElement('style');
+  style.id = `motion-artifact-${value.slug}`;
+  style.setAttribute(TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE, value.digest);
+  style.setAttribute(TENANT_THEME_ARTIFACT_SLUG_ATTRIBUTE, value.slug);
+  style.setAttribute(TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE, value.verticalKey);
+  style.textContent = value.css;
+  document.head.appendChild(style);
+  return style;
 }
 
 function MotionPolicyProbe(): React.ReactElement {
   const policy = useMotionPolicy();
-  const projection: MotionPolicyProjection = {
-    profile: policy.profile,
-    intensity: policy.intensity,
-    durationScale: policy.durationScale,
-    ambient: policy.ambient,
-  };
-
-  return <output data-testid="motion-policy">{JSON.stringify(projection)}</output>;
+  return <output data-testid="motion-policy">{JSON.stringify(policy)}</output>;
 }
 
-async function readPolicy(rendered: RenderResult): Promise<MotionPolicyProjection> {
-  const output = await waitFor(() => {
-    const element = rendered.getByTestId('motion-policy');
-    expect(element.textContent).toBeTruthy();
-    return element;
-  });
-
-  return JSON.parse(output.textContent ?? '{}') as MotionPolicyProjection;
+function renderArtifact(value: TenantThemeArtifact) {
+  mountArtifact(value);
+  return render(
+    <DesignSystemProvider
+      vertical={value.verticalKey as 'evnto' | 'rottay'}
+      tenantConfig={config(value)}
+      visualAuthority={{ authority: 'compiled-artifact', artifact: value }}
+    >
+      <MotionPolicyProbe />
+    </DesignSystemProvider>,
+  );
 }
+
+afterEach(() => {
+  cleanup();
+  document.querySelectorAll('[id^="motion-artifact-"]').forEach((node) => node.remove());
+});
 
 describe('DesignSystemProvider motion policy ownership', () => {
-  it('derives the semantic profile from the vertical and the bounded dial from appearance', async () => {
-    const rendered = render(
-      <DesignSystemProvider
-        vertical="evnto"
-        tenantConfig={tenantConfig('any-db-tenant', {
-          intensity: 0.62,
-          durationScale: 1.3,
-          ambient: 'off',
-        })}
-        skipCssLoading
-      >
-        <MotionPolicyProbe />
-      </DesignSystemProvider>,
-    );
-
-    await expect(readPolicy(rendered)).resolves.toEqual({
+  it('combines the vertical profile with the verified artifact dial', () => {
+    const value = artifact('motion-evnto', 'evnto', {
+      intensity: 0.62,
+      durationScale: 1.3,
+      ambient: 'off',
+    });
+    renderArtifact(value);
+    expect(JSON.parse(screen.getByTestId('motion-policy').textContent ?? '{}')).toMatchObject({
       profile: 'expressive',
       intensity: 0.62,
       durationScale: 1.3,
@@ -72,40 +95,17 @@ describe('DesignSystemProvider motion policy ownership', () => {
     });
   });
 
-  it('is invariant to tenant identity when vertical and DB dial are identical', async () => {
+  it('is invariant to tenant identity for the same vertical and compiled dial', () => {
     const dial: TenantMotionDial = {
       intensity: 0.4,
       durationScale: 0.75,
       ambient: 'subtle',
     };
-    const first = render(
-      <DesignSystemProvider
-        vertical="platform"
-        tenantConfig={tenantConfig('bithire', dial)}
-        skipCssLoading
-      >
-        <MotionPolicyProbe />
-      </DesignSystemProvider>,
-    );
-    const firstPolicy = await readPolicy(first);
+    const first = renderArtifact(artifact('motion-a', 'rottay', dial));
+    const firstPolicy = screen.getByTestId('motion-policy').textContent;
     first.unmount();
-
-    const second = render(
-      <DesignSystemProvider
-        vertical="platform"
-        tenantConfig={tenantConfig('themanagementmiami', dial)}
-        skipCssLoading
-      >
-        <MotionPolicyProbe />
-      </DesignSystemProvider>,
-    );
-
-    expect(await readPolicy(second)).toEqual(firstPolicy);
-    expect(firstPolicy).toEqual({
-      profile: 'precise',
-      intensity: 0.4,
-      durationScale: 0.75,
-      ambient: 'subtle',
-    });
+    document.getElementById('motion-artifact-motion-a')?.remove();
+    renderArtifact(artifact('motion-b', 'rottay', dial));
+    expect(screen.getByTestId('motion-policy').textContent).toBe(firstPolicy);
   });
 });

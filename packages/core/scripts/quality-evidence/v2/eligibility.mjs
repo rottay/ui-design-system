@@ -104,7 +104,13 @@ export function evaluateFamilyEligibility(receipt, options = {}) {
   const notes = [];
 
   const family = getFamily(contracts, receipt?.familyId);
-  if (!family) blockers.push(`family ${receipt?.familyId ?? '<missing>'} is not in the 252-family inventory`);
+  // The denominator is read from the inventory that just answered, never restated. A literal
+  // here would go on naming a count the catalog had already left behind.
+  if (!family) {
+    blockers.push(
+      `family ${receipt?.familyId ?? '<missing>'} is not one of the ${contracts.inventory.rows.length} families in the canonical inventory`,
+    );
+  }
 
   if (!FAMILY_STATUSES.includes(receipt?.finalPendingStatus)) {
     blockers.push(`finalPendingStatus must be one of ${FAMILY_STATUSES.join(', ')}`);

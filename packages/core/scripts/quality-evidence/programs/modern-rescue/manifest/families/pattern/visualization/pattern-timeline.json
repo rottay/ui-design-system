@@ -9,14 +9,14 @@
       "PatternTimeline"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/visualization",
+    "sourceOwner": "packages/core/src/ui/patterns/visualization/timeline",
     "publicComponents": [
       "PatternTimeline"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "b3707f5462169c7985e4cca244efed1021b9e3756b7d966a764c8c030a52a28b"
+    "inventoryRowDigest": "ccaa87084b336aa68b99bdc6aaa71a3ec0fd1e59379a02be440c3e9c080d3e36"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

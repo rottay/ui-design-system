@@ -71,9 +71,9 @@
  *
  * The set of compiler-emitted channels is read from the GENERATED artifact's
  * compiled block, not from `dist/`: the artifact is the compiler's own output,
- * its freshness is already enforced by `build-vertical-artifacts.mjs --check`,
- * and depending on a build directory would make this gate lie whenever `dist`
- * lagged the source.
+ * its freshness is already enforced from authored source by the
+ * `first-party-artifacts-source-staleness` CI gate, and depending on a build
+ * directory would make this gate lie whenever `dist` lagged the source.
  *
  * Usage:
  *   node scripts/artifact-provenance-gate.mjs           # print the report

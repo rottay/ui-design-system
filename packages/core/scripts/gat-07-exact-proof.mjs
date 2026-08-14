@@ -30,6 +30,7 @@ import {
   ENGINE_TOKEN_EXACT,
   ENGINE_TOKEN_MINIMUM,
 } from './lib/engine-token-governance.mjs';
+import { readFirstPartyRosterSource } from './lib/first-party-roster-source.mjs';
 import {
   analyzeClaimSourceRecords,
   analyzeTenantFloorCssRecords,
@@ -79,7 +80,7 @@ const SKIN_DIRS = [
 
 const CANONICAL_DOC_MARKERS = Object.freeze({
   'component-extensions': '<!-- GAT07-CLAIM component-extensions: reserved-deprecated; runtime=unimplemented; affirmative-behavior=false; owner=DS-IMP-021 -->',
-  'surface-profile-overrides': '<!-- GAT07-CLAIM surface-profile-overrides: active; runtime=declared-33-applied-11; affirmative-behavior=true; owner=DS-IMP-022 -->',
+  'surface-profile-overrides': '<!-- GAT07-CLAIM surface-profile-overrides: active; runtime=declared-32-applied-31; affirmative-behavior=true; owner=DS-IMP-022 -->',
 });
 
 const CLAIM_DOCS = [
@@ -121,6 +122,7 @@ const CLAIM_FLOOR_KEYS = new Set([
   'affirmativeBehaviorClaimAllowed',
   'deferredOwner',
   'definitionFiles',
+  'authority',
   'productionConsumers',
   'executableAssertions',
   'requiredAssertions',
@@ -143,23 +145,84 @@ const GAT07_STATIC_REGISTRY_FIELDS = Object.freeze([
   'notes',
   'execution',
 ]);
+/**
+ * The applied-consumer roster: every productive Core file that DIRECTLY calls
+ * `useSurfaceProfileDefaultsWithOverrides`. Sorted, and byte-identical to the
+ * analyzer's measured set -- the claim floor mirrors the measurement, it never
+ * sources it. The structure-tier `header-surface` consumer is included; the
+ * former `/src/ui/surfaces/` census filter silently dropped it.
+ */
 const SURFACE_PROFILE_OVERRIDE_CONSUMERS = Object.freeze([
-  'src/ui/surfaces/composition/layout/page-shell/header/index.tsx',
+  'src/ui/structures/headers/header-surface/index.tsx',
+  'src/ui/surfaces/presentation/pages/admin/audit/index.tsx',
+  'src/ui/surfaces/presentation/pages/admin/billing/index.tsx',
+  'src/ui/surfaces/presentation/pages/admin/file-browser/index.tsx',
+  'src/ui/surfaces/presentation/pages/admin/import-export/index.tsx',
+  'src/ui/surfaces/presentation/pages/admin/integration/index.tsx',
+  'src/ui/surfaces/presentation/pages/admin/profile/index.tsx',
   'src/ui/surfaces/presentation/pages/admin/settings/index.tsx',
+  'src/ui/surfaces/presentation/pages/admin/team/index.tsx',
   'src/ui/surfaces/presentation/pages/data/compare/index.tsx',
   'src/ui/surfaces/presentation/pages/data/dashboard/index.tsx',
   'src/ui/surfaces/presentation/pages/data/detail/index.tsx',
   'src/ui/surfaces/presentation/pages/data/list/index.tsx',
+  'src/ui/surfaces/presentation/pages/data/report/index.tsx',
+  'src/ui/surfaces/presentation/pages/data/search/index.tsx',
   'src/ui/surfaces/presentation/pages/data/visualization/index.tsx',
+  'src/ui/surfaces/presentation/pages/experience/auth/index.tsx',
   'src/ui/surfaces/presentation/pages/experience/chat/index.tsx',
+  'src/ui/surfaces/presentation/pages/experience/editor/index.tsx',
+  'src/ui/surfaces/presentation/pages/experience/empty-state/index.tsx',
+  'src/ui/surfaces/presentation/pages/experience/marketing/index.tsx',
+  'src/ui/surfaces/presentation/pages/experience/media/index.tsx',
+  'src/ui/surfaces/presentation/pages/experience/notification/index.tsx',
+  'src/ui/surfaces/presentation/pages/experience/pricing/index.tsx',
+  'src/ui/surfaces/presentation/pages/forms/detail-form/index.tsx',
   'src/ui/surfaces/presentation/pages/forms/form/index.tsx',
   'src/ui/surfaces/presentation/pages/forms/wizard/index.tsx',
+  'src/ui/surfaces/presentation/pages/operations/activity/index.tsx',
+  'src/ui/surfaces/presentation/pages/operations/kanban/index.tsx',
+  'src/ui/surfaces/presentation/pages/operations/operational/index.tsx',
   'src/ui/surfaces/presentation/pages/operations/scheduler/index.tsx',
 ]);
 const SURFACE_PROFILE_OVERRIDE_ASSERTIONS = Object.freeze([
   'scripts/surface-profile-overrides.test.mjs',
   'src/ui/surfaces/tests/SurfacesLongTailBatch.contract.test.tsx',
 ]);
+/**
+ * Declaration identity. A count of 32 is not, by itself, an authority: the same
+ * 32 could be produced by moving a declaration between owners or re-hosting it
+ * on another type. This block pins WHERE the declarations live -- the owner
+ * distribution, the two structure-tier enclosing types, a type that must stay
+ * absent, and the single declared-but-never-applied field whose wire-or-remove
+ * decision is still OPEN.
+ */
+const SURFACE_PROFILE_AUTHORITY = Object.freeze({
+  declarationOwners: {
+    'src/ui/structures/foundation/chrome/contracts/index.ts': 2,
+    'src/ui/surfaces/foundation/contracts/index.ts': 30,
+  },
+  pinnedEnclosingTypes: [
+    {
+      enclosingType: 'SidebarSurfaceVisualConfig',
+      path: 'src/ui/structures/foundation/chrome/contracts/index.ts',
+      declarations: 1,
+    },
+    {
+      enclosingType: 'HeaderSurfaceVisualConfig',
+      path: 'src/ui/structures/foundation/chrome/contracts/index.ts',
+      declarations: 1,
+    },
+  ],
+  absentEnclosingTypes: ['HeaderSurfacePresentationConfig'],
+  declaredNotApplied: [
+    {
+      enclosingType: 'SidebarSurfaceVisualConfig',
+      path: 'src/ui/structures/foundation/chrome/contracts/index.ts',
+      wireOrRemove: 'OPEN',
+    },
+  ],
+});
 const EXPECTED_CLAIM_FLOOR = Object.freeze({
   'component-extensions': {
     symbols: ['ComponentExtensions', 'ExtensionHelpers', 'EngineAwareProps.extensions'],
@@ -187,26 +250,31 @@ const EXPECTED_CLAIM_FLOOR = Object.freeze({
   'surface-profile-overrides': {
     symbols: ['SurfaceVisualOverrides', 'useSurfaceProfileDefaultsWithOverrides', 'visual.profileOverrides'],
     disposition: 'active',
-    runtimeStatus: 'declared-33-applied-11',
+    // Declared (32) and applied (31) are DISTINCT censuses, not a parity claim.
+    // `SidebarSurfaceVisualConfig.profileOverrides` is declared and never read.
+    runtimeStatus: 'declared-32-applied-31',
     deferredOwner: {
       sourceId: 'DS-IMP-022',
       owner: 'design-system-program',
       targetPhase: '2A',
-      decision: 'maintain exact declaration-to-consumer parity with executable evidence',
+      decision: 'maintain the exact declaration and applied-consumer census with executable evidence; close or retire the declared-not-applied gap',
     },
     definitionFiles: [
+      'src/ui/structures/foundation/chrome/contracts/index.ts',
+      'src/ui/structures/foundation/chrome/runtime/profile-defaults/overrides/index.ts',
       'src/ui/surfaces/foundation/contracts/index.ts',
-      'src/ui/surfaces/runtime/profile-defaults/overrides/index.ts',
-      'src/ui/surfaces/runtime/profile-defaults/attributes/index.ts',
       'src/ui/surfaces/index.ts',
     ],
+    authority: SURFACE_PROFILE_AUTHORITY,
     productionConsumers: SURFACE_PROFILE_OVERRIDE_CONSUMERS,
     executableAssertions: SURFACE_PROFILE_OVERRIDE_ASSERTIONS,
     requiredAssertions: {
-      profileOverrideDeclarations: 33,
-      staticallyResolvedSurfaceHookCalls: 11,
+      profileOverrideDeclarations: 32,
+      staticallyResolvedSurfaceHookCalls: 31,
+      // `productionConsumers` is governed by APPLICATIONS, not by bare calls.
+      staticallyResolvedSurfaceProfileApplications: 31,
       staticallyResolvedShowroomProfileOverrideReferences: 0,
-      staticallyResolvedPotentialConsumers: 12,
+      staticallyResolvedPotentialConsumers: 31,
       unsupportedGovernedReferences: 0,
       registeredExecutableEvidence: 2,
     },
@@ -355,6 +423,80 @@ function generatedClaimDocumentationTemplates(floor) {
   ]));
 }
 
+/**
+ * Declaration identity, enforced against the measured records. A count of 32 is
+ * not an authority on its own: the owner distribution, the pinned structure-tier
+ * enclosing types, and the type that must stay absent are all pinned, so a
+ * declaration that MOVES between owners or is RE-HOSTED on another type turns
+ * red while the count still reads 32.
+ */
+export function evaluateClaimAuthority(claim, measured) {
+  const errors = [];
+  const authority = claim.authority;
+  const records = measured.profileOverrideDeclarationRecords;
+  if (!Array.isArray(records)) {
+    errors.push(`${claim.id}.authority: the analyzer emitted no declaration-identity records`);
+    return errors;
+  }
+  const owners = authority.declarationOwners ?? {};
+  const ownedBy = (record, owner) => record.path === owner || record.path.endsWith(`/${owner}`);
+  for (const [owner, expected] of Object.entries(owners)) {
+    const actual = records.filter((record) => ownedBy(record, owner)).length;
+    if (actual !== expected) {
+      errors.push(`${claim.id}.authority.declarationOwners[${owner}]: ${actual} != ${expected}`);
+    }
+  }
+  const unattributed = records.filter((record) => !Object.keys(owners).some((owner) => ownedBy(record, owner)));
+  for (const record of unattributed) {
+    errors.push(`${claim.id}.authority.declarationOwners: ${record.enclosingType} declares outside the pinned owners (${record.path})`);
+  }
+  for (const pinned of authority.pinnedEnclosingTypes ?? []) {
+    const actual = records.filter(
+      (record) => record.enclosingType === pinned.enclosingType && ownedBy(record, pinned.path),
+    ).length;
+    if (actual !== pinned.declarations) {
+      errors.push(`${claim.id}.authority.pinnedEnclosingTypes[${pinned.enclosingType}]: ${actual} != ${pinned.declarations} in ${pinned.path}`);
+    }
+  }
+  for (const absent of authority.absentEnclosingTypes ?? []) {
+    if (records.some((record) => record.enclosingType === absent)) {
+      errors.push(`${claim.id}.authority.absentEnclosingTypes: ${absent} must not host a governed declaration`);
+    }
+  }
+  for (const gap of authority.declaredNotApplied ?? []) {
+    if (!records.some((record) => record.enclosingType === gap.enclosingType && ownedBy(record, gap.path))) {
+      errors.push(`${claim.id}.authority.declaredNotApplied: ${gap.enclosingType} no longer declares the governed field`);
+    }
+    if (gap.wireOrRemove !== 'OPEN') {
+      errors.push(`${claim.id}.authority.declaredNotApplied: ${gap.enclosingType} wire-or-remove must stay OPEN until it is wired or removed`);
+    }
+  }
+  // The gap is an exact SET DIFFERENCE between the governed declarations and
+  // the identities actually applied -- never a count. A consumer that applies
+  // ANOTHER owner's field leaves both the count and the roster intact while
+  // moving WHICH declaration is unapplied, so only identity can see it.
+  // `wireOrRemove` is registry bookkeeping and is deliberately ignored here;
+  // it is enforced by the loop above.
+  const registeredGap = authority.declaredNotApplied ?? [];
+  const measuredGap = measured.profileOverrideUnappliedDeclarationRecords;
+  if (!Array.isArray(measuredGap)) {
+    errors.push(`${claim.id}.authority.declaredNotApplied: the analyzer emitted no unapplied-declaration records`);
+    return errors;
+  }
+  const sameIdentity = (gap, record) => record.enclosingType === gap.enclosingType && ownedBy(record, gap.path);
+  for (const gap of registeredGap) {
+    if (!measuredGap.some((record) => sameIdentity(gap, record))) {
+      errors.push(`${claim.id}.authority.declaredNotApplied: ${gap.enclosingType} (${gap.path}) is registered as declared-not-applied but the tree applies it`);
+    }
+  }
+  for (const record of measuredGap) {
+    if (!registeredGap.some((gap) => sameIdentity(gap, record))) {
+      errors.push(`${claim.id}.authority.declaredNotApplied: ${record.enclosingType} (${record.path}) is declared and never applied but is not registered`);
+    }
+  }
+  return errors;
+}
+
 function measureClaims() {
   const floor = JSON.parse(read(CLAIM_FLOOR_PATH));
   const errors = [...evaluateClaimFloor(floor).errors];
@@ -387,6 +529,7 @@ function measureClaims() {
         errors.push(`${claim.id}.${assertion}: ${actual} != ${expected}`);
       }
     }
+    if (claim.authority) errors.push(...evaluateClaimAuthority(claim, measured));
   }
 
   const documentationRecords = claimDocumentationRecords();
@@ -449,7 +592,11 @@ function measureVerticals() {
   }
   for (const unresolved of verticalResult.unresolvedEntries) errors.push(`vertical registry unresolved at line ${unresolved.line}: ${unresolved.reason}`);
   for (const unresolved of tenantResult.unresolvedEntries) errors.push(`tenant registry unresolved at line ${unresolved.line}: ${unresolved.reason}`);
-  for (const key of ['platform', 'bithire', 'evnto']) {
+  const rosterPath = join(
+    CORE_ROOT,
+    'src/foundation/tokens/ts/presentation/brand-themes/index.ts',
+  );
+  for (const { slug: key } of readFirstPartyRosterSource(rosterPath)) {
     if (!literalEquals(verticalResult.facts[key]?.engine, 'modern')) {
       errors.push(`${key} vertical engine is not a literal modern value: ${JSON.stringify(verticalResult.facts[key]?.engine)}`);
     }
@@ -472,7 +619,7 @@ function measureVerticals() {
     ],
     engines: [
       '| Classic | `classic` | Ant Design 5 (`antd`) | Stable | -- |',
-      '| Modern | `modern` | Rottay-native/Tailwind bridge | Stable | Platform, BitHire, Evnto vertical presets |',
+      '| Modern | `modern` | Rottay-native/Tailwind bridge | Stable | Rottay, BitHire, Evnto vertical presets |',
     ],
   };
   const documentation = {};

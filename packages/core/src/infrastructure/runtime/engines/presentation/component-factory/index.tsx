@@ -34,7 +34,6 @@ import {
   lazy,
   Suspense,
   useContext,
-  useEffect,
   useMemo,
   ComponentType,
   LazyExoticComponent,
@@ -46,10 +45,9 @@ import {
 } from 'react';
 import { useEngineContext } from '../../composition/react/provider';
 import { createCustomWrapper } from '../../runtime/customization/component-registry';
-import { acquireRegisteredSkinPack } from '../../runtime/customization/component-registry/skin-pack/application';
 import { EngineErrorBoundary } from './error-boundary';
 import type { EngineName } from '../../../../../foundation/contracts';
-import { TenantContext } from '../../../tenant/composition/react/provider';
+import { TenantContext } from '../../../tenant/foundation/context';
 
 /**
  * Configuration object containing dynamic import functions for each engine.
@@ -148,19 +146,12 @@ export function createEngineComponent<P extends object>(
     // Allow engine prop to override context engine
     const activeEngine = props.engine || context.engine;
 
-    // When a skin pack is registered for the active pack key, hold its CSS and
-    // tokens on the document for as long as this component is mounted under
-    // the `custom` engine. The lightweight registered-pack acquisition seam
-    // is idempotent on content and reference-counted, so every component
-    // instance running this effect for the same pack costs one Map lookup
-    // after the first, and the pack is withdrawn only when the last of them
-    // releases. Runs whenever a registered pack is active, independent of
-    // whether this component resolves to a bespoke override or the shared
-    // fallback — the pack's tokens are page-wide, not per-component.
-    useEffect(() => {
-      if (activeEngine !== 'custom' || !customEnabled) return;
-      return acquireRegisteredSkinPack(componentPack);
-    }, [activeEngine, componentPack, customEnabled]);
+    // `componentPack` selects WHICH components render; it never paints. This
+    // factory therefore holds nothing on the document — no `<style>` element,
+    // no custom properties on `documentElement`, no refcount to unwind. Tenant
+    // visuals arrive as the server-compiled artifact the client hydrates under
+    // `visualAuthority="compiled-artifact"`, and nothing here may compete with
+    // it. Component resolution below is pure lookup.
 
     // Custom engine is the only path that needs tenant-aware component lookup.
     // Standard engines are fully determined by the active engine name.

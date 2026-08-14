@@ -39,8 +39,10 @@ import { contrastRatio } from '@/foundation/kernel/color/contrast';
 import {
   ON_TONE_ROLES,
   deriveReadableInk,
+  measureReadableInk,
   onToneChannel,
 } from '@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink';
+import { deriveInteractionFloor } from '@/infrastructure/compilers/kernel/foundation/css/color-math/interaction-floor';
 import {
   clampDensityIntoExpressiveEnvelope,
   clampIntoExpressiveEnvelope,
@@ -137,13 +139,18 @@ function deriveAppearanceOnToneInks(
  * a single mode-blind value. Only a channel whose halves genuinely differ
  * (real math on a mode's own seed) becomes a `light-dark()` pair, which is
  * what keeps the emitted map as small as the tenant's actual divergence.
+ * A caller may mark math-derived channels as paired-only: if either half is
+ * absent because its seed was not measurable, the whole channel is omitted.
+ * Pass-through channels remain independently representable per half.
  */
 function mergeDerivedModeHalves(
   light: Record<string, string>,
   dark: Record<string, string> | undefined,
+  requireBothHalves: readonly string[] = [],
 ): Record<string, string> {
   if (!dark) return light;
   const merged: Record<string, string> = {};
+  const pairedOnly = new Set(requireBothHalves);
   for (const channel of new Set([...Object.keys(light), ...Object.keys(dark)])) {
     const lightValue = light[channel];
     const darkValue = dark[channel];
@@ -152,8 +159,9 @@ function mergeDerivedModeHalves(
         lightValue === darkValue
           ? lightValue
           : `light-dark(${lightValue}, ${darkValue})`;
-    } else {
-      merged[channel] = lightValue ?? darkValue;
+    } else if (!pairedOnly.has(channel)) {
+      const value = lightValue ?? darkValue;
+      if (value) merged[channel] = value;
     }
   }
   return merged;
@@ -202,19 +210,21 @@ type TenantAppearanceDarkSeeds = NonNullable<
 
 /**
  * Ground for the dark half of a dual (`auto` + dark seeds) derivation. The
- * authored dark background wins; `--ds-color-dark-bg` (a legal tokenOverride)
- * is the fallback; the code-owned dark ground anchors the rest. The generic
- * light-first resolver is not reused here because under `auto` its
- * `--ds-color-bg-primary` candidate is the tenant's LIGHT canvas.
+ * authored dark background wins and the code-owned dark ground anchors the
+ * rest. The generic light-first resolver is not reused here because under
+ * `auto` its `--ds-color-bg-primary` candidate is the tenant's LIGHT canvas.
+ *
+ * `--ds-color-dark-bg` used to sit between the two as a fallback. That
+ * channel no longer exists: a theme's ground is `--ds-color-bg-primary` in
+ * whatever mode is active, and the DB path's own dark seed is the typed
+ * `palette.dark.background` read on the line above. Keeping the lookup would
+ * mean this compiler still recognises a name nothing can write.
  */
 function resolveAppearanceDarkGround(
   darkSeeds: TenantAppearanceDarkSeeds | undefined,
-  compiledBaseVariables: Readonly<Record<string, string>>,
 ): string {
   const authored = darkSeeds?.background;
   if (authored && isHexColor(authored)) return normalizeHexColor(authored);
-  const declared = compiledBaseVariables['--ds-color-dark-bg'];
-  if (declared && isHexColor(declared)) return normalizeHexColor(declared);
   return APPEARANCE_RAMP_GROUNDS.dark;
 }
 
@@ -223,7 +233,7 @@ function resolveAppearanceRampGround(
   compiledBaseVariables: Readonly<Record<string, string>>,
 ): string {
   const candidates = surface === 'dark'
-    ? ['--ds-color-dark-bg', '--ds-color-bg-primary']
+    ? ['--ds-color-bg-primary']
     : ['--ds-color-bg-primary', '--ds-color-background', '--ds-color-bg'];
   for (const name of candidates) {
     const candidate = compiledBaseVariables[name];
@@ -260,7 +270,7 @@ export function deriveAppearanceColorRamps(
       (seed) => typeof seed === 'string' && isValidCssColor(seed),
     );
   const darkGround = dualActive
-    ? resolveAppearanceDarkGround(darkSeeds, compiledBaseVariables)
+    ? resolveAppearanceDarkGround(darkSeeds)
     : APPEARANCE_RAMP_GROUNDS.dark;
 
   for (const role of [
@@ -420,20 +430,71 @@ export function appearanceGeneralToVariables(
     // near-white, the static artifacts' pure-white card grammar) and still
     // loses to Advanced tokenOverrides, which merge after General.
     const resolvedPrimary = mode === 'dark' ? p.dark?.primary ?? p.primary : p.primary;
-    if (
-      mode === 'auto' &&
-      p.primary &&
-      isHexColor(p.primary) &&
-      p.dark?.primary &&
-      isHexColor(p.dark.primary)
-    ) {
-      setVar(
+    const measuredPrimaryInk = (seed: string | undefined): Record<string, string> => {
+      if (!seed) return {};
+      const measurement = measureReadableInk(seed);
+      return measurement.status === 'measured' && measurement.meetsAA
+        ? { '--ds-color-text-on-primary': measurement.ink }
+        : {};
+    };
+    if (mode === 'auto' && p.primary && p.dark?.primary) {
+      Object.assign(
         vars,
-        '--ds-color-text-on-primary',
-        `light-dark(${deriveReadableInk(p.primary)}, ${deriveReadableInk(p.dark.primary)})`,
+        mergeDerivedModeHalves(
+          measuredPrimaryInk(p.primary),
+          measuredPrimaryInk(p.dark.primary),
+          ['--ds-color-text-on-primary'],
+        ),
       );
-    } else if (resolvedPrimary && isHexColor(resolvedPrimary)) {
-      setVar(vars, '--ds-color-text-on-primary', deriveReadableInk(resolvedPrimary));
+    } else {
+      Object.assign(vars, measuredPrimaryInk(resolvedPrimary));
+    }
+
+    // The four primary-seeded interaction floors, from the SAME derivation the
+    // static BrandTheme path uses (`color-math/interaction-floor`). Not a
+    // reimplementation and not a local variant: the DB tenant and the
+    // code-owned vertical must answer "what ink is legible on this primary,
+    // and what is its hover shade" with one function, or a customer's
+    // self-service primary and a vertical's authored primary produce different
+    // buttons from the same hex.
+    //
+    // Emitted from General, so bounded Advanced `tokenOverrides` — which merge
+    // after this tier — still win per channel, exactly like an authored
+    // BrandTheme palette field wins over the floor on the static side.
+    //
+    // A non-hex seed emits only the two pass-through channels; the floor
+    // itself declines to claim an ink it could not measure.
+    //
+    // Under `auto` the floor is derived TWICE, from the same two halves the
+    // palette uses (`p.primary` and `darkSeeds.primary`), and merged by the
+    // same `mergeDerivedModeHalves` — so a channel whose halves agree stays a
+    // single mode-blind value and only a genuinely divergent one pairs.
+    //
+    // It previously derived once from `resolvedPrimary`, which under `auto`
+    // resolves to the LIGHT seed. Everything around it already paired per
+    // half — palette semantics, `--ds-color-text-on-primary`, the ground
+    // ladder — so a tenant authoring `palette.dark.primary` got a dark canvas
+    // whose focus ring, link colour and link-hover shade were all computed
+    // from its LIGHT brand colour. `--ds-button-primary-bg-hover` paired and
+    // `--ds-color-link-hover` did not, from the same pair of seeds.
+    if (mode === 'auto' && p.primary && darkSeeds.primary) {
+      Object.assign(
+        vars,
+        mergeDerivedModeHalves(
+          deriveInteractionFloor(p.primary).variables,
+          deriveInteractionFloor(darkSeeds.primary).variables,
+          [
+            '--ds-color-primary-foreground',
+            '--ds-color-link-hover',
+          ],
+        ),
+      );
+    } else if (resolvedPrimary) {
+      for (const [channel, value] of Object.entries(
+        deriveInteractionFloor(resolvedPrimary).variables,
+      )) {
+        setVar(vars, channel, value);
+      }
     }
 
     // The ladder itself now lives in the shared derivation module, so the DB
@@ -620,9 +681,37 @@ export function appearanceGeneralToVariables(
   // an authored decision and the floor already resolves to the same 1 —
   // emitting keeps precedence honest (DB > authored > profile > canon)
   // without changing a single resolved value.
-  if (general.rhythm != null) {
-    const factor = TENANT_THEME_RHYTHM_FACTORS[general.rhythm];
-    if (factor != null) {
+  //
+  // FAILING CLOSED IS PART OF THE PARITY, not an extra. This function is
+  // EXPORTED and reachable without `validateTenantThemeDocument`: the legacy
+  // `TenantConfig.appearance` compat path hands it a plain object whose
+  // `TenantAppearance` type has already erased. A bare bracket read of the
+  // factor table therefore resolves INHERITED members — `rhythm: 'toString'`
+  // and `'constructor'` resolve to a FUNCTION, `'__proto__'` to an object —
+  // and `factor != null` is true for both. `clampValue` then coerces the
+  // non-number through `Math.min`/`Math.max` to `NaN`, and `setVar`'s
+  // `value != null` check passes `NaN` straight into `String()`, writing the
+  // literal text `NaN` into `--ds-rhythm-scale`. That makes
+  // `clamp(0.8, var(--ds-rhythm-scale, 1), 1.25)` invalid at computed-value
+  // time for every consumer of the effective channel.
+  //
+  // The static `brandThemeToCssVariables` lowering already guards exactly this
+  // shape. The two ingress paths must fail closed the SAME way, so the own-
+  // property + numeric guard is mirrored here rather than left to the schema:
+  // the schema gate is upstream of `compileTenantThemeConfig`, not upstream of
+  // this exported function.
+  const authoredRhythm: unknown = general.rhythm;
+  if (
+    typeof authoredRhythm === 'string'
+    && Object.prototype.hasOwnProperty.call(
+      TENANT_THEME_RHYTHM_FACTORS,
+      authoredRhythm,
+    )
+  ) {
+    const factor = TENANT_THEME_RHYTHM_FACTORS[
+      authoredRhythm as keyof typeof TENANT_THEME_RHYTHM_FACTORS
+    ];
+    if (typeof factor === 'number' && Number.isFinite(factor)) {
       setVar(
         vars,
         '--ds-rhythm-scale',
@@ -672,7 +761,28 @@ export function appearanceAdvancedToVariables(
     );
   }
 
-  // ── Raw token overrides (allowlisted, capped by the schema limits object) ──
+  // ── Raw token overrides ────────────────────────────────────────────────
+  // WHAT THIS SITE ENFORCES, EXACTLY: a `--ds-` prefix, a non-null value, and
+  // the `MAX_TOKEN_OVERRIDES` entry cap. It does NOT enforce a name allowlist,
+  // and the comment that used to say "allowlisted" here was a false claim
+  // about this code.
+  //
+  // The NAME allowlist is real, but it lives one layer up and is exact rather
+  // than prefix-shaped: `TENANT_THEME_OVERRIDE_TOKENS` is compiled into the
+  // document schema as `tokenOverrides: object(tokenValueRules)`, and
+  // `validateTenantThemeDocument` rejects any key outside it with
+  // `code: 'unknown_key'`. Every DB customer write passes through that gate,
+  // so no published tenant theme can reach this function with an unlisted
+  // name.
+  //
+  // `TenantAppearanceAdvanced` is the normalized compiler/compat shape, not
+  // the DB write contract, so a caller that hand-builds one — the legacy
+  // `TenantConfig.appearance` path read by the bootstrap provider and by
+  // `compilers/runtime/tenant-css/visual-config` — reaches here unvalidated
+  // and may write any `--ds-*` name. That is a compatibility surface, not the
+  // governed path; closing it is a bounded behavior change with a blast radius
+  // wider than any one channel, so it is recorded here rather than silently
+  // narrowed.
   if (advanced.tokenOverrides) {
     const entries = Object.entries(advanced.tokenOverrides).filter(
       ([key, value]) => key.startsWith('--ds-') && value != null,
@@ -854,9 +964,7 @@ export function appearanceToVariables(
     if (mode !== 'dark') grounds.push(resolveAppearanceRampGround('light', vars));
     if (mode === 'dark') grounds.push(resolveAppearanceRampGround('dark', vars));
     if (mode === 'auto') {
-      grounds.push(
-        resolveAppearanceDarkGround(appearance.general?.palette?.dark, vars),
-      );
+      grounds.push(resolveAppearanceDarkGround(appearance.general?.palette?.dark));
     }
     const series = deriveChartSeriesPalette(
       normalizeHexColor(chartSeriesSeed),

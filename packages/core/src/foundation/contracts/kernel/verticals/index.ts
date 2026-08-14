@@ -15,8 +15,8 @@
  * import type { VerticalManifest } from '@rottay/design-system';
  *
  * export const MANIFEST: VerticalManifest = {
- *   id: 'platform',
- *   name: 'Rotate',
+ *   id: 'rottay',
+ *   name: 'Rottay',
  *   tone: 'control-room',
  *   shape: 'sharp',
  *   motion: 'precise',
@@ -35,7 +35,36 @@
 // Core identity
 // ---------------------------------------------------------------------------
 
-export type VerticalId = 'platform' | 'evnto' | 'bithire';
+/**
+ * The three code-owned vertical identities.
+ *
+ * This union is the LOWEST statement of the fact. It lives in `contracts`
+ * rather than beside the roster because contracts is the bottom of the local
+ * dependency order: tokens, infrastructure, tooling and scripts may all read
+ * down to it, and nothing here may read back up. Putting the union next to the
+ * roster would force every consumer of the mere TYPE to depend on the token
+ * tree that carries the themes, palettes and font packs.
+ *
+ * Order here is alphabetical-by-accident and carries no meaning: a union is a
+ * set. The CANONICAL ORDER — the one coverage arrays, bundle manifests and
+ * artifact digests are keyed on — is the roster's
+ * `FIRST_PARTY_VERTICAL_SLUGS`, which is the single ordered enumeration and
+ * asserts exact agreement with this union in both directions.
+ *
+ * There is no `platform` member and no alias for one. `platform` was never a
+ * fourth product; it was a second spelling of `rottay` that let the theme
+ * folder, the artifact directory and the registry key disagree with each
+ * other. An app still stamping `platform` is an external caller to cut over,
+ * not a case for a compatibility member here.
+ */
+export type FirstPartyVerticalId = 'rottay' | 'bithire' | 'evnto';
+
+/**
+ * A code-owned vertical. Equal to `FirstPartyVerticalId` by construction —
+ * the alias exists so the many call sites that read "which vertical is this"
+ * keep their familiar name while there remains exactly ONE union behind it.
+ */
+export type VerticalId = FirstPartyVerticalId;
 
 /**
  * Registry key accepted by the vertical preset runtime.

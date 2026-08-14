@@ -17,7 +17,7 @@ import { describe, expect, it } from 'vitest';
 
 import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/bithire';
 import { evntoBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/evnto';
-import { rottayBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/platform';
+import { rottayBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/rottay';
 
 import { compileBrandTheme } from '../index';
 

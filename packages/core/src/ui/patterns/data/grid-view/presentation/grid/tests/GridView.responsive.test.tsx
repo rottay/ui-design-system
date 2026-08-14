@@ -29,6 +29,7 @@ describe('PatternGridView responsive + style pass-through', () => {
   it('floors the auto track at 100% of the container so it cannot overflow a narrow parent', async () => {
     const { container } = renderWithEngine(
       <PatternGridView data={data} renderCard={renderCard} rowKey="id" minColumnWidth={320} />,
+      'modern',
     );
 
     const columns = (await root(container)).style.gridTemplateColumns;
@@ -45,6 +46,7 @@ describe('PatternGridView responsive + style pass-through', () => {
         rowKey="id"
         style={{ minHeight: '320px' }}
       />,
+      'modern',
     );
 
     const empty = (await root(container));

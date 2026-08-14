@@ -7,6 +7,7 @@
  */
 
 import { type TenantAppearance } from "@/foundation/contracts/composition/tenants/themes";
+import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
 import { contrastRatio } from "@/foundation/kernel/accessibility/branding-contrast";
 import {
   canonicalizeJsonValue as canonicalizeTenantThemeValue,
@@ -15,6 +16,7 @@ import {
 } from "@/foundation/kernel/serialization";
 import { validateRecipeProfileSelection } from "@/foundation/tokens/ts/presentation/recipe-profiles";
 import { validateResponsivePostureSelection } from "@/foundation/tokens/ts/presentation/responsive-postures";
+import { assertTenantIdentityAllowed } from "@/foundation/tokens/ts/presentation/brand-themes";
 import {
   EXPRESSIVE_A11Y_FLOORS,
   EXPRESSIVE_EDGE_WIDTH_CHANNELS,
@@ -81,6 +83,40 @@ function deepFreezeTenantThemeValue<T>(value: T): Readonly<T> {
  * neither client payloads nor tenant JSONB can supply or widen this authority.
  */
 export const TENANT_THEME_VERTICAL_ENVELOPES = deepFreezeTenantThemeValue({
+  /**
+   * Rottay's envelope. Its ABSENCE was the bug.
+   *
+   * `getTenantThemeVerticalEnvelope` fails closed, so a missing key is not an
+   * error anyone sees — it silently returns `undefined`. With no `rottay` row,
+   * a perfectly legitimate customer tenant (slug `acme`, `verticalKey:
+   * 'rottay'`) resolved no envelope and therefore could not compile a theme at
+   * all, while bithire and evnto customers could. The roster names three
+   * verticals; keying this record on `FirstPartyVerticalId` below means the
+   * third one can never again be quietly left out.
+   *
+   * The ranges are the most conservative of the three on purpose: Rottay is
+   * the neutral baseline the other two are read against, so a customer riding
+   * it should be able to brand it without being able to restyle it into a
+   * different product.
+   */
+  rottay: {
+    schemaVersion: TENANT_THEME_SCHEMA_VERSION,
+    verticalKey: "rottay",
+    allowedModes: ["simple", "advanced"],
+    advanced: {
+      chromeFamilies: [...TENANT_THEME_CHROME_FAMILIES],
+      allowTokenOverrides: true,
+      allowAnatomyVariants: true,
+    },
+    ranges: {
+      densityScale: { min: 0.85, max: 1.15 },
+      effectIntensity: { min: 0, max: 0.65 },
+      motionIntensity: { min: 0, max: 0.8 },
+      motionDurationScale: { min: 0.75, max: 1.35 },
+      typeScale: { min: 0.92, max: 1.08 },
+      radiusScale: { min: 0.8, max: 1.2 },
+    },
+  },
   bithire: {
     schemaVersion: TENANT_THEME_SCHEMA_VERSION,
     verticalKey: "bithire",
@@ -119,7 +155,14 @@ export const TENANT_THEME_VERTICAL_ENVELOPES = deepFreezeTenantThemeValue({
       radiusScale: { min: 0.8, max: 1.2 },
     },
   },
-} as const satisfies Readonly<Record<string, TenantThemeVerticalEnvelope>>);
+  // `Record<FirstPartyVerticalId, ...>`, not `Record<string, ...>`. The open
+  // key type is what let this record ship two of the three verticals: with a
+  // `string` key nothing states how many rows there must be, so omitting one
+  // type-checked exactly like listing it. Keyed on the closed union, a missing
+  // vertical is a compile error at this line.
+} as const satisfies Readonly<
+  Record<FirstPartyVerticalId, TenantThemeVerticalEnvelope>
+>);
 
 /** Resolve a trusted code-owned envelope; unknown verticals fail closed. */
 export function getTenantThemeVerticalEnvelope(
@@ -858,6 +901,10 @@ export function hydrateTenantThemeConfig(
   identity: TenantThemeConfigIdentity,
   options: HydrateTenantThemeConfigOptions = {}
 ): TenantThemeConfig {
+  assertTenantIdentityAllowed({
+    slug: identity.slug,
+    verticalKey: identity.verticalKey,
+  });
   const parsedDocument = parseTenantThemeDocument(document);
   const mismatchIssues: TenantThemeValidationIssue[] = [];
   for (const key of [
@@ -1444,6 +1491,10 @@ export function compileTenantThemeConfig(
   options: CompileTenantThemeConfigOptions = {}
 ): TenantThemeArtifact {
   const config = parseTenantThemeConfig(input);
+  assertTenantIdentityAllowed({
+    slug: config.slug,
+    verticalKey: config.verticalKey,
+  });
   // Simple v1 documents remain source-compatible: their trusted vertical
   // resolves the code-owned vertical default even when the caller omits the
   // envelope option. Advanced mode keeps its existing explicit-policy gate.

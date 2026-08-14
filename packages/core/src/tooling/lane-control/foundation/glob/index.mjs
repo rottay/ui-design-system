@@ -126,6 +126,46 @@ export function normalizePath(input) {
 }
 
 /**
+ * Why a path has to be CANONICAL before it is compared, not merely normalized.
+ *
+ * Containment here is a string relation: `a/b/c` is inside `a/b`. `..` breaks
+ * that relation without breaking the string, so
+ * `…/display/Avatar/../../inputs/Button` reads as inside Avatar to every prefix
+ * test in this folder while git resolves it to Button — the Avatar lane commits
+ * Button's files and every check says 0 findings. Normalization does not save
+ * this, because collapsing `..` against a bound that is itself a pattern is
+ * ambiguous; the only safe answer is to refuse the segment.
+ *
+ * The rest of the list is the same failure in other alphabets: an absolute path
+ * ignores the repo root, a leading `-` is read by git as an option, and `:` /
+ * `!` / `^` open git's pathspec magic (`:(glob)`, `:!`) which re-selects files
+ * the checker never saw. Glob metacharacters are refused only where the field
+ * is supposed to name one literal path.
+ *
+ * Returns a reason string, or null when the path is canonical.
+ */
+const TRAVERSAL_SEGMENT = /(^|\/)\.\.(\/|$)/;
+const GLOB_MAGIC = /[*?[\]{}]/;
+
+export function pathEscapeReason(input, { allowGlob = false } = {}) {
+  const raw = String(input).trim();
+  if (raw === '') return 'is empty';
+  if (raw.startsWith('-')) return 'starts with "-", which git reads as an option rather than a path';
+  if (raw.startsWith('/') || raw.startsWith('~') || /^[A-Za-z]:[\\/]/.test(raw)) {
+    return 'is absolute; every path in a plan or work order is repo-relative';
+  }
+  if (raw.startsWith(':') || raw.startsWith('!') || raw.startsWith('^')) {
+    return 'uses git pathspec magic, which re-selects files no check in this folder ever resolved';
+  }
+  const value = normalizePath(raw);
+  if (TRAVERSAL_SEGMENT.test(value)) {
+    return 'contains a ".." segment, which resolves outside the path it appears to name while still reading as inside it';
+  }
+  if (!allowGlob && GLOB_MAGIC.test(value)) return 'contains glob or pathspec magic, and this field must name one literal path';
+  return null;
+}
+
+/**
  * A compiled pattern: every brace expansion, each with its RegExp.
  * Rejects negation and universal claims at compile time, fail-closed.
  */
@@ -136,8 +176,12 @@ export function compilePattern(pattern) {
       `lane-control: negation is not supported in a writeSet (${pattern}). Declare it in writeExcludes.`,
     );
   }
-  if (normalized.startsWith('/') || normalized.includes('../')) {
-    throw new Error(`lane-control: pattern must be repo-relative and may not escape upward: ${pattern}`);
+  // The predecessor tested `includes('../')`, which is the same rule with a
+  // hole in it: `…/Avatar/..` and a bare `..` carry no trailing slash and went
+  // through. One canonical test, shared with the literal-path fields.
+  const escape = pathEscapeReason(normalized, { allowGlob: true });
+  if (escape) {
+    throw new Error(`lane-control: pattern ${escape}: ${pattern}`);
   }
   if (UNIVERSAL_PATTERNS.has(normalized)) {
     throw new Error(`lane-control: pattern claims the entire repository: ${pattern}`);

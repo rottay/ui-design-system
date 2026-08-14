@@ -9,14 +9,14 @@
       "PatternGalleryView"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery",
+    "sourceOwner": "packages/core/src/ui/patterns/data/gallery-view",
     "publicComponents": [
       "PatternGalleryView"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "dcbbb0a7f9f153d54ff21e9e414d6c9dbad32c2712b590332cfe47d9d45fd765"
+    "inventoryRowDigest": "f41908428e54a8d0c7bd135aaed6efe21cbd1292ad38d6cd627cb3df8851e85f"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

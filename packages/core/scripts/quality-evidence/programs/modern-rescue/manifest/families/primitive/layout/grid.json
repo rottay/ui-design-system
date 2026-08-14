@@ -18,7 +18,7 @@
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
     "inventoryRowDigest": "e956493be83f436ea246ab71113d8106af547c8c85c60d1ed8025f024f76adaa"
   },
-  "maximumClaim": "INVENTORIED_ONLY",
+  "maximumClaim": "SOURCE_BOUND",
   "review": {
     "verdict": null,
     "acceptedSourceDigest": null,
@@ -26,216 +26,635 @@
     "decisionReason": null
   },
   "anatomy": {
-    "assessmentState": "UNKNOWN",
-    "stableParts": [],
-    "states": [],
-    "propertyGroups": [],
-    "invariants": [],
+    "assessmentState": "SOURCE_BOUND",
+    "partCensusCompleteness": "MODERN_ROOT_AND_COMPOUND_ITEM_BOUND_DYNAMIC_POLYMORPHIC_TAGS_REQUIRE_BROWSER_PROOF",
+    "sourceBindings": [
+      "packages/core/src/ui/primitives/layout/Grid/contracts/index.ts",
+      "packages/core/src/ui/primitives/layout/Grid/index.ts",
+      "packages/core/src/ui/primitives/layout/Grid/engines/modern/index.tsx",
+      "packages/core/src/ui/primitives/layout/Grid/compound/index.ts",
+      "packages/core/src/ui/primitives/layout/Grid/runtime/responsive/index.ts",
+      "packages/core/src/ui/primitives/layout/Grid/runtime/dom-attributes/index.ts",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+    ],
+    "stableParts": [
+      "root",
+      "item"
+    ],
+    "states": [
+      "scalar-tracks",
+      "responsive-tracks",
+      "auto-fit",
+      "inline-grid",
+      "named-areas",
+      "dense-auto-flow",
+      "rearranging"
+    ],
+    "propertyGroups": [
+      "explicit-and-responsive-tracks",
+      "auto-fit-and-implicit-tracks",
+      "uniform-and-axis-gaps",
+      "container-alignment",
+      "item-placement-and-spans",
+      "intrinsic-sizing-and-overflow",
+      "layout-motion",
+      "semantic-polymorphic-roots"
+    ],
+    "invariants": [
+      "Modern numeric track counts clamp to integers from 1 through 12 and resolve as repeat(N,minmax(0,1fr)).",
+      "Root and Grid.Item pin zero intrinsic minimums so long content cannot force tracks wider than their share.",
+      "Named item area takes precedence over explicit row and column placement.",
+      "templateColumns takes precedence over minColumnWidth, which takes precedence over columns.",
+      "placeItems and placeSelf take precedence over their separate axis props.",
+      "Grid.Item placement changes CSS lines and spans without changing DOM order."
+    ],
     "evidenceIds": [],
-    "nextAction": "SOURCE_BIND_ROOT_PARTS_STATES_PROPERTY_GROUPS_AND_INVARIANTS"
+    "nextAction": "BROWSER_PROVE_TRACK_GEOMETRY_ITEM_PLACEMENT_RTL_OVERFLOW_AND_RESPONSIVE_AXIS_PRECEDENCE_WITH_SOURCE_HASH"
   },
   "themeControls": [
     {
       "controlId": "palette.seeds",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "NEGATIVE_COMPUTED_PROOF_MISSING",
+      "applicabilityHypothesis": "INVARIANT_CANDIDATE: Grid owns tracks and placement, not paint; descendant paint is outside its root and item layout contract.",
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Grid/engines/modern/index.tsx",
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFF_PALETTE_STOPS_AND_PROVE_GRID_ROOT_ITEM_GEOMETRY_AND_ENGINE_OWNED_PAINT_ARE_UNCHANGED"
     },
     {
       "controlId": "typography.pairing",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "DESCENDANT_AND_NEGATIVE_PROOF_MISSING",
+      "applicabilityHypothesis": "INVARIANT_CANDIDATE: Grid declares no font family, while changed descendant metrics must remain constrained by minmax(0,1fr).",
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Grid/engines/modern/index.tsx"
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "PROVE_NO_ROOT_OR_ITEM_FONT_BINDING_AND_STRESS_LONG_CONTENT_ACROSS_PAIRINGS"
     },
     {
       "controlId": "typography.families",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "DESCENDANT_AND_NEGATIVE_PROOF_MISSING",
+      "applicabilityHypothesis": "INVARIANT_CANDIDATE: font stacks may alter child intrinsic metrics but Grid does not own text presentation.",
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Grid/contracts/index.ts",
+        "packages/core/src/ui/primitives/layout/Grid/engines/modern/index.tsx"
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "PROVE_TRACKS_REMAIN_OVERFLOW_SAFE_WITH_EACH_FONT_STACK_AND_UNBREAKABLE_CONTENT"
     },
     {
       "controlId": "typography.scale",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "LARGE_TEXT_STRESS_AND_NEGATIVE_PROOF_MISSING",
+      "applicabilityHypothesis": "INVARIANT_CANDIDATE_WITH_DESCENDANT_STRESS: type scale changes child metrics; track count, item placement and root semantics must remain stable.",
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Grid/engines/modern/index.tsx"
+      ],
+      "stressCases": [
+        "200-percent-text",
+        "unbreakable-token",
+        "auto-fit-minimum",
+        "twelve-tracks",
+        "spanning-item"
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "RUN_LARGE_TEXT_GEOMETRY_PROBE_FOR_FIXED_RESPONSIVE_AUTO_FIT_AND_SPANNING_TRACKS"
     },
     {
       "controlId": "shape.radius-scale",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "NEGATIVE_COMPUTED_PROOF_MISSING",
+      "applicabilityHypothesis": "NOT_APPLICABLE_CANDIDATE: neither Grid root nor Grid.Item owns radius, border or clipping paint.",
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Grid/engines/modern/index.tsx"
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "PROVE_ROOT_AND_ITEM_BORDER_RADIUS_REMAIN_UNOWNED_ACROSS_RADIUS_STOPS"
     },
     {
       "controlId": "shape.button-style",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "NEGATIVE_COMPUTED_PROOF_MISSING",
+      "applicabilityHypothesis": "NOT_APPLICABLE_CANDIDATE: no button anatomy or button silhouette is owned by Grid.",
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Grid/contracts/index.ts"
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "NEGATIVE_CENSUS_BUTTON_CHANNELS_AND_PROVE_IDENTICAL_TRACK_GEOMETRY"
     },
     {
       "controlId": "density.mode",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "COMPUTED_STATIC_DB_AND_RESTORE_PROOF_MISSING",
+      "applicabilityHypothesis": "APPLICABLE_CANDIDATE_FOR_PRESET_GAPS: main, row and column preset values resolve through density-scaled --ds-spacing-*; numeric values stay exact.",
+      "outputBindings": [
+        "--ds-grid-gap",
+        "--ds-spacing-1",
+        "--ds-spacing-2",
+        "--ds-spacing-4",
+        "--ds-spacing-6",
+        "--ds-spacing-8",
+        "--ds-spacing-10",
+        "--ds-spacing-12",
+        "--ds-spacing-16"
+      ],
+      "computedProperties": [
+        "gap",
+        "column-gap",
+        "row-gap"
+      ],
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Grid/contracts/index.ts#GAP_MAP",
+        "packages/core/src/ui/primitives/layout/Grid/engines/modern/index.tsx",
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+      ],
+      "negativeControls": [
+        "numeric main and axis gaps remain exact",
+        "track count span line placement and touch ownership remain unchanged"
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "PROVE_PRESET_MAIN_AND_AXIS_GAPS_FOR_DENSITY_STOPS_STATIC_DB_AND_EXACT_RESET"
     },
     {
       "controlId": "spacing.rhythm",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "COMPUTED_STATIC_DB_AND_RESTORE_EVIDENCE_MISSING",
+      "applicabilityHypothesis": "APPLICABLE_CANDIDATE_FOR_MAIN_AND_PER_AXIS_PRESET_GAPS: main, column and row preset rungs each multiply by tight=0.85 normal=1 airy=1.2 through a Modern-scoped rule; numeric values remain exact instance geometry and stamp no preset.",
+      "axisDispositions": [
+        {
+          "axis": "main-preset-gap",
+          "hypothesis": "APPLICABLE",
+          "expectedComputed": "gap = computed(--ds-grid-gap) * rhythm factor; neutral-density md baseline 16px yields 13.6px / 16px / 19.2px"
+        },
+        {
+          "axis": "columnGap-preset",
+          "hypothesis": "APPLICABLE",
+          "expectedComputed": "column-gap = computed(--_ds-grid-column-gap) * rhythm factor; the rung routes through a private seam plus data-column-gap-preset so no inline declaration outranks the stylesheet"
+        },
+        {
+          "axis": "rowGap-preset",
+          "hypothesis": "APPLICABLE",
+          "expectedComputed": "row-gap = computed(--_ds-grid-row-gap) * rhythm factor; symmetric with the column axis"
+        },
+        {
+          "axis": "numeric-main-or-axis-gap",
+          "hypothesis": "INVARIANT",
+          "expectedComputed": "finite non-negative number remains exact px; negative, NaN and Infinity normalize to 0px"
+        },
+        {
+          "axis": "measurement-uniform-gap-with-one-preset-axis",
+          "hypothesis": "INVARIANT_BY_CONSTRUCTION",
+          "expectedComputed": "a numeric uniform gap beside a preset axis is declared only on the axis it still owns, because an inline gap SHORTHAND also sets the column-gap longhand and would outrank the stylesheet-owned axis rule; the uniform-numeric-only path still emits the gap shorthand byte-identically"
+        }
+      ],
+      "outputBindings": [
+        "data-gap-preset",
+        "data-column-gap-preset",
+        "data-row-gap-preset",
+        "--ds-grid-gap",
+        "--_ds-grid-column-gap",
+        "--_ds-grid-row-gap",
+        "--ds-rhythm-effective-scale"
+      ],
+      "stableParts": [
+        "root"
+      ],
+      "propertyGroups": [
+        "uniform-and-axis-gaps"
+      ],
+      "computedProperties": [
+        "gap",
+        "column-gap",
+        "row-gap"
+      ],
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Grid/contracts/index.ts#GridGapValue",
+        "packages/core/src/ui/primitives/layout/Grid/engines/modern/index.tsx#GRID_GAP_RHYTHM_PRESETS",
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
+        "packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/controls/spacing.rhythm.json"
+      ],
+      "negativeControls": [
+        "gap=-8, NaN or Infinity normalizes to 0px and stamps no preset",
+        "columnGap and rowGap numeric values remain exact and override main gap per CSS",
+        "gap=none remains zero",
+        "track templates item spans auto-flow alignment font color border and motion remain unchanged"
+      ],
+      "stressCases": [
+        "rtl-named-areas",
+        "responsive-columns-and-rows",
+        "auto-fit-min-column-width",
+        "main-gap-with-one-axis-override",
+        "both-axis-overrides",
+        "large-text-and-long-token"
+      ],
+      "restoreRequirements": [
+        "Unset static and DB rhythm restores factor 1 and byte-equivalent main computed gap.",
+        "Axis-remediation must clear stale preset channels when switching to numeric, none or unset.",
+        "Track templates, item placement and consumer inline style must remain identical through control set and reset."
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "REMEDIATE_PRESET_ROW_COLUMN_GAP_RHYTHM_BYPASS_THEN_PROVE_0_85_1_1_2_STATIC_DB_NEGATIVES_AND_EXACT_RESTORE"
     },
     {
       "controlId": "motion.dial",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "COMPUTED_MOTION_AND_REDUCED_MOTION_PROOF_MISSING",
+      "applicabilityHypothesis": "APPLICABLE_CANDIDATE_WHEN motion=rearrange: Grid root transitions transform and inline/block size through --ds-transition-rearrange; Grid.Item has no motion prop.",
+      "outputBindings": [
+        "data-layout-motion",
+        "--ds-transition-rearrange",
+        "--ds-motion-rearrange"
+      ],
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Grid/engines/modern/index.tsx",
+        "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css"
+      ],
+      "negativeControls": [
+        "motion=none remains transition:none",
+        "item placement and DOM order do not change",
+        "prefers-reduced-motion forces rearrange duration to zero"
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "PROVE_DIAL_STOPS_ONLY_CHANGE_ROOT_REARRANGE_CADENCE_AND_REDUCED_MOTION_WINS"
     },
     {
       "controlId": "surfaces.elevation-posture",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "NEGATIVE_COMPUTED_PROOF_MISSING",
+      "applicabilityHypothesis": "NOT_APPLICABLE_CANDIDATE: Grid and Grid.Item are transparent layout boxes without shadow ownership.",
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Grid/engines/modern/index.tsx"
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "PROVE_ROOT_AND_ITEM_BOX_SHADOW_BACKGROUND_AND_BORDER_ARE_UNCHANGED"
     },
     {
       "controlId": "surfaces.effect-intensity",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "NEGATIVE_COMPUTED_PROOF_MISSING",
+      "applicabilityHypothesis": "NOT_APPLICABLE_CANDIDATE: no Grid-owned blur, texture, gradient or glass effect exists.",
+      "sourceBindings": [
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "NEGATIVE_CENSUS_EFFECT_CHANNELS_AND_COMPUTED_PAINT"
     },
     {
       "controlId": "navigation.sidebar-tone",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "NEGATIVE_COMPUTED_PROOF_MISSING",
+      "applicabilityHypothesis": "NOT_APPLICABLE_CANDIDATE: generic Grid has no sidebar semantic or sidebar color consumer.",
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Grid/contracts/index.ts"
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "PROVE_SIDEBAR_TONE_CANNOT_SELECT_OR_PAINT_GENERIC_GRID"
     },
     {
       "controlId": "experience.profile",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "COMPOSED_PROFILE_DIFFERENTIAL_PROOF_MISSING",
+      "applicabilityHypothesis": "INVARIANT_CANDIDATE_EXCEPT_THROUGH_EXPLICIT_CHILD_OR_SPACING_AXES: Grid reads no experience-profile output directly.",
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Grid/engines/modern/index.tsx",
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFF_EACH_PROFILE_AND_ATTRIBUTE_ANY_GRID_DELTA_TO_A_GOVERNED_UNDERLYING_AXIS"
     },
     {
       "controlId": "chrome.families",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "NEGATIVE_COMPUTED_PROOF_MISSING",
+      "applicabilityHypothesis": "NOT_APPLICABLE_CANDIDATE: no button, table or modal chrome channel is consumed by generic Grid.",
+      "sourceBindings": [
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "NEGATIVE_CENSUS_CHROME_FAMILY_CHANNELS"
     },
     {
       "controlId": "chrome.anatomy",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "ROOT_ATTRIBUTE_NEGATIVE_PROOF_MISSING",
+      "applicabilityHypothesis": "NOT_APPLICABLE_CANDIDATE: data-anatomy-layout currently targets shells and headers, not Grid or Grid.Item.",
+      "sourceBindings": [
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "PROVE_LAYOUT_ANATOMY_ATTRIBUTE_HAS_NO_GRID_SELECTOR_OR_COMPUTED_DELTA"
     },
     {
       "controlId": "token-overrides",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "ALLOWLIST_MEMBERSHIP_AND_EXACT_RESTORE_PROOF_MISSING",
+      "applicabilityHypothesis": "APPLICABLE_CANDIDATE_ONLY_FOR_ALLOWLISTED_LAYOUT_CHANNELS: spacing and motion overrides may reach Grid; tracks and placement remain instance-owned.",
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Grid/contracts/index.ts#GAP_MAP",
+        "packages/core/src/ui/primitives/layout/Grid/engines/modern/index.tsx",
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+      ],
+      "negativeControls": [
+        "cannot override columns rows templates spans lines auto-flow alignment or numeric gaps",
+        "unknown and non-allowlisted channels fail closed"
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "RESOLVE_EXPERT_ALLOWLIST_MEMBERSHIP_THEN_PROVE_AUTHORIZED_GAP_OR_MOTION_CHANNELS_AND_EXACT_RESET"
     },
     {
       "controlId": "recipe-profile",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "NEGATIVE_BINDING_PROOF_MISSING",
+      "applicabilityHypothesis": "INVARIANT_CANDIDATE: Grid exposes no recipe selection or recipe-profile consumer.",
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Grid/contracts/index.ts",
+        "packages/core/src/ui/primitives/layout/Grid/engines/modern/index.tsx"
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "PROVE_RECIPE_PROFILE_PRESERVES_IDENTICAL_GRID_AND_ITEM_ANATOMY"
     },
     {
       "controlId": "profiles.expressive",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "COMPOSED_AXIS_NEGATIVE_PROOF_MISSING",
+      "applicabilityHypothesis": "INVARIANT_CANDIDATE: expressive type, edge and material outputs are not directly consumed by Grid.",
+      "sourceBindings": [
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "DIFF_EXPRESSIVE_AXES_AND_PROVE_NO_DIRECT_GRID_SELECTOR_OR_PAINT_BINDING"
     },
     {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "NEGATIVE_BINDING_PROOF_MISSING",
+      "applicabilityHypothesis": "NOT_APPLICABLE_CANDIDATE: Grid renders no owned icon and does not choose descendant glyph policy.",
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Grid/engines/modern/index.tsx"
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "PROVE_ICON_PROFILE_CHANGES_DESCENDANT_ICONS_ONLY"
     },
     {
       "controlId": "responsive.posture",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "CONTROL_TO_FAMILY_NEGATIVE_PROOF_MISSING",
+      "applicabilityHypothesis": "INVARIANT_CANDIDATE: Grid responsive tracks use their own viewport breakpoint object or CSS-native auto-fit and do not consume WidgetBoard responsive posture.",
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Grid/runtime/responsive/index.ts",
+        "packages/core/src/ui/primitives/layout/Grid/engines/modern/index.tsx"
+      ],
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING"
+      "nextAction": "PROVE_RESPONSIVE_POSTURE_CONTROL_DOES_NOT_CHANGE_GRID_BREAKPOINTS_AUTO_FIT_OR_TRACK_GEOMETRY"
     }
   ],
   "retiredThemeControls": [],
   "recipeAnatomy": {
-    "assessmentState": "UNKNOWN",
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/primitives/layout/Grid/contracts/index.ts",
+      "packages/core/src/ui/primitives/layout/Grid/engines/modern/index.tsx",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+    ],
     "groupBindings": [],
     "variants": [],
     "deprecatedAliases": [],
     "evidenceIds": [],
-    "nextAction": "CENSUS_TYPED_RECIPE_AND_ANATOMY_VARIANTS"
+    "nextAction": "NEGATIVE_PROVE_NO_RECIPE_PROFILE_OR_LAYOUT_ANATOMY_SELECTOR_TARGETS_GRID_OR_ITEM"
   },
   "instanceApi": {
-    "assessmentState": "UNKNOWN",
-    "props": [],
-    "slots": [],
-    "callbacks": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/primitives/layout/Grid/contracts/index.ts#GridProps",
+      "packages/core/src/ui/primitives/layout/Grid/index.ts",
+      "packages/core/src/ui/primitives/layout/Grid/compound/index.ts"
+    ],
+    "contractSymbols": [
+      "GridProps",
+      "GridItemProps"
+    ],
+    "props": [
+      "columns",
+      "rows",
+      "gap",
+      "spacing",
+      "columnGap",
+      "rowGap",
+      "templateColumns",
+      "templateRows",
+      "templateAreas",
+      "minColumnWidth",
+      "autoFlow",
+      "autoColumns",
+      "autoRows",
+      "alignItems",
+      "justifyItems",
+      "placeItems",
+      "alignContent",
+      "justifyContent",
+      "as",
+      "width",
+      "height",
+      "minHeight",
+      "minWidth",
+      "maxWidth",
+      "overflow",
+      "inline",
+      "motion",
+      "role",
+      "tabIndex",
+      "title",
+      "lang",
+      "dir",
+      "className",
+      "style",
+      "engine",
+      "children",
+      "data-*",
+      "aria-*"
+    ],
+    "itemProps": [
+      "span",
+      "colSpan",
+      "rowSpan",
+      "colStart",
+      "colEnd",
+      "rowStart",
+      "rowEnd",
+      "area",
+      "alignSelf",
+      "justifySelf",
+      "placeSelf",
+      "zIndex",
+      "as",
+      "role",
+      "tabIndex",
+      "title",
+      "lang",
+      "dir",
+      "className",
+      "style",
+      "children",
+      "data-*",
+      "aria-*"
+    ],
+    "slots": [
+      "children",
+      "Grid.Item children"
+    ],
+    "callbacks": [
+      "no family-specific callbacks; BaseComponentProps semantic attributes only"
+    ],
     "controlledState": [],
     "evidenceIds": [],
-    "nextAction": "CENSUS_PUBLIC_PROPS_SLOTS_CALLBACKS_AND_CONTROLLED_STATE"
+    "nextAction": "VERIFY_PUBLIC_ENTRYPOINT_TYPE_EXPORTS_GRID_ITEM_COMPOUND_IDENTITY_REFS_AND_PROP_PRECEDENCE"
   },
   "hostAdaptation": {
-    "assessmentState": "UNKNOWN",
-    "contexts": [],
-    "containerRules": [],
-    "invariants": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/primitives/layout/Grid/engines/modern/index.tsx",
+      "packages/core/src/ui/primitives/layout/Grid/runtime/responsive/index.ts",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+    ],
+    "contexts": [
+      "standalone-page",
+      "embedded-workbench",
+      "narrow-region",
+      "rtl-subtree"
+    ],
+    "containerRules": [
+      "Numeric columns and rows use minmax(0,1fr) tracks with zero intrinsic minima on root and items.",
+      "Responsive columns and rows emit scoped viewport media rules and preserve a non-responsive sibling axis.",
+      "minColumnWidth uses CSS auto-fit and min(100%, value), adapting natively to host width.",
+      "Consumer inline style is final except responsive axes deliberately clear their engine inline template so media rules can own that axis."
+    ],
+    "invariants": [
+      "dir is forwarded; named areas and numeric lines remain authored CSS semantics in RTL.",
+      "Grid owns no pointer, touch or keyboard navigation model; role and tabIndex do not synthesize ARIA grid behavior.",
+      "Long content cannot force fractional tracks beyond their assigned share without an explicit consumer template."
+    ],
+    "sourceTests": [
+      "packages/core/src/ui/primitives/layout/Grid/tests/Grid.modern-quality.test.tsx",
+      "packages/core/src/ui/primitives/layout/Grid/tests/ModernGrid.responsive.test.tsx",
+      "packages/core/src/ui/primitives/layout/Grid/tests/Grid.modern-responsive-axis-wipe.test.tsx",
+      "packages/core/src/ui/primitives/layout/Grid/tests/Grid.engine-advanced.test.tsx",
+      "packages/core/src/ui/primitives/layout/Grid/tests/Grid.rhythm-preset-contract.test.tsx"
+    ],
     "evidenceIds": [],
-    "nextAction": "PROVE_PAGE_EMBED_CONTAINER_VIEWPORT_AND_HOST_POSTURES"
+    "nextAction": "BROWSER_PROVE_PAGE_EMBED_AUTO_FIT_WIDE_VIEWPORT_NARROW_HOST_RTL_LARGE_TEXT_AND_OVERFLOW"
   },
   "statesMotion": {
-    "assessmentState": "UNKNOWN",
-    "states": [],
-    "transitions": [],
-    "inputModes": [],
-    "reducedMotion": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/primitives/layout/Grid/engines/modern/index.tsx",
+      "packages/core/src/ui/primitives/layout/Grid/contracts/index.ts",
+      "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css"
+    ],
+    "states": [
+      "default",
+      "responsive-breakpoint",
+      "auto-fit",
+      "dense-flow",
+      "rearranging",
+      "motion-none"
+    ],
+    "transitions": [
+      "motion=rearrange -> --ds-transition-rearrange on root",
+      "motion=none -> transition:none",
+      "Grid.Item placement has no family-owned transition"
+    ],
+    "inputModes": [
+      "passive-layout",
+      "semantic role and tabIndex only"
+    ],
+    "reducedMotion": [
+      "global reduced-motion authority forces --ds-motion-rearrange to 0s"
+    ],
     "evidenceIds": [],
-    "nextAction": "CENSUS_STATES_TRANSITIONS_INPUTS_AND_REDUCED_MOTION"
+    "nextAction": "COMPUTED_PROVE_MOTION_DIAL_REDUCED_MOTION_AND_NO_CONTENT_SHIFT_AT_REST"
   },
   "invariants": {
-    "assessmentState": "UNKNOWN",
-    "entries": [],
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/primitives/layout/Grid/contracts/index.ts",
+      "packages/core/src/ui/primitives/layout/Grid/engines/modern/index.tsx",
+      "packages/core/src/ui/primitives/layout/Grid/runtime/dom-attributes/index.ts",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+    ],
+    "entries": [
+      "Grid and Grid.Item keep stable root identity through track and placement changes.",
+      "Responsive projection clears only the axis owned by responsive CSS.",
+      "Numeric gaps and track dimensions never emit NaN, Infinity or negative gap geometry.",
+      "Item span and line normalization omits invalid zero and non-finite placements while preserving legal negative lines.",
+      "Theme controls never choose columns rows spans areas ordering or interactive semantics.",
+      "Unset tenant controls must exactly restore root attributes, channels, tracks and computed gaps.",
+      "A preset gap attribute is engine-owned output, never consumer input. RECORDED HAZARD, pre-existing and now shared by three attribute names (data-gap-preset, data-column-gap-preset, data-row-gap-preset): the base rules keyed on those attributes are not engine-scoped, while Classic and Rustic forward caller data-* props through extractSemanticDOMAttributes. A caller who hand-stamps one of them on a Classic or Rustic grid produces var(<unset>), which is invalid at computed-value time and collapses the gap to normal. The Modern engine strips a hand-stamped attribute from a numeric axis, so the exposure is Classic and Rustic only. Engine-scoping is one decision that must be taken for all three names at once."
+    ],
     "evidenceIds": [],
-    "nextAction": "AUTHOR_STRUCTURAL_BEHAVIORAL_ACCESSIBILITY_AND_RESTORE_INVARIANTS"
+    "nextAction": "BIND_INVARIANTS_TO_NEGATIVE_DRILLS_COMPUTED_OUTPUT_AND_SIGHTED_HOST_RECEIPTS"
   },
-  "premiumCandidates": []
+  "premiumCandidates": [
+    {
+      "id": "container-responsive-track-map",
+      "proposalState": "PROPOSAL",
+      "countsAsCapability": false,
+      "gap": "Responsive columns and rows use viewport media queries; auto-fit is host-aware but cannot express authored host-width track maps or named-area posture changes.",
+      "mechanism": "additive responsiveBasis=viewport|container plus governed container track maps; default remains viewport",
+      "candidateVariants": [
+        "viewport-map",
+        "container-map",
+        "auto-fit"
+      ],
+      "blockedBy": [
+        "two-consumer-demand",
+        "container-name-ownership",
+        "SSR-and-hydration-contract",
+        "named-area-responsive-law",
+        "browser-resize-evidence"
+      ]
+    },
+    {
+      "id": "semantic-grid-interaction-adapter",
+      "proposalState": "PROPOSAL",
+      "countsAsCapability": false,
+      "gap": "role=grid and tabIndex are forwarded but do not provide row/cell semantics, roving focus, arrow navigation or selection behavior.",
+      "mechanism": "separate opt-in compound behavior adapter over stable Grid.Item anatomy, never implicit in passive layout",
+      "candidateVariants": [
+        "passive",
+        "navigable",
+        "selectable"
+      ],
+      "blockedBy": [
+        "ARIA-grid-contract",
+        "virtualization-compatibility",
+        "controlled-state-model",
+        "keyboard-touch-screen-reader-evidence"
+      ]
+    }
+  ]
 }

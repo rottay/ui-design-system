@@ -6,17 +6,17 @@
     "category": "data",
     "name": "ColumnSettings",
     "components": [
-      "ColumnSettings"
+      "PatternColumnSettings"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
     "sourceOwner": "packages/core/src/ui/patterns/data/column-settings",
-    "publicComponents": [],
-    "unresolvedPublicComponents": [
-      "ColumnSettings"
+    "publicComponents": [
+      "PatternColumnSettings"
     ],
+    "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "7eea3b8c5b7215834a6d2efa2943d257cca65d07ec07c50188cd9f6222f681bb"
+    "inventoryRowDigest": "ac853427cdc7c9cd5fe956251bf3ca0b56453722811cac97fdcbd3b955b492ef"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

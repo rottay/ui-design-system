@@ -157,7 +157,7 @@ describe('OAuthTransition external skin migration contract', () => {
   it('renders the compact dark return contract without a style block and preserves copy, palette and Microsoft marks', () => {
     const { container } = render(
       <OAuthTransitionScreen
-        appId="platform"
+        appId="rottay"
         provider="microsoft"
         variantId="watchtower-sweep-dark"
         phase="return"
@@ -178,7 +178,7 @@ describe('OAuthTransition external skin migration contract', () => {
     expectInlinePaletteContract(root);
 
     expect(root.querySelectorAll('style')).toHaveLength(0);
-    expect(root.querySelector('.rottay-transition-title')).toHaveTextContent('Back to Rottay Platform.');
+    expect(root.querySelector('.rottay-transition-title')).toHaveTextContent('Back to Rottay.');
     expect(root.querySelector('.rottay-transition-provider-copy strong')).toHaveTextContent('Microsoft');
     expect(root.querySelector('.rottay-transition-provider-copy span')).toHaveTextContent('Return confirmed');
     expect(root.querySelector('.rottay-transition-flow-tag')).toHaveTextContent('Protected return');

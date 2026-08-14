@@ -7,10 +7,22 @@ import {
 import type { ResponsiveValue } from "@/foundation/contracts/kernel/responsive/values";
 import { SPACING_MAP, type BoxProps, type BoxSpacing } from "../../contracts";
 
-/** Resolves a Box spacing token to its CSS value. */
+/**
+ * Resolves a Box spacing token to its CSS value.
+ *
+ * `|| "0"` is NOT sufficient on its own, which is easy to misread: it catches
+ * an unknown rung (`"huge"` resolves to `undefined`, which is falsy, so the
+ * fallback fires) but NOT a prototype-inherited name. `SPACING_MAP` is a plain
+ * object literal, so `"toString"` and `"constructor"` resolve to a truthy
+ * FUNCTION and `"__proto__"` to a truthy object -- and `||` never reaches its
+ * fallback for a truthy left side, so a function body would be stamped into
+ * the style attribute. An own-property guard is what closes the vocabulary.
+ */
 export function resolveBoxSpacing(value: BoxSpacing): string {
   if (value === "none") return "0";
-  return SPACING_MAP[value] || "0";
+  return Object.prototype.hasOwnProperty.call(SPACING_MAP, value as string)
+    ? SPACING_MAP[value] || "0"
+    : "0";
 }
 
 /** Collects Box props that require responsive CSS projection. */

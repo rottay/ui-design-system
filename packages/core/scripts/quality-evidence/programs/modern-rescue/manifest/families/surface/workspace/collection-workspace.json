@@ -16,7 +16,7 @@
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "5397170e49f418e69fa0cf8fd84378dcb7f9825a81d6402dd7e8399964ca6d70"
+    "inventoryRowDigest": "65d7150712278dce46e5e759f6ef35d35c639ae8e91c4c7431f023a9ed730b69"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -240,6 +240,12 @@
   "retiredThemeControls": [],
   "recipeAnatomy": {
     "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/foundation/contracts/runtime/components/patterns/data/index.ts#CollectionViewMode",
+      "packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+      "packages/core/src/ui/surfaces/runtime/adaptive-posture/index.ts#useAdaptivePosture",
+      "packages/core/src/ui/surfaces/foundation/contracts/adaptive/collection/index.ts#WorkspaceViewModeConfig"
+    ],
     "groupBindings": [
       {
         "groupId": "collection-view-mode",
@@ -251,7 +257,7 @@
           "gallery",
           "calendar"
         ],
-        "selectionApi": "WorkspaceViewModeConfig and AdaptiveConfig collection posture"
+        "selectionApi": "WorkspaceViewModeConfig.value selects any of the six; AdaptiveConfig collection posture resolves only table or cards"
       }
     ],
     "variants": [
@@ -268,6 +274,10 @@
   },
   "instanceApi": {
     "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx#CollectionWorkspaceProps",
+      "packages/core/src/ui/surfaces/foundation/contracts/adaptive/collection/index.ts#CollectionWorkspaceConfig"
+    ],
     "contractSymbols": [
       "CollectionWorkspaceProps<T>",
       "CollectionWorkspaceConfig<T>",
@@ -287,12 +297,11 @@
       "behavior"
     ],
     "slots": [
-      "header",
-      "context",
-      "stats",
+      "headerSlot",
+      "contextSlot",
+      "statsSlot",
       "primaryAction",
       "emptyState",
-      "errorState",
       "previewRail.render"
     ],
     "callbacks": [
@@ -306,24 +315,31 @@
     ],
     "controlledState": [
       "search",
-      "filters",
+      "filterValues",
       "saved views",
       "density",
       "view mode",
       "selection",
       "column visibility/order/pinning/widths",
-      "preview item"
+      "behavior.focus.focusedKey"
     ],
     "evidenceIds": [],
-    "nextAction": "VERIFY_EXPORT_CENSUS_AND_EVERY_CONTROLLED_UNCONTROLLED_PRECEDENCE_RULE"
+    "nextAction": "VERIFY_EXPORT_CENSUS_AND_EVERY_CONTROLLED_UNCONTROLLED_PRECEDENCE_RULE",
+    "unprovenClaims": [
+      "errorState was listed as a slot and does not exist on CollectionWorkspaceProps or CollectionWorkspaceConfig; the contract exposes error and onRetry instead."
+    ]
   },
   "hostAdaptation": {
     "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/surfaces/runtime/collection-workspace/index.ts",
+      "packages/core/src/ui/surfaces/runtime/adaptive-posture/index.ts",
+      "packages/core/src/ui/surfaces/foundation/contracts/adaptive/index.ts",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css"
+    ],
     "contexts": [
       "page",
       "embed",
-      "browser-page",
-      "ai-workbench",
       "narrow-container-inside-wide-viewport"
     ],
     "containerRules": [
@@ -335,11 +351,11 @@
     "invariants": [
       "Viewport size cannot override a narrower measured host.",
       "No application min-width is required to keep the collection usable.",
-      "Page and Workbench reuse the same component, data, state and permissions."
+      "Page and embed reuse the same component, data, state and permissions."
     ],
     "sourceTests": [
       "packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/tests/CollectionWorkspace.test.tsx#resolves adaptive posture from a narrow collection inside a wide viewport",
-      "packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/tests/CollectionWorkspace.test.tsx#surfaceMode embed"
+      "packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/tests/CollectionWorkspace.test.tsx#uses lean chrome defaults in embedded mode without hiding search"
     ],
     "evidenceIds": [],
     "nextAction": "PRODUCE_BROWSER_COMPUTED_KEYBOARD_AND_RESTORE_EVIDENCE_FOR_PAGE_AND_EMBED"
@@ -355,15 +371,22 @@
   },
   "invariants": {
     "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+      "packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/index.tsx",
+      "packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/tests/CollectionWorkspace.test.tsx"
+    ],
     "entries": [
       "Adaptive posture owns both renderer and toolbar view state.",
-      "View changes preserve selection, focus, actions and preview identity.",
-      "Custom cards receive DataTableMobileCardContext instead of rebuilding behavior.",
-      "Structural choices are props and data, never CSS tokens.",
-      "Tenant theme controls paint shared stable parts without introducing host-specific markup."
+      "Custom cards receive DataTableMobileCardContext instead of rebuilding behavior."
     ],
     "evidenceIds": [],
-    "nextAction": "BIND_INVARIANTS_TO_FOCAL_TESTS_NEGATIVE_CONTROLS_AND_SIGHTED_RECEIPTS"
+    "nextAction": "BIND_INVARIANTS_TO_FOCAL_TESTS_NEGATIVE_CONTROLS_AND_SIGHTED_RECEIPTS",
+    "unprovenClaims": [
+      "View changes preserve selection, focus, actions and preview identity. [no direct test or quotable source authority found]",
+      "Structural choices are props and data, never CSS tokens. [no direct test or quotable source authority found]",
+      "Tenant theme controls paint shared stable parts without introducing host-specific markup. [no direct test or quotable source authority found]"
+    ]
   },
   "premiumCandidates": [
     {

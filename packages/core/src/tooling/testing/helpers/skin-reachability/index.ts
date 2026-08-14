@@ -35,7 +35,16 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-import postcss, { type AtRule, type Rule } from 'postcss';
+import postcss, { type AtRule, type Document, type Root, type Rule } from 'postcss';
+
+/**
+ * What a rule's ancestry can honestly hold. `Rule['parent']` is
+ * `ContainerWithChildren | undefined`, but a `Root`'s parent is a `Document`,
+ * so one more hop widens the set. These four are exactly the node types that
+ * can appear above a rule: the union is closed under `.parent` and every
+ * member carries a literal `type`, so `'atrule'` narrows without a cast.
+ */
+type SkinAncestor = AtRule | Document | Root | Rule | undefined;
 
 export interface SkinRule {
   /** One selector from the rule's selector list, whitespace-normalised. */
@@ -55,11 +64,10 @@ export function readSkinRules(family: string, root = SKIN_ROOT): SkinRule[] {
   postcss.parse(css).walkRules((rule: Rule) => {
     const conditions: string[] = [];
     let inKeyframes = false;
-    for (let node = rule.parent; node; node = node.parent) {
-      if ((node as AtRule).type === 'atrule') {
-        const at = node as AtRule;
-        if (at.name === 'keyframes') inKeyframes = true;
-        conditions.push(`@${at.name} ${at.params}`);
+    for (let node: SkinAncestor = rule.parent; node !== undefined; node = node.parent) {
+      if (node.type === 'atrule') {
+        if (node.name === 'keyframes') inKeyframes = true;
+        conditions.push(`@${node.name} ${node.params}`);
       }
     }
     if (inKeyframes) return;

@@ -91,7 +91,7 @@ function useDtcTranslation() {
  * Internal Link wrapper that resolves the consumer-supplied Link via the
  * NavigationLinkProvider context, falling back to a native `<a>` when no
  * provider is mounted. This keeps the DS pattern framework-agnostic
- * (mirrors the Wave 5.1 follow-up adapter pattern used by SurfaceReadField).
+ * (mirrors the Wave 5.1 follow-up adapter pattern used by RecordField).
  * The anchor carries the family's own link class so the skin can paint the
  * keyboard focus ring (a consumer-supplied adapter owns its DOM, so the hook
  * is a class, not a data-part).

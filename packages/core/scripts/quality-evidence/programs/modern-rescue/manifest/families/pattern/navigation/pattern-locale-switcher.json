@@ -9,14 +9,14 @@
       "PatternLocaleSwitcher"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/navigation",
+    "sourceOwner": "packages/core/src/ui/patterns/navigation/locale-switcher",
     "publicComponents": [
       "PatternLocaleSwitcher"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "346dc146d2deacd2e1ac6f58cd583757c340fc29e5cce5df217040b2710ef2d4"
+    "inventoryRowDigest": "c20ce9f75bb41513ae70f1033cc6a79326ae77c108796ab3a5e00df9176c7926"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

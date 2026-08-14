@@ -28,7 +28,7 @@
 import React, { useMemo, useState, useEffect, useRef, type ReactNode } from 'react';
 import { ConfigProvider, theme as antdTheme } from 'antd';
 import { useEngineContext } from '../../../composition/react/provider';
-import { useTenantContext } from '../../../../tenant/composition/react/provider';
+import { useTenantContext } from '../../../../tenant/foundation/context';
 
 /* ---------------------------------------------------------------------------
  * CSS variable -> antd seed token mapping

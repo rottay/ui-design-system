@@ -10,6 +10,7 @@
 
 import type { EngineName } from "../../../runtime/engine";
 import type { TenantMotionDial } from "../../../runtime/motion";
+import type { FirstPartyVerticalId } from "../../../kernel/verticals";
 import type {
   SurfaceTokens,
   ChartPersonalityTokens,
@@ -168,6 +169,65 @@ export type BrandThemeModes = Partial<
   Record<BrandThemeMode, BrandThemeModeOverlay>
 >;
 
+/**
+ * The optional BrandTheme families whose presence is a BRAND DECISION rather
+ * than a schema accident.
+ *
+ * Every one of these is `?` on `BrandTheme` because a DB patch or a fixture may
+ * legitimately omit it. That optionality is wrong for a first-party vertical:
+ * "evnto ships no recipe selection" and "someone forgot to author evnto's
+ * recipe selection" are indistinguishable from the source alone, and silent
+ * absence is exactly how a vertical loses a capability without anyone noticing.
+ * A first-party theme therefore states a disposition for each id instead of
+ * omitting the key.
+ */
+export type BrandCapabilityId =
+  | "motion"
+  | "recipes"
+  | "expressive"
+  | "responsive"
+  | "engineBridge";
+
+/** Why a capability is not active. Never inferred; always authored. */
+export type BrandCapabilityAbsenceReason =
+  /** A newer authority owns this channel; the field is compatibility-only. */
+  | "superseded"
+  /** The brand deliberately ships nothing here. */
+  | "not-authored"
+  /** No governed profile exists for this brand yet; a decision is pending. */
+  | "pending-selection";
+
+/**
+ * A capability is either active (the corresponding BrandTheme field is
+ * authored and live) or explicitly not — with a reason and a human note.
+ *
+ * `disabled` means the decision is made and closed. `unassigned` means the
+ * decision is still open, which is what an art-direction proposal looks like
+ * BEFORE a governed profile exists to select. Neither may be represented by
+ * simply leaving the field out.
+ */
+export type BrandCapabilityDisposition =
+  | { readonly status: "active" }
+  | {
+      readonly status: "disabled";
+      readonly reason: BrandCapabilityAbsenceReason;
+      readonly note: string;
+    }
+  | {
+      readonly status: "unassigned";
+      readonly reason: BrandCapabilityAbsenceReason;
+      readonly note: string;
+    };
+
+/**
+ * The complete disposition catalog. Every `BrandCapabilityId` must be keyed —
+ * `Record` (not `Partial<Record>`) is the point: a missing key is a type error,
+ * so the catalog cannot regress back into silent absence.
+ */
+export type BrandCapabilityCatalog = Readonly<
+  Record<BrandCapabilityId, BrandCapabilityDisposition>
+>;
+
 export interface BrandTheme {
   /** Unique identifier for this brand theme */
   id: string;
@@ -203,6 +263,77 @@ export interface BrandTheme {
   chrome?: BrandChrome;
   /** DaisyUI variables, engine-specific values */
   engineBridge?: Partial<Record<EngineName, Record<string, unknown>>>;
+  /**
+   * Explicit disposition for every optional capability family.
+   *
+   * Optional on `BrandTheme` because DB documents stay partial patches and
+   * fixtures author only what they exercise. REQUIRED on
+   * `FirstPartyBrandTheme`, which is the shape the three code-owned verticals
+   * must satisfy.
+   */
+  capabilities?: BrandCapabilityCatalog;
+}
+
+/**
+ * The mandatory common inventory every first-party BrandTheme authors, in the
+ * order it must be authored.
+ *
+ * `motion` is deliberately NOT here. `BrandMotion` is deprecated (see its
+ * declaration below): runtime choreography resolves through the vertical
+ * `MotionProfile` plus the bounded `TenantMotionDial`, so promoting the
+ * compatibility field to a required family would re-entrench the authority it
+ * is being retired from. It is governed as a capability disposition instead.
+ *
+ * The order is load-bearing, not cosmetic: a normalizer that walks families in
+ * a per-theme order produces per-theme output orderings, and the artifact
+ * digests are order-sensitive by construction.
+ */
+export const FIRST_PARTY_BRAND_THEME_REQUIRED_KEYS = [
+  "id",
+  "name",
+  "appearance",
+  "modes",
+  "palette",
+  "typography",
+  "surfaces",
+  "charts",
+  "chrome",
+  "capabilities",
+] as const;
+
+export type FirstPartyBrandThemeRequiredKey =
+  (typeof FIRST_PARTY_BRAND_THEME_REQUIRED_KEYS)[number];
+
+/**
+ * A code-owned vertical's BrandTheme.
+ *
+ * Narrows `BrandTheme`'s all-optional visual families to required for the three
+ * first-party identities. Product-specific EXTRAS (`recipes`, `expressive`,
+ * `responsive`, `engineBridge`) stay optional on purpose — the law is equality
+ * of the common required inventory, not equality of extras count. What makes
+ * their absence honest is `capabilities`, which must state a disposition for
+ * each of them regardless.
+ */
+export interface FirstPartyBrandTheme extends BrandTheme {
+  /**
+   * The vertical this theme IS.
+   *
+   * Narrowed from `BrandTheme.id`'s open `string` to the closed contract
+   * union. This is what makes the roster's `theme.id` -> slug derivation a
+   * compile-time fact instead of a cast: a theme authored in `rottay/` whose
+   * id says something else no longer type-checks, so the folder, the artifact
+   * directory and the registry key cannot drift apart again.
+   */
+  readonly id: FirstPartyVerticalId;
+  readonly name: string;
+  readonly appearance: BrandAppearance;
+  readonly modes: BrandThemeModes;
+  readonly palette: BrandPalette;
+  readonly typography: BrandTypography;
+  readonly surfaces: BrandSurfaces;
+  readonly charts: Partial<ChartPersonalityTokens>;
+  readonly chrome: BrandChrome;
+  readonly capabilities: BrandCapabilityCatalog;
 }
 
 /** Palette roles that carry a `--ds-color-{role}-{50..900}` ramp. */
@@ -283,17 +414,18 @@ export interface BrandPalette {
   borderSubtleColor?: string;
   /** Separator of the focused control. Not the focus ring itself. */
   borderFocusColor?: string;
-  darkPrimaryColor?: string;
-  darkSecondaryColor?: string;
-  darkAccentColor?: string;
   /**
-   * The page ground in clear mode. Its dark twin is `darkBackgroundColor`.
-   * Without this field a tenant cannot choose the surface its product sits
-   * on, which is the most visible thing a white-label system owns.
+   * The page ground of the mode this palette authors. Reaches
+   * `--ds-color-bg-primary`, `--ds-color-bg` and `--ds-color-background`.
+   *
+   * There is no `dark`-prefixed twin. A palette authors exactly one mode --
+   * the theme's `appearance.defaultMode` at the top level, or the overlay's
+   * own mode inside `modes.{light,dark}` -- so "the ground" is never
+   * ambiguous and never needs a second field to disambiguate it. Without this
+   * field a tenant cannot choose the surface its product sits on, which is
+   * the most visible thing a white-label system owns.
    */
   backgroundColor?: string;
-  /** The page ground in dark mode. Reaches `--ds-color-bg-primary`. */
-  darkBackgroundColor?: string;
   /** The ground one step off the page: panels, wells, quiet bands. */
   backgroundSecondaryColor?: string;
   /** The ground two steps off the page. */
@@ -2034,8 +2166,10 @@ export interface CompiledBrandModeBlock {
 /**
  * Brand compiler function signature.
  *
- * Both runtime (ThemeProvider) and static generation (generateTenantCss)
- * must use an implementation conforming to this signature so the merge
- * chain is consistent regardless of execution context.
+ * The first-party static ingress path — `compileBrandTheme` feeding
+ * `renderFirstPartyArtifact` — conforms to this signature, and so does every
+ * consumer that recompiles a theme (the tenant preview, the artifact parity
+ * tests, the build). One signature keeps the merge chain identical whichever
+ * of them ran.
  */
 export type CompileBrandTheme = (input: BrandCompilerInput) => CompiledBrand;

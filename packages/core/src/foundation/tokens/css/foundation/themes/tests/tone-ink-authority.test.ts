@@ -13,7 +13,7 @@
  *  LIGHT — `defaultIsUnchanged` per SHIPPED bundle. The values must be the
  *  pre-authority mixes byte-for-byte, resolved against each vertical's OWN tone
  *  seeds. Per bundle rather than once, because a tone seed differs per vertical
- *  (bithire's warning is #D6A04E, platform's #F59E0B, evnto's #A16207) and a
+ *  (bithire's warning is #D6A04E, Rottay's #F59E0B, evnto's #A16207) and a
  *  value that holds in one bundle can move in another.
  *
  *  DARK — STRUCTURAL here, because the no-loss harness collects DEFAULT-state
@@ -35,7 +35,7 @@
  *    DS base   --ds-color-neutral-900 #171717 -> #f8fafc
  *              warning icon  srgb(0.569 0.381 0.064) -> srgb(0.966 0.782 0.468)
  *    bithire   --ds-color-neutral-900 #191919 -> #c0cdd8   (light-authored)
- *    platform  --ds-color-neutral-900 #171717 -> #ECECEC   (dark-authored)
+ *    rottay    --ds-color-neutral-900 #171717 -> #ECECEC   (dark-authored)
  *
  *  and the SAME probe run against the pre-P1 bundles from git returned every
  *  one of those values byte-identically, which is the no-loss proof for the
@@ -44,8 +44,8 @@
  *  without a browser. Re-run it by hand if the mixes or the neutral ramp move.
  *
  *  Two traps that cost real time and are worth leaving written down. First, a
- *  probe that stamps `data-vertical="platform"` and only toggles `data-theme`
- *  ON/absent measures nothing: platform is a DARK-authored vertical whose block
+ *  probe that stamps `data-vertical="rottay"` and only toggles `data-theme`
+ *  ON/absent measures nothing: Rottay is a DARK-authored vertical whose block
  *  applies under `:not([data-theme='light'])`, so it is active in both reads —
  *  compare explicit `light` vs `dark`, never `absent` vs `dark`. Second, the
  *  tag-input rejection border reads back as `oklab(...)` in dark because its
@@ -81,7 +81,7 @@ const EXPECTED_LIGHT = {
     '--ds-color-error-ink': 'color-mix(in srgb, #C5504C 78%, #171717 22%)',
     '--ds-color-success-ink': 'color-mix(in srgb, #327CA8 60%, #171717 40%)',
   },
-  platform: {
+  rottay: {
     '--ds-color-info-ink': '#3B82F6',
     '--ds-color-warning-ink': 'color-mix(in srgb, #F59E0B 55%, #171717 45%)',
     '--ds-color-error-ink': 'color-mix(in srgb, #EF4444 78%, #171717 22%)',
@@ -187,7 +187,7 @@ describe('AUT-1 tone-ink authority — DARK leg (structural, by construction)', 
     // deliberately rather than discovered.
     expect(THEME_CSS).toContain('--ds-color-on-warning: #171717;');
     expect(darkBlock()).not.toContain('--ds-color-on-warning:');
-    const bundle = loadBundle(SHIPPED_BUNDLES.platform);
+    const bundle = loadBundle(SHIPPED_BUNDLES.rottay);
     expect(resolveChannel(bundle, '--ds-color-on-warning')).toBe('#171717');
     expect(resolveChannel(bundle, '--ds-color-warning-ink')).not.toBe('#171717');
   });

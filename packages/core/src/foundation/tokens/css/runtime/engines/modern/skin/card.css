@@ -654,16 +654,19 @@
 
 /* Nesting: a card rendered inside another card's body is grouping, not a new
    surface — it keeps its frame but drops depth at rest so nested composition
-   cannot stack elevations, and its corner DERIVES from the parent's resolved
-   radius (concentric grammar, computed on the parent body above) instead of
-   wearing an unrelated second rounding. The tenant can restore nested depth
-   or pin an explicit nested radius through the channels. At (0,7,0) this
-   beats the at-rest variant and anatomy depth rules; the hover rule (0,8,0)
-   still lifts on interaction, and the selected/hover state treatments keep
-   their outline and wash. */
+   cannot stack elevations. At (0,7,0) this beats the at-rest variant and
+   anatomy depth rules; the hover rule (0,8,0) still lifts on interaction, and
+   the selected/hover state treatments keep their outline and wash.
+
+   RETIRED (spacing.rhythm concentric ruling): the corner used to DERIVE from
+   the parent body's `--_ds-card-nest-radius`. The subject here is a whole
+   Card's `[data-part='root']`, so that was a component's own/outer radius
+   tracking rhythm — forbidden "even when that component can be nested". A
+   nested card now keeps its own resolved corner; only genuinely inner parts of
+   the padded body (header zone, actions zone) stay concentric. */
 .ds-card.ds-card--modern [data-part='body'] .ds-card.ds-card--modern[data-part='root'][data-size] {
   box-shadow: var(--ds-card-nested-shadow, none);
-  border-radius: var(--_ds-card-nest-radius, var(--_ds-card-radius-current, var(--ds-card-radius)));
+  border-radius: var(--_ds-card-radius-current, var(--ds-card-radius));
 }
 
 /* Instance-level suppression and unavailable state are terminal even when a

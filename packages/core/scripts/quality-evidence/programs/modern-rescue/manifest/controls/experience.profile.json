@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "ed06c5a7fb7dc7e90ff04eef914c94a48a2f6eaff749c1e8ed7995639e2319f3"
+    "registryDigest": "7543b5262d4a58c1f80ed954a7177008f450be9bfb3c0554b7f3993fcacb6fc7"
   },
   "title": "Experience profile",
   "valueType": "profile-id",
@@ -40,7 +40,6 @@
   },
   "calibration": {
     "assessmentState": "UNKNOWN",
-    "representativeFamilyIds": [],
     "normalizedStops": [],
     "staticDbParityEvidenceIds": [],
     "exactRestoreEvidenceIds": [],

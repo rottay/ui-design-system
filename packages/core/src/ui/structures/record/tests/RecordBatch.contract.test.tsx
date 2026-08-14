@@ -3,7 +3,11 @@ import { describe, expect, it, vi } from 'vitest';
 import { waitFor } from '@testing-library/react';
 
 import { FormSections, FormFactsCard } from '../form-sections';
-import { RecordSummaryStrip, RecordFieldGrid, RecordField, RecordActionBar, RecordPanel } from '../content';
+import { RecordSummaryStrip } from '../summary-strip';
+import { RecordFieldGrid } from '../field-grid';
+import { RecordField } from '../field';
+import { RecordActionBar } from '../action-bar';
+import { RecordPanel } from '../panel';
 import {
   InlineEditorGroup,
   InlineEditor,

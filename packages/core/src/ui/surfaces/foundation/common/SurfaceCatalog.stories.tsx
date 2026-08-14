@@ -12,7 +12,6 @@ import {
   DetailFormSurface,
   EmptyStateSurface,
   MediaSurface,
-  OnboardingSurface,
   OperationalSurface,
   SchedulerSurface,
   SearchSurface,
@@ -298,26 +297,6 @@ export const CompareAndOnboarding: Story = {
         }}
       />
 
-      <OnboardingSurface
-        config={{
-          visual: { showProgress: true, stackOnMobile: true },
-          presentation: {
-            chrome: { title: 'Launch a New Workspace' },
-            description: 'Guided setup is now a first-class surface instead of another custom flow.',
-            hero: <Text>Explain why this product configuration matters before the team commits.</Text>,
-            checklist: <Stack spacing="xs"><Text>1. Choose profile</Text><Text>2. Brand tenant</Text><Text>3. Configure surfaces</Text></Stack>,
-          },
-          behavior: {
-            currentStep: 0,
-            onStepChange: () => undefined,
-            submitAction: { id: 'finish-setup', label: 'Finish setup', variant: 'primary', onClick: async () => undefined },
-            steps: [
-              { key: 'brand', title: 'Brand', fields: [{ name: 'tenantName', label: 'Tenant name', type: 'text' }] },
-              { key: 'review', title: 'Review', content: <Text>Everything is ready for launch.</Text> },
-            ],
-          },
-        }}
-      />
     </Stack>
   ),
 };

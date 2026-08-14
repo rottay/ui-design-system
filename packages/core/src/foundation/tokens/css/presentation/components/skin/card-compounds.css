@@ -43,13 +43,15 @@
   gap: var(--ds-card-header-gap);
   min-inline-size: 0;
   min-height: var(--ds-card-header-min-height);
-  /* Protected header zone: the tenant band (`--ds-card-header-bg`, painted
-     below) wears the concentric corner the parent card body publishes for
-     its nested regions, so a painted band reads as ONE bounded region
-     related to the card corner. Unpainted (transparent channel) the radius
-     is invisible; outside a card the private is unset and the 0px fallback
-     preserves the previous square-edged band exactly. */
-  border-radius: var(--_ds-card-nest-radius, 0px);
+  /* RETIRED (spacing.rhythm concentric ruling): this rule used to read the
+     card's `--_ds-card-nest-radius` so a painted tenant band wore the card
+     corner. Its selector is a bare compound — it proves nothing about being
+     inside a card and leans entirely on the private happening to inherit — so
+     the ruling's "demonstrably inner geometry" clause refuses it. The engine's
+     own header keeps the concentric corner because its selector DOES prove
+     containment (`> [data-part='body'] > [data-part='header']`). Removing the
+     declaration restores the pre-nest render exactly: the 0px fallback was the
+     effective value in every engine except a Modern card. */
   border-bottom: none;
   background: var(--ds-card-header-bg);
   background-position: 0% 50%;

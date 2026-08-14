@@ -32,10 +32,10 @@ const STYLE_ID = 'ds-personality-tokens';
 /** Mutable so tenant/theme switches can be simulated between renders. */
 let currentTokens = makeTokens('#4f46e5');
 
-function makeTokens(primary: string) {
+function makeTokens(primary: string, personality = DEFAULT_PERSONALITY) {
   return {
     colors: { primary },
-    personality: DEFAULT_PERSONALITY,
+    personality,
     transitions: {
       fast: '150ms',
       normal: '250ms',
@@ -89,14 +89,43 @@ function createLayerCapableSheet() {
   };
 }
 
-/** Pre-mounts the style element the bridge reuses, with a layer-capable sheet. */
-function mountLayerCapableStyleElement() {
-  const element = document.createElement('style');
-  element.id = STYLE_ID;
+/**
+ * Gives the node the bridge CREATES a layer-capable stylesheet, without putting
+ * anything at `#ds-personality-tokens` first.
+ *
+ * Pre-mounting a node at that id is not a way to hand the bridge a better
+ * CSSOM -- it is an INCUMBENT, and the ownership law refuses incumbents
+ * outright. A harness that pre-mounted one was therefore not exercising the
+ * layered path at all: the bridge published nothing, so its drills either read
+ * an empty sheet or passed vacuously against a channel nobody wrote.
+ *
+ * `.sheet` is shimmed on the created element instead, installed before the
+ * bridge first reads it so the claim is taken against THIS object and every
+ * later ownership proof compares against the same identity. Only the first
+ * `<style>` is shimmed: the bridge creates exactly one, and leaving the rest
+ * alone keeps the fallback drills on the real environment.
+ */
+function shimSheetOnCreatedStyleElement() {
   const sheet = createLayerCapableSheet();
-  Object.defineProperty(element, 'sheet', { get: () => sheet, configurable: true });
-  document.head.appendChild(element);
-  return { element, sheet };
+  let created: HTMLStyleElement | null = null;
+  const real = document.createElement.bind(document);
+
+  vi.spyOn(document, 'createElement').mockImplementation(((
+    tagName: string,
+    options?: ElementCreationOptions,
+  ) => {
+    const element = real(tagName, options);
+    if (tagName === 'style' && !created) {
+      created = element as HTMLStyleElement;
+      Object.defineProperty(element, 'sheet', {
+        get: () => sheet,
+        configurable: true,
+      });
+    }
+    return element;
+  }) as unknown as typeof document.createElement);
+
+  return { sheet, element: () => created as HTMLStyleElement };
 }
 
 function resetDom() {
@@ -114,12 +143,15 @@ describe('personality cascade layer', () => {
 
   afterEach(() => {
     cleanup();
+    // The created-element shim is a spy on `document.createElement`; leaving it
+    // installed would follow the next test into a path it did not ask for.
+    vi.restoreAllMocks();
     resetDom();
   });
 
   describe('layer-capable CSSOM (real browsers)', () => {
     it('writes the personality rule inside the personality layer', () => {
-      const { sheet } = mountLayerCapableStyleElement();
+      const { sheet } = shimSheetOnCreatedStyleElement();
 
       render(<SystemCssVariablesBridge />);
 
@@ -128,10 +160,14 @@ describe('personality cascade layer', () => {
     });
 
     it('never leaves an unlayered rule behind that would outrank every layer', () => {
-      const { sheet } = mountLayerCapableStyleElement();
+      const { sheet } = shimSheetOnCreatedStyleElement();
 
       render(<SystemCssVariablesBridge />);
 
+      // Pinned first, because "no unlayered rule" is also what an EMPTY sheet
+      // says. Without this the drill passed hardest in exactly the case it
+      // exists to catch: a bridge that published nothing at all.
+      expect(sheet.cssRules).toHaveLength(2);
       const unlayered = sheet.cssRules.filter(
         (rule) => rule.selectorText !== undefined && rule.layerName === undefined,
       );
@@ -142,7 +178,7 @@ describe('personality cascade layer', () => {
       // The order statement is emitted BEFORE the rule. Layers are ordered by
       // first appearance, so without this the name would register at whatever
       // position this stylesheet happened to load at.
-      const { sheet } = mountLayerCapableStyleElement();
+      const { sheet } = shimSheetOnCreatedStyleElement();
 
       render(<SystemCssVariablesBridge />);
 
@@ -152,7 +188,7 @@ describe('personality cascade layer', () => {
     });
 
     it('writes token values into the layered rule', () => {
-      const { sheet } = mountLayerCapableStyleElement();
+      const { sheet } = shimSheetOnCreatedStyleElement();
 
       render(<SystemCssVariablesBridge />);
 
@@ -170,11 +206,11 @@ describe('personality cascade layer', () => {
     });
 
     it('reports the layered path in the DOM', () => {
-      const { element } = mountLayerCapableStyleElement();
+      const { element } = shimSheetOnCreatedStyleElement();
 
       render(<SystemCssVariablesBridge />);
 
-      expect(element.getAttribute('data-ds-cascade')).toBe('layered');
+      expect(element().getAttribute('data-ds-cascade')).toBe('layered');
     });
   });
 
@@ -210,17 +246,30 @@ describe('personality cascade layer', () => {
 
   describe('lifecycle', () => {
     it('replaces rules on a tenant switch instead of stacking them', () => {
-      const { sheet } = mountLayerCapableStyleElement();
+      const { sheet } = shimSheetOnCreatedStyleElement();
       const { rerender } = render(<SystemCssVariablesBridge />);
 
-      currentTokens = makeTokens('#0ea5e9');
+      // The switch has to change something the bridge actually PUBLISHES, or
+      // the repaint this test is named for never happens: `colors.primary`
+      // alone reaches no personality variable, so the effect correctly skips.
+      currentTokens = makeTokens('#0ea5e9', {
+        ...DEFAULT_PERSONALITY,
+        animation: { ...DEFAULT_PERSONALITY.animation, hoverScale: 1.4 },
+      });
       rerender(<SystemCssVariablesBridge />);
 
       // One order statement + one layer block, not two of each.
       expect(sheet.cssRules).toHaveLength(2);
-      expect((sheet.cssRules[1] as { layerName?: string }).layerName).toBe(
-        PERSONALITY_CASCADE_LAYER,
-      );
+      const layerBlock = sheet.cssRules[1] as {
+        layerName?: string;
+        cssRules: { style: { getPropertyValue: (n: string) => string } }[];
+      };
+      expect(layerBlock.layerName).toBe(PERSONALITY_CASCADE_LAYER);
+      expect(
+        layerBlock.cssRules[0].style.getPropertyValue(
+          '--ds-personality-animation-hover-scale',
+        ),
+      ).toBe('1.4');
     });
 
     it('keeps a single stylesheet across a light/dark switch', () => {
@@ -234,8 +283,7 @@ describe('personality cascade layer', () => {
       expect(document.querySelectorAll(`#${STYLE_ID}`)).toHaveLength(1);
     });
 
-    it('removes the stylesheet on unmount so a switch cannot leak values', () => {
-      mountLayerCapableStyleElement();
+    it('removes a stylesheet it created itself so a switch cannot leak values', () => {
       const { unmount } = render(<SystemCssVariablesBridge />);
       expect(document.getElementById(STYLE_ID)).not.toBeNull();
 
@@ -244,8 +292,47 @@ describe('personality cascade layer', () => {
       expect(document.getElementById(STYLE_ID)).toBeNull();
     });
 
+    /* This drill used to PRE-MOUNT a node at the id to hand the bridge a
+       layer-capable CSSOM, then assert the bridge gave it back with its own
+       marks removed. Both halves contradicted the ownership law at once: an
+       incumbent is never adopted, so there was no mark to remove and no rule
+       written, and the "hand-back" it claimed to prove had nothing to hand
+       back. The layered drills above now shim the sheet on the node the bridge
+       CREATES, which leaves this file free to state what an incumbent is
+       actually owed -- nothing happens to it, at mount or at release. */
+    it('leaves a layer-capable incumbent untouched instead of adopting its sheet', () => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      try {
+        const incumbent = document.createElement('style');
+        incumbent.id = STYLE_ID;
+        const sheet = createLayerCapableSheet();
+        Object.defineProperty(incumbent, 'sheet', {
+          get: () => sheet,
+          configurable: true,
+        });
+        document.head.appendChild(incumbent);
+
+        const { unmount } = render(<SystemCssVariablesBridge />);
+
+        // Refused: no ownership mark, no cascade mark, no rule, and no second
+        // node mounted beside it to publish into instead.
+        expect(incumbent.getAttributeNames().sort()).toEqual(['id']);
+        expect(sheet.cssRules).toEqual([]);
+        expect(document.querySelectorAll(`#${STYLE_ID}`)).toHaveLength(1);
+
+        unmount();
+
+        // And the release deletes nothing, because the claim never took it.
+        expect(document.getElementById(STYLE_ID)).toBe(incumbent);
+        expect(incumbent.getAttributeNames().sort()).toEqual(['id']);
+        expect(sheet.cssRules).toEqual([]);
+      } finally {
+        warn.mockRestore();
+      }
+    });
+
     it('never stamps personality variables inline on the document element', () => {
-      mountLayerCapableStyleElement();
+      shimSheetOnCreatedStyleElement();
 
       render(<SystemCssVariablesBridge />);
 

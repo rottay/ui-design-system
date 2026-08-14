@@ -9,14 +9,14 @@
       "DetailHeader"
     ],
     "sourceRoot": "packages/core/src/ui/structures",
-    "sourceOwner": "packages/core/src/ui/structures/headers",
+    "sourceOwner": "packages/core/src/ui/structures/headers/detail",
     "publicComponents": [
       "DetailHeader"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "52c3bf2cf9a0439d7de2540870947d68957edad2d3123dd934c04dabcda5cfbb"
+    "inventoryRowDigest": "deea67ef7a995c5386dfe1d82fe573decb9981498505c9736ca03928c3ad89a0"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

@@ -12,6 +12,25 @@ import {
   type ResponsiveContextValue,
 } from '../../../../../infrastructure/runtime/responsive';
 
+/**
+ * The shared surface fixture carries NO runtime visual payload.
+ *
+ * `censusRuntimeVisualPayload` counts `branding.primaryColor`,
+ * `accentColor`, `darkPrimaryColor` and `darkAccentColor` (and the other
+ * colour/font fields) as runtime paint. A tenant that carries paint without a
+ * verified, mounted, compiled artifact is refused by `resolveVisualAuthority`,
+ * and `DesignSystemProvider` fails closed on that conflict: it renders
+ * `<LoadingScreen />` and never mounts its children. This fixture used to
+ * declare four brand colours that no assertion in any surface suite ever read
+ * — decorative payload that made every render through this helper block
+ * forever once the authority barrier landed.
+ *
+ * The fix is the honest one: surface suites assert anatomy, not tenant paint,
+ * so the fixture stops claiming a paint authority it never had. `companyName`
+ * is deliberately kept — it is identity, not paint, and the census ignores it.
+ * A suite that genuinely needs compiled tenant paint must mount a verified
+ * artifact and declare `visualAuthority`; it must not re-add raw colours here.
+ */
 const SURFACE_TEST_TENANT: TenantConfig = {
   slug: 'surface-test',
   name: 'Surface Test Tenant',
@@ -21,10 +40,6 @@ const SURFACE_TEST_TENANT: TenantConfig = {
   features: ['all'],
   branding: {
     companyName: 'Surface Test Tenant',
-    primaryColor: '#0a66c2',
-    accentColor: '#0f766e',
-    darkPrimaryColor: '#60a5fa',
-    darkAccentColor: '#5eead4',
   },
 };
 

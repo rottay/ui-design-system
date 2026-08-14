@@ -32,9 +32,9 @@ The tree is deliberately small:
 | `README.md` | human entry, laws, resume algorithm and execution order |
 | `program.json` | programme identity, fences and source authorities |
 | `checkpoint.intent.json` | machine-rendered current packet intent |
-| `manifest/index.json` | generated index of the segmented control, recipe and 252-family customization manifest |
+| `manifest/index.json` | generated index of the segmented control, recipe and per-family customization manifest |
 | `rounds.json` | R0–R6 execution boundaries; R7 is future and disabled |
-| `family-inventory.json` | canonical 252-family identity and ownership |
+| `family-inventory.json` | canonical family identity and ownership; the active denominator |
 | `customization-model.json` | operational controls, proposed target model and control-to-family evidence contract |
 | `quality-rubric.json` | DONE, test-truth and acceptance vocabulary |
 | `evidence-contract.json` | source binding, computed, restore and sighted receipts |
@@ -48,11 +48,15 @@ evidence remains under
 `packages/core/test-artifacts/quality-evidence/wo-cra-23/`; evidence is not a
 roadmap and never overrides this tree.
 
-The segmented manifest is the future assessment and acceptance authority.
-`family-ledger.json` remains an immutable historical/source-visitation input:
-its `SOURCE_TOUCHED`, `TESTS_ONLY` and old review fields are never updated or
-read as current programme progress. A generated manifest rollup is the only
-place that may aggregate current family/control state.
+The segmented manifest is the assessment and acceptance authority.
+`family-ledger.json` is sealed historical evidence and is **not** an input to
+anything active. It records git-derived source-visitation facts from the
+252-family era; its `SOURCE_TOUCHED`, `TESTS_ONLY` and old review fields were
+never progress and are never read as current state. Nothing active hashes it,
+counts it, or requires its ids to agree with the catalog — an archive that has
+to be rewritten whenever a family is renamed is not an archive. The active
+denominator comes from `family-inventory.json`, and a generated manifest rollup
+is the only place that may aggregate current family/control state.
 
 Architecture documentation remains authoritative for architecture. If an
 execution finding changes architecture, update its owning contract rather than
@@ -60,7 +64,7 @@ writing another programme.
 
 ## Fixed scope and honest progress
 
-The closure universe is the 252 canonical IDs in `family-inventory.json`.
+The closure universe is every canonical ID in `family-inventory.json`.
 Static reach, CSS basename spread, files touched, tests present, capture counts
 and source commits are prioritization signals only. They cannot shrink the
 denominator or award progress.
@@ -75,7 +79,7 @@ In particular:
 - Historical acceptance claims remain historical until reconciled against this
   contract; they are not silently discarded or promoted.
 
-Every one of the 252 families eventually receives an explicit disposition for
+Every family in the active inventory eventually receives an explicit disposition for
 every governed control: `APPLICABLE`, `INVARIANT_WITH_REASON`,
 `NOT_APPLICABLE_WITH_REASON`, or `UNKNOWN`. Absence is never interpreted as not
 applicable.
@@ -93,7 +97,8 @@ consumer propagation, exact restore and predecessor retirement. A proposed
 name never counts toward coverage and must not be added beside an equivalent
 operational control.
 
-For each operational control the trace must end in exactly 252 dispositions.
+For each operational control the trace must end in exactly one disposition per
+family in the active inventory.
 An `APPLICABLE` row names canonical family ID, stable part, property group,
 computed CSS properties, source bindings and evidence IDs. A
 `NOT_APPLICABLE_WITH_REASON` row carries negative reach proof. `UNKNOWN`
@@ -116,8 +121,9 @@ No control or group file hand-lists consumer families. The family file owns the
 edge, and the index derives reverse views and rollups. This keeps one semantic
 owner with many consumers without duplicating the relationship in two files.
 
-The first bootstrap contains 252 `INVENTORIED_ONLY` family records and 5,040
-`UNKNOWN` control/family cells. It awards zero progress. A proposed premium
+A bootstrap contains one `INVENTORIED_ONLY` record per canonical family and a
+`UNKNOWN` cell for every active control on every family -- currently 255 records
+and 5,100 cells. It awards zero progress. A proposed premium
 feature has `countsAsCapability: false` until it is adopted through an existing
 authority or an owner-approved additive API.
 
@@ -156,7 +162,8 @@ A family is DONE only when:
 - evidence is bound to the frozen source and artifact hashes; and
 - Codex performs final sighted acceptance.
 
-Programme closure requires an honest disposition for all 252 families. A family
+Programme closure requires an honest disposition for every family in the active
+inventory. A family
 may be assessed as not elevated only when the evidence says why; it may not be
 called accepted to improve a percentage.
 
@@ -184,7 +191,7 @@ failure must enter the truth policy above before it can authorize any edit.
 
 Execution gates are ordered and non-overlapping:
 
-1. schema, source census and exact 252-family partition;
+1. schema, source census and exact active-inventory family partition;
 2. one-control static/DB calibration, negative controls and exact restore;
 3. representative recipe/anatomy calibration on three families;
 4. family-once focal and computed cohorts of at most 25 families;
@@ -200,7 +207,7 @@ not rerun an implementation loop for every earlier assertion.
 
 <!-- lane-control:program-state v1 — DO NOT EDIT BY HAND. Rewrite it with:
      node packages/core/src/tooling/lane-control/public/program-state/index.mjs --write --intent <intent.json>
-     head=fb1e200ca written=2026-08-11T16:07:29.797Z intent=844c708999d73cfd render=005234c890201039 -->
+     head=68f258690 written=2026-08-13T16:16:13.760Z intent=aa3a79f7f00ac414 render=adcfc6b9becc8a94 -->
 
 *Everything in this section is intent. Anything derivable is derived by command, not typed here.*
 
@@ -236,10 +243,11 @@ absent: pinning them here would make this document stale the moment it was commi
 
 | Fact | Value | Derivation |
 |---|---|---|
-| `ledger.families` | 252 | family-ledger.json rows.length |
+| `inventory.families` | 255 | packages/core/scripts/quality-evidence/programs/modern-rescue/family-inventory.json rows.length |
+| `manifest.controlFamilyCells` | 5100 | packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/index.json denominators.controlFamilyCells |
 | `adjudication.accepted` | 0 | packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/index.json rollups.familyReviews.accepted |
 | `adjudication.assessedNotElevated` | 0 | packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/index.json rollups.familyReviews.assessedNotElevated |
-| `adjudication.unreviewed` | 252 | packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/index.json rollups.familyReviews.unreviewed |
+| `adjudication.unreviewed` | 255 | packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/index.json rollups.familyReviews.unreviewed |
 
 
 ## Active packet: spacing.rhythm
@@ -251,8 +259,9 @@ new name or tier decision.
 
 The slice must:
 
-1. freeze the operational registry, compiler table and 252-family inventory;
-2. produce all 252 family dispositions without treating absence as N/A;
+1. freeze the operational registry, compiler table and family inventory;
+2. produce a disposition for every family in the active inventory without
+   treating absence as N/A;
 3. run a fail-closed property classifier that proves the complete current set
    of forbidden capacity, size and touch-target readers, then remove every
    confirmed off-contract DashboardInsights `block-size` rhythm read (eight
@@ -285,7 +294,7 @@ consolidated.
    the checkpoint check.
 3. Read `program.json`, `checkpoint.intent.json`,
    `customization-model.json`, and only the active round/slice records.
-4. Verify the 252-family inventory and current control registry from source.
+4. Verify the family inventory and current control registry from source.
 5. Inspect the latest source-bound receipts; never trust a prose percentage.
 6. Classify any red test before changing it.
 7. Work one control slice at a time with disjoint file ownership.

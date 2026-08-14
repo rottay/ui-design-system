@@ -11,16 +11,3 @@ export type {
   RenderFirstPartyArtifactInput,
   RenderVerticalArtifactInput,
 } from './artifact-renderer';
-export {
-  buildTenantSelector,
-  generateTenantCss,
-  generateTenantCssFile,
-  generateTenantCssFromResolvedVisualConfig,
-  hasVisualBrandingFields,
-  resolveTenantVisualConfig,
-} from './visual-config';
-export type {
-  GenerateTenantCssOptions,
-  ResolvedTenantVisualConfig,
-  ResolveTenantVisualConfigOptions,
-} from './visual-config';

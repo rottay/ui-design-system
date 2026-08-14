@@ -6,13 +6,15 @@
  * One identical component tree for the six Lane-B families (Menu, Breadcrumb,
  * Pagination, Segmented, Steps, Stepper) rendered under two opposing
  * governed sources:
- *  - `bithire-static`: the checked-in BitHire BrandTheme (file-first path);
- *  - `themanagement-db`: the DB Appearance construction mirrored from
- *    `@/components/brand-locale-evidence` (DB-owned runtime path).
+ *  - `bithire-static`: the bundled BitHire vertical, code-owned;
+ *  - `themanagement-db`: a published customer document, compiled and proven.
  *
- * The density posture sweeps compact | comfortable | spacious through
- * `appearance.general.density` only (`comfortable` maps to the canonical
- * `normal` alias at the Appearance boundary), and the locale sweep renders
+ * Both grounds are built by `@/components/showroom-tenant`; this probe states
+ * WHICH one it wants and nothing about how one is made.
+ *
+ * The density posture sweeps compact | comfortable | spacious -- carried by
+ * `DensityScope` on the code-owned source and by the compiled document's own
+ * density on the DB one, never by both, and the locale sweep renders
  * EN/ES/AR with `dir="rtl"` for Arabic — the lane's indentation, connector
  * and seam hooks are logical, so the Arabic cell is the RTL witness.
  *
@@ -30,7 +32,6 @@ import { useState } from "react";
 import {
   Box,
   Breadcrumb,
-  DesignSystemProvider,
   Heading,
   Menu,
   Pagination,
@@ -39,12 +40,10 @@ import {
   Stepper,
   Steps,
   Text,
-  bithireBrandTheme,
-  type TenantConfig,
 } from "@rottay/design-system";
 import { Icon } from "@rottay/design-system/icons";
 
-import { tenantConfigFor as brandLocaleTenantConfigFor } from "@/components/brand-locale-evidence";
+import { ShowroomTenantProvider } from "@/components/showroom-tenant";
 
 export type LaneBSource = "bithire-static" | "themanagement-db";
 export type LaneBLocale = "en" | "es" | "ar";
@@ -78,52 +77,6 @@ export interface K3LaneBProbeProps {
   density: LaneBDensity;
   state: LaneBState;
   variant?: LaneBVariant;
-}
-
-/**
- * The tenant-facing Appearance vocabulary has no `comfortable` literal:
- * `normal` is the canonical alias (TenantAppearanceGeneral['density']).
- */
-function toAppearanceDensity(
-  density: LaneBDensity
-): "compact" | "normal" | "spacious" {
-  return density === "comfortable" ? "normal" : density;
-}
-
-function tenantConfig(
-  source: LaneBSource,
-  locale: LaneBLocale,
-  density: LaneBDensity
-): TenantConfig {
-  if (source === "themanagement-db") {
-    const base = brandLocaleTenantConfigFor("themanagementmiami", locale);
-    return {
-      ...base,
-      appearance: {
-        ...base.appearance,
-        general: {
-          ...base.appearance?.general,
-          density: toAppearanceDensity(density),
-        },
-      },
-    };
-  }
-
-  return {
-    slug: "bithire",
-    name: "BitHire",
-    vertical: "bithire",
-    engine: "modern",
-    theme: "light",
-    plan: "enterprise",
-    features: ["*"],
-    branding: { companyName: "BitHire" },
-    // BitHire is first-party vertical identity and therefore comes from the
-    // checked-in DS theme, never from a customer DB fixture. The semantic
-    // posture enters exclusively through the Appearance channel.
-    brandTheme: bithireBrandTheme,
-    appearance: { general: { density: toAppearanceDensity(density) } },
-  };
 }
 
 const COPY: Record<
@@ -529,13 +482,7 @@ function VariantTree({
 
 export function K3LaneBProbe({ source, locale, density, state, variant }: K3LaneBProbeProps) {
   return (
-    <DesignSystemProvider
-      tenantConfig={{ ...tenantConfig(source, locale, density), locale }}
-      vertical="bithire"
-      locale={locale}
-      forceEngine="modern"
-      forceTheme="light"
-    >
+    <ShowroomTenantProvider source={source} locale={locale} density={density}>
       <Box
         data-testid="k3b-canvas"
         style={{
@@ -565,6 +512,6 @@ export function K3LaneBProbe({ source, locale, density, state, variant }: K3Lane
           )}
         </Box>
       </Box>
-    </DesignSystemProvider>
+    </ShowroomTenantProvider>
   );
 }

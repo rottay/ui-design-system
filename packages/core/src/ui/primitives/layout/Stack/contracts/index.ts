@@ -283,11 +283,70 @@ export const JUSTIFY_MAP: Record<StackJustify, string> = {
  * };
  * ```
  *
+ * Values can arrive from JavaScript, persisted preferences, or arithmetic even
+ * when TypeScript authoring is strict. Negative and non-finite spacings
+ * collapse to zero instead of leaking `NaNpx`, `Infinitypx`, or invalid
+ * negative CSS -- the identical guard `resolveFlexGapValue` already applies, so
+ * the two families in this group stop disagreeing about what an unsafe number
+ * means. A finite non-negative number is untouched and still produces the exact
+ * `${value}px` string it always did.
+ *
  * @param value - Spacing value: preset name ('xs', 'sm', 'md', etc.) or number in pixels
  * @returns CSS-compatible spacing value string
  */
 export function resolveSpacing(value: StackSpacing | undefined): string {
   if (value === undefined || value === "none") return "0";
-  if (typeof value === "number") return `${value}px`;
-  return SPACING_MAP[value] || "0";
+  if (typeof value === "number") {
+    return Number.isFinite(value) && value >= 0 ? `${value}px` : "0px";
+  }
+  // `|| "0"` alone leaks a prototype-inherited name: `SPACING_MAP` is a plain
+  // object literal, so `"toString"` resolves to a truthy FUNCTION and `||`
+  // never reaches its fallback. The own-property guard is what makes this a
+  // closed vocabulary rather than a lookup -- same law as `resolveFlexGapValue`.
+  return Object.prototype.hasOwnProperty.call(SPACING_MAP, value as string)
+    ? SPACING_MAP[value] || "0"
+    : "0";
+}
+
+/** A rung on the shared spacing ramp: every `SPACING_MAP` key except `none`. */
+export type StackSpacingRhythmPreset = Exclude<StackSpacingPreset, "none">;
+
+/**
+ * The preset spelling behind a spacing value, or `undefined` when it is a
+ * number (exact geometry), `none` (zero has no room to scale) or an
+ * unrecognized string.
+ *
+ * The scalable set is DERIVED from `SPACING_MAP` — the single enumeration the
+ * `[data-spacing="..."]` rules in layout-primitives.css already key on — so
+ * there is no second list to keep in agreement with it. The twin of
+ * `flexGapPresetSpelling`, and the same law: a rung may be scaled by layout
+ * rhythm, a measurement never is.
+ *
+ * OWN-PROPERTY GUARD, not the `in` operator. `in` walks the WHOLE prototype
+ * chain, so `"toString" in SPACING_MAP` is `true` -- `SPACING_MAP` is a plain
+ * object literal and inherits every `Object.prototype` member name. The old
+ * `value in SPACING_MAP` read therefore returned an inherited key such as
+ * `"toString"` or `"constructor"` AS IF it were a declared rung, handing
+ * `resolveStackSpacingWithRhythm` (Stack/runtime/responsive/index.tsx) a
+ * spelling that is not one of the eight the stylesheet enumerates. The
+ * resolved magnitude stayed safe either way (`resolveSpacing` already
+ * own-property-guards `SPACING_MAP` itself and falls back to `"0"`), but the
+ * RESPONSIVE path would then wrap that safe `"0"` in a needless
+ * `calc(0 * var(--ds-rhythm-effective-scale, 1))` instead of leaving it
+ * exactly `"0"` -- a hostile string masquerading as a scalable rung, and a
+ * live break of the doc-stated law that "a caller's measurement is exact
+ * geometry under rhythm exactly as under density." `Object.prototype.hasOwnProperty.call`
+ * closes the vocabulary to exactly `SPACING_MAP`'s own keys, the identical
+ * guard `resolveSpacing` above and `resolveFlexGapValue`/`flexGapPresetSpelling`
+ * already apply.
+ */
+export function stackSpacingPresetSpelling(
+  value: StackSpacing | undefined
+): StackSpacingRhythmPreset | undefined {
+  if (value === undefined || typeof value === "number" || value === "none") {
+    return undefined;
+  }
+  return Object.prototype.hasOwnProperty.call(SPACING_MAP, value as string)
+    ? (value as StackSpacingRhythmPreset)
+    : undefined;
 }

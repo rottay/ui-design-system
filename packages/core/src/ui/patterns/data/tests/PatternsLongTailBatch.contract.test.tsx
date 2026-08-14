@@ -4,7 +4,9 @@ import { waitFor } from '@testing-library/react';
 
 import { renderWithEngine } from '../../../../tooling/testing/helpers/engine';
 import { BulkSelectToggle } from '../bulk-select-toggle';
-import { cellRenderers } from '../cell-renderers';
+// cellRenderers now lives in `patterns/runtime/cell-renderers`; the `patterns/data`
+// barrel re-exports it so data-column callers keep one import.
+import { cellRenderers } from '..';
 import { PatternGalleryView } from '../gallery-view/presentation/gallery';
 import { PatternGridView } from '../grid-view/presentation/grid';
 import ModernStatsGrid from '../stats-grid/engines/modern';

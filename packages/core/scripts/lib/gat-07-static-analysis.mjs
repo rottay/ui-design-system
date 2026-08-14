@@ -229,6 +229,23 @@ function isTypeOnlyPosition(node) {
   return false;
 }
 
+/**
+ * Name of the interface / type-alias / class that physically hosts a governed
+ * declaration. Used for declaration identity, so re-hosting a field on another
+ * type is detectable without changing the declaration count.
+ */
+function enclosingTypeName(declaration) {
+  for (let current = declaration?.parent; current; current = current.parent) {
+    if (
+      ts.isInterfaceDeclaration(current) || ts.isTypeAliasDeclaration(current) ||
+      ts.isClassDeclaration(current)
+    ) {
+      return current.name?.text ?? '(anonymous)';
+    }
+  }
+  return '(anonymous)';
+}
+
 function directCallForSymbolReference(node) {
   let expression = node;
   if (
@@ -252,6 +269,30 @@ function directCallForSymbolReference(node) {
 }
 
 /**
+ * Canonical source owners for the surface-profile-overrides claim.
+ *
+ * The claim type and its hook live under the structure-chrome foundation; the
+ * surfaces tree only re-exports them. These are the ONLY authoritative owners --
+ * the pre-relocation `src/ui/surfaces/runtime/profile-defaults/**` paths no
+ * longer exist and carry no authority.
+ */
+const SURFACE_PROFILE_CLAIM_TYPE_OWNER = '/src/ui/structures/foundation/chrome/contracts/index.ts';
+const SURFACE_PROFILE_HOOK_OWNER =
+  '/src/ui/structures/foundation/chrome/runtime/profile-defaults/overrides/index.ts';
+
+/**
+ * Files that DEFINE or re-export the claim rather than consume it. A reference
+ * inside one of these is authorship of the contract, not an applied consumer,
+ * so they are excluded from the applied-consumer census.
+ */
+const SURFACE_PROFILE_DEFINITION_SUFFIXES = Object.freeze([
+  SURFACE_PROFILE_CLAIM_TYPE_OWNER,
+  SURFACE_PROFILE_HOOK_OWNER,
+  '/src/ui/surfaces/foundation/contracts/index.ts',
+  '/src/ui/surfaces/index.ts',
+]);
+
+/**
  * Analyze the bounded Phase-0 claim families through TypeScript symbols.
  *
  * Only direct, checker-resolved value references are static evidence. Passing a
@@ -264,6 +305,27 @@ export function analyzeClaimSourceRecords(records) {
   const extensionRuntimeFiles = new Set();
   const extensionHelperFiles = new Set();
   const hookCallFiles = new Set();
+  // A hook CALL is not an APPLICATION. `hookCallFiles` stays a separate metric:
+  // it counts any direct call to the governed hook. `hookApplicationFiles`
+  // counts only a call whose SINGLE argument resolves, whole and by exact
+  // symbol identity, to one of the canonical `profileOverrides` declarations.
+  //
+  // A subtree scan of the arguments -- what this analyzer used to do -- is not
+  // that test. `hook(flag ? overrides : {})`, `hook(a, overrides)` and
+  // `hook({ ...config.visual?.profileOverrides })` all CONTAIN a governed
+  // reference while applying nothing the gate can attribute, so containment is
+  // never evidence here.
+  const hookApplicationFiles = new Set();
+  // Application identity: WHICH declaration each consumer applied. The
+  // unapplied census is the exact set difference against the declaration
+  // roster, so a consumer that silently switches to another owner's field is
+  // visible even when the applied roster is byte-identical.
+  const applicationRecords = [];
+  const appliedDeclarationRecords = new Set();
+  // Canonical field symbol -> its declaration record. Application is decided
+  // against THIS map by symbol identity, never by name or by subtree presence.
+  const profileFieldRecordBySymbol = new Map();
+  const profileDeclarationRecords = [];
   const showroomOverrideFiles = new Set();
   const potentialConsumerFiles = {
     'component-extensions': new Set(),
@@ -302,22 +364,29 @@ export function analyzeClaimSourceRecords(records) {
     {
       claimId: 'surface-profile-overrides',
       name: 'SurfaceVisualOverrides',
-      pathSuffix: '/src/ui/surfaces/foundation/contracts/index.ts',
+      pathSuffixes: [SURFACE_PROFILE_CLAIM_TYPE_OWNER],
       role: 'claim-type',
     },
     {
       claimId: 'surface-profile-overrides',
       name: 'useSurfaceProfileDefaultsWithOverrides',
-      pathSuffix: '/src/ui/surfaces/runtime/profile-defaults/overrides/index.ts',
+      pathSuffixes: [SURFACE_PROFILE_HOOK_OWNER],
       role: 'surface-hook',
     },
     {
       claimId: 'surface-profile-overrides',
       name: 'profileOverrides',
-      pathSuffix: '/src/ui/surfaces/foundation/contracts/index.ts',
+      // The declaring contracts are BOTH the structure-chrome owner and the
+      // surfaces facade that re-exports the claim type. Counting only one of
+      // them under-reports the declaration census.
+      pathSuffixes: [SURFACE_PROFILE_CLAIM_TYPE_OWNER, '/src/ui/surfaces/foundation/contracts/index.ts'],
       role: 'surface-runtime-field',
-      acceptsDeclaration: (declaration, source) =>
-        ts.isPropertySignature(declaration) && declaration.type?.getText(source).includes('SurfaceVisualOverrides'),
+      // Exact TypeScript symbol identity, never a substring of the printed
+      // type. `NotSurfaceVisualOverrides` and a same-named local interface both
+      // satisfy `includes('SurfaceVisualOverrides')`; neither is the governed
+      // contract. A real import/re-export alias DOES root back to it and counts.
+      acceptsDeclaration: (declaration, _source, context) =>
+        ts.isPropertySignature(declaration) && context.resolvesToClaimType(declaration.type),
     },
   ];
   const canonicalSymbols = new Map();
@@ -346,25 +415,63 @@ export function analyzeClaimSourceRecords(records) {
     }
     return null;
   };
-  for (const spec of definitionSpecs) {
-    const source = program.getSourceFiles().find((candidate) => candidate.fileName.endsWith(spec.pathSuffix));
-    if (!source) continue;
-    function collect(node) {
-      if (
-        ts.isIdentifier(node) && node.text === spec.name &&
-        node.parent?.name === node && ts.isDeclaration(node.parent) &&
-        (!spec.acceptsDeclaration || spec.acceptsDeclaration(node.parent, source))
-      ) {
-        const symbol = rootSymbol(checker.getSymbolAtLocation(node));
-        if (symbol) {
-          canonicalSymbols.set(symbol, spec);
-          canonicalDeclarationNames.add(node);
+  const claimTypeSymbols = new Set();
+  /**
+   * Exact symbol identity for a governed type annotation. Resolves the written
+   * type reference to its symbol and roots it through import/re-export aliases,
+   * so a genuine alias counts while a look-alike name never does.
+   */
+  const resolvesToClaimType = (typeNode) => {
+    if (!typeNode || !ts.isTypeReferenceNode(typeNode)) return false;
+    const nameNode = ts.isQualifiedName(typeNode.typeName) ? typeNode.typeName.right : typeNode.typeName;
+    return rootedSymbols(checker.getSymbolAtLocation(nameNode)).some((candidate) => claimTypeSymbols.has(candidate));
+  };
+  const declarationContext = { resolvesToClaimType };
+  const specDeclarationCounts = new Map();
+  // `claim-type` specs must be collected before the specs whose acceptance
+  // predicate resolves against them.
+  for (const spec of [...definitionSpecs].sort((left, right) =>
+    Number(right.role === 'claim-type') - Number(left.role === 'claim-type'))) {
+    const suffixes = spec.pathSuffixes ?? [spec.pathSuffix];
+    for (const suffix of suffixes) {
+      const source = program.getSourceFiles().find((candidate) => candidate.fileName.endsWith(suffix));
+      if (!source) continue;
+      function collect(node) {
+        if (
+          ts.isIdentifier(node) && node.text === spec.name &&
+          node.parent?.name === node && ts.isDeclaration(node.parent) &&
+          (!spec.acceptsDeclaration || spec.acceptsDeclaration(node.parent, source, declarationContext))
+        ) {
+          const symbol = rootSymbol(checker.getSymbolAtLocation(node));
+          if (symbol) {
+            canonicalSymbols.set(symbol, spec);
+            canonicalDeclarationNames.add(node);
+            if (spec.role === 'claim-type') claimTypeSymbols.add(symbol);
+            if (spec.role === 'surface-runtime-field') {
+              // Declaration identity: every accepted PropertySignature is
+              // attributable to an owner file and an enclosing type, so a
+              // declaration that MOVES between owners, or is re-hosted on a
+              // different type, is visible even when the count stays 32.
+              // The record is keyed by symbol so an APPLICATION can name the
+              // exact declaration it applied.
+              const declarationRecord = {
+                path: recordByFile.get(source.fileName)?.path ?? source.fileName,
+                enclosingType: enclosingTypeName(node.parent),
+              };
+              profileFieldRecordBySymbol.set(symbol, declarationRecord);
+              profileDeclarationRecords.push(declarationRecord);
+            }
+            specDeclarationCounts.set(spec.role, (specDeclarationCounts.get(spec.role) ?? 0) + 1);
+          }
         }
+        ts.forEachChild(node, collect);
       }
-      ts.forEachChild(node, collect);
+      collect(source);
     }
-    collect(source);
   }
+  // The declaration census IS the set of governed field declarations the
+  // analyzer accepted by exact symbol identity, across every declaring owner.
+  profileDeclarations = specDeclarationCounts.get('surface-runtime-field') ?? 0;
 
   const addFinding = (list, claimId, record, source, node, reason, symbol = null) => {
     const line = sourceLine(source, node);
@@ -456,17 +563,67 @@ export function analyzeClaimSourceRecords(records) {
     return type ? checker.getPropertyOfType(checker.getApparentType(type), name) : null;
   };
 
+  /**
+   * Strip ONLY the wrappers that are transparent to the value being passed.
+   *
+   * Parentheses, a non-null assertion, a cast and a `satisfies` change the
+   * type or the syntax around an expression without changing WHICH value
+   * arrives at the parameter. Nothing else is unwrapped: a conditional, a
+   * logical, a comma, a call and an object literal each SELECT or CONSTRUCT a
+   * value, so the argument is no longer the governed declaration itself.
+   */
+  const unwrapApplicationArgument = (node) => {
+    let current = node;
+    while (
+      current &&
+      (ts.isParenthesizedExpression(current) || ts.isNonNullExpression(current) ||
+        ts.isAsExpression(current) || ts.isTypeAssertionExpression(current) ||
+        ts.isSatisfiesExpression(current))
+    ) {
+      current = current.expression;
+    }
+    return current;
+  };
+
+  /**
+   * The declaration a hook argument APPLIES, or null.
+   *
+   * The COMPLETE argument -- after the transparent unwrapping above -- must
+   * itself resolve, by exact symbol identity, to a canonical `profileOverrides`
+   * declaration. There is deliberately no subtree search: an argument that
+   * merely CONTAINS a governed reference somewhere inside it applies nothing,
+   * because the value that actually reaches the parameter is whatever the
+   * enclosing conditional/logical/comma/call/object produced instead.
+   */
+  const appliedDeclarationForArgument = (argument) => {
+    const expression = unwrapApplicationArgument(argument);
+    if (!expression) return null;
+    // Only two shapes can BE the declaration: a property access whose name is
+    // the governed field, or an identifier that roots to it through aliases.
+    const nameNode = ts.isPropertyAccessExpression(expression)
+      ? expression.name
+      : ts.isIdentifier(expression)
+      ? expression
+      : null;
+    if (!nameNode || !ts.isIdentifier(nameNode)) return null;
+    if (canonicalDeclarationNames.has(nameNode) || isTypeOnlyPosition(nameNode)) return null;
+    const symbol = rootSymbol(checker.getSymbolAtLocation(nameNode)) ??
+      rootSymbol(contextualFieldSymbol(nameNode, nameNode.text));
+    if (!symbol) return null;
+    for (const candidate of rootedSymbols(symbol)) {
+      const declarationRecord = profileFieldRecordBySymbol.get(candidate);
+      if (declarationRecord) return declarationRecord;
+    }
+    return null;
+  };
+
   for (const source of program.getSourceFiles()) {
     const record = recordByFile.get(source.fileName);
     if (!record) continue;
     const normalized = record.path.replaceAll('\\', '/');
     const isExtensionDefinition = normalized.endsWith('/src/foundation/contracts/kernel/tokens/extensions/index.ts');
     const isEngineDefinition = normalized.endsWith('/src/foundation/contracts/runtime/engine/index.ts');
-    const isSurfaceTypes = normalized.endsWith('/src/ui/surfaces/foundation/contracts/index.ts');
-    const isSurfaceDefinition =
-      isSurfaceTypes ||
-      normalized.endsWith('/src/ui/surfaces/runtime/profile-defaults/overrides/index.ts') ||
-      normalized.endsWith('/src/ui/surfaces/index.ts');
+    const isSurfaceDefinition = SURFACE_PROFILE_DEFINITION_SUFFIXES.some((suffix) => normalized.endsWith(suffix));
     if (isExtensionDefinition || isEngineDefinition) extensionDeprecations += countDeprecated(record.text);
     if (isSurfaceDefinition) profileDeprecations += countDeprecated(record.text);
 
@@ -509,12 +666,6 @@ export function analyzeClaimSourceRecords(records) {
           showroomOverrideFiles.add(record.path);
         }
       }
-      if (isSurfaceTypes && ts.isPropertySignature(node)) {
-        const propertyName = ts.isIdentifier(node.name) || ts.isStringLiteralLike(node.name) ? node.name.text : null;
-        if (propertyName === 'profileOverrides' && node.type?.getText(source).includes('SurfaceVisualOverrides')) {
-          profileDeclarations += 1;
-        }
-      }
       if (!directFieldSpec && ts.isIdentifier(node) && !isDeclarationOrModuleEdge(node) && !isTypeOnlyPosition(node)) {
         const spec = canonicalSpecForSymbol(checker.getSymbolAtLocation(node));
         if (spec) {
@@ -540,11 +691,29 @@ export function analyzeClaimSourceRecords(records) {
             );
           }
           if (spec.role === 'extension-helper') extensionHelperFiles.add(record.path);
-          if (
-            spec.role === 'surface-hook' && directCall &&
-            record.kind === 'core' && normalized.includes('/src/ui/surfaces/')
-          ) {
+          // Applied-consumer census: any productive Core file that DIRECTLY
+          // calls the hook and is not itself a definition/re-export owner. The
+          // former `/src/ui/surfaces/` path filter silently dropped the
+          // structure-tier `header-surface` consumer.
+          if (spec.role === 'surface-hook' && directCall && record.kind === 'core' && !isSurfaceDefinition) {
             hookCallFiles.add(record.path);
+            // An APPLICATION is exactly one argument that IS a governed
+            // declaration. Zero arguments apply nothing; two or more mean the
+            // governed value is one input among several and the analyzer
+            // cannot attribute the application, so both are calls only.
+            const callArguments = directCall.arguments ?? [];
+            const appliedDeclaration = callArguments.length === 1
+              ? appliedDeclarationForArgument(callArguments[0])
+              : null;
+            if (appliedDeclaration) {
+              hookApplicationFiles.add(record.path);
+              appliedDeclarationRecords.add(appliedDeclaration);
+              applicationRecords.push({
+                consumerPath: record.path,
+                declarationPath: appliedDeclaration.path,
+                enclosingType: appliedDeclaration.enclosingType,
+              });
+            }
           }
         }
       }
@@ -581,6 +750,26 @@ export function analyzeClaimSourceRecords(records) {
   }
 
   const sorted = (set) => [...set].sort();
+  // Declaration identity is emitted as a stable, sorted (path, enclosingType)
+  // roster so a declaration that moves between owners, or is re-hosted on a
+  // different type, is observable even when the declaration count is constant.
+  const byDeclarationIdentity = (left, right) =>
+    left.path.localeCompare(right.path) || left.enclosingType.localeCompare(right.enclosingType);
+  const declarationRecord = ({ path, enclosingType }) => ({ path, enclosingType });
+  const sortedDeclarationRecords = profileDeclarationRecords.map(declarationRecord).sort(byDeclarationIdentity);
+  // The unapplied census is the EXACT set difference between the declaration
+  // roster and the declarations some consumer actually applied -- computed on
+  // record identity, which is symbol identity, not on names and not on counts.
+  // `declared - applied` is a size; this is the gap itself.
+  const unappliedDeclarationRecords = profileDeclarationRecords
+    .filter((record) => !appliedDeclarationRecords.has(record))
+    .map(declarationRecord)
+    .sort(byDeclarationIdentity);
+  const appliedDeclarationRoster = [...appliedDeclarationRecords].map(declarationRecord).sort(byDeclarationIdentity);
+  const sortedApplicationRecords = [...applicationRecords].sort((left, right) =>
+    left.consumerPath.localeCompare(right.consumerPath) ||
+    left.declarationPath.localeCompare(right.declarationPath) ||
+    left.enclosingType.localeCompare(right.enclosingType));
   const sortedFindings = (findings, claimId) => findings
     .filter((finding) => finding.claimId === claimId)
     .sort((left, right) => left.path.localeCompare(right.path) || left.line - right.line || left.reason.localeCompare(right.reason));
@@ -600,11 +789,18 @@ export function analyzeClaimSourceRecords(records) {
     },
     'surface-profile-overrides': {
       profileOverrideDeclarations: profileDeclarations,
+      profileOverrideDeclarationRecords: sortedDeclarationRecords,
       staticallyResolvedSurfaceHookCalls: hookCallFiles.size,
       staticallyResolvedSurfaceHookCallFiles: sorted(hookCallFiles),
+      staticallyResolvedSurfaceProfileApplications: hookApplicationFiles.size,
+      staticallyResolvedSurfaceProfileApplicationFiles: sorted(hookApplicationFiles),
+      staticallyResolvedSurfaceProfileApplicationRecords: sortedApplicationRecords,
+      profileOverrideAppliedDeclarationRecords: appliedDeclarationRoster,
+      profileOverrideUnappliedDeclarationRecords: unappliedDeclarationRecords,
       staticallyResolvedShowroomProfileOverrideReferences: showroomOverrideFiles.size,
       staticallyResolvedShowroomProfileOverrideReferenceFiles: sorted(showroomOverrideFiles),
       staticallyResolvedPotentialConsumers: potentialConsumerFiles['surface-profile-overrides'].size,
+      staticallyResolvedPotentialConsumerFiles: sorted(potentialConsumerFiles['surface-profile-overrides']),
       potentialConsumers: sortedFindings(potentialConsumers, 'surface-profile-overrides'),
       containmentExclusions: sortedFindings(containmentExclusions, 'surface-profile-overrides'),
       unsupportedGovernedReferences: sortedFindings(unsupportedReferences, 'surface-profile-overrides').length,

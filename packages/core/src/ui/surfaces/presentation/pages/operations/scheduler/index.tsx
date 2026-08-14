@@ -16,15 +16,15 @@
 import React, { useMemo } from 'react';
 import { Box, Card, Grid, Stack, Text } from '../../../../../primitives';
 import { PatternCalendarView, type CalendarEvent } from '../../../../../patterns';
-import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
+import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
 import type { SchedulerSurfaceConfig } from '../../../../foundation/contracts';
-import { PageShellSurface } from '../../../../composition/layout/page-shell';
-import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
-import { resolveStackSpacing } from '../../../../runtime/profile-defaults/personality';
-import { useSurfaceResponsiveLayout } from '../../../../runtime/responsive';
-import { SurfaceActionBar } from '../../../../runtime/helpers/rendering';
+import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
+import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
+import { resolveStackSpacing } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
+import { useSurfaceResponsiveLayout } from '../../../../../structures/foundation/chrome/runtime/responsive';
+import { SurfaceActionBar } from '../../../../../structures/shell/surface-chrome';
 import { hasSurfaceError } from '../../../../runtime/helpers';
-import { SurfaceEmptyState, SurfaceErrorState } from '../../../../runtime/helpers/states';
+import { SurfaceEmptyState, SurfaceErrorState } from '../../../../../structures/feedback/surface-lifecycle';
 import { FadeIn, StaggerChildren } from '@/graphics/motion';
 import { formatTime } from '@/foundation/i18n/runtime/formatting';
 

@@ -1,0 +1,84 @@
+/**
+ * Monochrome ramp — the grayscale token contract.
+ *
+ * Spec: docs-engineering/engineering/design-system/commercial-surfaces/README.md section 2.
+ * Rottay's brand colors ARE this grayscale ramp; emphasis comes from inversion, scale,
+ * weight, texture, framing, and motion — never hue.
+ *
+ * The 11 numeric steps (mono-0 = black .. mono-1000 = white) are PERCEPTUALLY EVEN:
+ * each step is +10 in CIE L*, converted to sRGB gray. This makes contrast between any two
+ * adjacent steps feel uniform, unlike a naive linear-RGB ramp. The values are deliberately
+ * distinct from `--ds-color-neutral-*`, which is a 10-step hue-tinted UI scale.
+ *
+ * Motion, mono type and focus width are NOT re-declared here: those roles already have
+ * canonical DS channels (`--ds-duration-*`, `--ds-ease-out`, `--ds-font-mono`,
+ * `--ds-focus-ring-width`) and consumers read them directly rather than through a
+ * second name for the same value.
+ */
+
+:root {
+  /* Perceptually-even grayscale ramp (CIE L* 0..100 in steps of 10). */
+  --ds-color-mono-0: #000000; /* L* 0  */
+  --ds-color-mono-100: #1b1b1b; /* L* 10 */
+  --ds-color-mono-200: #303030; /* L* 20 */
+  --ds-color-mono-300: #474747; /* L* 30 */
+  --ds-color-mono-400: #5e5e5e; /* L* 40 */
+  --ds-color-mono-500: #777777; /* L* 50 */
+  --ds-color-mono-600: #919191; /* L* 60 */
+  --ds-color-mono-700: #ababab; /* L* 70 */
+  --ds-color-mono-800: #c6c6c6; /* L* 80 */
+  --ds-color-mono-900: #e2e2e2; /* L* 90 */
+  --ds-color-mono-1000: #ffffff; /* L* 100 */
+
+  /* Semantic anchors. */
+  --ds-color-surface-ink: #0a0a0c; /* the flagship dark surface (spec section 2) */
+  --ds-color-surface-paper: #ffffff; /* the flagship light surface */
+  --ds-color-hairline: var(--ds-color-mono-300); /* 1px rules */
+  --ds-color-hairline-strong: var(--ds-color-mono-500);
+
+  /* Texture strength (whisper contrast, spec section 5) — owned by TextureBackdrop. */
+  --ds-texture-backdrop-opacity: 0.03;
+  --ds-texture-backdrop-ink: var(--ds-color-mono-1000); /* texture on dark surfaces */
+  --ds-texture-backdrop-paper: var(--ds-color-mono-0); /* texture on light surfaces */
+}
+
+/*
+ * Focus rings are pure inversion (spec section 2): the ring color is the FOREGROUND of the
+ * surface it sits on, so it is always visible in monochrome. Surfaces set
+ * --ds-surface-fg / --ds-surface-bg; components read them.
+ */
+/* Mirrors InvertSection.css's generic-role re-key for surfaces that establish monochrome chrome
+   directly; `:where()` zero specificity keeps a nested InvertSection authoritative. */
+:where(.ds-mono-surface) {
+  --ds-surface-fg: var(--ds-color-mono-1000);
+  --ds-surface-bg: var(--ds-color-surface-ink);
+
+  --ds-color-text-primary: var(--ds-surface-fg);
+  --ds-color-text-secondary: var(--ds-color-mono-600);
+  --ds-color-text-tertiary: var(--ds-color-mono-600);
+  --ds-color-text-muted: var(--ds-color-mono-600);
+  --ds-color-text-inverse: var(--ds-surface-bg);
+  --ds-color-text-disabled: var(--ds-color-mono-500);
+  --ds-color-border: var(--ds-color-hairline-strong);
+  --ds-color-border-primary: var(--ds-color-hairline-strong);
+  --ds-color-border-secondary: var(--ds-color-hairline-strong);
+  --ds-color-border-subtle: var(--ds-color-hairline-strong);
+  --ds-color-border-tertiary: var(--ds-color-hairline-strong);
+}
+/* Print drops background colours by default, which would leave an ink surface printing its own
+   near-white foreground on blank paper. Mirrors InvertSection.css's print rule. */
+@media print {
+  :where(.ds-mono-surface) {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}
+
+:where(.ds-mono-surface[data-surface="paper"]) {
+  --ds-surface-fg: var(--ds-color-mono-0);
+  --ds-surface-bg: var(--ds-color-surface-paper);
+
+  --ds-color-text-secondary: var(--ds-color-mono-400);
+  --ds-color-text-tertiary: var(--ds-color-mono-400);
+  --ds-color-text-muted: var(--ds-color-mono-400);
+}

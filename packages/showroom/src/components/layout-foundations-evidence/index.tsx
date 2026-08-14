@@ -8,7 +8,6 @@ import {
   Box,
   Button,
   Container,
-  DesignSystemProvider,
   Divider,
   Flex,
   Grid,
@@ -17,12 +16,16 @@ import {
   Stack,
   Text,
   useTranslation,
+  type TenantConfig,
 } from "@rottay/design-system";
 
 import {
-  tenantConfigFor,
-  type BrandLocaleEvidenceFixture,
-  type BrandLocaleEvidenceLocale,
+  ShowroomTenantProvider,
+  type ShowroomTenantSource,
+} from "@/components/showroom-tenant";
+import type {
+  BrandLocaleEvidenceFixture,
+  BrandLocaleEvidenceLocale,
 } from "@/components/brand-locale-evidence";
 
 function FoundationPanel({
@@ -221,6 +224,59 @@ function FoundationsCanvas({
   );
 }
 
+/**
+ * The customer's published copy for the DB-owned fixture.
+ *
+ * It travels as a PROVIDER prop and never on the tenant config: the code-owned
+ * projection keeps only
+ * `branding | engine | features | name | plan | slug | theme | vertical`, so
+ * `customTranslations` (or `locale`) set on a config is dropped before the
+ * runtime ever sees it. Routing copy the same way on both sources keeps one
+ * rule instead of two.
+ */
+const THE_MANAGEMENT_DB_COPY: Record<
+  BrandLocaleEvidenceLocale,
+  NonNullable<TenantConfig["customTranslations"]>
+> = {
+  en: { components: { empty: { description: "No talent profiles yet" } } },
+  es: {
+    components: {
+      empty: { description: "Todavía no hay perfiles de talento" },
+    },
+  },
+  ar: { components: { empty: { description: "لا توجد ملفات مواهب بعد" } } },
+};
+
+/**
+ * This route's two fixtures ARE the fleet's two governed sources, so they map
+ * onto them instead of rebuilding them.
+ */
+const EVIDENCE_TENANT_SOURCE: Record<
+  BrandLocaleEvidenceFixture,
+  ShowroomTenantSource
+> = {
+  bithire: "bithire-static",
+  themanagementmiami: "themanagement-db",
+};
+
+/**
+ * Both halves come from the shared ground; this component owns neither.
+ *
+ * The previous `{ ...tenantConfigFor(fixture, locale), locale }` was illegal in
+ * both directions at once, and both failures are SILENT -- a blocked visual
+ * authority renders `<LoadingScreen />`, which photographs as a slow load
+ * rather than as a failure. Spreading the registry config destroys the WeakSet
+ * object identity that makes bithire code-owned, so the copy became an ordinary
+ * tenant carrying an uncompiled `brandTheme`; the management branch carried a
+ * hand-authored `appearance` literal, which is visual payload that no
+ * declaration admits.
+ *
+ * `ShowroomTenantProvider` fixes both: bithire is the registry's own object,
+ * UNSPREAD, and The Management is a validated / hydrated / compiled artifact
+ * whose `<style>` mounts OUTSIDE the provider so the mount proof can see it.
+ * Engine (`modern`) and ground (`light`) are the provider's own defaults, and
+ * locale stays a provider prop on both paths.
+ */
 export function LayoutFoundationsEvidence({
   fixture,
   locale,
@@ -229,14 +285,14 @@ export function LayoutFoundationsEvidence({
   locale: BrandLocaleEvidenceLocale;
 }) {
   return (
-    <DesignSystemProvider
-      tenantConfig={{ ...tenantConfigFor(fixture, locale), locale }}
-      vertical="bithire"
+    <ShowroomTenantProvider
+      source={EVIDENCE_TENANT_SOURCE[fixture]}
       locale={locale}
-      forceEngine="modern"
-      forceTheme="light"
+      {...(fixture === "themanagementmiami"
+        ? { customTranslations: THE_MANAGEMENT_DB_COPY[locale] }
+        : {})}
     >
       <FoundationsCanvas fixture={fixture} />
-    </DesignSystemProvider>
+    </ShowroomTenantProvider>
   );
 }

@@ -237,7 +237,7 @@ describe('EffectDefinition certification laws', () => {
     expect(isEffectDefinition(labWithoutOwner)).toBe(false);
     const { runtimeControl: _control, ...labWithoutControl } = lab;
     expect(isEffectDefinition(labWithoutControl)).toBe(false);
-    expect(isEffectDefinition({ ...lab, killSwitch: 'app-platform:legacy' })).toBe(false);
+    expect(isEffectDefinition({ ...lab, killSwitch: 'app-rottay:legacy' })).toBe(false);
   });
 
   it('requires certified source provenance and rejects restricted reference material', () => {
@@ -273,9 +273,22 @@ describe('EffectDefinition certification laws', () => {
   });
 
   it('uses canonical verticals and built-in engines, never tenant or personality aliases', () => {
+    // `['rottay']` used to be the negative case here, because the canonical
+    // vertical was spelled `platform` and `rottay` was therefore "a tenant
+    // alias". That is now exactly backwards: `rottay` IS the vertical, and
+    // `platform` is the retired alias. Both directions are asserted so the
+    // swap cannot be undone silently.
     expect(isEffectDefinition({
       ...EFFECT_REGISTRY['glass-card'],
       supportedVerticals: ['rottay'],
+    })).toBe(true);
+    expect(isEffectDefinition({
+      ...EFFECT_REGISTRY['glass-card'],
+      supportedVerticals: ['platform'],
+    })).toBe(false);
+    expect(isEffectDefinition({
+      ...EFFECT_REGISTRY['glass-card'],
+      supportedVerticals: ['themanagement'],
     })).toBe(false);
     expect(isEffectDefinition({
       ...EFFECT_REGISTRY['glass-card'],
@@ -398,7 +411,7 @@ describe('fail-closed effect resolution', () => {
     }).reason).toBe('effect-disabled');
     expect(resolveEffectDefinition(lab, {
       ...SAFE_CONTEXT,
-      enabledKillSwitches: ['app-platform:PARTICLE_FIELD_ROUTE_KILL_SWITCHES'],
+      enabledKillSwitches: ['app-rottay:PARTICLE_FIELD_ROUTE_KILL_SWITCHES'],
     }).mode).toBe('active');
   });
 

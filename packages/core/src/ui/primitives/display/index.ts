@@ -108,3 +108,15 @@ export type {
   MarkdownBlockNode,
   MarkdownInlineNode,
 } from './MarkdownView';
+
+// Typewriter
+export { Typewriter } from './Typewriter';
+export type { TypewriterProps, TypewriterMode } from './Typewriter';
+
+// CropMarks
+export { CropMarks } from './CropMarks';
+export type { CropMarksProps } from './CropMarks';
+
+// TextureBackdrop
+export { TextureBackdrop } from './TextureBackdrop';
+export type { TextureBackdropProps, TextureBackdropPattern } from './TextureBackdrop';

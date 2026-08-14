@@ -4,25 +4,23 @@ import { waitFor } from '@testing-library/react';
 
 import { mockMatchMedia } from '../../../tooling/testing/helpers/browser/match-media';
 import { renderSurface } from '../foundation/common/test-utils';
-import { SurfaceAccentBar } from '../runtime/profile-defaults/personality';
+import { SurfaceAccentBar } from '../../structures/foundation/chrome/runtime/profile-defaults/personality';
 import {
   SurfaceActionBar,
   SurfaceSectionCard,
   SurfaceTabbedLabel,
-} from '../runtime/helpers/rendering';
+} from '../../structures/shell/surface-chrome';
 import {
   SurfaceEmptyState,
   SurfaceErrorState,
-  SurfaceLoadingState,
-  SurfaceEmptyStateCard,
-  SurfaceErrorStateCard,
   SurfaceLoadingSkeleton,
   SurfaceOfflineBanner,
   SurfaceStaleBanner,
-} from '../runtime/helpers/states';
-import { WorkspaceShell } from '../composition/layout/collection-shell';
-import { HeaderSurface } from '../composition/layout/page-shell/header';
-import { SidebarSurface } from '../composition/layout/sidebar';
+} from '../../structures/feedback/surface-lifecycle';
+import { SurfaceCapabilityAnatomy } from '../../structures/feedback/capability-anatomy';
+import { WorkspaceShell } from '../../structures/shell/workspace-shell';
+import { HeaderSurface } from '../../structures/headers/header-surface';
+import { SidebarSurface } from '../../structures/shell/navigation/sidebar-surface';
 import { AuditSurface } from '../presentation/pages/admin/audit';
 import { BillingSurface } from '../presentation/pages/admin/billing';
 import { ImportExportSurface } from '../presentation/pages/admin/import-export';
@@ -57,19 +55,34 @@ import { RecordWorkbenchSurface } from '../presentation/pages/workspace/record-w
 // are one component entry, but both engine implementations are rendered in the
 // sibling PatternsLongTailBatch contract. Runtime keeps its two state files
 // separate because both export independently rendered anatomy islands.
+//
+// Paths are relative to `src/ui/surfaces`. The six `../structures/...` entries
+// are the page-chrome owners that moved down a tier -- HeaderSurface and
+// SidebarSurface are structure families now, the shared chrome runtime went
+// with them, the five lifecycle states are
+// `structures/feedback/surface-lifecycle/states`, and the capability inventory
+// is its own `structures/feedback/capability-anatomy` owner. This suite still
+// covers them because the CK-I contract is about rendered anatomy, which the
+// moves did not change; the paths say where the source actually is rather than
+// where it used to be.
+//
+// `runtime/helpers/states` is deliberately absent -- it is gone. The lifecycle
+// used to ship twice from there, a card set and an older trio, and the owner
+// ruling converged the three duplicated roles into one component each. This
+// census tracks the five that survive.
 const CK_I_RENDERABLE_SOURCES = [
-  'runtime/profile-defaults/personality',
-  'runtime/helpers/rendering',
-  'runtime/helpers/states/index',
-  'runtime/helpers/states/i18n/components',
+  '../structures/foundation/chrome/runtime/profile-defaults/personality',
+  '../structures/shell/surface-chrome',
+  '../structures/feedback/capability-anatomy',
+  '../structures/feedback/surface-lifecycle/states',
   'patterns/data/stats-grid/engines/{modern,rustic}',
   'patterns/data/gallery-view',
   'patterns/data/grid-view',
-  'patterns/data/cell-renderers',
+  'patterns/runtime/cell-renderers',
   'patterns/data/bulk-select-toggle',
-  'composition/layout/collection-shell',
-  'composition/layout/page-shell/header',
-  'composition/layout/sidebar',
+  'workspace/workspace-shell',
+  '../structures/headers/header-surface',
+  '../structures/shell/navigation/sidebar-surface',
   'presentation/pages/workspace/collection-workspace',
   'presentation/pages/workspace/collection-workspace/render-dispatch',
   'presentation/pages/workspace/record-workbench',
@@ -149,18 +162,18 @@ describe('CK-I foundation anatomy (I-1)', () => {
           Section content
         </SurfaceSectionCard>
 
-        <SurfaceLoadingState title="Loading title" description="Loading copy" />
-        <SurfaceEmptyState title="Empty title" description="Empty copy" />
+        <SurfaceEmptyState
+          icon="?"
+          title="Empty title"
+          description="Empty copy"
+          action={{ id: 'create', label: 'Create', onClick: () => undefined }}
+        />
         <SurfaceErrorState error="Failure" onRetry={() => undefined} />
+        <SurfaceCapabilityAnatomy
+          capabilities={[{ kind: 'action', id: 'export', label: 'Export' }]}
+        />
 
         <SurfaceLoadingSkeleton rows={2} showHeader />
-        <SurfaceEmptyStateCard
-          icon="?"
-          title="Nothing here"
-          description="Create the first item"
-          action={{ label: 'Create', onClick: () => undefined }}
-        />
-        <SurfaceErrorStateCard error="Broken" onRetry={() => undefined} />
         <SurfaceStaleBanner message="Stale" refreshing onRefresh={() => undefined} />
         <SurfaceStaleBanner message="Fresh enough" refreshing={false} />
         <SurfaceOfflineBanner message="Offline" showCachedNotice />
@@ -169,12 +182,10 @@ describe('CK-I foundation anatomy (I-1)', () => {
 
     await waitForSelectors(container, [
       '.ds-surface.ds-section-card',
-      '.ds-surface.ds-loading-state',
       '.ds-surface.ds-empty-state',
       '.ds-surface.ds-error-state',
+      '.ds-surface.ds-capability-anatomy[data-part="capability-anatomy"]',
       '.ds-surface.ds-loading-skeleton[data-part="root"]',
-      '.ds-surface.ds-empty-state-card',
-      '.ds-surface.ds-error-state-card',
       '.ds-surface.ds-stale-banner[data-part="banner"][data-refreshing="true"]',
       '.ds-surface.ds-stale-banner[data-part="banner"][data-refreshing="false"]',
       '.ds-surface.ds-offline-banner',
@@ -191,14 +202,11 @@ describe('CK-I foundation anatomy (I-1)', () => {
     ).toHaveLength(1);
     expect(q(container, '[data-part="header-actions"]')).toHaveLength(1);
     expect(q(container, '[data-part="section-content"]')).toHaveLength(1);
-    expect(q(container, '.ds-loading-state__skeleton')).toHaveLength(1);
     expect(q(container, '.ds-error-state__alert')).toHaveLength(1);
     expect(q(container, '.ds-error-state__retry')).toHaveLength(1);
     expect(q(container, '.ds-loading-skeleton__header-primary')).toHaveLength(1);
     expect(q(container, '.ds-loading-skeleton__header-secondary')).toHaveLength(1);
     expect(q(container, '.ds-loading-skeleton__rows')).toHaveLength(1);
-    expect(q(container, '.ds-empty-state-card__action')).toHaveLength(1);
-    expect(q(container, '.ds-error-state-card__retry')).toHaveLength(1);
     expect(q(container, '.ds-stale-banner__refresh')).toHaveLength(1);
   });
 });

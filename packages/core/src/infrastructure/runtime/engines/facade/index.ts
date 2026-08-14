@@ -25,7 +25,5 @@ export * from '../foundation/contracts/binding';
 export * from '../presentation/component-factory/error-boundary';
 export * from '../runtime/resolution';
 export * from '../runtime/customization/component-registry';
-export * from '../runtime/customization/component-registry/skin-pack';
-export * from '../runtime/customization/component-registry/skin-pack/example';
 export * from '../composition/react/provider';
 export * from '../presentation/adapters/antd';

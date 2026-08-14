@@ -5,6 +5,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { TenantConfig } from '../../../../../../../foundation/contracts';
 import { useTenantContext } from '../../../../../tenant/composition/react/provider';
 import { DesignSystemProvider } from '..';
+import { ReservedTenantIdentityError } from '@/foundation/tokens/ts/presentation/brand-themes';
 
 const { resolveTenantConfigMock } = vi.hoisted(() => ({
   resolveTenantConfigMock: vi.fn(),
@@ -47,6 +48,23 @@ function readProbe(element: HTMLElement): { slug: string; companyName: string } 
     slug: string;
     companyName: string;
   };
+}
+
+class ErrorBoundary extends React.Component<
+  React.PropsWithChildren,
+  { error: Error | null }
+> {
+  state = { error: null as Error | null };
+
+  static getDerivedStateFromError(error: Error) {
+    return { error };
+  }
+
+  render() {
+    return this.state.error
+      ? <output data-testid="provider-error">{this.state.error.name}</output>
+      : this.props.children;
+  }
 }
 
 describe('DesignSystemProvider tenant-resolution boundary', () => {
@@ -118,5 +136,36 @@ describe('DesignSystemProvider tenant-resolution boundary', () => {
     expect(onError).toHaveBeenCalledWith(expect.objectContaining({
       message: 'resolver unavailable',
     }));
+  });
+
+  it('does not convert a reserved-identity error into an unresolved fallback', async () => {
+    const reserved = new ReservedTenantIdentityError({
+      kind: 'reserved-identity-violation',
+      field: 'slug',
+      value: 'Rottay',
+      reservedAs: 'rottay',
+    });
+    const onError = vi.fn();
+    resolveTenantConfigMock.mockImplementation(async (slug: string) => {
+      expect(slug).toBe('Rottay');
+      throw reserved;
+    });
+
+    const rendered = render(
+      <ErrorBoundary>
+        <DesignSystemProvider tenantSlug="Rottay" onError={onError} skipCssLoading>
+          <TenantProbe />
+        </DesignSystemProvider>
+      </ErrorBoundary>,
+    );
+
+    await waitFor(() => {
+      expect(rendered.getByTestId('provider-error').textContent).toBe(
+        'ReservedTenantIdentityError',
+      );
+    });
+    expect(rendered.queryByTestId('tenant-probe')).toBeNull();
+    expect(resolveTenantConfigMock).toHaveBeenCalledWith('Rottay');
+    expect(onError).toHaveBeenCalledWith(reserved);
   });
 });

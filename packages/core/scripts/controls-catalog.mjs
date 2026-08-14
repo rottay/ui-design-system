@@ -15,12 +15,18 @@
  * dead inventories stay in their own trees; this page is ONLY the operative
  * product surface.
  *
- * --write   regenerate the view
- * --check   fail on: missing view, digest drift vs inputs, an active
- *           standard/pro capability absent from the view, a control whose
- *           channels sum ZERO live reads (published control without a real
- *           consumer), or an Expert count that disagrees with the report.
- * --drill=<case>  self-inject: missing-control | zero-consumer | stale
+ * COMMAND GRAMMAR (closed, exactly ONE token — anti-vacuity law, 2026-08-13):
+ *   --write                  regenerate the view
+ *   --check                  fail on: missing view, digest drift vs inputs, an
+ *                            active standard/pro capability absent from the
+ *                            view, or a control whose channels sum ZERO live
+ *                            reads with no proven consumer
+ *   --drill=stale            self-inject each violation and prove THAT drill
+ *   --drill=missing-control  produced ITS OWN cause. A drill that only
+ *   --drill=zero-consumer    inherits a pre-existing baseline failure FAILS.
+ *
+ * Exit codes: 0 = ok / causal drill · 1 = gate red or vacuous drill ·
+ *             2 = invalid usage (rejected BEFORE any build/check/dist load).
  */
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -32,12 +38,88 @@ const REPORT = join(ROOT, 'customization-surface-report.json');
 const OUT_DIR = join(ROOT, 'tokens/controls');
 const OUT = join(OUT_DIR, 'README.md');
 
-const args = process.argv.slice(2);
-const has = (f) => args.includes(f) || args.some((a) => a.startsWith(`${f}=`));
-const drill = (() => {
-  const hit = args.find((a) => a.startsWith('--drill'));
-  return hit?.includes('=') ? hit.split('=')[1] : undefined;
-})();
+/* ------------------------------------------------------------------ *
+ * Drill grammar — closed set, each case carries its OWN expected cause.
+ * A drill verdict NEVER counts a failure it did not itself inject.
+ * ------------------------------------------------------------------ */
+
+const DRILL_STALE_CANDIDATE = 'deadbeef';
+const DRILL_GHOST_ID = 'drill.ghost';
+const DRILL_ZERO_ID = 'drill.zero-consumer';
+const DRILL_ZERO_CHANNEL = '--ds-drill-channel-sin-lecturas';
+
+/**
+ * `expectedCause` is the LITERAL discriminating substring the injected failure
+ * must carry, and `matches` is derived from it — the matcher and the advertised
+ * cause cannot drift apart, so a drill can never be credited by prose that no
+ * failure actually contains.
+ */
+const defineDrill = ({ injects, expectedCause }) => Object.freeze({
+  injects,
+  expectedCause,
+  matches: (failure) => failure.includes(expectedCause),
+});
+
+export const DRILL_CASES = Object.freeze({
+  stale: defineDrill({
+    injects: `digest almacenado sustituido por el candidato "${DRILL_STALE_CANDIDATE}"`,
+    // A real stale tree reports a 64-hex observed digest, never the candidate.
+    expectedCause: `observed=${DRILL_STALE_CANDIDATE}`,
+  }),
+  'missing-control': defineDrill({
+    injects: `capability activa sintética "${DRILL_GHOST_ID}" que la vista no contiene`,
+    expectedCause: `ausente de la vista: ${DRILL_GHOST_ID}`,
+  }),
+  'zero-consumer': defineDrill({
+    injects: `control publicado sintético "${DRILL_ZERO_ID}" con canal sin lecturas ni consumer`,
+    expectedCause: `SIN consumer real (drill): ${DRILL_ZERO_ID}`,
+  }),
+});
+
+export const DRILL_NAMES = Object.freeze(Object.keys(DRILL_CASES));
+
+export const USAGE = `controls-catalog USAGE — exactamente UN comando: --check | --write | ${DRILL_NAMES.map((n) => `--drill=${n}`).join(' | ')}`;
+
+/**
+ * Pure argv parser. The grammar is CLOSED and accepts exactly one token, so an
+ * unknown drill, a bare `--drill`, a `--check=x`, a stray positional, or an
+ * empty argv is rejected here — before any build, dist load or filesystem read
+ * can produce a failure the caller might mistake for a real signal.
+ *
+ * @param {readonly string[]} argv
+ * @returns {{ok: true, command: 'check'|'write'|'drill', drill?: string} | {ok: false, error: string}}
+ */
+export function parseCommand(argv) {
+  if (!Array.isArray(argv)) {
+    return { ok: false, error: 'argv debe ser un array de tokens' };
+  }
+  if (argv.length === 0) {
+    return { ok: false, error: 'sin comando: se requiere exactamente UN token' };
+  }
+  if (argv.length > 1) {
+    return { ok: false, error: `${argv.length} tokens recibidos: la gramática admite exactamente UNO` };
+  }
+  const [token] = argv;
+  if (typeof token !== 'string') {
+    return { ok: false, error: 'el token debe ser un string' };
+  }
+  if (token === '--check') return { ok: true, command: 'check' };
+  if (token === '--write') return { ok: true, command: 'write' };
+  if (token === '--drill') {
+    return { ok: false, error: '`--drill` desnudo: se requiere `--drill=<case>`' };
+  }
+  if (token.startsWith('--drill=')) {
+    const drill = token.slice('--drill='.length);
+    if (drill === '') {
+      return { ok: false, error: '`--drill=` vacío: se requiere un caso de la gramática' };
+    }
+    if (!Object.hasOwn(DRILL_CASES, drill)) {
+      return { ok: false, error: `drill desconocido "${drill}": la gramática es cerrada (${DRILL_NAMES.join(', ')})` };
+    }
+    return { ok: true, command: 'drill', drill };
+  }
+  return { ok: false, error: `token no reconocido "${token}"` };
+}
 
 async function loadRegistry() {
   const mod = await import(pathToFileURL(join(ROOT, 'dist/index.js')).href);
@@ -129,55 +211,143 @@ ${byTier('internal').map((c) => `- \`${c.id}\` — ${c.title ?? ''} (${c.default
   return { md, digest, active, report };
 }
 
-export async function check() {
+/**
+ * Run the gate. `drill` is an explicit ARGUMENT, never ambient argv state, so
+ * the same function can be exercised in-process without a global.
+ *
+ * Every injected violation is tagged so the caller can tell an injected cause
+ * apart from a pre-existing baseline failure. In particular the stale drill
+ * emits its OWN finding carrying `observed=deadbeef` alongside (not instead of)
+ * whatever the real stored digest reports — a genuinely stale tree can never
+ * satisfy the drill's expected cause.
+ *
+ * @param {{drill?: string}} [options]
+ * @returns {Promise<string[]>} failures, injected and baseline alike
+ */
+export async function check({ drill } = {}) {
+  if (drill !== undefined && !Object.hasOwn(DRILL_CASES, drill)) {
+    throw new Error(`check(): drill desconocido "${drill}" — la gramática es cerrada (${DRILL_NAMES.join(', ')})`);
+  }
   const failures = [];
-  const { md, digest, active, report } = await build();
+  const { digest, active, report } = await build();
   if (!existsSync(OUT)) return ['controls view missing — run --write'];
   const stored = readFileSync(OUT, 'utf8');
   const storedDigest = stored.match(/digest: ([0-9a-f]{64})/)?.[1];
-  if ((drill === 'stale' ? 'deadbeef' : storedDigest) !== digest) {
-    failures.push('controls view STALE vs contratos/censo — regenerar con --write');
+
+  if (storedDigest !== digest) {
+    failures.push(`controls view STALE vs contratos/censo — regenerar con --write (observed=${storedDigest ?? 'ausente'}, expected=${digest})`);
   }
-  const caps = drill === 'missing-control'
-    ? [...active, { id: 'drill.ghost', tier: 'standard', status: 'active', channels: [] }]
-    : active;
+  if (drill === 'stale' && DRILL_STALE_CANDIDATE !== digest) {
+    failures.push(`controls view STALE vs contratos/censo (drill) — candidato inyectado (observed=${DRILL_STALE_CANDIDATE}, expected=${digest})`);
+  }
+
+  const caps = [...active];
+  if (drill === 'missing-control') {
+    caps.push({
+      id: DRILL_GHOST_ID,
+      title: 'drill: control activo nunca publicado en la vista',
+      tier: 'standard',
+      status: 'active',
+      derivedChannels: [],
+    });
+  }
+  if (drill === 'zero-consumer') {
+    caps.push({
+      id: DRILL_ZERO_ID,
+      title: 'drill: control publicado sin lecturas vivas ni consumer',
+      tier: 'pro',
+      status: 'active',
+      derivedChannels: [DRILL_ZERO_CHANNEL],
+      drillInjected: true,
+      skipPresenceCheck: true,
+    });
+  }
+
   for (const cap of caps.filter((c) => c.tier === 'standard' || c.tier === 'pro')) {
-    if (!stored.includes(`\`${cap.id}\``)) failures.push(`control activo ausente de la vista: ${cap.id}`);
-    const { total } = liveReads(report, cap.derivedChannels);
-    const zero = drill === 'zero-consumer' && cap.id === caps[0].id ? 0 : (cap.derivedChannels?.length ? total : 1);
-    if (cap.derivedChannels?.length && zero === 0 && !cap.evidence?.consumer) {
-      failures.push(`control publicado SIN consumer real: ${cap.id}`);
+    if (!cap.skipPresenceCheck && !stored.includes(`\`${cap.id}\``)) {
+      failures.push(`control activo ausente de la vista: ${cap.id}`);
     }
-    if (drill === 'zero-consumer' && cap.id === caps[0].id && zero === 0) {
-      failures.push(`control publicado SIN consumer real (drill): ${cap.id}`);
-    }
+    const channels = cap.derivedChannels ?? [];
+    if (channels.length === 0) continue;
+    const { total } = liveReads(report, channels);
+    if (total > 0 || cap.evidence?.consumer) continue;
+    failures.push(cap.drillInjected
+      ? `control publicado SIN consumer real (drill): ${cap.id}`
+      : `control publicado SIN consumer real: ${cap.id}`);
   }
   return failures;
 }
 
-async function main() {
-  if (has('--write')) {
-    const { md, active } = await build();
-    mkdirSync(OUT_DIR, { recursive: true });
-    writeFileSync(OUT, md);
-    console.log(`controls-catalog: ${active.filter((c) => c.tier === 'standard').length} standard + ${active.filter((c) => c.tier === 'pro').length} pro + Expert allowlist escritos en tokens/controls/README.md`);
+async function runWrite() {
+  const { md, active } = await build();
+  mkdirSync(OUT_DIR, { recursive: true });
+  writeFileSync(OUT, md);
+  console.log(`controls-catalog: ${active.filter((c) => c.tier === 'standard').length} standard + ${active.filter((c) => c.tier === 'pro').length} pro + Expert allowlist escritos en tokens/controls/README.md`);
+  return 0;
+}
+
+async function runCheck() {
+  const failures = await check();
+  if (failures.length > 0) {
+    for (const f of failures.slice(0, 10)) console.error(`controls-catalog FAIL — ${f}`);
+    if (failures.length > 10) console.error(`controls-catalog FAIL — … y ${failures.length - 10} más`);
+    return 1;
   }
-  if (has('--check') || drill) {
-    const failures = await check();
-    if (drill) {
-      if (failures.length === 0) {
-        console.error(`controls-catalog DRILL FAIL — "${drill}" no produjo violaciones (gate vacuo)`);
-        process.exit(1);
-      }
-      console.log(`controls-catalog drill "${drill}" OK — ${failures.length} violación(es) detectadas`);
-      return;
+  console.log('controls-catalog --check OK');
+  return 0;
+}
+
+async function runDrill(name) {
+  const def = DRILL_CASES[name];
+  const failures = await check({ drill: name });
+  const causal = failures.filter((f) => def.matches(f));
+  const baseline = failures.filter((f) => !def.matches(f));
+
+  if (causal.length === 0) {
+    console.error(`controls-catalog DRILL FAIL — ${name} no produjo SU violación`);
+    console.error(`  inyectado: ${def.injects}`);
+    console.error(`  causa esperada: ${def.expectedCause}`);
+    for (const f of baseline.slice(0, 10)) {
+      console.error(`  falla basal (NO acredita el drill): ${f}`);
     }
-    if (failures.length > 0) {
-      for (const f of failures.slice(0, 10)) console.error(`controls-catalog FAIL — ${f}`);
-      process.exit(1);
-    }
-    console.log('controls-catalog --check OK');
+    if (baseline.length === 0) console.error('  (sin fallas basales: el gate quedó completamente mudo)');
+    return 1;
   }
+
+  console.log(`controls-catalog drill "${name}" OK — ${causal.length} violación(es) causal(es) propias`);
+  for (const f of causal) console.log(`  causa propia: ${f}`);
+  if (baseline.length > 0) {
+    console.log(`  (${baseline.length} falla(s) basal(es) preexistente(s), excluidas del veredicto del drill)`);
+  }
+  return 0;
+}
+
+export async function main(argv = process.argv.slice(2)) {
+  const parsed = parseCommand(argv);
+  if (!parsed.ok) {
+    console.error(USAGE);
+    console.error(`  recibido: ${JSON.stringify(argv)}`);
+    console.error(`  motivo: ${parsed.error}`);
+    process.exitCode = 2;
+    return 2;
+  }
+
+  let code;
+  switch (parsed.command) {
+    case 'write':
+      code = await runWrite();
+      break;
+    case 'check':
+      code = await runCheck();
+      break;
+    case 'drill':
+      code = await runDrill(parsed.drill);
+      break;
+    default:
+      throw new Error(`comando no implementado: ${parsed.command}`);
+  }
+  process.exitCode = code;
+  return code;
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {

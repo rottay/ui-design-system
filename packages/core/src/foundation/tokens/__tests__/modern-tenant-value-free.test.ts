@@ -29,7 +29,7 @@ import { describe, expect, it } from 'vitest';
 
 import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/bithire';
 import { evntoBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/evnto';
-import { rottayBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/platform';
+import { rottayBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/rottay';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const SRC = resolve(HERE, '../../..');
@@ -269,8 +269,16 @@ describe('MODERN-TENANT-VALUE-FREE · the engine declares no tenant color', () =
 
     const tmp = mkdtempSync(join(tmpdir(), 'ds-modern-tenant-drill-'));
     const planted = join(tmp, 'card.css');
-    const rottayCanvas = rottayBrandTheme.palette!.darkBackgroundColor!;
-    const bithirePrimary = bithireBrandTheme.palette!.primaryColor!;
+    // Rottay declares `appearance.defaultMode: 'dark'`, so its base palette IS
+    // the dark one and `palette.backgroundColor` is its dark canvas. This read
+    // `palette.darkBackgroundColor`, a field removed with the second-dark-field
+    // model: it resolved to `undefined`, so the drill planted the literal
+    // "undefined" and then threw in `normalizeColor` instead of proving the
+    // floor turns red. A drill that cannot fail on purpose proves nothing.
+    const rottayCanvas = rottayBrandTheme.palette.backgroundColor!;
+    const bithirePrimary = bithireBrandTheme.palette.primaryColor;
+    expect(rottayCanvas).toMatch(/^#[0-9A-Fa-f]{6}$/);
+    expect(bithirePrimary).toMatch(/^#[0-9A-Fa-f]{6}$/);
     writeFileSync(
       planted,
       `${readFileSync(donor!, 'utf-8')}\n.ds-card-drill {\n  background: ${rottayCanvas};\n  border-color: ${bithirePrimary};\n}\n`

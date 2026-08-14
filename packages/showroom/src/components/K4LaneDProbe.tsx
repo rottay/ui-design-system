@@ -4,26 +4,29 @@
  * K4 Lane D probe (showroom): stress inputs — Mentions, OTPInput, Transfer.
  *
  * One deterministic component tree for the three Lane-D families, rendered
- * under two opposing governed sources:
- *  - `bithire-static`: the checked-in BitHire BrandTheme (file-first path);
- *  - `themanagement-db`: the DB Appearance construction mirrored from
- *    `@/components/brand-locale-evidence` (DB-owned runtime path).
+ * under the two opposing governed sources `@/components/showroom-tenant` owns:
+ *  - `bithire-static`: the bundled BitHire vertical, code-owned;
+ *  - `themanagement-db`: a published customer document, compiled and proven.
  *
  * Axes (all URL-addressable through the wired route):
  *  - locale EN/ES/AR — the AR cell sets `dir="rtl"` on the frame and is the
  *    RTL witness for the K4-D logical conversions (Transfer `panel-title`
  *    `margin-inline-start`, Mentions dropdown `inset-block-*`, and the
  *    mirrored Transfer pagination glyphs under `[dir='rtl']`);
- *  - density compact | comfortable | spacious through
- *    `appearance.general.density` (`comfortable` maps to the canonical
- *    `normal` alias) — witnesses the density-scaled OTP slot boxes and the
- *    `--ds-spacing-*` channels the drained Transfer geometry now rides;
+ *  - density compact | comfortable | spacious — witnesses the density-scaled
+ *    OTP slot boxes and the `--ds-spacing-*` channels the drained Transfer
+ *    geometry now rides;
  *  - state rest | error | disabled — Mentions `status="error"`, OTPInput
  *    `error + errorMessage`, Transfer has no error channel and renders its
  *    rest anatomy (documented); disabled renders all three disabled;
- *  - ground light | dark through `forceTheme` — BitHire carries authored
- *    dark channels; the DB source projects its Appearance over the dark base
- *    exactly as the production merge chain would.
+ *  - ground light | dark, by the two mechanisms the sources actually have:
+ *    BitHire is code-owned, so dark can only arrive as `forceTheme` over its
+ *    authored dark channels, while the DB tenant publishes a dark PALETTE and
+ *    its compiled artifact states the ground outright. Measured: flipping only
+ *    `backgroundMode` re-ramps the generated scales but leaves the authored
+ *    background light, and the artifact selector outranks `[data-theme=dark]`,
+ *    so a DB dark cell that is not authored dark renders a light ground no
+ *    theme prop can take back.
  *
  * Long/hostile content is a fixture property of every cell (long option
  * labels, an unbreakable long word, long Transfer titles, long OTP error
@@ -36,19 +39,16 @@
 
 import {
   Box,
-  DesignSystemProvider,
   Heading,
   Mentions,
   OTPInput,
   Stack,
   Transfer,
-  bithireBrandTheme,
   type MentionsOption,
-  type TenantConfig,
   type TransferItem,
 } from "@rottay/design-system";
 
-import { tenantConfigFor as brandLocaleTenantConfigFor } from "@/components/brand-locale-evidence";
+import { ShowroomTenantProvider } from "@/components/showroom-tenant";
 
 export type K4LaneDSource = "bithire-static" | "themanagement-db";
 export type K4LaneDLocale = "en" | "es" | "ar";
@@ -62,54 +62,6 @@ export interface K4LaneDProbeProps {
   density: K4LaneDDensity;
   state: K4LaneDState;
   ground: K4LaneDGround;
-}
-
-/**
- * The tenant-facing Appearance vocabulary has no `comfortable` literal:
- * `normal` is the canonical alias (TenantAppearanceGeneral['density']).
- */
-function toAppearanceDensity(
-  density: K4LaneDDensity
-): "compact" | "normal" | "spacious" {
-  return density === "comfortable" ? "normal" : density;
-}
-
-function tenantConfig(
-  source: K4LaneDSource,
-  locale: K4LaneDLocale,
-  density: K4LaneDDensity,
-  ground: K4LaneDGround
-): TenantConfig {
-  if (source === "themanagement-db") {
-    const base = brandLocaleTenantConfigFor("themanagementmiami", locale);
-    return {
-      ...base,
-      theme: ground,
-      appearance: {
-        ...base.appearance,
-        general: {
-          ...base.appearance?.general,
-          density: toAppearanceDensity(density),
-        },
-      },
-    };
-  }
-
-  return {
-    slug: "bithire",
-    name: "BitHire",
-    vertical: "bithire",
-    engine: "modern",
-    theme: ground,
-    plan: "enterprise",
-    features: ["*"],
-    branding: { companyName: "BitHire" },
-    // BitHire is first-party vertical identity and therefore comes from the
-    // checked-in DS theme, never from a customer DB fixture. The semantic
-    // posture enters exclusively through the Appearance channel.
-    brandTheme: bithireBrandTheme,
-    appearance: { general: { density: toAppearanceDensity(density) } },
-  };
 }
 
 const COPY: Record<
@@ -307,12 +259,11 @@ function SpecimenTree({
 
 export function K4LaneDProbe({ source, locale, density, state, ground }: K4LaneDProbeProps) {
   return (
-    <DesignSystemProvider
-      tenantConfig={{ ...tenantConfig(source, locale, density, ground), locale }}
-      vertical="bithire"
+    <ShowroomTenantProvider
+      source={source}
       locale={locale}
-      forceEngine="modern"
-      forceTheme={ground}
+      density={density}
+      theme={ground}
     >
       <Box
         data-ds-root=""
@@ -358,7 +309,7 @@ export function K4LaneDProbe({ source, locale, density, state, ground }: K4LaneD
           </main>
         </Box>
       </Box>
-    </DesignSystemProvider>
+    </ShowroomTenantProvider>
   );
 }
 

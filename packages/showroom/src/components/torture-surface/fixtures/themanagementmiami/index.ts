@@ -5,7 +5,7 @@
  * fixture.
  *
  * Canonical source:
- * packages/core/src/foundation/tokens/ts/presentation/brand-themes/fixtures/themanagementmiami/index.ts
+ * packages/core/src/tooling/testing/fixtures/brand-themes/themanagementmiami/index.ts
  *
  * This file exists because tenant-named proof fixtures are intentionally absent
  * from the public @rottay/design-system barrel. Apart from this provenance block
@@ -72,6 +72,25 @@ export const themanagementmiamiBrandTheme: BrandTheme = {
   id: "themanagementmiami",
   name: "The Management Miami",
 
+  // themanagementmiami always renders on the light ground (theme: 'light' in
+  // its TenantConfig, and it is one of LIGHT_FORCED_FIXTURES), so light is the
+  // declared default mode and its values stay in the plain palette below.
+  appearance: { defaultMode: "light" },
+
+  // Same Art Deco palette, lifted for AA text/non-text contrast on the
+  // canonical dark canvas instead of reusing the light-ground seeds. Declared
+  // as the non-default mode overlay so the fixture still covers dark ground
+  // for a probe that forces it.
+  modes: {
+    dark: {
+      palette: {
+        primaryColor: "#4FB3AA",
+        secondaryColor: "#D0AE78",
+        accentColor: "#D97864",
+      },
+    },
+  },
+
   palette: {
     primaryColor: "#0F766E",
     secondaryColor: "#8C6D46",
@@ -82,11 +101,6 @@ export const themanagementmiamiBrandTheme: BrandTheme = {
     textDisabledColor: "#74644F",
     borderPrimaryColor: "#C8B9A5",
     borderSecondaryColor: "#E2D9CC",
-    // Same Art Deco palette, lifted for AA text/non-text contrast on the
-    // canonical dark canvas instead of reusing the light-ground seeds.
-    darkPrimaryColor: "#4FB3AA",
-    darkSecondaryColor: "#D0AE78",
-    darkAccentColor: "#D97864",
     backgroundColor: "#FBF6EC",
     successColor: "#3F6F2A",
     warningColor: "#8A6B00",

@@ -20,15 +20,75 @@ const CONTRACT_FILES = Object.freeze({
   evidence: "evidence-contract.json"
 });
 
+// The five canonical family layers (CLAUDE.md). `surface-composition` and
+// `commercial` were carried here as expected layers, which made this gate
+// require the two forbidden layers it exists to police: any correct fix broke
+// the check, so the check kept the defect alive.
+//
+// The four former `surface-composition` rows were adjudicated INDIVIDUALLY
+// (owner ruling 2026-08-12) rather than relabelled as a block -- sharing one
+// `sourceOwner` does not make four components one layer:
+//   PageShellSurface -> structure/shell         (page-chrome foundation)
+//   HeaderSurface    -> structure/headers       (a header, beside the other 6)
+//   SidebarSurface   -> structure/shell/navigation
+//   WorkspaceShell   -> structure/shell         (a layout shell, so it is chrome)
+//
+// WorkspaceShell was first landed as `surface/workspace/workspace-shell` on the
+// reading that a continuous page surface is a surface. It is not: CLAUDE.md puts
+// a layout shell in `structure/shell/*` and reserves `surface/<group>/*` for a
+// complete declarative page recipe, and the component's own contract agrees --
+// it frames whatever children a workspace hands it and names no screen. Moving
+// it also closed the last `local-layer-inversion`, because the collection
+// workspace surface was importing upward into a peer surface family.
+//
+// The eleven `commercial` rows were split the same way -- by what each component
+// does, never by where it was sold. Nine relocated into canonical owners,
+// ProductWindow left for the Showroom (a browser-chrome mock is showcase
+// furniture, not a DS capability), and TreeView collapsed into the one canonical
+// tree family it had been duplicating.
+//
+// Two further rows were retired rather than moved: `table-checkbox-styles`, a
+// global-CSS injector whose own source declared MERGE/RETIRE and which had zero
+// productive consumers; and `record-content`, which was never a component at all
+// -- it is one file exporting five public families, so it became those five.
+//
+// Net: 252 - 11 - 1 - 1 + 9 + 5 = 253. Every number below is a census of
+// `family-inventory.json`, re-derived after each move, never a hand-carried
+// total.
+//
+// The 2026-08-12 owner rulings then moved it again, in both directions, which
+// is why these numbers were left deliberately stale between the first ruling
+// and the last one -- locking a total mid-adjudication is how this file drifted
+// before. Applied:
+//   - `pattern/data/cell-renderers` retired (-1): its declared component was a
+//     TYPE (`typeof cellRenderers`), so the row never named anything a consumer
+//     could render. The render functions stay as data-table support;
+//   - the lifecycle converged into ONE `structure/feedback/surface-lifecycle`
+//     row (+1) over one owner, absorbing the duplicate Loading/Empty/Error
+//     anatomy, `useSurfaceState` and `SurfaceErrorBoundary`;
+//   - `structure/feedback/capability-anatomy` became its own row (+1): its
+//     contract and consumers prove it is independent public chrome beside the
+//     lifecycle, not an internal part of it;
+//   - `SurfaceActionBar`/`SurfaceTabbedLabel`/`SurfaceSectionCard` became ONE
+//     `structure/shell/surface-chrome` row (+1) over one owner, not three rows.
+//
+// Net: 253 - 1 + 1 + 1 + 1 = 255. Re-derived from `family-inventory.json` only
+// after `public-component-row-projection.test.mjs` reported zero unowned public
+// components, so the total certifies a finished adjudication rather than a
+// half-applied one. Every number below is that census, never a hand-carried
+// total.
+// The WorkspaceShell reclassification above moves one row between two layers,
+// so the total is untouched and only the split changes: structure 38 -> 39,
+// surface 37 -> 36.
 const EXPECTED_COUNTS = Object.freeze({
-  primitive: 100,
-  pattern: 56,
+  primitive: 105,
+  pattern: 57,
   chart: 18,
-  structure: 27,
-  surface: 36,
-  "surface-composition": 4,
-  commercial: 11
+  structure: 39,
+  surface: 36
 });
+
+const EXPECTED_FAMILY_TOTAL = Object.values(EXPECTED_COUNTS).reduce((sum, n) => sum + n, 0);
 
 const SHADOW_STATE_KEYS = new Set([
   "status",
@@ -91,8 +151,28 @@ export function validateModernRescueContracts(contracts) {
   if (program?.statusAuthority !== "roadmap/registry.json") {
     errors.push("program.statusAuthority must remain roadmap/registry.json");
   }
-  if (program?.denominators?.visibleFamilies !== 252) {
-    errors.push("program visible family denominator must be 252");
+  if (program?.denominators?.visibleFamilies !== EXPECTED_FAMILY_TOTAL) {
+    errors.push(`program visible family denominator must be ${EXPECTED_FAMILY_TOTAL}`);
+  }
+  for (const [key, expected] of Object.entries({
+    primitives: EXPECTED_COUNTS.primitive,
+    patternsExcludingCharts: EXPECTED_COUNTS.pattern,
+    charts: EXPECTED_COUNTS.chart,
+    structures: EXPECTED_COUNTS.structure,
+    pageSurfaces: EXPECTED_COUNTS.surface
+  })) {
+    if (program?.denominators?.[key] !== expected) {
+      errors.push(`program denominator ${key} must be ${expected}`);
+    }
+  }
+  // The per-layer denominators used to be free-floating numbers that nobody
+  // reconciled against the layer census, which is how `structures: 27` survived
+  // beside a ledger that said 30. They are now pinned to EXPECTED_COUNTS, so a
+  // layer can only move in both places at once.
+  for (const forbidden of ["surfaceCompositions", "commercialKit"]) {
+    if (program?.denominators?.[forbidden] !== undefined) {
+      errors.push(`program denominator ${forbidden} names a forbidden layer and must be removed`);
+    }
   }
   if (checkpoint?.schemaVersion !== 1 || !checkpoint?.currentWave) {
     errors.push("checkpoint intent must be a versioned non-empty machine contract");
@@ -196,12 +276,22 @@ export function validateModernRescueContracts(contracts) {
     }
   }
 
-  if (inventory?.denominator !== 252 || inventory?.rows?.length !== 252) {
-    errors.push("family inventory must contain exactly 252 rows");
+  if (
+    inventory?.denominator !== EXPECTED_FAMILY_TOTAL ||
+    inventory?.rows?.length !== EXPECTED_FAMILY_TOTAL
+  ) {
+    errors.push(`family inventory must contain exactly ${EXPECTED_FAMILY_TOTAL} rows`);
   }
   const ids = inventory?.rows?.map((row) => row.id) ?? [];
   if (new Set(ids).size !== ids.length) {
     errors.push("family inventory ids must be unique");
+  }
+  for (const row of inventory?.rows ?? []) {
+    if (!Object.hasOwn(EXPECTED_COUNTS, row.layer)) {
+      errors.push(
+        `family inventory ${row.id} declares forbidden layer '${row.layer}'; allowed layers are ${Object.keys(EXPECTED_COUNTS).join("|")}`
+      );
+    }
   }
   for (const [layer, expected] of Object.entries(EXPECTED_COUNTS)) {
     const actual = inventory?.rows?.filter((row) => row.layer === layer).length ?? 0;
@@ -210,6 +300,14 @@ export function validateModernRescueContracts(contracts) {
     }
     if (inventory?.counts?.[layer] !== expected) {
       errors.push(`family inventory declared ${layer} count must be ${expected}`);
+    }
+  }
+  // Declared counts are checked in both directions. Reading only the five keys we
+  // expect would let `"commercial": 11` sit in the counts block unread -- present
+  // in the authority, invisible to the gate.
+  for (const layer of Object.keys(inventory?.counts ?? {})) {
+    if (!Object.hasOwn(EXPECTED_COUNTS, layer)) {
+      errors.push(`family inventory declares a count for forbidden layer '${layer}'`);
     }
   }
   for (const row of inventory?.rows ?? []) {
@@ -221,8 +319,17 @@ export function validateModernRescueContracts(contracts) {
   if (!familyNames.includes("SemanticSurface")) {
     errors.push("canonical primitive inventory must include SemanticSurface");
   }
-  if (familyNames.includes("OverlayModal")) {
-    errors.push("deprecated OverlayModal alias must not count as an independent family");
+  // Retirement regression guards, adjudicated 2026-08-12. Each name was removed
+  // from source, not merely from the count, so re-appearance here means someone
+  // resurrected a family the owner struck out.
+  for (const [retired, why] of Object.entries({
+    OverlayModal: "a forwarding alias for feedback/Modal",
+    TableCheckboxStyles: "a global-CSS injector with no productive consumer",
+    RecordContent: "never a component; split into five real record families"
+  })) {
+    if (familyNames.includes(retired)) {
+      errors.push(`retired ${retired} must not count as an independent family (${why})`);
+    }
   }
 
   if (program?.r7Enabled !== false) {
@@ -321,6 +428,10 @@ export function validateModernRescueContracts(contracts) {
   const improvementFloors =
     familyCompletion?.materialImprovement
       ?.minimumImprovedDimensionsUnlessEveryOtherApplicableDimensionAlreadyMeetsFloor;
+  // Keyed by layerProfile. `surface-composition` is now plainly `surface` -- the
+  // floor was always about how much a page-level composition has to move, never
+  // about a layer by that name -- and the `commercial` floor is gone with the
+  // layer: its nine survivors inherit whichever profile their new owner carries.
   const expectedImprovementFloors = {
     "reference-canary": 6,
     "primitive-static-layout": 4,
@@ -328,12 +439,16 @@ export function validateModernRescueContracts(contracts) {
     pattern: 5,
     chart: 5,
     structure: 6,
-    "surface-composition": 7,
-    commercial: 5
+    surface: 7
   };
   for (const [layer, floor] of Object.entries(expectedImprovementFloors)) {
     if (improvementFloors?.[layer] !== floor) {
       errors.push(`material improvement floor ${layer} must remain ${floor}`);
+    }
+  }
+  for (const declared of Object.keys(improvementFloors ?? {})) {
+    if (!Object.hasOwn(expectedImprovementFloors, declared)) {
+      errors.push(`material improvement floor declares retired profile '${declared}'`);
     }
   }
   if (familyCompletion?.materialImprovement?.premiumDimensionFloor !== 4) {
@@ -418,8 +533,8 @@ export function validateModernRescueContracts(contracts) {
     errors.push("unknown targeted impact must exit at zero");
   }
   const r7Customization = customization?.r7Execution;
-  if (r7Customization?.familyDispositionDenominator !== 252) {
-    errors.push("R7 customization model must disposition 252 families");
+  if (r7Customization?.familyDispositionDenominator !== EXPECTED_FAMILY_TOTAL) {
+    errors.push(`R7 customization model must disposition ${EXPECTED_FAMILY_TOTAL} families`);
   }
   if (r7Customization?.targetRecipeGroups !== 14) {
     errors.push("R7 customization model must target fourteen recipe groups");
@@ -452,7 +567,7 @@ export function validateModernRescueContracts(contracts) {
     }
   }
   for (const binary of [
-    "r7-252-family-anatomy-disposition-complete",
+    `r7-${EXPECTED_FAMILY_TOTAL}-family-anatomy-disposition-complete`,
     "r7-reference-parity-without-copy",
     "r7-fourteen-recipe-groups-productive",
     "r7-zero-dormant-public-customization-channels",
@@ -629,7 +744,35 @@ export function validateModernRescueContracts(contracts) {
   if (!checkpointPolicy?.restartLaw?.includes("restarts")) {
     errors.push("shared grammar changes must restart dependent checkpoints");
   }
-  const expectedCheckpointTotals = { R1: 12, R2: 100, R3: 74, R4: 78, R7: 252 };
+  // R1 is the reference-canary cohort and stands outside the family census. R2/R3/R4
+  // partition the catalog by layer and must therefore add up to it exactly; R7 covers
+  // it whole. Deriving them from EXPECTED_COUNTS means a family cannot enter the
+  // inventory without landing in exactly one round's cohorts.
+  const expectedCheckpointTotals = {
+    R1: 12,
+    R2: EXPECTED_COUNTS.primitive,
+    R3: EXPECTED_COUNTS.pattern + EXPECTED_COUNTS.chart,
+    R4: EXPECTED_COUNTS.structure + EXPECTED_COUNTS.surface,
+    R7: EXPECTED_FAMILY_TOTAL
+  };
+  // The key set is CLOSED. `expectedCheckpointTotals` iterates its own keys, so an
+  // extra `roundCohorts.R5` block was read by nothing and bound by nothing -- not
+  // the denominator law, not the twenty-five cap, not the replay. An unread cohort
+  // block is worse than a missing one: it looks like governed plan and is not.
+  const declaredCohortRounds = Object.keys(checkpointPolicy?.roundCohorts ?? {});
+  const governedCohortRounds = Object.keys(expectedCheckpointTotals);
+  if ([...declaredCohortRounds].sort().join(",") !== [...governedCohortRounds].sort().join(",")) {
+    errors.push(
+      `checkpoint roundCohorts must declare exactly ${governedCohortRounds.join(",")} but declares ${declaredCohortRounds.join(",") || "nothing"}`
+    );
+  }
+  const roundPartitionTotal =
+    expectedCheckpointTotals.R2 + expectedCheckpointTotals.R3 + expectedCheckpointTotals.R4;
+  if (roundPartitionTotal !== EXPECTED_FAMILY_TOTAL) {
+    errors.push(
+      `R2+R3+R4 cover ${roundPartitionTotal} families but the catalog holds ${EXPECTED_FAMILY_TOTAL}`
+    );
+  }
   for (const [roundId, expectedTotal] of Object.entries(expectedCheckpointTotals)) {
     const cohorts = checkpointPolicy?.roundCohorts?.[roundId] ?? [];
     let total = 0;
@@ -647,6 +790,149 @@ export function validateModernRescueContracts(contracts) {
       errors.push(`${roundId} checkpoint denominator ${total} != ${expectedTotal}`);
     }
   }
+  // The totals above are necessary but not sufficient: they are sums, and a sum
+  // survives a +1/-1 trade between two categories. `structure-shell-5` beside
+  // `surface-workspace-5` still adds to 75 while both labels misdescribe the
+  // catalog, and the R7 replay compares label SETS, so mutating both rounds
+  // keeps replay equal too. Only the inventory can settle it.
+  //
+  // GOVERNED_COHORT_CATEGORIES maps a label STEM -- the label with its numeric
+  // suffix stripped -- to {layer, category}. Keying on the whole label would
+  // smuggle the count back in as a map key, so `structure-shell-5` would be
+  // rejected merely for being an unknown name; keying on the stem means both
+  // spellings resolve to the same category and the NUMBER comes only from
+  // `inventory.rows`, counted at check time. A family that moves category is
+  // then a finding rather than a second place to edit.
+  //
+  // R2 was previously left ungoverned on the grounds that its cohorts partition
+  // primitives "on a different axis". The axis really is different -- but different
+  // is not underivable, and unbound meant 105 families, 41% of the catalog, whose
+  // declared split answered to nothing. `primitive-display-24` could read `-20`
+  // beside `primitive-navigation-16`, summing to 105 under the twenty-five cap,
+  // with an inventory holding 26 and 12; and a primitive genuinely moving category
+  // produced no finding at all, while the identical move in a pattern did.
+  //
+  // The axis is exactly one carve-out: `foundation-visual` is the primitives whose
+  // source still sits under the pre-split `primitives/foundation/` owner, and every
+  // `primitive-<category>` is that category MINUS the carve-out. Deriving it that
+  // way reproduces all seven declared R2 labels exactly (5/18/24/25/12/11/10), so
+  // R2 joins the same law with no second count table and no contract edit.
+  const isFoundationCarveOut = (row) =>
+    typeof row.sourceOwner === "string" &&
+    row.sourceOwner.includes("/ui/primitives/foundation/");
+  const outsideCarveOut = (row) => !isFoundationCarveOut(row);
+  const GOVERNED_COHORT_CATEGORIES = {
+    "foundation-visual": {
+      layer: "primitive",
+      rowFilter: isFoundationCarveOut,
+      describe: "primitive/foundation-visual carve-out"
+    },
+    "primitive-display": { layer: "primitive", category: "display", rowFilter: outsideCarveOut },
+    "primitive-inputs": { layer: "primitive", category: "inputs", rowFilter: outsideCarveOut },
+    "primitive-navigation": {
+      layer: "primitive",
+      category: "navigation",
+      rowFilter: outsideCarveOut
+    },
+    "primitive-feedback": { layer: "primitive", category: "feedback", rowFilter: outsideCarveOut },
+    "primitive-overlay": { layer: "primitive", category: "overlay", rowFilter: outsideCarveOut },
+    "primitive-layout-responsive": {
+      layer: "primitive",
+      category: "layout",
+      rowFilter: outsideCarveOut
+    },
+    "pattern-data": { layer: "pattern", category: "data" },
+    "pattern-forms": { layer: "pattern", category: "forms" },
+    "pattern-visualization-non-chart": { layer: "pattern", category: "visualization" },
+    "pattern-commerce": { layer: "pattern", category: "commerce" },
+    "pattern-feedback": { layer: "pattern", category: "feedback" },
+    "pattern-identity": { layer: "pattern", category: "identity" },
+    "pattern-communication": { layer: "pattern", category: "communication" },
+    "pattern-workflow": { layer: "pattern", category: "workflow" },
+    "pattern-navigation": { layer: "pattern", category: "navigation" },
+    "pattern-customization": { layer: "pattern", category: "customization" },
+    "pattern-shell": { layer: "pattern", category: "shell" },
+    charts: { layer: "chart" },
+    "structure-headers": { layer: "structure", category: "headers" },
+    "structure-workspace": { layer: "structure", category: "workspace" },
+    "structure-record": { layer: "structure", category: "record" },
+    "structure-dashboard": { layer: "structure", category: "dashboard" },
+    "structure-feedback": { layer: "structure", category: "feedback" },
+    "structure-shell": { layer: "structure", category: "shell" },
+    "surface-admin": { layer: "surface", category: "admin" },
+    "surface-data": { layer: "surface", category: "data" },
+    "surface-experience": { layer: "surface", category: "experience" },
+    "surface-forms": { layer: "surface", category: "forms" },
+    "surface-operations": { layer: "surface", category: "operations" },
+    "surface-workspace": { layer: "surface", category: "workspace" }
+  };
+  const cohortStem = (label) => label.replace(/-\d+$/, "");
+  const countRows = ({ layer, category, rowFilter }) =>
+    (inventory?.rows ?? []).filter(
+      (row) =>
+        row.layer === layer &&
+        (category === undefined || row.category === category) &&
+        (rowFilter === undefined || rowFilter(row))
+    ).length;
+  const describeBinding = (binding) =>
+    binding.describe ?? `${binding.layer}/${binding.category ?? "*"}`;
+  // R3 and R4 must be FULLY governed: an unrecognized stem there would silently
+  // opt out of the category law, which is the hole this closes rather than opens.
+  //
+  // Stem plus count is still not sufficient, because both are round-blind. Every
+  // governed label already carries its own correct count, so SWAPPING two equally
+  // sized labels across the round boundary -- `pattern-feedback-3` out of R3 for
+  // `structure-dashboard-3` out of R4 -- leaves both suffix totals at 75, leaves
+  // every count agreeing with the inventory, and leaves the R7 label SET
+  // byte-identical, so neither the denominator law, the category law nor the
+  // replay law can see it. Yet R3 would then certify a structure family and R4 a
+  // pattern family, and the round scopes those cohorts are supposed to enumerate
+  // (`patterns`/`charts` vs `structures`/`pageSurfaces`) would be describing rows
+  // that live in the other round.
+  //
+  // Round membership is therefore its own law: R3 owns pattern+chart, R4 owns
+  // structure+surface. The layer is read from the SAME binding that supplies the
+  // count, so this adds no second hand-maintained label catalog -- a relabelled
+  // or reclassified family moves both facts at once. R7 is the global replay
+  // round and legitimately carries every layer, so it is deliberately excluded.
+  // R2 joins R3 and R4 here now that its axis is derived rather than exempt.
+  const ROUND_COHORT_LAYERS = {
+    R2: ["primitive"],
+    R3: ["pattern", "chart"],
+    R4: ["structure", "surface"]
+  };
+  for (const [roundId, allowedLayers] of Object.entries(ROUND_COHORT_LAYERS)) {
+    for (const label of (checkpointPolicy?.roundCohorts?.[roundId] ?? []).flat()) {
+      const binding = GOVERNED_COHORT_CATEGORIES[cohortStem(label)];
+      if (!binding) {
+        errors.push(
+          `${roundId} cohort label ${label} has no inventory category binding; every R2/R3/R4 label must be governed`
+        );
+        continue;
+      }
+      if (!allowedLayers.includes(binding.layer)) {
+        errors.push(
+          `${roundId} cohort label ${label} is a ${binding.layer} family but ${roundId} may only carry ${allowedLayers.join("+")} families`
+        );
+      }
+    }
+  }
+  // With R2 bound, every stem R7 replays is governed too, so R7's `continue` is no
+  // longer an escape hatch for a whole layer -- it now only guards a label that the
+  // loop above has already reported as unbound.
+  for (const roundId of ["R2", "R3", "R4", "R7"]) {
+    for (const label of (checkpointPolicy?.roundCohorts?.[roundId] ?? []).flat()) {
+      const binding = GOVERNED_COHORT_CATEGORIES[cohortStem(label)];
+      if (!binding) continue;
+      const declared = Number(label.match(/-(\d+)$/)?.[1]);
+      const actual = countRows(binding);
+      if (declared !== actual) {
+        errors.push(
+          `${roundId} cohort label ${label} claims ${declared} families but the inventory holds ${actual} in ${describeBinding(binding)}`
+        );
+      }
+    }
+  }
   const r7CohortLabels = (checkpointPolicy?.roundCohorts?.R7 ?? []).flat();
   const certifiedFamilyCohortLabels = ["R2", "R3", "R4"].flatMap(
     (roundId) => (checkpointPolicy?.roundCohorts?.[roundId] ?? []).flat()
@@ -654,11 +940,53 @@ export function validateModernRescueContracts(contracts) {
   if (new Set(r7CohortLabels).size !== r7CohortLabels.length) {
     errors.push("R7 checkpoint cohorts must be unique");
   }
+  // Replay is STRUCTURAL, not set-based. A cohort array is not a bag of labels: it
+  // is one checkpoint between two explicit Codex GOs, which is what
+  // `maximumFamiliesBetweenCodexCheckpoints` and `calibrationLaw` govern. Comparing
+  // flattened sets let two R7 cohorts merge into one -- deleting a human review
+  // gate -- while the contract still certified "exact replay". Comparing the
+  // partition itself makes the cadence part of the claim. R7 is already exactly
+  // R2 ++ R3 ++ R4 in order and grouping, so this tightens the law without moving
+  // a single declared cohort.
+  const partitionOf = (cohorts) => JSON.stringify(cohorts ?? []);
+  const certifiedFamilyCohorts = ["R2", "R3", "R4"].flatMap(
+    (roundId) => checkpointPolicy?.roundCohorts?.[roundId] ?? []
+  );
   if (
     [...r7CohortLabels].sort().join(",") !==
     [...certifiedFamilyCohortLabels].sort().join(",")
   ) {
     errors.push("R7 checkpoint cohorts must replay the exact R2-R4 family cohort catalog");
+  } else if (
+    partitionOf(checkpointPolicy?.roundCohorts?.R7) !== partitionOf(certifiedFamilyCohorts)
+  ) {
+    // Same labels, different grouping or order: the census is intact but the
+    // checkpoint cadence is not, so it is reported as its own distinct failure.
+    errors.push(
+      `R7 must replay the R2-R4 checkpoint cadence exactly: ${(checkpointPolicy?.roundCohorts?.R7 ?? []).length} cohorts against ${certifiedFamilyCohorts.length}`
+    );
+  }
+  // R1 stands outside the family census, which left it standing outside every law
+  // except its own total. Twelve weight-one strings summing to twelve is satisfied
+  // by the same canary repeated twelve times, so a reference family could leave the
+  // cohort silently. The canary roster is stated twice -- here and in
+  // `rounds.json` R1.scope.families -- and nothing kept the two honest, so each is
+  // now checked against the other rather than against a third hand-written list.
+  const r1CohortLabels = (checkpointPolicy?.roundCohorts?.R1 ?? []).flat();
+  if (new Set(r1CohortLabels).size !== r1CohortLabels.length) {
+    errors.push("R1 reference canaries must be unique; a repeated canary silently drops a family");
+  }
+  const r1ScopeFamilies = rounds?.rounds?.find((round) => round.id === "R1")?.scope?.families;
+  if (!Array.isArray(r1ScopeFamilies) || r1ScopeFamilies.length !== expectedCheckpointTotals.R1) {
+    errors.push(
+      `R1 scope must name exactly ${expectedCheckpointTotals.R1} reference families but names ${Array.isArray(r1ScopeFamilies) ? r1ScopeFamilies.length : "none"}`
+    );
+  } else if (
+    [...r1ScopeFamilies].sort().join(",") !== [...r1CohortLabels].sort().join(",")
+  ) {
+    errors.push(
+      "R1 scope families and R1 checkpoint cohorts must name the same reference canaries"
+    );
   }
 
   const roundIds = rounds?.rounds?.map((round) => round.id) ?? [];
@@ -679,7 +1007,13 @@ export function validateModernRescueContracts(contracts) {
       errors.push(`${round.id} must remain enabled inside the authorized R0-R6 scope`);
     }
   }
-  if (r2?.scope?.primitives !== 100) errors.push("R2 must cover 100 primitives");
+  // Derived, like R3 and R4. The literal 100 outlived the census: the commercial
+  // split moved five families into primitives (crop-marks, texture-backdrop,
+  // typewriter, ascii-frame, invert-section) and a hardcoded round scope cannot
+  // notice that its own layer grew.
+  if (r2?.scope?.primitives !== EXPECTED_COUNTS.primitive) {
+    errors.push(`R2 must cover ${EXPECTED_COUNTS.primitive} primitives`);
+  }
   if (r1?.scope?.referenceLab !== "/probe/ds-reference") {
     errors.push("R1 must execute through the canonical DS reference lab");
   }
@@ -692,20 +1026,53 @@ export function validateModernRescueContracts(contracts) {
   ) {
     errors.push("round boundaries must consume the visual craft checkpoint policy");
   }
-  if ((r3?.scope?.patterns ?? 0) + (r3?.scope?.charts ?? 0) !== 74) {
-    errors.push("R3 must cover 74 pattern/chart families");
+  // Each axis is validated INDIVIDUALLY, not as a sum. A sum-only law is a
+  // same-total false green: moving one pattern into charts (57/18 -> 56/19) or
+  // trading a structure for a surface (39/36 -> 38/37) leaves the total intact
+  // and the round scope wrong, which is exactly the shape of the drift this
+  // reconciliation had to repair by hand.
+  for (const [roundId, round, axes] of [
+    ["R3", r3, { patterns: EXPECTED_COUNTS.pattern, charts: EXPECTED_COUNTS.chart }],
+    [
+      "R4",
+      r4,
+      { structures: EXPECTED_COUNTS.structure, pageSurfaces: EXPECTED_COUNTS.surface }
+    ]
+  ]) {
+    for (const [axis, expected] of Object.entries(axes)) {
+      if (round?.scope?.[axis] !== expected) {
+        errors.push(
+          `${roundId} scope ${axis} is ${round?.scope?.[axis]} but the inventory holds ${expected}`
+        );
+      }
+    }
   }
-  if (
-    (r4?.scope?.structures ?? 0) +
-      (r4?.scope?.pageSurfaces ?? 0) +
-      (r4?.scope?.surfaceCompositions ?? 0) +
-      (r4?.scope?.commercialKit ?? 0) !==
-    78
-  ) {
-    errors.push("R4 must cover 78 structure/surface/commercial families");
+  // R4's scope used to be a four-term sum whose last two terms named forbidden
+  // layers. It is now the two real ones, and the retired keys are rejected rather
+  // than tolerated as zero -- `?? 0` would have quietly accepted a stale
+  // `commercialKit: 11` going missing OR a stale one still sitting there.
+  for (const forbidden of ["surfaceCompositions", "commercialKit"]) {
+    if (r4?.scope?.[forbidden] !== undefined) {
+      errors.push(`R4 scope key ${forbidden} names a forbidden layer and must be removed`);
+    }
   }
-  if (r7?.scope?.families !== 252) {
-    errors.push("R7 must disposition all 252 certified families");
+  // Every round that states a family denominator states the SAME one, and each is
+  // pinned to the inventory. Only R7 used to be checked, which left three copies
+  // of the number free to rot: `253` is not hypothetical here, it is the exact
+  // stale value this program spent a reconciliation pass draining, and R0/R5/R6
+  // could each have taken it back silently. R2/R3/R4 are absent on purpose --
+  // they declare per-layer axes instead, validated individually further down.
+  for (const [roundId, round, law] of [
+    ["R0", rounds?.rounds?.find((round) => round.id === "R0"), "certify"],
+    ["R5", rounds?.rounds?.find((round) => round.id === "R5"), "sweep"],
+    ["R6", rounds?.rounds?.find((round) => round.id === "R6"), "freeze"],
+    ["R7", r7, "disposition"]
+  ]) {
+    if (round?.scope?.families !== EXPECTED_FAMILY_TOTAL) {
+      errors.push(
+        `${roundId} must ${law} all ${EXPECTED_FAMILY_TOTAL} certified families but its scope says ${round?.scope?.families}`
+      );
+    }
   }
   if (r7?.scope?.recipeGroups?.current !== 6 || r7?.scope?.recipeGroups?.target !== 14) {
     errors.push("R7 must expand the six current recipe families into fourteen target groups");
@@ -879,7 +1246,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     process.exitCode = 1;
   } else {
     console.log(
-      "modern-rescue program contract OK — 252 families, 20 active public controls, R0-R6 enabled, R7 disabled"
+      `modern-rescue program contract OK — ${EXPECTED_FAMILY_TOTAL} families, 20 active public controls, R0-R6 enabled, R7 disabled`
     );
   }
 }

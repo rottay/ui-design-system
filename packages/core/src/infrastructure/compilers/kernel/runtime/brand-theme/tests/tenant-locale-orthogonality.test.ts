@@ -7,7 +7,7 @@ import {
 } from "@/foundation/i18n/runtime/catalog";
 import { resolveTranslation } from "@/foundation/i18n/runtime/resolution";
 import { bithireBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes";
-import { themanagementmiamiBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes/fixtures/themanagementmiami";
+import { themanagementmiamiBrandTheme } from "@/tooling/testing/fixtures/brand-themes/themanagementmiami";
 import { brandThemeToTenantAppearance } from "@/ui/patterns/customization/brand-studio/runtime/file-export";
 import { appearanceToVariables } from "../../appearance";
 

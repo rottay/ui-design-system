@@ -47,6 +47,13 @@ describe('appearanceGeneralToVariables', () => {
     expect(vars['--ds-color-text-on-primary']).toBe('#171717');
   });
 
+  it('defers primary inks when neither canonical ink clears AA on a mid-gray seed', () => {
+    const vars = appearanceGeneralToVariables({ palette: { primary: '#777777' } });
+    expect(vars['--ds-color-text-on-primary']).toBeUndefined();
+    expect(vars['--ds-color-primary-foreground']).toBeUndefined();
+    expect(vars['--ds-color-link-hover']).toBeDefined();
+  });
+
   it('derives the surface family from a light canvas instead of leaking the dark base', () => {
     const vars = appearanceGeneralToVariables({ palette: { background: '#FBF6EC' } });
     // Tenant-tinted near-white, not the dark :root fallbacks (#18181C/#0F0F12)
@@ -84,6 +91,95 @@ describe('appearanceGeneralToVariables', () => {
     expect(vars['--ds-color-bg-elevated']).toMatch(/^light-dark\(/);
     expect(vars['--ds-color-bg-input']).toMatch(/^light-dark\(/);
   });
+
+  it('requires both auto-mode halves to clear AA before claiming primary ink channels', () => {
+    const vars = appearanceGeneralToVariables({
+      palette: {
+        primary: '#0F766E',
+        backgroundMode: 'auto',
+        dark: { primary: '#777777' },
+      },
+    });
+    expect(vars['--ds-color-text-on-primary']).toBeUndefined();
+    expect(vars['--ds-color-primary-foreground']).toBeUndefined();
+    expect(vars['--ds-color-link-hover']).toMatch(/^light-dark\(/);
+  });
+
+  it.each([
+    {
+      label: 'hex/hex',
+      light: '#0F766E',
+      dark: '#4FB3AA',
+      math: 'paired',
+      passThrough: 'paired',
+    },
+    {
+      label: 'hex/var',
+      light: '#0F766E',
+      dark: 'var(--customer-primary-dark)',
+      math: 'absent',
+      passThrough: 'paired',
+    },
+    {
+      label: 'var/hex',
+      light: 'var(--customer-primary-light)',
+      dark: '#4FB3AA',
+      math: 'absent',
+      passThrough: 'paired',
+    },
+    {
+      label: 'var/var',
+      light: 'var(--customer-primary)',
+      dark: 'var(--customer-primary-dark)',
+      math: 'absent',
+      passThrough: 'paired',
+    },
+    {
+      label: 'same seed',
+      light: '#0F766E',
+      dark: '#0F766E',
+      math: 'scalar',
+      passThrough: 'scalar',
+    },
+    {
+      label: 'absent dark',
+      light: '#0F766E',
+      dark: undefined,
+      math: 'scalar',
+      passThrough: 'scalar',
+    },
+  ] as const)(
+    'merges interaction-floor halves without inventing math for $label',
+    ({ light, dark, math, passThrough }) => {
+      const vars = appearanceGeneralToVariables({
+        palette: {
+          primary: light,
+          backgroundMode: 'auto',
+          ...(dark === undefined ? {} : { dark: { primary: dark } }),
+        },
+      });
+
+      for (const channel of [
+        '--ds-color-primary-foreground',
+        '--ds-color-link-hover',
+      ]) {
+        if (math === 'absent') expect(vars[channel], channel).toBeUndefined();
+        if (math === 'paired') expect(vars[channel], channel).toMatch(/^light-dark\(/);
+        if (math === 'scalar') {
+          expect(vars[channel], channel).toBeDefined();
+          expect(vars[channel], channel).not.toMatch(/^light-dark\(/);
+        }
+      }
+
+      for (const channel of ['--ds-color-border-focus', '--ds-color-link']) {
+        if (passThrough === 'paired') {
+          expect(vars[channel], channel).toBe(`light-dark(${light}, ${dark})`);
+        } else {
+          expect(vars[channel], channel).toBe(light);
+        }
+      }
+    },
+  );
 
   it('skips the derivations for non-hex palette values', () => {
     const vars = appearanceGeneralToVariables({
@@ -507,9 +603,15 @@ describe('appearanceToVariables', () => {
       { palette: { primary: '#0F766E', backgroundMode: 'light' } },
       { '--ds-color-primary': '#0F766E' },
     );
+    // The warm dark ground is declared on `--ds-color-bg-primary`, the ONE
+    // ground channel. It used to be declared on `--ds-color-dark-bg`, a
+    // mode-prefixed twin the ramp resolver consulted first; that family is
+    // gone, and a theme's ground is now the same channel name in whichever
+    // mode is active. The property under test is unchanged: a tenant that
+    // moves its dark canvas re-keys the ramp derived against it.
     const warmDark = deriveAppearanceColorRamps(
       { palette: { primary: '#0F766E', backgroundMode: 'dark' } },
-      { '--ds-color-primary': '#0F766E', '--ds-color-dark-bg': '#201B15' },
+      { '--ds-color-primary': '#0F766E', '--ds-color-bg-primary': '#201B15' },
     );
     const defaultDark = deriveAppearanceColorRamps(
       { palette: { primary: '#0F766E', backgroundMode: 'dark' } },

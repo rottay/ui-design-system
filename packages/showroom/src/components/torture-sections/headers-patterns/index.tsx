@@ -108,7 +108,7 @@ function HeadersPatternsFbPageShell() {
       </Text>
       <PatternPageShell
         title="Users"
-        subtitle="Manage platform users"
+        subtitle="Manage tenant users"
         breadcrumbs={HP_CRUMBS}
         back={{ label: 'Settings', onClick: () => undefined }}
         badge={<Badge variant="primary">beta</Badge>}

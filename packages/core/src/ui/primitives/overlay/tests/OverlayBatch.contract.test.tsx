@@ -2,7 +2,7 @@ import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, waitFor } from '@testing-library/react';
 
-import { Modal } from '../Modal';
+import { Modal } from '../../feedback/Modal';
 import { Tour } from '../Tour';
 import { ConfirmDialog } from '../ConfirmDialog';
 import { AlertDialog } from '../AlertDialog';
@@ -41,10 +41,13 @@ import { renderWithEngine } from '../../../../tooling/testing/helpers/engine';
 // tenant/DS scope SURVIVES the portal boundary (see `withDsRoot` /
 // `expectTenantScopeSurvivedPortal` below).
 //
-// `primitives/overlay/Modal` is imported directly from its own local path,
-// never from the package barrel -- the barrel re-exports it as `OverlayModal`
-// specifically to avoid colliding with the unrelated, already-published
-// `primitives/feedback/Modal`'s own `Modal` export (checkpoint contract P1).
+// Modal is imported from `primitives/feedback/Modal`, the sole owner. When this
+// file was written the suite pulled it from a sibling `primitives/overlay/Modal`
+// that the barrel re-exported as `OverlayModal` to avoid a name collision -- but
+// the two were never two components: overlay/Modal was a folder of forwarding
+// shims onto feedback/Modal, so the collision it dodged was between one
+// implementation and itself. The shim folder is retired; the coverage below is
+// unchanged because it always exercised the feedback implementation.
 //
 // Modal, Tour, ConfirmDialog, ContextMenu, and Dropdown's modern engines all
 // gate their mount behind `usePresence`, whose `dataState` is derived

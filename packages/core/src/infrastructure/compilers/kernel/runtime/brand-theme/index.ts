@@ -5,7 +5,7 @@
  * (useTokens, ThemeProvider) and by static CSS generation.
  *
  * Bridge functions: brandThemeToTokenOverrides, brandThemeToPersonality,
- * brandThemeToBranding, deepMergeTokenOverrides.
+ * deepMergeTokenOverrides.
  *
  * Compiler: compileBrandTheme — conforms to the CompileBrandTheme contract
  * from contracts/themes. Produces personality, tokenOverrides, CSS variables,
@@ -16,7 +16,10 @@ import {
   assertMandatoryFontFallback,
   withArabicSafeFallback,
 } from "@/foundation/kernel/typography";
-import { TENANT_THEME_RHYTHM_FACTORS } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
+import {
+  TENANT_THEME_RHYTHM_FACTORS,
+  TENANT_THEME_RHYTHM_SCALE_BOUNDS,
+} from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import type {
   BrandTheme,
   BrandPalette,
@@ -45,10 +48,7 @@ import {
 } from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
 import type { ExpressiveTypeRoleOverlay } from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
 import { appearancePostureToVariables } from "../../foundation/css/appearance-posture";
-import type {
-  TenantBranding,
-  TenantTokenOverrides,
-} from "@/foundation/contracts/composition/tenants";
+import type { TenantTokenOverrides } from "@/foundation/contracts/composition/tenants";
 import type { PartialPersonalityTokens, PersonalityTokens } from "@/foundation/contracts/kernel/tokens/personality";
 import {
   SEMANTIC_SURFACE_ROLES,
@@ -67,6 +67,7 @@ import {
 import { chromeToVariables } from "../../foundation/css/chrome-variables";
 import { derivePaletteSemantics } from "../../foundation/css/color-math/palette-derivations";
 import { isHexColor } from "../../foundation/css/color-math";
+import { deriveInteractionFloor } from "../../foundation/css/color-math/interaction-floor";
 import {
   ON_TONE_ROLES,
   deriveReadableInk,
@@ -99,11 +100,10 @@ function isSpringEligible(bt: BrandTheme): boolean {
  * Maps BrandTheme.surfaces to TenantTokenOverrides so the existing
  * structural merge chain can consume it without changes. When the theme is
  * spring-eligible, also derives `motion.spring` (a generated `linear()`
- * curve) so it rides the SAME `TenantTokenOverrides.motion.spring` field the
- * tenant visual compiler (`infrastructure/compilers/runtime/tenant-css/visual-config`) maps
- * to `--ds-motion-spring` -- this is the only path that reaches the
- * generated tenant artifact without a tenant manually authoring a literal
- * override.
+ * curve) so it rides the SAME `TenantTokenOverrides.motion.spring` field
+ * `useTokens` resolves into `--ds-motion-spring` -- this is the only path
+ * that reaches the compiled artifact without a theme manually authoring a
+ * literal override.
  */
 export function brandThemeToTokenOverrides(
   bt: BrandTheme
@@ -189,39 +189,6 @@ export function brandThemeToPersonality(
 }
 
 /**
- * Extract legacy-compatible branding from a BrandTheme.
- *
- * Maps BrandTheme.palette + typography font families to TenantBranding
- * so ThemeProvider's branding injection works without modification.
- */
-export function brandThemeToBranding(bt: BrandTheme): Partial<TenantBranding> {
-  const result: Partial<TenantBranding> = {};
-
-  if (bt.palette) {
-    result.primaryColor = bt.palette.primaryColor;
-    result.secondaryColor = bt.palette.secondaryColor;
-    result.accentColor = bt.palette.accentColor;
-    result.darkPrimaryColor = bt.palette.darkPrimaryColor;
-    result.darkSecondaryColor = bt.palette.darkSecondaryColor;
-    result.darkAccentColor = bt.palette.darkAccentColor;
-    result.darkBackgroundColor = bt.palette.darkBackgroundColor;
-    result.successColor = bt.palette.successColor;
-    result.warningColor = bt.palette.warningColor;
-    result.errorColor = bt.palette.errorColor;
-    result.infoColor = bt.palette.infoColor;
-  }
-
-  if (bt.typography) {
-    result.fontFamilyBase = bt.typography.fontFamilyBase;
-    result.fontFamilyHeading = bt.typography.fontFamilyHeading;
-    result.fontFamilyMono = bt.typography.fontFamilyMono;
-    result.fontFamilyDisplay = bt.typography.fontFamilyDisplay;
-  }
-
-  return result;
-}
-
-/**
  * Deep-merge two TenantTokenOverrides objects.
  *
  * Nested objects (glass, gradients, overlays, surface, motion, borderRadius,
@@ -282,84 +249,88 @@ export function mergePartialPersonality(
 
 // ── Perceptual color ramp derivation (WO-TOK-02) ───────────
 
-/** The DS foundation's light canvas -- the ground a light-surface tenant
+/** The DS foundation's light canvas -- the ground a light-surface theme
  * falls back to when it does not declare its own `backgroundColor`. */
 const LIGHT_DEFAULT_GROUND = "#FFFFFF";
 
+/** The DS foundation's dark canvas -- the ground a dark-surface theme falls
+ * back to when it does not declare its own `backgroundColor`. */
+const DARK_DEFAULT_GROUND = "#0A0A0A";
+
 /**
- * A tenant is dark-surface when it declares ONLY a dark ground
- * (`darkBackgroundColor` set, `backgroundColor` absent) -- its one true
- * canvas is dark and there is no light default to fall back to (rottay:
- * `darkBackgroundColor` set, no `backgroundColor`). A tenant that declares
- * BOTH stays light-surface: a declared `backgroundColor` is always its own
- * default ground, and a `darkBackgroundColor` alongside it is an optional
- * toggle variant, not the tenant's canonical surface (evnto: both set,
- * light-first). There is no light/dark toggle in the derivation itself --
- * each tenant gets exactly one ramp, keyed to this classification.
+ * A theme is dark-surface when it DECLARES so: `appearance.defaultMode`.
+ *
+ * The classification used to be inferred from the shape of the palette --
+ * "declares `darkBackgroundColor` and no `backgroundColor`". That inference
+ * existed only because a dark theme had nowhere to say what it was: its own
+ * ground had to be smuggled through a `dark`-prefixed field while the plain
+ * field stayed empty, and every reader had to reconstruct the intent.
+ *
+ * A theme now writes its default mode down and puts that mode's values in the
+ * PLAIN channels; the other mode, when it has one, is a `modes` overlay. So
+ * the declaration is the classification, and a theme's ground is
+ * `palette.backgroundColor` in every mode including its own dark one.
  */
-export function isDarkSurfacePalette(
-  palette: BrandPalette | undefined
-): boolean {
-  return !!palette?.darkBackgroundColor && !palette?.backgroundColor;
+export function isDarkSurfaceTheme(bt: BrandTheme | undefined): boolean {
+  return bt?.appearance?.defaultMode === "dark";
+}
+
+/** The surface a theme's base block compiles for. */
+export function brandThemeRampSurface(bt: BrandTheme | undefined): RampSurface {
+  return isDarkSurfaceTheme(bt) ? "dark" : "light";
 }
 
 interface RampRoleSpec {
   name: string;
-  light: string | undefined;
-  dark: string | undefined;
+  seed: string | undefined;
 }
 
-/** The 7 palette roles a ramp can be derived for. success/warning/error/info
- * have no dedicated dark seed in the BrandPalette contract, so a dark-surface
- * tenant re-derives their ramp from the same seed against its dark ground. */
+/**
+ * The 7 palette roles a ramp can be derived for.
+ *
+ * One seed per role, whatever the surface. A mode overlay that wants a
+ * different seed restates `primaryColor` in `modes.{mode}.palette`, which
+ * re-enters this same derivation against that mode's own ground -- so the
+ * other mode is a real compiled block rather than a parallel channel family
+ * nothing consumes.
+ */
 function rampRoleSpecs(palette: BrandPalette): readonly RampRoleSpec[] {
   return [
-    {
-      name: "primary",
-      light: palette.primaryColor,
-      dark: palette.darkPrimaryColor,
-    },
-    {
-      name: "secondary",
-      light: palette.secondaryColor,
-      dark: palette.darkSecondaryColor,
-    },
-    {
-      name: "accent",
-      light: palette.accentColor,
-      dark: palette.darkAccentColor,
-    },
-    { name: "success", light: palette.successColor, dark: undefined },
-    { name: "warning", light: palette.warningColor, dark: undefined },
-    { name: "error", light: palette.errorColor, dark: undefined },
-    { name: "info", light: palette.infoColor, dark: undefined },
+    { name: "primary", seed: palette.primaryColor },
+    { name: "secondary", seed: palette.secondaryColor },
+    { name: "accent", seed: palette.accentColor },
+    { name: "success", seed: palette.successColor },
+    { name: "warning", seed: palette.warningColor },
+    { name: "error", seed: palette.errorColor },
+    { name: "info", seed: palette.infoColor },
   ];
 }
 
 /**
  * Derive the perceptually-even `--ds-color-{role}-{50..900}` ramp for every
- * palette role that declares a seed, keyed to the tenant's OWN surface: any
- * tenant seed color mechanically yields a full, even, gamut-mapped palette
- * -- no per-tenant design work. See `deriveOklchRamp` for the derivation
- * itself (OKLCH lightness/chroma interpolation, hue held constant, gamut
- * mapped per step).
+ * palette role that declares a seed, keyed to the surface being compiled: any
+ * seed color mechanically yields a full, even, gamut-mapped palette -- no
+ * per-tenant design work. See `deriveOklchRamp` for the derivation itself
+ * (OKLCH lightness/chroma interpolation, hue held constant, gamut mapped per
+ * step).
+ *
+ * `surface` is the mode this palette is being compiled FOR, passed by the
+ * caller that knows it. One call derives one ramp; a second mode is a second
+ * call with that mode's merged palette, not a second channel family.
  */
 export function deriveTenantColorRamps(
-  palette: BrandPalette | undefined
+  palette: BrandPalette | undefined,
+  surface: RampSurface = "light"
 ): Record<string, string> {
   if (!palette) return {};
-  const dark = isDarkSurfacePalette(palette);
-  const surface: RampSurface = dark ? "dark" : "light";
   const ground =
-    dark && palette.darkBackgroundColor
-      ? palette.darkBackgroundColor
-      : palette.backgroundColor ?? LIGHT_DEFAULT_GROUND;
+    palette.backgroundColor ??
+    (surface === "dark" ? DARK_DEFAULT_GROUND : LIGHT_DEFAULT_GROUND);
 
   const vars: Record<string, string> = {};
   for (const role of rampRoleSpecs(palette)) {
-    const seed = (dark ? role.dark : undefined) ?? role.light;
-    if (!seed) continue;
-    const ramp = deriveOklchRamp(seed, ground, surface);
+    if (!role.seed) continue;
+    const ramp = deriveOklchRamp(role.seed, ground, surface);
     for (const step of RAMP_STEPS) {
       vars[`--ds-color-${role.name}-${step}`] = ramp[step];
     }
@@ -376,12 +347,12 @@ export function deriveTenantColorRamps(
 }
 
 /**
- * Convert BrandTheme palette to a flat CSS variable map.
- * Emits light-mode vars by default. Dark-mode palette aliases use the
- * `--ds-color-dark-*` names consumed by ThemeProvider. For bundled tenants
- * the CSS artifact handles light/dark
- * splitting directly; these dark vars are consumed by DB-driven tenants
- * where runtime switching is needed.
+ * Convert a semantic surface-role map to a flat CSS variable map.
+ *
+ * Emits the channels of the mode being compiled. A theme's other mode is a
+ * `modes` overlay that re-enters the same family compilers with its own
+ * merged values, so there is exactly one channel family per role and no
+ * `dark`-prefixed twin for anything to consume.
  */
 export function semanticSurfaceRolesToCssVariables(
   surfaceRoles: SemanticSurfaceRoleMap | undefined
@@ -542,8 +513,45 @@ function setExtendedPaletteVariables(
   }
 }
 
+/**
+ * The FLOOR for four `EXTENDED_PALETTE_CHANNELS` entries a theme may author
+ * but never must: `--ds-color-primary-foreground`, `--ds-color-border-focus`,
+ * `--ds-color-link`, `--ds-color-link-hover`.
+ *
+ * The math itself is `deriveInteractionFloor` in
+ * `color-math/interaction-floor` -- shared verbatim with the DB
+ * `compileTenantThemeConfig` path, so the two ingress paths cannot answer
+ * "what does this seed imply" differently. This wrapper exists only to keep
+ * the static path's own call site named after the channel group it feeds.
+ *
+ * Merged BEFORE `setExtendedPaletteVariables`, whose unconditional "write
+ * when the string is present" then overwrites exactly the keys the theme
+ * supplies -- derivation is the floor, authored is the ceiling, and it is
+ * never the other way around. Precedence is per channel: authoring the link
+ * color leaves the derived foreground, focus border and link hover in place.
+ */
+export function deriveExtendedPaletteFloor(
+  effectivePrimary: string | undefined
+): Record<string, string> {
+  return deriveInteractionFloor(effectivePrimary).variables;
+}
 
-function brandThemeToCssVariables(bt: BrandTheme): Record<string, string> {
+
+/**
+ * Compile one BrandTheme block.
+ *
+ * `surface` is the mode the block is FOR. It defaults to the theme's declared
+ * default mode, and `compileModeBlocks` passes the overlay's own mode when it
+ * re-enters with a merged theme — so a light overlay on a dark-default theme
+ * derives its ramp against a light surface rather than inheriting the base
+ * theme's. All three first-party verticals pin every derivable role in their
+ * overlays today, so threading it is zero-delta on the committed artifacts and
+ * only decides what an UNPINNED overlay role derives to.
+ */
+function brandThemeToCssVariables(
+  bt: BrandTheme,
+  surface: RampSurface = brandThemeRampSurface(bt)
+): Record<string, string> {
   // C1b expressive expansion — resolved HERE (not in compileBrandTheme) so
   // compileModeBlocks, which re-invokes this function per authored mode
   // overlay, re-expands automatically and every mode block sees the same
@@ -571,13 +579,41 @@ function brandThemeToCssVariables(bt: BrandTheme): Record<string, string> {
   // appearance compiler uses lowers `surfaces.rhythm` here, so a static
   // vertical and a DB tenant authoring the same word get the same scale.
   // Absent -> no emission (the :root seed 1 governs; zero-delta).
-  if (bt.surfaces?.rhythm) {
+  //
+  // FAILING CLOSED IS PART OF THE PARITY, not an extra. `BrandTheme` is typed,
+  // but it is also plain data by the time it reaches this compiler — it
+  // crosses the RSC/JSON boundary and arrives through the compatibility
+  // `TenantConfig.brandTheme` field, where no type survives. A bare bracket
+  // read of the factor table therefore resolves INHERITED members:
+  // `rhythm: 'toString'` returned a function and emitted its source text into
+  // the channel, `'__proto__'` emitted `[object Object]`, and an object whose
+  // `toString()` says `'tight'` was silently accepted by key coercion. Any of
+  // those makes `clamp(0.8, var(--ds-rhythm-scale, 1), 1.25)` invalid at
+  // computed-value time for every consumer of the effective channel — the
+  // opposite of the documented "absent behaves like the pre-rhythm cascade".
+  // The DB path rejects all of them at document validation, so an own-property
+  // + numeric guard is what makes the two ingress paths fail closed the same
+  // way. The clamp mirrors the DB lowering for the same reason: one envelope,
+  // both paths, even though the three canonical postures sit inside it.
+  const authoredRhythm = bt.surfaces?.rhythm;
+  if (
+    typeof authoredRhythm === "string" &&
+    Object.prototype.hasOwnProperty.call(
+      TENANT_THEME_RHYTHM_FACTORS,
+      authoredRhythm,
+    )
+  ) {
     const rhythmFactor =
       TENANT_THEME_RHYTHM_FACTORS[
-        bt.surfaces.rhythm as keyof typeof TENANT_THEME_RHYTHM_FACTORS
+        authoredRhythm as keyof typeof TENANT_THEME_RHYTHM_FACTORS
       ];
-    if (rhythmFactor !== undefined) {
-      vars["--ds-rhythm-scale"] = String(rhythmFactor);
+    if (typeof rhythmFactor === "number" && Number.isFinite(rhythmFactor)) {
+      vars["--ds-rhythm-scale"] = String(
+        Math.min(
+          TENANT_THEME_RHYTHM_SCALE_BOUNDS.max,
+          Math.max(TENANT_THEME_RHYTHM_SCALE_BOUNDS.min, rhythmFactor),
+        ),
+      );
     }
   }
   // Profile channels land OVER the neutral structural seeds and UNDER every
@@ -631,16 +667,16 @@ function brandThemeToCssVariables(bt: BrandTheme): Record<string, string> {
     // a dark-surface tenant derives from its dark seeds against its own dark
     // ground. A ground is derived only when the palette actually declares one,
     // so an absent seed never claims a channel.
-    const darkSurface = isDarkSurfacePalette(bt.palette);
+    // The seed every derived channel below reads. One palette, one primary,
+    // one ground -- a mode overlay re-enters this function with its own
+    // merged palette, so the other mode resolves its own seed here rather
+    // than being smuggled through a second field on this one.
+    const effectivePrimary = bt.palette.primaryColor;
     Object.assign(
       vars,
       derivePaletteSemantics({
-        primary: darkSurface
-          ? bt.palette.darkPrimaryColor ?? bt.palette.primaryColor
-          : bt.palette.primaryColor,
-        background: darkSurface
-          ? bt.palette.darkBackgroundColor
-          : bt.palette.backgroundColor,
+        primary: effectivePrimary,
+        background: bt.palette.backgroundColor,
       })
     );
 
@@ -679,31 +715,29 @@ function brandThemeToCssVariables(bt: BrandTheme): Record<string, string> {
         vars[onToneChannel(role)] = deriveReadableInk(seed);
       }
     }
+    // The unauthored floor for the four channels a theme MAY author, merged
+    // UNDER `setExtendedPaletteVariables` so any authored value overwrites its
+    // own channel and leaves the other three derived. This compiler is now
+    // the only author of all four: the runtime generator that used to derive
+    // them from an NTSC luma threshold is gone, so there is no second emitter
+    // to collide with and no reason to keep the floor exported-but-unwired.
+    Object.assign(vars, deriveExtendedPaletteFloor(effectivePrimary));
     setExtendedPaletteVariables(vars, bt.palette);
 
-    // Dark-mode palette aliases consumed by ThemeProvider.
-    if (bt.palette.darkPrimaryColor)
-      vars["--ds-color-dark-primary"] = bt.palette.darkPrimaryColor;
-    if (bt.palette.darkSecondaryColor)
-      vars["--ds-color-dark-secondary"] = bt.palette.darkSecondaryColor;
-    if (bt.palette.darkAccentColor)
-      vars["--ds-color-dark-accent"] = bt.palette.darkAccentColor;
-    // The clear-mode ground. The dark twin is emitted by the generator's dark
-    // block, which is the only place a `[data-theme='dark']` selector exists.
+    // This mode's ground. A theme declares one ground in the plain channel;
+    // its other mode declares that mode's ground in its own overlay, which
+    // compiles into a mode block. There is no `--ds-color-dark-bg` twin,
+    // because a channel nothing paints from is not a mode.
     if (bt.palette.backgroundColor) {
       vars["--ds-color-bg-primary"] = bt.palette.backgroundColor;
       vars["--ds-color-bg"] = bt.palette.backgroundColor;
       vars["--ds-color-background"] = bt.palette.backgroundColor;
     }
-    if (bt.palette.darkBackgroundColor)
-      vars["--ds-color-dark-bg"] = bt.palette.darkBackgroundColor;
 
-    // The semantic control surface, which `--ds-surface-control` derives from and
-    // every modern input control falls back to. It belongs here and not in the
-    // chrome emitter: the generator applies chrome into the dark block too, so a
-    // value emitted there is mode-blind and a light-authored tenant would paint
-    // white controls on its own dark ground. The dark twin is emitted by the
-    // generator's dark block, which is the only place that knows the mode.
+    // The semantic control surface, which `--ds-surface-control` derives from
+    // and every modern input control falls back to. It belongs here and not in
+    // the chrome emitter: a mode overlay restates it through this same path,
+    // so the value is always the one that mode authored.
     const inputBg = bt.chrome?.controls?.input?.bg;
     if (inputBg) vars["--ds-color-bg-input"] = inputBg;
   }
@@ -821,7 +855,11 @@ function brandThemeToCssVariables(bt: BrandTheme): Record<string, string> {
     // Defaults to 1 (full Quiet Premium) when the theme does not set it.
     vars["--ds-effect-intensity"] = String(su.effectIntensity ?? 1);
   }
-  Object.assign(vars, deriveTenantColorRamps(bt.palette));
+  // One ramp, on the surface THIS block compiles for. A mode overlay re-enters
+  // this function with its own merged palette and its own mode, so its ramp
+  // derives against its own ground through the same call — one channel family,
+  // two blocks, never a namespaced twin.
+  Object.assign(vars, deriveTenantColorRamps(bt.palette, surface));
   setTintScaleVariables(vars, bt);
   setTypeRampVariables(vars);
   // `labelStyle` is an AUTHORED case decision and must sit in the authored
@@ -1294,7 +1332,7 @@ function compileModeBlocks(
     }
     const merged = applyModeOverlay(bt, overlay);
     const modeVars = {
-      ...brandThemeToCssVariables(merged),
+      ...brandThemeToCssVariables(merged, mode),
       ...brandThemeToChromeVariables(merged),
     };
     const cssVariables: Record<string, string> = {};
@@ -1304,6 +1342,18 @@ function compileModeBlocks(
     blocks.push({ mode, cssVariables, colorScheme: mode });
   }
   return blocks;
+}
+
+/**
+ * The selector a compiled BrandTheme's base block is scoped to.
+ *
+ * Exported because consumers that RE-SCOPE this compiler's output — the
+ * tenant preview rebuilds every rule onto a container-local selector — need
+ * the same string this compiler writes. Reconstructing it at the call site is
+ * how a preview silently stops matching when the scoping changes here.
+ */
+export function brandTenantSelector(tenantSlug: string): string {
+  return `html[data-tenant='${tenantSlug}']`;
 }
 
 /** Build a CSS string from variables with tenant selector scoping. */
@@ -1318,7 +1368,7 @@ function buildCssString(
     ...(colorScheme ? [`  color-scheme: ${colorScheme};`] : []),
     ...entries.map(([k, v]) => `  ${k}: ${v};`),
   ].join("\n");
-  return `html[data-tenant='${tenantSlug}'] {\n${declarations}\n}`;
+  return `${brandTenantSelector(tenantSlug)} {\n${declarations}\n}`;
 }
 
 /**
@@ -1334,7 +1384,8 @@ export function brandModeSelector(
   tenantSlug: string,
   mode: BrandThemeMode
 ): string {
-  return `html[data-tenant='${tenantSlug}'][data-theme='${mode}'], html[data-tenant='${tenantSlug}'].${mode}`;
+  const base = brandTenantSelector(tenantSlug);
+  return `${base}[data-theme='${mode}'], ${base}.${mode}`;
 }
 
 /** Build one compiled mode block's CSS. */

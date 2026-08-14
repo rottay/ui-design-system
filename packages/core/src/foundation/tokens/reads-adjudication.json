@@ -9864,12 +9864,12 @@
       }
     },
     {
-      "name": "--ds-commercial-bg",
-      "family": "--ds-commercial-bg",
+      "name": "--ds-surface-bg",
+      "family": "--ds-surface-bg",
       "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/ui/patterns/commercial/foundation/tokens/commercial-ramp.css",
+      "owner": "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css",
       "readSites": 4,
-      "evidence": "packages/core/src/ui/patterns/commercial/foundation/tokens/index.ts:44  bg: \"var(--ds-commercial-bg)\",",
+      "evidence": "packages/core/src/foundation/tokens/ts/runtime/mirrors/monochrome/index.ts:44  bg: \"var(--ds-surface-bg)\",",
       "_audit": {
         "readBuckets": {
           "ui": 4
@@ -9883,12 +9883,12 @@
       }
     },
     {
-      "name": "--ds-commercial-fg",
-      "family": "--ds-commercial-fg",
+      "name": "--ds-surface-fg",
+      "family": "--ds-surface-fg",
       "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/ui/patterns/commercial/foundation/tokens/commercial-ramp.css",
+      "owner": "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css",
       "readSites": 14,
-      "evidence": "packages/core/src/ui/patterns/commercial/foundation/tokens/index.ts:43  fg: \"var(--ds-commercial-fg)\",",
+      "evidence": "packages/core/src/foundation/tokens/ts/runtime/mirrors/monochrome/index.ts:43  fg: \"var(--ds-surface-fg)\",",
       "_audit": {
         "readBuckets": {
           "ui": 14
@@ -9902,12 +9902,12 @@
       }
     },
     {
-      "name": "--ds-commercial-font-mono",
-      "family": "--ds-commercial-font",
+      "name": "--ds-font-mono",
+      "family": "--ds-font-mono",
       "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/ui/patterns/commercial/foundation/tokens/commercial-ramp.css",
+      "owner": "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css",
       "readSites": 12,
-      "evidence": "packages/core/src/ui/patterns/commercial/foundation/tokens/index.ts:45  fontMono: \"var(--ds-commercial-font-mono)\",",
+      "evidence": "packages/core/src/foundation/tokens/ts/runtime/mirrors/monochrome/index.ts:45  fontMono: \"var(--ds-font-mono)\",",
       "_audit": {
         "readBuckets": {
           "ui": 12
@@ -9921,12 +9921,12 @@
       }
     },
     {
-      "name": "--ds-commercial-hairline",
-      "family": "--ds-commercial-hairline",
+      "name": "--ds-color-hairline",
+      "family": "--ds-color-hairline",
       "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/ui/patterns/commercial/foundation/tokens/commercial-ramp.css",
+      "owner": "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css",
       "readSites": 9,
-      "evidence": "packages/core/src/ui/patterns/commercial/foundation/tokens/index.ts:41  hairline: \"var(--ds-commercial-hairline)\",",
+      "evidence": "packages/core/src/foundation/tokens/ts/runtime/mirrors/monochrome/index.ts:41  hairline: \"var(--ds-color-hairline)\",",
       "_audit": {
         "readBuckets": {
           "ui": 9
@@ -9940,12 +9940,12 @@
       }
     },
     {
-      "name": "--ds-commercial-hairline-strong",
-      "family": "--ds-commercial-hairline",
+      "name": "--ds-color-hairline-strong",
+      "family": "--ds-color-hairline",
       "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/ui/patterns/commercial/foundation/tokens/commercial-ramp.css",
+      "owner": "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css",
       "readSites": 7,
-      "evidence": "packages/core/src/ui/patterns/commercial/foundation/tokens/index.ts:42  hairlineStrong: \"var(--ds-commercial-hairline-strong)\",",
+      "evidence": "packages/core/src/foundation/tokens/ts/runtime/mirrors/monochrome/index.ts:42  hairlineStrong: \"var(--ds-color-hairline-strong)\",",
       "_audit": {
         "readBuckets": {
           "ui": 7
@@ -9959,12 +9959,12 @@
       }
     },
     {
-      "name": "--ds-commercial-ink",
-      "family": "--ds-commercial-ink",
+      "name": "--ds-color-surface-ink",
+      "family": "--ds-color-surface-ink",
       "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/ui/patterns/commercial/foundation/tokens/commercial-ramp.css",
+      "owner": "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css",
       "readSites": 4,
-      "evidence": "packages/core/src/ui/patterns/commercial/foundation/tokens/commercial-ramp.css:70  --ds-commercial-bg: var(--ds-commercial-ink);",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:70  --ds-surface-bg: var(--ds-color-surface-ink);",
       "_audit": {
         "readBuckets": {
           "ui": 4
@@ -9978,12 +9978,12 @@
       }
     },
     {
-      "name": "--ds-commercial-motion-ease",
-      "family": "--ds-commercial-motion",
+      "name": "--ds-ease-out",
+      "family": "--ds-motion",
       "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/ui/patterns/commercial/foundation/tokens/commercial-ramp.css",
+      "owner": "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css",
       "readSites": 3,
-      "evidence": "packages/core/src/ui/patterns/commercial/foundation/tokens/index.ts:49  motionEase: \"var(--ds-commercial-motion-ease)\",",
+      "evidence": "packages/core/src/foundation/tokens/ts/runtime/mirrors/monochrome/index.ts:49  motionEase: \"var(--ds-ease-out)\",",
       "_audit": {
         "readBuckets": {
           "ui": 3
@@ -9997,12 +9997,12 @@
       }
     },
     {
-      "name": "--ds-commercial-motion-fast",
-      "family": "--ds-commercial-motion",
+      "name": "--ds-duration-fast",
+      "family": "--ds-motion",
       "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/ui/patterns/commercial/foundation/tokens/commercial-ramp.css",
+      "owner": "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css",
       "readSites": 1,
-      "evidence": "packages/core/src/ui/patterns/commercial/foundation/tokens/index.ts:46  motionFast: \"var(--ds-commercial-motion-fast)\",",
+      "evidence": "packages/core/src/foundation/tokens/ts/runtime/mirrors/monochrome/index.ts:46  motionFast: \"var(--ds-duration-fast)\",",
       "_audit": {
         "readBuckets": {
           "ui": 1
@@ -10016,12 +10016,12 @@
       }
     },
     {
-      "name": "--ds-commercial-motion-normal",
-      "family": "--ds-commercial-motion",
+      "name": "--ds-duration-normal",
+      "family": "--ds-motion",
       "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/ui/patterns/commercial/foundation/tokens/commercial-ramp.css",
+      "owner": "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css",
       "readSites": 1,
-      "evidence": "packages/core/src/ui/patterns/commercial/foundation/tokens/index.ts:47  motionNormal: \"var(--ds-commercial-motion-normal)\",",
+      "evidence": "packages/core/src/foundation/tokens/ts/runtime/mirrors/monochrome/index.ts:47  motionNormal: \"var(--ds-duration-normal)\",",
       "_audit": {
         "readBuckets": {
           "ui": 1
@@ -10035,12 +10035,12 @@
       }
     },
     {
-      "name": "--ds-commercial-motion-slow",
-      "family": "--ds-commercial-motion",
+      "name": "--ds-duration-slow",
+      "family": "--ds-motion",
       "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/ui/patterns/commercial/foundation/tokens/commercial-ramp.css",
+      "owner": "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css",
       "readSites": 3,
-      "evidence": "packages/core/src/ui/patterns/commercial/foundation/tokens/index.ts:48  motionSlow: \"var(--ds-commercial-motion-slow)\",",
+      "evidence": "packages/core/src/foundation/tokens/ts/runtime/mirrors/monochrome/index.ts:48  motionSlow: \"var(--ds-duration-slow)\",",
       "_audit": {
         "readBuckets": {
           "ui": 3
@@ -10054,12 +10054,12 @@
       }
     },
     {
-      "name": "--ds-commercial-paper",
-      "family": "--ds-commercial-paper",
+      "name": "--ds-color-surface-paper",
+      "family": "--ds-color-surface-paper",
       "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/ui/patterns/commercial/foundation/tokens/commercial-ramp.css",
+      "owner": "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css",
       "readSites": 3,
-      "evidence": "packages/core/src/ui/patterns/commercial/foundation/tokens/commercial-ramp.css:74  --ds-commercial-bg: var(--ds-commercial-paper);",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:74  --ds-surface-bg: var(--ds-color-surface-paper);",
       "_audit": {
         "readBuckets": {
           "ui": 3

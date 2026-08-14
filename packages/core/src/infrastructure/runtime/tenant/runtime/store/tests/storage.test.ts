@@ -13,6 +13,7 @@ import {
 } from '..';
 import { loadStaticTenantConfig } from '../static/loader';
 import { fetchRemoteTenantConfig } from '../remote';
+import { ReservedTenantIdentityError } from '@/foundation/tokens/ts/presentation/brand-themes';
 
 vi.mock('../static/loader', () => ({
   loadStaticTenantConfig: vi.fn(),
@@ -59,6 +60,48 @@ describe('tenant storage facade', () => {
     expect(mockedFetchRemoteTenantConfig).not.toHaveBeenCalled();
   });
 
+  it('resolves the code-owned registry before a poisoned first-party cache entry', async () => {
+    localStorage.setItem(
+      'rottay-ds-tenant-cache-bithire',
+      JSON.stringify({
+        config: {
+          slug: 'bithire',
+          name: 'Attacker',
+          engine: 'modern',
+          theme: 'base',
+          plan: 'enterprise',
+          features: ['*'],
+          branding: { companyName: 'Attacker' },
+        },
+        timestamp: Date.now(),
+      }),
+    );
+
+    await expect(getTenantConfig('bithire')).resolves.toEqual(
+      getKnownTenantConfig('bithire'),
+    );
+    expect(mockedLoadStaticTenantConfig).not.toHaveBeenCalled();
+    expect(mockedFetchRemoteTenantConfig).not.toHaveBeenCalled();
+  });
+
+  it.each(['BitHire', 'bit-hire', 'bit\u200dhire', 'ＢｉｔＨｉｒｅ'])(
+    'rejects a reserved request variant before cache or I/O: %j',
+    async (slug) => {
+      await expect(getTenantConfig(slug)).rejects.toThrow(/reserved/);
+      expect(mockedLoadStaticTenantConfig).not.toHaveBeenCalled();
+      expect(mockedFetchRemoteTenantConfig).not.toHaveBeenCalled();
+    },
+  );
+
+  it.each(['Acme', 'acme_works', 'acme--works'])(
+    'rejects a non-canonical customer request before cache or I/O: %j',
+    async (slug) => {
+      await expect(getTenantConfig(slug)).rejects.toThrow(/lower-kebab/);
+      expect(mockedLoadStaticTenantConfig).not.toHaveBeenCalled();
+      expect(mockedFetchRemoteTenantConfig).not.toHaveBeenCalled();
+    },
+  );
+
   it('hydrates from localStorage before falling through to network-backed loaders', async () => {
     localStorage.setItem(
       'rottay-ds-tenant-cache-cached-tenant',
@@ -85,6 +128,100 @@ describe('tenant storage facade', () => {
     expect(mockedFetchRemoteTenantConfig).not.toHaveBeenCalled();
   });
 
+  it.each([
+    ['non-numeric', 'not-a-timestamp'],
+    ['null', null],
+    ['future', Date.now() + 60_000],
+  ])('discards a %s localStorage timestamp', async (_label, timestamp) => {
+    localStorage.setItem(
+      'rottay-ds-tenant-cache-acme',
+      JSON.stringify({
+        config: {
+          slug: 'acme',
+          name: 'Cached Acme',
+          theme: 'base',
+          plan: 'pro',
+          features: [],
+          branding: { companyName: 'Cached Acme' },
+        },
+        timestamp,
+      }),
+    );
+    mockedLoadStaticTenantConfig.mockResolvedValue({
+      slug: 'acme',
+      name: 'Fresh Acme',
+      theme: 'base',
+      plan: 'pro',
+      features: [],
+      branding: { companyName: 'Fresh Acme' },
+    });
+
+    await expect(getTenantConfig('acme')).resolves.toMatchObject({ name: 'Fresh Acme' });
+    expect(localStorage.removeItem).toHaveBeenCalledWith('rottay-ds-tenant-cache-acme');
+    expect(mockedLoadStaticTenantConfig).toHaveBeenCalledWith('acme');
+  });
+
+  it('discards a cached slug that only matches after normalization', async () => {
+    localStorage.setItem(
+      'rottay-ds-tenant-cache-acme',
+      JSON.stringify({
+        config: {
+          slug: 'ACME',
+          name: 'Cached Acme',
+          theme: 'base',
+          plan: 'pro',
+          features: [],
+          branding: { companyName: 'Cached Acme' },
+        },
+        timestamp: Date.now(),
+      }),
+    );
+    mockedLoadStaticTenantConfig.mockResolvedValue({
+      slug: 'acme',
+      name: 'Fresh Acme',
+      theme: 'base',
+      plan: 'pro',
+      features: [],
+      branding: { companyName: 'Fresh Acme' },
+    });
+
+    await expect(getTenantConfig('acme')).resolves.toMatchObject({ name: 'Fresh Acme' });
+    expect(localStorage.removeItem).toHaveBeenCalledWith('rottay-ds-tenant-cache-acme');
+  });
+
+  it('discards a customer cache entry carrying a reserved display identity', async () => {
+    localStorage.setItem(
+      'rottay-ds-tenant-cache-acme',
+      JSON.stringify({
+        config: {
+          slug: 'acme',
+          name: 'Bit Hire',
+          engine: 'modern',
+          theme: 'base',
+          plan: 'pro',
+          features: [],
+          branding: { companyName: 'Acme' },
+        },
+        timestamp: Date.now(),
+      }),
+    );
+    mockedLoadStaticTenantConfig.mockResolvedValue({
+      slug: 'acme',
+      name: 'Acme',
+      engine: 'modern',
+      theme: 'base',
+      plan: 'pro',
+      features: [],
+      branding: { companyName: 'Acme' },
+    });
+
+    await expect(getTenantConfig('acme')).resolves.toMatchObject({ name: 'Acme' });
+    expect(mockedLoadStaticTenantConfig).toHaveBeenCalledWith('acme');
+    expect(localStorage.removeItem).toHaveBeenCalledWith(
+      'rottay-ds-tenant-cache-acme',
+    );
+  });
+
   it('loads from static storage and persists successful lookups to cache', async () => {
     mockedLoadStaticTenantConfig.mockResolvedValue({
       slug: 'static-tenant',
@@ -104,6 +241,50 @@ describe('tenant storage facade', () => {
     expect(mockedLoadStaticTenantConfig).toHaveBeenCalledWith('static-tenant');
     expect(mockedFetchRemoteTenantConfig).not.toHaveBeenCalled();
     expect(localStorage.getItem('rottay-ds-tenant-cache-static-tenant')).toContain('Static Tenant');
+  });
+
+  it('stores an immutable snapshot so a caller cannot poison the memory cache', async () => {
+    const loaderConfig = {
+      slug: 'acme',
+      name: 'Acme',
+      theme: 'base',
+      plan: 'pro' as const,
+      features: ['search'],
+      branding: { companyName: 'Acme' },
+    };
+    mockedLoadStaticTenantConfig.mockResolvedValue(loaderConfig);
+
+    const first = await getTenantConfig('acme');
+    expect(first).not.toBe(loaderConfig);
+    expect(Object.isFrozen(first)).toBe(true);
+    expect(Object.isFrozen(first.branding)).toBe(true);
+    expect(Object.isFrozen(first.features)).toBe(true);
+    expect(Reflect.set(first, 'name', 'BitHire')).toBe(false);
+    expect(Reflect.set(first.branding, 'companyName', 'BitHire')).toBe(false);
+
+    loaderConfig.name = 'BitHire';
+    loaderConfig.branding.companyName = 'BitHire';
+    const second = await getTenantConfig('acme');
+    expect(second).toMatchObject({
+      slug: 'acme',
+      name: 'Acme',
+      branding: { companyName: 'Acme' },
+    });
+    expect(mockedLoadStaticTenantConfig).toHaveBeenCalledTimes(1);
+  });
+
+  it('propagates a reserved identity returned by a loader instead of falling back', async () => {
+    mockedLoadStaticTenantConfig.mockRejectedValue(
+      new ReservedTenantIdentityError({
+        kind: 'reserved-identity-violation',
+        field: 'name',
+        value: 'BitHire',
+        reservedAs: 'BitHire',
+      }),
+    );
+
+    await expect(getTenantConfig('acme')).rejects.toThrow(/reserved/);
+    expect(mockedFetchRemoteTenantConfig).not.toHaveBeenCalled();
   });
 
   it('falls back to remote storage when the static loader fails', async () => {

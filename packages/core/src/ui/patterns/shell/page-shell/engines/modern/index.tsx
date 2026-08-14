@@ -28,7 +28,7 @@
  * @example
  * <ModernPageShell
  *   title="Users"
- *   subtitle="Manage platform users"
+ *   subtitle="Manage tenant users"
  *   breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Users' }]}
  *   actions={<Button>Add User</Button>}
  * >

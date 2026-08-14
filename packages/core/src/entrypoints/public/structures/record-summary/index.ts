@@ -1,3 +1,3 @@
 "use client";
 
-export { RecordSummaryStrip } from "../../../../ui/structures/record/content";
+export { RecordSummaryStrip } from "../../../../ui/structures/record/summary-strip";

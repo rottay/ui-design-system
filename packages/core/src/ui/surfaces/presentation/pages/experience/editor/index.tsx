@@ -33,17 +33,17 @@ import { Box, Card, Grid, Stack, Text, Textarea } from '../../../../../primitive
 import { FadeIn } from '@/graphics/motion';
 import type { SurfaceAction } from '../../../../foundation/contracts';
 import type { EditorSurfaceConfig } from '../../../../foundation/contracts';
-import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
-import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
+import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
+import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
 import {
   resolveStackSpacing,
   SurfaceAccentBarWrapper,
-} from '../../../../runtime/profile-defaults/personality';
-import { PageShellSurface } from '../../../../composition/layout/page-shell';
-import { useSurfaceResponsiveLayout } from '../../../../runtime/responsive';
-import { SurfaceActionBar, SurfaceSectionCard } from '../../../../runtime/helpers/rendering';
+} from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
+import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
+import { useSurfaceResponsiveLayout } from '../../../../../structures/foundation/chrome/runtime/responsive';
+import { SurfaceActionBar, SurfaceSectionCard } from '../../../../../structures/shell/surface-chrome';
 import { hasSurfaceError } from '../../../../runtime/helpers';
-import { SurfaceErrorState } from '../../../../runtime/helpers/states';
+import { SurfaceErrorState } from '../../../../../structures/feedback/surface-lifecycle';
 
 export interface EditorSurfaceProps {
   config: EditorSurfaceConfig;

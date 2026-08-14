@@ -14,7 +14,7 @@ import type { TenantConfig } from '@/foundation/contracts';
 import { useTranslation } from '@/infrastructure/runtime/i18n/composition';
 import { DesignSystemProvider } from '@/infrastructure/runtime/bootstrap';
 import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes';
-import { themanagementmiamiBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/fixtures/themanagementmiami';
+import { themanagementmiamiBrandTheme } from '@/tooling/testing/fixtures/brand-themes/themanagementmiami';
 import { Box } from '@/ui/primitives/layout/Box';
 import { Grid } from '@/ui/primitives/layout/Grid';
 import { Stack } from '@/ui/primitives/layout/Stack';

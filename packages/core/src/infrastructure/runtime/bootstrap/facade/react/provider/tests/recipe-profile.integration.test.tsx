@@ -1,120 +1,118 @@
-/**
- * DS-S001 production-provider proof.
- *
- * Static first-party BrandTheme selection and DB-owned Appearance selection
- * must reach the same runtime context. DB appearance is the later authority
- * in the documented merge chain, while malformed selections fail closed.
- */
 import React from 'react';
-import { cleanup, render, waitFor } from '@testing-library/react';
-import { afterEach, describe, expect, it } from 'vitest';
-
+import { cleanup, render, screen } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { TenantConfig } from '@/foundation/contracts/composition/tenants';
+import type { TenantThemeArtifact } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
+import {
+  compileTenantThemeConfig,
+  getTenantThemeVerticalEnvelope,
+  hydrateTenantThemeConfig,
+} from '@/infrastructure/compilers/composition/tenant-theme';
 import { useRecipeProfile } from '@/infrastructure/runtime/foundation/recipes/profiles';
+import {
+  TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE,
+  TENANT_THEME_ARTIFACT_SLUG_ATTRIBUTE,
+  TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE,
+  resetVisualAuthorityDiagnostics,
+} from '@/infrastructure/runtime/theming';
 import ModernButton from '@/ui/primitives/inputs/Button/engines/modern';
 import { DesignSystemProvider } from '..';
 
-afterEach(cleanup);
-
-function tenantConfig(
-  overrides: Partial<TenantConfig> = {},
-): TenantConfig {
-  return {
+const ARTIFACT = compileTenantThemeConfig(
+  hydrateTenantThemeConfig({
+    schemaVersion: 1,
+    mode: 'advanced',
+    visualFoundation: {
+      general: {},
+      advanced: {},
+      recipeProfile: 'rottay/editorial-round@1',
+    },
+  }, {
+    tenantId: 'tenant_recipe_profile',
     slug: 'recipe-profile-proof',
+    verticalKey: 'rottay',
+    rowVersion: 1,
+  }),
+  { verticalEnvelope: getTenantThemeVerticalEnvelope('rottay') },
+);
+
+function tenantConfig(overrides: Partial<TenantConfig> = {}): TenantConfig {
+  return {
+    slug: ARTIFACT.slug,
     name: 'Recipe profile proof',
     theme: 'base',
     plan: 'enterprise',
     features: [],
     branding: { companyName: 'Recipe profile proof' },
+    appearance: ARTIFACT.normalizedAppearance,
     ...overrides,
-  };
+  } as TenantConfig;
+}
+
+function mountArtifact(artifact: TenantThemeArtifact): void {
+  const style = document.createElement('style');
+  style.id = 'recipe-profile-artifact';
+  style.setAttribute(TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE, artifact.digest);
+  style.setAttribute(TENANT_THEME_ARTIFACT_SLUG_ATTRIBUTE, artifact.slug);
+  style.setAttribute(TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE, artifact.verticalKey);
+  style.textContent = artifact.css;
+  document.head.appendChild(style);
 }
 
 function ProfileProbe() {
   const profile = useRecipeProfile();
   return (
     <>
-      <output data-testid="active-recipe-profile">
-        {profile?.id ?? 'engine-defaults'}
-      </output>
+      <output data-testid="active-recipe-profile">{profile?.id ?? 'engine-defaults'}</output>
       <ModernButton>Action</ModernButton>
     </>
   );
 }
 
-function renderConfig(config: TenantConfig) {
-  return render(
-    <DesignSystemProvider tenantConfig={config} skipCssLoading>
-      <ProfileProbe />
-    </DesignSystemProvider>,
-  );
-}
-
 describe('DesignSystemProvider recipe-profile authority', () => {
-  it('mounts a static BrandTheme selection in the production provider', async () => {
-    const view = renderConfig(
-      tenantConfig({
-        brandTheme: {
-          id: 'static-technical',
-          name: 'Static technical',
-          recipes: {
-            schemaVersion: 1,
-            profile: 'rottay/technical-sharp@1',
-          },
-        },
-      }),
-    );
-
-    expect(
-      await view.findByTestId('active-recipe-profile'),
-    ).toHaveTextContent('rottay/technical-sharp@1');
-    const button = await view.findByRole('button');
-    expect(button).toHaveAttribute('data-variant', 'outline');
-    expect(button).toHaveAttribute('data-shape', 'default');
-    expect(button).toHaveAttribute('data-size', 'sm');
+  beforeEach(() => {
+    resetVisualAuthorityDiagnostics();
+    vi.spyOn(console, 'error').mockImplementation(() => {});
   });
 
-  it('mounts DB Appearance and lets it override the static selection', async () => {
-    const view = renderConfig(
-      tenantConfig({
-        brandTheme: {
-          id: 'static-technical',
-          name: 'Static technical',
-          recipes: {
-            schemaVersion: 1,
-            profile: 'rottay/technical-sharp@1',
-          },
-        },
-        appearance: {
-          recipeProfile: 'rottay/editorial-round@1',
-        },
-      }),
-    );
-
-    expect(
-      await view.findByTestId('active-recipe-profile'),
-    ).toHaveTextContent('rottay/editorial-round@1');
-    const button = await view.findByRole('button');
-    expect(button).toHaveAttribute('data-variant', 'primary');
-    expect(button).toHaveAttribute('data-shape', 'round');
-    expect(button).toHaveAttribute('data-size', 'lg');
+  afterEach(() => {
+    cleanup();
+    vi.restoreAllMocks();
+    resetVisualAuthorityDiagnostics();
+    document.getElementById('recipe-profile-artifact')?.remove();
   });
 
-  it('fails closed for an invalid DB selection', async () => {
-    const view = renderConfig(
-      tenantConfig({
-        appearance: { recipeProfile: 'foreign/not-published@9' },
-      }),
+  it('reads the recipe selection only from the verified mounted artifact', () => {
+    mountArtifact(ARTIFACT);
+    render(
+      <DesignSystemProvider
+        tenantConfig={tenantConfig()}
+        visualAuthority={{ authority: 'compiled-artifact', artifact: ARTIFACT }}
+        vertical="rottay"
+        forceEngine="modern"
+      >
+        <ProfileProbe />
+      </DesignSystemProvider>,
     );
 
-    await waitFor(() =>
-      expect(view.getByTestId('active-recipe-profile')).toHaveTextContent(
-        'engine-defaults',
-      ),
+    expect(screen.getByTestId('active-recipe-profile'))
+      .toHaveTextContent('rottay/editorial-round@1');
+    expect(screen.getByRole('button')).toHaveAttribute('data-shape', 'round');
+  });
+
+  it('blocks an uncompiled runtime brandTheme before the recipe consumer mounts', () => {
+    render(
+      <DesignSystemProvider tenantConfig={tenantConfig({
+        appearance: undefined,
+        brandTheme: {
+          id: 'runtime-technical',
+          name: 'Runtime technical',
+          recipes: { schemaVersion: 1, profile: 'rottay/technical-sharp@1' },
+        },
+      })}>
+        <ProfileProbe />
+      </DesignSystemProvider>,
     );
-    expect(await view.findByRole('button')).toHaveAttribute(
-      'data-variant',
-      'primary',
-    );
+    expect(screen.queryByTestId('active-recipe-profile')).toBeNull();
   });
 });

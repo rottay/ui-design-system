@@ -40,9 +40,20 @@ import { collectBoxResponsiveEntries } from "../../runtime/responsive";
 
 // Deterministic style builder. Consumer-supplied paint stays available through
 // `style`, while DS-owned spacing and motion remain connected to tokens.
+//
+// THE TOKEN BRANCH FAILS CLOSED THE SAME WAY `resolveFlexGapValue` does. A
+// bare `SPACING_MAP[value]` read is a lookup on a plain object literal, so an
+// INHERITED member name ("toString", "constructor") resolves through
+// `Object.prototype` to a FUNCTION rather than `undefined` -- a value that
+// would then be stamped straight into the style attribute. An own-property
+// guard makes the map a closed vocabulary; an unrecognized truthy value fails
+// closed to the declared `none` rung (`BOX_DEFAULTS.padding`/`.margin`), never
+// to whatever the bare lookup happened to return.
 function resolveSpacing(value: BoxSpacing | undefined): string | undefined {
   if (!value) return undefined;
-  return SPACING_MAP[value];
+  return Object.prototype.hasOwnProperty.call(SPACING_MAP, value as string)
+    ? SPACING_MAP[value]
+    : SPACING_MAP.none;
 }
 
 function buildBoxStyles(props: BoxProps): CSSProperties {

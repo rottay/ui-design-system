@@ -18,7 +18,7 @@ import {
 } from '@/foundation/kernel/typography';
 import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/bithire';
 import { evntoBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/evnto';
-import { rottayBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/platform';
+import { rottayBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/rottay';
 
 const FIRST_PARTY = [
   ['bithire', bithireBrandTheme],

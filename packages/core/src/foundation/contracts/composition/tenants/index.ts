@@ -4,7 +4,7 @@
  * TenantPlan, token overrides, and the TenantContext value exposed by TenantProvider.
  *
  * @remarks
- * Everything that app-platform or product teams should be able to change at
+ * Everything that the Rottay app or product teams should be able to change at
  * runtime (engine, theme, branding, personality, features, locale, translations)
  * is encoded here rather than in component code. The DesignSystemProvider
  * resolves and merges tenant configuration into the runtime context.
@@ -218,11 +218,11 @@ export interface VerticalPreset {
     density: 'compact' | 'comfortable' | 'spacious';
     schedulerView?: 'month' | 'week' | 'day';
   };
-  suggestedPalette?: {
-    primaryColor: string;
-    secondaryColor?: string;
-    accentColor?: string;
-  };
+  // A `suggestedPalette` field lived here and was authored by all three
+  // first-party presets with seeds that contradicted every shipped BrandTheme.
+  // It is removed rather than corrected: a second place to author brand colour
+  // is the defect, and leaving the slot open invites the next author to refill
+  // it. Colour belongs to the BrandTheme source.
 }
 
 export interface TenantContextValue {

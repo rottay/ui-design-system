@@ -13,20 +13,22 @@
  * to reach the tenant border-color floor at (0,4,0).
  *
  * R2+R3: every inline style the state components used to carry (title
- * weights, card paddings, icon size, banner rhythm, capability-anatomy grid)
- * lives here now, on governed tokens — the engines stamp anatomy only. No
+ * weights, skeleton geometry, banner rhythm, capability-anatomy grid) lives
+ * here now, on governed tokens — the engines stamp anatomy only. No
  * hardcoded color literals: the stale-banner fallbacks derive from
  * --ds-color-info via color-mix.
+ *
+ * CONVERGENCE (owner ruling, 2026-08-12): the lifecycle used to ship two
+ * components for the same role, so this file used to skin two anatomies for
+ * one state. `.ds-loading-state` and `.ds-empty-state-card` were the retired
+ * halves and their rules are gone; a rule that paints a component the source
+ * no longer renders is exactly the legacy the ruling forbids. The empty state
+ * now delegates to PatternEmptyState, whose paint is that family's contract.
+ *
+ * The file keeps its `surface-states.css` name on purpose: it is aggregated
+ * into published CSS bundles by path, and those bundles are generated
+ * artifacts. Renaming it is a build-owned change, not a source-owned one.
  */
-
-/* ---- loading state: copy hierarchy ---- */
-.ds-surface.ds-loading-state [data-part='title'][data-part='title'][data-part='title'] {
-  font-weight: var(--ds-font-weight-bold, 700);
-}
-
-.ds-surface.ds-loading-state [data-part='description'][data-part='description'][data-part='description'] {
-  color: var(--ds-color-text-muted);
-}
 
 /* ---- loading skeleton: header bar geometry (was inline width/height) ---- */
 .ds-surface.ds-loading-skeleton .ds-loading-skeleton__header-primary[data-part='root'] {
@@ -37,33 +39,6 @@
 .ds-surface.ds-loading-skeleton .ds-loading-skeleton__header-secondary[data-part='root'] {
   inline-size: 20%;
   block-size: var(--ds-loading-skeleton-header-height, 24px);
-}
-
-/* ---- empty state card: centered composition on the system type scale ---- */
-.ds-surface.ds-empty-state-card [data-part='content'] {
-  padding: var(--ds-empty-state-card-padding-block, var(--ds-spacing-12, 48px))
-    var(--ds-empty-state-card-padding-inline, var(--ds-spacing-6, 24px));
-}
-
-.ds-surface.ds-empty-state-card [data-part='icon'][data-part='icon'][data-part='icon'] {
-  color: var(--ds-color-text-disabled);
-  font-size: var(--ds-empty-state-card-icon-size, 3rem);
-  line-height: 1;
-}
-
-.ds-surface.ds-empty-state-card [data-part='copy'] {
-  text-align: center;
-}
-
-.ds-surface.ds-empty-state-card [data-part='title'][data-part='title'][data-part='title'] {
-  color: var(--ds-color-text-primary);
-  font-size: var(--ds-font-size-base, 1rem);
-  font-weight: var(--ds-font-weight-semibold, 600);
-}
-
-.ds-surface.ds-empty-state-card [data-part='description'][data-part='description'][data-part='description'] {
-  color: var(--ds-color-text-muted);
-  font-size: var(--ds-font-size-sm, 0.875rem);
 }
 
 /* ---- error state: title weight ---- */

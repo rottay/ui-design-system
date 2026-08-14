@@ -10,7 +10,7 @@
  * for inline rendering, and a valid document returns the compiled artifact plus
  * the derived preview payload (contrast adjustments, font-pack warnings, and the
  * container-scoped CSS + preview-root attributes that reuse the W1 CMP-02
- * scoping). The three surface fixtures render inside that scope; app-platform
+ * scoping). The three surface fixtures render inside that scope; the Rottay app
  * console wiring is a separate cross-repo concern.
  *
  * @module Patterns/Customization/BrandStudio/Runtime/TenantThemePreview
@@ -114,7 +114,7 @@ export function compileTenantThemePreview(
 ): TenantThemeCompileOutput {
   try {
     const artifact = tenantThemeCompiler.compileTenantThemeConfig(
-      { ...input.document, ...input.identity },
+      tenantThemeCompiler.hydrateTenantThemeConfig(input.document, input.identity),
       input.envelope ? { verticalEnvelope: input.envelope } : {}
     );
     return { artifact, issues: null };

@@ -5,7 +5,6 @@ import {
   Box,
   Button,
   Card,
-  DesignSystemProvider,
   Flex,
   Grid,
   Heading,
@@ -16,14 +15,15 @@ import {
   Tabs,
   Text,
   Tooltip,
-  bithireBrandTheme,
-  brandThemeToTenantAppearance,
   useTranslation,
   type TenantConfig,
   type SemanticSurfaceRole,
 } from "@rottay/design-system";
 
-import { themanagementmiamiBrandTheme } from "@/components/torture-surface/fixtures";
+import {
+  ShowroomTenantProvider,
+  type ShowroomTenantSource,
+} from "@/components/showroom-tenant";
 
 export type BrandLocaleEvidenceFixture = "bithire" | "themanagementmiami";
 export type BrandLocaleEvidenceLocale = "en" | "es" | "ar";
@@ -49,267 +49,6 @@ const SURFACE_ROLE_SECTION_LABEL: Record<
   es: "Roles semánticos de superficie",
   ar: "أدوار الأسطح الدلالية",
 };
-
-const THE_MANAGEMENT_PROJECTED_APPEARANCE = brandThemeToTenantAppearance(
-  themanagementmiamiBrandTheme
-);
-
-/**
- * Deterministic specimen of the JSON-safe appearance payload production reads
- * from the tenancy DB. The local BrandTheme fixture is only an authoring input
- * to the public bounded exporter; the provider below receives `appearance`
- * and never receives that fixture through the file-first `brandTheme` field.
- */
-/**
- * The canonical SEEDS allowlist, transcribed from the capability registry row
- * `palette.seeds` (`documentPath: appearance.palette.{primary,secondary,accent,
- * background}`), expressed in the shape the provider actually consumes:
- * `appearance.general.palette`. Note the two are NOT the same shape — the
- * registry path is the DB authoring document, and conflating them is how a
- * "seeds-only" claim gets written against a payload that is nothing of the
- * kind.
- *
- * `palette.status-seeds` is REJECTED today and `palette.dark-mode` is tier
- * `internal`, so neither belongs here; `foreground`/`border` are authorable in
- * this shape but are not seeds.
- */
-export const SEEDS_ONLY_ALLOWLIST: Readonly<Record<string, readonly string[]>> =
-  Object.freeze({
-    "": Object.freeze(["general"]),
-    general: Object.freeze(["palette"]),
-    "general.palette": Object.freeze([
-      "primary",
-      "secondary",
-      "accent",
-      "background",
-    ]),
-  });
-
-/** The Management's authored seeds, read from its BrandTheme fixture. */
-export const THE_MANAGEMENT_SEEDS = Object.freeze({
-  primary: "#0F766E",
-  secondary: "#8C6D46",
-  accent: "#B44F3C",
-  background: "#FBF6EC",
-});
-
-/**
- * A genuinely seeds-only appearance: built from literal keys, with ZERO spread
- * of any BrandTheme projection. `brandThemeToTenantAppearance` — which the
- * full-appearance fixture below uses — emits typography, shape, density,
- * motion, surfaces and `advanced.chrome`/`tokenOverrides`, so anything derived
- * from it can never support a seeds-only claim.
- *
- * Everything a tenant sees under this config beyond the four colours is
- * therefore DERIVED by the compiler, which is the property the seeds contract
- * exists to prove.
- */
-export function seedsOnlyAppearance(
-  primary: string = THE_MANAGEMENT_SEEDS.primary
-): NonNullable<TenantConfig["appearance"]> {
-  return {
-    general: {
-      palette: {
-        primary,
-        secondary: THE_MANAGEMENT_SEEDS.secondary,
-        accent: THE_MANAGEMENT_SEEDS.accent,
-        background: THE_MANAGEMENT_SEEDS.background,
-      },
-    },
-  };
-}
-
-/** Seeds-only tenant: same vertical and engine, only the configuration differs. */
-export function seedsOnlyTenantConfig(
-  locale: BrandLocaleEvidenceLocale,
-  primary?: string
-): TenantConfig {
-  return {
-    slug: "themanagementseeds",
-    name: "The Management (seeds only)",
-    vertical: "bithire",
-    engine: "modern",
-    theme: "light",
-    plan: "enterprise",
-    features: ["*"],
-    branding: { companyName: "The Management (seeds only)" },
-    appearance: seedsOnlyAppearance(primary),
-    customTranslations: THE_MANAGEMENT_DB_COPY[locale],
-  };
-}
-
-const THE_MANAGEMENT_DB_APPEARANCE: NonNullable<TenantConfig["appearance"]> = {
-  general: {
-    ...THE_MANAGEMENT_PROJECTED_APPEARANCE.general,
-    typography: {
-      ...THE_MANAGEMENT_PROJECTED_APPEARANCE.general?.typography,
-      fontFamilyBase: themanagementmiamiBrandTheme.typography?.fontFamilyBase,
-      fontFamilyHeading:
-        themanagementmiamiBrandTheme.typography?.fontFamilyHeading,
-      typePairing: "editorial",
-      scale: 1.04,
-    },
-    shape: { buttonStyle: "soft", radiusScale: 0.76 },
-    density: "spacious",
-    motion: { intensity: 0.62, durationScale: 1.08, ambient: "subtle" },
-    // General owns the coordinated surface-role tenor. This DB field must
-    // retune every reviewed gradient/glass/glow/texture consumer without
-    // customer CSS or component-specific repainting.
-    surfaces: { elevation: "elevated", effectIntensity: 0.45 },
-    navigation: { sidebarTone: "strong" },
-  },
-  advanced: {
-    ...THE_MANAGEMENT_PROJECTED_APPEARANCE.advanced,
-    chrome: {
-      ...THE_MANAGEMENT_PROJECTED_APPEARANCE.advanced?.chrome,
-      layout: {
-        ...THE_MANAGEMENT_PROJECTED_APPEARANCE.advanced?.chrome?.layout,
-        containerBackground: "#FFFCF6",
-        containerBorder: "1px solid #C9B89D",
-        containerRadius: "0.75rem",
-        containerShadow: "0 20px 48px -34px rgb(20 34 56 / 34%)",
-        containerMotionDuration: "220ms",
-        containerMotionEasing: "cubic-bezier(0.22, 1, 0.36, 1)",
-        aspectRatioBackground: "#FBF3E7",
-        aspectRatioBorder: "1px solid #C9B89D",
-        aspectRatioRadius: "0.45rem",
-        aspectRatioShadow: "inset 0 1px 0 rgb(255 255 255 / 72%)",
-        aspectRatioOverflow: "hidden",
-        aspectRatioMotionDuration: "220ms",
-        aspectRatioMotionEasing: "cubic-bezier(0.22, 1, 0.36, 1)",
-        dividerColor: "#9B8A73",
-        dividerThicknessThin: "1px",
-        dividerThicknessMedium: "2px",
-        dividerThicknessThick: "3px",
-        dividerContentGap: "0.75rem",
-        dividerEdgeSegment: "7%",
-        dividerMinSegment: "7%",
-        dividerLabelMaxWidth: "32rem",
-        dividerLabelFontSize: "0.75rem",
-        dividerLabelFontWeight: "700",
-        dividerLabelLineHeight: "1.3",
-        dividerLabelTransform: "none",
-        dividerLabelTracking: "0.04em",
-        dividerMotionDuration: "160ms",
-        dividerMotionEasing: "cubic-bezier(0.22, 1, 0.36, 1)",
-        stackDividerSize: "1px",
-        stackDividerColor: "#C9B89D",
-        stackDividerOpacity: "0.82",
-        spaceMotionDuration: "160ms",
-        spaceMotionEasing: "cubic-bezier(0.22, 1, 0.36, 1)",
-      },
-      tooltip: {
-        borderedBackground: "#142238",
-        borderedForeground: "#FFF9F0",
-        borderedBorder: "#8B6F47",
-        borderedRadius: "0.35rem",
-        borderedShadow: "0 14px 30px -18px rgb(20 34 56 / 58%)",
-        comfortablePaddingBlock: "0.55rem",
-        comfortablePaddingInline: "0.8rem",
-      },
-      popover: {
-        borderedBackground: "#FFFCF6",
-        borderedForeground: "#142238",
-        borderedMutedForeground: "#6F665C",
-        borderedBorder: "#C9B89D",
-        borderedRadius: "0.55rem",
-        borderedShadow: "0 22px 48px -28px rgb(20 34 56 / 52%)",
-        comfortablePaddingBlock: "1rem",
-        comfortablePaddingInline: "1.1rem",
-      },
-    },
-    // Nested surfaces remain legitimate bounded Advanced values; the global
-    // canvas/ink/border hierarchy above is now a first-class General contract.
-    tokenOverrides: {
-      ...THE_MANAGEMENT_PROJECTED_APPEARANCE.advanced?.tokenOverrides,
-      "--ds-color-bg-secondary": "#FBF3E7",
-      "--ds-color-surface": "#FFFEFB",
-      "--ds-material-canvas-background": "#FBF6EC",
-      "--ds-material-canvas-foreground": "#2E261C",
-      "--ds-material-canvas-border": "#E2D9CC",
-      "--ds-material-canvas-shadow": "none",
-      "--ds-material-shell-background": "#F5ECDF",
-      "--ds-material-shell-foreground": "#2E261C",
-      "--ds-material-shell-border": "#C8B9A5",
-      "--ds-material-shell-shadow": "0 2px 8px rgba(46, 38, 28, 0.05)",
-      "--ds-material-panel-background": "#FFFCF6",
-      "--ds-material-panel-foreground": "#2E261C",
-      "--ds-material-panel-border": "#D8C9B7",
-      "--ds-material-panel-shadow": "0 8px 24px rgba(46, 38, 28, 0.08)",
-      "--ds-material-card-background": "#FFFEFB",
-      "--ds-material-card-background-hover": "#F8EFE2",
-      "--ds-material-card-background-active": "#F1E4D3",
-      "--ds-material-card-background-selected": "#E8F2EF",
-      "--ds-material-card-foreground": "#2E261C",
-      "--ds-material-card-foreground-muted": "#6B5B48",
-      "--ds-material-card-border": "#D8C9B7",
-      "--ds-material-card-border-strong": "#8C6D46",
-      "--ds-material-card-border-hover": "#0F766E",
-      "--ds-material-card-focus-ring": "0 0 0 3px rgba(15, 118, 110, 0.26)",
-      "--ds-material-card-shadow": "0 10px 30px rgba(46, 38, 28, 0.08)",
-      "--ds-material-card-shadow-hover": "0 16px 38px rgba(46, 38, 28, 0.12)",
-      "--ds-material-card-shadow-selected": "0 0 0 2px rgba(15, 118, 110, 0.3)",
-      "--ds-material-inset-background": "#F1E7D9",
-      "--ds-material-inset-foreground": "#3B3126",
-      "--ds-material-inset-border": "#C8B9A5",
-      "--ds-material-inset-shadow": "inset 0 1px 3px rgba(46, 38, 28, 0.08)",
-      "--ds-material-control-background": "#FFFFFF",
-      "--ds-material-control-background-hover": "#F8EFE2",
-      "--ds-material-control-background-active": "#EEE0CF",
-      "--ds-material-control-foreground": "#2E261C",
-      "--ds-material-control-border": "#B9A991",
-      "--ds-material-control-border-hover": "#0F766E",
-      "--ds-material-control-focus-ring": "0 0 0 3px rgba(15, 118, 110, 0.26)",
-      "--ds-material-control-shadow": "0 1px 2px rgba(46, 38, 28, 0.05)",
-      "--ds-material-raised-background": "#FFFFFF",
-      "--ds-material-raised-foreground": "#2E261C",
-      "--ds-material-raised-border": "#C8B9A5",
-      "--ds-material-raised-shadow": "0 18px 42px rgba(46, 38, 28, 0.14)",
-      "--ds-material-overlay-background": "#2E261C",
-      "--ds-material-overlay-foreground": "#FFF9F0",
-      "--ds-material-overlay-foreground-muted": "#E2D9CC",
-      "--ds-material-overlay-border": "#8C6D46",
-      "--ds-material-overlay-shadow": "0 24px 64px rgba(20, 14, 8, 0.34)",
-    },
-  },
-};
-
-export function tenantConfigFor(
-  fixture: BrandLocaleEvidenceFixture,
-  locale: BrandLocaleEvidenceLocale
-): TenantConfig {
-  if (fixture === "themanagementmiami") {
-    return {
-      slug: "themanagementmiami",
-      name: "The Management Miami",
-      vertical: "bithire",
-      engine: "modern",
-      theme: "light",
-      plan: "enterprise",
-      features: ["*"],
-      branding: { companyName: "The Management Miami" },
-      // Customer identity must exercise the DB-owned runtime path. Supplying
-      // `brandTheme` here would be a false-positive proof of the file-first
-      // path reserved for bundled vertical identity.
-      appearance: THE_MANAGEMENT_DB_APPEARANCE,
-      customTranslations: THE_MANAGEMENT_DB_COPY[locale],
-    };
-  }
-
-  return {
-    slug: "bithire",
-    name: "BitHire",
-    vertical: "bithire",
-    engine: "modern",
-    theme: "light",
-    plan: "enterprise",
-    features: ["*"],
-    branding: { companyName: "BitHire" },
-    // BitHire is first-party vertical identity and therefore comes from the
-    // checked-in DS theme, never from a customer DB fixture.
-    brandTheme: bithireBrandTheme,
-  };
-}
 
 function EvidenceCanvas({
   fixture,
@@ -544,6 +283,43 @@ function EvidenceCanvas({
   );
 }
 
+/**
+ * The two fixtures of this route ARE two of the fleet's governed sources, so
+ * they map onto them instead of rebuilding them. The third,
+ * `themanagement-seeds`, is deliberately not offered here: this route contrasts
+ * a bundled vertical against a fully-authored customer document, and the
+ * seeds-only claim is the canary's subject, not this one's.
+ */
+const EVIDENCE_TENANT_SOURCE: Record<
+  BrandLocaleEvidenceFixture,
+  ShowroomTenantSource
+> = {
+  bithire: "bithire-static",
+  themanagementmiami: "themanagement-db",
+};
+
+/**
+ * Both halves come from the shared ground; this component owns neither.
+ *
+ * The previous `{ ...tenantConfigFor(fixture, locale), locale }` was illegal in
+ * both directions at once. Spreading the registry config destroys the WeakSet
+ * object identity that makes bithire code-owned, so the copy became an ordinary
+ * tenant carrying an uncompiled `brandTheme` -- blocked visual authority, and a
+ * blocked resolution renders `<LoadingScreen />`, which photographs as a slow
+ * load rather than as a failure. The management branch was blocked for the
+ * second reason: a hand-authored `appearance` is visual payload that no
+ * declaration admits.
+ *
+ * `ShowroomTenantProvider` fixes both: bithire is the registry's own object,
+ * unspread, and The Management is a validated/hydrated/compiled artifact whose
+ * `<style>` mounts OUTSIDE the provider so the mount proof can see it.
+ *
+ * Locale is provider/context data on BOTH paths and never a reason to clone the
+ * tenant -- the code-owned projection drops everything outside
+ * `branding | engine | features | name | plan | slug | theme | vertical`, so a
+ * `locale` (or `customTranslations`) set on a config would be silently dropped
+ * even if cloning were legal. Copy travels the same way for the same reason.
+ */
 export function BrandLocaleEvidence({
   fixture,
   locale,
@@ -552,14 +328,14 @@ export function BrandLocaleEvidence({
   locale: BrandLocaleEvidenceLocale;
 }) {
   return (
-    <DesignSystemProvider
-      tenantConfig={{ ...tenantConfigFor(fixture, locale), locale }}
-      vertical="bithire"
+    <ShowroomTenantProvider
+      source={EVIDENCE_TENANT_SOURCE[fixture]}
       locale={locale}
-      forceEngine="modern"
-      forceTheme="light"
+      {...(fixture === "themanagementmiami"
+        ? { customTranslations: THE_MANAGEMENT_DB_COPY[locale] }
+        : {})}
     >
       <EvidenceCanvas fixture={fixture} evidenceLocale={locale} />
-    </DesignSystemProvider>
+    </ShowroomTenantProvider>
   );
 }

@@ -43,14 +43,14 @@
 import React, { useId } from 'react';
 import { Box, Card, Grid, Heading, Stack, Text } from '../../../../../primitives';
 import { FadeIn } from '@/graphics/motion';
-import { useSurfaceResponsiveLayout } from '../../../../runtime/responsive';
+import { useSurfaceResponsiveLayout } from '../../../../../structures/foundation/chrome/runtime/responsive';
 import type { AuthSurfaceConfig } from '../../../../foundation/contracts';
-import { SurfaceActionBar } from '../../../../runtime/helpers/rendering';
+import { SurfaceActionBar } from '../../../../../structures/shell/surface-chrome';
 import { hasSurfaceError } from '../../../../runtime/helpers';
-import { SurfaceErrorState } from '../../../../runtime/helpers/states';
-import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
-import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
-import { resolveStackSpacing } from '../../../../runtime/profile-defaults/personality';
+import { SurfaceErrorState } from '../../../../../structures/feedback/surface-lifecycle';
+import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
+import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
+import { resolveStackSpacing } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
 
 export interface AuthSurfaceProps {
   config: AuthSurfaceConfig;

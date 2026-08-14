@@ -3,19 +3,57 @@
 /**
  * DS-Q001L canonical specimen (showroom probe).
  *
- * One identical component tree for the six DS-S001 families rendered under
- * two opposing governed sources:
- *  - `technical-static`: static BrandTheme selecting `rottay/technical-sharp@1`
- *    (radius-zero, ruled, outlined posture);
- *  - `editorial-db`: DB Appearance selecting `rottay/editorial-round@1`
- *    (ultra-rounded, soft, elevated posture).
+ * One identical component tree for the six DS-S001 families rendered under the
+ * two GOVERNED INGRESS PATHS a recipe profile actually has:
+ *  - `technical-static`: the code-owned `rottay` registry tenant, whose own
+ *    checked-in BrandTheme authors `rottay/technical-sharp@1` (ruled, outlined,
+ *    square posture -- and Rottay's real near-black canvas);
+ *  - `editorial-db`: a published customer document selecting
+ *    `rottay/editorial-round@1`, validated, compiled and mounted as a verified
+ *    artifact (rounded, soft, elevated, warm).
+ *
+ * NEITHER SIDE IS SYNTHESISED ANY MORE, and that is the repair. The static side
+ * used to hand-author a `TECHNICAL_STATIC_THEME` BrandTheme and pass it as
+ * `tenantConfig.brandTheme`; measured against the real resolver, a runtime
+ * BrandTheme is unrenderable under every declaration, so that cell was a
+ * spinner. The DB side used to pass a raw `appearance` literal, which is visual
+ * payload on its own and blocks just as hard. A hand-authored BrandTheme has
+ * exactly one legal home -- the checked-in registry -- and a customer's
+ * appearance has exactly one -- a compiled artifact whose mount is proven. So
+ * the specimen now uses one of each, which is also the more honest comparison:
+ * it contrasts the two ways a profile can REACH the runtime, not two ways of
+ * faking it.
+ *
+ * The editorial document's `radiusScale` is 1.2, not the 1.35 the superseded
+ * literal used: 1.2 is the bithire envelope CEILING and 1.35 is a value the
+ * real DB channel rejects. Its `advanced.tokenOverrides` block is gone as well
+ * -- it hard-coded the radii, the card and the whole tabs tray to the values
+ * the author wanted to see, which is exactly the "profile" being simulated
+ * instead of selected. The governed dials plus `rottay/editorial-round@1` are
+ * what a customer actually has, so they are what the specimen shows.
+ *
+ * Two placements below are load-bearing rather than stylistic, both inherited
+ * from `showroom-tenant`, which is where they are argued in full:
+ *
+ *   - the registry config is passed UNSPREAD. Code-owned identity is WeakSet
+ *     object identity, so `{ ...getKnownTenantConfig('rottay'), locale }` is an
+ *     ordinary tenant carrying an uncompiled `brandTheme`, and it blocks.
+ *     Locale therefore travels as a provider prop on BOTH sources.
+ *   - the artifact `<style>` mounts OUTSIDE the provider. The provider proves
+ *     the mount during its own render, before children commit, so an artifact
+ *     mounted as a child can never be seen and the cell spins forever.
+ *
+ * The specimen's own axis (`vertical`) is read off whichever config it mounted
+ * -- `rottay` for the registry tenant, `bithire` for the customer row, whose
+ * envelope bounds its document -- instead of being restated as a literal that
+ * could disagree with the artifact selector.
  *
  * Every cell is deterministic and URL-addressable; the Playwright matrix
  * asserts DOM parity and computed-style divergence, and Codex performs the
  * sighted inspection. No fixture value here is product content.
  */
 
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import {
   Box,
   Button,
@@ -28,9 +66,15 @@ import {
   Tabs,
   Tag,
   Text,
-  type BrandTheme,
-  type TenantConfig,
 } from "@rottay/design-system";
+import { getKnownTenantConfig } from "@rottay/design-system/server";
+
+import {
+  ShowroomArtifactStyle,
+  compileShowroomTenantGround,
+  type ShowroomTenantGround,
+  type ShowroomTenantIdentity,
+} from "@/components/showroom-tenant";
 
 export type SpecimenSource = "technical-static" | "editorial-db";
 export type SpecimenLocale = "en" | "es" | "ar";
@@ -44,126 +88,97 @@ export interface RecipeProfileSpecimenProps {
   stress: SpecimenStress;
 }
 
-/** Static technical vertical: square, ruled, cold, outlined. */
-const TECHNICAL_STATIC_THEME: BrandTheme = {
-  id: "q001l-technical",
-  name: "Q001L Technical",
-  recipes: { schemaVersion: 1, profile: "rottay/technical-sharp@1" },
-  palette: {
-    primaryColor: "#1a56db",
-    backgroundColor: "#f4f5f7",
-    textPrimaryColor: "#111827",
-    borderPrimaryColor: "#9aa3b2",
-  },
-  typography: {
-    fontFamilyBase: "'IBM Plex Sans', system-ui, sans-serif",
-    fontFamilyHeading: "'IBM Plex Mono', ui-monospace, monospace",
-    labelStyle: "uppercase",
-  },
-  surfaces: {
-    borderRadius: { sm: "0px", md: "0px", lg: "0px", xl: "0px" },
-    shadows: { sm: "none", md: "none", lg: "none", xl: "none" },
-    densityScale: 0.92,
-    effectIntensity: 0,
-  },
+/**
+ * The trusted identity columns of the published editorial row.
+ *
+ * `verticalKey` is `bithire` because the envelope that bounds the document
+ * below is bithire's; the profile it selects is a `rottay/` registry id, which
+ * is a namespace on the governed profile registry and not a vertical claim.
+ */
+const EDITORIAL_IDENTITY: ShowroomTenantIdentity = {
+  tenantId: "3f6c1d95-71ab-4e02-8c47-2d5b90ea6c18",
+  slug: "q001l-editorial",
+  verticalKey: "bithire",
+  rowVersion: 1,
 };
 
 /**
- * DB editorial tenant: round, soft, warm, elevated. Expressed strictly as the
- * bounded Appearance projection a customer row compiles to — never as a
- * static BrandTheme — so the specimen exercises the DB-owned runtime path.
+ * The published editorial document: round, soft, warm, elevated.
+ *
+ * Expressed as the bounded `TenantThemeDocument` a customer actually writes --
+ * not a `BrandTheme` (that channel is reserved for checked-in vertical
+ * identity) and not a raw `appearance` literal (that is visual payload no
+ * declaration admits). Every dial sits inside the measured bithire envelope:
+ * radiusScale 1.2 is its ceiling, effectIntensity 0.55 and motion intensity
+ * 0.75 are inside 0-0.65 and 0-0.8, and typeScale 1.04 is inside 0.92-1.08.
+ * The visual difference is carried by these governed dials plus the profile
+ * selection -- nothing here restates a `--ds-*` value directly.
  */
-const EDITORIAL_DB_APPEARANCE = {
-  recipeProfile: "rottay/editorial-round@1",
-  general: {
-    palette: {
-      primary: "#b45309",
-      secondary: "#7c3f18",
-      accent: "#c26d2d",
-      background: "#fffaf3",
-      foreground: {
-        primary: "#2c1810",
-        secondary: "#674332",
-        muted: "#886858",
-        disabled: "#ad9386",
+const EDITORIAL_DOCUMENT = {
+  schemaVersion: 1,
+  mode: "advanced",
+  visualFoundation: {
+    recipeProfile: "rottay/editorial-round@1",
+    general: {
+      palette: {
+        primary: "#B45309",
+        secondary: "#7C3F18",
+        accent: "#C26D2D",
+        background: "#FFFAF3",
+        foreground: {
+          primary: "#2C1810",
+          secondary: "#674332",
+          muted: "#886858",
+          disabled: "#AD9386",
+        },
+        border: { primary: "#D9B99D", secondary: "#EAD8C7" },
+        backgroundMode: "light",
       },
-      border: {
-        primary: "#d9b99d",
-        secondary: "#ead8c7",
+      typography: {
+        typePairing: "editorial",
+        fontFamilyHeading: "Fraunces, Georgia, 'Times New Roman', serif",
+        fontFamilyBase: "Fraunces, Georgia, 'Times New Roman', serif",
+        scale: 1.04,
       },
-      backgroundMode: "light",
-    },
-    typography: {
-      fontFamilyBase: "'Fraunces', Georgia, serif",
-      fontFamilyHeading: "'Fraunces', Georgia, serif",
-      typePairing: "editorial",
-      scale: 1.04,
-    },
-    shape: {
-      buttonStyle: "pill",
-      radiusScale: 1.35,
-    },
-    density: "spacious",
-    motion: {
-      intensity: 0.75,
-      durationScale: 1.08,
-      ambient: "subtle",
-    },
-    surfaces: {
-      elevation: "soft",
-      effectIntensity: 0.55,
+      shape: { buttonStyle: "pill", radiusScale: 1.2 },
+      motion: { intensity: 0.75, durationScale: 1.08 },
+      density: "spacious",
+      surfaces: { elevation: "soft", effectIntensity: 0.55 },
     },
   },
-  advanced: {
-    tokenOverrides: {
-      "--ds-radius-sm": "14px",
-      "--ds-radius-md": "20px",
-      "--ds-radius-lg": "28px",
-      "--ds-radius-xl": "36px",
-      "--ds-density-scale": "1.08",
-      "--ds-font-family-heading": "'Fraunces', Georgia, serif",
-      "--ds-card-bg": "#fff6ea",
-      "--ds-tabs-list-bg": "#f3e4d4",
-      "--ds-tabs-list-border": "#d9b99d",
-      "--ds-tabs-contained-list-bg": "#f3e4d4",
-      "--ds-tabs-segmented-list-bg": "#f3e4d4",
-      "--ds-tabs-pills-list-bg": "#f3e4d4",
-      "--ds-tabs-active-bg": "#fffaf3",
-      "--ds-tabs-pills-active-color": "#fffaf3",
-      "--ds-tabs-panel-bg": "#fffaf3",
-      "--ds-tabs-panel-border": "#ead8c7",
-      "--ds-tab-color": "#674332",
-      "--ds-tab-color-hover": "#2c1810",
-      "--ds-tab-color-active": "#2c1810",
-    },
-  },
-} as const satisfies NonNullable<TenantConfig["appearance"]>;
+} as const;
 
-function tenantConfigFor(source: SpecimenSource): TenantConfig {
-  if (source === "editorial-db") {
-    return {
-      slug: "q001l-editorial",
-      name: "Editorial Round",
-      vertical: "bithire",
-      engine: "modern",
-      theme: "light",
-      plan: "enterprise",
-      features: ["*"],
-      branding: { companyName: "Editorial Round" },
-      appearance: EDITORIAL_DB_APPEARANCE,
-    };
-  }
-  return {
-    slug: "q001l-technical",
-    name: "Q001L Technical",
-    vertical: "bithire",
-    engine: "modern",
+/**
+ * One compile for the process, and identity matters as much as cost: the
+ * provider re-verifies the mounted artifact on every render, so a fresh
+ * artifact object per render would churn the retained-artifact ledger for a
+ * document whose bytes never changed.
+ */
+let EDITORIAL_GROUND: ShowroomTenantGround | null = null;
+
+function editorialGround(): ShowroomTenantGround {
+  EDITORIAL_GROUND ??= compileShowroomTenantGround({
+    document: EDITORIAL_DOCUMENT,
+    identity: EDITORIAL_IDENTITY,
+    name: "Editorial Round",
     theme: "light",
-    plan: "enterprise",
-    features: ["*"],
-    branding: { companyName: "Q001L Technical" },
-    brandTheme: TECHNICAL_STATIC_THEME,
-  };
+  });
+  return EDITORIAL_GROUND;
+}
+
+function technicalGround(): ShowroomTenantGround {
+  // The REGISTRY's own object, unspread and uncopied. Rottay's checked-in
+  // BrandTheme is what authors `rottay/technical-sharp@1` here, and its CSS is
+  // bundled, so this side needs neither an emission nor a declaration.
+  const tenantConfig = getKnownTenantConfig("rottay");
+  if (!tenantConfig) {
+    throw new Error("The bundled rottay tenant is missing from the registry");
+  }
+  return { tenantConfig, emission: null, declaration: undefined };
+}
+
+function specimenGround(source: SpecimenSource): ShowroomTenantGround {
+  return source === "editorial-db" ? editorialGround() : technicalGround();
 }
 
 const COPY: Record<SpecimenLocale, Record<string, string>> = {
@@ -340,39 +355,46 @@ export function RecipeProfileSpecimen({
   state,
   stress,
 }: RecipeProfileSpecimenProps) {
+  const ground = useMemo(() => specimenGround(source), [source]);
+
   return (
-    <DesignSystemProvider
-      tenantConfig={{ ...tenantConfigFor(source), locale }}
-      vertical="bithire"
-      locale={locale}
-      forceEngine="modern"
-      forceTheme="light"
-    >
-      <Box
-        data-testid="specimen-canvas"
-        style={{
-          background: "var(--ds-color-background)",
-          color: "var(--ds-color-text-primary)",
-          minHeight: "100vh",
-          inlineSize: "100%",
-        }}
+    <>
+      <ShowroomArtifactStyle emission={ground.emission} />
+      <DesignSystemProvider
+        tenantConfig={ground.tenantConfig}
+        vertical={ground.tenantConfig.vertical}
+        locale={locale}
+        forceEngine="modern"
+        forceTheme="light"
+        {...(ground.declaration ? { visualAuthority: ground.declaration } : {})}
       >
         <Box
-          data-testid="specimen-frame"
-          data-specimen-source={source}
-          data-specimen-state={state}
-          data-specimen-stress={stress}
-          dir={locale === "ar" ? "rtl" : "ltr"}
+          data-testid="specimen-canvas"
           style={{
-            padding: 24,
+            background: "var(--ds-color-background)",
+            color: "var(--ds-color-text-primary)",
             minHeight: "100vh",
-            maxInlineSize: 1100,
-            marginInline: "auto",
+            inlineSize: "100%",
           }}
         >
-          <SpecimenTree locale={locale} state={state} stress={stress} />
+          <Box
+            data-testid="specimen-frame"
+            data-specimen-source={source}
+            data-specimen-tenant={ground.tenantConfig.slug}
+            data-specimen-state={state}
+            data-specimen-stress={stress}
+            dir={locale === "ar" ? "rtl" : "ltr"}
+            style={{
+              padding: 24,
+              minHeight: "100vh",
+              maxInlineSize: 1100,
+              marginInline: "auto",
+            }}
+          >
+            <SpecimenTree locale={locale} state={state} stress={stress} />
+          </Box>
         </Box>
-      </Box>
-    </DesignSystemProvider>
+      </DesignSystemProvider>
+    </>
   );
 }

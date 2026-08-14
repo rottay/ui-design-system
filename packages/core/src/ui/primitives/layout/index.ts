@@ -133,5 +133,13 @@ export { ScrollArea } from './ScrollArea';
 export type { ScrollAreaProps, ScrollAreaOrientation, ScrollAreaScrollbarSize } from './ScrollArea';
 export { SCROLL_AREA_DEFAULTS, SCROLLBAR_SIZES } from './ScrollArea';
 
+// AsciiFrame
+export { AsciiFrame } from './AsciiFrame';
+export type { AsciiFrameProps, AsciiFrameVariant } from './AsciiFrame';
+
+// InvertSection
+export { InvertSection } from './InvertSection';
+export type { InvertSectionProps, InvertSectionSurface } from './InvertSection';
+
 // CSS-first responsive visibility and content swapping
 export * from './responsive';

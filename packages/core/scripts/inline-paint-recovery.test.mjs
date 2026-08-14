@@ -19,6 +19,35 @@ function stylesheet(relativePath) {
   return readFileSync(join(CSS, relativePath), 'utf8');
 }
 
+function escapeForRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/**
+ * Proves a skin rule by extracting the ONE top-level block the selector opens
+ * and comparing its body byte-for-byte (leading/trailing whitespace aside).
+ *
+ * A permissive `includes` check would pass on any superset: a resurrected dead
+ * fallback, an extra declaration smuggled into the same block, or a second
+ * competing rule later in the file would all survive it. The uniqueness half
+ * matters as much as the equality half -- the last rule wins in the cascade,
+ * so proving that one exists proves nothing about what actually paints.
+ *
+ * `(?:^|\})` anchors the match to a top-level rule: a selector reached only as
+ * one arm of a comma list, or as the first rule inside an `@media` block, is
+ * deliberately NOT this rule and must not satisfy the assertion.
+ */
+function assertSoleRule(css, selector, expectedBody, label) {
+  const withoutComments = css.replace(/\/\*[\s\S]*?\*\//g, '');
+  const pattern = new RegExp(
+    `(?:^|\\})\\s*${escapeForRegExp(selector)}\\s*\\{([^{}]*)\\}`,
+    'g'
+  );
+  const bodies = [...withoutComments.matchAll(pattern)].map((match) => match[1].trim());
+  assert.equal(bodies.length, 1, `${label}: expected exactly one top-level rule for ${selector}`);
+  assert.equal(bodies[0], expectedBody, label);
+}
+
 test('the twenty runtime paint sites keep their exact property identity', () => {
   const boxProperties = [
     'background',
@@ -89,22 +118,66 @@ test('the recovered static paint lives in wired, logical-property skins', () => 
     /border-(?:top|bottom)-(?:left|right)-radius: 0 !important;/,
   );
 
-  const radiusValues = new Map([
-    ['xs', 'var(--ds-radius-xs, 0.1875rem)'],
-    ['sm', 'var(--ds-radius-sm, 0.375rem)'],
-    ['md', 'var(--ds-radius-md, 0.5rem)'],
-    ['lg', 'var(--ds-radius-lg, 0.75rem)'],
-    ['xl', 'var(--ds-radius-xl, 1rem)'],
-    ['2xl', 'var(--ds-radius-2xl, 1.25rem)'],
-    ['full', 'var(--ds-radius-full, 9999px)'],
-  ]);
-  const shadowValues = new Map([
-    ['xs', 'var(--ds-elevation-1, 0 1px 2px 0 rgba(0, 0, 0, 0.05))'],
-    ['sm', 'var(--ds-elevation-2, 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1))'],
-    ['md', 'var(--ds-elevation-3, 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1))'],
-    ['lg', 'var(--ds-elevation-4, 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1))'],
-    ['xl', 'var(--ds-elevation-5, 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1))'],
-    ['2xl', '0 25px 50px -12px rgba(0, 0, 0, 0.25)'],
+  // The two engines recovered the SAME inline paint into DIFFERENT skins, so
+  // one shared expectation table was a fiction that only held while both were
+  // read through a permissive substring check.
+  //
+  // Modern rides the declared DS scale bare: every `--ds-radius-*` and
+  // `--ds-elevation-1..6` channel is declared in the default theme, so a
+  // literal fallback beside it is dead bytes that can never fire (the engine's
+  // fallback-parity law). `2xl` mounts `--ds-elevation-6` -- the rung the
+  // token layer grew -- not a reference back down to 5.
+  //
+  // Rustic keeps its seven radius fallbacks and its six shadows BYTE-EXACT.
+  // It is the vanilla-CSS fallback engine: it is the one skin expected to
+  // render standalone, outside the DS theme, where the fallback IS the value.
+  // These strings are transcribed from the rustic source and are asserted, not
+  // edited -- this atom touches no rustic byte.
+  const boxSkinExpectations = new Map([
+    [
+      'modern',
+      {
+        radius: new Map([
+          ['xs', 'var(--ds-radius-xs)'],
+          ['sm', 'var(--ds-radius-sm)'],
+          ['md', 'var(--ds-radius-md)'],
+          ['lg', 'var(--ds-radius-lg)'],
+          ['xl', 'var(--ds-radius-xl)'],
+          ['2xl', 'var(--ds-radius-2xl)'],
+          ['full', 'var(--ds-radius-full)'],
+        ]),
+        shadow: new Map([
+          ['xs', 'var(--ds-elevation-1)'],
+          ['sm', 'var(--ds-elevation-2)'],
+          ['md', 'var(--ds-elevation-3)'],
+          ['lg', 'var(--ds-elevation-4)'],
+          ['xl', 'var(--ds-elevation-5)'],
+          ['2xl', 'var(--ds-elevation-6)'],
+        ]),
+      },
+    ],
+    [
+      'rustic',
+      {
+        radius: new Map([
+          ['xs', 'var(--ds-radius-xs, 0.1875rem)'],
+          ['sm', 'var(--ds-radius-sm, 0.375rem)'],
+          ['md', 'var(--ds-radius-md, 0.5rem)'],
+          ['lg', 'var(--ds-radius-lg, 0.75rem)'],
+          ['xl', 'var(--ds-radius-xl, 1rem)'],
+          ['2xl', 'var(--ds-radius-2xl, 1.25rem)'],
+          ['full', 'var(--ds-radius-full, 9999px)'],
+        ]),
+        shadow: new Map([
+          ['xs', 'var(--ds-elevation-1, 0 1px 2px 0 rgba(0, 0, 0, 0.05))'],
+          ['sm', 'var(--ds-elevation-2, 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1))'],
+          ['md', 'var(--ds-elevation-3, 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1))'],
+          ['lg', 'var(--ds-elevation-4, 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1))'],
+          ['xl', 'var(--ds-elevation-5, 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1))'],
+          ['2xl', '0 25px 50px -12px rgba(0, 0, 0, 0.25)'],
+        ]),
+      },
+    ],
   ]);
   for (const engine of ['modern', 'rustic']) {
     const box = component(`primitives/layout/Box/engines/${engine}/index.tsx`);
@@ -120,20 +193,20 @@ test('the recovered static paint lives in wired, logical-property skins', () => 
       /["']data-shadow["']:\s*!callerOwnsShadow && props\.shadow && props\.shadow !== ["']none["']/,
     );
     const boxCss = stylesheet(`runtime/engines/${engine}/skin/layout.css`);
-    const normalizedBoxCss = boxCss.replace(/\s+/g, ' ');
-    for (const [token, value] of radiusValues) {
-      assert.ok(
-        normalizedBoxCss.includes(
-          `.rottay-box.rottay-box--${engine}[data-radius='${token}'] { border-radius: ${value}; }`
-        ),
+    const { radius, shadow } = boxSkinExpectations.get(engine);
+    for (const [token, value] of radius) {
+      assertSoleRule(
+        boxCss,
+        `.rottay-box.rottay-box--${engine}[data-radius='${token}']`,
+        `border-radius: ${value};`,
         `${engine} radius ${token}`
       );
     }
-    for (const [token, value] of shadowValues) {
-      assert.ok(
-        normalizedBoxCss.includes(
-          `.rottay-box.rottay-box--${engine}[data-shadow='${token}'] { box-shadow: ${value}; }`
-        ),
+    for (const [token, value] of shadow) {
+      assertSoleRule(
+        boxCss,
+        `.rottay-box.rottay-box--${engine}[data-shadow='${token}']`,
+        `box-shadow: ${value};`,
         `${engine} shadow ${token}`
       );
     }
@@ -148,7 +221,14 @@ test('the recovered static paint lives in wired, logical-property skins', () => 
     /\[data-placement='top-center'\]\[data-center-transform='true'\],[\s\S]*?\[data-placement='bottom-center'\]\[data-center-transform='true'\][\s\S]*?transform: translateX\(-50%\);/
   );
 
-  const accent = component('surfaces/runtime/profile-defaults/personality/index.tsx');
+  // Relocated by the chrome-ownership wave: the profile-defaults personality
+  // owner now lives under `structures/foundation/chrome/`, not under
+  // `surfaces/runtime/`. The move is byte-identical, so the assertions below
+  // are unchanged -- only the path was stale, and it made the focal fail
+  // before reaching assertions (fail-closed ENOENT on the read).
+  const accent = component(
+    'structures/foundation/chrome/runtime/profile-defaults/personality/index.tsx'
+  );
   assert.equal(countArc09PaintInFile(accent.source, accent.file), 0);
   assert.doesNotMatch(accent.source, /baseStyle\.backgroundSize\s*=/);
   const accentSkin = stylesheet('presentation/components/skin/surface-accent-bar.css');

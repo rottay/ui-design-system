@@ -1,16 +1,135 @@
 /**
  * Provider-level behavioral test for TenantAppearance.
  *
- * Proves that config.appearance fields propagate through
- * DesignSystemProvider -> ThemeProvider -> DOM.
+ * WHAT THIS DEFENDS, AND WHAT CHANGED.
+ *
+ * The property has always been "an authored appearance field reaches the
+ * pixels". What used to carry it was `DesignSystemProvider` compiling the
+ * appearance and `ThemeProvider` stamping the result inline on `<html>`, so
+ * these cases read `document.documentElement.style`.
+ *
+ * That carrier is gone. The provider compiles nothing and writes no visual
+ * variable; a tenant's appearance is compiled once, into an artifact, and the
+ * artifact is the only style owner. So each case below now asserts BOTH
+ * halves of the current law on the same input:
+ *   - the channel IS produced, by the compiler, into `artifact.css`
+ *   - the provider does NOT also stamp it inline
+ * Asserting only the first would let a second emitter come back unnoticed;
+ * asserting only the second would pass for an appearance that reaches
+ * nothing at all.
+ *
+ * The provider's non-visual responsibilities — tenant context, `data-theme`
+ * from `backgroundMode` — are unchanged and still asserted through the DOM.
  */
 
 import React from 'react';
-import { render, act } from '@testing-library/react';
+import { render, act, cleanup, screen } from '@testing-library/react';
 import { describe, it, expect, afterEach } from 'vitest';
 import { DesignSystemProvider } from '@/infrastructure/runtime/bootstrap';
 import type { TenantConfig } from '@/foundation/contracts';
-import { useTenantContext } from '@/infrastructure/runtime/tenant/composition/react/provider';
+import type { TenantAppearance } from '@/foundation/contracts/composition/tenants/themes';
+import type { TenantThemeArtifact } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
+import { compileAppearanceVariables } from '@/infrastructure/compilers/kernel/runtime/appearance';
+import {
+  compileTenantThemeConfig,
+  getTenantThemeVerticalEnvelope,
+  hydrateTenantThemeConfig,
+} from '@/infrastructure/compilers/composition/tenant-theme';
+import { emitTenantThemeArtifactForSsr } from '@/infrastructure/runtime/theming/foundation/visual-authority';
+
+/**
+ * A genuinely admitted tenant: one compiled artifact, carrying a real payload
+ * (palette seed, dark background mode, compact density), mounted exactly as a
+ * request ships it.
+ *
+ * WHY THIS EXISTS. Every "the provider does not restate it" case below asserts
+ * an ABSENCE on the root style. An absence is satisfied for free by a provider
+ * that renders nothing at all — and that is precisely what a raw `appearance`
+ * on the config now produces, because the authority barrier refuses runtime
+ * visual payload with no artifact behind it. Handing those cases a raw
+ * appearance would leave four green tests proving nothing. They render this
+ * admitted tenant instead, and `renderAdmitted` asserts the tree actually
+ * mounted before reading the style.
+ */
+function admittedArtifact(): TenantThemeArtifact {
+  return compileTenantThemeConfig(
+    hydrateTenantThemeConfig(
+      {
+        schemaVersion: 1,
+        mode: 'simple',
+        appearance: {
+          palette: { primary: '#FF5500', backgroundMode: 'dark' },
+          density: 'compact',
+        },
+      },
+      {
+        tenantId: 'tenant_test_appearance',
+        slug: 'test-appearance',
+        verticalKey: 'bithire',
+        rowVersion: 1,
+      },
+    ),
+    { verticalEnvelope: getTenantThemeVerticalEnvelope('bithire') },
+  );
+}
+
+const mountedArtifacts: HTMLStyleElement[] = [];
+
+function mountArtifact(artifact: TenantThemeArtifact): void {
+  const { attributes, css } = emitTenantThemeArtifactForSsr(artifact, {
+    slug: artifact.slug,
+    verticalKey: artifact.verticalKey,
+  });
+  const style = document.createElement('style');
+  for (const [name, value] of Object.entries(attributes)) {
+    style.setAttribute(name, value);
+  }
+  style.textContent = css;
+  document.head.appendChild(style);
+  mountedArtifacts.push(style);
+}
+
+/**
+ * Render an admitted tenant and report what the root style holds. Every visual
+ * channel must come back empty: that is the whole point of the provider having
+ * no emitters — proven here against a provider that definitely rendered.
+ */
+async function renderAdmitted(
+  overrides: Partial<TenantConfig> = {},
+): Promise<CSSStyleDeclaration> {
+  const artifact = admittedArtifact();
+  mountArtifact(artifact);
+  await act(async () => {
+    render(
+      <DesignSystemProvider
+        tenantConfig={makeConfig({ vertical: 'bithire', ...overrides })}
+        visualAuthority={{ authority: 'compiled-artifact', artifact }}
+      >
+        <div data-testid="child">hello</div>
+      </DesignSystemProvider>,
+    );
+  });
+  // The guard that makes every absence below load-bearing.
+  expect(screen.getByTestId('child')).toBeTruthy();
+  return document.documentElement.style;
+}
+
+/**
+ * Render a tenant whose visual payload has NO artifact behind it. Used only by
+ * the fail-closed case, which wants exactly this outcome.
+ */
+async function renderUnbacked(
+  appearance: TenantAppearance,
+): Promise<CSSStyleDeclaration> {
+  await act(async () => {
+    render(
+      <DesignSystemProvider tenantConfig={makeConfig({ appearance })}>
+        <div data-testid="child">hello</div>
+      </DesignSystemProvider>,
+    );
+  });
+  return document.documentElement.style;
+}
 
 function makeConfig(overrides: Partial<TenantConfig>): TenantConfig {
   return {
@@ -25,18 +144,13 @@ function makeConfig(overrides: Partial<TenantConfig>): TenantConfig {
   } as TenantConfig;
 }
 
-function TenantConfigProbe() {
-  const { config } = useTenantContext();
-  return (
-    <div
-      data-testid="tenant-config-probe"
-      data-company={config.branding.companyName}
-      data-primary={config.branding.primaryColor}
-    />
-  );
-}
 
 afterEach(() => {
+  // Unmount before the artifact leaves the document: retention watches the
+  // mounted element and revoking under a live provider is a state update on an
+  // unmounting tree.
+  cleanup();
+  while (mountedArtifacts.length > 0) mountedArtifacts.pop()?.remove();
   // Clean up DOM attributes set by providers
   const root = document.documentElement;
   root.removeAttribute('data-tenant');
@@ -47,164 +161,102 @@ afterEach(() => {
 });
 
 describe('TenantAppearance via DesignSystemProvider', () => {
-  it('appearance.general.palette.primary injects --ds-color-primary on root', async () => {
-    await act(async () => {
-      render(
-        <DesignSystemProvider
-          tenantConfig={makeConfig({
-            appearance: {
-              general: { palette: { primary: '#FF5500' } },
-            },
-          })}
-        >
-          <div data-testid="child">hello</div>
-        </DesignSystemProvider>
-      );
-    });
+  it('appearance.general.palette.primary compiles --ds-color-primary, and the provider does not restate it', async () => {
+    const appearance: TenantAppearance = {
+      general: { palette: { primary: '#FF5500' } },
+    };
 
-    const root = document.documentElement;
-    // The appearance compiler should have produced --ds-color-primary
-    // and ThemeProvider should have injected it as an inline style
-    expect(root.style.getPropertyValue('--ds-color-primary')).toBe('#FF5500');
+    expect(compileAppearanceVariables(appearance).variables['--ds-color-primary']).toBe(
+      '#FF5500',
+    );
+
+    const rootStyle = await renderAdmitted();
+    expect(rootStyle.getPropertyValue('--ds-color-primary')).toBe('');
   });
 
   it('appearance.general.palette.backgroundMode=dark sets data-theme=dark when tenant.theme is base', async () => {
-    await act(async () => {
-      render(
-        <DesignSystemProvider
-          tenantConfig={makeConfig({
-            theme: 'base', // default, should NOT block backgroundMode
-            appearance: {
-              general: { palette: { backgroundMode: 'dark' } },
-            },
-          })}
-        >
-          <div>hello</div>
-        </DesignSystemProvider>
-      );
-    });
+    // The mode arrives on the artifact's own normalized appearance, which is
+    // the only channel the provider reads it from now. Asserting it through a
+    // raw config field would assert a shape the barrier refuses.
+    const artifact = admittedArtifact();
+    expect(artifact.normalizedAppearance.general?.palette?.backgroundMode).toBe('dark');
+
+    await renderAdmitted({ theme: 'base' }); // default, should NOT block backgroundMode
 
     const root = document.documentElement;
     expect(root.getAttribute('data-theme')).toBe('dark');
   });
 
   it('explicit tenant.theme=light wins over appearance.backgroundMode=dark', async () => {
-    await act(async () => {
-      render(
-        <DesignSystemProvider
-          tenantConfig={makeConfig({
-            theme: 'light', // explicit — should win
-            appearance: {
-              general: { palette: { backgroundMode: 'dark' } },
-            },
-          })}
-        >
-          <div>hello</div>
-        </DesignSystemProvider>
-      );
-    });
+    await renderAdmitted({ theme: 'light' }); // explicit — should win
 
     const root = document.documentElement;
     expect(root.getAttribute('data-theme')).toBe('light');
   });
 
-  it('appearance.general.shape.buttonStyle=pill injects --ds-radius-button', async () => {
-    await act(async () => {
-      render(
-        <DesignSystemProvider
-          tenantConfig={makeConfig({
-            appearance: {
-              general: { shape: { buttonStyle: 'pill' } },
-            },
-          })}
-        >
-          <div>hello</div>
-        </DesignSystemProvider>
-      );
-    });
+  it('appearance.general.shape.buttonStyle=pill compiles --ds-radius-button, and the provider does not restate it', async () => {
+    const appearance: TenantAppearance = {
+      general: { shape: { buttonStyle: 'pill' } },
+    };
 
-    const root = document.documentElement;
-    // The pill silhouette reaches the root as its own product with the radius
-    // dial, so a tenant scale still moves it; at rest it is the authored 9999px.
-    expect(root.style.getPropertyValue('--ds-radius-button')).toBe(
-      'calc(9999px * var(--ds-radius-scale, 1))'
+    // The pill silhouette reaches the channel as its own product with the
+    // radius dial, so a tenant scale still moves it; at rest it is the
+    // authored 9999px.
+    expect(compileAppearanceVariables(appearance).variables['--ds-radius-button']).toBe(
+      'calc(9999px * var(--ds-radius-scale, 1))',
     );
+
+    const rootStyle = await renderAdmitted();
+    expect(rootStyle.getPropertyValue('--ds-radius-button')).toBe('');
   });
 
-  it('appearance.general.navigation.sidebarTone=inverse injects sidebar vars', async () => {
-    await act(async () => {
-      render(
-        <DesignSystemProvider
-          tenantConfig={makeConfig({
-            appearance: {
-              general: { navigation: { sidebarTone: 'inverse' } },
-            },
-          })}
-        >
-          <div>hello</div>
-        </DesignSystemProvider>
-      );
-    });
+  it('appearance.general.navigation.sidebarTone=inverse compiles sidebar vars, and the provider does not restate them', async () => {
+    const appearance: TenantAppearance = {
+      general: { navigation: { sidebarTone: 'inverse' } },
+    };
 
-    const root = document.documentElement;
-    expect(root.style.getPropertyValue('--ds-sidebar-bg')).toBe('var(--ds-color-neutral-900)');
+    expect(compileAppearanceVariables(appearance).variables['--ds-sidebar-bg']).toBe(
+      'var(--ds-color-neutral-900)',
+    );
+
+    const rootStyle = await renderAdmitted();
+    expect(rootStyle.getPropertyValue('--ds-sidebar-bg')).toBe('');
   });
 
-  it('appearance.advanced.tokenOverrides pass through to DOM', async () => {
-    await act(async () => {
-      render(
-        <DesignSystemProvider
-          tenantConfig={makeConfig({
-            appearance: {
-              advanced: {
-                tokenOverrides: { '--ds-color-success': '#00FF00' },
-              },
-            },
-          })}
-        >
-          <div>hello</div>
-        </DesignSystemProvider>
-      );
-    });
+  it('appearance.advanced.tokenOverrides compile through, and the provider does not restate them', async () => {
+    const appearance: TenantAppearance = {
+      advanced: {
+        tokenOverrides: { '--ds-color-success': '#00FF00' },
+      },
+    };
 
-    const root = document.documentElement;
-    expect(root.style.getPropertyValue('--ds-color-success')).toBe('#00FF00');
+    expect(compileAppearanceVariables(appearance).variables['--ds-color-success']).toBe(
+      '#00FF00',
+    );
+
+    const rootStyle = await renderAdmitted();
+    expect(rootStyle.getPropertyValue('--ds-color-success')).toBe('');
   });
 
-  it('compiled-artifact keeps tenant context complete without re-emitting visual variables', async () => {
-    let view: ReturnType<typeof render> | undefined;
-
-    await act(async () => {
-      view = render(
-        <DesignSystemProvider
-          visualAuthority="compiled-artifact"
-          tenantConfig={makeConfig({
-            branding: {
-              companyName: 'Artifact-owned Tenant',
-              primaryColor: '#FF5500',
-            },
-            tokenOverrides: { glass: { blur: '18px' } },
-            appearance: {
-              general: { palette: { primary: '#00AA88' } },
-              advanced: {
-                tokenOverrides: { '--ds-runtime-appearance-probe': 'must-not-exist' },
-              },
-            },
-          })}
-        >
-          <TenantConfigProbe />
-        </DesignSystemProvider>
-      );
+  it('a tenant carrying appearance with no compiled artifact paints nothing at all', async () => {
+    // The fail-closed half of the law, stated on the DOM. This tenant has a
+    // real visual payload and no artifact, so there is no producer for it:
+    // the honest outcome is an unpainted root, not the DS baseline wearing
+    // the tenant's slug. Every channel the payload names stays empty.
+    const rootStyle = await renderUnbacked({
+      general: { palette: { primary: '#FF5500' } },
+      advanced: { tokenOverrides: { '--ds-color-success': '#00FF00' } },
     });
 
-    const probe = view?.getByTestId('tenant-config-probe');
-    expect(probe).toHaveAttribute('data-company', 'Artifact-owned Tenant');
-    expect(probe).toHaveAttribute('data-primary', '#FF5500');
-
-    const rootStyle = document.documentElement.style;
     expect(rootStyle.getPropertyValue('--ds-color-primary')).toBe('');
-    expect(rootStyle.getPropertyValue('--ds-glass-blur')).toBe('');
-    expect(rootStyle.getPropertyValue('--ds-runtime-appearance-probe')).toBe('');
-    expect(document.getElementById('ds-personality-tokens')).toBeNull();
+    expect(rootStyle.getPropertyValue('--ds-color-success')).toBe('');
+    expect(rootStyle.getPropertyValue('--ds-color-primary-500')).toBe('');
+
+    // And it is refused, not merely unpainted by coincidence: the barrier
+    // blocks the whole tree, which is why the four cases above cannot use this
+    // shape to prove the provider stamps nothing.
+    expect(screen.queryByTestId('child')).toBeNull();
+    expect(document.documentElement.getAttribute('data-theme')).toBeNull();
   });
+
 });

@@ -7,7 +7,7 @@
  * Two reasons, both structural:
  *
  *   THE THREE APPS ARE NOT IN THIS REPOSITORY. `app-bithire`, `app-evnto` and
- *   `app-platform` are separate repos, so a name with zero reads here may have
+ *   the Rottay app are separate repos, so a name with zero reads here may have
  *   hundreds there. A zero NEVER proves a name unused; it bounds nothing.
  *
  *   INTERPOLATED READS ARE INVISIBLE. `var(--ds-${role}-bg)` is a read that no

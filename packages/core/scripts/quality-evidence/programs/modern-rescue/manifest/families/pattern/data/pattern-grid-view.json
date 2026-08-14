@@ -9,14 +9,14 @@
       "PatternGridView"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/data",
+    "sourceOwner": "packages/core/src/ui/patterns/data/grid-view",
     "publicComponents": [
       "PatternGridView"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "7498ffd3c81ebaf52535cb002ebd930d4717b816c8fb77b392f63f419db02e46"
+    "inventoryRowDigest": "74cf6b629cc744f05d77e7823d708c824e7c4a18db413ff193b0a9105e70d8ab"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

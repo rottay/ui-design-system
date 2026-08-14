@@ -27,12 +27,12 @@
  *   - Nested-radius grammar: a surface nested inside another derives its
  *     corner from the parent radius minus a bounded inset
  *     (`--ds-radius-nest-inset`) — never two unrelated rounded rectangles.
- *     C0 maturation: the resolved corner is re-published as
- *     `--_surface-radius-current`, which FIRST reads the concentric corner a
- *     Card body publishes for its nested regions (`--_ds-card-nest-radius`),
- *     so any surface landing in a card is visibly related to the card
- *     corner; nesting depth can only hold or sharpen corners, never invert
- *     the parent/child relationship.
+ *     The C0 maturation that re-published the corner as
+ *     `--_surface-radius-current` and let it read the Card body's
+ *     `--_ds-card-nest-radius` is RETIRED: the spacing.rhythm concentric
+ *     ruling keeps a component's own root radius outside rhythm's reach even
+ *     when the component is nested, and named that carrier as the forbidden
+ *     shape. The inset is subtracted from the role radius instead.
  *   - Bounded glass: callers may opt a `raised` or `overlay` surface into a
  *     frosted finish through the passthrough hook `data-finish="glass"`. The
  *     blur scales with `--ds-effect-intensity`, and both
@@ -244,24 +244,25 @@
   position: relative;
   box-sizing: border-box;
   min-inline-size: 0;
-  /* Cross-primitive nest grammar: a surface that lands inside a Card body
-     wears the concentric corner the card publishes for its nested regions
-     (`--_ds-card-nest-radius`, parent radius minus a bounded inset), so a
-     panel/well/inset inside a card is visibly RELATED to the card corner
-     instead of a second, unrelated rounded rectangle. Outside a card the
-     private is unset and the role radius applies exactly as before. The
-     resolved value is re-published as `--_surface-radius-current` so the
-     nested rule below can subtract the inset from the CURRENT corner —
-     keeping multi-level nesting monotonic (never an inner corner rounder
-     than its parent). */
-  --_surface-radius-current: var(--_ds-card-nest-radius, var(--ds-surface-radius-md, var(--ds-radius-md)));
+  /* RETIRED (spacing.rhythm concentric ruling): this element used to read the
+     Card's `--_ds-card-nest-radius` and re-publish it as
+     `--_surface-radius-current`, so a surface nested in a card wore the card's
+     concentric corner. The owner ruled that rhythm may reach only an INTERNAL
+     DESCENDANT radius, never a component's own/outer radius — "even when that
+     component can be nested" — and named this exact carrier as the forbidden
+     shape. `.ds-semantic-surface` is this component's own root, so its corner
+     is now the role radius unconditionally, which is byte-identical to the
+     pre-nest behaviour and to every Classic/Rustic render (neither engine ever
+     published the card private). The visual intent — a panel inside a card
+     reading as related rather than as a second rounded rectangle — is recorded
+     as an open question on the control, not smuggled through a radius. */
   background: var(--_surface-texture, none),
     var(--_surface-background, transparent);
   color: var(--_surface-foreground, inherit);
   border-width: var(--ds-surface-border-width, var(--ds-border-width-1));
   border-style: var(--ds-surface-border-style, solid);
   border-color: var(--_surface-border, transparent);
-  border-radius: var(--_surface-radius-current);
+  border-radius: var(--ds-surface-radius-md, var(--ds-radius-md));
   box-shadow: var(--_surface-shadow, none);
   /* background-color is the interpolable paint channel; the texture layer
      swaps instantly, which is what a motif change should do. */
@@ -272,18 +273,19 @@
     color var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
-/* Nested-radius grammar: an inner surface derives its corner from its OWN
-   resolved radius (which already parents into a card when nested in one)
-   minus the governed inset, so nested regions read as one concentric
-   family instead of two unrelated rounded rectangles. Because every level
-   recomputes from `--_surface-radius-current`, depth can only hold or
-   sharpen the corner, never invert it. `--ds-radius-nest-inset` is the ONE
-   inset authority for this law; the formula stays local. */
+/* Nested-radius grammar: an inner surface derives its corner from the parent
+   radius minus a bounded inset, so nested regions read as one concentric
+   family instead of two unrelated rounded rectangles. `--ds-radius-nest-inset`
+   is the ONE inset authority for this law; the formula stays local.
+
+   The inset is subtracted from the ROLE radius, not from a rhythm-carrying
+   channel: a nested `.ds-semantic-surface` is still that component's own root,
+   which the concentric ruling keeps outside `spacing.rhythm`'s reach. */
 .ds-semantic-surface .ds-semantic-surface {
   border-radius: max(
     0px,
     calc(
-      var(--_surface-radius-current) -
+      var(--ds-surface-radius-md, var(--ds-radius-md)) -
         var(--ds-radius-nest-inset, 4px)
     )
   );

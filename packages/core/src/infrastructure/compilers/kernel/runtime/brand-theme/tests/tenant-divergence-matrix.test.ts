@@ -19,7 +19,7 @@ import { describe, expect, it } from 'vitest';
 import { compileBrandTheme } from '../index';
 import { appearanceToVariables } from '../../appearance';
 import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes';
-import { themanagementmiamiBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/fixtures/themanagementmiami';
+import { themanagementmiamiBrandTheme } from '@/tooling/testing/fixtures/brand-themes/themanagementmiami';
 import { resolveEngine } from '@/infrastructure/runtime/engines/runtime/resolution';
 import { getVerticalPreset } from '@/foundation/presets/verticals';
 import type { TenantAppearance, TenantConfig } from '@/foundation/contracts';

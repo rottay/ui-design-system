@@ -6,17 +6,31 @@
     "category": "dashboard",
     "name": "DashboardInsights",
     "components": [
-      "DashboardInsights"
+      "MetricsRows",
+      "MetricsCards",
+      "MetricsMinimal",
+      "MetricsChart",
+      "ActivityTimeline",
+      "ActivityCompact",
+      "ActivityCards",
+      "ActivityTicker"
     ],
     "sourceRoot": "packages/core/src/ui/structures",
     "sourceOwner": "packages/core/src/ui/structures/dashboard/insights",
-    "publicComponents": [],
-    "unresolvedPublicComponents": [
-      "DashboardInsights"
+    "publicComponents": [
+      "MetricsRows",
+      "MetricsCards",
+      "MetricsMinimal",
+      "MetricsChart",
+      "ActivityTimeline",
+      "ActivityCompact",
+      "ActivityCards",
+      "ActivityTicker"
     ],
+    "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "5461981319577baf3c019a0e3198a597e1a3f89a296fc9f545f6a34356c65765"
+    "inventoryRowDigest": "d84f9bc59c2ae23f9d46f64aa1b855c04cf6fd416a7ec96499124284d858adad"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

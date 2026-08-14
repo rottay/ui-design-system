@@ -20,6 +20,8 @@
  */
 
 import type { TenantThemeArtifact } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
+import { assertTenantIdentityAllowed } from '@/foundation/tokens/ts/presentation/brand-themes';
+import { verifyTenantThemeArtifactV1 } from '@/infrastructure/runtime/theming/foundation/visual-authority';
 import {
   PREVIEW_SCOPE_ATTRIBUTE,
   buildPreviewScopeSelector,
@@ -47,12 +49,24 @@ export interface TenantThemePreviewScope {
  * survives, so an empty `<style>` never carries a dangling selector.
  */
 export function buildTenantThemePreviewScope(
-  artifact: Pick<TenantThemeArtifact, 'slug' | 'variables'>
+  artifact: TenantThemeArtifact
 ): TenantThemePreviewScope {
-  const safeSlug = sanitizePreviewSlug(artifact.slug);
+  if (!artifact || typeof artifact.slug !== 'string' || typeof artifact.verticalKey !== 'string') {
+    throw new TypeError('[design-system] Invalid tenant preview artifact identity.');
+  }
+  assertTenantIdentityAllowed({ slug: artifact.slug });
+  const verification = verifyTenantThemeArtifactV1(artifact, {
+    slug: artifact.slug,
+    verticalKey: artifact.verticalKey,
+  });
+  if (!verification.ok) {
+    throw new TypeError(`[design-system] Invalid tenant preview artifact: ${verification.error}`);
+  }
+  const verifiedArtifact = verification.artifact;
+  const safeSlug = sanitizePreviewSlug(verifiedArtifact.slug);
   const scopeSelector = buildPreviewScopeSelector(safeSlug);
   const declarations: string[] = [];
-  for (const [name, value] of Object.entries(artifact.variables)) {
+  for (const [name, value] of Object.entries(verifiedArtifact.variables)) {
     if (name.startsWith('--ds-') && isSafePreviewCssValue(value)) {
       declarations.push(`  ${name}: ${value};`);
     }

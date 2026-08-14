@@ -6,6 +6,7 @@
 
 import type { TenantConfig, TenantBranding, TenantPlan, EngineName } from '../../../../../foundation/contracts';
 import type { SupportedLocale } from '@/foundation/i18n/kernel/contracts';
+import { isTenantIdentityAllowed } from '@/foundation/tokens/ts/presentation/brand-themes';
 
 /**
  * Branding is intentionally permissive: only `companyName` is required.
@@ -30,6 +31,15 @@ export function isValidPlan(plan: unknown): plan is TenantPlan {
  */
 export function isValidEngineName(engine: unknown): engine is EngineName {
   return engine === 'classic' || engine === 'modern' || engine === 'rustic' || engine === 'custom';
+}
+
+const LOWER_KEBAB_TENANT_SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+/** Public loader requests use one canonical, path-safe tenant identifier. */
+export function assertLowerKebabTenantSlug(slug: unknown): asserts slug is string {
+  if (typeof slug !== 'string' || !LOWER_KEBAB_TENANT_SLUG.test(slug)) {
+    throw new Error('[design-system] Tenant slug must be canonical lower-kebab case.');
+  }
 }
 
 /**
@@ -59,13 +69,19 @@ export function isValidTenantConfig(config: unknown): config is TenantConfig {
   return (
       typeof c.slug === 'string' &&
       typeof c.name === 'string' &&
-      isValidEngineName(c.engine) &&
+      (c.engine === undefined || isValidEngineName(c.engine)) &&
       typeof c.theme === 'string' &&
       (c.locale === undefined || isValidLocale(c.locale)) &&
       (c.fallbackLocale === undefined || isValidLocale(c.fallbackLocale)) &&
       isValidPlan(c.plan) &&
       Array.isArray(c.features) &&
       isValidBranding(c.branding) &&
+      isTenantIdentityAllowed({
+        slug: c.slug,
+        name: c.name,
+        companyName: c.branding?.companyName,
+        verticalKey: c.vertical,
+      }) &&
       (c.vertical === undefined || typeof c.vertical === 'string') &&
       (c.componentPack === undefined || typeof c.componentPack === 'string')
   );

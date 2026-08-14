@@ -288,11 +288,24 @@
   }
 }
 
+/* ─── reduced motion: the ROOT only. The back button's transition is declared in
+   `header-hero-shared.css` and collapsed there — guarding it from here too made
+   one chip the property of two files, and the shared file was left animating
+   unguarded when the paint moved and the guard did not.
+
+   The old `animation: none` / `transition: none` did not shorten the motion, it
+   deleted it: `animationend` never fires, so anything sequenced on the enter
+   run waits forever, and the `both` fill mode stops resolving. Near-zero
+   longhands collapse the same motion to imperceptible while the events still
+   arrive, and the iteration pin stops a repeat surviving as a fast flicker.
+
+   The forced-colors `animation: none` below is a different contract and stays:
+   there the whole decorative layer is being removed, not shortened. ─── */
 @media (prefers-reduced-motion: reduce) {
-  .ds-structure.ds-form-header[data-part='root'],
-  .ds-structure.ds-form-header[data-part='root'] [data-part='back-button'] {
-    animation: none;
-    transition: none;
+  .ds-structure.ds-form-header[data-part='root'] {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }
 

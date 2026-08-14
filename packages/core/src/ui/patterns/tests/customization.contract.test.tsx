@@ -36,6 +36,15 @@ const TEST_TENANT: TenantConfig = {
 const STUDIO_THEME: BrandTheme = {
   id: 'ck-h1-theme',
   name: 'CK-H1 Theme',
+  appearance: { defaultMode: 'light' },
+  modes: {
+    dark: {
+      palette: {
+        primaryColor: '#818cf8',
+        backgroundColor: '#0b1020',
+      },
+    },
+  },
   palette: {
     primaryColor: '#4f46e5',
     secondaryColor: '#0ea5e9',
@@ -44,8 +53,6 @@ const STUDIO_THEME: BrandTheme = {
     warningColor: '#d97706',
     errorColor: '#dc2626',
     infoColor: '#2563eb',
-    darkPrimaryColor: '#818cf8',
-    darkBackgroundColor: '#0b1020',
   },
   typography: {
     fontFamilyBase: 'Inter, sans-serif',

@@ -9,14 +9,14 @@
       "PatternFormBuilder"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/forms",
+    "sourceOwner": "packages/core/src/ui/patterns/forms/form-builder",
     "publicComponents": [
       "PatternFormBuilder"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "9a3a12e867e104c7c068c173c1cea967854821186fe702d008c02126c239664c"
+    "inventoryRowDigest": "61ddb45d2c88b4288ea4c73825c1f2688282122775d2331c940b650d17e931df"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

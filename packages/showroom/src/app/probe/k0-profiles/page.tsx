@@ -6,18 +6,11 @@ import { useSearchParams } from "next/navigation";
 import {
   K0ProfileEvidence,
   type ProfileEvidenceLocale,
-  type ProfileEvidenceProfile,
-  type ProfileEvidenceTheme,
+  type ProfileEvidenceVertical,
 } from "@/components/k0-profile-evidence";
 
-function sanitizeTheme(value: string | null): ProfileEvidenceTheme {
-  return value === "bithire" || value === "evnto" ? value : "platform";
-}
-
-function sanitizeProfile(value: string | null): ProfileEvidenceProfile {
-  return value === "technical-sharp" || value === "editorial-round"
-    ? value
-    : "none";
+function sanitizeVertical(value: string | null): ProfileEvidenceVertical {
+  return value === "bithire" || value === "evnto" ? value : "rottay";
 }
 
 function sanitizeLocale(value: string | null): ProfileEvidenceLocale {
@@ -26,10 +19,13 @@ function sanitizeLocale(value: string | null): ProfileEvidenceLocale {
 
 function ProbeContent() {
   const searchParams = useSearchParams();
+  // `?profile=` is deliberately NOT read. A recipe profile is authored in the
+  // vertical's checked-in BrandTheme and reaches the runtime only through the
+  // code-owned registry path; a runtime override is unrenderable, so offering
+  // the knob would only produce spinners. See the probe's own header.
   const cell = useMemo(
     () => ({
-      theme: sanitizeTheme(searchParams.get("theme")),
-      profile: sanitizeProfile(searchParams.get("profile")),
+      vertical: sanitizeVertical(searchParams.get("vertical")),
       locale: sanitizeLocale(searchParams.get("locale")),
     }),
     [searchParams]

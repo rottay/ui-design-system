@@ -169,7 +169,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       tier: 'standard',
       status: 'active',
       evidence: {
-        consumer: 'src/ui/patterns/data/widget-board/runtime/solver/react/index.ts',
+        consumer: 'src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts',
         symbol: '--ds-type-scale',
       },
       scope: 'tenant',
@@ -229,7 +229,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       tier: 'standard',
       status: 'active',
       evidence: {
-        consumer: 'src/ui/patterns/data/widget-board/runtime/solver/react/index.ts',
+        consumer: 'src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts',
         symbol: 'useDensity',
       },
       scope: 'tenant',
@@ -553,7 +553,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       status: 'active',
       evidence: {
         consumer:
-          'src/ui/patterns/data/widget-board/runtime/solver/react/index.ts',
+          'src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts',
         symbol: 'resolveActiveResponsivePosture',
       },
       scope: 'tenant',

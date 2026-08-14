@@ -47,6 +47,8 @@ import type {
   BrandPalette,
   BrandSurfaces,
   BrandTheme,
+  BrandThemeMode,
+  CompiledBrand,
 } from '../../../../foundation/contracts/composition/tenants/themes';
 import { cloneBrandTheme } from './runtime/file-export';
 import { useTenantThemePreview } from './runtime/tenant-theme-preview';
@@ -218,10 +220,15 @@ function pickHex(vars: Record<string, string>, keys: string[]): string | undefin
 /**
  * Map a compiled + grounded `--ds-*` variable set to WCAG {@link BrandingColors}.
  *
- * `primary`/`background` read the merged `vars` unconditionally: `primary` is a
- * required BrandTheme field (always compiled) and `background` intentionally
- * falls through to the neutral ground when the theme does not target a
- * specific dark background.
+ * `primary`/`background` read the merged `vars` unconditionally, and always
+ * from the NORMAL (unprefixed) channel names -- `--ds-color-primary` and
+ * `--ds-color-bg-primary`. There is no `--ds-color-dark-*` channel family: a
+ * dark-mode authored value reaches these same two names inside the compiled
+ * mode block (see `resolveModeVariables` below), so by the time `vars`
+ * reaches here it already IS the effective set for whichever surface produced
+ * it. `surface` is kept as a parameter for call-site clarity -- every caller
+ * already knows which ground it is deriving for -- even though the lookup
+ * itself no longer branches on it.
  *
  * `text`/`textMuted`/`surfaceCard` are different: their first candidate in each
  * list is a theme-authored chrome var (`--ds-card-color` etc.) and the rest are
@@ -241,9 +248,7 @@ export function deriveBrandingColors(
   surface: BrandStudioSurfaceKey,
   declaredKeys?: ReadonlySet<string>
 ): BrandingColors {
-  const backgroundKeys =
-    surface === 'dark' ? ['--ds-color-dark-bg', '--ds-color-bg-primary'] : ['--ds-color-bg-primary'];
-
+  void surface;
   const pickDeclared = (keys: string[]): string | undefined => {
     for (const key of keys) {
       if (declaredKeys && !declaredKeys.has(key)) continue;
@@ -255,7 +260,7 @@ export function deriveBrandingColors(
 
   return {
     primary: pickHex(vars, ['--ds-color-primary']) ?? '',
-    background: pickHex(vars, backgroundKeys) ?? '',
+    background: pickHex(vars, ['--ds-color-bg-primary']) ?? '',
     text: pickDeclared(['--ds-card-color', '--ds-color-text', '--ds-color-text-primary']),
     textMuted: pickDeclared(['--ds-card-color-muted', '--ds-color-text-muted']),
     surfaceCard: pickDeclared(['--ds-card-bg', '--ds-color-surface', '--ds-color-bg-elevated']),
@@ -263,39 +268,46 @@ export function deriveBrandingColors(
 }
 
 /**
- * Dark-mode palette overrides for the dark preview ground.
- *
- * `compileBrandTheme` does not branch on `baseTheme` (see
- * `infrastructure/compilers/kernel/runtime/brand-theme`): it always sources `--ds-color-primary`/
- * `--ds-color-bg-primary` from the theme's single `primaryColor`/background
- * fields, so `palette.darkPrimaryColor`/`palette.darkBackgroundColor` have no
- * effect on the compiled map. Those two fields exist specifically to override
- * the primary/background role on a dark ground, so the dark preview applies
- * them after compilation, scoped to the dark surface only. A theme that leaves
- * them unset falls through to the already-compiled value unchanged, and the
- * light surface is never touched.
+ * This theme's own declared default mode. Absent `appearance` means light —
+ * the same fallback `isDarkSurfaceTheme` uses in the compiler
+ * (`infrastructure/compilers/kernel/runtime/brand-theme`).
  */
-function applyDarkPaletteOverrides(
-  vars: Record<string, string>,
+function themeDefaultMode(theme: BrandTheme): BrandThemeMode {
+  return theme.appearance?.defaultMode ?? 'light';
+}
+
+/**
+ * Resolve one mode's effective compiled CSS variables from a full
+ * `CompiledBrand`.
+ *
+ * When `mode` is the theme's own declared default mode, the base block
+ * (`compiled.cssVariables`) already IS that mode's values. Otherwise the base
+ * block is overlaid with the matching `compiled.modeBlocks` entry — the exact
+ * channels the theme's `modes.{mode}` overlay changes, compiled by the SAME
+ * family compilers `compileBrandTheme` runs for the base block, under the
+ * NORMAL (unprefixed) channel names. A theme that never authored
+ * `modes.{mode}` has no matching block, so the base block passes through
+ * unchanged — the same "leaves it unset, falls through to the already-
+ * compiled value" behavior the old `darkPrimaryColor`/`darkBackgroundColor`
+ * fields had, now generalized to every channel a mode overlay can move
+ * instead of two hardcoded ones.
+ */
+function resolveModeVariables(
   theme: BrandTheme,
-  surfaceKey: BrandStudioSurfaceKey
+  compiled: CompiledBrand,
+  mode: BrandThemeMode
 ): Record<string, string> {
-  if (surfaceKey !== 'dark') return vars;
-  const darkPrimary = theme.palette?.darkPrimaryColor;
-  const darkBackground = theme.palette?.darkBackgroundColor;
-  if (!darkPrimary && !darkBackground) return vars;
-  return {
-    ...vars,
-    ...(darkPrimary ? { '--ds-color-primary': darkPrimary } : {}),
-    ...(darkBackground ? { '--ds-color-bg-primary': darkBackground } : {}),
-  };
+  if (mode === themeDefaultMode(theme)) return compiled.cssVariables;
+  const block = compiled.modeBlocks?.find((entry) => entry.mode === mode);
+  if (!block) return compiled.cssVariables;
+  return { ...compiled.cssVariables, ...block.cssVariables };
 }
 
 /** `buildSurfaceVariables` result: the merged map plus which keys the compiled theme itself declared. */
 export interface SurfaceVariables {
-  /** Ground scaffold, then the compiled theme, then dark-only palette overrides — merged in that order. */
+  /** Ground scaffold, then the mode-resolved compiled theme — merged in that order. */
   vars: Record<string, string>;
-  /** Keys `compileBrandTheme` itself emitted for this theme (excludes ground-scaffold-only keys). */
+  /** Keys `compileBrandTheme` itself emitted for this mode (excludes ground-scaffold-only keys). */
   declaredKeys: ReadonlySet<string>;
 }
 
@@ -305,16 +317,20 @@ export interface SurfaceVariables {
  * exact same variable set — this is also the single place that answers "what
  * does the preview inject," and is exported so a test can assert on it
  * directly instead of only through rendered DOM output.
+ *
+ * `baseTheme` is not forwarded to `compileBrandTheme` — the compiler's own
+ * light/dark split is driven entirely by the theme's `appearance.defaultMode`
+ * and `modes` overlays, resolved per-panel by `resolveModeVariables` above,
+ * not by an input flag the compiler reads.
  */
 export function buildSurfaceVariables(theme: BrandTheme, surface: BrandStudioSurfaceConfig): SurfaceVariables {
   const compiled = compileBrandTheme({
     brandTheme: theme,
     tenantSlug: surface.tenantSlug,
-    baseTheme: surface.baseTheme,
   });
-  const declaredKeys = new Set(Object.keys(compiled.cssVariables));
-  const merged = { ...(surface.groundVars ?? {}), ...compiled.cssVariables };
-  const vars = applyDarkPaletteOverrides(merged, theme, surface.key);
+  const modeVars = resolveModeVariables(theme, compiled, surface.baseTheme);
+  const declaredKeys = new Set(Object.keys(modeVars));
+  const vars = { ...(surface.groundVars ?? {}), ...modeVars };
   return { vars, declaredKeys };
 }
 
@@ -343,8 +359,17 @@ export function applyHostileBrandTheme(theme: BrandTheme): BrandTheme {
   draft.palette = {
     ...(draft.palette ?? {}),
     primaryColor: '#f4f4f4',
-    darkBackgroundColor: '#f7f7f7',
   };
+  // The near-white primary above must also fail against a near-white ground
+  // on the DARK preview surface specifically -- previously carried by
+  // `palette.darkBackgroundColor`, now a `modes.dark` overlay. Guarded by the
+  // theme's own default mode: a theme can never author `modes.<its own
+  // default>` (`compileBrandTheme` rejects it), so a dark-DEFAULT theme gets
+  // the hostile ground pinned on `modes.light` instead -- still "the mode
+  // this theme does not already speak for in its base block," which is
+  // exactly what both preview grounds compile from.
+  const hostileOverlayMode: BrandThemeMode = themeDefaultMode(draft) === 'dark' ? 'light' : 'dark';
+  draftModePalette(draft, hostileOverlayMode).backgroundColor = '#f7f7f7';
   draft.chrome = { ...(draft.chrome ?? {}) };
   draft.chrome.cardComponent = {
     ...(draft.chrome.cardComponent ?? {}),
@@ -817,6 +842,25 @@ function draftPalette(draft: BrandTheme): BrandPalette {
   return palette;
 }
 
+/**
+ * Ensure `draft.modes[mode].palette` exists and return it (typed, mutable).
+ *
+ * The mode-overlay counterpart of `draftPalette` above: a theme's non-default
+ * mode is authored here instead of through `dark`-prefixed palette fields.
+ * Unlike the base palette, every field here is optional
+ * (`BrandThemeModeOverlay.palette` is `Partial<BrandPalette>`), so there is no
+ * required-leaf seed to default in.
+ */
+function draftModePalette(draft: BrandTheme, mode: BrandThemeMode): Partial<BrandPalette> {
+  const modes = draft.modes ?? {};
+  draft.modes = modes;
+  const overlay = modes[mode] ?? {};
+  modes[mode] = overlay;
+  const modePalette = overlay.palette ?? {};
+  overlay.palette = modePalette;
+  return modePalette;
+}
+
 /** Ensure `draft.surfaces` exists and return it (typed, mutable). */
 function draftSurfaces(draft: BrandTheme): BrandSurfaces {
   const surfaces = draft.surfaces ?? {};
@@ -840,11 +884,23 @@ function draftControls(draft: BrandTheme): BrandControlsChrome {
 }
 
 /**
- * Contract-required leaves: they stay present (as the cleared string) instead
- * of being dropped, so a cleared control never emits a structurally invalid
- * theme.
+ * Contract-required root leaves: they stay present (as the cleared string)
+ * instead of being dropped, so a cleared control never emits a structurally
+ * invalid theme.
  */
-const REQUIRED_BRAND_THEME_KEYS: ReadonlySet<string> = new Set(['id', 'name', 'primaryColor']);
+const REQUIRED_ROOT_KEYS: ReadonlySet<string> = new Set(['id', 'name']);
+/**
+ * `primaryColor` is required only on the BASE `draft.palette`
+ * (`BrandPalette.primaryColor: string`). The identical field name inside a
+ * `modes.{mode}.palette` overlay is a `Partial<BrandPalette>` field and is
+ * therefore optional there — clearing a "Dark primary" control must prune it
+ * exactly like any other overlay leaf, not be pinned open by a same-named but
+ * unrelated requirement. Protection below is applied by REFERENCE to the one
+ * object that is the draft's own base palette, never by key name alone, so it
+ * cannot also (mis)protect the same-named field inside a mode overlay.
+ */
+const REQUIRED_BASE_PALETTE_KEYS: ReadonlySet<string> = new Set(['primaryColor']);
+const NO_PROTECTED_KEYS: ReadonlySet<string> = new Set();
 
 /**
  * Drop cleared leaves — and the groups that become empty because of them —
@@ -858,19 +914,28 @@ const REQUIRED_BRAND_THEME_KEYS: ReadonlySet<string> = new Set(['id', 'name', 'p
  * `chrome` verbatim, carrying the empty string into the DB-bound appearance.
  * Pruning makes clearing the exact inverse of setting on both paths.
  */
-function pruneClearedFields(node: object): void {
-  const entries: Array<[string, unknown]> = Object.entries(node);
-  for (const [key, value] of entries) {
-    if (typeof value === 'string') {
-      if (value.trim() === '' && !REQUIRED_BRAND_THEME_KEYS.has(key)) {
-        Reflect.deleteProperty(node, key);
+function pruneClearedFields(root: BrandTheme): void {
+  // Captured AFTER the caller's `mutate(draft)` already ran, so this is the
+  // exact object `draft.palette` points to right now — the only node in the
+  // tree whose `primaryColor` leaf is contract-required.
+  const basePalette = root.palette;
+
+  function walk(node: object, protectedKeys: ReadonlySet<string>): void {
+    const entries: Array<[string, unknown]> = Object.entries(node);
+    for (const [key, value] of entries) {
+      if (typeof value === 'string') {
+        if (value.trim() === '' && !protectedKeys.has(key)) {
+          Reflect.deleteProperty(node, key);
+        }
+        continue;
       }
-      continue;
+      if (value === null || typeof value !== 'object' || Array.isArray(value)) continue;
+      walk(value, value === basePalette ? REQUIRED_BASE_PALETTE_KEYS : NO_PROTECTED_KEYS);
+      if (Object.keys(value).length === 0) Reflect.deleteProperty(node, key);
     }
-    if (value === null || typeof value !== 'object' || Array.isArray(value)) continue;
-    pruneClearedFields(value);
-    if (Object.keys(value).length === 0) Reflect.deleteProperty(node, key);
   }
+
+  walk(root, REQUIRED_ROOT_KEYS);
 }
 
 function BrandThemeEditor({
@@ -883,6 +948,9 @@ function BrandThemeEditor({
   const t = useBrandStudioCopy();
   const inheritPlaceholder = t('brandStudio.inherit', 'Inherit');
   const palette: Partial<BrandPalette> = theme.palette ?? {};
+  // The theme's dark-mode overlay -- what the two "(dark ground)" controls
+  // below read and write. Empty when the theme ships no `modes.dark`.
+  const darkModePalette: Partial<BrandPalette> = theme.modes?.dark?.palette ?? {};
   const typography = theme.typography ?? {};
   const surfaces = theme.surfaces ?? {};
   const radius = surfaces.borderRadius ?? {};
@@ -963,19 +1031,19 @@ function BrandThemeEditor({
         />
         <ColorField
           label={t('brandStudio.field.darkPrimary', 'Dark primary (dark ground)')}
-          value={palette.darkPrimaryColor}
+          value={darkModePalette.primaryColor}
           onChange={(v) =>
             emit((d) => {
-              draftPalette(d).darkPrimaryColor = v;
+              draftModePalette(d, 'dark').primaryColor = v;
             })
           }
         />
         <ColorField
           label={t('brandStudio.field.darkBackground', 'Dark background (dark ground)')}
-          value={palette.darkBackgroundColor}
+          value={darkModePalette.backgroundColor}
           onChange={(v) =>
             emit((d) => {
-              draftPalette(d).darkBackgroundColor = v;
+              draftModePalette(d, 'dark').backgroundColor = v;
             })
           }
         />

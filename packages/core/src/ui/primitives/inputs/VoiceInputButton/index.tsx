@@ -28,7 +28,7 @@
  * `style`, `data-testid` and arbitrary `data-*`/`aria-*` reach the element,
  * with the engine-owned hooks winning every tie (the layout sisters' law).
  *
- * Originally lived in app-platform's `_shared/voice-input/` and was
+ * Originally lived in the Rottay app's `_shared/voice-input/` and was
  * relocated to the design system as part of Wave 4.2 of the canonical
  * execution plan (correcting the Wave 1 misclassification — voice
  * input has zero domain semantics, only a browser API dependency).

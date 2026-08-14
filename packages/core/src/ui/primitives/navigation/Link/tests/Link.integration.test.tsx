@@ -4,14 +4,14 @@ import { fireEvent, screen, waitFor } from '@testing-library/react';
 
 import { renderWithEngine, STABLE_ENGINES } from '../../../../../tooling/testing/helpers/engine';
 
-describe('Link integration', () => {
+describe('NavLink integration', () => {
   it.each(STABLE_ENGINES)('renders the live link through the %s engine', async (engine) => {
-    const { Link } = await import('..');
+    const { NavLink } = await import('..');
 
     renderWithEngine(
-      <Link engine={engine} href="/docs" type="primary">
+      <NavLink engine={engine} href="/docs" type="primary">
         Design system docs
-      </Link>,
+      </NavLink>,
       engine
     );
 
@@ -22,11 +22,11 @@ describe('Link integration', () => {
   it.each(STABLE_ENGINES)(
     'supports disabled, external, and underline variants through the %s engine',
     async (engine) => {
-      const { Link } = await import('..');
+      const { NavLink } = await import('..');
       const handleClick = vi.fn();
 
       const { rerender } = renderWithEngine(
-        <Link
+        <NavLink
           engine={engine}
           href="https://example.com"
           external
@@ -34,7 +34,7 @@ describe('Link integration', () => {
           onClick={handleClick}
         >
           External link
-        </Link>,
+        </NavLink>,
         engine
       );
 
@@ -58,9 +58,9 @@ describe('Link integration', () => {
       }
 
       rerender(
-        <Link engine={engine} href="/blocked" disabled onClick={handleClick}>
+        <NavLink engine={engine} href="/blocked" disabled onClick={handleClick}>
           Disabled link
-        </Link>
+        </NavLink>
       );
 
       const disabledLink = await screen.findByText(/disabled link/i, undefined, { timeout: 30000 });

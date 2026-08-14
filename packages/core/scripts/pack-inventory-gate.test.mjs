@@ -69,7 +69,7 @@ test('a clean pack within baseline passes', () => {
 });
 
 test('a shipped fixtures/ path fails', () => {
-  const p = pack(['dist/foundation/tokens/ts/presentation/brand-themes/fixtures/torture/index.js']);
+  const p = pack(['dist/tooling/testing/fixtures/brand-themes/torture/index.js']);
   const { failures } = audit(p, { baseline: baselineFrom(p) });
   assert.match(failures.join('\n'), /fixture path shipped/);
 });

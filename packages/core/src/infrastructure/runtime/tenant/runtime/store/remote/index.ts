@@ -6,7 +6,11 @@
  */
 
 import type { TenantConfig } from '../../../../../../foundation/contracts';
-import { isValidTenantConfig } from '../../../foundation/validation';
+import { assertTenantIdentityAllowed } from '@/foundation/tokens/ts/presentation/brand-themes';
+import {
+  assertLowerKebabTenantSlug,
+  isValidTenantConfig,
+} from '../../../foundation/validation';
 
 // Module-level state: the API endpoint is set once at app startup via
 // `configureTenantApi()`. This avoids threading an endpoint through every
@@ -46,6 +50,8 @@ export function configureTenantApi(endpoint: string): void {
  * @throws If the API endpoint is not configured, the fetch fails, or validation fails.
  */
 export async function fetchRemoteTenantConfig(slug: string): Promise<TenantConfig> {
+  assertTenantIdentityAllowed({ slug });
+  assertLowerKebabTenantSlug(slug);
   if (!apiEndpoint) {
     throw new Error('Tenant API endpoint not configured. Call configureTenantApi() first.');
   }
@@ -57,6 +63,15 @@ export async function fetchRemoteTenantConfig(slug: string): Promise<TenantConfi
   }
 
   const config = await response.json();
+  assertTenantIdentityAllowed({
+    slug: config?.slug,
+    name: config?.name,
+    companyName: config?.branding?.companyName,
+    verticalKey: config?.vertical,
+  });
+  if (config?.slug !== slug) {
+    throw new Error(`Remote tenant payload identity mismatch for: ${slug}`);
+  }
 
   // Validate the shape before trusting it -- a malformed config could crash
   // downstream token resolution or theme injection.

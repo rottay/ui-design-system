@@ -1,9 +1,10 @@
 {
   "schemaVersion": 1,
   "programId": "modern-rescue",
-  "purpose": "Ledger rows for the NON-FAMILY lanes. family-ledger.json bounds 252 family lanes and nothing else; the base CSS layer, the gates, the generator and the capability registry were bounded by prose, and prose cannot be intersected. These rows carry the same shape as a family row so they pass through identical machinery. They are not families and never claim to be: `synthetic` is true on every one.",
+  "purpose": "Ownership rows for the NON-FAMILY lanes. A family lane's bound is derived from the canonical inventory and is exactly that family's sourceOwner subtree; the base CSS layer, the gates, the generator and the capability registry have no source owner and were bounded by prose, and prose cannot be intersected. These rows carry the same shape as a family row so they pass through identical machinery. They are not families and never claim to be: `synthetic` is true on every one. No family count is restated here — the canonical catalog is scripts/quality-evidence/programs/modern-rescue/family-inventory.json.",
   "fieldNotes": {
     "synthetic": "Always true here. It is what tells a reader — and a checker — that this row was authored as a lane boundary rather than derived from a component owner.",
+    "writeRoot": "Declared, and only here. A family row does not declare one: its writeRoot IS its sourceOwner, derived from the canonical inventory, so a family lane's bound cannot drift away from where the family actually lives. These rows describe regions no family owns, so there is nothing to derive them from.",
     "writeSet": "Family rows imply their write set from `writeRoot`. These rows may declare one explicitly, because two of them share a directory and can only be separated by filename shape.",
     "writeExcludes": "Directory entries exclude a subtree; entries carrying glob magic exclude a shape. `tooling:gates` and `tooling:generator` are provably disjoint ONLY because each excludes the other's shape — `packages/core/scripts` today holds no file matching both, so a file-level intersection would call them disjoint and be wrong the first time somebody writes `build-something-gate.mjs`.",
     "sourceCommits/lastCommit/lastCommitDate": "Null on purpose. They are derivable by command, and a figure a command can produce must not be typed into a document.",

@@ -277,7 +277,6 @@
 @media (prefers-reduced-motion: reduce) {
   .ds-pattern-environment-toggle.ds-engine-modern [data-part='banner'],
   .ds-pattern-environment-toggle.ds-engine-modern [data-part='banner-dot'],
-  .ds-pattern-environment-toggle.ds-engine-modern [data-part='dot'], .ds-pattern-environment-toggle.ds-engine-modern [data-part='banner-dot'],
   .ds-pattern-environment-toggle.ds-engine-modern [data-part='panel'] {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;

@@ -6,17 +6,31 @@
     "category": "record",
     "name": "EditFields",
     "components": [
-      "EditFields"
+      "InlineEditorGroup",
+      "InlineEditor",
+      "InlineEditGrid",
+      "InlineEditSection",
+      "InlineEditControl",
+      "InlineEditField",
+      "MoreFieldsToggle",
+      "InlineEditFooter"
     ],
     "sourceRoot": "packages/core/src/ui/structures",
     "sourceOwner": "packages/core/src/ui/structures/record/edit-fields",
-    "publicComponents": [],
-    "unresolvedPublicComponents": [
-      "EditFields"
+    "publicComponents": [
+      "InlineEditorGroup",
+      "InlineEditor",
+      "InlineEditGrid",
+      "InlineEditSection",
+      "InlineEditControl",
+      "InlineEditField",
+      "MoreFieldsToggle",
+      "InlineEditFooter"
     ],
+    "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "157af748d057bb23a9151f40c2f89547298ec22082d0d625f231807ba646f42f"
+    "inventoryRowDigest": "8c8643482423bb008dae479fc6e9da5880440dccfe0f76514a7ce13b621592e3"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

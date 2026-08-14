@@ -5,7 +5,7 @@
  * scope so a compiled tenant theme can be seen re-skinning real surfaces. They
  * are preview fixtures, not product code, and carry no tenant/candidate/role/
  * company/interview/event vocabulary. Production Brand Studio does not import
- * them; a consumer (showroom, the divergence demo, or app-platform) passes them
+ * them; a consumer (showroom, the divergence demo, or the Rottay app) passes them
  * -- or its own content -- through the preview galleries slot.
  */
 

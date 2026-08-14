@@ -30,6 +30,17 @@ const foundations: NavSection = {
     { slug: 'tokens', label: 'Tokens', path: '/foundations/tokens' },
     { slug: 'themes', label: 'Themes', path: '/foundations/themes' },
     { slug: 'engines', label: 'Engines', path: '/foundations/engines' },
+    // Flat sibling rather than a child of `engines` on purpose: an item's
+    // children only render once that item is itself active, which would make
+    // this page reachable only by first visiting /foundations/engines. As a
+    // sibling it is reachable from any Foundations route in one client-side
+    // navigation -- which is also what the isolation spec needs, and what stops
+    // the page from being an orphan no link points at.
+    {
+      slug: 'custom-component-pack',
+      label: 'Component packs',
+      path: '/foundations/engines/custom-component-pack',
+    },
     { slug: 'icons', label: 'Icons', path: '/foundations/icons', badge: '109' },
   ],
 };
@@ -53,18 +64,25 @@ const primitives: NavSection = {
         { slug: 'callout', label: 'Callout', path: '/primitives/display/callout' },
         { slug: 'card', label: 'Card', path: '/primitives/display/card' },
         { slug: 'carousel', label: 'Carousel', path: '/primitives/display/carousel' },
+        { slug: 'code-block', label: 'CodeBlock', path: '/primitives/display/code-block' },
+        { slug: 'crop-marks', label: 'CropMarks', path: '/primitives/display/crop-marks' },
         { slug: 'descriptions', label: 'Descriptions', path: '/primitives/display/descriptions' },
         { slug: 'empty', label: 'Empty', path: '/primitives/display/empty' },
+        { slug: 'icon-frame', label: 'IconFrame', path: '/primitives/display/icon-frame' },
         { slug: 'image', label: 'Image', path: '/primitives/display/image' },
         { slug: 'kbd', label: 'Kbd', path: '/primitives/display/kbd' },
         { slug: 'list', label: 'List', path: '/primitives/display/list' },
+        { slug: 'markdown-view', label: 'MarkdownView', path: '/primitives/display/markdown-view' },
+        { slug: 'meter', label: 'Meter', path: '/primitives/display/meter' },
         { slug: 'qr-code', label: 'QRCode', path: '/primitives/display/qr-code' },
         { slug: 'statistic', label: 'Statistic', path: '/primitives/display/statistic' },
         { slug: 'table', label: 'Table', path: '/primitives/display/table' },
         { slug: 'tag', label: 'Tag', path: '/primitives/display/tag' },
+        { slug: 'texture-backdrop', label: 'TextureBackdrop', path: '/primitives/display/texture-backdrop' },
         { slug: 'timeline', label: 'Timeline', path: '/primitives/display/timeline' },
         { slug: 'tooltip', label: 'Tooltip', path: '/primitives/display/tooltip' },
         { slug: 'tree', label: 'Tree', path: '/primitives/display/tree' },
+        { slug: 'typewriter', label: 'Typewriter', path: '/primitives/display/typewriter' },
         { slug: 'typography', label: 'Typography', path: '/primitives/display/typography' },
       ],
     },
@@ -107,6 +125,7 @@ const primitives: NavSection = {
       children: [
         { slug: 'alert', label: 'Alert', path: '/primitives/feedback/alert' },
         { slug: 'drawer', label: 'Drawer', path: '/primitives/feedback/drawer' },
+        { slug: 'loading-indicator', label: 'LoadingIndicator', path: '/primitives/feedback/loading-indicator' },
         { slug: 'message', label: 'Message', path: '/primitives/feedback/message' },
         { slug: 'modal', label: 'Modal', path: '/primitives/feedback/modal' },
         { slug: 'notification', label: 'Notification', path: '/primitives/feedback/notification' },
@@ -123,6 +142,7 @@ const primitives: NavSection = {
       label: 'Layout',
       path: '/primitives/layout',
       children: [
+        { slug: 'ascii-frame', label: 'AsciiFrame', path: '/primitives/layout/ascii-frame' },
         { slug: 'aspect-ratio', label: 'AspectRatio', path: '/primitives/layout/aspect-ratio' },
         { slug: 'box', label: 'Box', path: '/primitives/layout/box' },
         { slug: 'collapse', label: 'Collapse', path: '/primitives/layout/collapse' },
@@ -131,13 +151,17 @@ const primitives: NavSection = {
         { slug: 'flex', label: 'Flex', path: '/primitives/layout/flex' },
         { slug: 'grid', label: 'Grid', path: '/primitives/layout/grid' },
         { slug: 'hide', label: 'Hide', path: '/primitives/layout/hide' },
+        { slug: 'invert-section', label: 'InvertSection', path: '/primitives/layout/invert-section' },
         { slug: 'layout', label: 'Layout', path: '/primitives/layout/layout' },
+        { slug: 'resize-handle', label: 'ResizeHandle', path: '/primitives/layout/resize-handle' },
         { slug: 'responsive-slot', label: 'ResponsiveSlot', path: '/primitives/layout/responsive-slot' },
         { slug: 'scroll-area', label: 'ScrollArea', path: '/primitives/layout/scroll-area' },
+        { slug: 'semantic-surface', label: 'SemanticSurface', path: '/primitives/layout/semantic-surface' },
         { slug: 'show', label: 'Show', path: '/primitives/layout/show' },
         { slug: 'space', label: 'Space', path: '/primitives/layout/space' },
         { slug: 'splitter', label: 'Splitter', path: '/primitives/layout/splitter' },
         { slug: 'stack', label: 'Stack', path: '/primitives/layout/stack' },
+        { slug: 'visually-hidden', label: 'VisuallyHidden', path: '/primitives/layout/visually-hidden' },
       ],
     },
     {
@@ -169,7 +193,6 @@ const primitives: NavSection = {
         { slug: 'context-menu', label: 'ContextMenu', path: '/primitives/overlay/context-menu' },
         { slug: 'dropdown', label: 'Dropdown', path: '/primitives/overlay/dropdown' },
         { slug: 'hover-card', label: 'HoverCard', path: '/primitives/overlay/hover-card' },
-        { slug: 'overlay-modal', label: 'Modal', path: '/primitives/overlay/overlay-modal' },
         { slug: 'popconfirm', label: 'Popconfirm', path: '/primitives/overlay/popconfirm' },
         { slug: 'popover', label: 'Popover', path: '/primitives/overlay/popover' },
         { slug: 'sheet', label: 'Sheet', path: '/primitives/overlay/sheet' },
@@ -195,16 +218,21 @@ const patterns: NavSection = {
       children: [
         { slug: 'data-table', label: 'DataTable', path: '/patterns/data/data-table' },
         { slug: 'bulk-select-toggle', label: 'BulkSelectToggle', path: '/patterns/data/bulk-select-toggle' },
-        { slug: 'cell-renderers', label: 'CellRenderers', path: '/patterns/data/cell-renderers' },
         { slug: 'column-settings', label: 'ColumnSettings', path: '/patterns/data/column-settings' },
+        { slug: 'decision-comparison', label: 'DecisionComparison', path: '/patterns/data/decision-comparison' },
+        { slug: 'decision-panorama', label: 'DecisionPanorama', path: '/patterns/data/decision-panorama' },
         { slug: 'detail-panel', label: 'DetailPanel', path: '/patterns/data/detail-panel' },
         { slug: 'file-manager', label: 'FileManager', path: '/patterns/data/file-manager' },
         { slug: 'gallery-view', label: 'GalleryView', path: '/patterns/data/gallery-view' },
         { slug: 'grid-view', label: 'GridView', path: '/patterns/data/grid-view' },
         { slug: 'list-toolbar', label: 'ListToolbar', path: '/patterns/data/list-toolbar' },
+        { slug: 'mono-stat', label: 'MonoStat', path: '/patterns/data/mono-stat' },
+        { slug: 'record-facts', label: 'RecordFacts', path: '/patterns/data/record-facts' },
         { slug: 'saved-views', label: 'SavedViews', path: '/patterns/data/saved-views' },
         { slug: 'stats-grid', label: 'StatsGrid', path: '/patterns/data/stats-grid' },
         { slug: 'status-filter-pills', label: 'StatusFilterPills', path: '/patterns/data/status-filter-pills' },
+        { slug: 'virtual-list', label: 'PatternVirtualList', path: '/patterns/data/virtual-list' },
+        { slug: 'widget-board', label: 'WidgetBoard', path: '/patterns/data/widget-board' },
       ],
     },
     {
@@ -224,6 +252,7 @@ const patterns: NavSection = {
       label: 'Visualization',
       path: '/patterns/visualization',
       children: [
+        { slug: 'ascii-diagram', label: 'AsciiDiagram', path: '/patterns/visualization/ascii-diagram' },
         { slug: 'calendar-view', label: 'CalendarView', path: '/patterns/visualization/calendar-view' },
         { slug: 'charts', label: 'Charts', path: '/patterns/visualization/charts', badge: '18' },
         { slug: 'kanban-board', label: 'KanbanBoard', path: '/patterns/visualization/kanban-board' },
@@ -252,6 +281,7 @@ const patterns: NavSection = {
       children: [
         { slug: 'adaptive-overlay', label: 'AdaptiveOverlay', path: '/patterns/feedback/adaptive-overlay' },
         { slug: 'empty-state', label: 'EmptyState', path: '/patterns/feedback/empty-state' },
+        { slug: 'terminal-block', label: 'TerminalBlock', path: '/patterns/feedback/terminal-block' },
       ],
     },
     {
@@ -292,6 +322,7 @@ const patterns: NavSection = {
       path: '/patterns/customization',
       children: [
         { slug: 'branding-preview-sandbox', label: 'BrandingPreviewSandbox', path: '/patterns/customization/branding-preview-sandbox' },
+        { slug: 'pattern-brand-studio', label: 'PatternBrandStudio', path: '/patterns/customization/pattern-brand-studio' },
         { slug: 'tenant-preview', label: 'TenantPreview', path: '/patterns/customization/tenant-preview' },
         { slug: 'token-inspector', label: 'TokenInspector', path: '/patterns/customization/token-inspector' },
       ],
@@ -310,7 +341,8 @@ const patterns: NavSection = {
       path: '/patterns/shell',
       children: [
         { slug: 'cockpit-header', label: 'CockpitHeader', path: '/patterns/shell/cockpit-header' },
-        { slug: 'page-shell', label: 'PageShell', path: '/patterns/shell/page-shell' },
+        { slug: 'feature-workspace-frame', label: 'FeatureWorkspaceFrame', path: '/patterns/shell/feature-workspace-frame' },
+        { slug: 'page-shell', label: 'PatternPageShell', path: '/patterns/shell/page-shell' },
         { slug: 'workbench-header', label: 'WorkbenchHeader', path: '/patterns/shell/workbench-header' },
       ],
     },
@@ -336,6 +368,8 @@ const structuresNav: NavSection = {
         { slug: 'detail-header', label: 'DetailHeader', path: '/structures/headers/detail-header' },
         { slug: 'edit-header', label: 'EditHeader', path: '/structures/headers/edit-header' },
         { slug: 'form-header', label: 'FormHeader', path: '/structures/headers/form-header' },
+        { slug: 'header-surface', label: 'HeaderSurface', path: '/structures/headers/header-surface' },
+        { slug: 'section-frame', label: 'SectionFrame', path: '/structures/headers/section-frame' },
       ],
     },
     {
@@ -346,6 +380,7 @@ const structuresNav: NavSection = {
         { slug: 'action-dock', label: 'ActionDock', path: '/structures/workspace/action-dock' },
         { slug: 'active-filters-bar', label: 'ActiveFiltersBar', path: '/structures/workspace/active-filters-bar' },
         { slug: 'column-menu', label: 'ColumnMenu', path: '/structures/workspace/column-menu' },
+        { slug: 'connected-command-palette', label: 'ConnectedCommandPalette', path: '/structures/workspace/connected-command-palette' },
         { slug: 'export-button', label: 'ExportButton', path: '/structures/workspace/export-button' },
         { slug: 'field-filters-panel', label: 'FieldFiltersPanel', path: '/structures/workspace/field-filters-panel' },
         { slug: 'saved-views-menu', label: 'SavedViewsMenu', path: '/structures/workspace/saved-views-menu' },
@@ -361,7 +396,12 @@ const structuresNav: NavSection = {
       label: 'Shell',
       path: '/structures/shell',
       children: [
+        { slug: 'app-shell', label: 'AppShell', path: '/structures/shell/app-shell' },
         { slug: 'bottom-tab-bar', label: 'BottomTabBar', path: '/structures/shell/bottom-tab-bar' },
+        { slug: 'page-shell-surface', label: 'PageShellSurface', path: '/structures/shell/page-shell-surface' },
+        { slug: 'sidebar-surface', label: 'SidebarSurface', path: '/structures/shell/sidebar-surface' },
+        { slug: 'surface-chrome', label: 'SurfaceChrome', path: '/structures/shell/surface-chrome' },
+        { slug: 'workspace-shell', label: 'WorkspaceShell', path: '/structures/shell/workspace-shell' },
       ],
     },
     {
@@ -369,8 +409,13 @@ const structuresNav: NavSection = {
       label: 'Record',
       path: '/structures/record',
       children: [
-        { slug: 'record', label: 'Record', path: '/structures/record/record' },
+        { slug: 'record-action-bar', label: 'RecordActionBar', path: '/structures/record/record-action-bar' },
+        { slug: 'record-field', label: 'RecordField', path: '/structures/record/record-field' },
+        { slug: 'record-field-grid', label: 'RecordFieldGrid', path: '/structures/record/record-field-grid' },
+        { slug: 'record-panel', label: 'RecordPanel', path: '/structures/record/record-panel' },
+        { slug: 'record-summary-strip', label: 'RecordSummaryStrip', path: '/structures/record/record-summary-strip' },
         { slug: 'form-sections', label: 'FormSections', path: '/structures/record/form-sections' },
+        { slug: 'edit-fields', label: 'EditFields', path: '/structures/record/edit-fields' },
       ],
     },
     {
@@ -388,7 +433,9 @@ const structuresNav: NavSection = {
       label: 'Feedback',
       path: '/structures/feedback',
       children: [
+        { slug: 'capability-anatomy', label: 'SurfaceCapabilityAnatomy', path: '/structures/feedback/capability-anatomy' },
         { slug: 'loading-overlay', label: 'LoadingOverlay', path: '/structures/feedback/loading-overlay' },
+        { slug: 'surface-lifecycle', label: 'SurfaceLifecycle', path: '/structures/feedback/surface-lifecycle' },
       ],
     },
   ],
@@ -442,8 +489,8 @@ const surfacesNav: NavSection = {
         { slug: 'empty-state', label: 'EmptyStateSurface', path: '/surfaces/experience/empty-state' },
         { slug: 'marketing', label: 'MarketingSurface', path: '/surfaces/experience/marketing' },
         { slug: 'media', label: 'MediaSurface', path: '/surfaces/experience/media' },
+        { slug: 'oauth-transition', label: 'OAuthTransitionScreen', path: '/surfaces/experience/oauth-transition' },
         { slug: 'notification', label: 'NotificationSurface', path: '/surfaces/experience/notification' },
-        { slug: 'onboarding', label: 'OnboardingSurface', path: '/surfaces/experience/onboarding' },
         { slug: 'pricing', label: 'PricingSurface', path: '/surfaces/experience/pricing' },
       ],
     },
@@ -491,7 +538,7 @@ const verticals: NavSection = {
   slug: 'verticals',
   label: 'Verticals',
   children: [
-    { slug: 'platform', label: 'Platform', path: '/verticals/platform' },
+    { slug: 'rottay', label: 'Rottay', path: '/verticals/rottay' },
     { slug: 'bithire', label: 'BitHire', path: '/verticals/bithire' },
     { slug: 'evnto', label: 'Evnto', path: '/verticals/evnto' },
   ],

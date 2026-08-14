@@ -1,391 +1,345 @@
-/**
- * Provider-level ownership contract for a compiled tenant envelope.
- *
- * The app mounts the exact compiled artifact and hands the provider a typed
- * declaration. This suite proves the provider then emits NOTHING on the
- * channels the artifact covers, keeps emitting on the channels it does not,
- * and still READS the compiled appearance for the runtime semantics that are
- * not paint (density, motion dial, background mode, recipe profile).
- */
-
 import React from 'react';
-import { render, waitFor, type RenderResult } from '@testing-library/react';
-import { afterEach, describe, expect, it } from 'vitest';
-
+import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { TenantAppearance, TenantConfig } from '@/foundation/contracts';
-import {
-  TENANT_THEME_V1_COVERAGE,
-  type TenantThemeArtifact,
-  type TenantThemeDocument,
-  type TenantVisualChannel,
-} from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
+import type { TenantThemeArtifact } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
 import {
   compileTenantThemeConfig,
   getTenantThemeVerticalEnvelope,
   hydrateTenantThemeConfig,
 } from '@/infrastructure/compilers/composition/tenant-theme';
-import type { VisualAuthorityDeclaration } from '@/infrastructure/runtime/theming';
+import { useTenantContext } from '@/infrastructure/runtime/tenant/composition/react/provider';
 import {
-  PERSONALITY_CASCADE_LAYER,
-  buildPersonalityRootRuleText,
-} from '@/infrastructure/runtime/theming/foundation/cascade-layers';
-import { useDensity } from '@/infrastructure/runtime/foundation/density';
-import { useRecipeProfile } from '@/infrastructure/runtime/foundation/recipes/profiles';
-import { useMotionPolicy } from '@/infrastructure/runtime/motion';
+  TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE,
+  TENANT_THEME_ARTIFACT_SLUG_ATTRIBUTE,
+  TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE,
+  resetVisualAuthorityDiagnostics,
+} from '@/infrastructure/runtime/theming';
 import { DesignSystemProvider } from '..';
 
-const PERSONALITY_STYLE_ID = 'ds-personality-tokens';
-const ARTIFACT_STYLE_ID = 'test-mounted-artifact';
-
-function document_(document_: TenantThemeDocument): TenantThemeDocument {
-  return document_;
-}
-
-const THEMANAGEMENT_DOCUMENT = document_({
-  schemaVersion: 1,
-  mode: 'advanced',
-  visualFoundation: {
-    general: {
+const ARTIFACT = compileTenantThemeConfig(
+  hydrateTenantThemeConfig({
+    schemaVersion: 1,
+    mode: 'simple',
+    appearance: {
       palette: { primary: '#2F6B9A', backgroundMode: 'dark' },
       density: 'compact',
       motion: { intensity: 0.4, durationScale: 0.9, ambient: 'off' },
     },
-    advanced: {
-      chrome: { sidebar: { bg: '#101014' } },
-      tokenOverrides: { '--ds-radius-md': '10px' },
-    },
-    recipeProfile: 'rottay/technical-sharp@1',
-  },
-} as TenantThemeDocument);
+  }, {
+    tenantId: 'tenant_themanagement',
+    slug: 'themanagement',
+    verticalKey: 'bithire',
+    rowVersion: 7,
+  }),
+  { verticalEnvelope: getTenantThemeVerticalEnvelope('bithire') },
+);
 
-/** Same shape, contradictory compiled values: the invariance control. */
-const OTHER_TENANT_DOCUMENT = document_({
-  schemaVersion: 1,
-  mode: 'advanced',
-  visualFoundation: {
-    general: {
-      palette: { primary: '#B3001B', backgroundMode: 'light' },
-      density: 'spacious',
-      motion: { intensity: 0.8, durationScale: 1.2, ambient: 'subtle' },
-    },
-    advanced: {
-      chrome: { sidebar: { bg: '#FFFFFF' } },
-      tokenOverrides: { '--ds-radius-md': '2px' },
-    },
-  },
-} as TenantThemeDocument);
-
-function compile(
-  slug: string,
-  tenantThemeDocument: TenantThemeDocument,
-): TenantThemeArtifact {
-  return compileTenantThemeConfig(
-    hydrateTenantThemeConfig(tenantThemeDocument, {
-      tenantId: `tenant_${slug}`,
-      slug,
-      verticalKey: 'bithire',
-      rowVersion: 3,
-    }),
-    { verticalEnvelope: getTenantThemeVerticalEnvelope('bithire') },
-  );
+function mountArtifact(artifact: TenantThemeArtifact = ARTIFACT): HTMLStyleElement {
+  const style = document.createElement('style');
+  style.id = 'test-tenant-theme-artifact';
+  style.setAttribute(TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE, artifact.digest);
+  style.setAttribute(TENANT_THEME_ARTIFACT_SLUG_ATTRIBUTE, artifact.slug);
+  style.setAttribute(TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE, artifact.verticalKey);
+  style.textContent = artifact.css;
+  document.head.appendChild(style);
+  return style;
 }
 
-const THEMANAGEMENT = compile('themanagement', THEMANAGEMENT_DOCUMENT);
-const OTHER_TENANT = compile('other-tenant', OTHER_TENANT_DOCUMENT);
-
-/** The exact envelope `buildTenantConfig` hands the provider for a DB tenant. */
-function dbTenantConfig(artifact: TenantThemeArtifact): TenantConfig {
+function tenantConfig(overrides: Partial<TenantConfig> = {}): TenantConfig {
   return {
-    slug: artifact.slug,
+    slug: ARTIFACT.slug,
     name: 'The Management',
-    vertical: 'bithire',
-    theme: artifact.normalizedAppearance.general?.palette?.backgroundMode ?? 'light',
+    vertical: ARTIFACT.verticalKey,
+    theme: 'dark',
+    locale: 'en',
     plan: 'enterprise',
-    features: ['*'],
-    // Identity only: companyName/logo are not paint.
-    branding: { companyName: 'The Management' },
-    appearance: artifact.normalizedAppearance as TenantAppearance,
+    features: ['feature-a'],
+    branding: {
+      companyName: 'The Management',
+      logo: '/logo.svg',
+      logoMark: '/mark.svg',
+      favicon: '/favicon.ico',
+    },
+    appearance: ARTIFACT.normalizedAppearance as TenantAppearance,
+    ...overrides,
   } as TenantConfig;
 }
 
-function declaration(
-  artifact: TenantThemeArtifact,
-  coverage: readonly TenantVisualChannel[] = artifact.coverage,
-): VisualAuthorityDeclaration {
-  return {
-    authority: 'compiled-artifact',
-    artifact: {
-      digest: artifact.digest,
-      compilerVersion: artifact.compilerVersion,
-      coverage,
-      normalizedAppearance: artifact.normalizedAppearance,
-    },
-  };
+function ConfigProbe(): React.ReactElement {
+  const { config } = useTenantContext();
+  return <output data-testid="resolved-config">{JSON.stringify(config)}</output>;
 }
 
-interface SemanticsProjection {
-  density: string;
-  recipeProfile: string | null;
-  motionIntensity: number;
-  motionDurationScale: number;
-  motionAmbient: string;
-}
-
-function SemanticsProbe(): React.ReactElement {
-  const { posture } = useDensity();
-  const profile = useRecipeProfile();
-  const motion = useMotionPolicy();
-  const projection: SemanticsProjection = {
-    density: posture,
-    recipeProfile: profile?.id ?? null,
-    motionIntensity: motion.intensity,
-    motionDurationScale: motion.durationScale,
-    motionAmbient: motion.ambient,
-  };
-  return <output data-testid="semantics">{JSON.stringify(projection)}</output>;
-}
-
-async function readSemantics(rendered: RenderResult): Promise<SemanticsProjection> {
-  const element = await waitFor(() => {
-    const found = rendered.getByTestId('semantics');
-    expect(found.textContent).toBeTruthy();
-    return found;
-  });
-  return JSON.parse(element.textContent ?? '{}') as SemanticsProjection;
-}
-
-/** Every custom property the bridge wrote, read back through CSSOM text. */
-function personalityVariables(): Record<string, string> {
-  const element = document.getElementById(PERSONALITY_STYLE_ID) as HTMLStyleElement | null;
-  const sheet = element?.sheet;
-  if (!sheet) return {};
-
-  const collect = (rules: CSSRuleList): CSSStyleRule[] =>
-    Array.from(rules).flatMap((rule) => {
-      const grouping = rule as CSSGroupingRule;
-      if (grouping.cssRules && grouping.cssRules.length > 0 && !(rule as CSSStyleRule).style) {
-        return collect(grouping.cssRules);
-      }
-      return (rule as CSSStyleRule).style ? [rule as CSSStyleRule] : [];
-    });
-
-  const variables: Record<string, string> = {};
-  for (const rule of collect(sheet.cssRules)) {
-    for (const [, name, value] of rule.cssText.matchAll(/(--[a-z0-9-]+)\s*:\s*([^;}]+)/gi)) {
-      variables[name] = value.trim();
-    }
-  }
-  return variables;
-}
-
-/** Provider-authored declarations only: the mounted artifact is excluded. */
-function providerDeclaredCustomProperties(): Set<string> {
-  const declared = new Set<string>();
-  const inline = document.documentElement.getAttribute('style') ?? '';
-  for (const [, name] of inline.matchAll(/(--[a-z0-9-]+)\s*:/gi)) declared.add(name);
-
-  for (const element of Array.from(document.querySelectorAll('style'))) {
-    if (element.id === ARTIFACT_STYLE_ID) continue;
-    for (const [, name] of (element.textContent ?? '').matchAll(/(--[a-z0-9-]+)\s*:/gi)) {
-      declared.add(name);
-    }
-    for (const rule of Array.from(element.sheet?.cssRules ?? [])) {
-      for (const [, name] of rule.cssText.matchAll(/(--[a-z0-9-]+)\s*:/gi)) declared.add(name);
-    }
-  }
-  return declared;
-}
-
-function renderCompiledEnvelope(
-  artifact: TenantThemeArtifact,
-  options: {
-    coverage?: readonly TenantVisualChannel[];
-    productProfile?: 'dashboard' | 'workspace';
-  } = {},
-): RenderResult {
+function renderProvider(
+  config: TenantConfig,
+  artifact: TenantThemeArtifact = ARTIFACT,
+) {
   return render(
     <DesignSystemProvider
-      tenantConfig={dbTenantConfig(artifact)}
-      visualAuthority={declaration(artifact, options.coverage ?? artifact.coverage)}
+      tenantConfig={config}
       vertical="bithire"
       forceEngine="modern"
-      {...(options.productProfile ? { productProfile: options.productProfile } : {})}
+      visualAuthority={{ authority: 'compiled-artifact', artifact }}
     >
-      <style id={ARTIFACT_STYLE_ID} dangerouslySetInnerHTML={{ __html: artifact.css }} />
-      <SemanticsProbe />
+      <ConfigProbe />
     </DesignSystemProvider>,
   );
 }
 
-afterEach(() => {
-  const root = document.documentElement;
-  root.removeAttribute('data-tenant');
-  root.removeAttribute('data-theme');
-  root.removeAttribute('data-engine');
-  root.removeAttribute('data-density');
-  root.classList.remove('dark');
-  root.style.cssText = '';
-  document.getElementById(PERSONALITY_STYLE_ID)?.remove();
-});
+describe('DesignSystemProvider visual authority barrier', () => {
+  beforeEach(() => {
+    resetVisualAuthorityDiagnostics();
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+  });
 
-describe('DesignSystemProvider under a compiled tenant envelope', () => {
-  it('emits nothing on a covered channel, so the artifact is the single owner', async () => {
-    const rendered = renderCompiledEnvelope(THEMANAGEMENT);
-    await readSemantics(rendered);
-    // The bridge writes in an effect. Waiting for it keeps the census below
-    // from passing merely because no provider emitter had run yet.
-    await waitFor(() => {
-      expect(Object.keys(personalityVariables()).length).toBeGreaterThan(0);
-    });
+  afterEach(() => {
+    // Unmount BEFORE tearing the artifact out of the document. Vitest runs
+    // afterEach in reverse registration order, so this hook would otherwise
+    // remove the mounted element while a live provider is still holding a
+    // retained proof of it -- which correctly revokes, from a teardown.
+    cleanup();
+    vi.restoreAllMocks();
+    resetVisualAuthorityDiagnostics();
+    document.getElementById('test-tenant-theme-artifact')?.remove();
+    const root = document.documentElement;
+    root.removeAttribute('data-tenant');
+    root.removeAttribute('data-theme');
+    root.removeAttribute('data-engine');
+    root.removeAttribute('data-density');
+    root.removeAttribute('data-vertical');
+    root.classList.remove('dark');
+    root.style.cssText = '';
+  });
 
-    // brand-chrome: no provider-generated tenant chrome element.
-    expect(document.querySelector('style[id^="ds-chrome-"]')).toBeNull();
-    // appearance + visual-branding + token-overrides: ThemeProvider received
-    // undefined for each, so it wrote no inline custom property at all.
-    expect(document.documentElement.getAttribute('style') ?? '').not.toMatch(/--ds-/);
-
-    // The decisive assertion: no provider-authored rule anywhere declares a
-    // variable the artifact declares. Contradictory values cannot arise,
-    // because only one declaration of each key exists in the document.
-    const declared = providerDeclaredCustomProperties();
-    const contested = Object.keys(THEMANAGEMENT.variables).filter((token) =>
-      declared.has(token),
+  it('boots the exact code-owned Rottay default without a provider painter or artifact declaration', async () => {
+    render(
+      <DesignSystemProvider>
+        <ConfigProbe />
+      </DesignSystemProvider>,
     );
-    expect(contested).toEqual([]);
-    expect(Object.keys(THEMANAGEMENT.variables).length).toBeGreaterThan(10);
-  });
 
-  it('keeps the personality bridge mounted and disjoint from the artifact', async () => {
-    const rendered = renderCompiledEnvelope(THEMANAGEMENT);
-    await readSemantics(rendered);
-
-    const personality = await waitFor(() => {
-      const variables = personalityVariables();
-      expect(Object.keys(variables).length).toBeGreaterThan(0);
-      return variables;
+    await waitFor(() => expect(screen.getByTestId('resolved-config')).toBeTruthy());
+    const resolved = JSON.parse(screen.getByTestId('resolved-config').textContent ?? '{}') as TenantConfig;
+    expect(resolved).toMatchObject({
+      slug: 'rottay',
+      engine: 'modern',
+      vertical: 'rottay',
+      branding: { companyName: 'Rottay' },
     });
-
-    // Personality is outside v1 coverage, so its namespaced data bridge stays
-    // mounted without becoming a second canonical painter.
-    expect(TENANT_THEME_V1_COVERAGE).not.toContain('personality');
-    expect(Object.keys(personality).some((name) => name.startsWith('--ds-personality-'))).toBe(
-      true,
-    );
-    // The bridge is a data channel, not a parallel component painter. The
-    // static personality projection owns every canonical component alias.
-    expect(
-      Object.keys(personality).every((name) => name.startsWith('--ds-personality-')),
-    ).toBe(true);
-    expect(
-      Object.keys(personality).filter((name) => THEMANAGEMENT.variables[name] !== undefined),
-    ).toEqual([]);
+    expect(resolved).not.toHaveProperty('brandTheme');
+    expect(resolved).not.toHaveProperty('personality');
+    expect(resolved).not.toHaveProperty('tokenOverrides');
+    expect(document.documentElement.getAttribute('data-tenant')).toBe('rottay');
+    expect(document.querySelector('style[data-tenant-css]')).toBeNull();
   });
 
-  it('keeps the artifact unlayered above the bridge, so a contested key resolves to it', () => {
-    // Coverage prevents contention for the channels the artifact claims. The
-    // cascade contract is what settles any key both would declare anyway: the
-    // artifact rule is unlayered, and an unlayered declaration outranks every
-    // named layer regardless of specificity or source order.
-    expect(THEMANAGEMENT.css).not.toContain('@layer');
-    expect(buildPersonalityRootRuleText()).toContain(`@layer ${PERSONALITY_CASCADE_LAYER}`);
-  });
+  it('admits a verified mounted artifact and exposes one sanitized runtime config', () => {
+    mountArtifact();
+    renderProvider(tenantConfig());
 
-  it('unmounts the bridge when the coverage claims personality, so the artifact wins it', async () => {
-    // Both would declare the same channel; coverage decides, deterministically
-    // and in the artifact's favor. This is the rollback lever, not v1 behavior.
-    const rendered = renderCompiledEnvelope(THEMANAGEMENT, {
-      coverage: [...TENANT_THEME_V1_COVERAGE, 'personality'],
+    const resolved = JSON.parse(screen.getByTestId('resolved-config').textContent ?? '{}') as TenantConfig;
+    expect(resolved.slug).toBe(ARTIFACT.slug);
+    expect(resolved.features).toEqual(['feature-a']);
+    expect(resolved.locale).toBe('en');
+    expect(resolved.branding).toEqual({
+      companyName: 'The Management',
+      logo: '/logo.svg',
+      logoMark: '/mark.svg',
+      favicon: '/favicon.ico',
     });
-    await readSemantics(rendered);
-
-    expect(document.getElementById(PERSONALITY_STYLE_ID)).toBeNull();
+    expect(resolved.appearance).toEqual(ARTIFACT.normalizedAppearance);
+    expect(resolved).not.toHaveProperty('tokenOverrides');
+    expect(resolved).not.toHaveProperty('personality');
+    expect(resolved).not.toHaveProperty('brandTheme');
+    expect(document.querySelector('link[id^="tenant-theme-"]')).toBeNull();
+    expect(document.getElementById('rottay-emergency-tokens')).toBeNull();
   });
 
-  it('feeds the bridge from the product/vertical baseline, never from DB-tenant values', async () => {
-    const first = renderCompiledEnvelope(THEMANAGEMENT);
-    await readSemantics(first);
-    const forThemanagement = await waitFor(() => {
-      const variables = personalityVariables();
-      expect(Object.keys(variables).length).toBeGreaterThan(0);
-      return variables;
-    });
-    first.unmount();
-    document.getElementById(PERSONALITY_STYLE_ID)?.remove();
-
-    const second = renderCompiledEnvelope(OTHER_TENANT);
-    await readSemantics(second);
-    const forOtherTenant = await waitFor(() => {
-      const variables = personalityVariables();
-      expect(Object.keys(variables).length).toBeGreaterThan(0);
-      return variables;
-    });
-    second.unmount();
-    document.getElementById(PERSONALITY_STYLE_ID)?.remove();
-
-    // Two tenants whose compiled palette, density, motion and chrome all
-    // differ produce byte-identical personality.
-    expect(THEMANAGEMENT.variables).not.toEqual(OTHER_TENANT.variables);
-    expect(forOtherTenant).toEqual(forThemanagement);
-
-    // Non-vacuous: the channel the bridge DOES consume moves it.
-    const third = renderCompiledEnvelope(THEMANAGEMENT, { productProfile: 'workspace' });
-    await readSemantics(third);
-    const forWorkspaceProfile = await waitFor(() => {
-      const variables = personalityVariables();
-      expect(Object.keys(variables).length).toBeGreaterThan(0);
-      return variables;
-    });
-    expect(forWorkspaceProfile).not.toEqual(forThemanagement);
+  it('blocks children before downstream providers when the artifact is not mounted', () => {
+    renderProvider(tenantConfig());
+    expect(screen.queryByTestId('resolved-config')).toBeNull();
+    expect(document.documentElement.hasAttribute('data-tenant')).toBe(false);
   });
 
-  it('still reads the compiled appearance for the semantics that are not paint', async () => {
-    const rendered = renderCompiledEnvelope(THEMANAGEMENT);
-    const semantics = await readSemantics(rendered);
-
-    expect(semantics.density).toBe('compact');
-    expect(semantics.recipeProfile).toBe('rottay/technical-sharp@1');
-    expect(semantics.motionIntensity).toBe(0.4);
-    expect(semantics.motionDurationScale).toBe(0.9);
-    expect(semantics.motionAmbient).toBe('off');
-    expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
-    expect(document.documentElement.getAttribute('data-density')).toBe('compact');
-
-    // ...while zero appearance paint reached the document.
-    expect(document.documentElement.getAttribute('style') ?? '').not.toMatch(/--ds-/);
+  it('blocks a tampered artifact even when its claimed element is mounted', () => {
+    const tampered = { ...ARTIFACT, css: `${ARTIFACT.css}\n/* tampered */` };
+    mountArtifact(tampered);
+    renderProvider(tenantConfig(), tampered);
+    expect(screen.queryByTestId('resolved-config')).toBeNull();
+    expect(document.documentElement.hasAttribute('data-tenant')).toBe(false);
   });
-});
 
-describe('DesignSystemProvider without a compiled envelope', () => {
-  it('treats a bundled vertical as compiled paint while retaining personality data', async () => {
-    const rendered = render(
+  it('blocks uncompiled visual payload instead of rendering children under a baseline', () => {
+    render(
       <DesignSystemProvider
-        tenantConfig={{
-          slug: 'bithire',
-          name: 'BitHire',
-          vertical: 'bithire',
-          theme: 'light',
-          plan: 'enterprise',
-          features: [],
-          branding: { companyName: 'BitHire', primaryColor: '#3355FF' },
-        } as TenantConfig}
+        tenantConfig={tenantConfig({
+          appearance: undefined,
+          branding: { companyName: 'The Management', primaryColor: '#B3001B' },
+        })}
         vertical="bithire"
         forceEngine="modern"
       >
-        <SemanticsProbe />
+        <ConfigProbe />
       </DesignSystemProvider>,
     );
-    await readSemantics(rendered);
+    expect(screen.queryByTestId('resolved-config')).toBeNull();
+    expect(document.documentElement.hasAttribute('data-tenant')).toBe(false);
+  });
 
-    // Personality is intentionally outside artifact v1 coverage, but it now
-    // publishes namespaced data only.
-    await waitFor(() => {
-      expect(document.getElementById(PERSONALITY_STYLE_ID)).not.toBeNull();
+  it('blocks a raw appearance that differs from the compiled artifact', () => {
+    mountArtifact();
+    renderProvider(tenantConfig({
+      appearance: {
+        ...(ARTIFACT.normalizedAppearance as TenantAppearance),
+        general: {
+          ...ARTIFACT.normalizedAppearance.general,
+          density: 'spacious',
+        },
+      },
+    }));
+    expect(screen.queryByTestId('resolved-config')).toBeNull();
+  });
+});
+
+/**
+ * Admission is one observation; the tree then renders for the life of the app.
+ * These drills act AFTER children are on screen, which is the whole point: the
+ * barrier must close again, not merely have been closed once.
+ *
+ * The declaration is a stable module constant here, as a real application's
+ * would be. An inline object literal is a new prop on every render, which
+ * re-runs the resolver -- so a removal or a byte rewrite would be caught by
+ * re-admission and these drills would pass without any retention at all.
+ */
+const STABLE_DECLARATION = {
+  authority: 'compiled-artifact',
+  artifact: ARTIFACT,
+} as const;
+
+function renderRetained(config: TenantConfig = tenantConfig()) {
+  return render(
+    <DesignSystemProvider
+      tenantConfig={config}
+      vertical="bithire"
+      forceEngine="modern"
+      visualAuthority={STABLE_DECLARATION}
+    >
+      <ConfigProbe />
+    </DesignSystemProvider>,
+  );
+}
+
+describe('DesignSystemProvider retained mount proof', () => {
+  beforeEach(() => {
+    resetVisualAuthorityDiagnostics();
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    cleanup();
+    vi.restoreAllMocks();
+    resetVisualAuthorityDiagnostics();
+    document.querySelectorAll('#test-tenant-theme-artifact').forEach((node) => node.remove());
+    const root = document.documentElement;
+    root.removeAttribute('data-tenant');
+    root.removeAttribute('data-theme');
+    root.removeAttribute('data-engine');
+    root.removeAttribute('data-density');
+    root.removeAttribute('data-vertical');
+    root.classList.remove('dark');
+    root.style.cssText = '';
+  });
+
+  it('keeps children mounted while the admitted artifact is untouched', async () => {
+    mountArtifact();
+    renderRetained();
+    expect(screen.getByTestId('resolved-config')).toBeTruthy();
+
+    await act(async () => {
+      document.head.appendChild(document.createElement('style'));
+      document.body.appendChild(document.createElement('div'));
+      await new Promise((resolve) => setTimeout(resolve, 0));
     });
-    expect(document.documentElement.style.getPropertyValue('--ds-color-primary')).toBe('');
-    expect(
-      Object.keys(personalityVariables()).every((name) =>
-        name.startsWith('--ds-personality-'),
-      ),
-    ).toBe(true);
+
+    expect(screen.queryByTestId('resolved-config')).not.toBeNull();
+    expect(document.documentElement.getAttribute('data-tenant')).toBe(ARTIFACT.slug);
+  });
+
+  it.each([
+    ['removal', (style: HTMLStyleElement) => style.remove()],
+    ['byte rewrite', (style: HTMLStyleElement) => {
+      style.textContent = `${ARTIFACT.css}\n:root{--ds-color-primary:#ff0000}\n`;
+    }],
+    ['scope relabel', (style: HTMLStyleElement) => {
+      style.setAttribute(TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE, `sha256-${'0'.repeat(64)}`);
+    }],
+    ['duplicate scope', () => {
+      mountArtifact({ ...ARTIFACT, digest: `sha256-${'0'.repeat(64)}` });
+    }],
+    ['takeover by a byte-identical node', (style: HTMLStyleElement) => {
+      style.remove();
+      mountArtifact();
+    }],
+  ] as const)('revokes and blocks children on client %s after admission', async (_label, tamper) => {
+    const style = mountArtifact();
+    renderRetained();
+    expect(screen.getByTestId('resolved-config')).toBeTruthy();
+
+    tamper(style);
+
+    await waitFor(() => expect(screen.queryByTestId('resolved-config')).toBeNull());
+    expect(document.documentElement.hasAttribute('data-tenant')).toBe(false);
+  });
+
+  it('reports the revocation as a visual authority conflict', async () => {
+    const reported: unknown[] = [];
+    vi.spyOn(console, 'error').mockImplementation((...args) => { reported.push(args[0]); });
+    const style = mountArtifact();
+    renderRetained();
+    style.remove();
+
+    await waitFor(() => expect(screen.queryByTestId('resolved-config')).toBeNull());
+    expect(reported.some((message) =>
+      typeof message === 'string' &&
+      message.includes(`Tenant "${ARTIFACT.slug}"`) &&
+      message.includes('revoked'),
+    )).toBe(true);
+  });
+
+  /**
+   * A re-declaration is not a re-proof of the thing that failed.
+   *
+   * This drill used to assert the opposite -- that a fresh declaration
+   * re-admits, on the reasoning that a new declaration is a new complete
+   * proof. It is not. Re-admission re-runs exactly the observation a takeover
+   * already satisfies: one byte-exact element carrying the right scope
+   * attributes. The evidence that separates the admitted element from an
+   * identical impostor is node identity, and once that is broken no later
+   * observation restores it. So the verdict outlives the admission, and the
+   * way back is a recompiled artifact, which is admitted on its own digest.
+   * The full treatment is in retained-artifact-gate.integration.test.tsx.
+   */
+  it('stays revoked under a fresh declaration once the artifact has been removed', async () => {
+    const style = mountArtifact();
+    const view = renderRetained();
+    style.remove();
+    await waitFor(() => expect(screen.queryByTestId('resolved-config')).toBeNull());
+
+    await act(async () => { mountArtifact(); });
+    view.rerender(
+      <DesignSystemProvider
+        tenantConfig={tenantConfig()}
+        vertical="bithire"
+        forceEngine="modern"
+        visualAuthority={{ authority: 'compiled-artifact', artifact: { ...ARTIFACT } }}
+      >
+        <ConfigProbe />
+      </DesignSystemProvider>,
+    );
+    await act(async () => { await new Promise((resolve) => setTimeout(resolve, 0)); });
+
+    expect(screen.queryByTestId('resolved-config')).toBeNull();
+    expect(document.documentElement.hasAttribute('data-tenant')).toBe(false);
   });
 });

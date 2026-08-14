@@ -6,17 +6,17 @@
     "category": "data",
     "name": "FileManager",
     "components": [
-      "FileManager"
+      "PatternFileManager"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
     "sourceOwner": "packages/core/src/ui/patterns/data/file-manager",
-    "publicComponents": [],
-    "unresolvedPublicComponents": [
-      "FileManager"
+    "publicComponents": [
+      "PatternFileManager"
     ],
+    "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "ac50b24f7f35611aed07d69dba3a50194bd751f9da6bea9657cf38a7cb0db72b"
+    "inventoryRowDigest": "ed24c6dfe0dd9666a545b579590c69f6cd0091ce485dbb3f199d3c238f299b73"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

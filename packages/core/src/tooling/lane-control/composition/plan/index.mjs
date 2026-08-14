@@ -7,8 +7,10 @@
  *
  * RESOLUTION IS THREE-LAYERED, on purpose:
  *
- *   row        — the ledger row that BOUNDS the lane (`writeRoot` minus
- *                `writeExcludes`). A lane with no row and no explicit
+ *   row        — the ownership row that BOUNDS the lane (`writeRoot` minus
+ *                `writeExcludes`). For a family that row is derived from the
+ *                canonical inventory, and its bound is the family's exact
+ *                `sourceOwner` subtree. A lane with no row and no explicit
  *                `writeRoot` is refused: an unbounded lane cannot be checked,
  *                and "the agent will be careful" is not a boundary.
  *   patterns   — what the lane DECLARES it will write, which must be inside
@@ -30,8 +32,9 @@ import {
   normalizePath,
   territoryOf,
 } from '../../foundation/glob/index.mjs';
-import { loadRows, writeExcludesForRow, writeSetForRow, DEFAULT_LEDGER_PATH, DEFAULT_SYNTHETIC_PATH } from '../../runtime/ledger/index.mjs';
+import { loadRows, writeExcludesForRow, writeSetForRow } from '../../runtime/ownership-rows/index.mjs';
 import { listFiles } from '../../foundation/git/index.mjs';
+import { INTEGRATOR_ROOTS } from '../../runtime/shared-files/index.mjs';
 
 export function readPlan(path) {
   const plan = JSON.parse(readFileSync(path, 'utf8'));
@@ -58,19 +61,89 @@ function directoryProbe(root) {
 }
 
 /**
- * Resolve one lane: its bound, its declared patterns, the files those
- * patterns cover today, and every way the declaration escapes its bound.
+ * The closed set of lane shapes. A lane is one of exactly these three things,
+ * and the role decides where its bound may come from.
+ *
+ * The hole this closes: a lane with NO row and an explicit `writeRoot` could
+ * be pointed straight at a family's subtree. It then inherited none of that
+ * family's derived `writeExcludes`, so it silently owned every family nested
+ * inside it — the catalog was bypassed by simply not mentioning it. Declaring
+ * a root is now only legitimate where no family owner exists to bind to.
+ */
+export const LANE_ROLES = Object.freeze(['family', 'domain', 'integrator']);
+
+function inferRole(lane, row) {
+  if (lane.laneRole) return lane.laneRole;
+  if (row) return row.synthetic ? 'domain' : 'family';
+  return 'integrator';
+}
+
+/**
+ * Resolve one lane: its role, its bound, its declared patterns, the files
+ * those patterns cover today, and every way the declaration escapes.
  */
 export function resolveLane(lane, context) {
-  const { rowIndex, universe, isDirectory } = context;
+  const { rowIndex, universe, isDirectory, integratorRoots = [] } = context;
 
   const row = lane.row ? rowIndex.get(lane.row) : null;
   if (lane.row && !row) throw new Error(`lane-control: lane "${lane.id}" names unknown row "${lane.row}"`);
 
+  const laneRole = inferRole(lane, row);
+  const roleViolations = [];
+  if (!LANE_ROLES.includes(laneRole)) {
+    roleViolations.push({
+      kind: 'unknown-role',
+      message: `laneRole "${laneRole}" is not one of ${LANE_ROLES.join(', ')}`,
+    });
+  }
+  if (laneRole === 'family' || laneRole === 'domain') {
+    if (!row) {
+      roleViolations.push({
+        kind: 'role-needs-row',
+        message: `a ${laneRole} lane must name an ownership row — that row IS its bound`,
+      });
+    } else if (laneRole === 'family' && row.synthetic) {
+      roleViolations.push({
+        kind: 'role-row-mismatch',
+        message: `row "${row.id}" is synthetic, so this is a domain lane, not a family lane`,
+      });
+    } else if (laneRole === 'domain' && !row.synthetic) {
+      roleViolations.push({
+        kind: 'role-row-mismatch',
+        message: `row "${row.id}" is a family, so this is a family lane, not a domain lane`,
+      });
+    }
+    if (lane.writeRoot !== undefined) {
+      roleViolations.push({
+        kind: 'role-declares-root',
+        message: `a ${laneRole} lane may not declare writeRoot — it inherits the row's bound, and a declared root is how the catalog gets bypassed`,
+      });
+    }
+  }
+  if (laneRole === 'integrator') {
+    if (row) {
+      roleViolations.push({
+        kind: 'role-names-row',
+        message: `an integrator lane may not name row "${lane.row}" — it exists to hold shared regions no row owns`,
+      });
+    }
+    if (lane.writeRoot === undefined) {
+      roleViolations.push({ kind: 'role-needs-root', message: 'an integrator lane must declare its writeRoot' });
+    } else {
+      const declaredRoot = normalizePath(lane.writeRoot);
+      if (!integratorRoots.some((allowed) => isUnderOrEqual(declaredRoot, allowed))) {
+        roleViolations.push({
+          kind: 'root-outside-integrator-domains',
+          message: `writeRoot "${declaredRoot}" is not inside a declared shared region (${integratorRoots.join(', ')}) — bind to an ownership row instead`,
+        });
+      }
+    }
+  }
+
   const writeRoot = normalizePath(lane.writeRoot ?? row?.writeRoot ?? '');
   if (!writeRoot) {
     throw new Error(
-      `lane-control: lane "${lane.id}" has no writeRoot — name a ledger row or declare writeRoot. An unbounded lane cannot be checked.`,
+      `lane-control: lane "${lane.id}" has no writeRoot — name an ownership row or declare writeRoot. An unbounded lane cannot be checked.`,
     );
   }
 
@@ -83,8 +156,9 @@ export function resolveLane(lane, context) {
 
   // An exclusion naming a DIRECTORY excludes the directory and its subtree;
   // an exclusion carrying glob magic is a shape and is taken literally. Both
-  // forms are needed: `writeExcludes` in the ledger are directories, while a
-  // lane sharing a directory with another lane can only be separated by shape.
+  // forms are needed: a row's `writeExcludes` are directories — the source
+  // owners nesting inside this one — while a lane sharing a directory with
+  // another lane can only be separated by shape.
   const excludePatterns = writeExcludes.flatMap((entry) => (hasMagic(entry) ? [entry] : [entry, `${entry}/**`]));
   const compiledExclude = compilePatterns(excludePatterns);
   const excludeTerritories = excludePatterns.map((pattern) => territoryOf(pattern, { isDirectory }));
@@ -139,6 +213,8 @@ export function resolveLane(lane, context) {
     id: lane.id,
     rowId: lane.row ?? null,
     row,
+    laneRole,
+    roleViolations,
     model: lane.model ?? null,
     writeRoot,
     writeExcludes,
@@ -163,12 +239,13 @@ export function laneCovers(lane, path) {
   return isUnderOrEqual(normalized, lane.writeRoot);
 }
 
-export function loadContext({ root, ledgerPath = DEFAULT_LEDGER_PATH, syntheticPath = DEFAULT_SYNTHETIC_PATH }) {
-  const rows = loadRows({ root, ledgerPath, syntheticPath });
+export function loadContext({ root, testCatalog }) {
+  const rows = loadRows({ root, testCatalog });
   return {
     root,
     rows,
     rowIndex: rows.index,
+    integratorRoots: INTEGRATOR_ROOTS,
     universe: listFiles(root).map((file) => normalizePath(file)),
     isDirectory: directoryProbe(root),
   };

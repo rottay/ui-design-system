@@ -40,13 +40,57 @@ const read = (root, path) => readFileSync(`${root}/${path}`, 'utf8');
 
 /* ────────────────────────── source scanning ────────────────────────── */
 
+/**
+ * Walk a balanced bracket pair from `at` (which must be the opening bracket)
+ * and return the index of its closing partner, or -1.
+ */
+function closingBracket(source, at, open, close) {
+  let depth = 0;
+  for (let index = at; index < source.length; index += 1) {
+    if (source[index] === open) depth += 1;
+    else if (source[index] === close) {
+      depth -= 1;
+      if (depth === 0) return index;
+    }
+  }
+  return -1;
+}
+
+/**
+ * The `{` that opens a function's body, given the index of the `(` or `<` that
+ * opens its signature.
+ *
+ * The signature has to be STEPPED OVER, not searched through. Taking the first
+ * `{` after the function name finds a default parameter value instead:
+ * `chromeToVariables(chrome, context: ChromeVariableContext = {})` handed back
+ * a two-character body, the `size` loop inside the real body bound nothing, and
+ * its two interpolated emitters were attributed to `<module>`. That is the
+ * failure this gate is built to refuse — E0 held the line and refused to report
+ * a number, which is why the miss surfaced as a red rather than as a quietly
+ * inflated defect count.
+ */
+function bodyBraceAfterSignature(source, at) {
+  let cursor = at;
+  if (source[cursor] === '<') {
+    cursor = closingBracket(source, cursor, '<', '>');
+    if (cursor === -1) return -1;
+    cursor = source.indexOf('(', cursor);
+    if (cursor === -1) return -1;
+  }
+  const closingParen = closingBracket(source, cursor, '(', ')');
+  if (closingParen === -1) return -1;
+  // Return-type annotations in this corpus are named types (`Record<…>`,
+  // `void`, `string`), never object literals, so the next `{` is the body.
+  return source.indexOf('{', closingParen);
+}
+
 /** Every `function NAME(...) { … }` with the source range of its body. */
 export function functionBodies(source) {
   const bodies = [];
   const pattern = /function\s+([A-Za-z0-9_$]+)\s*[(<]/g;
   let match = pattern.exec(source);
   while (match !== null) {
-    const braceAt = source.indexOf('{', match.index);
+    const braceAt = bodyBraceAfterSignature(source, pattern.lastIndex - 1);
     if (braceAt !== -1) {
       let depth = 0;
       let end = braceAt;

@@ -22,20 +22,20 @@ import { NavigationSettingsIcon } from '@/graphics/icons/presentation/semantic/g
 import { densityScopeAttributes } from '@/infrastructure/runtime/foundation/density';
 import { filterSurfaceTabbedViews, hasSurfaceError } from '../../../../runtime/helpers';
 import type { SettingsSurfaceConfig } from '../../../../foundation/contracts';
-import { PageShellSurface } from '../../../../composition/layout/page-shell';
-import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
-import { useSurfaceResponsiveLayout } from '../../../../runtime/responsive';
+import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
+import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
+import { useSurfaceResponsiveLayout } from '../../../../../structures/foundation/chrome/runtime/responsive';
 import {
   resolveStackSpacing,
   SurfaceAccentBarWrapper,
-} from '../../../../runtime/profile-defaults/personality';
-import { SurfaceActionBar, SurfaceTabbedLabel } from '../../../../runtime/helpers/rendering';
+} from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
+import { SurfaceActionBar, SurfaceTabbedLabel } from '../../../../../structures/shell/surface-chrome';
 import {
   SurfaceEmptyState,
   SurfaceErrorState,
   SurfaceLoadingSkeleton,
-} from '../../../../runtime/helpers/states';
-import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
+} from '../../../../../structures/feedback/surface-lifecycle';
+import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
 
 export interface SettingsSurfaceProps {
   config: SettingsSurfaceConfig;

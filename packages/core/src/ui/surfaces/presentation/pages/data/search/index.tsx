@@ -16,23 +16,23 @@ import { PatternFilterPanel } from '../../../../../patterns';
 import { FadeIn } from '@/graphics/motion';
 import { useCollectionStagger } from '../../../../../patterns/foundation/motion';
 import { countActiveFilters, filterSurfaceActions, hasSurfaceError } from '../../../../runtime/helpers';
-import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
+import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
 import type {
   SearchSurfaceConfig,
   SearchSurfaceResult,
 } from '../../../../foundation/contracts';
-import { PageShellSurface } from '../../../../composition/layout/page-shell';
-import { useSurfaceResponsiveLayout } from '../../../../runtime/responsive';
+import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
+import { useSurfaceResponsiveLayout } from '../../../../../structures/foundation/chrome/runtime/responsive';
 import {
   SurfaceActionBar,
   SurfaceSectionCard,
-} from '../../../../runtime/helpers/rendering';
+} from '../../../../../structures/shell/surface-chrome';
 import {
   SurfaceEmptyState,
   SurfaceErrorState,
-} from '../../../../runtime/helpers/states';
-import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
-import { resolveStackSpacing } from '../../../../runtime/profile-defaults/personality';
+} from '../../../../../structures/feedback/surface-lifecycle';
+import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
+import { resolveStackSpacing } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
 
 type SurfaceCardVariant = 'outlined' | 'elevated' | 'filled' | 'ghost';
 type SectionSpacing = 'sm' | 'md' | 'lg';

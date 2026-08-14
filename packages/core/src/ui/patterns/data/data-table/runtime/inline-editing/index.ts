@@ -96,7 +96,7 @@ function resolveRowKeyValue<T>(row: T, rowKey: keyof T | ((row: T) => string)): 
   return String(readRecordValue(row, rowKey as string));
 }
 
-export function useInlineEditing<T extends Record<string, unknown>>(
+export function useInlineEditing<T extends object>(
   options: UseInlineEditingOptions<T>,
 ): UseInlineEditingReturn<T> {
   const {

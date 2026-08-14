@@ -65,7 +65,7 @@ describe('public api contract', () => {
     }
 
     // Per-vertical CSS bundles (the canonical app-facing contract)
-    const verticalStyles = ['./styles/platform', './styles/bithire', './styles/evnto'];
+    const verticalStyles = ['./styles/rottay', './styles/bithire', './styles/evnto'];
     for (const path of verticalStyles) {
       expect(currentExports, `missing vertical style export: ${path}`).toContain(path);
     }
@@ -73,8 +73,9 @@ describe('public api contract', () => {
     // Engine-specific styles exist as optimization path (not required by apps)
     expect(currentExports).toContain('./styles/modern');
 
-    // Legacy rottay alias exists for backward compatibility
-    expect(currentExports).toContain('./styles/rottay');
+    // Neutral consumers can request the same canonical Rottay bundle without
+    // introducing a second vertical identity.
+    expect(currentExports).toContain('./styles/default');
 
     // No ghost exports from previous API versions
     const forbidden = ['./tokens', './foundation/tokens/css', './foundation/tokens/css/*', './i18n'];

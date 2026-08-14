@@ -76,3 +76,54 @@ export function declaredProperties(fixtures = FIXTURES) {
   }
   return [...properties].sort();
 }
+
+/**
+ * Every `fixtureId/targetId` key this roster can actually produce.
+ *
+ * A negative-control BINDING or a causal `--bind` flag names a target by this
+ * exact key. Before this existed, nothing stopped a binding from naming a
+ * fixture/target pair the roster had never declared — the key just produced
+ * no rows, and an entry scoped to `declared-targets` that names a target
+ * absent from EVERY measured scope would fail its own guard eventually, but
+ * only downstream and never by naming the fabrication itself.
+ */
+export const KNOWN_TARGET_KEYS = Object.freeze(
+  FIXTURES.flatMap((fixture) => fixture.targets.map((target) => `${fixture.id}/${target.id}`)),
+);
+
+/**
+ * Fails closed, naming every key that is not a real fixture/target pair.
+ *
+ * @param {string[]} keys
+ * @param {{context?: string}} [options]
+ */
+export function assertKnownTargetKeys(keys, { context = 'a binding' } = {}) {
+  const known = new Set(KNOWN_TARGET_KEYS);
+  const unknown = [...new Set(keys)].filter((key) => !known.has(key));
+  if (unknown.length > 0) {
+    throw new Error(
+      `resolution-probe: ${context} names a fixture/target pair this roster does not declare: ` +
+        `${unknown.join(', ')}. A binding must name a real "fixtureId/targetId" from ` +
+        `FIXTURE_IDS, never one the harness merely wishes existed. Known keys: ` +
+        `${KNOWN_TARGET_KEYS.join(', ')}.`,
+    );
+  }
+}
+
+/**
+ * Finds real roster fixtures that read every declared control channel on one
+ * target. These are the only fixtures eligible to prove control liveness: a
+ * radius, colour or unrelated geometry movement on the same fixture cannot
+ * certify a rhythm channel.
+ */
+export function directControlFixtureIds({ fixtures = FIXTURES, channels }) {
+  const required = [...new Set(channels ?? [])];
+  if (required.length === 0) return [];
+  return fixtures
+    .filter((fixture) =>
+      fixture.targets.some((target) =>
+        required.every((channel) => target.properties.includes(channel)),
+      ),
+    )
+    .map((fixture) => fixture.id);
+}

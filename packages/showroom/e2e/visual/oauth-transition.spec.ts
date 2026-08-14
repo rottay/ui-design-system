@@ -71,7 +71,7 @@ const SCENARIOS: readonly Scenario[] = [
     compact: false,
     viewport: DESKTOP_VIEWPORT,
     expected: {
-      title: 'Redirecting to GitHub for Rottay Platform.',
+      title: 'Redirecting to GitHub for Rottay.',
       provider: 'GitHub',
       variant: 'watchtower-sweep-dark',
       family: 'watchtower-sweep',
@@ -87,7 +87,7 @@ const SCENARIOS: readonly Scenario[] = [
     compact: false,
     viewport: DESKTOP_VIEWPORT,
     expected: {
-      title: 'Back to Rottay Platform.',
+      title: 'Back to Rottay.',
       provider: 'GitHub',
       variant: 'watchtower-sweep-dark',
       family: 'watchtower-sweep',
@@ -103,7 +103,7 @@ const SCENARIOS: readonly Scenario[] = [
     compact: true,
     viewport: { width: 390, height: 844 },
     expected: {
-      title: 'Back to Rottay Platform.',
+      title: 'Back to Rottay.',
       provider: 'GitHub',
       variant: 'watchtower-sweep-dark',
       family: 'watchtower-sweep',
@@ -154,7 +154,7 @@ async function assertScenarioContent(fixture: Locator, root: Locator, scenario: 
     scenario.phase === 'return'
       ? scenario.tone === 'light'
         ? 'Opening Bithire'
-        : 'Opening Rottay Platform'
+        : 'Opening Rottay'
       : `Redirecting to ${scenario.expected.provider}`,
   );
 

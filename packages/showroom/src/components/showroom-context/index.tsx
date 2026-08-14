@@ -10,6 +10,8 @@ import {
   useState,
   type ReactNode,
 } from 'react';
+import type { ProductProfileKey } from '@rottay/design-system';
+
 import {
   applyShowroomRuntimeQuery,
   isShowroomEngine as isShowroomEngineValue,
@@ -22,7 +24,7 @@ import {
 export type ShowroomEngine = RuntimeQueryEngine;
 export type ShowroomTenant = RuntimeQueryTenant;
 export type ShowroomTheme = ShowroomTenant;
-export type ShowroomVertical = 'platform' | 'bithire' | 'evnto';
+export type ShowroomVertical = 'rottay' | 'bithire' | 'evnto';
 
 const ENGINE_STORAGE_KEY = 'rottay-showroom-engine';
 const THEME_STORAGE_KEY = 'rottay-showroom-theme';
@@ -85,14 +87,14 @@ export function getShowroomVerticalKey(tenantSlug: ShowroomTenant): ShowroomVert
       return 'evnto';
     case 'rottay':
     default:
-      return 'platform';
+      return 'rottay';
   }
 }
 
 export function getShowroomProductProfileKey(
   tenantSlug: ShowroomTenant,
   engine: ShowroomEngine
-) {
+): ProductProfileKey {
   const meta = SHOWROOM_RUNTIME_META[tenantSlug];
   const useModernProfile =
     tenantSlug === 'rottay' && engine === 'modern' && meta.modernProfileKey;
@@ -116,26 +118,32 @@ const ShowroomContext = createContext<ShowroomContextValue>({
   setTenantSlug: () => {},
 });
 
+// The profile keys are `ProductProfileKey`, not `string`. The union is closed
+// on purpose -- the presets registry resolves fail-closed, so an unbacked key
+// is never PAINTED, it silently falls back to the default profile. Typing this
+// table as `string` moved that silence into the showroom: a stale `platform.*`
+// spelling would have type-checked here and then rendered the wrong profile
+// with nothing to observe. Now it is a compile error at the table.
 const SHOWROOM_RUNTIME_META: Record<
   ShowroomTenant,
   {
     tenantName: string;
     verticalKey: ShowroomVertical;
     verticalLabel: string;
-    defaultProfileKey: string;
+    defaultProfileKey: ProductProfileKey;
     defaultProfileLabel: string;
-    modernProfileKey?: string;
+    modernProfileKey?: ProductProfileKey;
     modernProfileLabel?: string;
   }
 > = {
   rottay: {
     tenantName: 'Rottay',
-    verticalKey: 'platform',
-    verticalLabel: 'Platform',
-    defaultProfileKey: 'platform.admin',
-    defaultProfileLabel: 'Platform Admin',
-    modernProfileKey: 'platform.flagship',
-    modernProfileLabel: 'Platform Flagship',
+    verticalKey: 'rottay',
+    verticalLabel: 'Rottay',
+    defaultProfileKey: 'rottay.admin',
+    defaultProfileLabel: 'Rottay Admin',
+    modernProfileKey: 'rottay.flagship',
+    modernProfileLabel: 'Rottay Flagship',
   },
   bithire: {
     tenantName: 'BitHire',

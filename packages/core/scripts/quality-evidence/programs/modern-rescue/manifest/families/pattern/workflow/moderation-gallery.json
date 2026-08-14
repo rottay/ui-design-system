@@ -6,17 +6,17 @@
     "category": "workflow",
     "name": "ModerationGallery",
     "components": [
-      "ModerationGallery"
+      "PatternModerationGallery"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
     "sourceOwner": "packages/core/src/ui/patterns/workflow/moderation-gallery",
-    "publicComponents": [],
-    "unresolvedPublicComponents": [
-      "ModerationGallery"
+    "publicComponents": [
+      "PatternModerationGallery"
     ],
+    "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "8b9072714e0fe2989a1b908d731b4e160ebb059b53c5ac129b096e12c24d531d"
+    "inventoryRowDigest": "00fc746c593477afe11d1089f74ac9cbe0cb3e9da2f572942bb9255369211c85"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

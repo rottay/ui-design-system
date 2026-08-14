@@ -29,7 +29,7 @@
  *     of the no-loss law, and because it runs per bundle it also catches the
  *     density trap: `--ds-spacing-N` is density-multiplied and the verticals
  *     ship 0.9 / 1 / 1.125, so a literal reconnected to the spacing scale
- *     holds in `platform` and moves in `bithire` and `evnto`.
+ *     holds in `rottay` and moves in `bithire` and `evnto`.
  *
  * LIMITS, STATED PLAINLY.
  *   - This is BUNDLE resolution, not `getComputedStyle`. It does not lay out,
@@ -66,7 +66,7 @@ const CORE_ROOT = resolvePath(HERE, "../../../..");
 /** The bundles that really ship, keyed by vertical. */
 export const SHIPPED_BUNDLES = Object.freeze({
   bithire: "styles/bithire.css",
-  platform: "styles/platform.css",
+  rottay: "styles/rottay.css",
   evnto: "styles/evnto.css",
 });
 

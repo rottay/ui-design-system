@@ -104,7 +104,6 @@ const PRESERVED_LABELS = new Set([
   'Classic',
   'Evnto',
   'Modern',
-  'Platform',
   'Rottay',
   'Rustic',
 ]);
@@ -199,8 +198,8 @@ function buildPathMetadata() {
     description: 'Tenant-tailored examples connecting the system to real business use cases.',
     sectionSlug: 'verticals',
   });
-  metadata.set('/verticals/platform', {
-    label: 'Platform',
+  metadata.set('/verticals/rottay', {
+    label: 'Rottay',
     description: 'Operational admin patterns for the flagship platform experience.',
     sectionSlug: 'verticals',
   });

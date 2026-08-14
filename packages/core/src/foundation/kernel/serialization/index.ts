@@ -13,6 +13,10 @@
  * to the JSON data model. Anything outside that model throws rather than being
  * coerced, because a lossy coercion would let two different payloads share one
  * digest.
+ *
+ * Canonical form is therefore lossy BY DESIGN, and must never be used to retain
+ * a payload. `cloneJsonValueExact` is the byte-preserving counterpart for
+ * callers that need to hold a value rather than compare it.
  */
 
 /**
@@ -194,4 +198,80 @@ export function normalizeCanonicalJsonValue(value: unknown): unknown {
 /** Stable JSON serialization with recursively sorted keys and normalized edge whitespace. */
 export function canonicalizeJsonValue(value: unknown): string {
   return JSON.stringify(normalizeCanonicalJsonValue(value));
+}
+
+/**
+ * Structural clone that preserves every byte, restricted to the JSON data model.
+ *
+ * `JSON.parse(canonicalizeJsonValue(value))` is NOT a clone. Canonical form is
+ * built for digests and structural comparison, so it deliberately discards
+ * information: it trims string edges and reorders keys. A payload whose exact
+ * bytes are load-bearing -- CSS whose trailing newline is part of the artifact,
+ * a signature input, anything later compared byte-for-byte -- does not survive
+ * that round trip. Canonicalize to compare; clone to retain.
+ *
+ * The JSON model is enforced rather than coerced, for the same reason
+ * `normalize` enforces it: a caller retaining an untrusted payload must not
+ * silently admit a `Date`, a class instance or a host object that will behave
+ * differently later. Holes in arrays are rejected too -- a hole reads back as
+ * `undefined` and is skipped by `every`/`map`, so it can hide a missing element
+ * from exactly the ordered-comparison checks a verifier depends on.
+ *
+ * Every property is read exactly once, so an accessor on the input cannot serve
+ * one value to a verifier and a different one to the consumer that follows.
+ */
+function cloneExact(value: unknown, path: string, ancestors: Set<object>): unknown {
+  if (value === null || typeof value === 'boolean' || typeof value === 'string') {
+    return value;
+  }
+
+  if (typeof value === 'number') {
+    if (!Number.isFinite(value)) throw new CanonicalJsonError('non-finite-number', path);
+    return value;
+  }
+
+  if (Array.isArray(value)) {
+    if (ancestors.has(value)) throw new CanonicalJsonError('circular-reference', path);
+    ancestors.add(value);
+    const items: unknown[] = new Array(value.length);
+    for (let index = 0; index < value.length; index += 1) {
+      const itemPath = `${path}[${index}]`;
+      if (!Object.prototype.hasOwnProperty.call(value, index)) {
+        throw new CanonicalJsonError('unsupported-property', itemPath);
+      }
+      items[index] = cloneExact(value[index], itemPath, ancestors);
+    }
+    ancestors.delete(value);
+    return items;
+  }
+
+  if (!isCanonicalJsonObject(value)) throw new CanonicalJsonError('unsupported-value', path);
+  if (ancestors.has(value)) throw new CanonicalJsonError('circular-reference', path);
+  ancestors.add(value);
+
+  const result: Record<string, unknown> = {};
+  for (const key of Object.keys(value)) {
+    const child = value[key];
+    if (
+      child === undefined ||
+      typeof child === 'function' ||
+      typeof child === 'symbol' ||
+      typeof child === 'bigint'
+    ) {
+      throw new CanonicalJsonError('unsupported-property', childPath(path, key));
+    }
+    result[key] = cloneExact(child, childPath(path, key), ancestors);
+  }
+
+  ancestors.delete(value);
+  return result;
+}
+
+/**
+ * Byte-exact deep clone of a JSON value. Throws `CanonicalJsonError` for
+ * anything outside the JSON data model. See `cloneExact` for why this is not
+ * interchangeable with a canonicalize round trip.
+ */
+export function cloneJsonValueExact<T>(value: T): T {
+  return cloneExact(value, '$', new Set<object>()) as T;
 }

@@ -56,7 +56,7 @@ const SURFACE_EDITORIAL: Record<SurfaceGroup, SurfaceEditorial> = {
     description:
       'Experience surfaces cover the public and user-facing edges of the system.',
     bestFor: 'Auth, onboarding, messaging, marketing, branded journeys',
-    examples: ['AuthSurface', 'OnboardingSurface', 'MarketingSurface'],
+    examples: ['AuthSurface', 'PricingSurface', 'MarketingSurface'],
     tint: 'var(--ds-color-warning-50)',
     accent: 'var(--ds-color-warning-700)',
     icon: <SparklesIcon size={20} />,

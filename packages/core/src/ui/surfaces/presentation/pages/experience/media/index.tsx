@@ -38,17 +38,17 @@ import { Box, Card, Grid, Image, Stack, Text } from '../../../../../primitives';
 import { FadeIn, recordTransitionName } from '@/graphics/motion';
 import { useCollectionStagger } from '../../../../../patterns/foundation/motion';
 import { filterSurfaceActions, hasSurfaceError } from '../../../../runtime/helpers';
-import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
-import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
+import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
+import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
 import {
   resolveStackSpacing,
   SurfaceAccentBarWrapper,
-} from '../../../../runtime/profile-defaults/personality';
+} from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
 import type { MediaSurfaceConfig, MediaSurfaceItem } from '../../../../foundation/contracts';
-import { PageShellSurface } from '../../../../composition/layout/page-shell';
-import { resolveResponsiveColumnCount, useSurfaceResponsiveLayout } from '../../../../runtime/responsive';
-import { SurfaceActionBar, SurfaceSectionCard } from '../../../../runtime/helpers/rendering';
-import { SurfaceEmptyState, SurfaceErrorState } from '../../../../runtime/helpers/states';
+import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
+import { resolveResponsiveColumnCount, useSurfaceResponsiveLayout } from '../../../../../structures/foundation/chrome/runtime/responsive';
+import { SurfaceActionBar, SurfaceSectionCard } from '../../../../../structures/shell/surface-chrome';
+import { SurfaceEmptyState, SurfaceErrorState } from '../../../../../structures/feedback/surface-lifecycle';
 
 /**
  * Default gallery card used when callers do not provide a custom grid-item

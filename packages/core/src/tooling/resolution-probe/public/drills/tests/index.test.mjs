@@ -105,20 +105,20 @@ test('formula drill: the fresh composition agrees with the repository staleness 
 });
 
 test('scope: an undeclared theme is not silently allowed', () => {
-  assert.throws(() => rootAttributes({ vertical: 'platform', theme: 'auto' }), /unknown theme/);
+  assert.throws(() => rootAttributes({ vertical: 'rottay', theme: 'auto' }), /unknown theme/);
   assert.throws(() => rootAttributes({ vertical: 'nope', theme: 'light' }), /unknown vertical/);
 });
 
 test('scope: the valueless data-ds-root attribute serialises bare', () => {
-  const html = rootAttributesToHtml(rootAttributes({ vertical: 'platform', theme: 'dark' }));
+  const html = rootAttributesToHtml(rootAttributes({ vertical: 'rottay', theme: 'dark' }));
   assert.match(html, /(^| )data-ds-root( |$)/, 'data-ds-root must not serialise as an empty pair');
-  assert.match(html, /data-tenant="rottay"/, 'platform keys on the rottay slug, not its own name');
-  assert.match(html, /data-vertical="platform"/);
+  assert.match(html, /data-tenant="rottay"/);
+  assert.match(html, /data-vertical="rottay"/);
 });
 
 test('bundle: fresh composition is reproducible and its drift against dist is stated', async () => {
-  const first = await resolveBundle({ vertical: 'platform', mode: 'fresh' });
-  const second = await resolveBundle({ vertical: 'platform', mode: 'fresh' });
+  const first = await resolveBundle({ vertical: 'rottay', mode: 'fresh' });
+  const second = await resolveBundle({ vertical: 'rottay', mode: 'fresh' });
   assert.equal(first.provenance.sha256, second.provenance.sha256);
   assert.equal(sha256(first.css), first.provenance.sha256);
   assert.equal(first.provenance.freshnessProven, true);
@@ -129,7 +129,7 @@ test('bundle: fresh composition is reproducible and its drift against dist is st
 });
 
 test('bundle: styles/ is byte-identical to dist/, so it is not a second opinion', async () => {
-  const shipped = await resolveBundle({ vertical: 'platform', mode: 'dist' });
+  const shipped = await resolveBundle({ vertical: 'rottay', mode: 'dist' });
   assert.equal(shipped.provenance.distMatchesStyles, true);
   assert.equal(
     shipped.provenance.freshnessProven,
@@ -164,13 +164,13 @@ test('serialisation: key order cannot depend on insertion order', () => {
 test('diff: a value change is reported; a bundle-sha change alone stays comparable', () => {
   const base = {
     artifactVersion: 1,
-    scopeOfRun: { fixtures: ['f'], verticals: ['platform'], themes: ['light'], engine: 'modern' },
-    provenance: { bundleMode: 'fresh', browser: {}, bundles: { platform: { sha256: 'aaa' } } },
-    readings: { 'platform/light/modern/both': { 'f/root': { present: true, values: { x: '1px' } } } },
+    scopeOfRun: { fixtures: ['f'], verticals: ['rottay'], themes: ['light'], engine: 'modern' },
+    provenance: { bundleMode: 'fresh', browser: {}, bundles: { rottay: { sha256: 'aaa' } } },
+    readings: { 'rottay/light/modern/both': { 'f/root': { present: true, values: { x: '1px' } } } },
   };
   const changed = structuredClone(base);
-  changed.provenance.bundles.platform.sha256 = 'bbb';
-  changed.readings['platform/light/modern/both']['f/root'].values.x = '2px';
+  changed.provenance.bundles.rottay.sha256 = 'bbb';
+  changed.readings['rottay/light/modern/both']['f/root'].values.x = '2px';
 
   const result = diffArtifacts(base, changed);
   assert.equal(result.comparable, true, 'a changed bundle is the POINT of a diff, not a defect');
@@ -178,7 +178,7 @@ test('diff: a value change is reported; a bundle-sha change alone stays comparab
   assert.equal(result.totals.changedRows, 1);
   assert.deepEqual(result.changes[0], {
     kind: 'value-changed',
-    scope: 'platform/light/modern/both',
+    scope: 'rottay/light/modern/both',
     target: 'f/root',
     property: 'x',
     before: '1px',

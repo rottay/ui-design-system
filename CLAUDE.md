@@ -124,7 +124,7 @@ This package is the **single source of truth** for reusable, domain-agnostic UI 
 - Before adding a new component, ask: *"Could another app use this without knowing what a tenant, candidate, role, company, interview, or event is?"* If no, it does not belong here — it belongs in the consuming app.
 - See `docs-engineering/engineering/design-system/architecture/README.md` and `docs-engineering/engineering/design-system/catalog/decision-matrix/README.md` for the full ownership contract.
 
-## Component taxonomy (4 tiers)
+## Component taxonomy (4 physical tiers, 5 manifest layers)
 
 The design system has 4 single-word tiers under `packages/core/src/ui/`:
 
@@ -138,11 +138,14 @@ Each engine-switched primitive has three physical implementations: classic, mode
 Task-level compositions that solve generic UI tasks. A pattern may be
 engine-backed when rendering genuinely differs by engine.
 Think: tables, forms, charts, kanban boards, timelines, command palettes.
-Product groups are `commerce/`, `commercial/`, `communication/`,
+Product groups are `commerce/`, `communication/`,
 `customization/`, `data/`, `feedback/`, `forms/`, `identity/`, `navigation/`,
 `shell/`, `visualization/`, and `workflow/`. `foundation/`, `runtime/`, and
 `tooling/` are explicit support owners; generic `misc/`, `_internal/`, `hooks/`
-and `shared/` owners are forbidden.
+and `shared/` owners are forbidden. The existing `patterns/commercial/` tree is
+migration debt, not a canonical group and not a precedent for new work. Its
+owners must be reclassified by reusable task/role or removed before the
+Modern Rescue point-zero freeze.
 
 **Example:** PatternDataTable, PatternFormBuilder, PatternKanbanBoard, PatternStatsGrid.
 
@@ -170,6 +173,68 @@ Dependency branches: `foundation/` (contracts/support), `runtime/`
 | Wraps or accompanies a pattern as page chrome (header, toolbar, record panel, metric card) | **structures** |
 | Describes a whole page as a config object | **surfaces** |
 | Depends on specific business domain, route, API, or copy | **the consuming app** |
+
+### Canonical family-manifest taxonomy (NON-NEGOTIABLE)
+
+The physical UI tree above has four tiers. The Modern Rescue family manifest
+has exactly five logical layer values:
+
+`primitive | pattern | structure | surface | chart`
+
+`chart` is a dedicated inventory/review cohort because chart behavior and
+evidence are specialized; its production owner still lives physically below
+`ui/patterns/visualization/charts/`. No sixth family layer may be introduced.
+
+- `commercial` is a marketing adjective, not an architectural role. It may
+  never be a manifest layer, family kind, or duplicated path such as
+  `commercial/commercial/*`.
+- `composition` is a dependency role inside an owner, not a component tier or
+  family layer. `surface-composition` and paths such as
+  `surface-composition/composition/*` are forbidden.
+- A public page-chrome or layout-shell component belongs to
+  `structure/shell/*`; a complete declarative page recipe belongs to
+  `surface/<group>/*`; implementation-only composition support has no
+  independent family row.
+- A commercial/marketing showcase component is admitted to the DS only when
+  it is domain-agnostic and reusable. It must then be classified by what it
+  does (for example framing, content, visualization or feedback), never by
+  where it is sold. Otherwise it belongs in the Showroom or consuming app.
+- Support folders such as `foundation`, `runtime`, `composition`,
+  `presentation`, `facade`, `tests`, fixtures and generated artifacts never
+  create family rows by themselves.
+- Every public component has exactly one canonical family ID and one source
+  owner. Aliases, compatibility paths and multiple exports must resolve to the
+  same row; they cannot inflate the family denominator.
+- The current denominator is an inventory observation, not a reason to retain
+  ghost or duplicate families. A removal, merge or reclassification must be
+  source-bound, owner-reviewed and applied atomically to inventory, manifests,
+  reverse projections, gates and evidence. Never preserve a bogus row merely
+  to keep the denominator unchanged. The denominator is an output, not an
+  input: it is derived from `family-inventory.json` only after the reverse
+  public projection reports zero unowned components, and it is stated in
+  exactly one place, `program.json` -> `denominators.visibleFamilies`. This
+  rule previously quoted a literal count, which made the rule against pinning
+  a number depend on a pinned number; if you need today's value, read it from
+  `program.json` rather than from prose.
+
+Before the Modern Rescue point-zero freeze, recursively audit every folder and
+subfolder below `packages/core/src` and the Showroom registries. The audit is a
+blocking architecture gate and must prove:
+
+1. every authored production owner has one stated purpose and a live consumer;
+2. every reusable UI owner maps to exactly one allowed tier/layer and family;
+3. every support-only owner is excluded from the component denominator;
+4. no legacy, duplicate, empty, domain-specific or compatibility-only owner
+   survives merely because an older document or test references it;
+5. public exports, source ownership, manifest identity and Showroom navigation
+   agree exactly; and
+6. a planted forbidden layer/duplicate/unowned folder makes the gate fail.
+
+For the current known debt, explicitly adjudicate all 11 owners under
+`ui/patterns/commercial/` and the four components currently inventoried as
+`surface-composition`. Do not bulk-rename them: decide migrate, merge, make
+internal, move to Showroom/app, or delete from source and evidence based on
+their actual semantics and consumers.
 
 ### What does NOT go in the DS
 
@@ -336,14 +401,22 @@ Features implemented across Waves 2 through 6 of the DS execution plan.
 
 ### Wave 5 -- Surface Lifecycle and Permissions
 
-<!-- GAT07-CLAIM surface-profile-overrides: active; runtime=declared-33-applied-11; affirmative-behavior=true; owner=DS-IMP-022 -->
+<!-- GAT07-CLAIM surface-profile-overrides: active; runtime=declared-32-applied-31; affirmative-behavior=true; owner=DS-IMP-022 -->
 
-GAT07-CONTRACT surface-profile-overrides: symbols=[SurfaceVisualOverrides, useSurfaceProfileDefaultsWithOverrides, visual.profileOverrides]; disposition=active; runtime-status=declared-33-applied-11; affirmative-behavior=true; production-consumers=11; executable-assertions=2; owner=design-system-program/DS-IMP-022; target-phase=2A.
+GAT07-CONTRACT surface-profile-overrides: symbols=[SurfaceVisualOverrides, useSurfaceProfileDefaultsWithOverrides, visual.profileOverrides]; disposition=active; runtime-status=declared-32-applied-31; affirmative-behavior=true; production-consumers=31; executable-assertions=2; owner=design-system-program/DS-IMP-022; target-phase=2A.
+
+Census, checker-measured from source and deliberately NOT a parity claim: **32**
+governed field declarations across **2** definition owners
+(`structures/foundation/chrome/contracts`, `surfaces/foundation/contracts`);
+**31** of them applied by a direct call to the governed hook, giving **31**
+production consumers; **0** showroom references; **0** unsupported governed
+references. The single declared-but-never-applied field belongs to
+`SidebarSurfaceVisualConfig`.
 
 - `useSurfaceState` hook (8 lifecycle states, `renderState` helper)
-- Feedback components: `SurfaceLoadingSkeleton`, `SurfaceEmptyStateCard`, `SurfaceErrorStateCard`, `SurfaceStaleBanner`, `SurfaceOfflineBanner`
-- The generated GAT07 contract above certifies exact declaration-to-consumer
-  parity for the active surface-override family.
+- Feedback components: `SurfaceLoadingSkeleton`, `SurfaceEmptyState`, `SurfaceErrorState`, `SurfaceStaleBanner`, `SurfaceOfflineBanner`, `SurfaceErrorBoundary` -- one family, `structure/feedback/surface-lifecycle`, owned by `packages/core/src/ui/structures/feedback/surface-lifecycle`. The duplicate `SurfaceLoadingState` / `SurfaceEmptyStateCard` / `SurfaceErrorStateCard` trio was retired on 2026-08-12 with no alias and no compatibility subpath (owner ruling: clean break). `SurfaceCapabilityAnatomy` is a separate family, `structure/feedback/capability-anatomy`, not a lifecycle state.
+- The generated GAT07 contract above certifies the exact declaration and
+  applied-consumer census for the active surface-override family.
 - Enhanced permissions: `isRowAllowed`, `cascadeRules`, `resolveFieldAccess`
 
 ### Wave 6 -- Branding Validation, Collaboration, and Lint Rules

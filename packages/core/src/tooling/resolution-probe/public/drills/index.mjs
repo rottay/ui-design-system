@@ -58,7 +58,7 @@ export const DRILL_CSS = `
   --ds-radius-md-base: 8px;
   --ds-radius-md: calc(var(--ds-radius-md-base) * var(--ds-radius-scale, 1));
 }
-:is(html[data-tenant='rottay'], :where([data-ds-root][data-vertical='platform'])) {
+:is(html[data-tenant='rottay'], :where([data-ds-root][data-vertical='rottay'])) {
   /* The defect, in one line: a flat literal at the tenant scope, above the
      derivation, so the dial can never reach anything that reads it. */
   --ds-radius-md: 10px;
@@ -95,7 +95,7 @@ export const DRILL_FIXTURES = Object.freeze([
 ]);
 
 const DRILL_SCOPE = Object.freeze({
-  vertical: 'platform',
+  vertical: 'rottay',
   theme: 'light',
   engine: 'modern',
   arm: 'both',
@@ -224,11 +224,10 @@ export async function runFormulaAgreementDrill() {
     }
   }
 
-  // The gate names bundles by their committed filename; `platform` is also
-  // published as `rottay`, and `index` is the all-tenants bundle this harness
-  // does not measure.
+  // The gate names bundles by their canonical committed filename; `index` is
+  // the all-tenants bundle this harness does not measure.
   const comparisons = [];
-  for (const vertical of ['platform', 'bithire', 'evnto']) {
+  for (const vertical of ['rottay', 'bithire', 'evnto']) {
     const bundle = await resolveBundle({ vertical, mode: 'fresh' });
     const drift = bundle.provenance.shippedDistDrift;
     const gateLine = gate[vertical] ?? null;
@@ -297,7 +296,7 @@ export function runProjectionDrill() {
     [...source.matchAll(/'(data-[a-z-]+)'\s*[?]?:/g)].map((match) => match[1]),
   );
   const projected = new Set(
-    Object.keys(rootAttributes({ vertical: 'platform', theme: 'light' })).filter((name) =>
+    Object.keys(rootAttributes({ vertical: 'rottay', theme: 'light' })).filter((name) =>
       name.startsWith('data-'),
     ),
   );

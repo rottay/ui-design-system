@@ -14,7 +14,6 @@
     "three"
   ],
   "nonRuntimeEntrypoints": [
-    "./commercial.css",
     "./fonts/editorial-display.css",
     "./fonts/editorial-text.css",
     "./fonts/geometric-display.css",
@@ -26,9 +25,9 @@
     "./styles",
     "./styles.css",
     "./styles/bithire",
+    "./styles/default",
     "./styles/evnto",
     "./styles/modern",
-    "./styles/platform",
     "./styles/rottay",
     "./supplier-contract",
     "./tenant-theme-canary-fixtures"
@@ -60,6 +59,8 @@
         "AntdConfigProvider",
         "AppShell",
         "AreaChart",
+        "AsciiDiagram",
+        "AsciiFrame",
         "AspectRatio",
         "AssistantStatusBadge",
         "AssistantStatusIndicator",
@@ -133,6 +134,7 @@
         "ContextMenu",
         "CopyToCheck",
         "CountUp",
+        "CropMarks",
         "DAYS_SHORT",
         "DEFAULT_COLORS",
         "DEFAULT_COMPACT_CONFIG",
@@ -175,7 +177,6 @@
         "Dropdown",
         "EMPHASIS_FAMILIES",
         "ENGINE_REGISTRY",
-        "EXAMPLE_SKIN_PACK",
         "EXPERIENCE_PROFILES",
         "EXPERIENCE_PROFILE_ENVELOPES",
         "EXPRESSIVE_A11Y_FLOORS",
@@ -202,6 +203,7 @@
         "FALLBACK_ENGINE",
         "FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND",
         "FIRST_PARTY_ARTIFACT_SPECS",
+        "FIRST_PARTY_BRAND_THEME_REQUIRED_KEYS",
         "FLEX_ALIGN_MAP",
         "FLEX_DEFAULTS",
         "FLEX_JUSTIFY_MAP",
@@ -219,7 +221,6 @@
         "Flex",
         "FloatButton",
         "FocusModeProvider",
-        "FocusTrap",
         "Form",
         "FormFactsCard",
         "FormField",
@@ -267,6 +268,7 @@
         "InputGroup",
         "InputNumber",
         "IntegrationSurface",
+        "InvertSection",
         "JUSTIFY_ITEMS_MAP",
         "KBD_DEFAULTS",
         "KanbanSurface",
@@ -286,11 +288,7 @@
         "MENTIONS_DEFAULTS",
         "MENU_DEFAULTS",
         "MOBILE_HEADER_DEFAULTS",
-        "MODAL_MAX_HEIGHT_MAP",
-        "MODAL_PADDING_MAP",
         "MODAL_PROMOTE_TRANSITION_NAME",
-        "MODAL_RADIUS_MAP",
-        "MODAL_SIZE_MAP",
         "MONTHS_FULL",
         "MONTHS_SHORT",
         "Magnetic",
@@ -317,6 +315,7 @@
         "ModalCloseButton",
         "ModalFooter",
         "ModalHeader",
+        "MonoStat",
         "MoreFieldsToggle",
         "Morph",
         "MotionProvider",
@@ -334,11 +333,7 @@
         "OPERATOR_DEFINITIONS",
         "OTPINPUT_DEFAULTS",
         "OTPInput",
-        "OVERLAY_MODAL_DEFAULTS",
-        "OnboardingSurface",
         "OperationalSurface",
-        "Overlay",
-        "OverlayModal",
         "PASSWORD_INPUT_DEFAULTS",
         "POPCONFIRM_DEFAULTS",
         "POPOVER_DEFAULTS",
@@ -401,8 +396,6 @@
         "PieChart",
         "Popconfirm",
         "Popover",
-        "Portal",
-        "PortalScope",
         "PremiumFormFactsCard",
         "PremiumFormSections",
         "Presence",
@@ -482,6 +475,7 @@
         "ScrollReveal",
         "SearchCommandBar",
         "SearchSurface",
+        "SectionFrame",
         "Segmented",
         "Select",
         "SelectionPreviewRail",
@@ -521,22 +515,14 @@
         "Steps",
         "StreamingText",
         "SurfaceActionBar",
-        "SurfaceActionFooter",
         "SurfaceCapabilityAnatomy",
         "SurfaceEmptyState",
-        "SurfaceEmptyStateCard",
         "SurfaceErrorBoundary",
         "SurfaceErrorState",
-        "SurfaceErrorStateCard",
-        "SurfaceFieldGrid",
         "SurfaceLoadingSkeleton",
-        "SurfaceLoadingState",
         "SurfaceOfflineBanner",
-        "SurfacePanel",
-        "SurfaceReadField",
         "SurfaceSectionCard",
         "SurfaceStaleBanner",
-        "SurfaceSummaryStrip",
         "SurfaceTabbedLabel",
         "Switch",
         "SystemCssVariablesBridge",
@@ -575,7 +561,6 @@
         "TRANSFER_DEFAULTS",
         "TREESELECT_DEFAULTS",
         "Table",
-        "TableCheckboxStyles",
         "TableToolbar",
         "Tabs",
         "Tag",
@@ -586,9 +571,11 @@
         "TenantProvider",
         "TenantThemePreviewReport",
         "TenantThemeValidationError",
+        "TerminalBlock",
         "Text",
         "TextReveal",
         "Textarea",
+        "TextureBackdrop",
         "ThemeContext",
         "ThemeProvider",
         "TimePicker",
@@ -607,6 +594,8 @@
         "Tree",
         "TreeMap",
         "TreeSelect",
+        "TreeViewConnector",
+        "Typewriter",
         "TypingIndicator",
         "Typography",
         "UNSAVED_CHANGES_GUARD_CONTRACT",
@@ -632,20 +621,19 @@
         "WorkspaceScopes",
         "WorkspaceShell",
         "WorkspaceViewsMenu",
-        "acquireSkinPack",
         "actionsColumn",
         "apcaContrast",
         "appearanceMatchesArtifact",
         "applyFormat",
         "applyModeOverlay",
-        "applySkinPack",
         "applyStreamCommit",
         "ar",
         "arePropsEqual",
         "assertExpressiveEdgeWidthInvariant",
         "bithireBrandTheme",
         "brandModeSelector",
-        "brandThemeToBranding",
+        "brandTenantSelector",
+        "brandThemeRampSurface",
         "brandThemeToChromeVariables",
         "brandThemeToPersonality",
         "brandThemeToTenantAppearance",
@@ -657,7 +645,6 @@
         "buildRangeQuery",
         "buildRecipeManifest",
         "buildShowMediaQuery",
-        "buildTenantSelector",
         "buildTenantThemePreviewScope",
         "buildViewModes",
         "canonicalizeTenantThemeValue",
@@ -670,7 +657,6 @@
         "clampIntoExpressiveEnvelope",
         "clearCustomRegistry",
         "clearServerHeaders",
-        "clearSkinPacks",
         "clearTenantCache",
         "column",
         "columns",
@@ -699,6 +685,7 @@
         "deepMergeTokenOverrides",
         "defaultViewModeIcons",
         "defaultViewModeLabels",
+        "deriveExtendedPaletteFloor",
         "deriveTenantColorRamps",
         "describeChart",
         "deserializeBrandTheme",
@@ -735,8 +722,6 @@
         "generateCsv",
         "generateFilterId",
         "generateJson",
-        "generateTenantCss",
-        "generateTenantCssFile",
         "getAvailableEngines",
         "getCustomComponent",
         "getCustomEngineConfig",
@@ -759,7 +744,6 @@
         "getRegisteredComponentCount",
         "getRegisteredComponents",
         "getRegisteredPacks",
-        "getRegisteredSkinPack",
         "getStableEngines",
         "getTenantConfig",
         "getTenantThemeVerticalEnvelope",
@@ -775,7 +759,7 @@
         "inferSharedHeaderActionKind",
         "isAllSurfaceAccess",
         "isBundledTenant",
-        "isDarkSurfacePalette",
+        "isDarkSurfaceTheme",
         "isDateInRange",
         "isFieldVisibleForRow",
         "isFilterGroup",
@@ -813,15 +797,12 @@
         "pt",
         "quantizeEmphasis",
         "rankByFrecency",
-        "readLocaleContext",
-        "readPortalScope",
         "recordMorphStyle",
         "recordTransitionName",
         "recordUse",
         "registerCustomComponent",
         "registerCustomComponents",
         "registerHighlighter",
-        "registerSkinPack",
         "renderFirstPartyArtifact",
         "renderVerticalArtifact",
         "reportVisualAuthorityConflict",
@@ -897,7 +878,6 @@
         "toast",
         "triggerDownload",
         "unregisterCustomComponent",
-        "unregisterSkinPack",
         "useAccentTokens",
         "useActiveResponsivePosture",
         "useAdaptivePosture",
@@ -940,7 +920,6 @@
         "useFeatures",
         "useFilterPanel",
         "useFlipLayout",
-        "useFocusTrap",
         "useForm",
         "useFormBuilder",
         "useFormDiff",
@@ -975,8 +954,6 @@
         "useOptionalTranslation",
         "useOverlayLayer",
         "usePdfExport",
-        "usePortalContainer",
-        "usePortalScope",
         "usePresence",
         "useProductProfile",
         "useProductProfileContext",
@@ -1098,6 +1075,10 @@
         "AreaChart": [
           "antd",
           "d3",
+          "motion"
+        ],
+        "AsciiDiagram": [
+          "antd",
           "motion"
         ],
         "AssistantStatusBadge": [
@@ -1504,8 +1485,10 @@
           "motion"
         ],
         "HeaderSurface": [
+          "@ant-design/icons",
           "@phosphor-icons/react",
           "antd",
+          "d3",
           "motion"
         ],
         "Heading": [
@@ -1712,27 +1695,7 @@
           "antd",
           "motion"
         ],
-        "MODAL_MAX_HEIGHT_MAP": [
-          "@phosphor-icons/react",
-          "antd",
-          "motion"
-        ],
-        "MODAL_PADDING_MAP": [
-          "@phosphor-icons/react",
-          "antd",
-          "motion"
-        ],
         "MODAL_PROMOTE_TRANSITION_NAME": [
-          "motion"
-        ],
-        "MODAL_RADIUS_MAP": [
-          "@phosphor-icons/react",
-          "antd",
-          "motion"
-        ],
-        "MODAL_SIZE_MAP": [
-          "@phosphor-icons/react",
-          "antd",
           "motion"
         ],
         "ModalCloseButton": [
@@ -1740,6 +1703,10 @@
         ],
         "ModalHeader": [
           "@phosphor-icons/react"
+        ],
+        "MonoStat": [
+          "antd",
+          "motion"
         ],
         "MoreFieldsToggle": [
           "@phosphor-icons/react",
@@ -1792,16 +1759,6 @@
           "@phosphor-icons/react",
           "antd",
           "d3",
-          "motion"
-        ],
-        "OVERLAY_MODAL_DEFAULTS": [
-          "@phosphor-icons/react",
-          "antd",
-          "motion"
-        ],
-        "OverlayModal": [
-          "@phosphor-icons/react",
-          "antd",
           "motion"
         ],
         "PageShellSurface": [
@@ -2134,23 +2091,11 @@
           "antd",
           "motion"
         ],
-        "RecordFieldGrid": [
-          "@phosphor-icons/react",
-          "antd",
-          "motion"
-        ],
         "recordMorphStyle": [
           "motion"
         ],
-        "RecordPanel": [
-          "@phosphor-icons/react",
-          "antd",
-          "motion"
-        ],
         "RecordSummaryStrip": [
-          "@phosphor-icons/react",
-          "antd",
-          "motion"
+          "antd"
         ],
         "recordTransitionName": [
           "motion"
@@ -2332,22 +2277,10 @@
           "antd",
           "motion"
         ],
-        "SurfaceActionFooter": [
-          "@phosphor-icons/react",
-          "antd",
-          "motion"
-        ],
         "SurfaceCapabilityAnatomy": [
-          "@phosphor-icons/react",
-          "antd",
-          "motion"
+          "antd"
         ],
         "SurfaceEmptyState": [
-          "@phosphor-icons/react",
-          "antd",
-          "motion"
-        ],
-        "SurfaceEmptyStateCard": [
           "@phosphor-icons/react",
           "antd",
           "motion"
@@ -2357,37 +2290,12 @@
           "antd",
           "motion"
         ],
-        "SurfaceErrorStateCard": [
-          "@phosphor-icons/react",
-          "antd",
-          "motion"
-        ],
-        "SurfaceFieldGrid": [
-          "@phosphor-icons/react",
-          "antd",
-          "motion"
-        ],
         "SurfaceLoadingSkeleton": [
           "@phosphor-icons/react",
           "antd",
           "motion"
         ],
-        "SurfaceLoadingState": [
-          "@phosphor-icons/react",
-          "antd",
-          "motion"
-        ],
         "SurfaceOfflineBanner": [
-          "@phosphor-icons/react",
-          "antd",
-          "motion"
-        ],
-        "SurfacePanel": [
-          "@phosphor-icons/react",
-          "antd",
-          "motion"
-        ],
-        "SurfaceReadField": [
           "@phosphor-icons/react",
           "antd",
           "motion"
@@ -2403,11 +2311,6 @@
           "motion"
         ],
         "SurfaceStaleBanner": [
-          "@phosphor-icons/react",
-          "antd",
-          "motion"
-        ],
-        "SurfaceSummaryStrip": [
           "@phosphor-icons/react",
           "antd",
           "motion"
@@ -2465,6 +2368,10 @@
         "TenantThemePreviewReport": [
           "@phosphor-icons/react",
           "antd"
+        ],
+        "TerminalBlock": [
+          "antd",
+          "motion"
         ],
         "Text": [
           "antd"
@@ -2527,6 +2434,10 @@
         "TreeSelect": [
           "@phosphor-icons/react",
           "antd"
+        ],
+        "Typewriter": [
+          "antd",
+          "motion"
         ],
         "TypingIndicator": [
           "@phosphor-icons/react",
@@ -2609,6 +2520,11 @@
         ],
         "useSurfaceProfileDefaults": [
           "antd"
+        ],
+        "useSurfaceState": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
         ],
         "useTokens": [
           "antd"
@@ -2707,6 +2623,7 @@
         "APCA_BODY_TEXT_MIN_LC",
         "ASPECT_RATIO_DEFAULTS",
         "AUTOCOMPLETE_DEFAULTS",
+        "AsciiFrame",
         "AspectRatio",
         "AvatarBadge",
         "AvatarFallback",
@@ -2738,6 +2655,7 @@
         "ChartTooltip",
         "CommandRegistryProvider",
         "Container",
+        "CropMarks",
         "DAYS_SHORT",
         "DEFAULT_COLORS",
         "DEFAULT_COMPACT_CONFIG",
@@ -2765,7 +2683,6 @@
         "DensityScope",
         "EMPHASIS_FAMILIES",
         "ENGINE_REGISTRY",
-        "EXAMPLE_SKIN_PACK",
         "EXPERIENCE_PROFILES",
         "EXPERIENCE_PROFILE_ENVELOPES",
         "EXPRESSIVE_A11Y_FLOORS",
@@ -2787,6 +2704,7 @@
         "FALLBACK_ENGINE",
         "FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND",
         "FIRST_PARTY_ARTIFACT_SPECS",
+        "FIRST_PARTY_BRAND_THEME_REQUIRED_KEYS",
         "FLEX_ALIGN_MAP",
         "FLEX_DEFAULTS",
         "FLEX_JUSTIFY_MAP",
@@ -2799,7 +2717,6 @@
         "FeatureProvider",
         "FeatureWorkspaceFrame",
         "FocusModeProvider",
-        "FocusTrap",
         "GAP_MAP",
         "GENERATED_ARTIFACT_BANNER",
         "GRID_DEFAULTS",
@@ -2815,6 +2732,7 @@
         "ImageSkeleton",
         "InputAddon",
         "InputGroup",
+        "InvertSection",
         "JUSTIFY_ITEMS_MAP",
         "KBD_DEFAULTS",
         "Kbd",
@@ -2843,8 +2761,6 @@
         "OPERATOR_DEFINITIONS",
         "OTPINPUT_DEFAULTS",
         "OTPInput",
-        "OnboardingSurface",
-        "Overlay",
         "PASSWORD_INPUT_DEFAULTS",
         "POPCONFIRM_DEFAULTS",
         "POPOVER_DEFAULTS",
@@ -2854,8 +2770,6 @@
         "PatternDecisionPanorama",
         "PatternFeatureWorkspaceFrame",
         "PatternVirtualList",
-        "Portal",
-        "PortalScope",
         "ProductProfileContext",
         "ProductProfileProvider",
         "PulseValue",
@@ -2871,6 +2785,8 @@
         "RESPONSIVE_POSTURE_PROFILES",
         "RESPONSIVE_POSTURE_SCHEMA_VERSION",
         "RecipeProfileProvider",
+        "RecordFieldGrid",
+        "RecordPanel",
         "ResizeHandle",
         "ResponsiveContext",
         "ResponsiveProvider",
@@ -2903,6 +2819,7 @@
         "STRENGTH_WIDTHS",
         "ScopeSwitcher",
         "ScrollArea",
+        "SectionFrame",
         "SemanticSurface",
         "SemanticSurfaceSupport",
         "ShortcutProvider",
@@ -2952,37 +2869,37 @@
         "TOUR_DEFAULTS",
         "TRANSFER_DEFAULTS",
         "TREESELECT_DEFAULTS",
-        "TableCheckboxStyles",
         "TagGroup",
         "TenantContext",
         "TenantProvider",
         "TenantThemeValidationError",
+        "TextureBackdrop",
         "ThemeContext",
         "ThemeProvider",
         "ToastProvider",
         "TokenInspector",
         "TooltipSeries",
         "TooltipValue",
+        "TreeViewConnector",
         "UNSAVED_CHANGES_GUARD_CONTRACT",
         "UPLOAD_DEFAULTS",
         "VERTICAL_REGISTRY",
         "VisuallyHidden",
         "WATERMARK_DEFAULTS",
         "WorkspaceScopes",
-        "acquireSkinPack",
         "actionsColumn",
         "apcaContrast",
         "appearanceMatchesArtifact",
         "applyFormat",
         "applyModeOverlay",
-        "applySkinPack",
         "applyStreamCommit",
         "ar",
         "arePropsEqual",
         "assertExpressiveEdgeWidthInvariant",
         "bithireBrandTheme",
         "brandModeSelector",
-        "brandThemeToBranding",
+        "brandTenantSelector",
+        "brandThemeRampSurface",
         "brandThemeToChromeVariables",
         "brandThemeToPersonality",
         "brandThemeToTenantAppearance",
@@ -2994,7 +2911,6 @@
         "buildRangeQuery",
         "buildRecipeManifest",
         "buildShowMediaQuery",
-        "buildTenantSelector",
         "buildTenantThemePreviewScope",
         "canonicalizeTenantThemeValue",
         "cellRenderers",
@@ -3006,7 +2922,6 @@
         "clampIntoExpressiveEnvelope",
         "clearCustomRegistry",
         "clearServerHeaders",
-        "clearSkinPacks",
         "clearTenantCache",
         "column",
         "columns",
@@ -3033,6 +2948,7 @@
         "daysInMonthCount",
         "decayedFrecency",
         "deepMergeTokenOverrides",
+        "deriveExtendedPaletteFloor",
         "deriveTenantColorRamps",
         "describeChart",
         "deserializeBrandTheme",
@@ -3068,8 +2984,6 @@
         "generateCsv",
         "generateFilterId",
         "generateJson",
-        "generateTenantCss",
-        "generateTenantCssFile",
         "getAvailableEngines",
         "getCustomComponent",
         "getCustomEngineConfig",
@@ -3092,7 +3006,6 @@
         "getRegisteredComponentCount",
         "getRegisteredComponents",
         "getRegisteredPacks",
-        "getRegisteredSkinPack",
         "getStableEngines",
         "getTenantConfig",
         "getTenantThemeVerticalEnvelope",
@@ -3107,7 +3020,7 @@
         "hydrateTenantThemeConfig",
         "isAllSurfaceAccess",
         "isBundledTenant",
-        "isDarkSurfacePalette",
+        "isDarkSurfaceTheme",
         "isDateInRange",
         "isFieldVisibleForRow",
         "isFilterGroup",
@@ -3142,13 +3055,10 @@
         "pt",
         "quantizeEmphasis",
         "rankByFrecency",
-        "readLocaleContext",
-        "readPortalScope",
         "recordUse",
         "registerCustomComponent",
         "registerCustomComponents",
         "registerHighlighter",
-        "registerSkinPack",
         "renderFirstPartyArtifact",
         "renderVerticalArtifact",
         "reportVisualAuthorityConflict",
@@ -3214,7 +3124,6 @@
         "toast",
         "triggerDownload",
         "unregisterCustomComponent",
-        "unregisterSkinPack",
         "useActiveResponsivePosture",
         "useAdaptivePosture",
         "useAriaAnnounce",
@@ -3249,7 +3158,6 @@
         "useFeatureContextAlias",
         "useFeatures",
         "useFilterPanel",
-        "useFocusTrap",
         "useFormBuilder",
         "useFormDiff",
         "useGlobalSearch",
@@ -3278,8 +3186,6 @@
         "useOptionalTranslation",
         "useOverlayLayer",
         "usePdfExport",
-        "usePortalContainer",
-        "usePortalScope",
         "useProductProfile",
         "useProductProfileContext",
         "usePulseOnChange",
@@ -3298,7 +3204,6 @@
         "useStreamingText",
         "useSurfaceProfileDefaultsWithOverrides",
         "useSurfaceQuery",
-        "useSurfaceState",
         "useTableExport",
         "useTenant",
         "useTenantBranding",
@@ -3330,6 +3235,10 @@
         "FONT_PACK_IDS",
         "FONT_PACK_MANIFEST",
         "TENANT_THEME_ANATOMY_VARIANTS",
+        "TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE",
+        "TENANT_THEME_ARTIFACT_ELEMENT_ID_PREFIX",
+        "TENANT_THEME_ARTIFACT_SLUG_ATTRIBUTE",
+        "TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE",
         "TENANT_THEME_CHROME_FAMILIES",
         "TENANT_THEME_COMPILER_VERSION",
         "TENANT_THEME_CONFIG_SCHEMA",
@@ -3343,16 +3252,23 @@
         "TENANT_THEME_VERTICAL_ENVELOPES",
         "TENANT_VISUAL_CHANNELS",
         "TenantThemeValidationError",
+        "brandModeSelector",
+        "brandTenantSelector",
         "brandingContrastRatio",
         "buildThemePrepaintScript",
         "canonicalizeTenantThemeValue",
+        "censusRuntimeVisualPayload",
+        "compileBrandTheme",
         "compileTenantThemeConfig",
         "createEdgeConfigDomainLookup",
+        "emitTenantThemeArtifactForSsr",
+        "getCodeOwnedRuntimeConfig",
         "getKnownTenantConfig",
         "getKnownTenantSlugs",
         "getTenantThemeVerticalEnvelope",
         "hydrateTenantThemeConfig",
         "isBundledTenant",
+        "isCodeOwnedTenantConfig",
         "isKnownTenant",
         "parseTenantThemeConfig",
         "parseTenantThemeDocument",
@@ -3361,8 +3277,11 @@
         "resolveDocumentRootAttributes",
         "resolveRequestTenant",
         "resolveRequestTenantAsync",
+        "resolveVisualAuthority",
         "sha256TenantThemeValue",
         "tenantThemeAnatomyAttributes",
+        "tenantThemeArtifactCssIntegrity",
+        "tenantThemeArtifactElementId",
         "tenantThemeArtifactRootAttributes",
         "toSupportedLocale",
         "validateBrandingContrast",
@@ -3376,6 +3295,10 @@
         "FONT_PACK_IDS",
         "FONT_PACK_MANIFEST",
         "TENANT_THEME_ANATOMY_VARIANTS",
+        "TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE",
+        "TENANT_THEME_ARTIFACT_ELEMENT_ID_PREFIX",
+        "TENANT_THEME_ARTIFACT_SLUG_ATTRIBUTE",
+        "TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE",
         "TENANT_THEME_CHROME_FAMILIES",
         "TENANT_THEME_COMPILER_VERSION",
         "TENANT_THEME_CONFIG_SCHEMA",
@@ -3389,16 +3312,23 @@
         "TENANT_THEME_VERTICAL_ENVELOPES",
         "TENANT_VISUAL_CHANNELS",
         "TenantThemeValidationError",
+        "brandModeSelector",
+        "brandTenantSelector",
         "brandingContrastRatio",
         "buildThemePrepaintScript",
         "canonicalizeTenantThemeValue",
+        "censusRuntimeVisualPayload",
+        "compileBrandTheme",
         "compileTenantThemeConfig",
         "createEdgeConfigDomainLookup",
+        "emitTenantThemeArtifactForSsr",
+        "getCodeOwnedRuntimeConfig",
         "getKnownTenantConfig",
         "getKnownTenantSlugs",
         "getTenantThemeVerticalEnvelope",
         "hydrateTenantThemeConfig",
         "isBundledTenant",
+        "isCodeOwnedTenantConfig",
         "isKnownTenant",
         "parseTenantThemeConfig",
         "parseTenantThemeDocument",
@@ -3407,8 +3337,11 @@
         "resolveDocumentRootAttributes",
         "resolveRequestTenant",
         "resolveRequestTenantAsync",
+        "resolveVisualAuthority",
         "sha256TenantThemeValue",
         "tenantThemeAnatomyAttributes",
+        "tenantThemeArtifactCssIntegrity",
+        "tenantThemeArtifactElementId",
         "tenantThemeArtifactRootAttributes",
         "toSupportedLocale",
         "validateBrandingContrast",
@@ -4226,10 +4159,18 @@
         "BulletChart",
         "CalendarHeatMap",
         "FunnelChart",
+        "GanttChart",
         "GaugeChart",
+        "HeatMap",
+        "Histogram",
         "LineChart",
+        "NetworkGraph",
+        "PieChart",
         "RadarChart",
+        "SankeyChart",
+        "ScatterChart",
         "Sparkline",
+        "TreeMap",
         "WaterfallChart"
       ],
       "symbols": {
@@ -4258,7 +4199,22 @@
           "d3",
           "motion"
         ],
+        "GanttChart": [
+          "antd",
+          "d3",
+          "motion"
+        ],
         "GaugeChart": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "HeatMap": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "Histogram": [
           "antd",
           "d3",
           "motion"
@@ -4268,12 +4224,37 @@
           "d3",
           "motion"
         ],
+        "NetworkGraph": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "PieChart": [
+          "antd",
+          "d3",
+          "motion"
+        ],
         "RadarChart": [
           "antd",
           "d3",
           "motion"
         ],
+        "SankeyChart": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "ScatterChart": [
+          "antd",
+          "d3",
+          "motion"
+        ],
         "Sparkline": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "TreeMap": [
           "antd",
           "d3",
           "motion"
@@ -4305,9 +4286,7 @@
       ],
       "symbols": {
         "RecordSummaryStrip": [
-          "@phosphor-icons/react",
-          "antd",
-          "motion"
+          "antd"
         ]
       },
       "supplierFreeExports": []
@@ -4381,37 +4360,6 @@
         "isOAuthProvider",
         "isOAuthTransitionVariantId"
       ]
-    },
-    "./surfaces/state-cards": {
-      "exports": [
-        "SurfaceEmptyStateCard",
-        "SurfaceErrorStateCard",
-        "SurfaceLoadingSkeleton",
-        "SurfaceStaleBanner"
-      ],
-      "symbols": {
-        "SurfaceEmptyStateCard": [
-          "@phosphor-icons/react",
-          "antd",
-          "motion"
-        ],
-        "SurfaceErrorStateCard": [
-          "@phosphor-icons/react",
-          "antd",
-          "motion"
-        ],
-        "SurfaceLoadingSkeleton": [
-          "@phosphor-icons/react",
-          "antd",
-          "motion"
-        ],
-        "SurfaceStaleBanner": [
-          "@phosphor-icons/react",
-          "antd",
-          "motion"
-        ]
-      },
-      "supplierFreeExports": []
     },
     "./icons": {
       "exports": [
@@ -7504,58 +7452,6 @@
         "configs",
         "plugin",
         "rules"
-      ]
-    },
-    "./commercial": {
-      "exports": [
-        "AsciiDiagram",
-        "AsciiFrame",
-        "COMMERCIAL_GRAY_HEX",
-        "COMMERCIAL_INK_HEX",
-        "COMMERCIAL_PAPER_HEX",
-        "CropMarks",
-        "InvertSection",
-        "MonoStat",
-        "ProductWindow",
-        "SectionFrame",
-        "TerminalBlock",
-        "TextureBackdrop",
-        "TreeView",
-        "Typewriter",
-        "commercialGray",
-        "commercialTokens"
-      ],
-      "symbols": {
-        "AsciiDiagram": [
-          "antd",
-          "motion"
-        ],
-        "MonoStat": [
-          "antd",
-          "motion"
-        ],
-        "TerminalBlock": [
-          "antd",
-          "motion"
-        ],
-        "Typewriter": [
-          "antd",
-          "motion"
-        ]
-      },
-      "supplierFreeExports": [
-        "AsciiFrame",
-        "COMMERCIAL_GRAY_HEX",
-        "COMMERCIAL_INK_HEX",
-        "COMMERCIAL_PAPER_HEX",
-        "CropMarks",
-        "InvertSection",
-        "ProductWindow",
-        "SectionFrame",
-        "TextureBackdrop",
-        "TreeView",
-        "commercialGray",
-        "commercialTokens"
       ]
     },
     "./supplier-honesty-cli": {

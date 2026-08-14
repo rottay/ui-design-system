@@ -4,9 +4,19 @@
  *
  * @description
  * Contains preset definitions for the three first-party Rottay products
- * (`evnto`, `bithire`, `platform`). Each vertical captures the full
+ * (`evnto`, `bithire`, `rottay`). Each vertical captures the full
  * personality, engine preference, and surface defaults for a product
  * domain.
+ *
+ * WHAT THIS REGISTRY IS NOT. It used to carry a `suggestedPalette` per
+ * vertical, and all seven of those seed colours disagreed with the shipped
+ * BrandTheme: evnto seeded orange/cyan against a black/sand editorial theme,
+ * bithire seeded purple against a blue theme, platform seeded indigo against
+ * a white-on-dark one. Nothing consumed the field, so the disagreement was
+ * invisible — but it made this file a second colour authority that a future
+ * reader could reasonably have believed. Colour comes from the BrandTheme
+ * source and nowhere else; this registry owns personality, engine posture and
+ * surface defaults only.
  *
  * These are **bundled defaults**, not the only verticals the DS supports.
  * Custom verticals can be registered at runtime via the open-ended
@@ -99,11 +109,6 @@ export const VERTICAL_REGISTRY: Readonly<Record<string, VerticalPreset>> = {
       density: "comfortable",
       schedulerView: "week",
     },
-    suggestedPalette: {
-      primaryColor: "#FF6B35",
-      secondaryColor: "#EA580C",
-      accentColor: "#06b6d4",
-    },
   },
 
   /**
@@ -175,23 +180,25 @@ export const VERTICAL_REGISTRY: Readonly<Record<string, VerticalPreset>> = {
       density: "comfortable",
       schedulerView: "week",
     },
-    suggestedPalette: {
-      primaryColor: "#5B50E6",
-      secondaryColor: "#4439B8",
-      accentColor: "#8B6FE8",
-    },
   },
 
   /**
-   * Platform - Admin portal
+   * Rottay - Admin portal / neutral core baseline
    *
-   * Derived from: platform.admin product profile + rottay tenant personality
+   * Derived from: rottay.admin product profile + rottay tenant personality
    * Personality: neutral, fade entrance, precise animations, compact density
    * Engine: modern is the flagship target; classic remains a supported engine path
+   *
+   * The key is `rottay`, not `platform`. Slug, registry key and
+   * `BrandTheme.id` are one fact — see FIRST_PARTY_VERTICAL_ROSTER in
+   * `foundation/tokens/ts/presentation/brand-themes`. The old `platform` key
+   * disagreed with both the `rottay` slug the rules key on and the `rottay`
+   * theme id, which is what forced every consumer touching both halves to
+   * carry two spellings.
    */
-  platform: {
-    key: "platform",
-    label: "Platform",
+  rottay: {
+    key: "rottay",
+    label: "Rottay",
     description:
       "Admin vertical with sharp aesthetics, compact density, and operational dashboard defaults.",
     engine: "modern",
@@ -242,15 +249,12 @@ export const VERTICAL_REGISTRY: Readonly<Record<string, VerticalPreset>> = {
         paddingDensity: "compact",
       },
     },
-    defaultProductProfile: "platform.admin",
+    defaultProductProfile: "rottay.admin",
     features: ["admin", "settings", "users", "billing"],
     surfaceDefaults: {
       listView: "table",
       density: "compact",
       schedulerView: "month",
-    },
-    suggestedPalette: {
-      primaryColor: "#6366F1",
     },
   },
 };

@@ -6,17 +6,17 @@
     "category": "communication",
     "name": "CommentThread",
     "components": [
-      "CommentThread"
+      "PatternCommentThread"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
     "sourceOwner": "packages/core/src/ui/patterns/communication/comment-thread",
-    "publicComponents": [],
-    "unresolvedPublicComponents": [
-      "CommentThread"
+    "publicComponents": [
+      "PatternCommentThread"
     ],
+    "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "669ea1b99beb0bf84f6f38f8b82b8d466bf0841c993f854fdb43b0a4faac4a87"
+    "inventoryRowDigest": "92ccd50bdc7a7c8d85750e4f4c0872e231c3deb7c86f6ede7cd49a76b4c6d195"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

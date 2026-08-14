@@ -30,12 +30,12 @@ import { Flex, Pagination, Stack, Text } from '../../../../../primitives';
 import { PatternActivityLog } from '../../../../../patterns';
 import type { Activity } from '../../../../../patterns';
 import type { ActivitySurfaceConfig } from '../../../../foundation/contracts';
-import { PageShellSurface } from '../../../../composition/layout/page-shell';
-import { SurfaceActionBar } from '../../../../runtime/helpers/rendering';
+import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
+import { SurfaceActionBar } from '../../../../../structures/shell/surface-chrome';
 import { hasSurfaceError } from '../../../../runtime/helpers';
-import { SurfaceErrorState } from '../../../../runtime/helpers/states';
-import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
-import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
+import { SurfaceErrorState } from '../../../../../structures/feedback/surface-lifecycle';
+import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
+import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
 import { FadeIn, StaggerChildren } from '@/graphics/motion';
 
 export interface ActivitySurfaceProps {

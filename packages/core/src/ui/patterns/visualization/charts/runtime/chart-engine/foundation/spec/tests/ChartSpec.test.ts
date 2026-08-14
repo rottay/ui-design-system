@@ -76,7 +76,7 @@ describe('ChartGrammar closed registry', () => {
     expect(CHART_GRAMMAR_IDS).toEqual([
       'neutral',
       'bithire',
-      'platform',
+      'rottay',
       'evnto',
     ]);
     expect(Object.keys(CHART_GRAMMAR_REGISTRY)).toEqual(CHART_GRAMMAR_IDS);
@@ -119,7 +119,7 @@ describe('ChartGrammar closed registry', () => {
       annotations: 'evidence-decision',
       motion: 'calm-continuity',
     });
-    expect(resolveChartGrammar('platform')).toMatchObject({
+    expect(resolveChartGrammar('rottay')).toMatchObject({
       posture: 'control-plane',
       grid: 'precise-compact',
       axes: 'high-contrast-compact',
@@ -137,9 +137,15 @@ describe('ChartGrammar closed registry', () => {
     });
   });
 
+  // `'rottay'` USED to sit in this list. That was not a deliberate exclusion:
+  // the canonical grammar id was spelled `'platform'` while the runtime hands
+  // `resolveChartGrammar` a tenant's `vertical.key`, which is `'rottay'`. So
+  // every Rottay chart silently resolved the neutral grammar — losing the
+  // control-plane posture, grid, axes, marks and motion — and this test
+  // asserted that loss was correct. The grammar id is now `'rottay'`, matching
+  // the vertical identity, and the positive assertion above proves it resolves.
   it.each([
     'BitHire',
-    'rottay',
     'tenant-bithire',
     'themanagement',
     'themanagement.miami',

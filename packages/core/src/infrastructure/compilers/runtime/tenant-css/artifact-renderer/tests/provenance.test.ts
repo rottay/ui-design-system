@@ -15,7 +15,7 @@ import {
   compileBrandTheme,
 } from '@/infrastructure/compilers/kernel/runtime/brand-theme';
 import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/bithire';
-import { rottayBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/platform';
+import { rottayBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/rottay';
 import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
 
 import {
@@ -147,9 +147,15 @@ describe('T12 · rottay serves its BrandTheme in the base state', () => {
     const compiledBlock = artifact.split('/* === Declared artifact extension')[0];
     // Scope projection wraps the spec selector; what matters is that nothing in
     // the result narrows it to a mode.
+    //
+    // Built from the spec rather than hardcoded. This literal used to read
+    // a mismatched vertical identity under `data-tenant='rottay'`, so the test
+    // pinned the very slug/verticalKey inversion the roster exists to remove.
     expect(compiledBlock).toContain(
-      ":is(html[data-tenant='rottay'], :where([data-ds-root][data-vertical='platform'])) {"
+      `:is(html[data-tenant='${spec.slug}'], :where([data-ds-root][data-vertical='${spec.verticalKey}'])) {`
     );
+    // ...and the two halves are the same identity, which is the actual law.
+    expect(spec.verticalKey).toBe(spec.slug);
     expect(compiledBlock).not.toContain('data-theme');
     expect(compiledBlock).not.toContain('.light');
   });

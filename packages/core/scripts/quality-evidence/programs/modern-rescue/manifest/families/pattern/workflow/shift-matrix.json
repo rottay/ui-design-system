@@ -6,17 +6,17 @@
     "category": "workflow",
     "name": "ShiftMatrix",
     "components": [
-      "ShiftMatrix"
+      "PatternShiftMatrix"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
     "sourceOwner": "packages/core/src/ui/patterns/workflow/shift-matrix",
-    "publicComponents": [],
-    "unresolvedPublicComponents": [
-      "ShiftMatrix"
+    "publicComponents": [
+      "PatternShiftMatrix"
     ],
+    "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "c638f30861986cfcafadb8554e9d36c73148e8e3cc1df28697d0417e115e0626"
+    "inventoryRowDigest": "c63dce2a43443743ffbaace90743733fbbfafc16c94f59c3a3660d48adab227f"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

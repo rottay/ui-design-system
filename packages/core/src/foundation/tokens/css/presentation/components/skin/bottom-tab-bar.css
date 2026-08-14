@@ -66,7 +66,7 @@
  * `data-selected`, so the cascade cannot be changed by a future `color`
  * landing on an intermediate node.
  *
- * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
+ * SPECIFICITY (P-48): the Rottay artifact ships an unlayered
  * border-color floor at (0,3,1). The root's `border-top` carries a real color,
  * so it must reach (0,4,0) — bought from the class + `data-part` +
  * always-present `data-testid` + `aria-label` (repetition is prohibited).

@@ -44,7 +44,9 @@ function heroFontSizes(root: Root): string[] {
   const values: string[] = [];
   root.walkRules((rule) => {
     if (!rule.selector.includes("[data-part='value']")) return;
-    rule.walkDecls('font-size', (decl) => values.push(decl.value));
+    rule.walkDecls('font-size', (decl) => {
+      values.push(decl.value);
+    });
   });
   return values;
 }
@@ -83,7 +85,9 @@ describe('DataTerminalCard elevation', () => {
     const containers: string[] = [];
     root.walkRules((rule) => {
       if (!rule.selector.includes("[data-part='root']")) return;
-      rule.walkDecls(/^container/, (decl) => containers.push(decl.value));
+      rule.walkDecls(/^container/, (decl) => {
+        containers.push(decl.value);
+      });
     });
     expect(containers).toHaveLength(2);
     for (const value of containers) expect(value).toContain('inline-size');
@@ -91,7 +95,9 @@ describe('DataTerminalCard elevation', () => {
     expect(containers.some((value) => value.includes('ds-data-terminal-stat'))).toBe(true);
 
     const cuts: string[] = [];
-    root.walkAtRules('container', (at) => cuts.push(at.params));
+    root.walkAtRules('container', (at) => {
+      cuts.push(at.params);
+    });
     expect(cuts.length).toBeGreaterThan(0);
     for (const cut of cuts) expect(cut).toContain('ds-data-terminal-card');
 
@@ -107,7 +113,9 @@ describe('DataTerminalCard elevation', () => {
 
     const folded: string[] = [];
     root.walkAtRules('container', (at) => {
-      at.walkDecls('grid-template-columns', (decl) => folded.push(decl.value));
+      at.walkDecls('grid-template-columns', (decl) => {
+        folded.push(decl.value);
+      });
     });
     expect(folded.length).toBeGreaterThan(0);
     for (const value of folded) expect(value).toContain('repeat(2,');
@@ -116,7 +124,9 @@ describe('DataTerminalCard elevation', () => {
     const base: string[] = [];
     root.walkRules((rule) => {
       if (!rule.selector.includes("[data-part='stats-grid']")) return;
-      rule.walkDecls('grid-template-columns', (decl) => base.push(decl.value));
+      rule.walkDecls('grid-template-columns', (decl) => {
+        base.push(decl.value);
+      });
     });
     expect(base.some((value) => value.includes('repeat(3,'))).toBe(true);
   });

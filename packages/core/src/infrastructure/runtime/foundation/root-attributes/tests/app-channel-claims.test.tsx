@@ -42,7 +42,10 @@ const SSR_BASELINE: Readonly<Record<string, string>> = {
 
 const APP_OWNED_CHANNELS = Object.keys(SSR_BASELINE);
 
-const CLAIM_REGISTRY_MODULE = 'infrastructure/runtime/foundation/root-attributes/index.ts';
+const CLAIM_REGISTRY_MODULES: ReadonlySet<string> = new Set([
+  'infrastructure/runtime/foundation/root-attributes/registry/index.ts',
+  'infrastructure/runtime/foundation/root-attributes/presentation/index.ts',
+]);
 
 interface RootWrite {
   readonly attribute: string;
@@ -80,7 +83,7 @@ function classifyWrite(): Pick<RootWrite, 'through' | 'origin'> {
     if (path.includes('/node_modules/')) continue;
     const relative = path.slice(path.lastIndexOf('/src/') + 5);
 
-    if (relative === CLAIM_REGISTRY_MODULE) {
+    if (CLAIM_REGISTRY_MODULES.has(relative)) {
       through = 'registry';
       continue;
     }

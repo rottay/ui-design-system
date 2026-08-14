@@ -9,14 +9,14 @@
       "PatternBrandStudio"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/customization",
+    "sourceOwner": "packages/core/src/ui/patterns/customization/brand-studio",
     "publicComponents": [
       "PatternBrandStudio"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "35a7fab22299bbc8abe1579c01c9024ba0ab3d23e84199246998d2aea490ba44"
+    "inventoryRowDigest": "e0e456a7e96e49f0141a4e9ee497f1842ab58e3687a83120d7c6fb11d2a1b33b"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

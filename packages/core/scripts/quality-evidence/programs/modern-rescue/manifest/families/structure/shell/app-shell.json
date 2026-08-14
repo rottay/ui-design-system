@@ -9,14 +9,14 @@
       "AppShell"
     ],
     "sourceRoot": "packages/core/src/ui/structures",
-    "sourceOwner": "packages/core/src/ui/structures/shell",
+    "sourceOwner": "packages/core/src/ui/structures/shell/app-shell",
     "publicComponents": [
       "AppShell"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "66083b4ecea4c63246a65750e469f78bce15f7bb00d650280d9543805351c6a6"
+    "inventoryRowDigest": "2256c52786657245127029a250790f8c88007ffd71277b1ee273591a07f91111"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

@@ -27,6 +27,7 @@ import {
   SEALED_REFERENCE_DOCS,
   discoverStaleTypescriptFiles,
   evaluateDataPartUnresolved,
+  evaluateClaimAuthority,
   evaluateClaimFloor,
   projectGat07RegistryDefinition,
   sealedDocumentationContentMatches,
@@ -385,14 +386,14 @@ test('G1-G7 structured analyzers fail closed on opaque claims and noncanonical e
       text: `import { ExtensionHelpers as Helpers } from '../foundation/contracts/kernel/tokens/extensions'; export const implementation = Helpers;`,
     },
     {
-      path: '/repo/src/ui/surfaces/runtime/profile-defaults/overrides/index.ts',
+      path: '/repo/src/ui/structures/foundation/chrome/runtime/profile-defaults/overrides/index.ts',
       kind: 'core',
       text: `export function useSurfaceProfileDefaultsWithOverrides(value: unknown) { return value; } export const selfProbe = () => useSurfaceProfileDefaultsWithOverrides({});`,
     },
     {
       path: '/repo/src/ui/surfaces/pages/demo.tsx',
       kind: 'core',
-      text: `import { useSurfaceProfileDefaultsWithOverrides as useOverrides } from '../runtime/profile-defaults/overrides'; export const Demo = () => useOverrides({});`,
+      text: `import { useSurfaceProfileDefaultsWithOverrides as useOverrides } from '../../structures/foundation/chrome/runtime/profile-defaults/overrides'; export const Demo = () => useOverrides({});`,
     },
     {
       path: '/repo/packages/showroom/src/demo.tsx',
@@ -404,7 +405,11 @@ test('G1-G7 structured analyzers fail closed on opaque claims and noncanonical e
   assert.equal(claimFacts['component-extensions'].staticallyResolvedExtensionHelperReferences, 0);
   assert.equal(claimFacts['component-extensions'].staticallyResolvedPotentialConsumers, 0);
   assert.equal(claimFacts['component-extensions'].unsupportedGovernedReferences, 1);
-  assert.equal(claimFacts['surface-profile-overrides'].staticallyResolvedSurfaceHookCalls, 2);
+  // The owner's own `selfProbe` call is authorship, not an applied consumer.
+  assert.equal(claimFacts['surface-profile-overrides'].staticallyResolvedSurfaceHookCalls, 1);
+  assert.deepEqual(claimFacts['surface-profile-overrides'].staticallyResolvedSurfaceHookCallFiles, [
+    '/repo/src/ui/surfaces/pages/demo.tsx',
+  ]);
   assert.equal(claimFacts['surface-profile-overrides'].staticallyResolvedShowroomProfileOverrideReferences, 0);
   assert.equal(claimFacts['surface-profile-overrides'].unsupportedGovernedReferences, 1);
   assert.equal(claimFacts['surface-profile-overrides'].registeredExecutableEvidence, 0);
@@ -475,7 +480,7 @@ test('G1-G7 structured analyzers fail closed on opaque claims and noncanonical e
 });
 
 test('G1 typed claim references resolve named/default/namespace/reexports without scope-name false positives', () => {
-  const hookPath = '/repo/src/ui/surfaces/runtime/profile-defaults/overrides/index.ts';
+  const hookPath = '/repo/src/ui/structures/foundation/chrome/runtime/profile-defaults/overrides/index.ts';
   const records = [
     {
       path: hookPath,
@@ -483,48 +488,55 @@ test('G1 typed claim references resolve named/default/namespace/reexports withou
       text: `export function useSurfaceProfileDefaultsWithOverrides(value: unknown) { return value; }`,
     },
     {
-      path: '/repo/src/ui/surfaces/foundation/contracts/index.ts',
+      path: '/repo/src/ui/structures/foundation/chrome/contracts/index.ts',
       kind: 'core',
-      text: `export interface SurfaceVisualOverrides { density?: string } export interface VisualOptions { profileOverrides?: SurfaceVisualOverrides }`,
+      text: `export interface SurfaceVisualOverrides { density?: string } export interface HeaderSurfaceVisualConfig { profileOverrides?: SurfaceVisualOverrides }`,
     },
     {
-      path: '/repo/src/ui/surfaces/runtime/profile-defaults/overrides/named.ts',
+      // The surfaces facade re-exports the claim type and declares its own
+      // governed fields; both owners contribute to the declaration census.
+      path: '/repo/src/ui/surfaces/foundation/contracts/index.ts',
+      kind: 'core',
+      text: `import type { SurfaceVisualOverrides } from '../../../structures/foundation/chrome/contracts'; export type { SurfaceVisualOverrides }; export interface VisualOptions { profileOverrides?: SurfaceVisualOverrides }`,
+    },
+    {
+      path: '/repo/src/ui/structures/foundation/chrome/runtime/profile-defaults/overrides/named.ts',
       kind: 'core',
       text: `export { useSurfaceProfileDefaultsWithOverrides as useProfile } from './index';`,
     },
     {
-      path: '/repo/src/ui/surfaces/runtime/profile-defaults/overrides/default.ts',
+      path: '/repo/src/ui/structures/foundation/chrome/runtime/profile-defaults/overrides/default.ts',
       kind: 'core',
       text: `export { useSurfaceProfileDefaultsWithOverrides as default } from './index';`,
     },
     {
-      path: '/repo/src/ui/surfaces/runtime/profile-defaults/overrides/star.ts',
+      path: '/repo/src/ui/structures/foundation/chrome/runtime/profile-defaults/overrides/star.ts',
       kind: 'core',
       text: `export * from './index';`,
     },
     {
       path: '/repo/src/ui/surfaces/pages/named.tsx', kind: 'core',
-      text: `import { useSurfaceProfileDefaultsWithOverrides as invoke } from '../runtime/profile-defaults/overrides'; export const Demo = () => invoke({});`,
+      text: `import { useSurfaceProfileDefaultsWithOverrides as invoke } from '../../structures/foundation/chrome/runtime/profile-defaults/overrides'; export const Demo = () => invoke({});`,
     },
     {
       path: '/repo/src/ui/surfaces/pages/default.tsx', kind: 'core',
-      text: `import invoke from '../runtime/profile-defaults/overrides/default'; export const Demo = () => invoke({});`,
+      text: `import invoke from '../../structures/foundation/chrome/runtime/profile-defaults/overrides/default'; export const Demo = () => invoke({});`,
     },
     {
       path: '/repo/src/ui/surfaces/pages/namespace.tsx', kind: 'core',
-      text: `import * as Hooks from '../runtime/profile-defaults/overrides'; export const Demo = () => Hooks.useSurfaceProfileDefaultsWithOverrides({});`,
+      text: `import * as Hooks from '../../structures/foundation/chrome/runtime/profile-defaults/overrides'; export const Demo = () => Hooks.useSurfaceProfileDefaultsWithOverrides({});`,
     },
     {
       path: '/repo/src/ui/surfaces/pages/reexport.tsx', kind: 'core',
-      text: `import { useProfile } from '../runtime/profile-defaults/overrides/named'; export const Demo = () => useProfile({});`,
+      text: `import { useProfile } from '../../structures/foundation/chrome/runtime/profile-defaults/overrides/named'; export const Demo = () => useProfile({});`,
     },
     {
       path: '/repo/src/ui/surfaces/pages/star.tsx', kind: 'core',
-      text: `import { useSurfaceProfileDefaultsWithOverrides as invoke } from '../runtime/profile-defaults/overrides/star'; export const Demo = () => invoke({});`,
+      text: `import { useSurfaceProfileDefaultsWithOverrides as invoke } from '../../structures/foundation/chrome/runtime/profile-defaults/overrides/star'; export const Demo = () => invoke({});`,
     },
     {
       path: '/repo/src/ui/surfaces/pages/scope-shadow.tsx', kind: 'core',
-      text: `import { useSurfaceProfileDefaultsWithOverrides as invoke } from '../runtime/profile-defaults/overrides'; export const outer = () => invoke({}); export function inner() { const invoke = () => null; return invoke(); }`,
+      text: `import { useSurfaceProfileDefaultsWithOverrides as invoke } from '../../structures/foundation/chrome/runtime/profile-defaults/overrides'; export const outer = () => invoke({}); export function inner() { const invoke = () => null; return invoke(); }`,
     },
   ];
   const facts = analyzeClaimSourceRecords(records)['surface-profile-overrides'];
@@ -532,6 +544,8 @@ test('G1 typed claim references resolve named/default/namespace/reexports withou
   assert.equal(facts.staticallyResolvedPotentialConsumers, 6);
   assert.equal(facts.unsupportedGovernedReferences, 0);
   assert.equal(facts.registeredExecutableEvidence, 0);
+  // Both declaring owners are counted; neither is counted as a consumer.
+  assert.equal(facts.profileOverrideDeclarations, 2);
   assert.deepEqual(facts.staticallyResolvedSurfaceHookCallFiles, [
     '/repo/src/ui/surfaces/pages/default.tsx',
     '/repo/src/ui/surfaces/pages/named.tsx',
@@ -590,34 +604,39 @@ test('G2 claim census keeps opaque transports and computed access out of direct 
       text: `import type { ComponentExtensions } from '../../kernel/tokens/extensions'; export interface EngineAwareProps { extensions?: ComponentExtensions }`,
     },
     {
-      path: '/repo/src/ui/surfaces/foundation/contracts/index.ts',
+      path: '/repo/src/ui/structures/foundation/chrome/contracts/index.ts',
       kind: 'core',
-      text: `export interface SurfaceVisualOverrides { density?: string } export interface VisualOptions { profileOverrides?: SurfaceVisualOverrides }`,
+      text: `export interface SurfaceVisualOverrides { density?: string }`,
     },
     {
-      path: '/repo/src/ui/surfaces/runtime/profile-defaults/overrides/index.ts',
+      path: '/repo/src/ui/surfaces/foundation/contracts/index.ts',
+      kind: 'core',
+      text: `import type { SurfaceVisualOverrides } from '../../../structures/foundation/chrome/contracts'; export type { SurfaceVisualOverrides }; export interface VisualOptions { profileOverrides?: SurfaceVisualOverrides }`,
+    },
+    {
+      path: '/repo/src/ui/structures/foundation/chrome/runtime/profile-defaults/overrides/index.ts',
       kind: 'core',
       text: `export function useSurfaceProfileDefaultsWithOverrides(value: unknown) { return value; } export const selfProbe = () => useSurfaceProfileDefaultsWithOverrides({});`,
     },
     {
       path: '/repo/src/ui/surfaces/pages/direct.tsx',
       kind: 'core',
-      text: `import { useSurfaceProfileDefaultsWithOverrides as useProfile } from '../runtime/profile-defaults/overrides'; export const Demo = () => useProfile({});`,
+      text: `import { useSurfaceProfileDefaultsWithOverrides as useProfile } from '../../structures/foundation/chrome/runtime/profile-defaults/overrides'; export const Demo = () => useProfile({});`,
     },
     {
       path: '/repo/src/ui/surfaces/pages/container.tsx',
       kind: 'core',
-      text: `import { useSurfaceProfileDefaultsWithOverrides as useProfile } from '../runtime/profile-defaults/overrides'; const hooks = [useProfile]; export const Demo = () => hooks[0]({});`,
+      text: `import { useSurfaceProfileDefaultsWithOverrides as useProfile } from '../../structures/foundation/chrome/runtime/profile-defaults/overrides'; const hooks = [useProfile]; export const Demo = () => hooks[0]({});`,
     },
     {
       path: '/repo/src/ui/surfaces/pages/helper.tsx',
       kind: 'core',
-      text: `import { useSurfaceProfileDefaultsWithOverrides as useProfile } from '../runtime/profile-defaults/overrides'; const forward = (value: unknown) => value; export const opaque = forward(useProfile);`,
+      text: `import { useSurfaceProfileDefaultsWithOverrides as useProfile } from '../../structures/foundation/chrome/runtime/profile-defaults/overrides'; const forward = (value: unknown) => value; export const opaque = forward(useProfile);`,
     },
     {
       path: '/repo/src/ui/surfaces/pages/wrappers.tsx',
       kind: 'core',
-      text: `import { useSurfaceProfileDefaultsWithOverrides as useProfile } from '../runtime/profile-defaults/overrides'; export const opaque = [useProfile.call(null, {}), Reflect.apply(useProfile, null, [{}]), useProfile.bind(null)];`,
+      text: `import { useSurfaceProfileDefaultsWithOverrides as useProfile } from '../../structures/foundation/chrome/runtime/profile-defaults/overrides'; export const opaque = [useProfile.call(null, {}), Reflect.apply(useProfile, null, [{}]), useProfile.bind(null)];`,
     },
     {
       path: '/repo/src/runtime/extensions-direct.ts',
@@ -649,6 +668,14 @@ test('G2 claim census keeps opaque transports and computed access out of direct 
       text: `import { useSurfaceProfileDefaultsWithOverrides as external } from 'untracked-package'; const fake = { useSurfaceProfileDefaultsWithOverrides() {} }; export const Demo = () => [external({}), fake.useSurfaceProfileDefaultsWithOverrides()];`,
     },
     {
+      // A look-alike type name and a same-named LOCAL interface are not the
+      // governed contract; a substring match on the printed type would count
+      // both. Neither may enter the declaration census.
+      path: '/repo/src/ui/surfaces/pages/impostor-types.tsx',
+      kind: 'core',
+      text: `interface NotSurfaceVisualOverrides { density?: string } interface SurfaceVisualOverrides { density?: string } export interface FakeA { profileOverrides?: NotSurfaceVisualOverrides } export interface FakeB { profileOverrides?: SurfaceVisualOverrides }`,
+    },
+    {
       path: '/repo/packages/showroom/src/profile.tsx',
       kind: 'showroom',
       text: `import type { VisualOptions } from '../../../src/ui/surfaces/foundation/contracts'; export const read = (visual: VisualOptions) => visual.profileOverrides; const fake = { profileOverrides: true }; export const ignored = fake.profileOverrides;`,
@@ -666,15 +693,20 @@ test('G2 claim census keeps opaque transports and computed access out of direct 
   assert.equal(extensions.registeredExecutableEvidence, 0);
 
   const surfaces = forward['surface-profile-overrides'];
-  assert.equal(surfaces.staticallyResolvedSurfaceHookCalls, 2);
+  // Only `direct.tsx` applies the hook: the owner's self-probe is authorship,
+  // and the container/helper/wrapper transports are opaque, not direct calls.
+  assert.equal(surfaces.staticallyResolvedSurfaceHookCalls, 1);
   assert.equal(surfaces.staticallyResolvedShowroomProfileOverrideReferences, 1);
   assert.equal(surfaces.staticallyResolvedPotentialConsumers, 6);
   assert.equal(surfaces.unsupportedGovernedReferences, 5);
   assert.deepEqual(surfaces.staticallyResolvedSurfaceHookCallFiles, [
     '/repo/src/ui/surfaces/pages/direct.tsx',
-    '/repo/src/ui/surfaces/runtime/profile-defaults/overrides/index.ts',
   ]);
   assert.equal(surfaces.potentialConsumers.some(({ path }) => path.endsWith('name-only-fakes.tsx')), false);
+  // The single governed declaration is the surfaces facade's `VisualOptions`;
+  // the impostor and local look-alike contribute nothing.
+  assert.equal(surfaces.profileOverrideDeclarations, 1);
+  assert.equal(surfaces.potentialConsumers.some(({ path }) => path.endsWith('impostor-types.tsx')), false);
 });
 
 test('G6 registry proof is a strict authored-initializer projection', () => {
@@ -932,11 +964,11 @@ test('G8 WO-GAT-07 projection is deterministic and binds only immutable executio
 test('G4 documentation permits only exact generated claim contracts even after allowlist rewrites', () => {
   const markers = {
     'component-extensions': '<!-- GAT07-CLAIM component-extensions: reserved-deprecated; runtime=unimplemented; affirmative-behavior=false; owner=DS-IMP-021 -->',
-    'surface-profile-overrides': '<!-- GAT07-CLAIM surface-profile-overrides: active; runtime=fleet-wired-33-of-33; affirmative-behavior=true; owner=DS-IMP-022 -->',
+    'surface-profile-overrides': '<!-- GAT07-CLAIM surface-profile-overrides: active; runtime=declared-32-applied-31; affirmative-behavior=true; owner=DS-IMP-022 -->',
   };
   const templates = {
     'component-extensions': 'GAT07-CONTRACT component-extensions: symbols=[ComponentExtensions, ExtensionHelpers, EngineAwareProps.extensions]; disposition=reserved-deprecated; runtime-status=unimplemented; affirmative-behavior=false; production-consumers=0; executable-assertions=0; owner=design-system-program/DS-IMP-021; target-phase=2A.',
-    'surface-profile-overrides': 'GAT07-CONTRACT surface-profile-overrides: symbols=[SurfaceVisualOverrides, useSurfaceProfileDefaultsWithOverrides, visual.profileOverrides]; disposition=active; runtime-status=fleet-wired-33-of-33; affirmative-behavior=true; production-consumers=33; executable-assertions=2; owner=design-system-program/DS-IMP-022; target-phase=2A.',
+    'surface-profile-overrides': 'GAT07-CONTRACT surface-profile-overrides: symbols=[SurfaceVisualOverrides, useSurfaceProfileDefaultsWithOverrides, visual.profileOverrides]; disposition=active; runtime-status=declared-32-applied-31; affirmative-behavior=true; production-consumers=31; executable-assertions=2; owner=design-system-program/DS-IMP-022; target-phase=2A.',
   };
   const records = [{
     path: 'contracts.md',
@@ -1188,5 +1220,575 @@ test('all reviewed paint evasion classes turn the production audit red', async (
     }
   } finally {
     rmSync(directory, { recursive: true, force: true });
+  }
+});
+
+/**
+ * Durable negatives for the surface-profile-overrides authority.
+ *
+ * The corpus is a miniature of the live tree: two declaring owners, a hook
+ * owner, a re-export barrel, two applied consumers, and a sidebar that
+ * DECLARES the governed field without ever reading it. Every mutation below
+ * must move a census or break the roster; a mutation that leaves both intact
+ * would mean the gate cannot see the change.
+ */
+const SURFACE_PROFILE_FIXTURE = Object.freeze({
+  claimType: '/repo/src/ui/structures/foundation/chrome/contracts/index.ts',
+  hookOwner: '/repo/src/ui/structures/foundation/chrome/runtime/profile-defaults/overrides/index.ts',
+  facade: '/repo/src/ui/surfaces/foundation/contracts/index.ts',
+  barrel: '/repo/src/ui/surfaces/index.ts',
+  header: '/repo/src/ui/structures/headers/header-surface/index.tsx',
+  page: '/repo/src/ui/surfaces/presentation/pages/data/list/index.tsx',
+  sidebar: '/repo/src/ui/structures/shell/navigation/sidebar-surface/index.tsx',
+});
+
+function surfaceProfileFixtureRecords() {
+  const F = SURFACE_PROFILE_FIXTURE;
+  return [
+    {
+      path: F.claimType,
+      kind: 'core',
+      text: `export interface SurfaceVisualOverrides { density?: string }
+export interface HeaderSurfaceVisualConfig { profileOverrides?: SurfaceVisualOverrides }
+export interface SidebarSurfaceVisualConfig { profileOverrides?: SurfaceVisualOverrides }`,
+    },
+    {
+      path: F.hookOwner,
+      kind: 'core',
+      text: `import type { SurfaceVisualOverrides } from '../../../contracts';
+export function useSurfaceProfileDefaultsWithOverrides(overrides?: SurfaceVisualOverrides) { return overrides; }`,
+    },
+    {
+      path: F.facade,
+      kind: 'core',
+      text: `import type { SurfaceVisualOverrides } from '../../../structures/foundation/chrome/contracts';
+export type { SurfaceVisualOverrides };
+export interface ListSurfaceVisualConfig { profileOverrides?: SurfaceVisualOverrides }`,
+    },
+    {
+      path: F.barrel,
+      kind: 'core',
+      text: `export { useSurfaceProfileDefaultsWithOverrides } from '../structures/foundation/chrome/runtime/profile-defaults/overrides';`,
+    },
+    {
+      path: F.header,
+      kind: 'core',
+      text: `import { useSurfaceProfileDefaultsWithOverrides } from '../../foundation/chrome/runtime/profile-defaults/overrides';
+import type { HeaderSurfaceVisualConfig } from '../../foundation/chrome/contracts';
+export const HeaderSurface = (config: { visual?: HeaderSurfaceVisualConfig }) =>
+  useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);`,
+    },
+    {
+      path: F.page,
+      kind: 'core',
+      text: `import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
+import type { ListSurfaceVisualConfig } from '../../../../foundation/contracts';
+export const ListSurface = (config: { visual?: ListSurfaceVisualConfig }) =>
+  useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);`,
+    },
+    {
+      // Declared-not-applied: the real SidebarSurface shape. It must never
+      // enter the applied census while the declaration still counts.
+      path: F.sidebar,
+      kind: 'core',
+      text: `export const SidebarSurface = () => null;`,
+    },
+  ];
+}
+
+const surfaceProfileFacts = (records) => analyzeClaimSourceRecords(records)['surface-profile-overrides'];
+
+const surfaceProfileCensus = (records) => {
+  const facts = surfaceProfileFacts(records);
+  return {
+    declared: facts.profileOverrideDeclarations,
+    // `applied` is governed by APPLICATIONS. `hookCalls` stays a separate,
+    // weaker metric so a call that never passes the governed field through its
+    // arguments is visible as exactly that: a call, not an application.
+    applied: facts.staticallyResolvedSurfaceProfileApplications,
+    roster: facts.staticallyResolvedSurfaceProfileApplicationFiles,
+    hookCalls: facts.staticallyResolvedSurfaceHookCalls,
+    hookCallRoster: facts.staticallyResolvedSurfaceHookCallFiles,
+    potential: facts.staticallyResolvedPotentialConsumers,
+    records: facts.profileOverrideDeclarationRecords,
+    // Application IDENTITY: which declaration each consumer applied, and the
+    // exact set difference that is therefore left declared-but-never-applied.
+    applications: facts.staticallyResolvedSurfaceProfileApplicationRecords,
+    appliedDeclarations: facts.profileOverrideAppliedDeclarationRecords,
+    unappliedDeclarations: facts.profileOverrideUnappliedDeclarationRecords,
+  };
+};
+
+const withRecord = (records, path, text) =>
+  records.map((record) => (record.path === path ? { ...record, text } : record));
+
+test('GAT07 surface-profile authority: baseline census separates declared from applied', () => {
+  const F = SURFACE_PROFILE_FIXTURE;
+  const base = surfaceProfileCensus(surfaceProfileFixtureRecords());
+  // Three declarations across BOTH declaring owners; only two are applied.
+  assert.equal(base.declared, 3);
+  assert.equal(base.applied, 2);
+  assert.deepEqual(base.roster, [F.header, F.page]);
+  // Neither the hook owner nor the re-export barrel is ever a consumer.
+  assert.equal(base.roster.includes(F.hookOwner), false);
+  assert.equal(base.roster.includes(F.barrel), false);
+  // Calls and applications agree here because every call passes the governed
+  // field; they are still measured separately.
+  assert.equal(base.hookCalls, 2);
+  assert.deepEqual(base.hookCallRoster, base.roster);
+  // Declaration identity, not just the count.
+  assert.deepEqual(base.records, [
+    { path: F.claimType, enclosingType: 'HeaderSurfaceVisualConfig' },
+    { path: F.claimType, enclosingType: 'SidebarSurfaceVisualConfig' },
+    { path: F.facade, enclosingType: 'ListSurfaceVisualConfig' },
+  ]);
+});
+
+test('GAT07 surface-profile authority: unwiring a consumer lowers the applied census', () => {
+  const F = SURFACE_PROFILE_FIXTURE;
+  const records = withRecord(
+    surfaceProfileFixtureRecords(),
+    F.page,
+    `import type { ListSurfaceVisualConfig } from '../../../../foundation/contracts';
+export const ListSurface = (_config: { visual?: ListSurfaceVisualConfig }) => null;`,
+  );
+  const census = surfaceProfileCensus(records);
+  assert.equal(census.applied, 1);
+  assert.deepEqual(census.roster, [F.header]);
+  assert.equal(census.declared, 3, 'unwiring a consumer must not change the declaration census');
+});
+
+test('GAT07 surface-profile authority: wiring the declared-not-applied sidebar raises the applied census', () => {
+  const F = SURFACE_PROFILE_FIXTURE;
+  const records = withRecord(
+    surfaceProfileFixtureRecords(),
+    F.sidebar,
+    `import { useSurfaceProfileDefaultsWithOverrides } from '../../../foundation/chrome/runtime/profile-defaults/overrides';
+import type { SidebarSurfaceVisualConfig } from '../../../foundation/chrome/contracts';
+export const SidebarSurface = (config: { visual?: SidebarSurfaceVisualConfig }) =>
+  useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);`,
+  );
+  const census = surfaceProfileCensus(records);
+  assert.equal(census.applied, 3);
+  assert.deepEqual(census.roster, [F.header, F.sidebar, F.page].sort());
+  assert.equal(census.declared, 3);
+});
+
+test('GAT07 surface-profile authority: relocating a consumer breaks the roster at an unchanged count', () => {
+  const F = SURFACE_PROFILE_FIXTURE;
+  const baseline = surfaceProfileCensus(surfaceProfileFixtureRecords());
+  const moved = '/repo/src/ui/surfaces/presentation/pages/data/relocated/index.tsx';
+  const records = surfaceProfileFixtureRecords().map((record) =>
+    record.path === F.page ? { ...record, path: moved } : record);
+  const census = surfaceProfileCensus(records);
+  assert.equal(census.applied, baseline.applied, 'the count alone cannot detect the move');
+  assert.notDeepEqual(census.roster, baseline.roster);
+  assert.deepEqual(census.roster, [F.header, moved]);
+});
+
+test('GAT07 surface-profile authority: removing a declaration from either owner lowers the declaration census', () => {
+  const F = SURFACE_PROFILE_FIXTURE;
+  const withoutStructureDeclaration = surfaceProfileCensus(withRecord(
+    surfaceProfileFixtureRecords(),
+    F.claimType,
+    `export interface SurfaceVisualOverrides { density?: string }
+export interface HeaderSurfaceVisualConfig { profileOverrides?: SurfaceVisualOverrides }
+export interface SidebarSurfaceVisualConfig { collapsible?: boolean }`,
+  ));
+  assert.equal(withoutStructureDeclaration.declared, 2);
+
+  const withoutFacadeDeclaration = surfaceProfileCensus(withRecord(
+    surfaceProfileFixtureRecords(),
+    F.facade,
+    `import type { SurfaceVisualOverrides } from '../../../structures/foundation/chrome/contracts';
+export type { SurfaceVisualOverrides };
+export interface ListSurfaceVisualConfig { bordered?: boolean }`,
+  ));
+  assert.equal(withoutFacadeDeclaration.declared, 2);
+});
+
+test('GAT07 surface-profile authority: pre-relocation owner paths carry no authority', () => {
+  const F = SURFACE_PROFILE_FIXTURE;
+  // The whole corpus re-hosted under the retired `src/ui/surfaces/runtime/**`
+  // owner resolves to nothing: no declarations, no applied consumers.
+  const census = surfaceProfileCensus([
+    {
+      path: '/repo/src/ui/surfaces/runtime/profile-defaults/overrides/index.ts',
+      kind: 'core',
+      text: `export function useSurfaceProfileDefaultsWithOverrides(value?: unknown) { return value; }`,
+    },
+    {
+      path: '/repo/src/ui/surfaces/runtime/profile-defaults/contracts/index.ts',
+      kind: 'core',
+      text: `export interface SurfaceVisualOverrides { density?: string }
+export interface LegacyVisualConfig { profileOverrides?: SurfaceVisualOverrides }`,
+    },
+    {
+      path: F.page,
+      kind: 'core',
+      text: `import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
+export const ListSurface = () => useSurfaceProfileDefaultsWithOverrides({});`,
+    },
+  ]);
+  assert.equal(census.declared, 0);
+  assert.equal(census.applied, 0);
+  assert.deepEqual(census.roster, []);
+});
+
+test('GAT07 surface-profile authority: comments and local shadows are never evidence', () => {
+  const F = SURFACE_PROFILE_FIXTURE;
+  const baseline = surfaceProfileCensus(surfaceProfileFixtureRecords());
+  const records = withRecord(
+    surfaceProfileFixtureRecords(),
+    F.sidebar,
+    `/**
+ * Visual defaults are resolved via \`useSurfaceProfileDefaultsWithOverrides\`
+ * and a surface config's \`visual.profileOverrides\`.
+ */
+interface SurfaceVisualOverrides { density?: string }
+interface LocalConfig { profileOverrides?: SurfaceVisualOverrides }
+function useSurfaceProfileDefaultsWithOverrides(value?: SurfaceVisualOverrides) { return value; }
+export const SidebarSurface = (config: LocalConfig) =>
+  useSurfaceProfileDefaultsWithOverrides(config.profileOverrides);`,
+  );
+  const census = surfaceProfileCensus(records);
+  assert.equal(census.declared, baseline.declared, 'a local look-alike is not a governed declaration');
+  assert.equal(census.applied, baseline.applied, 'a locally shadowed hook is not the governed hook');
+  assert.deepEqual(census.roster, baseline.roster);
+});
+
+/**
+ * The fixture's analogue of the shipped `authority` block: the same owner
+ * distribution, pinned enclosing types, forbidden type, and declared-not-applied
+ * gap, scaled to the three-declaration fixture corpus.
+ */
+const SURFACE_PROFILE_FIXTURE_AUTHORITY = Object.freeze({
+  declarationOwners: {
+    'src/ui/structures/foundation/chrome/contracts/index.ts': 2,
+    'src/ui/surfaces/foundation/contracts/index.ts': 1,
+  },
+  pinnedEnclosingTypes: [
+    {
+      enclosingType: 'SidebarSurfaceVisualConfig',
+      path: 'src/ui/structures/foundation/chrome/contracts/index.ts',
+      declarations: 1,
+    },
+    {
+      enclosingType: 'HeaderSurfaceVisualConfig',
+      path: 'src/ui/structures/foundation/chrome/contracts/index.ts',
+      declarations: 1,
+    },
+  ],
+  absentEnclosingTypes: ['HeaderSurfacePresentationConfig'],
+  declaredNotApplied: [
+    {
+      enclosingType: 'SidebarSurfaceVisualConfig',
+      path: 'src/ui/structures/foundation/chrome/contracts/index.ts',
+      wireOrRemove: 'OPEN',
+    },
+  ],
+});
+const surfaceProfileFixtureClaim = () => ({
+  id: 'surface-profile-overrides',
+  authority: SURFACE_PROFILE_FIXTURE_AUTHORITY,
+});
+
+test('GAT07 surface-profile authority: a hook call that never receives the field is not an application', () => {
+  const F = SURFACE_PROFILE_FIXTURE;
+  const baseline = surfaceProfileCensus(surfaceProfileFixtureRecords());
+  // The page keeps a REAL read of `config.visual.profileOverrides`, but the
+  // read never reaches the hook: the call argument is an empty object literal.
+  const records = withRecord(
+    surfaceProfileFixtureRecords(),
+    F.page,
+    `import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
+import type { ListSurfaceVisualConfig } from '../../../../foundation/contracts';
+export const ListSurface = (config: { visual?: ListSurfaceVisualConfig }) => {
+  const declaredButUnused = config.visual?.profileOverrides;
+  void declaredButUnused;
+  return useSurfaceProfileDefaultsWithOverrides({});
+};`,
+  );
+  const census = surfaceProfileCensus(records);
+  // The weaker metrics are untouched: the file still calls the hook and still
+  // references the governed field.
+  assert.equal(census.hookCalls, baseline.hookCalls);
+  assert.deepEqual(census.hookCallRoster, baseline.hookCallRoster);
+  assert.equal(census.potential, baseline.potential);
+  assert.equal(census.declared, baseline.declared);
+  // The applied census is the one that must drop.
+  assert.equal(census.applied, baseline.applied - 1);
+  assert.deepEqual(census.roster, [F.header]);
+  assert.equal(census.roster.includes(F.page), false);
+  // And the authority block turns red, because the declared-not-applied gap grew.
+  assert.deepEqual(evaluateClaimAuthority(surfaceProfileFixtureClaim(), surfaceProfileFacts(surfaceProfileFixtureRecords())), []);
+  assert.notEqual(evaluateClaimAuthority(surfaceProfileFixtureClaim(), surfaceProfileFacts(records)).length, 0);
+});
+
+test('GAT07 surface-profile authority: applying ANOTHER owner\'s field moves the gap identity at an unchanged roster', () => {
+  const F = SURFACE_PROFILE_FIXTURE;
+  const baseline = surfaceProfileCensus(surfaceProfileFixtureRecords());
+  // The header stops applying its OWN field and applies the sidebar's instead.
+  // Nothing a counter can see moves: 3 declarations, 2 applications, the same
+  // two files in the roster, the same gap SIZE of one. Only the identity of the
+  // unapplied declaration changes -- Sidebar is now wired, Header is not.
+  const records = withRecord(
+    surfaceProfileFixtureRecords(),
+    F.header,
+    `import { useSurfaceProfileDefaultsWithOverrides } from '../../foundation/chrome/runtime/profile-defaults/overrides';
+import type { SidebarSurfaceVisualConfig } from '../../foundation/chrome/contracts';
+export const HeaderSurface = (config: { visual?: SidebarSurfaceVisualConfig }) =>
+  useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);`,
+  );
+  const census = surfaceProfileCensus(records);
+  assert.equal(census.declared, baseline.declared);
+  assert.equal(census.applied, baseline.applied, 'the applied count alone cannot detect the swap');
+  assert.deepEqual(census.roster, baseline.roster, 'the roster alone cannot detect the swap');
+  assert.equal(census.hookCalls, baseline.hookCalls);
+  assert.equal(
+    census.unappliedDeclarations.length,
+    baseline.unappliedDeclarations.length,
+    'the gap SIZE alone cannot detect the swap',
+  );
+  // Identity is the only thing that moved -- and it must move.
+  assert.deepEqual(baseline.unappliedDeclarations, [
+    { path: F.claimType, enclosingType: 'SidebarSurfaceVisualConfig' },
+  ]);
+  assert.deepEqual(census.unappliedDeclarations, [
+    { path: F.claimType, enclosingType: 'HeaderSurfaceVisualConfig' },
+  ]);
+  assert.deepEqual(
+    census.applications.find((record) => record.consumerPath === F.header),
+    { consumerPath: F.header, declarationPath: F.claimType, enclosingType: 'SidebarSurfaceVisualConfig' },
+  );
+  // The authority block is green on the baseline and red on the swap, purely
+  // because the registered gap identity no longer matches the measured one.
+  assert.deepEqual(evaluateClaimAuthority(surfaceProfileFixtureClaim(), surfaceProfileFacts(surfaceProfileFixtureRecords())), []);
+  const errors = evaluateClaimAuthority(surfaceProfileFixtureClaim(), surfaceProfileFacts(records));
+  assert.notEqual(errors.length, 0);
+  // Both directions of the set difference are reported.
+  assert.ok(errors.some((error) => error.includes('SidebarSurfaceVisualConfig') && error.includes('the tree applies it')));
+  assert.ok(errors.some((error) => error.includes('HeaderSurfaceVisualConfig') && error.includes('not registered')));
+});
+
+test('GAT07 surface-profile authority: a governed field buried in a larger argument is a call, never an application', () => {
+  const F = SURFACE_PROFILE_FIXTURE;
+  const baseline = surfaceProfileCensus(surfaceProfileFixtureRecords());
+  const PROLOGUE = `import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
+import type { ListSurfaceVisualConfig } from '../../../../foundation/contracts';
+`;
+  // Every mutation keeps a REAL read of the governed field syntactically inside
+  // the call, so a subtree scan would score each one as an application. None of
+  // them passes the field itself as the whole argument.
+  const buried = {
+    'comma expression': `${PROLOGUE}export const ListSurface = (config: { visual?: ListSurfaceVisualConfig }) =>
+  useSurfaceProfileDefaultsWithOverrides((config.visual?.profileOverrides, {}));`,
+    'conditional expression': `${PROLOGUE}export const ListSurface = (config: { visual?: ListSurfaceVisualConfig }, enabled: boolean) =>
+  useSurfaceProfileDefaultsWithOverrides(enabled ? config.visual?.profileOverrides : undefined);`,
+    'extra argument': `${PROLOGUE}export const ListSurface = (config: { visual?: ListSurfaceVisualConfig }) =>
+  (useSurfaceProfileDefaultsWithOverrides as (...args: unknown[]) => unknown)(config.visual?.profileOverrides, {});`,
+    'object literal wrapper': `${PROLOGUE}export const ListSurface = (config: { visual?: ListSurfaceVisualConfig }) =>
+  useSurfaceProfileDefaultsWithOverrides({ ...config.visual?.profileOverrides });`,
+    'call wrapper': `${PROLOGUE}export const ListSurface = (config: { visual?: ListSurfaceVisualConfig }) =>
+  useSurfaceProfileDefaultsWithOverrides(Object.assign({}, config.visual?.profileOverrides));`,
+    'logical fallback': `${PROLOGUE}export const ListSurface = (config: { visual?: ListSurfaceVisualConfig }) =>
+  useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides || {});`,
+  };
+  for (const [label, text] of Object.entries(buried)) {
+    const census = surfaceProfileCensus(withRecord(surfaceProfileFixtureRecords(), F.page, text));
+    // Still a call, still a potential consumer, still 3 declarations.
+    assert.equal(census.hookCalls, baseline.hookCalls, `${label}: must remain a hook call`);
+    assert.deepEqual(census.hookCallRoster, baseline.hookCallRoster, `${label}: must remain a hook call`);
+    assert.equal(census.potential, baseline.potential, `${label}: must remain a potential consumer`);
+    assert.equal(census.declared, baseline.declared, `${label}: declarations must not move`);
+    // But not an application, and the gap grows by exactly the list field.
+    assert.equal(census.applied, baseline.applied - 1, `${label}: must not count as an application`);
+    assert.deepEqual(census.roster, [F.header], `${label}: must leave the applied roster`);
+    assert.equal(
+      census.applications.some((record) => record.consumerPath === F.page),
+      false,
+      `${label}: must emit no application record`,
+    );
+    assert.deepEqual(
+      census.unappliedDeclarations,
+      [
+        { path: F.claimType, enclosingType: 'SidebarSurfaceVisualConfig' },
+        { path: F.facade, enclosingType: 'ListSurfaceVisualConfig' },
+      ],
+      `${label}: the list declaration must join the declared-not-applied gap`,
+    );
+    assert.notEqual(
+      evaluateClaimAuthority(surfaceProfileFixtureClaim(), surfaceProfileFacts(withRecord(surfaceProfileFixtureRecords(), F.page, text))).length,
+      0,
+      `${label}: the authority block must turn red`,
+    );
+  }
+});
+
+test('GAT07 surface-profile authority: only type-erasing wrappers are transparent to the application check', () => {
+  const F = SURFACE_PROFILE_FIXTURE;
+  const baseline = surfaceProfileCensus(surfaceProfileFixtureRecords());
+  const PROLOGUE = `import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
+import type { ListSurfaceVisualConfig, SurfaceVisualOverrides } from '../../../../foundation/contracts';
+`;
+  // The five wrappers the check unwraps carry no runtime meaning, so the field
+  // still IS the whole argument. Rejecting these would under-count real wiring.
+  const transparent = {
+    parenthesized: `useSurfaceProfileDefaultsWithOverrides((config.visual?.profileOverrides))`,
+    'non-null': `useSurfaceProfileDefaultsWithOverrides(config.visual!.profileOverrides!)`,
+    'as-assertion': `useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides as SurfaceVisualOverrides)`,
+    satisfies: `useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides satisfies SurfaceVisualOverrides | undefined)`,
+  };
+  for (const [label, call] of Object.entries(transparent)) {
+    const census = surfaceProfileCensus(withRecord(
+      surfaceProfileFixtureRecords(),
+      F.page,
+      `${PROLOGUE}export const ListSurface = (config: { visual?: ListSurfaceVisualConfig }) =>
+  ${call};`,
+    ));
+    assert.equal(census.applied, baseline.applied, `${label}: must stay an application`);
+    assert.deepEqual(census.roster, baseline.roster, `${label}: must stay in the roster`);
+    assert.deepEqual(
+      census.applications.find((record) => record.consumerPath === F.page),
+      { consumerPath: F.page, declarationPath: F.facade, enclosingType: 'ListSurfaceVisualConfig' },
+      `${label}: must resolve to the list declaration`,
+    );
+    assert.deepEqual(census.unappliedDeclarations, baseline.unappliedDeclarations, `${label}: the gap must not move`);
+    assert.deepEqual(
+      evaluateClaimAuthority(surfaceProfileFixtureClaim(), surfaceProfileFacts(withRecord(
+        surfaceProfileFixtureRecords(),
+        F.page,
+        `${PROLOGUE}export const ListSurface = (config: { visual?: ListSurfaceVisualConfig }) =>
+  ${call};`,
+      ))),
+      [],
+      `${label}: the authority block must stay green`,
+    );
+  }
+
+  // Angle-bracket assertions are valid only in a .ts consumer; pin the fifth
+  // transparent AST wrapper separately without weakening the .tsx fixture.
+  const typeAssertionPath = F.page.replace(/\.tsx$/, '.ts');
+  const typeAssertionRecords = surfaceProfileFixtureRecords().map((record) =>
+    record.path === F.page
+      ? {
+          ...record,
+          path: typeAssertionPath,
+          text: `${PROLOGUE}export const ListSurface = (config: { visual?: ListSurfaceVisualConfig }) =>
+  useSurfaceProfileDefaultsWithOverrides(<SurfaceVisualOverrides>config.visual?.profileOverrides);`,
+        }
+      : record);
+  const typeAssertionCensus = surfaceProfileCensus(typeAssertionRecords);
+  assert.equal(typeAssertionCensus.hookCalls, baseline.hookCalls);
+  assert.equal(typeAssertionCensus.applied, baseline.applied);
+  assert.deepEqual(typeAssertionCensus.roster, [F.header, typeAssertionPath].sort());
+  assert.deepEqual(
+    typeAssertionCensus.applications.find(({ consumerPath }) => consumerPath === typeAssertionPath),
+    { consumerPath: typeAssertionPath, declarationPath: F.facade, enclosingType: 'ListSurfaceVisualConfig' },
+  );
+  assert.deepEqual(typeAssertionCensus.unappliedDeclarations, baseline.unappliedDeclarations);
+  assert.deepEqual(
+    evaluateClaimAuthority(surfaceProfileFixtureClaim(), surfaceProfileFacts(typeAssertionRecords)),
+    [],
+  );
+});
+
+test('GAT07 surface-profile authority: re-hosting the sidebar declaration is red at an unchanged count', () => {
+  const F = SURFACE_PROFILE_FIXTURE;
+  // `SidebarSurfaceVisualConfig` is swapped for the forbidden
+  // `HeaderSurfacePresentationConfig`. The declaration count is still 3.
+  const records = withRecord(
+    surfaceProfileFixtureRecords(),
+    F.claimType,
+    `export interface SurfaceVisualOverrides { density?: string }
+export interface HeaderSurfaceVisualConfig { profileOverrides?: SurfaceVisualOverrides }
+export interface HeaderSurfacePresentationConfig { profileOverrides?: SurfaceVisualOverrides }`,
+  );
+  const census = surfaceProfileCensus(records);
+  assert.equal(census.declared, 3, 'the count alone cannot detect the re-hosting');
+  assert.equal(census.applied, 2);
+  const errors = evaluateClaimAuthority(surfaceProfileFixtureClaim(), surfaceProfileFacts(records));
+  assert.notEqual(errors.length, 0);
+  assert.ok(errors.some((error) => error.includes('HeaderSurfacePresentationConfig')));
+  assert.ok(errors.some((error) => error.includes('SidebarSurfaceVisualConfig')));
+});
+
+test('GAT07 surface-profile authority: moving a declaration between owners is red at an unchanged count', () => {
+  const F = SURFACE_PROFILE_FIXTURE;
+  // `SidebarSurfaceVisualConfig` moves from the structure contract to the
+  // surfaces contract. Still 3 declarations, still the same enclosing types.
+  const records = withRecord(
+    withRecord(
+      surfaceProfileFixtureRecords(),
+      F.claimType,
+      `export interface SurfaceVisualOverrides { density?: string }
+export interface HeaderSurfaceVisualConfig { profileOverrides?: SurfaceVisualOverrides }`,
+    ),
+    F.facade,
+    `import type { SurfaceVisualOverrides } from '../../../structures/foundation/chrome/contracts';
+export type { SurfaceVisualOverrides };
+export interface ListSurfaceVisualConfig { profileOverrides?: SurfaceVisualOverrides }
+export interface SidebarSurfaceVisualConfig { profileOverrides?: SurfaceVisualOverrides }`,
+  );
+  const census = surfaceProfileCensus(records);
+  assert.equal(census.declared, 3, 'the count alone cannot detect the move');
+  assert.equal(census.applied, 2);
+  assert.deepEqual(
+    census.records.map(({ enclosingType }) => enclosingType).sort(),
+    ['HeaderSurfaceVisualConfig', 'ListSurfaceVisualConfig', 'SidebarSurfaceVisualConfig'],
+  );
+  const errors = evaluateClaimAuthority(surfaceProfileFixtureClaim(), surfaceProfileFacts(records));
+  assert.notEqual(errors.length, 0);
+  assert.ok(errors.some((error) => error.includes('declarationOwners')));
+  assert.ok(errors.some((error) => error.includes('pinnedEnclosingTypes[SidebarSurfaceVisualConfig]')));
+});
+
+test('GAT07 surface-profile authority: the shipped claim floor mirrors the measured tree', () => {
+  const floor = JSON.parse(readFileSync(CLAIM_FLOOR, 'utf8'));
+  const claim = floor.claims.find(({ id }) => id === 'surface-profile-overrides');
+  assert.equal(claim.runtimeStatus, 'declared-32-applied-31');
+  assert.equal(claim.requiredAssertions.profileOverrideDeclarations, 32);
+  assert.equal(claim.requiredAssertions.staticallyResolvedSurfaceHookCalls, 31);
+  assert.equal(claim.requiredAssertions.staticallyResolvedSurfaceProfileApplications, 31);
+  assert.equal(claim.requiredAssertions.staticallyResolvedPotentialConsumers, 31);
+  assert.equal(claim.productionConsumers.length, 31);
+  // The authority block pins WHERE the 32 declarations live and keeps the
+  // sidebar's wire-or-remove decision registered as OPEN.
+  assert.deepEqual(claim.authority.declarationOwners, {
+    'src/ui/structures/foundation/chrome/contracts/index.ts': 2,
+    'src/ui/surfaces/foundation/contracts/index.ts': 30,
+  });
+  assert.equal(
+    Object.values(claim.authority.declarationOwners).reduce((total, count) => total + count, 0),
+    claim.requiredAssertions.profileOverrideDeclarations,
+  );
+  assert.deepEqual(claim.authority.absentEnclosingTypes, ['HeaderSurfacePresentationConfig']);
+  assert.deepEqual(claim.authority.pinnedEnclosingTypes.map(({ enclosingType }) => enclosingType), [
+    'SidebarSurfaceVisualConfig',
+    'HeaderSurfaceVisualConfig',
+  ]);
+  assert.deepEqual(claim.authority.declaredNotApplied, [
+    {
+      enclosingType: 'SidebarSurfaceVisualConfig',
+      path: 'src/ui/structures/foundation/chrome/contracts/index.ts',
+      wireOrRemove: 'OPEN',
+    },
+  ]);
+  assert.equal(
+    claim.requiredAssertions.profileOverrideDeclarations
+      - claim.requiredAssertions.staticallyResolvedSurfaceProfileApplications,
+    claim.authority.declaredNotApplied.length,
+  );
+  assert.deepEqual([...claim.productionConsumers].sort(), claim.productionConsumers);
+  assert.deepEqual([...new Set(claim.productionConsumers)], claim.productionConsumers);
+  assert.deepEqual(claim.definitionFiles, [
+    'src/ui/structures/foundation/chrome/contracts/index.ts',
+    'src/ui/structures/foundation/chrome/runtime/profile-defaults/overrides/index.ts',
+    'src/ui/surfaces/foundation/contracts/index.ts',
+    'src/ui/surfaces/index.ts',
+  ]);
+  // A phantom or dropped roster entry is rejected against the live tree.
+  for (const consumer of claim.productionConsumers) {
+    assert.ok(existsSync(join(HERE, '..', consumer)), `phantom claim-floor consumer: ${consumer}`);
   }
 });

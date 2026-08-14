@@ -22,7 +22,7 @@ const RUNTIME_DIMENSIONS = [
     label: 'Vertical',
     value: 'Frames product proof',
     detail:
-      'Platform, BitHire, and Evnto organize the same system around different workflows, demos, and route-level stories.',
+      'Rottay, BitHire, and Evnto organize the same system around different workflows, demos, and route-level stories.',
   },
 ] as const;
 

@@ -2,9 +2,21 @@
 
 Coordinator machinery for running many writer agents in parallel over one shared tree.
 
-`writeRoot` lives in `test-artifacts/quality-evidence/wo-cra-23/family-ledger.json` and, before this
-folder existed, appeared in **no executable anywhere in the repository**. "Provably disjoint lanes"
-was prose. These four commands make it a mechanism.
+"Provably disjoint lanes" was prose: before this folder existed, no executable anywhere in the
+repository read a `writeRoot`. These four commands make it a mechanism.
+
+**One authority.** Every family row — its id and the subtree it may write — is derived from
+`scripts/quality-evidence/programs/modern-rescue/family-inventory.json`, the same regenerated
+catalog the manifest, the denominator and the checkpoint figures come from. A family's `writeRoot`
+**is** its `sourceOwner`: exact, never separately declared, and therefore unable to drift away from
+where the family actually lives.
+
+`test-artifacts/quality-evidence/wo-cra-23/family-ledger.json` is a **sealed R0 receipt** and is an
+input to nothing here. It used to bound the lanes, which made history the active boundary: renaming
+a family in source left its lane bounded by the name it carried in a receipt nobody may edit, and
+the only way to correct a lane was to rewrite the archive. An archive that must be rewritten to stay
+true is not an archive. The separation is drilled, not merely stated — editing the inventory's
+`sourceOwner` moves the lane bound; editing the sealed receipt moves nothing.
 
 Everything here runs **without a build** — no `dist` import, no dependency, no install step. The build
 has been red for this programme's whole life; a check nobody can run while the build is red is not a
@@ -27,11 +39,11 @@ node packages/core/src/tooling/lane-control/public/write-set-intersection/index.
 
 | Rule | What it computes |
 |---|---|
+| `R0-lane-role` | the lane's shape against its role: a `family`/`domain` lane names a row and declares no `writeRoot`; an `integrator` declares its own root and only inside a shared region |
 | `R1-bound` | every declared pattern resolves inside its row's `writeRoot`, outside its `writeExcludes` |
 | `R2-collision` | pairwise intersection over files that **exist today** — computed, never asserted |
 | `R3-territory` | pairwise intersection over paths that **do not exist yet**, reported with a synthesised witness |
-| `R4-single-owner` | no lane silently covers a single-owner file; at most one lane may *claim* each per plan |
-| `R5-ledger-drift` | the ledger's `sharedSkinFiles` map agrees with the map re-derived from `rows[].skinFiles` |
+| `R4-single-owner` | no lane silently covers a single-owner file; a claim has to fall inside the claiming lane's own root; and **one integrator per shared domain**, not per file |
 
 **R2 is not enough on its own, and R3 is why.** Two lanes shaped `scripts/**/*-gate.mjs` and
 `scripts/**/build-*.mjs` share no file today — a file-level intersection calls them disjoint and is
@@ -82,13 +94,28 @@ node packages/core/src/tooling/lane-control/public/work-order/index.mjs \
 | `W5-commit-pathspec` | `.` or `-A`; a pathspec outside the write set; a pathspec **containing an excluded region**, because `git commit -- <path>` stages the working tree under that path |
 | `W6-findings-file` | a findings destination with no directory to land in |
 | `W7-bound` | a write set escaping its row — checked by the *same* machinery the plan checker uses |
+| `W8-lane-role` | a missing `laneRole`; a family or domain lane declaring its own `writeRoot`, or naming no row; an integrator naming a row, rooted outside every shared region, or claiming nothing |
+| `W9-shared-claim` | a claim that hits no single-owner file or falls outside the write set — and **silence**: a covered single-owner file the work order never claims |
 
 Length is checkable and meaning is not, so `W1` puts a floor on **distinct words**: `"Mechanical" +
 51 dots` clears the schema's `minLength` and says nothing.
 
-**Synthetic ledger rows** for the non-family waves live in `public/work-order/synthetic-rows.json`, in the
-same shape as a family row: `layer:base`, `tooling:gates`, `tooling:generator`, `contracts:registry`.
-Their derivable fields are `null` on purpose.
+**`laneRole` is required here even though a plan can infer one.** A plan is read by the coordinator,
+who can see the row a lane names; a work order is handed to an agent who will not be present for the
+inference. So the role is written down, and `W8` is computed from the work order alone — no
+inventory, no repository.
+
+That property is why removing `--skip-repo-checks` cost nothing. The flag existed so drills could
+exercise `W8`/`W9` without a real tree; it also let a work order naming a row that does not exist,
+writing outside every bound, exit `0` and be quoted as validated. A verdict reached without the
+catalog is not a verdict about a lane, so the public command now always loads the canonical context.
+The in-process API still accepts `skipRepoChecks` for drills, and what it returns is marked
+`certified: false` and printed as `NOT CERTIFIED (repo checks skipped)`.
+
+**Synthetic ownership rows** for the non-family waves live in `public/work-order/synthetic-rows.json`,
+in the same shape as a family row: `layer:base`, `tooling:gates`, `tooling:generator`,
+`contracts:registry`. They declare a `writeRoot` because they describe regions no family owns and
+there is nothing to derive one from. Their derivable fields are `null` on purpose.
 
 ### 4. `program-state` — the README checkpoint as command output
 
@@ -121,7 +148,7 @@ same reason. The cut is not "HEAD-sensitive": `universe.files` and `plan.covered
 a lane does its job, and pinning them puts the check back where it started one commit later.
 
 Removing them does not weaken the check — it is what lets the check be **read**. While the checkpoint was
-permanently red over HEAD drift, a real `ledger.families` disagreement was invisible underneath it.
+permanently red over HEAD drift, a real `inventory.families` disagreement was invisible underneath it.
 
 `P5` is gone as a violation. "Has HEAD moved?" was only ever a *proxy* for "is this document still
 true?", and `P7`/`P8` answer that directly by re-deriving every pinned fact and byte-comparing. The
@@ -147,7 +174,7 @@ which is the same disease.
 ## Drills
 
 ```bash
-node packages/core/src/tooling/lane-control/quality/runtime/drills/index.mjs
+node packages/core/src/tooling/lane-control/integration/tests/drills/index.mjs
 ```
 
 Every check ships a drill that shows it **failing on an injected violation**, plus a positive control
@@ -183,8 +210,10 @@ the text.
 }
 ```
 
-- `row` binds the lane to a ledger row (family or synthetic) and inherits its `writeRoot` /
-  `writeExcludes`. A lane may narrow with its own `writeSet`; it may not escape.
+- `row` binds the lane to an ownership row (family or synthetic) and inherits its `writeRoot` /
+  `writeExcludes`. For a family, both are derived: `writeRoot` is its `sourceOwner`, and
+  `writeExcludes` is every other family's `sourceOwner` nesting inside it, recomputed on each run.
+  A lane may narrow with its own `writeSet`; it may not escape.
 - A lane with **no row and no explicit `writeRoot` is refused**. An unbounded lane cannot be checked,
   and "the agent will be careful" is not a boundary.
 - `writeExcludes` naming a directory excludes a subtree; one carrying glob magic excludes a **shape**,
@@ -194,9 +223,29 @@ the text.
 
 ## Single-owner files
 
-Seeded by architecture (the default theme, the base CSS layer, the tenant capability registry, the
-TypeScript token sources) and derived by arithmetic (every skin file the ledger shows has more than
-one family owner). Silence is refusal: a write set that covers one of these fails. A lane that
-genuinely owns the file declares `claimsSharedFiles`, and then exactly one lane per plan may claim it
-— *single ownership, always*. Without the escape the base-layer lane could not run at all; without the
-check the rule would be prose again.
+Six regions, every one of them **architectural**: the default theme, the base CSS layer, the tenant
+capability registry, the TypeScript token sources, the component token layer with its skin sheets,
+and the modern engine skin. They are shared because of where they sit in the cascade — a property no
+census can strengthen or repeal.
+
+The predecessor derived a second, narrower half of this set by counting how many families the sealed
+ledger recorded per skin file and protecting the ones with more than one. That protected 36 files of
+the 283 in those directories, moved whenever the catalog was renamed, and made history an active
+input. The regions above cover all of them, permanently.
+
+Silence is refusal: a write set that covers one of these fails. A lane that genuinely owns the file
+declares `claimsSharedFiles`, the claim has to fall inside that lane's own root, and the singleton is
+enforced **per shared domain, not per file** — *single ownership, always*.
+
+**Why the domain and not the file.** Two integrator lanes holding two different skin sheets look
+disjoint to any per-file rule and are not two independent jobs: the shared CSS is one cascade, so two
+writers in it produce interleaved visual change that neither one can review. The three domains are
+`shared-css`, `tenant-contracts` and `token-sources`; each admits one integrator per plan, whichever
+sheet or source file it names.
+
+**A family lane cannot use that escape.** Its bound is its `sourceOwner`, no shared region lies
+inside one, and `R1-bound` refuses a write set reaching outside the bound before `R4` ever reads the
+claim, and `R0-lane-role` refuses the shape before either. Writing shared CSS has to be raised as its
+own **integrator** lane, rooted in one of those regions — and only one per domain per plan may hold
+it, computed rather than agreed. Without the escape the base-layer lane could not run at all; without
+the checks the rule would be prose again.

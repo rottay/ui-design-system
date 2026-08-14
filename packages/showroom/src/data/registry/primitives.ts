@@ -2,7 +2,18 @@
  * Primitives Registry
  *
  * Catalog of all primitive components in the design system.
- * Grouped by category: display, inputs, feedback, layout, navigation, overlay.
+ * Grouped by the six governed categories: display, inputs, feedback, layout,
+ * navigation, overlay.
+ *
+ * There is no seventh `foundation` category. Five substrate primitives used to
+ * be registered under that name -- the busy glyph Spinner wraps, the framed
+ * medallion every header and metric repeats, the screen-reader-only span, the
+ * scalar reading, the drag edge. They are public and real, but "foundation" is
+ * a dependency-role layer inside an owner, never a component category, so it
+ * could not name a family. Each is now filed by what it renders: IconFrame and
+ * Meter display, LoadingIndicator gives feedback, ResizeHandle and
+ * VisuallyHidden are layout. Their physical source still sits under
+ * `primitives/foundation/`, which stays legal as a support layer.
  */
 
 export type PrimitiveCategory =
@@ -36,18 +47,25 @@ const display: PrimitiveEntry[] = [
   { slug: 'callout', name: 'Callout', category: 'display', description: 'Highlighted block for tips, warnings, or important notes', engines: allEngines },
   { slug: 'card', name: 'Card', category: 'display', description: 'Contained surface for grouping related content', engines: allEngines },
   { slug: 'carousel', name: 'Carousel', category: 'display', description: 'Horizontally scrollable set of slides', engines: allEngines },
+  { slug: 'code-block', name: 'CodeBlock', category: 'display', description: 'Source-code display with language label and copy affordance', engines: allEngines },
+  { slug: 'crop-marks', name: 'CropMarks', category: 'display', description: 'Corner registration ticks that mark a framed zone the way a print crop mark marks a trim edge', engines: allEngines },
   { slug: 'descriptions', name: 'Descriptions', category: 'display', description: 'Key-value list for displaying metadata fields', engines: allEngines },
   { slug: 'empty', name: 'Empty', category: 'display', description: 'Placeholder shown when a container has no data', engines: allEngines },
+  { slug: 'icon-frame', name: 'IconFrame', category: 'display', description: 'Framed icon medallion repeated by headers, cards, rows, metrics, and states', engines: allEngines },
   { slug: 'image', name: 'Image', category: 'display', description: 'Responsive image with lazy loading and fallback', engines: allEngines },
   { slug: 'kbd', name: 'Kbd', category: 'display', description: 'Keyboard shortcut indicator', engines: allEngines },
   { slug: 'list', name: 'List', category: 'display', description: 'Ordered or unordered list with optional actions', engines: allEngines },
+  { slug: 'markdown-view', name: 'MarkdownView', category: 'display', description: 'Renders a bounded CommonMark subset without pulling a parser into the page', engines: allEngines },
+  { slug: 'meter', name: 'Meter', category: 'display', description: 'Scalar reading for score, capacity, health, or usage — not task progress, so it has no indeterminate state', engines: allEngines },
   { slug: 'qr-code', name: 'QRCode', category: 'display', description: 'QR code generator for URLs or text', engines: allEngines },
   { slug: 'statistic', name: 'Statistic', category: 'display', description: 'Large numeric value with label and optional trend', engines: allEngines },
   { slug: 'table', name: 'Table', category: 'display', description: 'Basic data table primitive with rows and columns', engines: allEngines },
   { slug: 'tag', name: 'Tag', category: 'display', description: 'Compact label for categorization or filtering', engines: allEngines },
+  { slug: 'texture-backdrop', name: 'TextureBackdrop', category: 'display', description: 'Whisper-contrast CSS texture painted behind content on an aria-hidden layer', engines: allEngines },
   { slug: 'timeline', name: 'Timeline', category: 'display', description: 'Vertical sequence of chronological events', engines: allEngines },
   { slug: 'tooltip', name: 'Tooltip', category: 'display', description: 'Contextual popup shown on hover or focus', engines: allEngines },
   { slug: 'tree', name: 'Tree', category: 'display', description: 'Hierarchical tree structure with expand/collapse', engines: allEngines },
+  { slug: 'typewriter', name: 'Typewriter', category: 'display', description: 'Character-by-character text reveal with a token-governed cadence', engines: allEngines },
   { slug: 'typography', name: 'Typography', category: 'display', description: 'Text rendering with heading, paragraph, and inline styles', engines: allEngines },
 ];
 
@@ -90,6 +108,7 @@ const inputs: PrimitiveEntry[] = [
 const feedback: PrimitiveEntry[] = [
   { slug: 'alert', name: 'Alert', category: 'feedback', description: 'Inline banner for contextual messages', engines: allEngines },
   { slug: 'drawer', name: 'Drawer', category: 'feedback', description: 'Sliding panel from screen edge', engines: allEngines },
+  { slug: 'loading-indicator', name: 'LoadingIndicator', category: 'feedback', description: 'Engine-neutral busy glyph substrate that Spinner and other busy postures render', engines: allEngines },
   { slug: 'message', name: 'Message', category: 'feedback', description: 'Lightweight top-level feedback message', engines: allEngines },
   { slug: 'modal', name: 'Modal', category: 'feedback', description: 'Centered dialog overlay with adaptive fullscreen', engines: allEngines },
   { slug: 'notification', name: 'Notification', category: 'feedback', description: 'Toast-style notification with title and content', engines: allEngines },
@@ -106,6 +125,7 @@ const feedback: PrimitiveEntry[] = [
 // ---------------------------------------------------------------------------
 
 const layout: PrimitiveEntry[] = [
+  { slug: 'ascii-frame', name: 'AsciiFrame', category: 'layout', description: 'Box-drawing corner-and-rule frame for cards, callouts, and section labels', engines: allEngines },
   { slug: 'aspect-ratio', name: 'AspectRatio', category: 'layout', description: 'Container that maintains a fixed aspect ratio', engines: allEngines },
   { slug: 'box', name: 'Box', category: 'layout', description: 'Generic layout box replacing raw div', engines: allEngines },
   { slug: 'collapse', name: 'Collapse', category: 'layout', description: 'Expandable/collapsible content panel', engines: allEngines },
@@ -114,13 +134,17 @@ const layout: PrimitiveEntry[] = [
   { slug: 'flex', name: 'Flex', category: 'layout', description: 'Flexbox layout container with gap and alignment', engines: allEngines },
   { slug: 'grid', name: 'Grid', category: 'layout', description: 'CSS grid layout container', engines: allEngines },
   { slug: 'hide', name: 'Hide', category: 'layout', description: 'Conditionally hide content at breakpoints', engines: allEngines },
+  { slug: 'invert-section', name: 'InvertSection', category: 'layout', description: 'Full-bleed inversion boundary so crossing from a light section into a dark one feels deliberate', engines: allEngines },
   { slug: 'layout', name: 'Layout', category: 'layout', description: 'Page-level layout with header, sider, content, footer', engines: allEngines },
+  { slug: 'resize-handle', name: 'ResizeHandle', category: 'layout', description: 'Drag-to-resize edge shared by splitter gutters and resizable widget borders', engines: allEngines },
   { slug: 'responsive-slot', name: 'ResponsiveSlot', category: 'layout', description: 'Slot that renders different content per breakpoint', engines: allEngines },
   { slug: 'scroll-area', name: 'ScrollArea', category: 'layout', description: 'Custom scrollbar container', engines: allEngines },
+  { slug: 'semantic-surface', name: 'SemanticSurface', category: 'layout', description: 'Renders one governed surface role, with all paint owned by tokens rather than the call site', engines: allEngines },
   { slug: 'show', name: 'Show', category: 'layout', description: 'Conditionally show content at breakpoints', engines: allEngines },
   { slug: 'space', name: 'Space', category: 'layout', description: 'Inline spacing between child elements', engines: allEngines },
   { slug: 'splitter', name: 'Splitter', category: 'layout', description: 'Resizable split pane container', engines: allEngines },
   { slug: 'stack', name: 'Stack', category: 'layout', description: 'Vertical or horizontal stack with consistent spacing', engines: allEngines },
+  { slug: 'visually-hidden', name: 'VisuallyHidden', category: 'layout', description: 'Screen-reader-only content that stays out of the visual layout', engines: allEngines },
 ];
 
 // ---------------------------------------------------------------------------
@@ -133,7 +157,10 @@ const navigation: PrimitiveEntry[] = [
   { slug: 'back-top', name: 'BackTop', category: 'navigation', description: 'Scroll-to-top floating button', engines: allEngines },
   { slug: 'breadcrumb', name: 'Breadcrumb', category: 'navigation', description: 'Hierarchical path navigation trail', engines: allEngines },
   { slug: 'float-button', name: 'FloatButton', category: 'navigation', description: 'Floating action button with optional expansion', engines: allEngines },
-  { slug: 'link', name: 'Link', category: 'navigation', description: 'Styled anchor with router integration', engines: allEngines },
+  // Published as `NavLink`, not `Link`: the root's `Link` is the Typography
+  // compound, which belongs to `primitive/display/typography`. The registry
+  // carries the exported name so a reader can paste it into an import.
+  { slug: 'link', name: 'NavLink', category: 'navigation', description: 'Styled anchor with router integration', engines: allEngines },
   { slug: 'menu', name: 'Menu', category: 'navigation', description: 'Vertical or horizontal navigation menu', engines: allEngines },
   { slug: 'pagination', name: 'Pagination', category: 'navigation', description: 'Page navigation with size options', engines: allEngines },
   { slug: 'segmented', name: 'Segmented', category: 'navigation', description: 'Segmented control for switching views', engines: allEngines },
@@ -152,7 +179,10 @@ const overlay: PrimitiveEntry[] = [
   { slug: 'context-menu', name: 'ContextMenu', category: 'overlay', description: 'Right-click context menu with actions', engines: allEngines },
   { slug: 'dropdown', name: 'Dropdown', category: 'overlay', description: 'Trigger-based dropdown menu', engines: allEngines },
   { slug: 'hover-card', name: 'HoverCard', category: 'overlay', description: 'Rich content preview on hover', engines: allEngines },
-  { slug: 'overlay-modal', name: 'Modal', category: 'overlay', description: 'Overlay-tier modal with portal rendering', engines: allEngines },
+  // No `overlay-modal` row: it listed the SAME component as `feedback/modal`
+  // under a second slug, because the DS used to publish an `OverlayModal` alias
+  // over a folder of re-export shims. The alias is retired; Modal is documented
+  // once, in feedback.
   { slug: 'popconfirm', name: 'Popconfirm', category: 'overlay', description: 'Inline confirmation popover before action', engines: allEngines },
   { slug: 'popover', name: 'Popover', category: 'overlay', description: 'Floating content panel anchored to a trigger', engines: allEngines },
   { slug: 'sheet', name: 'Sheet', category: 'overlay', description: 'Bottom sheet overlay for mobile interactions', engines: allEngines },

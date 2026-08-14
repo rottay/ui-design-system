@@ -91,7 +91,7 @@ export interface SavedViewsMenuProps {
    * outside (typically a keyboard shortcut handler in the workspace
    * orchestrator). Defaults to
    * `entity-table-workspace:toggle-views-menu` for backwards-compat with
-   * the original app-platform extraction.
+   * the original Rottay-app extraction.
    */
   externalToggleEventName?: string;
 }

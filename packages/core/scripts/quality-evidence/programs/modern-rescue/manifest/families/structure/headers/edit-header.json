@@ -9,14 +9,14 @@
       "EditHeader"
     ],
     "sourceRoot": "packages/core/src/ui/structures",
-    "sourceOwner": "packages/core/src/ui/structures/headers",
+    "sourceOwner": "packages/core/src/ui/structures/headers/edit",
     "publicComponents": [
       "EditHeader"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "bae11083e0a1b3832a0b9088ad75c756207f971425f7ae1e91f81c8fede20170"
+    "inventoryRowDigest": "66216a0e7277388aa3ff3e681aec66e40be5387d8130821dedddd8462e8cdd9a"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

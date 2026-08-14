@@ -25,9 +25,12 @@ import { compileBrandTheme } from '@/infrastructure/compilers/kernel/runtime/bra
 import { DesignSystemProvider } from '@/infrastructure/runtime/bootstrap/facade/react/provider';
 import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
 import type {
+  TenantThemeArtifact,
   TenantThemeConfigIdentity,
   TenantThemeDocument,
 } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
+import { getKnownTenantConfig } from '@/infrastructure/runtime/tenant/foundation/configuration/registry';
+import { emitTenantThemeArtifactForSsr } from '@/infrastructure/runtime/theming/foundation/visual-authority';
 import {
   compileTenantThemeConfig,
   getTenantThemeVerticalEnvelope,
@@ -97,21 +100,55 @@ function tenantConfig(overrides: Partial<TenantConfig>): TenantConfig {
   };
 }
 
-afterEach(cleanup);
+const mountedArtifacts: HTMLStyleElement[] = [];
+
+/**
+ * Mount what a real request ships. The rendered leg below hands the provider a
+ * compiled artifact, and the authority barrier only admits an artifact whose
+ * exact bytes are present in the document — so the test has to put them there
+ * the same way SSR does, through the runtime's own emitter.
+ */
+function mountArtifact(artifact: TenantThemeArtifact): void {
+  const { attributes, css } = emitTenantThemeArtifactForSsr(artifact, {
+    slug: artifact.slug,
+    verticalKey: artifact.verticalKey,
+  });
+  const style = document.createElement('style');
+  for (const [name, value] of Object.entries(attributes)) {
+    style.setAttribute(name, value);
+  }
+  style.textContent = css;
+  document.head.appendChild(style);
+  mountedArtifacts.push(style);
+}
+
+afterEach(() => {
+  cleanup();
+  while (mountedArtifacts.length > 0) mountedArtifacts.pop()?.remove();
+});
 
 describe('C1b expressive envelope — two-system acid test', () => {
   it('renders the SAME public icon with different weights under the two real artifacts', async () => {
-    // The Management: the compiled DB artifact's OWN normalized appearance
-    // feeds the production provider — document → validator → compiler →
-    // artifact → provider → RSC-safe seam → rendered component. No manual
+    // The Management: the compiled DB artifact feeds the production provider —
+    // document → validator → compiler → artifact → mounted bytes → declared
+    // authority → provider → RSC-safe seam → rendered component. No manual
     // resolver call anywhere.
+    //
+    // WHAT CHANGED AND WHY. This leg used to copy `normalizedAppearance` onto
+    // the tenant config and mount nothing. That is a raw runtime visual payload
+    // with no artifact behind it: the barrier now reads it as a second painter
+    // and the provider renders nothing at all. The artifact is declared and
+    // mounted instead, which is both what production does and the only shape
+    // that can carry the posture through.
     const managementArtifact = compileManagementArtifact();
+    mountArtifact(managementArtifact);
     const tmm = render(
       <DesignSystemProvider
         tenantConfig={tenantConfig({
           slug: 'the-management',
-          appearance: managementArtifact.normalizedAppearance as TenantConfig['appearance'],
+          vertical: 'bithire',
         })}
+        visualAuthority={{ authority: 'compiled-artifact', artifact: managementArtifact }}
         skipCssLoading
       >
         <NavigationSettingsIcon decorative data-testid="acid-icon" />
@@ -124,16 +161,20 @@ describe('C1b expressive envelope — two-system acid test', () => {
     });
     tmm.unmount();
 
-    // BitHire static: same tree, same component, only the tenant config
-    // changes — the icon must come back to the baseline navigation weight.
+    // BitHire static: same tree, same component, only the tenant changes — the
+    // icon must come back to the baseline navigation weight.
+    //
+    // The registry object itself, not a copy carrying `brandTheme`. Code-owned
+    // trust is by IDENTITY, so a hand-built config with a reserved slug is
+    // deliberately untrusted and its `brandTheme` would be censused as raw
+    // payload. The governed icon posture reaches the seam through
+    // `getCodeOwnedGovernedBehavior`, which is exactly the production path.
+    const bithireConfig = getKnownTenantConfig('bithire');
+    if (!bithireConfig) throw new Error('Missing bundled BitHire tenant');
+    expect(bithireConfig.brandTheme).toBe(bithireBrandTheme);
+
     const bithire = render(
-      <DesignSystemProvider
-        tenantConfig={tenantConfig({
-          slug: 'bithire',
-          brandTheme: bithireBrandTheme,
-        })}
-        skipCssLoading
-      >
+      <DesignSystemProvider tenantConfig={bithireConfig} skipCssLoading>
         <NavigationSettingsIcon decorative data-testid="acid-icon" />
       </DesignSystemProvider>
     );

@@ -20,12 +20,12 @@ import { Box, Stack } from '../../../../../primitives';
 import { FadeIn } from '@/graphics/motion';
 import type { EmptyStateSurfaceConfig } from '../../../../foundation/contracts';
 import { filterSurfaceActions, resolveSurfaceAction } from '../../../../runtime/helpers';
-import { PageShellSurface } from '../../../../composition/layout/page-shell';
-import { SurfaceActionBar } from '../../../../runtime/helpers/rendering';
-import { SurfaceEmptyState } from '../../../../runtime/helpers/states';
-import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
-import { resolveStackSpacing } from '../../../../runtime/profile-defaults/personality';
-import { useSurfaceResponsiveLayout } from '../../../../runtime/responsive';
+import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
+import { SurfaceActionBar } from '../../../../../structures/shell/surface-chrome';
+import { SurfaceEmptyState } from '../../../../../structures/feedback/surface-lifecycle';
+import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
+import { resolveStackSpacing } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
+import { useSurfaceResponsiveLayout } from '../../../../../structures/foundation/chrome/runtime/responsive';
 
 export interface EmptyStateSurfaceProps {
   config: EmptyStateSurfaceConfig;

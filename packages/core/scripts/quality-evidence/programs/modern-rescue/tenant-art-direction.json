@@ -155,7 +155,7 @@
       "tenantId": "themanagement-db",
       "productName": "The Management",
       "sourceAuthority": "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts",
-      "currentContradictionReference": "packages/core/src/foundation/tokens/ts/presentation/brand-themes/fixtures/themanagementmiami/index.ts",
+      "currentContradictionReference": "packages/core/src/tooling/testing/fixtures/brand-themes/themanagementmiami/index.ts",
       "directionName": "Monochrome Executive Ledger",
       "currentPaletteIsTarget": false,
       "paletteRebuildLaw": "Replace teal, sandstone, terracotta and soft SaaS paint with paper or near-white grounds, near-black ink, deliberate grayscale hierarchy, ruled separation and accessible semantic exceptions. The result must be independently desirable, not a degraded BitHire.",

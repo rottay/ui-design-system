@@ -3,7 +3,7 @@
  * -----------------------------------
  * Showroom-owned copy of the hostile-tenant whitelabel proof fixtures.
  *
- * Source: packages/core/src/foundation/tokens/ts/presentation/brand-themes/fixtures/torture/index.ts
+ * Source: packages/core/src/tooling/testing/fixtures/brand-themes/torture/index.ts
  * Reason: commit 5d2157a8 drained these fixtures from the @rottay/design-system
  *         public barrel — tenant-named proof fixtures are not public DS API.
  *         The showroom is their sole consumer, so it now owns the copy.
@@ -48,14 +48,43 @@ export const tortureDarkBrandTheme: BrandTheme = {
   id: 'torture-dark',
   name: 'Torture Dark',
 
+  // This fixture's resting paint IS dark: torture-dark is never in
+  // LIGHT_FORCED_FIXTURES, so surfaceGroundFor always settles it on the dark
+  // ground. Dark is therefore the declared default mode, and its values live
+  // in the plain palette channels below -- there is no `dark`-prefixed twin.
+  //
+  // The old shape was incoherent with itself: the OKLCH ramp derived from the
+  // dark seed #FF00AA on ground #050307 while the flat --ds-color-primary
+  // literal shipped the light seed #CC0088 -- two different primaries reading
+  // as one channel. A dark-canvas fixture now has exactly one palette for one
+  // mode, so --ds-color-primary moves from #CC0088 to #FF00AA under this
+  // fixture's resting (dark) paint. That is the coherence fix, not a
+  // regression -- any probe baseline captured against the old value must move.
+  appearance: { defaultMode: 'dark' },
+
+  // The seeds this fixture never paints under its own default ground, kept as
+  // the non-default mode overlay so it still declares both modes (a probe can
+  // reach this block by forcing ground='light' through TortureSurface's
+  // `ground` prop). backgroundColor is authored explicitly here (torture-light's
+  // own light ground) rather than left to fall through to the DS default, so a
+  // forced-light capture of this fixture still reads a deliberate hostile
+  // ground instead of an accidental one.
+  modes: {
+    light: {
+      palette: {
+        primaryColor: '#CC0088',
+        secondaryColor: '#557700',
+        accentColor: '#B37700',
+        backgroundColor: '#FDFDFF',
+      },
+    },
+  },
+
   palette: {
-    primaryColor: '#CC0088',
-    secondaryColor: '#557700',
-    accentColor: '#B37700',
-    darkPrimaryColor: '#FF00AA',
-    darkSecondaryColor: '#B6FF00',
-    darkAccentColor: '#FFB300',
-    darkBackgroundColor: '#050307',
+    primaryColor: '#FF00AA',
+    secondaryColor: '#B6FF00',
+    accentColor: '#FFB300',
+    backgroundColor: '#050307',
     successColor: '#00FFC2',
     warningColor: '#FF7A00',
     errorColor: '#FF0055',
@@ -368,18 +397,31 @@ export const tortureLightBrandTheme: BrandTheme = {
   id: 'torture-light',
   name: 'Torture Light',
 
+  // torture-light is one of LIGHT_FORCED_FIXTURES, so surfaceGroundFor always
+  // settles it on the light ground: light is the declared default mode.
+  appearance: { defaultMode: 'light' },
+
+  // A hostile dark-mode overlay so the fixture declares BOTH modes and the
+  // probe list stays fully covered. torture-light's resting ground is light,
+  // so this block only paints when a probe forces ground='dark' through
+  // TortureSurface's `ground` prop -- it exists to be declared and reachable,
+  // not to be the resting paint.
+  modes: {
+    dark: {
+      palette: {
+        primaryColor: '#9B33FF',
+        secondaryColor: '#FF7A33',
+        accentColor: '#33CCBD',
+        backgroundColor: '#12001F',
+      },
+    },
+  },
+
   palette: {
     primaryColor: '#7A00FF',
     secondaryColor: '#FF5A00',
     accentColor: '#00B3A4',
-    darkPrimaryColor: '#9B33FF',
-    darkSecondaryColor: '#FF7A33',
-    darkAccentColor: '#33CCBD',
     backgroundColor: '#FDFDFF',
-    // A hostile dark ground so the fixture declares BOTH grounds and the probe
-    // list stays fully covered. torture-light is rendered in clear mode, so this
-    // value is never painted -- it exists to be declared.
-    darkBackgroundColor: '#12001F',
     successColor: '#00B37A',
     warningColor: '#E6B800',
     errorColor: '#E60039',

@@ -6,17 +6,17 @@
     "category": "feedback",
     "name": "EmptyState",
     "components": [
-      "EmptyState"
+      "PatternEmptyState"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
     "sourceOwner": "packages/core/src/ui/patterns/feedback/empty-state",
-    "publicComponents": [],
-    "unresolvedPublicComponents": [
-      "EmptyState"
+    "publicComponents": [
+      "PatternEmptyState"
     ],
+    "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "05a58b071c7ebb0e98594b953b9513f29219dafcf0f7c7f468c16c3560801d96"
+    "inventoryRowDigest": "78ef01ce8a886843b92d19657fdcefcee99538f629dcab8b3317c78ecfcd2682"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

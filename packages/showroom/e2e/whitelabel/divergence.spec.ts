@@ -10,12 +10,12 @@ import {
   DIVERGENCE_SOBER_DOCUMENT,
   DIVERGENCE_SOBER_EXPECTED_ANATOMY,
   DIVERGENCE_SOBER_IDENTITY,
-} from '../../../core/src/foundation/tokens/ts/presentation/brand-themes/fixtures/divergence-sober';
+} from '../../../core/src/tooling/testing/fixtures/brand-themes/divergence-sober';
 import {
   DIVERGENCE_EDITORIAL_DOCUMENT,
   DIVERGENCE_EDITORIAL_EXPECTED_ANATOMY,
   DIVERGENCE_EDITORIAL_IDENTITY,
-} from '../../../core/src/foundation/tokens/ts/presentation/brand-themes/fixtures/divergence-editorial';
+} from '../../../core/src/tooling/testing/fixtures/brand-themes/divergence-editorial';
 
 // ---------------------------------------------------------------------------
 // W4 divergence demo — the wave exit certification (design w4-whitelabel

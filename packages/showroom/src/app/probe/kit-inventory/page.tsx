@@ -1,43 +1,50 @@
 /**
  * TEMPORARY kit-inventory probe for WO-SHW-01 sighted capture.
  *
- * Renders every component of `@rottay/design-system/commercial` on both an ink (dark) and a
- * paper (light) surface so a single capture proves the monochrome kit under both surface
- * treatments, plus a ProductWindow demonstrating the sanctioned color pass-through. Not a
- * product surface — the showroom relaunch (WO-SHW-02+) builds the real commercial chrome.
+ * Renders every component of the monochrome cohort on both an ink (dark) and a paper (light)
+ * surface so a single capture proves the kit under both surface treatments, plus a
+ * ProductWindow demonstrating the sanctioned color pass-through. Not a product surface — the
+ * showroom relaunch (WO-SHW-02+) builds the real commercial chrome.
+ *
+ * No private kit stylesheet is imported. The ten DS owners of this cohort were reclassified by
+ * role, so their skins — and the `ds-mono-surface` foundation below — ship through the
+ * package's normal `styles.css`, which the root layout already loads. ProductWindow is
+ * showroom-local (the sanctioned color exception is a marketing-surface concern) and imports
+ * its own CSS.
  */
-import "@rottay/design-system/commercial.css";
 
 import {
   AsciiFrame,
   SectionFrame,
   Typewriter,
   TerminalBlock,
-  TreeView,
+  TreeViewConnector,
   CropMarks,
   InvertSection,
   TextureBackdrop,
   MonoStat,
   AsciiDiagram,
-  ProductWindow,
-} from "@rottay/design-system/commercial";
+  type TreeViewConnectorNode,
+} from "@rottay/design-system";
+
+import { ProductWindow } from "@/components/product-window";
 
 const DIAGRAM_NODES = [
-  { id: "platform", label: "PLATFORM", col: 1, row: 0, emphasis: true },
+  { id: "rottay", label: "ROTTAY", col: 1, row: 0, emphasis: true },
   { id: "bithire", label: "BITHIRE", col: 0, row: 1 },
   { id: "evnto", label: "EVNTO", col: 2, row: 1 },
   { id: "ds", label: "DESIGN SYSTEM", col: 1, row: 2 },
 ];
 const DIAGRAM_EDGES = [
-  { from: "platform", to: "bithire" },
-  { from: "platform", to: "evnto" },
-  { from: "platform", to: "ds" },
+  { from: "rottay", to: "bithire" },
+  { from: "rottay", to: "evnto" },
+  { from: "rottay", to: "ds" },
 ];
 
-const TREE = {
+const TREE: TreeViewConnectorNode = {
   label: "rottay/",
   children: [
-    { label: "platform/" },
+    { label: "rottay/" },
     { label: "verticals/", children: [{ label: "bithire/" }, { label: "evnto/" }] },
     { label: "design-system/" },
   ],
@@ -56,19 +63,25 @@ function Inventory(): React.JSX.Element {
         </div>
       </SectionFrame>
 
-      <SectionFrame index={2} title="ASCII devices" meta="AsciiDiagram / TreeView / TerminalBlock">
+      <SectionFrame
+        index={2}
+        title="ASCII devices"
+        meta="AsciiDiagram / TreeViewConnector / TerminalBlock"
+      >
         <AsciiDiagram
           nodes={DIAGRAM_NODES}
           edges={DIAGRAM_EDGES}
-          description="The Rottay platform connects to the BitHire and Evnto verticals and the design system."
+          description="Rottay connects the BitHire and Evnto verticals through the design system."
         />
         <div style={{ display: "grid", gap: "1.5rem", gridTemplateColumns: "1fr 1fr", marginTop: "1.5rem" }}>
-          <TreeView data={TREE} />
+          <TreeViewConnector aria-label="Rottay repository structure" data={TREE} />
           <TerminalBlock
             title="build"
             lines={[
               { prompt: true, text: "pnpm --filter @rottay/design-system build" },
-              { text: "commercial.js  commercial.cjs  commercial.d.ts" },
+              /* The kit's own `commercial.js / commercial.cjs / commercial.d.ts` used to be
+                 printed here. That subpath is gone: the cohort ships from the root barrel. */
+              { text: "index.js  index.cjs  index.d.ts  styles.css" },
               { text: "done in 2.4s" },
             ]}
           />
@@ -102,7 +115,7 @@ function Inventory(): React.JSX.Element {
 
 export default function KitInventoryPage(): React.JSX.Element {
   return (
-    <main className="ds-commercial">
+    <main className="ds-mono-surface">
       <InvertSection surface="ink">
         <Inventory />
       </InvertSection>

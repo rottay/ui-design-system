@@ -18,7 +18,8 @@
  * frame, header rule, bell well, badge position, view-all pill, item padding,
  * icon well, time dot, scroll region) moved here; the panel block size rides
  * the private dashboard seam `--_ds-dashboard-panel-block-size`; its fallback
- * follows the governed rhythm dial from the shipped 415px measure. The transition literals drained onto
+ * is the shipped 415px measure byte-exact and reads no rhythm channel — rhythm
+ * owns the room around content, never a panel's capacity. The transition literals drained onto
  * `--ds-motion-*` channels with the exact replaced values as fallbacks. The
  * timestamp is a real `<time>` element now (its micro typography lives here).
  * The inert item's misleading `cursor: pointer` was dropped — no click
@@ -33,7 +34,7 @@
 .ds-activity-cards.ds-activity-cards[data-part='root'] {
   display: flex;
   flex-direction: column;
-  block-size: var(--_ds-dashboard-panel-block-size, calc(415px * var(--ds-rhythm-effective-scale, 1)));
+  block-size: var(--_ds-dashboard-panel-block-size, 415px);
   padding: 16px;
   position: relative;
   overflow: hidden;

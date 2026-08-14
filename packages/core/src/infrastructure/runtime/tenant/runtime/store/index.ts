@@ -4,9 +4,9 @@
  * static, remote, and cached sources.
  *
  * Resolution priority:
- * 1. Memory cache
- * 2. localStorage cache
- * 3. Known tenants registry (built-in configs)
+ * 1. Code-owned first-party registry
+ * 2. Memory cache
+ * 3. localStorage cache
  * 4. Static files
  * 5. Remote API
  * 6. Identity-safe generic config for the requested slug
@@ -17,10 +17,19 @@
  */
 
 import type { TenantConfig } from '../../../../../foundation/contracts';
+import {
+  ReservedTenantIdentityError,
+  assertTenantIdentityAllowed,
+  getFirstPartyIdentity,
+} from '@/foundation/tokens/ts/presentation/brand-themes';
 import { loadStaticTenantConfig } from './static/loader';
 import { fetchRemoteTenantConfig } from './remote';
 import { getUnresolvedTenantConfig } from '../../foundation/configuration/defaults';
 import { getKnownTenantConfig } from '../../foundation/configuration/registry';
+import {
+  assertLowerKebabTenantSlug,
+  isValidTenantConfig,
+} from '../../foundation/validation';
 
 export { loadStaticTenantConfig } from './static/loader';
 export { fetchRemoteTenantConfig, configureTenantApi } from './remote';
@@ -39,6 +48,31 @@ const cache = new Map<string, TenantConfig>();
 // WHY a prefixed key: multiple Rottay apps may coexist on the same origin
 // (e.g., Storybook and the platform app), so we namespace to avoid collisions.
 const STORAGE_KEY = 'rottay-ds-tenant-cache';
+const CACHE_TTL_MS = 60 * 60 * 1000;
+
+function cloneAndFreezeTenantValue<T>(value: T): T {
+  if (value === null || typeof value !== 'object') return value;
+  if (Array.isArray(value)) {
+    return Object.freeze(value.map((item) => cloneAndFreezeTenantValue(item))) as T;
+  }
+  const clone = Object.fromEntries(
+    Object.entries(value as Record<string, unknown>).map(([key, nested]) => [
+      key,
+      cloneAndFreezeTenantValue(nested),
+    ]),
+  );
+  return Object.freeze(clone) as T;
+}
+
+function immutableCustomerConfig(config: unknown, slug: string): TenantConfig {
+  if (
+    !isValidTenantConfig(config)
+    || config.slug !== slug
+  ) {
+    throw new TypeError(`[design-system] Invalid tenant config for: ${slug}`);
+  }
+  return cloneAndFreezeTenantValue(config);
+}
 
 /**
  * Reads a cached tenant config from localStorage.
@@ -54,22 +88,30 @@ function getFromLocalStorage(slug: string): TenantConfig | null {
     if (!stored) return null;
 
     const { config, timestamp } = JSON.parse(stored);
+    const now = Date.now();
 
-    // Cache expires after 1 hour
-    if (Date.now() - timestamp > 60 * 60 * 1000) {
+    // A cache timestamp is untrusted input: NaN-like values and future dates
+    // must not turn an attacker-controlled record into a non-expiring entry.
+    if (
+      typeof timestamp !== 'number'
+      || !Number.isFinite(timestamp)
+      || timestamp > now
+      || now - timestamp > CACHE_TTL_MS
+    ) {
       localStorage.removeItem(`${STORAGE_KEY}-${slug}`);
       return null;
     }
 
     if (
       typeof config?.slug !== 'string'
-      || config.slug.trim().toLowerCase() !== slug
+      || config.slug !== slug
+      || !isValidTenantConfig(config)
     ) {
       localStorage.removeItem(`${STORAGE_KEY}-${slug}`);
       return null;
     }
 
-    return config;
+    return immutableCustomerConfig(config, slug);
   } catch {
     return null;
   }
@@ -98,9 +140,9 @@ function saveToLocalStorage(slug: string, config: TenantConfig): void {
  * Resolves a tenant configuration using the runtime fallback chain.
  *
  * Priority:
- * 1. Memory cache (instant, populated by prior calls)
- * 2. localStorage cache (fast, survives page reloads, 1-hour TTL)
- * 3. Known registry (bundled first-party tenants -- zero network)
+ * 1. Code-owned first-party registry (before any mutable cache)
+ * 2. Memory cache (instant, populated by prior customer calls)
+ * 3. localStorage cache (fast, survives page reloads, 1-hour TTL)
  * 4. Static files (`/.designsystem/tenants/<slug>/config.json`)
  * 5. Remote API (platform-managed tenants in the database)
  * 6. Identity-safe generic config for the requested slug
@@ -113,52 +155,61 @@ function saveToLocalStorage(slug: string, config: TenantConfig): void {
  * @returns A guaranteed-valid TenantConfig. Never aliases another tenant.
  */
 export async function getTenantConfig(slug: string): Promise<TenantConfig> {
-  const normalizedSlug = slug.trim().toLowerCase() || 'default';
-
-  // 1. Check memory cache
-  if (cache.has(normalizedSlug)) {
-    return cache.get(normalizedSlug)!;
+  const firstPartyIdentity = getFirstPartyIdentity(slug);
+  if (firstPartyIdentity) {
+    const staticConfig = getKnownTenantConfig(firstPartyIdentity.slug);
+    if (!staticConfig) {
+      throw new Error(`Missing code-owned tenant config for ${firstPartyIdentity.slug}`);
+    }
+    return staticConfig;
   }
 
-  // 2. Check localStorage cache
+  assertTenantIdentityAllowed({ slug });
+  assertLowerKebabTenantSlug(slug);
+  const normalizedSlug = slug;
+
+  // 2. Check memory cache
+  const cached = cache.get(normalizedSlug);
+  if (cached) {
+    if (isValidTenantConfig(cached) && cached.slug === normalizedSlug) return cached;
+    cache.delete(normalizedSlug);
+  }
+
+  // 3. Check localStorage cache
   const fromStorage = getFromLocalStorage(normalizedSlug);
   if (fromStorage) {
     cache.set(normalizedSlug, fromStorage);
     return fromStorage;
   }
 
-  // 3. Built-in registry is the fast path for first-party/demo tenants that ship
-  // with the DS bundle.
-  const knownConfig = getKnownTenantConfig(normalizedSlug);
-  if (knownConfig) {
-    cache.set(normalizedSlug, knownConfig);
-    return knownConfig;
-  }
-
   // 4. Static files are useful for deployments that publish tenant payloads as
   // versioned assets instead of serving them from an API.
   try {
     const config = await loadStaticTenantConfig(normalizedSlug);
-    if (config.slug.trim().toLowerCase() !== normalizedSlug) {
+    if (config.slug !== normalizedSlug) {
       throw new Error('Static tenant payload identity mismatch');
     }
-    cache.set(normalizedSlug, config);
-    saveToLocalStorage(normalizedSlug, config);
-    return config;
-  } catch {
+    const immutableConfig = immutableCustomerConfig(config, normalizedSlug);
+    cache.set(normalizedSlug, immutableConfig);
+    saveToLocalStorage(normalizedSlug, immutableConfig);
+    return immutableConfig;
+  } catch (error) {
+    if (error instanceof ReservedTenantIdentityError) throw error;
     // Static file not found, continue
   }
 
   // 5. Remote API is the canonical path for platform-managed tenants.
   try {
     const config = await fetchRemoteTenantConfig(normalizedSlug);
-    if (config.slug.trim().toLowerCase() !== normalizedSlug) {
+    if (config.slug !== normalizedSlug) {
       throw new Error('Remote tenant payload identity mismatch');
     }
-    cache.set(normalizedSlug, config);
-    saveToLocalStorage(normalizedSlug, config);
-    return config;
-  } catch {
+    const immutableConfig = immutableCustomerConfig(config, normalizedSlug);
+    cache.set(normalizedSlug, immutableConfig);
+    saveToLocalStorage(normalizedSlug, immutableConfig);
+    return immutableConfig;
+  } catch (error) {
+    if (error instanceof ReservedTenantIdentityError) throw error;
     // API failed, continue
   }
 

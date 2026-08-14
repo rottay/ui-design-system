@@ -245,11 +245,24 @@ describe("Grid advanced engine coverage", () => {
       justifySelf: "end",
     });
 
-    expect(screen.getByTestId("modern-template-grid").style.gap).toBe("0");
-    expect(screen.getByTestId("modern-template-grid")).toHaveStyle({
+    // AGED_EXPECTATION (WO-CRA-23 spacing.rhythm, lane C3): `gap="none"` is
+    // fully overridden here by BOTH axis props, and an inline `gap` shorthand
+    // would outrank the stylesheet rule that now owns the preset column axis --
+    // so the uniform zero is no longer declared at all, and the `xl` rung rides
+    // the private seam plus its stamp. Same resolved rung, same geometry.
+    // `rowGap={14}` is the counterfactual control: a measurement still resolves
+    // inline and must never acquire a stamp.
+    const templateGrid = screen.getByTestId("modern-template-grid");
+    expect(templateGrid.style.gap).toBe("");
+    expect(templateGrid).toHaveAttribute("data-column-gap-preset", "xl");
+    expect(templateGrid.style.getPropertyValue("--_ds-grid-column-gap")).toBe(
+      "var(--ds-spacing-8, 2rem)"
+    );
+    expect(templateGrid.style.columnGap).toBe("");
+    expect(templateGrid).not.toHaveAttribute("data-row-gap-preset");
+    expect(templateGrid).toHaveStyle({
       gridTemplateColumns: "240px 1fr",
       gridTemplateRows: "auto 1fr",
-      columnGap: "var(--ds-spacing-8, 2rem)",
       rowGap: "14px",
     });
     expect(

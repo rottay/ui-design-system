@@ -1,69 +1,108 @@
 /**
  * preview-css unit tests -- scoping and sanitization contract (audit CMP-02).
  *
- * The generator emits rules against html[data-tenant='<slug>'], which is the
- * document-root attribute owned by TenantProvider. buildPreviewCss must
- * re-anchor every rule to the preview scope attribute and neutralize hostile
- * slugs, names, and values before the CSS reaches a <style> tag.
+ * There are two canonical compilers, and buildPreviewCss must re-anchor
+ * either one's output to the preview scope: compileBrandTheme emits rules
+ * against html[data-tenant='<slug>'] (brandTenantSelector), the document-root
+ * attribute owned by TenantProvider; compileTenantThemeConfig emits rules
+ * against its own artifact's `scopes.combinedSelector`. Both are dead inside
+ * the preview container (a div, not the document root) and dangerous if the
+ * previewed slug equals the active tenant, so every rule from either producer
+ * is re-anchored here onto the preview scope attribute, and every line is
+ * whitelist-filtered so hostile config values, names, or slugs cannot escape
+ * the injected <style> tag's scope.
+ *
+ * "Either one's output" is now load-bearing. The brand-theme arm runs the
+ * compiler itself; the tenant-theme arm is handed an artifact and verifies it,
+ * so an object that merely satisfies `TenantThemeArtifact` structurally is
+ * refused rather than sanitized. The suites below are split accordingly:
+ * hostile-input neutralization is proven where a real producer can actually
+ * emit the hostile text (the brand-theme arm), and the tenant-theme arm proves
+ * refusal of everything a forged artifact could carry.
  */
 
 import { describe, it, expect } from 'vitest';
-import { buildPreviewCss } from '..';
+import { buildPreviewCss, draftBrandTheme } from '..';
 import {
   PREVIEW_SCOPE_ATTRIBUTE,
   buildPreviewScopeSelector,
+  sanitizePreviewSlug,
 } from '../../../../../../../infrastructure/runtime/tenant/runtime/preview-scope';
+import { compileBrandTheme } from '../../../../../../../infrastructure/compilers/kernel/runtime/brand-theme';
 import {
-  createTenantConfig,
-  type TenantCreationConfig,
-} from '../../../../../../../infrastructure/runtime/tenant/runtime/authoring/configuration';
-import { generateTenantCss } from '../../../../../../../infrastructure/runtime/tenant';
-import type { TenantConfig } from '../../../../../../../foundation/contracts';
+  compileTenantThemeConfig,
+  getTenantThemeVerticalEnvelope,
+  hydrateTenantThemeConfig,
+} from '../../../../../../../infrastructure/compilers/composition/tenant-theme';
+import { createTenantConfig } from '../../../../../../../infrastructure/runtime/tenant/runtime/authoring/configuration';
+import type { BrandTheme } from '../../../../../../../foundation/contracts/composition/tenants/themes';
+import type { TenantConfig } from '../../../../../../../foundation/contracts/composition/tenants';
+import type {
+  TenantThemeArtifact,
+  TenantThemeDocument,
+} from '../../../../../../../foundation/contracts/composition/tenants/themes/tenant-theme';
 
-const sampleCreation: TenantCreationConfig = {
+/** Minimal valid TenantConfig, overridable per test. */
+function baseTenantConfig(overrides: Partial<TenantConfig> = {}): TenantConfig {
+  return {
+    slug: 'acme',
+    name: 'Acme Corp',
+    theme: 'base',
+    plan: 'starter',
+    features: [],
+    branding: { companyName: 'Acme Corp' },
+    ...overrides,
+  };
+}
+
+const sampleDraft = {
   slug: 'acme',
   name: 'ACME Corp',
   primaryColor: '#3B82F6',
   secondaryColor: '#10B981',
-  personality: 'formal',
 };
 
-describe('buildPreviewCss scoping', () => {
+describe('buildPreviewCss scoping (brand-theme source)', () => {
   it('re-anchors every rule to the preview scope selector and keeps all generated declarations', () => {
-    const presets = ['formal', 'neutral', 'playful', 'expressive'] as const;
-    const densities = ['compact', 'comfortable', 'spacious'] as const;
+    const drafts = [
+      sampleDraft,
+      { slug: 'bravo', name: 'Bravo Inc', primaryColor: '#EF4444' },
+      { slug: 'charlie-co', name: 'Charlie Co', primaryColor: '#111827', secondaryColor: '#F59E0B' },
+    ];
 
-    for (const personality of presets) {
-      for (const density of densities) {
-        const config = createTenantConfig({ ...sampleCreation, personality, density });
-        const raw = generateTenantCss(config, {
-          includeDarkSelector: false,
-          includeSystemDarkSelector: false,
-        });
-        const rawDeclarationCount = raw
-          .split('\n')
-          .filter((line) => /^ {2}\S.*;$/.test(line)).length;
+    for (const draft of drafts) {
+      const brandTheme = draftBrandTheme(draft);
+      const safeSlug = sanitizePreviewSlug(draft.slug);
+      // Same call `resolveCompiledOutput` makes internally, so this is a
+      // faithful "raw" baseline rather than a second interpretation of it.
+      const raw = compileBrandTheme({ brandTheme, tenantSlug: safeSlug }).cssString;
+      const rawDeclarationCount = raw
+        .split('\n')
+        .filter((line) => /^ {2}\S.*;$/.test(line)).length;
 
-        const { css, safeSlug, scopeSelector } = buildPreviewCss(config);
-        const keptDeclarationCount = css
-          .split('\n')
-          .filter((line) => /^ {2}\S.*;$/.test(line)).length;
+      const { css, safeSlug: outSlug, scopeSelector } = buildPreviewCss({
+        kind: 'brand-theme',
+        slug: draft.slug,
+        brandTheme,
+      });
+      const keptDeclarationCount = css
+        .split('\n')
+        .filter((line) => /^ {2}\S.*;$/.test(line)).length;
 
-        expect(safeSlug).toBe('acme');
-        expect(scopeSelector).toBe(buildPreviewScopeSelector('acme'));
-        // Sanitization must be lossless on legitimate generator output.
-        expect(keptDeclarationCount).toBe(rawDeclarationCount);
-        expect(keptDeclarationCount).toBeGreaterThan(0);
-        const firstRule = css.split('\n').find((line) => line.endsWith('{'));
-        expect(firstRule?.startsWith(scopeSelector)).toBe(true);
-        expect(css).not.toContain('html[data-tenant');
-      }
+      expect(outSlug).toBe(safeSlug);
+      expect(scopeSelector).toBe(buildPreviewScopeSelector(safeSlug));
+      // Sanitization must be lossless on legitimate compiler output.
+      expect(keptDeclarationCount).toBe(rawDeclarationCount);
+      expect(keptDeclarationCount).toBeGreaterThan(0);
+      const firstRule = css.split('\n').find((line) => line.endsWith('{'));
+      expect(firstRule?.startsWith(scopeSelector)).toBe(true);
+      expect(css).not.toContain('html[data-tenant');
     }
   });
 
   it('emits no html[data-tenant] rule even when previewing the active tenant slug', () => {
-    const config = createTenantConfig({ ...sampleCreation, slug: 'bithire' });
-    const { css, scopeSelector } = buildPreviewCss(config);
+    const brandTheme = draftBrandTheme({ ...sampleDraft, slug: 'bithire' });
+    const { css, scopeSelector } = buildPreviewCss({ kind: 'brand-theme', slug: 'bithire', brandTheme });
 
     expect(css).not.toContain('html');
     expect(css).toContain('--ds-color-primary');
@@ -73,18 +112,14 @@ describe('buildPreviewCss scoping', () => {
   });
 });
 
-describe('buildPreviewCss hostile input neutralization', () => {
+describe('buildPreviewCss hostile input neutralization (brand-theme source)', () => {
   it('drops declarations whose value could close the block and restyle the document', () => {
-    const config = createTenantConfig(sampleCreation);
-    const hostile: TenantConfig = {
-      ...config,
-      tokenOverrides: {
-        ...config.tokenOverrides,
-        shadows: { md: 'red;} html{background:black}' },
-      } as TenantConfig['tokenOverrides'],
+    const brandTheme: BrandTheme = {
+      ...draftBrandTheme(sampleDraft),
+      surfaces: { shadows: { md: 'red;} html{background:black}' } },
     };
 
-    const { css } = buildPreviewCss(hostile);
+    const { css } = buildPreviewCss({ kind: 'brand-theme', slug: sampleDraft.slug, brandTheme });
     expect(css).not.toContain('background:black');
     expect(css).not.toContain('html');
     expect(css).not.toContain('--ds-shadow-md');
@@ -92,16 +127,12 @@ describe('buildPreviewCss hostile input neutralization', () => {
   });
 
   it('contains multi-line hostile values inside the scoped block', () => {
-    const config = createTenantConfig(sampleCreation);
-    const hostile: TenantConfig = {
-      ...config,
-      tokenOverrides: {
-        ...config.tokenOverrides,
-        borderRadius: { md: 'red;\n} zz9{--pwn9:1}\n' },
-      } as TenantConfig['tokenOverrides'],
+    const brandTheme: BrandTheme = {
+      ...draftBrandTheme(sampleDraft),
+      surfaces: { borderRadius: { md: 'red;\n} zz9{--pwn9:1}\n' } },
     };
 
-    const { css, scopeSelector } = buildPreviewCss(hostile);
+    const { css, scopeSelector } = buildPreviewCss({ kind: 'brand-theme', slug: sampleDraft.slug, brandTheme });
     expect(css).not.toContain('zz9');
     expect(css).not.toContain('--pwn9');
     for (const line of css.split('\n').filter((l) => l.endsWith('{'))) {
@@ -109,30 +140,439 @@ describe('buildPreviewCss hostile input neutralization', () => {
     }
   });
 
-  it('never lets a hostile slug break out of the scope selector', () => {
-    const config = createTenantConfig({
-      ...sampleCreation,
-      slug: "x'] , * { --pwn9: 1 } [q9='",
+  it('rejects a selector-open line that does not start with the compiled base selector', () => {
+    // The rescope pass's REJECTION branch (`rescopeSelectorLine` returning
+    // null), reached through a real compiler.
+    //
+    // This case used to live in the tenant-theme arm below, where hostile CSS
+    // text could simply be handed in on a hand-built artifact. That arm now
+    // verifies its input, so no unverifiable text reaches the state machine
+    // through it -- and the branch would have gone untested if the coverage
+    // had moved out with the fixtures. A multi-line brand value is the honest
+    // way in: the emitted declaration is split across lines, one of which
+    // closes the block early and the next of which opens a rule the base
+    // selector does not own.
+    const brandTheme: BrandTheme = {
+      ...draftBrandTheme(sampleDraft),
+      surfaces: { shadows: { md: 'red;\n}\nzz9, * {\n  --pwn9: 1;\n' } },
+    };
+    const safeSlug = sanitizePreviewSlug(sampleDraft.slug);
+    const raw = compileBrandTheme({ brandTheme, tenantSlug: safeSlug }).cssString;
+    // Guard: the drill proves nothing unless the escape actually reaches the
+    // rescope pass. If the compiler ever starts dropping the value upstream,
+    // this fails loudly instead of passing for the wrong reason.
+    expect(raw).toContain('zz9, * {');
+
+    const { css, scopeSelector } = buildPreviewCss({
+      kind: 'brand-theme',
+      slug: sampleDraft.slug,
+      brandTheme,
     });
 
-    const { css, safeSlug, scopeSelector } = buildPreviewCss(config);
-    expect(safeSlug).toMatch(/^[a-z0-9-]+$/);
-    expect(scopeSelector).toBe(`[${PREVIEW_SCOPE_ATTRIBUTE}='${safeSlug}']`);
-    expect(css).not.toContain('*');
-    expect(css).not.toContain('--pwn9:');
-    expect(css).not.toContain('html[data-tenant');
+    expect(css).not.toContain('zz9');
+    expect(css).not.toContain('--pwn9');
     for (const line of css.split('\n').filter((l) => l.endsWith('{'))) {
       expect(line.startsWith(scopeSelector)).toBe(true);
     }
   });
 
-  it('drops the display-name comment so a hostile name cannot open a comment breakout', () => {
+  it('never lets a hostile slug reach the selector', () => {
+    // The defense moved earlier in the pipeline: `resolveCompiledOutput`
+    // compiles with the SANITIZED slug (`sanitizePreviewSlug` runs before
+    // `compileBrandTheme`), so a hostile slug never reaches the compiler and
+    // therefore never reaches the CSS text at all -- the rescope pass below
+    // has nothing to reject here because there is nothing hostile left to
+    // reject. The `x'] , * { --pwn9: 1 } [q9='`-shaped attack this used to
+    // exercise via the rescope rejection is covered by the case directly
+    // above, which crafts a selector the base selector does not own and
+    // proves the rescope pass still rejects it.
+    const hostileSlug = "x'] , * { --pwn9: 1 } [q9='";
+    const brandTheme = draftBrandTheme({ ...sampleDraft, slug: hostileSlug });
+    const { css, safeSlug, scopeSelector } = buildPreviewCss({
+      kind: 'brand-theme',
+      slug: hostileSlug,
+      brandTheme,
+    });
+
+    expect(safeSlug).toMatch(/^[a-z0-9-]+$/);
+    expect(scopeSelector).toBe(`[${PREVIEW_SCOPE_ATTRIBUTE}='${safeSlug}']`);
+    expect(css).not.toContain('--pwn9:');
+    expect(css).not.toContain('html[data-tenant');
+    // Every selector-open line starts with the scope selector -- proof no
+    // wildcard/attribute-escaping rule survived. A bare `.not.toContain('*')`
+    // would also flag compileBrandTheme's own legitimate
+    // `calc(var(--x) * var(--y))` multiplication, which has nothing to do
+    // with the injection vector this test targets.
+    for (const line of css.split('\n').filter((l) => l.endsWith('{'))) {
+      expect(line.startsWith(scopeSelector)).toBe(true);
+    }
+  });
+});
+
+describe('buildPreviewCss scoping (tenant-theme source)', () => {
+  /**
+   * A type-only forgery: an object literal that satisfies `TenantThemeArtifact`
+   * structurally and controls exactly the two fields `resolveCompiledOutput`
+   * reads. It was this suite's main fixture, which is precisely what made the
+   * old contract dishonest -- it let a module whose whole premise is "show
+   * what a compiler actually produces" publish CSS no compiler produced.
+   * It survives only as the subject of the refusal drills below.
+   */
+  function stubArtifact(fields: { combinedSelector: string; css: string; slug?: string }): TenantThemeArtifact {
+    return {
+      slug: fields.slug ?? 'acme',
+      scopes: { combinedSelector: fields.combinedSelector },
+      css: fields.css,
+    } as unknown as TenantThemeArtifact;
+  }
+
+  /** The genuine article: compiled, and therefore verifiable. */
+  function compiledArtifact(): TenantThemeArtifact {
+    const document_ = {
+      schemaVersion: 1,
+      mode: 'advanced',
+      visualFoundation: {
+        general: { palette: { primary: '#2F6B9A', backgroundMode: 'dark' } },
+      },
+    } as TenantThemeDocument;
+    return compileTenantThemeConfig(
+      hydrateTenantThemeConfig(document_, {
+        tenantId: 'tenant_acme',
+        slug: 'acme',
+        verticalKey: 'bithire',
+        rowVersion: 1,
+      }),
+      { verticalEnvelope: getTenantThemeVerticalEnvelope('bithire') },
+    );
+  }
+
+  it('re-anchors a real compiled artifact to the preview scope, losslessly', () => {
+    const artifact = compiledArtifact();
+    const rawDeclarationCount = artifact.css
+      .split('\n')
+      .filter((line) => /^ {2}\S.*;$/.test(line)).length;
+
+    const { css, scopeSelector } = buildPreviewCss({ kind: 'tenant-theme', artifact });
+    const keptDeclarationCount = css
+      .split('\n')
+      .filter((line) => /^ {2}\S.*;$/.test(line)).length;
+
+    expect(keptDeclarationCount).toBe(rawDeclarationCount);
+    expect(keptDeclarationCount).toBeGreaterThan(0);
+    const firstRule = css.split('\n').find((line) => line.endsWith('{'));
+    expect(firstRule?.startsWith(scopeSelector)).toBe(true);
+    expect(css).not.toContain(artifact.scopes.combinedSelector);
+    // The artifact's own provenance comment is a comment line, not a
+    // recognized selector/declaration/closer, so the whitelist state machine
+    // drops it same as any other comment -- proven against real shipped
+    // bytes rather than assumed.
+    expect(artifact.css).toContain('/*');
+    expect(css).not.toContain('/*');
+    expect(css).not.toContain('TenantThemeArtifact');
+  });
+
+  it('DRILL: refuses hostile CSS text presented as a compiled artifact', () => {
+    // These three payloads are verbatim the ones this suite used to FILTER.
+    // Filtering them was the wrong verb: it treated attacker-authored CSS as
+    // a legitimate producer's output that merely needed cleaning, and shipped
+    // whatever survived the whitelist under the tenant's own slug. None of
+    // them was ever compiled, so the honest answer to all three is refusal.
+    //
+    // The whitelist still runs -- on real compiled output, above and in the
+    // brand-theme suite -- so nothing is weakened by moving these cases from
+    // "sanitized" to "rejected". What changes is that a forged artifact can
+    // no longer produce a preview at all, whether or not its payload would
+    // have survived the filter.
+    const artifact = compiledArtifact();
+    const combined = artifact.scopes.combinedSelector;
+    const forgeries: ReadonlyArray<{ name: string; css: string }> = [
+      {
+        name: 'selector escape',
+        css: [
+          `${combined} {`,
+          '  --ds-color-primary: #3B82F6;',
+          '}',
+          '',
+          `${combined}, * {`,
+          '  --pwn9: 1;',
+          '}',
+        ].join('\n'),
+      },
+      {
+        name: 'block-closing declaration value',
+        css: [
+          `${combined} {`,
+          '  --ds-color-primary: #3B82F6;',
+          '  --ds-shadow-md: red;} html{background:black};',
+          '}',
+        ].join('\n'),
+      },
+      {
+        name: 'hostile comment breakout',
+        css: [
+          '/* Tenant: Evil */ zz9{--pwn9:1} /* */',
+          `${combined} {`,
+          '  --ds-color-primary: #3B82F6;',
+          '}',
+        ].join('\n'),
+      },
+    ];
+
+    for (const forgery of forgeries) {
+      // Named, so a future change that refuses for an unrelated reason cannot
+      // keep this drill green: the CSS bytes must be what is caught.
+      expect(
+        () => buildPreviewCss({ kind: 'tenant-theme', artifact: { ...artifact, css: forgery.css } }),
+        forgery.name,
+      ).toThrow(/is not the deterministic v1 rendering/);
+    }
+  });
+
+  it('DRILL: refuses an artifact whose declared scope does not recompute from its identity', () => {
+    // The other field `resolveCompiledOutput` reads. Widening the selector is
+    // the interesting forgery: every rule would still start with the declared
+    // base selector, so the rescope pass would pass it through and re-anchor
+    // a `, *` rule onto the preview scope. Verification catches it a step
+    // earlier, on the ground that the compiler never emits that selector for
+    // this identity.
+    const artifact = compiledArtifact();
+    expect(() =>
+      buildPreviewCss({
+        kind: 'tenant-theme',
+        artifact: {
+          ...artifact,
+          scopes: {
+            ...artifact.scopes,
+            combinedSelector: `${artifact.scopes.combinedSelector}, *`,
+          },
+        },
+      }),
+    ).toThrow(/scopes do not recompute/);
+  });
+
+  it('DRILL: refuses an object that merely satisfies the artifact type', () => {
+    // `TenantThemeArtifact` is structural, so this literal type-checks. That
+    // is exactly why the type is not the guarantee, and why the arm verifies.
+    const combinedSelector = "[data-ds-root][data-vertical=\"bithire\"][data-tenant][data-tenant=\"acme\"]";
+    const artifact = stubArtifact({
+      combinedSelector,
+      css: `${combinedSelector} {\n  --ds-color-primary: #3B82F6;\n}`,
+    });
+
+    expect(() => buildPreviewCss({ kind: 'tenant-theme', artifact })).toThrow(TypeError);
+  });
+});
+
+describe('buildPreviewCss resolving a TenantConfig directly (CMP-02 restoration)', () => {
+  // These exercise the engines' real call shape: `buildPreviewCss(tenantConfig)`
+  // with a `TenantConfig` -- not a pre-resolved `PreviewSource` -- so the
+  // internal resolution in `resolvePreviewInput`/`liftTenantConfigToBrandTheme`
+  // is what's under test here, per axis, with real differing output (not
+  // `css.length > 0`).
+
+  it('palette: emitted custom-property values differ when branding.primaryColor differs', () => {
+    const blue = createTenantConfig({ slug: 'acme', name: 'Acme', primaryColor: '#3B82F6' });
+    const red = createTenantConfig({ slug: 'acme', name: 'Acme', primaryColor: '#EF4444' });
+
+    const cssBlue = buildPreviewCss(blue).css;
+    const cssRed = buildPreviewCss(red).css;
+
+    expect(cssBlue).toContain('--ds-color-primary: #3B82F6;');
+    expect(cssRed).toContain('--ds-color-primary: #EF4444;');
+    expect(cssBlue).not.toBe(cssRed);
+  });
+
+  it('personality preset: emitted output differs across presets via --ds-motion-calm', () => {
+    // `personality.animation.entranceDuration` differs per preset (formal
+    // 160, neutral 220, expressive 300, playful 400 -- see foundation
+    // personality presets) and is lifted onto `BrandMotion.entranceDuration`,
+    // which `compileBrandTheme`'s `setMotionVariables` feeds directly (no
+    // clamping) into `--ds-motion-calm: <ms>ms`. This is real, observed
+    // compiler behavior, not an assumption -- verified against
+    // `infrastructure/compilers/kernel/runtime/brand-theme`'s source.
+    //
+    // `--ds-motion-intensity` was tried first and rejected: it IS lifted from
+    // `personality.animation.intensity` and DOES feed a real CSS variable,
+    // but `MOTION_DIAL_BOUNDS.intensity` clamps to `[0, 1]`, and playful's
+    // 1.2 and expressive's 1.0 both saturate to the same clamped `1` --
+    // collapsing two of the four presets onto identical output for that one
+    // property. `entranceDuration` has no such clamp and is pairwise unique
+    // across all four presets, so it is the honest choice for a per-preset
+    // matrix rather than a coincidentally-passing one.
+    const presets = ['formal', 'neutral', 'playful', 'expressive'] as const;
+    const calmLine = (css: string) =>
+      css.split('\n').find((line) => line.trim().startsWith('--ds-motion-calm:'));
+
+    const lines = presets.map((personality) => {
+      const config = createTenantConfig({
+        slug: 'acme',
+        name: 'Acme',
+        primaryColor: '#3B82F6',
+        personality,
+      });
+      const { css } = buildPreviewCss(config);
+      const line = calmLine(css);
+      expect(line).toBeDefined();
+      return line;
+    });
+
+    // Every preset must be pairwise distinguishable -- not just "some pair differs".
+    expect(new Set(lines).size).toBe(presets.length);
+  });
+
+  it('density: emitted --ds-density-scale differs between compact and spacious', () => {
+    const compact = createTenantConfig({
+      slug: 'acme',
+      name: 'Acme',
+      primaryColor: '#3B82F6',
+      density: 'compact',
+    });
+    const spacious = createTenantConfig({
+      slug: 'acme',
+      name: 'Acme',
+      primaryColor: '#3B82F6',
+      density: 'spacious',
+    });
+
+    const cssCompact = buildPreviewCss(compact).css;
+    const cssSpacious = buildPreviewCss(spacious).css;
+
+    expect(cssCompact).toContain('--ds-density-scale: 0.95;');
+    expect(cssSpacious).toContain('--ds-density-scale: 1.1;');
+  });
+
+  it('dark/modes: branding dark-mode seeds emit a scoped, independent dark selector block', () => {
+    const config = baseTenantConfig({
+      branding: {
+        companyName: 'Acme Corp',
+        primaryColor: '#3B82F6',
+        darkPrimaryColor: '#60A5FA',
+      },
+    });
+
+    const { css, scopeSelector, unsupportedAxes } = buildPreviewCss(config);
+
+    const darkLine = css.split('\n').find((line) => line.includes("[data-theme='dark']"));
+    expect(darkLine).toBeDefined();
+    expect(darkLine).toContain(scopeSelector);
+    expect(css).toContain('--ds-color-primary: #60A5FA;');
+    expect(unsupportedAxes).not.toContain('modes.dark');
+
+    // The base (light) block is still scoped correctly alongside the dark one.
+    for (const line of css.split('\n').filter((l) => l.endsWith('{'))) {
+      expect(line.startsWith(scopeSelector)).toBe(true);
+    }
+  });
+
+  it('dark/modes: no dark branding seeds -> no dark selector block is emitted', () => {
+    const config = createTenantConfig({ slug: 'acme', name: 'Acme', primaryColor: '#3B82F6' });
+    const { css } = buildPreviewCss(config);
+
+    expect(css).not.toContain("data-theme='dark'");
+    expect(css).not.toContain('prefers-color-scheme');
+  });
+
+  it('an explicit config.brandTheme is passed through in FULL, ignoring legacy branding/personality/tokenOverrides', () => {
+    const brandTheme: BrandTheme = {
+      id: 'acme',
+      name: 'Acme Corp',
+      palette: { primaryColor: '#111827', secondaryColor: '#F59E0B' },
+    };
+    const config = baseTenantConfig({
+      brandTheme,
+      // Legacy fields present alongside brandTheme; per TenantConfig's own
+      // doc comment these are superseded and must not leak into the output.
+      branding: { companyName: 'Acme Corp', primaryColor: '#3B82F6' },
+      personality: { animation: { intensity: 1.5 } },
+    });
+
+    const direct = buildPreviewCss({ kind: 'brand-theme', slug: config.slug, brandTheme });
+    const viaConfig = buildPreviewCss(config);
+
+    expect(viaConfig.css).toBe(direct.css);
+    expect(viaConfig.unsupportedAxes).toEqual([]);
+    expect(viaConfig.css).toContain('#111827');
+    expect(viaConfig.css).not.toContain('#3B82F6');
+  });
+
+  it('neither a brandTheme nor a branding.primaryColor: returns the typed empty/unsupported result instead of inventing a preview', () => {
+    const config = baseTenantConfig({ branding: { companyName: 'Acme Corp' } });
+
+    const result = buildPreviewCss(config);
+
+    expect(result.css).toBe('');
+    expect(result.unsupportedAxes).toContain('palette');
+    expect(result.safeSlug).toBe(sanitizePreviewSlug(config.slug));
+    expect(result.scopeSelector).toBe(buildPreviewScopeSelector(result.safeSlug));
+  });
+
+  it('personality.chart/card/accent are preserved on the lift but reported as unsupported, since the compiler never renders them', () => {
+    const config = baseTenantConfig({
+      branding: { companyName: 'Acme Corp', primaryColor: '#3B82F6' },
+      personality: {
+        chart: {
+          animateOnMount: true,
+          mountDuration: 300,
+          lineStyle: 'smooth',
+          showDots: true,
+          useGradientFill: false,
+          tooltipStyle: 'minimal',
+        },
+        card: {
+          defaultElevation: 'lg',
+          hoverElevation: 'lift-one',
+          showBorder: true,
+          hoverTint: false,
+          paddingDensity: 'compact',
+        },
+        accent: {
+          barPosition: 'top',
+          barThickness: 2,
+          barStyle: 'solid',
+          iconContainerShape: 'circle',
+          badgeShape: 'pill',
+          dividerStyle: 'dashed',
+        },
+      },
+    });
+
+    const { unsupportedAxes } = buildPreviewCss(config);
+
+    expect(unsupportedAxes).toEqual(
+      expect.arrayContaining(['personality.chart', 'personality.card', 'personality.accent'])
+    );
+  });
+
+  it('never lets a hostile slug reach the selector, via the TenantConfig arm', () => {
+    const hostileSlug = "x'] , * { --pwn9: 1 } [q9='";
+    const config = createTenantConfig({ slug: hostileSlug, name: 'Acme', primaryColor: '#3B82F6' });
+
+    const { css, safeSlug, scopeSelector } = buildPreviewCss(config);
+
+    expect(safeSlug).toMatch(/^[a-z0-9-]+$/);
+    expect(scopeSelector).toBe(`[${PREVIEW_SCOPE_ATTRIBUTE}='${safeSlug}']`);
+    expect(css).not.toContain('--pwn9:');
+    for (const line of css.split('\n').filter((l) => l.endsWith('{'))) {
+      expect(line.startsWith(scopeSelector)).toBe(true);
+    }
+  });
+
+  it('drops the display-name comment so a hostile name cannot open a comment breakout, via the TenantConfig arm', () => {
+    // Faithful restoration of the HEAD test of the same name, adapted to the
+    // new call shape (`buildPreviewCss(tenantConfig)` still works exactly as
+    // before). It holds for a stronger reason than at HEAD: `compileBrandTheme`
+    // never writes `bt.name` into `cssString` at all (verified against the
+    // compiler source), so there is no comment-emitting code path left to
+    // exploit in the first place -- the assertions below guard against that
+    // regressing back in.
     const config = createTenantConfig({
-      ...sampleCreation,
+      slug: 'acme',
       name: 'Evil */ zz9{--pwn9:1} /*',
+      primaryColor: '#3B82F6',
     });
 
     const { css } = buildPreviewCss(config);
+
     expect(css).not.toContain('Evil');
     expect(css).not.toContain('--pwn9');
     expect(css).not.toContain('/*');

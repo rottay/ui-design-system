@@ -9,7 +9,7 @@ import type {
 
 type UnknownRecord = Record<string, unknown>;
 
-const GRAMMAR_IDS = new Set(['neutral', 'bithire', 'platform', 'evnto']);
+const GRAMMAR_IDS = new Set(['neutral', 'bithire', 'rottay', 'evnto']);
 const POSTURES = new Set([
   'neutral',
   'evidence-led',
@@ -117,15 +117,15 @@ function isChartGrammarChannels(value: unknown): value is ChartGrammarChannels {
   ])) return false;
 
   return typeof value.categorical === 'string'
-    && /^chart\.palette\.categorical\.(neutral|bithire|platform|evnto)$/.test(
+    && /^chart\.palette\.categorical\.(neutral|bithire|rottay|evnto)$/.test(
       value.categorical,
     )
     && typeof value.sequential === 'string'
-    && /^chart\.palette\.sequential\.(neutral|bithire|platform|evnto)$/.test(
+    && /^chart\.palette\.sequential\.(neutral|bithire|rottay|evnto)$/.test(
       value.sequential,
     )
     && typeof value.diverging === 'string'
-    && /^chart\.palette\.diverging\.(neutral|bithire|platform|evnto)$/.test(
+    && /^chart\.palette\.diverging\.(neutral|bithire|rottay|evnto)$/.test(
       value.diverging,
     )
     && value.status === 'chart.palette.status.semantic';

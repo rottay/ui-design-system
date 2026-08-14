@@ -7,7 +7,7 @@
       "0": "Absent, unusable or contradicted by evidence.",
       "1": "Damaging, incoherent or structurally broken.",
       "2": "Partial, fragile, generic or ordinary.",
-      "3": "Competent commercial baseline but not premium.",
+      "3": "Competent market-standard baseline but not premium.",
       "4": "Premium and coherent across all declared stresses.",
       "5": "Reference-grade, distinctive, causal and resilient."
     }
@@ -65,8 +65,7 @@
         "pattern": 5,
         "chart": 5,
         "structure": 6,
-        "surface-composition": 7,
-        "commercial": 5
+        "surface": 7
       },
       "scoreIncreaseWithoutObservableDeltaAllowed": false,
       "testsDocsCommentsGeneratedOutputAwardCraft": false
@@ -230,8 +229,7 @@
     "pattern": 92,
     "chart": 92,
     "structure": 93,
-    "surface-composition": 94,
-    "commercial": 92,
+    "surface": 94,
     "reference-canary": 95
   },
   "binaryContracts": [
@@ -261,7 +259,7 @@
     "visual-craft-contract-mechanical-floors",
     "codex-calibration-and-cohort-checkpoints",
     "semantic-role-icon-facade-without-compatibility-placeholders",
-    "r7-252-family-anatomy-disposition-complete",
+    "r7-255-family-anatomy-disposition-complete",
     "r7-reference-parity-without-copy",
     "r7-fourteen-recipe-groups-productive",
     "r7-zero-dormant-public-customization-channels",
@@ -372,6 +370,6 @@
     "interactive-control-layout": 3,
     "pattern-chart": 4,
     "structure": 5,
-    "surface-composition-canary": 6
+    "surface-canary": 6
   }
 }

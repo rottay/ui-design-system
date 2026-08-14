@@ -12,13 +12,27 @@ const BITHIRE_DUAL = `:is(${BITHIRE_LEGACY}, ${BITHIRE_ROOT})`;
 
 describe('first-party static dual-scope projection', () => {
   it('declares the explicit vertical identity for every first-party artifact', () => {
-    expect(
-      FIRST_PARTY_ARTIFACT_SPECS.map(({ slug, verticalKey }) => [slug, verticalKey]),
-    ).toEqual([
-      ['bithire', 'bithire'],
-      ['evnto', 'evnto'],
-      ['rottay', 'platform'],
-    ]);
+    // This used to restate the table as three literal pairs, one of which was
+    // ['rottay', 'platform'] — so the test did not merely tolerate the slug/
+    // verticalKey inversion, it PINNED it, and any attempt to fix the specs
+    // failed here and looked like a regression.
+    //
+    // A restated table is a second authority wearing a test's clothes. What
+    // actually matters is the invariant: a first-party artifact's vertical
+    // identity IS its slug. Asserting that leaves the roster the only place
+    // the three names are enumerated.
+    expect(FIRST_PARTY_ARTIFACT_SPECS.length).toBeGreaterThan(0);
+    for (const { slug, verticalKey } of FIRST_PARTY_ARTIFACT_SPECS) {
+      expect(verticalKey).toBe(slug);
+    }
+    // `platform` is retired from `FirstPartyVerticalId`, so a per-row
+    // `verticalKey === 'platform'` comparison is now statically impossible and
+    // the checker rejects it. The negative law still has to hold at runtime, so
+    // assert it over the collected keys instead of per row.
+    const verticalKeys: readonly string[] = FIRST_PARTY_ARTIFACT_SPECS.map(
+      ({ verticalKey }) => verticalKey,
+    );
+    expect(verticalKeys).not.toContain('platform');
   });
 
   it('projects dark, class, pseudo, combinator, comma, and nested-at-rule variants', () => {

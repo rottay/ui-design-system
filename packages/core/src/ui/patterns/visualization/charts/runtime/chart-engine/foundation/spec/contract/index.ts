@@ -6,7 +6,7 @@
  * selects one of the closed presentation grammars below.
  */
 
-export type ChartGrammarId = 'neutral' | 'bithire' | 'platform' | 'evnto';
+export type ChartGrammarId = 'neutral' | 'bithire' | 'rottay' | 'evnto';
 
 export type ChartCategoricalPaletteReference =
   `chart.palette.categorical.${ChartGrammarId}`;

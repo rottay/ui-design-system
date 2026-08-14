@@ -2,7 +2,7 @@ import React from "react";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
-import postcss, { type AtRule, type Rule } from "postcss";
+import postcss, { type AtRule, type Document, type Root, type Rule } from "postcss";
 import { describe, expect, it } from "vitest";
 import { fireEvent, waitFor } from "@testing-library/react";
 
@@ -19,17 +19,20 @@ interface SkinRule {
   decls: Record<string, string>;
 }
 
+/** Exactly the node types that can sit above a rule. Closed under `.parent`,
+    and every member carries a literal `type`, so `'atrule'` narrows here. */
+type SkinAncestor = AtRule | Document | Root | Rule | undefined;
+
 function readRules(): SkinRule[] {
   const css = readFileSync(resolve(process.cwd(), SKIN), "utf8");
   const out: SkinRule[] = [];
   postcss.parse(css).walkRules((rule: Rule) => {
     const conditions: string[] = [];
     let inKeyframes = false;
-    for (let node = rule.parent; node; node = node.parent) {
-      if ((node as AtRule).type === "atrule") {
-        const at = node as AtRule;
-        if (at.name === "keyframes") inKeyframes = true;
-        conditions.push(`@${at.name} ${at.params}`);
+    for (let node: SkinAncestor = rule.parent; node !== undefined; node = node.parent) {
+      if (node.type === "atrule") {
+        if (node.name === "keyframes") inKeyframes = true;
+        conditions.push(`@${node.name} ${node.params}`);
       }
     }
     if (inKeyframes) return;

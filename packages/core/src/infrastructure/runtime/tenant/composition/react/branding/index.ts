@@ -5,11 +5,37 @@
  *
  * Step 0 (synchronous): Resolves a vertical baseline or a tenant-identity
  *   fallback that can never collapse to another tenant.
- * Step 1 (instant): Overlays session branding for first paint.
+ * Step 1 (instant): Overlays session branding.
  * Step 2 (async): Fetches full config (personality, tokenOverrides) from
  *   the public branding endpoint after mount.
  *
  * This eliminates ~200 lines of copypaste per app.
+ *
+ * WHAT STEPS 1 AND 2 NO LONGER DO: paint.
+ *
+ * `DesignSystemProvider` does not consume this config directly. It censuses
+ * the config's visual channels -- `branding` colors/fonts, `tokenOverrides`,
+ * `personality`, `brandTheme`, `appearance` -- and resolves visual authority
+ * from that census; a conflict renders an empty tree rather than the app.
+ * Raw visual payload has no compiled provenance, so the barrier refuses it
+ * BOTH with no artifact declared ("uncompiled-visual-payload") and alongside
+ * a genuinely admitted artifact ("mixes a compiled artifact with ..."). The
+ * session overlay in step 1 carries `primaryColor`/`secondaryColor`/
+ * `accentColor`, so it is refused on the same terms as step 2.
+ *
+ * Step 0's identity fallback is therefore the only output of this hook that
+ * currently renders: `companyName`/`logo` are identity, not censused visual
+ * channels. Both halves are pinned in `tests/index.test.tsx` under
+ * "useTenantBranding at the visual-authority seam" -- the passing case
+ * included, so the failing ones cannot be read as "the barrier blocks
+ * everything".
+ *
+ * This is the compatibility path. The governing model is that customer
+ * styling is compiled on the server and hydrated as an artifact, and that
+ * browser components do not query the DB for visuals. Restoring the DB
+ * branding channel means compiling it into an artifact, not widening the
+ * barrier; retiring it means narrowing what this hook returns. Either is a
+ * visual-policy decision with app-side blast radius and is not made here.
  *
  * @example
  * ```tsx
@@ -26,7 +52,12 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import type { TenantConfig } from '@/foundation/contracts';
 import type { VerticalKey } from '@/foundation/contracts/kernel/verticals';
+import { assertTenantIdentityAllowed } from '@/foundation/tokens/ts/presentation/brand-themes';
 import { getKnownTenantConfig } from '../../../foundation/configuration/registry';
+import {
+  assertLowerKebabTenantSlug,
+  isValidTenantConfig,
+} from '../../../foundation/validation';
 
 /** Minimal session shape needed by the hook. Apps cast their session to this. */
 export interface TenantBrandingSession {
@@ -78,9 +109,23 @@ function matchingSessionTenant(
 ) {
   const tenant = session?.user?.tenancy?.tenant;
   if (!tenant?.slug) return undefined;
-  return tenant.slug.trim().toLowerCase() === tenantSlug.trim().toLowerCase()
+  return tenant.slug === tenantSlug
     ? tenant
     : undefined;
+}
+
+function assertCustomerTenantConfig(config: unknown): asserts config is TenantConfig {
+  const candidate = config as Partial<TenantConfig> | null;
+  assertTenantIdentityAllowed({
+    slug: candidate?.slug,
+    name: candidate?.name,
+    companyName: candidate?.branding?.companyName,
+    verticalKey: candidate?.vertical,
+  });
+  assertLowerKebabTenantSlug(candidate?.slug);
+  if (!isValidTenantConfig(config)) {
+    throw new TypeError('[design-system] Tenant branding produced an invalid tenant config.');
+  }
 }
 
 /**
@@ -103,7 +148,7 @@ function buildConfigFromSession(
     return undefined;
   }
 
-  return {
+  const config: TenantConfig = {
     slug: tenantSlug,
     name: tenant.name || tenantSlug,
     engine: (branding.engine as TenantConfig['engine']) || undefined,
@@ -119,6 +164,8 @@ function buildConfigFromSession(
       logo: branding.logo || undefined,
     },
   };
+  assertCustomerTenantConfig(config);
+  return config;
 }
 
 /**
@@ -132,7 +179,7 @@ function buildTenantIdentityFallback(
   vertical: VerticalKey,
 ): TenantConfig {
   const tenant = matchingSessionTenant(session, tenantSlug);
-  return {
+  const config: TenantConfig = {
     slug: tenantSlug,
     name: tenant?.name || tenantSlug,
     theme: 'base',
@@ -143,6 +190,8 @@ function buildTenantIdentityFallback(
       companyName: tenant?.name || tenantSlug,
     },
   };
+  assertCustomerTenantConfig(config);
+  return config;
 }
 
 /**
@@ -156,7 +205,7 @@ function buildConfigFromResponse(
   session: TenantBrandingSession | null,
 ): TenantConfig {
   const tenant = matchingSessionTenant(session, tenantSlug);
-  return {
+  const config: TenantConfig = {
     slug: tenantSlug,
     name: (data.branding as Record<string, unknown> | undefined)?.companyName as string || tenantSlug,
     engine: (data.engine as TenantConfig['engine']) || undefined,
@@ -169,6 +218,8 @@ function buildConfigFromResponse(
     tokenOverrides: (data.tokenOverrides as TenantConfig['tokenOverrides']) || undefined,
     appearance: (data.appearance as TenantConfig['appearance']) || undefined,
   };
+  assertCustomerTenantConfig(config);
+  return config;
 }
 
 /**
@@ -202,23 +253,19 @@ export function useTenantBranding(
   options: UseTenantBrandingOptions,
 ): UseTenantBrandingReturn {
   const { tenantSlug, session, vertical, brandingEndpoint = '/api/public/tenant-branding' } = options;
+  const knownTenantConfig = getKnownTenantConfig(tenantSlug);
+  if (!knownTenantConfig) {
+    assertTenantIdentityAllowed({ slug: tenantSlug });
+    assertLowerKebabTenantSlug(tenantSlug);
+  }
 
   // Step 0: Known tenants are available during SSR and the first client render.
   // This avoids handing an undefined config to DesignSystemProvider while its
   // async storage path waits for an effect.
-  const knownTenantConfig = useMemo(
-    () => getKnownTenantConfig(tenantSlug),
-    [tenantSlug],
-  );
-
   // Step 1: Quick session overlay (instant, for first paint). The known
-  // BrandTheme remains attached so DB/session branding cannot collapse a rich
-  // first-party tenant back to the vertical default.
+  // config is authoritative and never receives a DB/session overlay.
   const sessionConfig = useMemo(
-    () => overlayKnownTenantConfig(
-      knownTenantConfig,
-      buildConfigFromSession(session, tenantSlug, vertical),
-    ),
+    () => knownTenantConfig ?? buildConfigFromSession(session, tenantSlug, vertical),
     [session, tenantSlug, vertical, knownTenantConfig],
   );
 
@@ -270,7 +317,7 @@ export function useTenantBranding(
       if (res.ok) {
         const json = await res.json();
         const responseSlug = typeof json?.data?.slug === 'string'
-          ? json.data.slug.trim().toLowerCase()
+          ? json.data.slug
           : null;
         if (json?.success && json?.data && responseSlug === slug) {
           newConfig = overlayKnownTenantConfig(

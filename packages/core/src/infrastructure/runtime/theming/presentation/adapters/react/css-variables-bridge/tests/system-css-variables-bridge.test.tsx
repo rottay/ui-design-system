@@ -84,9 +84,11 @@ describe('SystemCssVariablesBridge', () => {
     document.documentElement.setAttribute('data-tenant', 'acme');
     document.documentElement.setAttribute('data-theme', 'dark');
 
-    // Simulates ThemeProvider's generatedChromeCss injection
-    // (runtime/theming/ThemeProvider.tsx): a <style id="ds-chrome-<slug>">
-    // scoped to html[data-tenant='x'][data-theme='dark'].
+    // Simulates the compiled tenant artifact the app/SSR layer mounts
+    // directly (ThemeProvider owns no paint emitters at all now -- see
+    // theming/composition/react/provider): a <style id="ds-chrome-<slug>">
+    // scoped to html[data-tenant='x'][data-theme='dark'], unlayered like every
+    // artifact `renderArtifactCss` produces.
     const chrome = document.createElement('style');
     chrome.id = 'ds-chrome-acme';
     chrome.textContent = "html[data-tenant='acme'][data-theme='dark'] { --ds-card-border: #4D0033; }";

@@ -26,7 +26,7 @@ import {
   normalizeSurfaceDensity,
   resolveListCardMinWidth,
   resolveSurfaceTabsType,
-} from '../../profile-defaults';
+} from '../../../../structures/foundation/chrome/runtime/profile-defaults';
 
 describe('normalizeSurfaceError', () => {
   it('extracts message and stack from Error instances', () => {

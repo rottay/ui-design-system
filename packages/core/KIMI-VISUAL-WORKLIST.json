@@ -2,10 +2,52 @@
   "schemaVersion": 3,
   "generatedBy": "FASE 3b -- tombstone remediation, revalidated against the real import graph",
   "generatedAt": "2026-08-02",
-  "sourceOfTruth": {
-    "adjudication": "src/foundation/tokens/premium-dead-adjudication.json (re-read at delivery time)",
-    "chains": "scratchpad/premium-chains.json (FASE M)",
-    "traceability": "scratchpad/premium-traceability.json (P2)"
+  "authority": {
+    "note": "This file is NOT a source of truth. It is a derived worklist. The previous `sourceOfTruth` key claimed authority this document does not hold, and listed two scratchpad inputs that were never retained -- an unverifiable claim. Authority is split below into the binding upstream, the consumer-evidence pin, and the row identity.",
+    "worklistAuthority": {
+      "source": "src/foundation/tokens/premium-dead-adjudication.json",
+      "sourceKind": "tracked",
+      "role": "BINDING_DISPOSITION_UPSTREAM",
+      "meaning": "The adjudication file is the binding disposition upstream. Every row here derives its disposition from it and may never contradict it. It is tracked in this repository, so the claim is verifiable at any commit."
+    },
+    "consumerEvidenceAuthority": {
+      "repository": "app-bithire",
+      "commit": "8abd05578d04cd3cf1c82ca8d777f0ca1ef6925f",
+      "checkoutRootEnv": "APP_BITHIRE_ROOT",
+      "role": "CURRENT_CONSUMER_EVIDENCE_AUTHORITY",
+      "meaning": "Every CONSUMER_APPLIED row resolves its evidence against this commit of app-bithire. The gate pins the same commit as an INDEPENDENT constant and fails on drift in either direction, so this field can never quietly follow a moved row. `checkoutRootEnv` names the environment variable that relocates the app-bithire checkout; when it is absent the gate falls back to the local sibling."
+    },
+    "rows": {
+      "rowCount": 219,
+      "canonicalRowsSha256": "37210b783901cc57c7d9fc57e28e3523dbb90cd49e9174506af3712ef799941a",
+      "role": "ROW_IDENTITY",
+      "algorithm": "sha256(utf8(JSON.stringify(canonical({A_pendingPartBlocked, B_deliberateDelta})))) where canonical() recursively sorts every OBJECT's keys with Array.prototype.sort() default lexicographic ordering and PRESERVES array order exactly. Applied to a single wrapper object holding both row arrays under their own key names; no whitespace, no separators, no trailing newline. Row order is part of the identity: reordering rows re-signs the hash. Metadata outside these two arrays is deliberately NOT covered, so this digest measures row content alone.",
+      "meaning": "Content identity of the 139 + 80 = 219 rows. A field edit, a row swap, a deletion or an insertion re-signs it. The gate recomputes it from the live arrays and compares -- it never trusts the stored value."
+    }
+  },
+  "historicalProvenance": {
+    "role": "HISTORICAL_UNRETAINED_NON_AUTHORITY",
+    "meaning": "Inputs that were consulted while this worklist was built and were NOT retained. They are recorded for honesty about how the rows came to exist. They are NOT authority, they are NOT re-readable, and nothing in this file or in the gate may depend on them.",
+    "missingInputs": [
+      {
+        "path": "scratchpad/premium-chains.json",
+        "phase": "FASE M",
+        "status": "UNRETAINED",
+        "note": "Not present in the tree and not tracked in Git. It cannot be re-read, so it cannot be authority."
+      },
+      {
+        "path": "scratchpad/premium-traceability.json",
+        "phase": "P2",
+        "status": "UNRETAINED",
+        "note": "Not present in the tree and not tracked in Git. It cannot be re-read, so it cannot be authority."
+      }
+    ],
+    "historicalMeasurementCommit": {
+      "repository": "app-bithire",
+      "commit": "bd1142d3a5895eb24a21c64f43849bedb24999c0",
+      "status": "SUPERSEDED",
+      "note": "The commit the ORIGINAL consumer-applied measurement was taken against. It is history, not the current authority: the live pin is `authority.consumerEvidenceAuthority.commit`. Recorded so the earlier measurement remains attributable rather than being silently overwritten."
+    }
   },
   "law": "Kimi does NOT mint a new authority. Every row names the exact channel to consume and the upstream it derives from. A slot is lit by adding a consumer of the form var(<token>, <what the part paints today>) so the default stays byte-identical until a brand authors the slot.",
   "totals": {
@@ -9650,7 +9692,8 @@
       "meaning": "The DS ships a class-keyed skin and the CONSUMING APP renders the node. A fourth legitimate class: neither a DS-rendered part nor an absent surface.",
       "evidenceRule": "Governed structure, not prose and not a bare path. The digest re-signs on every consumer change -- that staleness IS the property.",
       "measuredBy": "team-lead, with a ds-surface-card positive control before the zero was believed",
-      "measuredAgainst": "app-bithire @ bd1142d3a"
+      "measuredAgainst": "full app-bithire @ 8abd05578d04cd3cf1c82ca8d777f0ca1ef6925f",
+      "measuredAgainstNote": "Full 40-hex pin, identical to authority.consumerEvidenceAuthority.commit. The abbreviated `bd1142d3a` this field previously carried was the ORIGINAL measurement and now lives at historicalProvenance.historicalMeasurementCommit. `measuredBy` is unchanged because the measurement METHOD did not change -- only the commit it was re-taken against."
     }
   },
   "reachability": {

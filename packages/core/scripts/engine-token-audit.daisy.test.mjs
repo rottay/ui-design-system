@@ -420,19 +420,100 @@ test('a Daisy modifier rendered without its base is still detected and reported'
 /* -------------------------------------------------------------------------- */
 
 /**
+ * The corpus roster.
+ *
+ * `133` used to be written here as a naked total, and a naked total is the
+ * weakest possible statement about a corpus: it holds while the tree churns
+ * underneath it and it breaks for reasons it cannot name. When the four
+ * workflow engines landed and the duplicated overlay Modal adapter was retired,
+ * all this test could say was `136 !== 133` -- not which files arrived, not
+ * which one left, not whether either was adjudicated.
+ *
+ * The roster below states membership instead, and the total is derived from it.
+ * Every addition since the anchor is named, the retirement is named, and the
+ * count is an arithmetic consequence of both. A file swapped for another file
+ * keeps the total at 136 and still fails, because the names are asserted; a
+ * fifth, unadjudicated addition fails because the total is no longer free.
+ */
+
+/**
+ * `modernEngineFiles(uiDir)` at commit a5a4c3b43 ("feat(modern): complete R0
+ * design platform foundation"), the commit these tests were authored against.
+ * It is a historical measurement of a fixed tree, so it never changes; what
+ * changes is the delta below it.
+ */
+const ANCHOR_ENGINE_FILE_COUNT = 133;
+
+/**
+ * Every modern engine file that entered the corpus after the anchor -- four,
+ * and only four. Each is a real engine implementation under
+ * `patterns/workflow/`, not a relocation.
+ */
+const POST_ANCHOR_ADDITIONS = [
+  'patterns/workflow/approval-inbox/engines/modern/index.tsx',
+  'patterns/workflow/moderation-gallery/engines/modern/index.tsx',
+  'patterns/workflow/operational-ledger/engines/modern/index.tsx',
+  'patterns/workflow/shift-matrix/engines/modern/index.tsx',
+];
+
+/** Modal's one true modern engine: the capability owner, and a non-consumer. */
+const CANONICAL_MODAL_ENGINE = 'primitives/feedback/Modal/engines/modern/index.tsx';
+
+/**
+ * The duplicate adapter that shipped alongside it and has since been retired.
+ * It is asserted ABSENT rather than merely unmentioned: an absent file is
+ * indistinguishable from an unwritten assertion unless something checks, and
+ * resurrecting this path is exactly the regression that would put two engines
+ * behind one capability again.
+ */
+const RETIRED_OVERLAY_MODAL_ENGINE = 'primitives/overlay/Modal/engines/modern/index.tsx';
+
+/**
+ * The deep-nesting half of this test is older than the roster half and stays.
  * The corpus glob was `engines/modern(/[^/]+)?\.tsx?$` -- exactly one level.
  * `data-table/engines/modern/cell-editor/index.tsx` was therefore outside every
  * modern counter. It scans clean, so nothing was hidden; the defect is that
  * nothing WOULD be, and a ratchet that can be stepped around by adding a
  * subfolder is not a ratchet.
  */
-test('a nested engine file is inside the corpus', () => {
+test('the corpus is the anchor roster plus its four adjudicated additions, and reaches every depth', () => {
   const files = auditedModernFiles().map((file) => file.slice(uiDir.length + 1));
+
   assert.ok(
     files.includes('patterns/data/data-table/engines/modern/cell-editor/index.tsx'),
     'the known two-level engine file must be audited',
   );
-  assert.equal(files.length, 133);
+
+  // The roster is a closed list. Without these two assertions a later editor
+  // could append a fifth path and launder any new file into the formula.
+  assert.equal(POST_ANCHOR_ADDITIONS.length, 4, 'the post-anchor delta is four files, exactly');
+  assert.equal(
+    new Set(POST_ANCHOR_ADDITIONS).size,
+    POST_ANCHOR_ADDITIONS.length,
+    'a duplicated entry would inflate the formula without naming a new file',
+  );
+
+  for (const added of POST_ANCHOR_ADDITIONS) {
+    assert.ok(files.includes(added), `${added} is an adjudicated addition and must be audited`);
+  }
+
+  assert.ok(
+    files.includes(CANONICAL_MODAL_ENGINE),
+    'Modal keeps exactly one modern engine, and it is the feedback one',
+  );
+  assert.ok(
+    !files.includes(RETIRED_OVERLAY_MODAL_ENGINE),
+    'the retired duplicate overlay adapter must not come back',
+  );
+
+  // `- 1` is the retirement of RETIRED_OVERLAY_MODAL_ENGINE, which existed in
+  // the corpus at a5a4c3b43 and does not exist now. Anchor 133, plus the four
+  // named additions, minus that one retirement, is 136.
+  assert.equal(
+    files.length,
+    ANCHOR_ENGINE_FILE_COUNT + POST_ANCHOR_ADDITIONS.length - 1,
+    'the corpus total no longer follows from the adjudicated roster',
+  );
 });
 
 /**
@@ -541,8 +622,14 @@ test("a recipe name passed to a hook is not a class (Card's `useRecipeProfileDef
   assert.deepEqual([...findDaisyClassesInText(readFileSync(card, 'utf8'), card)], []);
 });
 
+/**
+ * This read the retired `primitives/overlay/Modal` adapter and died on ENOENT.
+ * It now reads the canonical capability owner through the SAME constant the
+ * roster asserts, so the file the corpus says is Modal's only modern engine is
+ * the file whose semantics are checked -- the two cannot drift apart.
+ */
 test("Modal's modern engine is not a consumer -- `kind: 'modal'` is a union member", () => {
-  const file = join(packageDir, 'src/ui/primitives/overlay/Modal/engines/modern/index.tsx');
+  const file = join(uiDir, CANONICAL_MODAL_ENGINE);
   const source = readFileSync(file, 'utf8');
   assert.match(source, /kind: 'modal'/, 'the expressive call site must stay expressive');
   assert.doesNotMatch(source, /OVERLAY_LAYER_KIND/, 'the counter-dodging constant must stay gone');

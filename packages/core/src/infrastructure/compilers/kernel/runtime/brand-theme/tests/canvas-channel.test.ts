@@ -2,17 +2,24 @@
  * @fileoverview The tenant owns its page ground (WO-TOK-06).
  *
  * `palette.darkBackgroundColor` used to compile only to `--ds-color-dark-bg`,
- * a variable with zero consumers, while the generator's dark block wrote a
- * literal `#0a0a0a`. A tenant could declare a ground and never see it: measured
- * in a browser, torture-dark asked for `#050307` and its canvas painted
- * `#0a0a0a`. There was no clear-mode ground field at all, so a light tenant
- * rendered light components on the design system's dark ground.
+ * a variable with zero consumers, while the retired runtime generator's dark
+ * block wrote a literal `#0a0a0a`. A tenant could declare a ground and never
+ * see it: measured in a browser, torture-dark asked for `#050307` and its
+ * canvas painted `#0a0a0a`. There was no clear-mode ground field at all, so a
+ * light tenant rendered light components on the design system's dark ground.
+ *
+ * Both halves of that defect are now structurally impossible. There is ONE
+ * ground field, `palette.backgroundColor`, and it belongs to the mode its
+ * palette is authored for: the theme's `appearance.defaultMode` at the top
+ * level, or the overlay's own mode inside `modes.{light,dark}`. So a ground is
+ * always on the channel the page actually reads, and the prefixed twin that
+ * nothing consumed does not exist to be declared into.
  */
 
 import { describe, expect, it } from 'vitest';
 
 import { compileBrandTheme } from '../index';
-import { tortureDarkBrandTheme, tortureLightBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/fixtures/torture';
+import { tortureDarkBrandTheme, tortureLightBrandTheme } from '@/tooling/testing/fixtures/brand-themes/torture';
 import { bithireBrandTheme, rottayBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes';
 
 describe('the clear-mode ground is a BrandTheme channel', () => {
@@ -61,26 +68,68 @@ describe('the clear-mode ground is a BrandTheme channel', () => {
     expect(cssVariables['--ds-color-bg-primary']).toBeUndefined();
   });
 
-  it('the dark ground stays on its own channel and does not leak into clear mode', () => {
-    const { cssVariables } = compileBrandTheme({ brandTheme: tortureDarkBrandTheme, tenantSlug: 'canvas-probe' });
-    expect(tortureDarkBrandTheme.palette!.darkBackgroundColor).toBe('#050307');
-    // The dark block is the generator's job: a `[data-theme='dark']` selector
-    // exists nowhere else. What must NOT happen is the dark ground landing in
-    // the clear-mode variable.
-    expect(cssVariables['--ds-color-bg-primary']).toBeUndefined();
+  it('each mode block carries its OWN ground, and neither leaks into the other', () => {
+    // The same property, restated on the model that replaced the prefixed
+    // field. torture-dark declares `defaultMode: 'dark'`, so its base block IS
+    // its dark block and #050307 belongs in the plain ground channel there.
+    // Its clear mode is a `modes.light` overlay, and #FDFDFF must appear in
+    // THAT block and only there. The old shape could not express this: the
+    // dark ground sat in `darkBackgroundColor`, which compiled to a variable
+    // nothing read, so a tenant declared a ground and never saw it.
+    const compiled = compileBrandTheme({
+      brandTheme: tortureDarkBrandTheme,
+      tenantSlug: 'canvas-probe',
+    });
+
+    expect(tortureDarkBrandTheme.appearance?.defaultMode).toBe('dark');
+    expect(compiled.cssVariables['--ds-color-bg-primary']).toBe('#050307');
+    expect(compiled.cssVariables['--ds-color-bg']).toBe('#050307');
+    expect(compiled.cssVariables['--ds-color-background']).toBe('#050307');
+
+    const lightBlock = compiled.modeBlocks?.find((block) => block.mode === 'light');
+    expect(lightBlock, 'torture-dark authors a light mode overlay').toBeDefined();
+    expect(lightBlock!.cssVariables['--ds-color-bg-primary']).toBe('#FDFDFF');
+
+    // The leak the original case guarded against, in both directions.
+    expect(lightBlock!.cssVariables['--ds-color-bg-primary']).not.toBe('#050307');
+    expect(
+      Object.values(compiled.cssVariables).includes('#FDFDFF'),
+      'the light ground must not appear in the dark base block',
+    ).toBe(false);
+  });
+
+  it('emits no `dark`-prefixed ground twin for any theme', () => {
+    for (const brandTheme of [tortureDarkBrandTheme, tortureLightBrandTheme, rottayBrandTheme, bithireBrandTheme]) {
+      const compiled = compileBrandTheme({ brandTheme, tenantSlug: 'canvas-probe' });
+      const blocks = [compiled.cssVariables, ...(compiled.modeBlocks ?? []).map((b) => b.cssVariables)];
+      for (const block of blocks) {
+        expect(
+          Object.keys(block).filter((name) => name.startsWith('--ds-color-dark-')),
+          `${brandTheme.id} emits a dark-prefixed channel`,
+        ).toEqual([]);
+      }
+    }
   });
 });
 
 describe('the ground field is no longer overloaded', () => {
-  it('bithire declares a clear ground, not a dark one', () => {
-    // `darkBackgroundColor: '#F8FBFF'` was a near-white: the field was being
-    // used as "the ground" regardless of mode. Wiring that value into the dark
-    // block would have painted bithire's dark mode white.
+  it('bithire declares its clear ground in the plain channel', () => {
+    // `darkBackgroundColor: '#F8FBFF'` was once a near-white here: the field
+    // was being used as "the ground" regardless of mode. There is now one
+    // ground field per palette, and the mode it belongs to is the one the
+    // palette is authored for.
+    expect(bithireBrandTheme.appearance?.defaultMode).toBe('light');
     expect(bithireBrandTheme.palette!.backgroundColor).toBe('#F4F8FB');
-    expect(bithireBrandTheme.palette!.darkBackgroundColor).toBeUndefined();
   });
 
-  it('a genuinely dark product keeps its dark ground', () => {
-    expect(rottayBrandTheme.palette!.darkBackgroundColor).toBe('#0C0C0E');
+  it('a genuinely dark product declares its dark ground as its ground', () => {
+    expect(rottayBrandTheme.appearance?.defaultMode).toBe('dark');
+    expect(rottayBrandTheme.palette!.backgroundColor).toBe('#0C0C0E');
+    // And it reaches the channel, which is the whole point of WO-TOK-06.
+    const { cssVariables } = compileBrandTheme({
+      brandTheme: rottayBrandTheme,
+      tenantSlug: 'canvas-probe',
+    });
+    expect(cssVariables['--ds-color-bg-primary']).toBe('#0C0C0E');
   });
 });

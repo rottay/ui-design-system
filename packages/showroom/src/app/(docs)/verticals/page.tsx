@@ -32,8 +32,8 @@ interface VerticalEntry {
 
 const VERTICALS: VerticalEntry[] = [
   {
-    name: "Platform",
-    slug: "platform",
+    name: "Rottay",
+    slug: "rottay",
     description:
       "Multi-tenant admin control plane for identity, tenancy, permissions, features, and governance-heavy SaaS operations.",
     engine: "classic",
@@ -280,7 +280,7 @@ export default function VerticalsPage() {
                 </Text>
                 <Box style={{ paddingTop: 10, borderTop: `1px solid ${BORDER}` }}>
                   <Text size="md" style={{ color: TEXT_SECONDARY, maxWidth: 780, lineHeight: 1.55 }}>
-                    These pages are here to prove that Platform, BitHire, and Evnto are not just
+                    These pages are here to prove that Rottay, BitHire, and Evnto are not just
                     tinted placeholders. Each vertical keeps a real workflow lens while the active
                     showroom provider changes the actual DS rendering, token posture, and contrast
                     rhythm.
@@ -341,7 +341,7 @@ export default function VerticalsPage() {
                 <MetricTile
                   label="Verticals"
                   value={`${VERTICALS.length}`}
-                  detail="Platform, BitHire, and Evnto all rendered through the active provider."
+                  detail="Rottay, BitHire, and Evnto all rendered through the active provider."
                 />
                 <MetricTile
                   label="Showcase lanes"

@@ -5,7 +5,7 @@
  * `facade/entrypoints/styles.css` into `layer(rottay-engines)` (the old
  * "unlayered" note predates the wiring). Caller inline styles still win.
  *
- * BORDER-COLOR FLOOR (P-48): the Platform-only Rottay artifact ships an unlayered
+ * BORDER-COLOR FLOOR (P-48): the Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` border-color rule at
  * specificity (0,3,1). Border paint reaches (0,4,0) through the always-stamped
  * root `data-part` ancestor (or `data-loading` on the root itself) — repeating

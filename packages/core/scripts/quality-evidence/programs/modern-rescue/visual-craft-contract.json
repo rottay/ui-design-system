@@ -434,44 +434,42 @@
         ["Dashboard-MetricCard-WidgetBoard", "Chart-frame-Line-Bar-tooltip-legend", "AppShell-sidebar-BottomTabBar", "record-detail-composition"]
       ],
       "R2": [
-        ["foundation-visual-5", "primitive-layout-responsive-16"],
-        ["primitive-display-21"],
+        ["foundation-visual-5", "primitive-layout-responsive-18"],
+        ["primitive-display-24"],
         ["primitive-inputs-25"],
         ["primitive-navigation-12"],
         ["primitive-feedback-11", "primitive-overlay-10"]
       ],
       "R3": [
-        ["pattern-data-18"],
-        ["pattern-forms-5", "pattern-visualization-non-chart-5", "pattern-commerce-1", "pattern-feedback-2", "pattern-identity-1"],
+        ["pattern-data-17"],
+        ["pattern-forms-5", "pattern-visualization-non-chart-6", "pattern-commerce-1", "pattern-feedback-3", "pattern-identity-1"],
         ["pattern-communication-6", "pattern-workflow-5", "pattern-navigation-5"],
         ["pattern-customization-4", "pattern-shell-4"],
         ["charts-18"]
       ],
       "R4": [
-        ["structure-headers-6", "structure-workspace-12"],
-        ["structure-record-3", "structure-dashboard-3", "structure-feedback-1", "structure-shell-2"],
+        ["structure-headers-8", "structure-workspace-12"],
+        ["structure-record-7", "structure-dashboard-3", "structure-feedback-3", "structure-shell-6"],
         ["surface-admin-8", "surface-data-7"],
         ["surface-experience-9", "surface-forms-4"],
-        ["surface-operations-4", "surface-workspace-4", "surface-composition-4"],
-        ["commercial-11"]
+        ["surface-operations-4", "surface-workspace-4"]
       ],
       "R7": [
-        ["foundation-visual-5", "primitive-layout-responsive-16"],
-        ["primitive-display-21"],
+        ["foundation-visual-5", "primitive-layout-responsive-18"],
+        ["primitive-display-24"],
         ["primitive-inputs-25"],
         ["primitive-navigation-12"],
         ["primitive-feedback-11", "primitive-overlay-10"],
-        ["pattern-data-18"],
-        ["pattern-forms-5", "pattern-visualization-non-chart-5", "pattern-commerce-1", "pattern-feedback-2", "pattern-identity-1"],
+        ["pattern-data-17"],
+        ["pattern-forms-5", "pattern-visualization-non-chart-6", "pattern-commerce-1", "pattern-feedback-3", "pattern-identity-1"],
         ["pattern-communication-6", "pattern-workflow-5", "pattern-navigation-5"],
         ["pattern-customization-4", "pattern-shell-4"],
         ["charts-18"],
-        ["structure-headers-6", "structure-workspace-12"],
-        ["structure-record-3", "structure-dashboard-3", "structure-feedback-1", "structure-shell-2"],
+        ["structure-headers-8", "structure-workspace-12"],
+        ["structure-record-7", "structure-dashboard-3", "structure-feedback-3", "structure-shell-6"],
         ["surface-admin-8", "surface-data-7"],
         ["surface-experience-9", "surface-forms-4"],
-        ["surface-operations-4", "surface-workspace-4", "surface-composition-4"],
-        ["commercial-11"]
+        ["surface-operations-4", "surface-workspace-4"]
       ]
     }
   }

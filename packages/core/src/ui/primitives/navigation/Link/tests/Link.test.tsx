@@ -1,11 +1,11 @@
 /**
- * Link Tests
+ * NavLink Tests
  * Colocated with component following approved architecture
  */
 
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { Link } from '..';
+import { NavLink } from '..';
 
 // Mock the engine factory to avoid async loading issues in tests
 vi.mock('@/infrastructure/runtime/engines/presentation/component-factory', () => ({
@@ -23,20 +23,20 @@ vi.mock('@/infrastructure/runtime/engines/presentation/component-factory', () =>
         {children}
       </a>
     );
-    MockLink.displayName = 'Link';
+    MockLink.displayName = 'NavLink';
     return MockLink;
   },
 }));
 
-describe('Link', () => {
+describe('NavLink', () => {
   it('renders correctly', () => {
-    render(<Link href="/test">Test Link</Link>);
+    render(<NavLink href="/test">Test NavLink</NavLink>);
     expect(screen.getByTestId('link')).toBeInTheDocument();
-    expect(screen.getByText('Test Link')).toBeInTheDocument();
+    expect(screen.getByText('Test NavLink')).toBeInTheDocument();
   });
 
   it('renders with href', () => {
-    render(<Link href="/about">About</Link>);
+    render(<NavLink href="/about">About</NavLink>);
     const link = screen.getByTestId('link');
     expect(link).toHaveAttribute('href', '/about');
   });
@@ -44,43 +44,43 @@ describe('Link', () => {
   it.each(['default', 'primary', 'secondary', 'success', 'warning', 'danger'] as const)(
     'renders type %s',
     (type) => {
-      render(<Link href="/test" type={type}>Test</Link>);
+      render(<NavLink href="/test" type={type}>Test</NavLink>);
       expect(screen.getByTestId('link')).toHaveAttribute('data-type', type);
     }
   );
 
   it('renders disabled state', () => {
-    render(<Link href="/test" disabled>Disabled Link</Link>);
+    render(<NavLink href="/test" disabled>Disabled NavLink</NavLink>);
     const link = screen.getByTestId('link');
     expect(link).toHaveAttribute('data-disabled', 'true');
     expect(link).not.toHaveAttribute('href');
   });
 
   it('renders without underline', () => {
-    render(<Link href="/test" underline={false}>No Underline</Link>);
+    render(<NavLink href="/test" underline={false}>No Underline</NavLink>);
     expect(screen.getByTestId('link')).toHaveAttribute('data-underline', 'false');
   });
 
   it('renders external link', () => {
-    render(<Link href="https://example.com" external>External</Link>);
+    render(<NavLink href="https://example.com" external>External</NavLink>);
     expect(screen.getByTestId('link')).toHaveAttribute('data-external', 'true');
   });
 
   it('applies custom className', () => {
-    render(<Link href="/test" className="custom-class">Test</Link>);
+    render(<NavLink href="/test" className="custom-class">Test</NavLink>);
     expect(screen.getByTestId('link')).toHaveClass('custom-class');
   });
 
   it('passes style prop to component', () => {
     const customStyle = { color: 'red' };
-    render(<Link href="/test" style={customStyle}>Test</Link>);
+    render(<NavLink href="/test" style={customStyle}>Test</NavLink>);
     expect(screen.getByTestId('link')).toBeInTheDocument();
   });
 
   it('handles click event', () => {
     const handleClick = vi.fn();
     render(
-      <Link
+      <NavLink
         href="/test"
         onClick={(event) => {
           event.preventDefault();
@@ -88,24 +88,24 @@ describe('Link', () => {
         }}
       >
         Click Me
-      </Link>
+      </NavLink>
     );
     fireEvent.click(screen.getByTestId('link'));
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 });
 
-describe('Link engines', () => {
+describe('NavLink engines', () => {
   it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
-    render(<Link engine={engine} href="/test">Test</Link>);
+    render(<NavLink engine={engine} href="/test">Test</NavLink>);
     expect(screen.getByTestId('link')).toBeInTheDocument();
   });
 });
 
-describe('Link tenants', () => {
+describe('NavLink tenants', () => {
   it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
     document.documentElement.setAttribute('data-tenant', tenant);
-    render(<Link href="/test">Test</Link>);
+    render(<NavLink href="/test">Test</NavLink>);
     expect(screen.getByTestId('link')).toBeInTheDocument();
     document.documentElement.removeAttribute('data-tenant');
   });

@@ -42,7 +42,7 @@ describe('DatePicker modern accessibility tree', () => {
 
   it('lets an external FormField label own the trigger name', async () => {
     renderWithEngine(
-      <FormField label="Date of birth">
+      <FormField label="Date of birth" name="date-of-birth">
         <ModernDatePicker placeholder="Select date" />
       </FormField>,
       'modern'

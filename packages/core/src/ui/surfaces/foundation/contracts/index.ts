@@ -61,88 +61,53 @@ export interface EntityAdapter<TRaw, TView> {
  * a `SurfacePageChrome` in its `presentation` section. This keeps page-level
  * navigation (breadcrumbs, back button, title) consistent across the entire
  * surface catalog without requiring each surface to re-define these props.
+ *
+ * The declarations themselves now live one tier down, in
+ * `ui/structures/foundation/chrome/contracts`, because the shells that consume
+ * them (`PageShellSurface`, `HeaderSurface`, `SidebarSurface`) are structure
+ * families and the structures tier may not import from surfaces. This file
+ * still composes every one of them -- `ListSurfaceConfig.presentation.chrome`
+ * is a `SurfacePageChrome`, every surface config carries `SurfaceAction`s --
+ * so they are imported for local use and re-exported by name, which is what
+ * keeps `@rottay/design-system/contracts/surfaces` exporting the same API it
+ * exported before the move. This is the surfaces tier building on the tier
+ * below it, not a compatibility shim for a retired path.
  */
+import type {
+  AppResolvedSurfaceAccess,
+  ListSurfaceView,
+  SurfaceAccessInput,
+  SurfaceAction,
+  SurfaceBreadcrumb,
+  SurfaceCapabilityKind,
+  SurfaceCapabilityRegistration,
+  SurfacePageChrome,
+  SurfaceResolvedCapability,
+  SurfaceTabbedView,
+  SurfaceVisualOverrides,
+} from '../../../structures/foundation/chrome/contracts';
 
-/** A single breadcrumb segment. Provide `href` for link navigation or `onClick` for SPA routing. */
-export interface SurfaceBreadcrumb {
-  label: string;
-  href?: string;
-  onClick?: () => void;
-}
-
-/**
- * Page-level chrome shared across all page surfaces.
- *
- * Surfaces pass this to `PageShellSurface` which delegates to `PatternPageShell`.
- * Keeping chrome separate from content lets apps swap page titles without
- * rebuilding the surface config.
- */
-export interface SurfacePageChrome {
-  /** Primary page heading rendered in the shell header. */
-  title: string;
-  /** Hide the shell header row entirely when the page composes its own top chrome. */
-  hideHeader?: boolean;
-  /** Secondary text or node shown below the title. */
-  subtitle?: ReactNode;
-  /** Optional register-line metadata (counts, timestamps, owners) rendered below the subtitle. */
-  metadata?: ReactNode;
-  /** Optional rich content rendered below the title/subtitle block inside the page header. */
-  headerContent?: ReactNode;
-  /** Breadcrumb trail for hierarchical navigation. */
-  breadcrumbs?: SurfaceBreadcrumb[];
-  /** Optional badge rendered inline with the title (e.g., status pill, count). */
-  badge?: ReactNode;
-  /** When true, the shell header sticks to the top of the scrollport with governed stuck elevation. */
-  sticky?: boolean;
-  /** Constrains the shell content width. Accepts CSS values or pixel numbers. */
-  maxWidth?: number | string;
-  /** Back navigation. When provided, the shell renders a back arrow/link. */
-  back?: {
-    label?: string;
-    onClick: () => void;
-  };
-}
-
-/**
- * Declarative action descriptor used across all surfaces.
- *
- * Apps own the actual handlers and access decisions; surfaces own placement,
- * and rendering. The generic `TView` parameter lets row-level actions (e.g.,
- * in ListSurface) receive the item they act on, while page-level actions
- * use `void`.
- *
- * @typeParam TView - The data type the action operates on. `void` for global
- *   actions (e.g., "Create New"), an entity view type for row/item actions.
- *
- * @example
- * ```ts
- * const deleteAction: SurfaceAction<UserView> = {
- *   id: 'delete-user',
- *   label: 'Delete',
- *   variant: 'danger',
- *   onClick: (user) => confirmDelete(user.id),
- *   visible: (user) => user.status !== 'deleted',
- * };
- * ```
- */
-export interface SurfaceAction<TView = void> {
-  /** Stable identifier used for presentation access and test selectors. */
-  id: string;
-  /** Human-readable label shown in buttons/menus. */
-  label: string;
-  /** Optional leading icon rendered beside the label. */
-  icon?: ReactNode;
-  /** Visual variant controlling button emphasis and color. */
-  variant?: 'default' | 'primary' | 'secondary' | 'danger' | 'ghost';
-  /** Handler invoked when the action is triggered. Receives the item for row actions. */
-  onClick?: (item: TView) => void | Promise<void>;
-  /** Predicate controlling whether the action is rendered for a given item. */
-  visible?: (item: TView) => boolean;
-  /** When true, the action renders in a disabled state. */
-  disabled?: boolean;
-  /** When true, the action shows a loading spinner. */
-  loading?: boolean;
-}
+export type {
+  AppResolvedSurfaceAccess,
+  HeaderSurfaceBehaviorConfig,
+  HeaderSurfaceConfig,
+  HeaderSurfacePresentationConfig,
+  HeaderSurfaceVisualConfig,
+  ListSurfaceView,
+  SidebarSurfaceBehaviorConfig,
+  SidebarSurfaceConfig,
+  SidebarSurfacePresentationConfig,
+  SidebarSurfaceVisualConfig,
+  SurfaceAccessInput,
+  SurfaceAction,
+  SurfaceBreadcrumb,
+  SurfaceCapabilityKind,
+  SurfaceCapabilityRegistration,
+  SurfacePageChrome,
+  SurfaceResolvedCapability,
+  SurfaceTabbedView,
+  SurfaceVisualOverrides,
+} from '../../../structures/foundation/chrome/contracts';
 
 /** Reasons surfaced by form and wizard discard protection. */
 export type SurfaceDirtyStateReason = 'navigation' | 'cancel' | 'back' | 'step-change' | 'command';
@@ -186,38 +151,6 @@ export interface SurfaceRuntimeContext {
   role?: string;
   [key: string]: unknown;
 }
-
-/** Capability anatomy resolved by the owning app/server before it reaches the DS. */
-export type SurfaceCapabilityKind = 'route' | 'field' | 'column' | 'action' | 'tab';
-
-/** A single app-resolved presentation decision for a registered surface capability. */
-export interface SurfaceResolvedCapability {
-  kind: SurfaceCapabilityKind;
-  id: string;
-  visible: boolean;
-  disabled?: boolean;
-}
-
-/** Stable capability anatomy declared by a surface before data is available. */
-export interface SurfaceCapabilityRegistration {
-  kind: SurfaceCapabilityKind;
-  id: string;
-  label?: ReactNode;
-  disabled?: boolean;
-}
-
-/**
- * Presentation-only access input resolved by the owning app/server.
- *
- * `all` is an upstream-resolved, unfiltered presentation mode: every registered
- * capability stays visible, no DS policy callback runs, and no authorization is granted.
- */
-export type AppResolvedSurfaceAccess =
-  | { mode: 'all' }
-  | {
-      mode: 'resolved';
-      capabilities: ReadonlyArray<SurfaceResolvedCapability>;
-    };
 
 /**
  * @deprecated Type-only compatibility contract for app-local policy. No DS
@@ -287,41 +220,9 @@ export interface SurfacePermissionsConfig {
   }) => 'visible' | 'readonly' | 'hidden';
 }
 
-/** The only access input accepted by DS surfaces and presentation helpers. */
-export type SurfaceAccessInput = AppResolvedSurfaceAccess;
-
-/**
- * Shared tabbed view descriptor used by several page-level surfaces.
- *
- * Settings, visualization pages, and sectioned headers all need the same
- * "named view with optional icon and content" contract. Keeping one shared
- * shape reduces the chance that every surface drifts into its own flavor.
- */
-export interface SurfaceTabbedView {
-  key: string;
-  label: ReactNode;
-  content: ReactNode;
-  icon?: ReactNode;
-  badge?: ReactNode;
-  description?: ReactNode;
-  disabled?: boolean;
-  visible?: boolean | (() => boolean);
-  /** Stable capability ID used by final app-resolved presentation access. Defaults to `key`. */
-  capabilityId?: string;
-  /** @deprecated Use `capabilityId`; retained as a type-only migration alias. */
-  permissionId?: string;
-}
-
 // ---------------------------------------------------------------------------
 // List surface contracts
 // ---------------------------------------------------------------------------
-
-/**
- * The two view modes a ListSurface can render.
- * Table is the default for data-dense operator screens; cards suit
- * media-heavy or consumer-facing lists.
- */
-export type ListSurfaceView = 'table' | 'cards';
 
 /**
  * Extended column definition that adds surface-level metadata on top of the
@@ -958,124 +859,6 @@ export interface WizardSurfaceConfig {
   visual: WizardSurfaceVisualConfig;
   presentation: WizardSurfacePresentationConfig;
   behavior: WizardSurfaceBehaviorConfig;
-  /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
-  access?: AppResolvedSurfaceAccess;
-}
-
-// ---------------------------------------------------------------------------
-// Header surface contracts
-// ---------------------------------------------------------------------------
-
-/** Visual configuration for header surfaces including tab styling. */
-export interface HeaderSurfaceVisualConfig {
-  maxWidth?: number | string;
-  /** Tab rendering style (line, card, etc.). Defaults to profile density preference. */
-  tabsType?: TabsProps['type'];
-  /** Center-align tabs within the header. Useful for marketing or focused layouts. */
-  centeredTabs?: boolean;
-  /** Reduce header padding and font sizes on mobile viewports. */
-  compactOnMobile?: boolean;
-  /** Hide secondary (non-primary) actions on mobile to reduce clutter. */
-  hideSecondaryActionsOnMobile?: boolean;
-
-  /** Highest-precedence visual defaults for this surface instance. */
-  profileOverrides?: SurfaceVisualOverrides;
-}
-
-/** Presentation slots for header page chrome, description, metadata, and tab content. */
-export interface HeaderSurfacePresentationConfig {
-  chrome: SurfacePageChrome;
-  description?: ReactNode;
-  /** Metadata line rendered below the description (e.g., "Created 3 days ago"). */
-  metadata?: ReactNode;
-  /** Leading action nodes rendered before the primary actions. */
-  actionsStart?: ReactNode;
-  /** Extra content rendered in the header body between chrome and tabs. */
-  headerContent?: ReactNode;
-  footer?: ReactNode;
-}
-
-/** Behavioral config: page-level actions and tabbed navigation. */
-export interface HeaderSurfaceBehaviorConfig {
-  actions?: SurfaceAction<void>[];
-  /** Tabbed views rendered below the header chrome. Uses shared `SurfaceTabbedView`. */
-  tabs?: SurfaceTabbedView[];
-  activeTab?: string;
-  onTabChange?: (key: string) => void;
-}
-
-/**
- * Complete header surface configuration.
- * Header surfaces provide the top-of-page chrome with optional tabbed navigation.
- */
-export interface HeaderSurfaceConfig {
-  visual: HeaderSurfaceVisualConfig;
-  presentation: HeaderSurfacePresentationConfig;
-  behavior: HeaderSurfaceBehaviorConfig;
-  /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
-  access?: AppResolvedSurfaceAccess;
-}
-
-// ---------------------------------------------------------------------------
-// Sidebar surface contracts
-// ---------------------------------------------------------------------------
-
-/**
- * Visual configuration for sidebar layouts.
- *
- * Sidebar surfaces provide a three-column potential layout:
- * sidebar | main content | optional aside. The sidebar can collapse to
- * save horizontal space on constrained viewports.
- */
-export interface SidebarSurfaceVisualConfig {
-  /** Expanded sidebar width. */
-  sidebarWidth?: number | string;
-  /** Width when the sidebar is collapsed (icon-only mode). */
-  collapsedWidth?: number | string;
-  /** Width of the optional right-side aside panel. */
-  asideWidth?: number | string;
-  /** Whether the sidebar supports collapsing. */
-  collapsible?: boolean;
-  /** Draw a border between the sidebar and content areas. */
-  bordered?: boolean;
-  stackOnMobile?: boolean;
-  stackOnTablet?: boolean;
-
-  /** Highest-precedence visual defaults for this surface instance. */
-  profileOverrides?: SurfaceVisualOverrides;
-}
-
-/** Presentation slots for the sidebar, content area, header, footer, and aside. */
-export interface SidebarSurfacePresentationConfig {
-  /** Primary sidebar content (navigation, filters, etc.). */
-  sidebar: ReactNode;
-  /** Main content area. */
-  content: ReactNode;
-  header?: ReactNode;
-  footer?: ReactNode;
-  /** Optional right-side panel for contextual info. */
-  aside?: ReactNode;
-}
-
-/** Behavioral config for sidebar collapse state and actions. */
-export interface SidebarSurfaceBehaviorConfig {
-  /** Current collapsed state (controlled). */
-  collapsed?: boolean;
-  /** Called when the user toggles the sidebar collapse state. */
-  onCollapsedChange?: (collapsed: boolean) => void;
-  /** Accessible label for the collapse toggle button. */
-  toggleLabel?: string;
-  actions?: SurfaceAction<void>[];
-}
-
-/**
- * Complete sidebar surface configuration for sidebar-driven layouts
- * (e.g., settings pages, admin panels, documentation browsers).
- */
-export interface SidebarSurfaceConfig {
-  visual: SidebarSurfaceVisualConfig;
-  presentation: SidebarSurfacePresentationConfig;
-  behavior: SidebarSurfaceBehaviorConfig;
   /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
 }
@@ -1909,52 +1692,6 @@ export interface MarketingSurfaceConfig {
   visual: MarketingSurfaceVisualConfig;
   presentation: MarketingSurfacePresentationConfig;
   behavior: MarketingSurfaceBehaviorConfig;
-  /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
-  access?: AppResolvedSurfaceAccess;
-}
-
-// ---------------------------------------------------------------------------
-// Onboarding surface contracts
-// ---------------------------------------------------------------------------
-
-/** Visual configuration for onboarding wizard surfaces. */
-export interface OnboardingSurfaceVisualConfig {
-  maxWidth?: number | string;
-  heroPosition?: 'start' | 'end';
-  orientation?: StepWizardOrientation;
-  showProgress?: boolean;
-  allowSkip?: boolean;
-  stackOnMobile?: boolean;
-  stackOnTablet?: boolean;
-
-  /** Highest-precedence visual defaults for this surface instance. */
-  profileOverrides?: SurfaceVisualOverrides;
-}
-
-/** Presentation slots for onboarding chrome, hero, and progress checklist. */
-export interface OnboardingSurfacePresentationConfig {
-  chrome: SurfacePageChrome;
-  description?: ReactNode;
-  /** Hero image or welcome illustration. */
-  hero?: ReactNode;
-  /** Checklist component showing overall onboarding progress. */
-  checklist?: ReactNode;
-  footer?: ReactNode;
-  renderField?: FormBuilderRenderField<FieldDef>;
-  emptyState?: ReactNode;
-}
-
-/**
- * Complete onboarding surface configuration.
- *
- * Reuses `WizardSurfaceBehaviorConfig` for step management because
- * onboarding is fundamentally a wizard flow with different presentation.
- */
-export interface OnboardingSurfaceConfig {
-  visual: OnboardingSurfaceVisualConfig;
-  presentation: OnboardingSurfacePresentationConfig;
-  /** Reuses wizard behavior: steps, values, navigation, submit. */
-  behavior: WizardSurfaceBehaviorConfig;
   /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
 }
@@ -3041,23 +2778,3 @@ export interface PricingSurfaceConfig {
 // ---------------------------------------------------------------------------
 // Shared visual overrides (Wave 5, section 4)
 // ---------------------------------------------------------------------------
-
-/**
- * Instance-level visual configuration applied after the resolved tenant artifact.
- * This is the highest typed DS configuration layer before app-local class rules
- * and the narrowly allowed runtime-geometry inline escape hatch.
- */
-export interface SurfaceVisualOverrides {
-  density?: 'compact' | 'comfortable' | 'spacious';
-  cardVariant?: 'outlined' | 'elevated' | 'filled' | 'ghost';
-  sectionSpacing?: 'sm' | 'md' | 'lg';
-  headerWeight?: 'lighter' | 'normal' | 'heavier';
-  animateEntrance?: boolean;
-  entranceStyle?: 'none' | 'fade' | 'slideUp' | 'spring' | 'bounce';
-  entranceDuration?: number;
-  staggerDelay?: number;
-  badgeShape?: 'rounded' | 'pill' | 'square';
-  labelStyle?: 'uppercase' | 'sentence' | 'capitalize';
-  countUpEnabled?: boolean;
-  pulseSpeed?: 'none' | 'slow' | 'normal' | 'fast';
-}

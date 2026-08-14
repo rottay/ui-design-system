@@ -409,11 +409,6 @@
       "import": "./dist/entrypoints/public/surfaces/oauth-transition/index.js",
       "require": "./dist/entrypoints/public/surfaces/oauth-transition/index.cjs"
     },
-    "./surfaces/state-cards": {
-      "types": "./dist/entrypoints/public/surfaces/state-cards/index.d.ts",
-      "import": "./dist/entrypoints/public/surfaces/state-cards/index.js",
-      "require": "./dist/entrypoints/public/surfaces/state-cards/index.cjs"
-    },
     "./public-entrypoints-manifest": {
       "default": "./public-entrypoints.manifest.json"
     },
@@ -537,10 +532,10 @@
       "import": "./dist/styles.css",
       "default": "./dist/styles.css"
     },
-    "./styles/platform": {
-      "style": "./dist/platform.css",
-      "import": "./dist/platform.css",
-      "default": "./dist/platform.css"
+    "./styles/default": {
+      "style": "./dist/rottay.css",
+      "import": "./dist/rottay.css",
+      "default": "./dist/rottay.css"
     },
     "./styles/bithire": {
       "style": "./dist/bithire.css",
@@ -553,9 +548,9 @@
       "default": "./dist/evnto.css"
     },
     "./styles/rottay": {
-      "style": "./dist/platform.css",
-      "import": "./dist/platform.css",
-      "default": "./dist/platform.css"
+      "style": "./dist/rottay.css",
+      "import": "./dist/rottay.css",
+      "default": "./dist/rottay.css"
     },
     "./styles/modern": {
       "style": "./dist/modern-engine.css",
@@ -567,11 +562,6 @@
       "import": "./dist/eslint.js",
       "require": "./dist/eslint.cjs"
     },
-    "./commercial": {
-      "types": "./dist/commercial.d.ts",
-      "import": "./dist/commercial.js",
-      "require": "./dist/commercial.cjs"
-    },
     "./supplier-contract": {
       "default": "./supplier-contract.json"
     },
@@ -582,11 +572,6 @@
     "./supplier-honesty-cli": {
       "import": "./consumer/ds-supplier-honesty.mjs",
       "default": "./consumer/ds-supplier-honesty.mjs"
-    },
-    "./commercial.css": {
-      "style": "./dist/commercial.css",
-      "import": "./dist/commercial.css",
-      "default": "./dist/commercial.css"
     },
     "./fonts/editorial-display.css": {
       "style": "./dist/fonts/editorial-display.css",
@@ -630,8 +615,7 @@
     "dist/**/*.d.ts",
     "dist/styles.css",
     "dist/modern-engine.css",
-    "dist/commercial.css",
-    "dist/platform.css",
+    "dist/rottay.css",
     "dist/bithire.css",
     "dist/evnto.css",
     "dist/fonts/**",
@@ -653,10 +637,9 @@
     "icons:check": "node scripts/generate-semantic-icons.mjs --check",
     "prebuild": "pnpm run public-entrypoints:check && pnpm run cra17:licenses && pnpm run icons:check && pnpm run contract:check && pnpm run hooks:check && pnpm run tenant-theme-fixtures:check && pnpm run csssource:check",
     "prepack": "pnpm run public-entrypoints:check && pnpm run distfresh:check && pnpm run cra15:gate && pnpm run cra17:licenses && pnpm run cra17:declarations",
-    "build": "tsc && vite build && pnpm run build:modern-css && pnpm run build:commercial-css && pnpm run build:vertical-css && pnpm run build:fonts && pnpm run build:stamp",
+    "build": "tsc && vite build && pnpm run build:modern-css && pnpm run build:vertical-css && pnpm run build:fonts && pnpm run build:stamp",
     "postbuild": "pnpm run cra14:check",
     "build:modern-css": "postcss src/foundation/tokens/css/runtime/engines/modern/compiled.css -o dist/modern-engine.css",
-    "build:commercial-css": "node scripts/build-commercial-css.mjs",
     "build:stamp": "node scripts/write-build-stamp.mjs",
     "distfresh:check": "node scripts/dist-freshness-gate.mjs --check",
     "engine-audit:check": "node scripts/engine-token-audit.mjs --check",
@@ -678,7 +661,7 @@
     "gat07:write": "node scripts/gat-07-exact-proof.mjs --write",
     "gat09:structural": "node scripts/gat-09-full-claim-integrity.mjs --structural",
     "gat09:gate": "node scripts/gat-09-full-claim-integrity.mjs",
-    "test:scripts": "node --test scripts/quality-evidence/v2/*.test.mjs && node --test scripts/*.test.mjs && node --test ../../scripts/effect-registry-audit.test.mjs && vitest run --config scripts/vitest.scripts.config.ts",
+    "test:scripts": "node --test scripts/quality-evidence/v2/*.test.mjs && node --test scripts/quality-evidence/programs/modern-rescue/program-check.test.mjs scripts/quality-evidence/programs/modern-rescue/manifest/generator.test.mjs && node --test scripts/*.test.mjs && node --test ../../scripts/effect-registry-audit.test.mjs && vitest run --config scripts/vitest.scripts.config.ts",
     "pretest": "pnpm run gates:ci",
     "build:vertical-artifacts": "node scripts/build-vertical-artifacts.mjs",
     "build:vertical-css": "node scripts/build-vertical-artifacts.mjs && node scripts/build-vertical-css.mjs",
@@ -699,6 +682,12 @@
     "quality-evidence:v2:drills": "node --test scripts/quality-evidence/v2/drills.test.mjs",
     "quality-evidence:v2:round": "node scripts/quality-evidence/v2/cli.mjs round-evidence",
     "size-axis:check": "node scripts/size-axis-law-gate.mjs --check",
+    "spacing-rhythm:check": "node scripts/spacing-rhythm-contract-gate.mjs",
+    "spacing-rhythm:test": "node --test scripts/spacing-rhythm-contract-gate.test.mjs",
+    "channel-liveness:check": "node scripts/channel-liveness-gate.mjs --check",
+    "channel-liveness:test": "node --test scripts/channel-liveness-gate.test.mjs",
+    "platform-identity:check": "node scripts/platform-identity-zero-gate.mjs",
+    "platform-identity:test": "node --test scripts/platform-identity-zero-gate.test.mjs",
     "gate:styles-css": "node --test scripts/vertical-css-staleness.gate.mjs",
     "packinv:check": "node scripts/pack-inventory-gate.mjs --check",
     "packinv:write": "node scripts/pack-inventory-gate.mjs --write",
@@ -822,7 +811,6 @@
       "./structures/column-menu": "entrypoints/public/structures/column-menu/index.ts",
       "./surfaces/collection-workspace": "entrypoints/public/surfaces/collection-workspace/index.ts",
       "./surfaces/oauth-transition": "entrypoints/public/surfaces/oauth-transition/index.ts",
-      "./surfaces/state-cards": "entrypoints/public/surfaces/state-cards/index.ts",
       "./icons": "entrypoints/icons/index.ts",
       "./icons/full": "entrypoints/icons/full/index.ts",
       "./icons/presets/bithire": "entrypoints/icons/presets/bithire/index.ts",
@@ -844,8 +832,7 @@
       "./effects": "entrypoints/graphics/effects/index.ts",
       "./spatial": "entrypoints/graphics/spatial/index.ts",
       "./spatial/spec": "entrypoints/graphics/spatial/spec/index.ts",
-      "./eslint": "entrypoints/eslint/index.ts",
-      "./commercial": "entrypoints/commercial/index.ts"
+      "./eslint": "entrypoints/eslint/index.ts"
     },
     "gateCommands": {
       "test:unit": [

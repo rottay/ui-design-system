@@ -1,22 +1,26 @@
 "use client";
 
-import { Suspense, useMemo } from "react";
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
 import {
   AlertDialog,
   Box,
   Button,
-  DesignSystemProvider,
   Heading,
   PatternFilterBuilder,
   PatternKanbanBoard,
   PatternSavedViewsBar,
   Text,
-  bithireBrandTheme,
 } from "@rottay/design-system";
 
-import { tenantConfigFor as brandLocaleTenantConfigFor } from "@/components/brand-locale-evidence";
+import {
+  ShowroomTenantProvider,
+  type ShowroomDensityPosture,
+  type ShowroomTenantLocale,
+  type ShowroomTenantSource,
+  type ShowroomTenantTheme,
+} from "@/components/showroom-tenant";
 
 /**
  * Daisy-regression live evidence probe (2026-07-26).
@@ -27,51 +31,16 @@ import { tenantConfigFor as brandLocaleTenantConfigFor } from "@/components/bran
  * AlertDialog modern portal/top-layer posture whose contract moved off
  * the dead Daisy class list onto the canonical rottay-* hooks.
  *
+ * The tenant ground is `ShowroomTenantProvider`, which owns both governed
+ * sources: the UNSPREAD registry object for `bithire-static` and the
+ * validated/hydrated/compiled `TenantThemeDocument` for `themanagement-db`.
+ * The axes below are the provider's own props -- a hand-built config or a
+ * raw `appearance` literal blocks visual-authority resolution, and a blocked
+ * resolution photographs a spinner instead of the branches under test.
+ *
  * URL-addressable: ?source=bithire-static|themanagement-db&locale=en|es|ar
  * &density=compact|comfortable|spacious&theme=light|dark
  */
-
-type Source = "bithire-static" | "themanagement-db";
-type Locale = "en" | "es" | "ar";
-type Density = "compact" | "comfortable" | "spacious";
-type Theme = "light" | "dark";
-
-function tenantConfig(source: Source, locale: Locale, density: Density, theme: Theme) {
-  const appearanceDensity = density === "comfortable" ? ("normal" as const) : density;
-  if (source === "themanagement-db") {
-    // Same wiring as K4LaneBProbe: DB fixture tenant, dark via Appearance.
-    const base = brandLocaleTenantConfigFor("themanagementmiami", locale);
-    return {
-      ...base,
-      theme,
-      appearance: {
-        ...base.appearance,
-        general: {
-          ...base.appearance?.general,
-          density: appearanceDensity,
-          ...(theme === "dark" ? { backgroundMode: "dark" as const } : {}),
-        },
-      },
-    };
-  }
-  return {
-    slug: "bithire",
-    name: "BitHire",
-    vertical: "bithire",
-    engine: "modern" as const,
-    theme,
-    plan: "enterprise" as const,
-    features: ["*"],
-    branding: { companyName: "BitHire" },
-    brandTheme: bithireBrandTheme,
-    appearance: {
-      general: {
-        density: appearanceDensity,
-        ...(theme === "dark" ? { backgroundMode: "dark" as const } : {}),
-      },
-    },
-  };
-}
 
 const FILTER_FIELDS = [
   { name: "stage", label: "Stage", type: "select" as const, options: ["Screening", "Interview", "Offer"] },
@@ -133,26 +102,20 @@ function Cells({ dialogOpen }: { dialogOpen: boolean }) {
 
 function ProbeContent() {
   const searchParams = useSearchParams();
-  const source: Source = searchParams.get("source") === "themanagement-db" ? "themanagement-db" : "bithire-static";
-  const locale: Locale = searchParams.get("locale") === "es" || searchParams.get("locale") === "ar" ? (searchParams.get("locale") as Locale) : "en";
-  const density: Density = searchParams.get("density") === "compact" || searchParams.get("density") === "spacious" ? (searchParams.get("density") as Density) : "comfortable";
-  const theme: Theme = searchParams.get("theme") === "dark" ? "dark" : "light";
+  const source: ShowroomTenantSource = searchParams.get("source") === "themanagement-db" ? "themanagement-db" : "bithire-static";
+  const locale: ShowroomTenantLocale = searchParams.get("locale") === "es" || searchParams.get("locale") === "ar" ? (searchParams.get("locale") as ShowroomTenantLocale) : "en";
+  const density: ShowroomDensityPosture = searchParams.get("density") === "compact" || searchParams.get("density") === "spacious" ? (searchParams.get("density") as ShowroomDensityPosture) : "comfortable";
+  const theme: ShowroomTenantTheme = searchParams.get("theme") === "dark" ? "dark" : "light";
   // The dialog is opt-in (`&dialog=1`) so it does not cover the loading
   // cells in their own captures (it portals above everything by design).
   const dialogOpen = searchParams.get("dialog") === "1";
 
-  const config = useMemo(
-    () => tenantConfig(source, locale, density, theme),
-    [source, locale, density, theme],
-  );
-
   return (
-    <DesignSystemProvider
-      tenantConfig={{ ...config, locale }}
-      vertical="bithire"
+    <ShowroomTenantProvider
+      source={source}
       locale={locale}
-      forceEngine="modern"
-      forceTheme={theme}
+      density={density}
+      theme={theme}
     >
       <Box
         data-testid="dr-root"
@@ -168,7 +131,7 @@ function ProbeContent() {
         <Heading level="h2">Daisy-regression evidence — loading branches + AlertDialog</Heading>
         <Cells dialogOpen={dialogOpen} />
       </Box>
-    </DesignSystemProvider>
+    </ShowroomTenantProvider>
   );
 }
 

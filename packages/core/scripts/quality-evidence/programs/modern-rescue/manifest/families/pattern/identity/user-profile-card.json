@@ -6,17 +6,17 @@
     "category": "identity",
     "name": "UserProfileCard",
     "components": [
-      "UserProfileCard"
+      "PatternUserProfileCard"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
     "sourceOwner": "packages/core/src/ui/patterns/identity/profile/user-profile-card",
-    "publicComponents": [],
-    "unresolvedPublicComponents": [
-      "UserProfileCard"
+    "publicComponents": [
+      "PatternUserProfileCard"
     ],
+    "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "5414b3fd15ca29b28f7a2b185b882fe2c85685a0097c9171f671a1e17ae36d25"
+    "inventoryRowDigest": "8c450b39538b96c0873cb2755966b8008e891a58e40ce0e14f2f7c99cf873617"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

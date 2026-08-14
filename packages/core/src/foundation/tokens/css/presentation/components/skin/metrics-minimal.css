@@ -29,7 +29,8 @@
  * GEOMETRY DRAIN (premium wave): the engine's static inline geometry (panel
  * frame, header rule, icon wells, live badge/dot, meter track/fill frame,
  * scroll region) moved here; the panel block size rides a private seam whose
- * fallback follows the governed rhythm dial from the shipped 415px measure.
+ * fallback is the shipped 415px measure byte-exact, reading no rhythm channel —
+ * rhythm owns the room around content, never a panel's capacity.
  * The fill WIDTH stays inline as runtime data and now anchors to the logical
  * inline-start (the former physical `left: 0` was LTR-only); the chevron
  * mirrors under RTL. This file also adds the reduced-motion and
@@ -60,7 +61,7 @@
   /* The panel is its own responsive frame — every cut in this file is keyed on
      the PANEL's inline size, never the viewport. */
   container: ds-metrics-minimal / inline-size;
-  block-size: var(--_ds-dashboard-panel-block-size, calc(415px * var(--ds-rhythm-effective-scale, 1)));
+  block-size: var(--_ds-dashboard-panel-block-size, 415px);
   /* Panel frame rides the tenant density plane (metrics-cards idiom). */
   padding: calc(16px * var(--ds-density-effective-scale, 1));
   position: relative;

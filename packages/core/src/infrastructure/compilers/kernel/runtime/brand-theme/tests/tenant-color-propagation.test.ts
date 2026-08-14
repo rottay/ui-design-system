@@ -31,6 +31,14 @@
  * Both are pinned. The residue that is still unreachable is a much shorter,
  * explicitly-reasoned STOPPED list rather than five whole families.
  *
+ * `--ds-color-border-focus`, `--ds-color-link` and `--ds-color-link-hover`
+ * moved from that STOPPED residue into the pinned-and-reachable side in this
+ * revision: they are now derived by the shared `deriveInteractionFloor`
+ * (`../../../foundation/css/color-math/interaction-floor`), the one
+ * remaining author of that floor now that the competing retired-branding
+ * emitter which used to force this compiler to defer to it is retired. See
+ * "one channel, one author" below.
+ *
  * The drill closes the loop with EXTENSION-CANNOT-BEAT-TENANT: a channel that
  * stays frozen while its seed moves is exactly what a planted extension
  * re-declaration produces, and the shared detector in
@@ -50,8 +58,6 @@ import {
   FIRST_PARTY_ARTIFACT_SPECS,
   renderFirstPartyArtifact,
 } from '@/infrastructure/compilers/runtime/tenant-css';
-import { generateTenantCss } from '@/infrastructure/compilers/runtime/tenant-css/visual-config';
-import type { TenantConfig } from '@/foundation/contracts';
 import {
   ruleRootStates,
   tenantOverrideConflicts,
@@ -250,21 +256,27 @@ describe('TENANT-COLOR PROPAGATION · the reach a seed has today', () => {
  * is semantically keyed to. Emptying the inventory by deleting it would have
  * lost the evidence, so the names stayed and the expectation flipped.
  *
- * Two of the five names are absent, for two different and non-negotiable
- * reasons:
+ * `links` moved INTO this list in this revision. It used to be excluded and
+ * pinned separately (see the "one channel, one author" describe block below)
+ * because `--ds-color-link` already had an author: the retired-branding
+ * emitter in the runtime tenant-CSS generator derived it from this same
+ * primary seed, and the retired single-emitter assertion rejected two compiled paths
+ * claiming the same light-block channel. That generator, and the emitter
+ * inside it, are retired in full. The shared floor this compiler and the DB
+ * appearance compiler both call (`deriveInteractionFloor`) is now the ONLY
+ * author of `--ds-color-link` and `--ds-color-border-focus`, so the
+ * conflict this family used to avoid no longer exists to avoid. `floor: 2`,
+ * not 3 — the floor reaches `--ds-color-link` and `--ds-color-link-hover`,
+ * but not `--ds-color-link-visited`, which nothing derives.
  *
- *   • `focus ring` — the two channels that literally spell `focus-ring` are on
- *     the STOPPED list below, because claiming them repaints bithire's and
- *     evnto's dark focus treatment. The focused CONTROL still tracks the seed,
- *     through `--ds-input-border-focus` and `--ds-input-shadow-focus`, which
- *     land in the `inputs` family — capability covered, repaint not taken.
- *   • `links` — `--ds-color-link` already has an author: the legacy-branding
- *     emitter in `runtime/tenant-css/visual-config` derives it from this same
- *     primary seed. Deriving it here too produced a two-author conflict that
- *     `assertSingleLightEmitter` rejects by design, so the competing emission
- *     was removed at ITS source rather than filtered at the merge. The family
- *     was never inert on the path that ships it; it was inert only in this
- *     compiler's own map. Pinned separately below.
+ * `focus ring` remains absent, for the reason it always was: the two
+ * channels that literally spell `focus-ring` are on the STOPPED list below,
+ * because claiming them repaints bithire's and evnto's dark focus treatment.
+ * The focused CONTROL still tracks the seed, through `--ds-input-border-focus`
+ * and `--ds-input-shadow-focus`, which land in the `inputs` family —
+ * capability covered, repaint not taken. (`--ds-color-border-focus` is a
+ * DIFFERENT channel from anything spelling `focus-ring`, and IS covered — see
+ * "one channel, one author" below.)
  */
 const FORMERLY_INERT: readonly {
   family: string;
@@ -280,6 +292,11 @@ const FORMERLY_INERT: readonly {
     paths: ['static', 'db'],
   },
   { family: 'inputs', seed: 'primary', floor: 2, paths: ['static', 'db'] },
+  // `--ds-color-link` and `--ds-color-link-hover`, from the shared
+  // interaction floor. Scoped to `static` here because this suite only
+  // proves DB-path presence, not DB-path novelty, for these two channels —
+  // see "one channel, one author" below for why.
+  { family: 'links', seed: 'primary', floor: 2, paths: ['static'] },
   // `cards` reaches its ground through `--ds-color-bg-elevated`. The DB path
   // emits that channel, so the chain closes there. The static path does not —
   // all three first-party extensions author the ground ladder by hand, and a
@@ -335,54 +352,66 @@ describe('TENANT-COLOR PROPAGATION · the reach a palette-only tenant has', () =
 
   it('the reach totals are floors, not anecdotes', () => {
     // Before the derivation: 16 and 14.
+    // TODO(regenerate): 21 undercounts as of the interaction-floor wiring
+    // (this file's "one channel, one author" section) -- `--ds-color-link`,
+    // `--ds-color-link-hover`, `--ds-color-border-focus` and
+    // `--ds-color-primary-foreground` are all now reachable from MINIMAL's
+    // primary seed and were not before, so the true count is measurably
+    // higher than 21. Left as the old literal (still a valid floor, since
+    // `toBeGreaterThanOrEqual` only breaks on a DECREASE) rather than
+    // guessed at; re-run this suite and replace with the observed value.
     expect(MINIMAL_PRIMARY_REACH.length).toBeGreaterThanOrEqual(21);
     expect(MINIMAL_BACKGROUND_REACH.length).toBeGreaterThanOrEqual(16);
   });
 });
 
 /**
- * Channels this compiler must NOT derive because something else already does.
+ * Channels this compiler now derives directly -- and the reason the pin
+ * flipped.
  *
- * `assertSingleLightEmitter` in `runtime/tenant-css/visual-config` throws when
- * a light-block channel has two authors, and its message is explicit that the
- * fix is to remove the competing emission at its source rather than filter at
- * the merge. Both of these are derived from the primary seed by the
- * legacy-branding emitter, so this compiler deriving them too was a duplicate
- * author, not added reach. The pin exists so a future wave does not re-add
- * them without first retiring the other emitter.
+ * These two used to be channels this compiler had to NOT derive, because
+ * something else already did: the retired single-emitter assertion in the (now fully
+ * retired) runtime tenant-CSS generator threw when a light-block channel had
+ * two authors, and both were derived from the primary seed by that
+ * generator's own retired-branding emitter. Retiring the competing emitter is
+ * exactly the "first retire the other emitter" precondition the original pin
+ * named as the only way this could ever change. It has changed: the shared
+ * `deriveInteractionFloor` (used by both this compiler and the DB appearance
+ * compiler) is the floor's one remaining author, so a palette-only theme now
+ * gets these two channels directly from `compileBrandTheme`, with no second
+ * emitter left to collide with.
  */
-const OWNED_BY_ANOTHER_EMITTER = [
+const NOW_CLAIMED_BY_THIS_COMPILER = [
   '--ds-color-border-focus',
   '--ds-color-link',
 ] as const;
 
 describe('TENANT-COLOR PROPAGATION · one channel, one author', () => {
-  it('the derivation does not claim a channel another emitter owns', () => {
-    const claimed = OWNED_BY_ANOTHER_EMITTER.filter(
+  it('the derivation now claims these two channels directly -- the other emitter that used to own them is retired', () => {
+    const claimed = NOW_CLAIMED_BY_THIS_COMPILER.filter(
       (channel) => channel in MINIMAL_BASE
     );
-    expect(claimed).toEqual([]);
+    expect(claimed).toEqual([...NOW_CLAIMED_BY_THIS_COMPILER]);
+    // Pass-through: for an unauthored theme these restate the primary seed
+    // verbatim (see `deriveInteractionFloor`'s file header for why).
+    expect(MINIMAL_BASE['--ds-color-border-focus']).toBe(MINIMAL.palette!.primaryColor);
+    expect(MINIMAL_BASE['--ds-color-link']).toBe(MINIMAL.palette!.primaryColor);
   });
 
-  it('a palette-only tenant still gets those channels from the emitter that owns them', () => {
-    // The capability is not lost by withholding it here — it is just authored
-    // one tier down, where it already tracked the same seed.
-    const css = generateTenantCss(
-      {
-        id: 'minimal',
-        slug: 'minimal',
-        name: 'Minimal',
-        branding: { companyName: 'Minimal', primaryColor: '#B4322A' },
-      } as unknown as TenantConfig,
-      { includeDarkSelector: false }
-    );
-    for (const channel of OWNED_BY_ANOTHER_EMITTER) {
-      expect({ channel, emitted: css.includes(`${channel}:`) }).toEqual({
-        channel,
-        emitted: true,
-      });
+  it('a palette-only DB-document tenant also gets both channels, through the same shared floor', () => {
+    // The retired retired-branding emitter this pin used to be about took a
+    // bare `TenantConfig.branding` literal with no BrandTheme at all -- a
+    // shape neither surviving compile path accepts. The DB document path
+    // (already exercised elsewhere in this file via `dbVariables`) is the
+    // sanctioned modern equivalent of "just a palette, nothing else": this
+    // only asserts PRESENCE through it, not novelty, since the DB path's own
+    // history with this floor is not this file's claim to make.
+    const seeded = { primary: '#B4322A', secondary: '#5B7C99', accent: '#6f92b0' };
+    const vars = dbVariables(seeded);
+    for (const channel of NOW_CLAIMED_BY_THIS_COMPILER) {
+      expect({ channel, emitted: channel in vars }).toEqual({ channel, emitted: true });
     }
-    expect(css).toContain('#B4322A');
+    expect(vars['--ds-color-link']).toBe('#B4322A');
   });
 });
 
@@ -396,6 +425,12 @@ describe('TENANT-COLOR PROPAGATION · one channel, one author', () => {
  * is not wrong; shipping it is a sighted-confirm decision, not a mechanical
  * one. The list is here so the remaining gap stays countable, and so that
  * claiming any of these turns this test RED in the same change.
+ *
+ * `--ds-color-link-hover` moved OUT of this list in this revision. It is one
+ * of the four channels the shared interaction floor now derives directly
+ * (see `NOW_CLAIMED_BY_THIS_COMPILER` above and
+ * `extended-palette-floor.test.ts`), so it is claimed, not withheld.
+ * `--ds-color-link-visited` stays — nothing derives it.
  */
 const STOPPED_PENDING_SIGHTED_CONFIRM = [
   '--ds-button-primary-bg-active',
@@ -406,7 +441,6 @@ const STOPPED_PENDING_SIGHTED_CONFIRM = [
   '--ds-color-interactive-bg-hover',
   '--ds-color-interactive-bg-muted',
   '--ds-color-interactive-border',
-  '--ds-color-link-hover',
   '--ds-color-link-visited',
   '--ds-focus-ring-color',
   '--ds-overlay-bg',
@@ -415,10 +449,7 @@ const STOPPED_PENDING_SIGHTED_CONFIRM = [
   '--ds-table-row-bg',
 ] as const;
 
-const withheld = [
-  ...STOPPED_PENDING_SIGHTED_CONFIRM,
-  ...OWNED_BY_ANOTHER_EMITTER,
-];
+const withheld = STOPPED_PENDING_SIGHTED_CONFIRM;
 
 describe('TENANT-COLOR PROPAGATION · the reach still withheld', () => {
   it('no withheld channel is claimed by a palette-only compile', () => {
@@ -459,6 +490,28 @@ describe('TENANT-COLOR PROPAGATION · authored chrome outranks the derivation', 
     // silently retune it when a different seed moves.
     expect(PRIMARY_MOVED).not.toContain('--ds-button-primary-bg');
     expect(MINIMAL_PRIMARY_REACH).toContain('--ds-button-primary-bg');
+  });
+
+  it('the same holds for the interaction floor: bithire authors border-focus/link/link-hover by hand, and they stay put', () => {
+    // The three channels the shared floor would otherwise derive for these,
+    // fixed literals in bithire's own default palette (see
+    // extended-palette-floor.test.ts's "reaches real first-party output"
+    // section for the authored-vs-derived split across all three tenants).
+    const palette = bithireBrandTheme.palette!;
+    expect(palette.borderFocusColor).toBeTruthy();
+    expect(palette.linkColor).toBeTruthy();
+    expect(palette.linkHoverColor).toBeTruthy();
+    expect(BASE['--ds-color-border-focus']).toBe(palette.borderFocusColor);
+    expect(BASE['--ds-color-link']).toBe(palette.linkColor);
+    expect(BASE['--ds-color-link-hover']).toBe(palette.linkHoverColor);
+    expect(PRIMARY_MOVED).not.toContain('--ds-color-border-focus');
+    expect(PRIMARY_MOVED).not.toContain('--ds-color-link');
+    expect(PRIMARY_MOVED).not.toContain('--ds-color-link-hover');
+    // …while the palette-only theme, authoring none of the three, gets them
+    // from the floor and DOES track a primary edit.
+    expect(MINIMAL_PRIMARY_REACH).toContain('--ds-color-border-focus');
+    expect(MINIMAL_PRIMARY_REACH).toContain('--ds-color-link');
+    expect(MINIMAL_PRIMARY_REACH).toContain('--ds-color-link-hover');
   });
 });
 

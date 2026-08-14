@@ -6,17 +6,17 @@
     "category": "forms",
     "name": "FilterPanel",
     "components": [
-      "FilterPanel"
+      "PatternFilterPanel"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
     "sourceOwner": "packages/core/src/ui/patterns/forms/filter-panel",
-    "publicComponents": [],
-    "unresolvedPublicComponents": [
-      "FilterPanel"
+    "publicComponents": [
+      "PatternFilterPanel"
     ],
+    "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "21dc28d8115e4a49d3ae90b81042f6710b3038fdd87a7a791953a56d9adb6fe5"
+    "inventoryRowDigest": "c2a5d0a2124c2a0a530661f1a0c49837f7e0e5a86611bf58d54ae893022ad870"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

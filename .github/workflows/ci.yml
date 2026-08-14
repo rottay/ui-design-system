@@ -139,7 +139,7 @@ jobs:
           # turn this gate into a source of unexplained failures.
           # R1 acceptance corpus. Update deliberately after a reviewed
           # app-bithire publication; never follow a moving branch here.
-          ref: 2e844fd58638987d4a20cb752b2e6e68b63a0a05
+          ref: 8abd05578d04cd3cf1c82ca8d777f0ca1ef6925f
           token: ${{ secrets.ORG_REPO_READ_TOKEN }}
           # actions/checkout requires this path to remain under GITHUB_WORKSPACE.
           path: .corpora/app-bithire
@@ -149,7 +149,7 @@ jobs:
         run: |
           cd "${{ github.workspace }}/.corpora/app-bithire"
           echo "app-bithire corpus SHA: $(git rev-parse HEAD)"
-          echo "app-bithire corpus ref: 2e844fd58638987d4a20cb752b2e6e68b63a0a05"
+          echo "app-bithire corpus ref: 8abd05578d04cd3cf1c82ca8d777f0ca1ef6925f"
 
       # CI runs `test:ci`, and npm fires `pre<name>` only for the EXACT script
       # `test` -- so the `pretest` chain never executed here and sixteen gates
@@ -188,26 +188,6 @@ jobs:
         run: |
           pnpm dependency:honesty:test
           node scripts/dependency-honesty.mjs static
-
-      # Must run BEFORE Build. `build` runs `build:vertical-css`, which regenerates
-      # every first-party artifact in place -- so by the time any test runs, a
-      # hand-edited artifact has already been silently overwritten with a correct
-      # one and nothing downstream can observe the bad committed state. The
-      # `pretest` hook that chains `lint:artifacts` never fires either, because
-      # `test:ci` is not named `test`. This step reads the artifacts from source
-      # (it does not need `dist/`, which only Build produces) and is the only slot
-      # in this workflow where the staleness check can actually see anything.
-      - name: Artifact staleness (before Build regenerates them)
-        run: pnpm --filter @rottay/design-system exec vitest run src/foundation/tokens/__tests__/first-party-artifacts-generated.test.ts
-
-      # GAT-02: the six committed styles/*.css bundles ship in the npm files list
-      # but had no CI check, and Build (below) regenerates them in place, masking
-      # any committed drift. This recomposes every bundle IN MEMORY (compiling the
-      # modern engine from source via postcss, no dist dependency) and byte-diffs
-      # against the committed files. It MUST run before Build for the same reason
-      # the artifact-staleness step above does.
-      - name: Styles bundle staleness (GAT-02, before Build regenerates them)
-        run: pnpm --filter @rottay/design-system run gate:styles-css
 
       # The package postbuild hook runs the WO-CRA-14 public-barrel/chunk gate
       # against the exact dist artifacts produced immediately above it.

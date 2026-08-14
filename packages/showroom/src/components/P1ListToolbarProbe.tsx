@@ -1,11 +1,10 @@
 "use client";
 
 /**
- * P1 ListToolbar probe (showroom): the elevated data-toolbar pattern under
- * two opposing governed sources:
- *  - `bithire-static`: the checked-in BitHire BrandTheme (file-first path);
- *  - `themanagement-db`: the DB Appearance construction mirrored from
- *    `@/components/brand-locale-evidence` (DB-owned runtime path).
+ * P1 ListToolbar probe (showroom): the elevated data-toolbar pattern under the
+ * two opposing governed sources `@/components/showroom-tenant` owns:
+ *  - `bithire-static`: the bundled BitHire vertical, code-owned;
+ *  - `themanagement-db`: a published customer document, compiled and proven.
  *
  * Requested by the ListToolbar lane (see
  * test-artifacts/rottay-design-platform/P1/list-toolbar/list-toolbar.md):
@@ -37,20 +36,17 @@ import { useState } from "react";
 
 import {
   Box,
-  DesignSystemProvider,
   PatternListToolbar,
   Stack,
   Text,
-  bithireBrandTheme,
   type DensityKey,
   type FilterPillConfig,
   type ListToolbarProps,
-  type TenantConfig,
   type ViewMode,
 } from "@rottay/design-system";
 import { Icon } from "@rottay/design-system/icons";
 
-import { tenantConfigFor as brandLocaleTenantConfigFor } from "@/components/brand-locale-evidence";
+import { ShowroomTenantProvider } from "@/components/showroom-tenant";
 
 export type P1ListToolbarSource = "bithire-static" | "themanagement-db";
 export type P1ListToolbarLocale = "en" | "es" | "ar";
@@ -67,26 +63,6 @@ export interface P1ListToolbarProbeProps {
 }
 
 type ToolbarMessages = NonNullable<ListToolbarProps["messages"]>;
-
-function tenantConfig(source: P1ListToolbarSource, locale: P1ListToolbarLocale): TenantConfig {
-  if (source === "themanagement-db") {
-    return brandLocaleTenantConfigFor("themanagementmiami", locale);
-  }
-
-  return {
-    slug: "bithire",
-    name: "BitHire",
-    vertical: "bithire",
-    engine: "modern",
-    theme: "light",
-    plan: "enterprise",
-    features: ["*"],
-    branding: { companyName: "BitHire" },
-    // BitHire is first-party vertical identity and therefore comes from the
-    // checked-in DS theme, never from a customer DB fixture.
-    brandTheme: bithireBrandTheme,
-  };
-}
 
 interface LocaleCopy {
   title: string;
@@ -342,13 +318,7 @@ export function P1ListToolbarProbe({
   const copy = COPY[locale];
 
   return (
-    <DesignSystemProvider
-      tenantConfig={{ ...tenantConfig(source, locale), locale }}
-      vertical="bithire"
-      locale={locale}
-      forceEngine={engine}
-      forceTheme="light"
-    >
+    <ShowroomTenantProvider source={source} locale={locale} engine={engine}>
       <Box
         data-testid="p1lt-canvas"
         style={{
@@ -410,7 +380,7 @@ export function P1ListToolbarProbe({
           </main>
         </Box>
       </Box>
-    </DesignSystemProvider>
+    </ShowroomTenantProvider>
   );
 }
 

@@ -8,6 +8,7 @@ import type {
   StackProps,
   StackSpacingPreset,
 } from "../../contracts";
+import { resolveSpacing } from "../../contracts";
 
 type StackSpacingAttribute = StackSpacingPreset | "custom";
 
@@ -60,8 +61,14 @@ export function resolveStackPresentation(props: StackProps): StackPresentation {
   const spacing = props.gap ?? props.spacing;
   if (spacing !== undefined && !isResponsiveValue(spacing)) {
     if (typeof spacing === "number") {
+      // `custom` is the non-preset spelling, so the enumerated rhythm rules in
+      // layout-primitives.css cannot reach it: a measurement stays exact.
+      // The value goes through the ONE contract-level normalizer, so an unsafe
+      // number collapses to `0px` here exactly as it does on the responsive
+      // path and exactly as Flex has always done, instead of leaking `NaNpx`,
+      // `Infinitypx` or a negative gap into the channel.
       attributes["data-spacing"] = "custom";
-      style["--ds-stack-gap"] = `${spacing}px`;
+      style["--ds-stack-gap"] = resolveSpacing(spacing);
     } else {
       attributes["data-spacing"] = spacing as StackSpacingPreset;
     }

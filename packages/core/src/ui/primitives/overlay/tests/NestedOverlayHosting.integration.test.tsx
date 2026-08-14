@@ -2,7 +2,11 @@ import React from 'react';
 import { describe, expect, it, afterEach, beforeAll, vi } from 'vitest';
 import { cleanup, fireEvent, waitFor } from '@testing-library/react';
 
-import { Modal } from '../Modal';
+// The canonical owner. This used to read `../Modal`, which resolved to the
+// overlay-tier forwarding shim that only re-exported feedback/Modal under the
+// `OverlayModal` alias; the shim is gone, and the behaviour under test here was
+// always the feedback one.
+import { Modal } from '../../feedback/Modal';
 import { Dropdown } from '../Dropdown';
 import { Select } from '../../inputs/Select';
 import { DatePicker } from '../../inputs/DatePicker';

@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 
 import type { ChartPersonalityTokens } from '@/foundation/contracts';
 import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes';
-import { themanagementmiamiBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/fixtures/themanagementmiami';
+import { themanagementmiamiBrandTheme } from '@/tooling/testing/fixtures/brand-themes/themanagementmiami';
 import {
   CHART_CATEGORICAL_SIZE,
   resolveChartSeriesPaint,

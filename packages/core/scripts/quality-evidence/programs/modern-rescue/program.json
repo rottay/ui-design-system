@@ -52,15 +52,12 @@
     "kimiPreservation": "packages/core/KIMI-CUSTOMIZATION-PRESERVATION-MANIFEST.json"
   },
   "denominators": {
-    "visibleFamilies": 252,
-    "rootUiFamilies": 237,
-    "primitives": 100,
-    "patternsExcludingCharts": 56,
+    "visibleFamilies": 255,
+    "primitives": 105,
+    "patternsExcludingCharts": 57,
     "charts": 18,
-    "structures": 27,
-    "pageSurfaces": 36,
-    "surfaceCompositions": 4,
-    "commercialKit": 11
+    "structures": 39,
+    "pageSurfaces": 36
   },
   "controlBaselines": {
     "standard": 13,

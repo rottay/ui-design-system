@@ -6,17 +6,17 @@
     "category": "workflow",
     "name": "OperationalLedger",
     "components": [
-      "OperationalLedger"
+      "PatternOperationalLedger"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
     "sourceOwner": "packages/core/src/ui/patterns/workflow/operational-ledger",
-    "publicComponents": [],
-    "unresolvedPublicComponents": [
-      "OperationalLedger"
+    "publicComponents": [
+      "PatternOperationalLedger"
     ],
+    "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "ae07d3037d6d6759fdfac00b5a08e164c5f697af8d8a6826aca8c8c4442385ae"
+    "inventoryRowDigest": "7d28e9b6ead56eb5c8dfe2457ff1419895ac415f14fb80d53a85d886e7048571"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

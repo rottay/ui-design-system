@@ -6,17 +6,17 @@
     "category": "customization",
     "name": "TenantPreview",
     "components": [
-      "TenantPreview"
+      "PatternTenantPreview"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
     "sourceOwner": "packages/core/src/ui/patterns/customization/tenant-preview",
-    "publicComponents": [],
-    "unresolvedPublicComponents": [
-      "TenantPreview"
+    "publicComponents": [
+      "PatternTenantPreview"
     ],
+    "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "b50b39f2394153c38b89c2bc7eee4a94d614470ad108518ee3a89a7aebf4b007"
+    "inventoryRowDigest": "2692d698fb6548777439f13338bf2f45419d5677318c491c0b9c286eb0511638"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

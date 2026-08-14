@@ -305,7 +305,7 @@
       "budget": {
         "maxDirectSources": 4,
         "maxReachableModules": 22,
-        "maxSourceBytes": 35069
+        "maxSourceBytes": 49826
       },
       "symbols": [
         {
@@ -1568,7 +1568,7 @@
       "budget": {
         "maxDirectSources": 10,
         "maxReachableModules": 242,
-        "maxSourceBytes": 1783125
+        "maxSourceBytes": 1821262
       },
       "symbols": [
         {
@@ -1592,7 +1592,19 @@
           "kind": "value"
         },
         {
+          "name": "GanttChart",
+          "kind": "value"
+        },
+        {
           "name": "GaugeChart",
+          "kind": "value"
+        },
+        {
+          "name": "HeatMap",
+          "kind": "value"
+        },
+        {
+          "name": "Histogram",
           "kind": "value"
         },
         {
@@ -1600,11 +1612,31 @@
           "kind": "value"
         },
         {
+          "name": "NetworkGraph",
+          "kind": "value"
+        },
+        {
+          "name": "PieChart",
+          "kind": "value"
+        },
+        {
           "name": "RadarChart",
           "kind": "value"
         },
         {
+          "name": "SankeyChart",
+          "kind": "value"
+        },
+        {
+          "name": "ScatterChart",
+          "kind": "value"
+        },
+        {
           "name": "Sparkline",
+          "kind": "value"
+        },
+        {
+          "name": "TreeMap",
           "kind": "value"
         },
         {
@@ -1761,42 +1793,11 @@
           "kind": "value"
         }
       ]
-    },
-    "./surfaces/state-cards": {
-      "owner": "surfaces",
-      "family": "state-cards",
-      "boundary": "runtime",
-      "client": true,
-      "source": "src/entrypoints/public/surfaces/state-cards/index.ts",
-      "output": "entrypoints/public/surfaces/state-cards/index",
-      "budget": {
-        "maxDirectSources": 1,
-        "maxReachableModules": 632,
-        "maxSourceBytes": 2250896
-      },
-      "symbols": [
-        {
-          "name": "SurfaceEmptyStateCard",
-          "kind": "value"
-        },
-        {
-          "name": "SurfaceErrorStateCard",
-          "kind": "value"
-        },
-        {
-          "name": "SurfaceLoadingSkeleton",
-          "kind": "value"
-        },
-        {
-          "name": "SurfaceStaleBanner",
-          "kind": "value"
-        }
-      ]
     }
   },
   "coverage": {
-    "runtimeSymbols": 108,
+    "runtimeSymbols": 112,
     "typeSymbols": 47,
-    "totalSymbols": 155
+    "totalSymbols": 159
   }
 }

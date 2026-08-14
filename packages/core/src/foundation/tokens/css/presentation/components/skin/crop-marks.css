@@ -1,0 +1,83 @@
+/**
+ * CropMarks — `+`-style corner registration ticks around content (spec section 5): short
+ * perpendicular hairlines positioned just outside each corner, marking a premium/framed zone
+ * the way a print crop mark marks a trim edge.
+ *
+ * Each tick is an empty, `aria-hidden` element; the hairlines are drawn with `::before`/
+ * `::after` (not a text glyph) so they stay crisp, resolution-independent hairlines at any
+ * size. The ticks sit outside the wrapper's box and never affect its layout size — `children`
+ * remain the only thing that determines the box.
+ *
+ * Tick geometry consumes the shared `--ds-spacing-*` role WITH a literal fallback (the kit's
+ * self-contained idiom), so tenant density scales the tick reach; every offset is a logical
+ * property, so RTL mirrors the marks for free.
+ */
+
+.rt-crop-marks {
+  position: relative;
+  display: block;
+}
+
+.rt-crop-marks__tick {
+  position: absolute;
+  inline-size: 0;
+  block-size: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+.rt-crop-marks__tick::before,
+.rt-crop-marks__tick::after {
+  content: "";
+  position: absolute;
+  background: var(--ds-color-hairline-strong);
+}
+
+/* Horizontal hairline of the tick, centered on the corner point. */
+.rt-crop-marks__tick::before {
+  inset-block-start: 0;
+  inset-inline-start: calc(var(--ds-spacing-3, 0.75rem) / -2);
+  inline-size: var(--ds-spacing-3, 0.75rem);
+  block-size: 1px;
+}
+
+/* Vertical hairline of the tick, centered on the corner point. */
+.rt-crop-marks__tick::after {
+  inset-block-start: calc(var(--ds-spacing-3, 0.75rem) / -2);
+  inset-inline-start: 0;
+  inline-size: 1px;
+  block-size: var(--ds-spacing-3, 0.75rem);
+}
+
+.rt-crop-marks__tick--tl {
+  inset-block-start: calc(var(--ds-spacing-3, 0.75rem) * -1);
+  inset-inline-start: calc(var(--ds-spacing-3, 0.75rem) * -1);
+}
+
+.rt-crop-marks__tick--tr {
+  inset-block-start: calc(var(--ds-spacing-3, 0.75rem) * -1);
+  inset-inline-end: calc(var(--ds-spacing-3, 0.75rem) * -1);
+}
+
+.rt-crop-marks__tick--bl {
+  inset-block-end: calc(var(--ds-spacing-3, 0.75rem) * -1);
+  inset-inline-start: calc(var(--ds-spacing-3, 0.75rem) * -1);
+}
+
+.rt-crop-marks__tick--br {
+  inset-block-end: calc(var(--ds-spacing-3, 0.75rem) * -1);
+  inset-inline-end: calc(var(--ds-spacing-3, 0.75rem) * -1);
+}
+
+.rt-crop-marks__body {
+  position: relative;
+  min-inline-size: 0;
+}
+
+/* Forced colors: the ticks re-key to system ink so the marks never vanish. */
+@media (forced-colors: active) {
+  .rt-crop-marks__tick::before,
+  .rt-crop-marks__tick::after {
+    background: CanvasText;
+  }
+}

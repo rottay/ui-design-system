@@ -6,20 +6,17 @@
     "category": "forms",
     "name": "WizardSurface",
     "components": [
-      "WizardSurface",
-      "OnboardingSurface"
+      "WizardSurface"
     ],
     "sourceRoot": "packages/core/src/ui/surfaces/presentation/pages/forms",
     "sourceOwner": "packages/core/src/ui/surfaces/presentation/pages/forms/wizard",
     "publicComponents": [
       "WizardSurface"
     ],
-    "unresolvedPublicComponents": [
-      "OnboardingSurface"
-    ],
+    "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "526f1876ff26aa01a58d4c556610f4c8713db13f907ad8b865f9339c4b24dafa"
+    "inventoryRowDigest": "f46ebdf3c728c520e6f6d52ee126f7740016515341f249deb05376771ef6ca7f"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

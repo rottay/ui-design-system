@@ -6,17 +6,19 @@
     "category": "feedback",
     "name": "Message",
     "components": [
-      "Message"
+      "MessageProvider",
+      "MessageItem"
     ],
     "sourceRoot": "packages/core/src/ui/primitives",
     "sourceOwner": "packages/core/src/ui/primitives/feedback/Message",
-    "publicComponents": [],
-    "unresolvedPublicComponents": [
-      "Message"
+    "publicComponents": [
+      "MessageProvider",
+      "MessageItem"
     ],
+    "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "d41feb9661e6cd4e09f07fc95d84998c5aca5a0135452629fbd9386b9d73b59c"
+    "inventoryRowDigest": "d4ed545710495a5c38cc7f33aa3573156a2090a55822896d145528f601a94c74"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

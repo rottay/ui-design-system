@@ -18,7 +18,8 @@
  * GEOMETRY DRAIN (premium wave): the engine's static inline geometry (panel
  * frame, header rule, icon wells, live badge/dot, shimmer frame, scroll
  * region) moved here; the panel block size rides a private seam whose fallback
- * follows the governed rhythm dial from the shipped 415px measure.
+ * is the shipped 415px measure byte-exact, reading no rhythm channel — rhythm
+ * owns the room around content, never a panel's capacity.
  * `Text` typography and the counter's runtime value stay in the engine.
  * The motion cadence (slide-in / dot-glow / shimmer) lives in the
  * interactions skin; this file adds the reduced-motion and forced-colors
@@ -54,7 +55,7 @@
      beside-chat strip and a full-width page all get the posture their own
      measure earns. */
   container: ds-metrics-rows / inline-size;
-  block-size: var(--_ds-dashboard-panel-block-size, calc(415px * var(--ds-rhythm-effective-scale, 1)));
+  block-size: var(--_ds-dashboard-panel-block-size, 415px);
   /* Panel frame rides the tenant density plane (metrics-cards idiom). */
   padding: calc(16px * var(--ds-density-effective-scale, 1));
   position: relative;

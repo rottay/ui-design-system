@@ -145,9 +145,11 @@ export const TONE_TO_VARIANT = {
 } as const satisfies Record<Tone, string>;
 
 /**
- * Modal width scale, shared by both Modal component families
- * (`primitives/feedback/Modal` and `primitives/overlay/Modal`) so the two parallel component
- * trees consume one declaration instead of two independently-maintained copies.
+ * Modal width scale. It was introduced here when two Modal folders appeared to
+ * exist (`primitives/feedback/Modal` and a shim tree at `primitives/overlay/Modal`),
+ * to keep one declaration instead of two drifting copies. The shim tree is gone
+ * and `primitives/feedback/Modal` is the single owner; the scale stays in the
+ * shared kernel because size vocabulary is contract, not component-local detail.
  */
 export type ModalSize = Size | '4xl' | '5xl' | 'full';
 

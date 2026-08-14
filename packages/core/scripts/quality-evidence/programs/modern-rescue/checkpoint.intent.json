@@ -45,7 +45,8 @@
     "Historical receipts remain immutable evidence. Historical Markdown is not an active authority."
   ],
   "derivedFacts": [
-    "ledger.families",
+    "inventory.families",
+    "manifest.controlFamilyCells",
     "adjudication.accepted",
     "adjudication.assessedNotElevated",
     "adjudication.unreviewed"

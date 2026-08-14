@@ -15,7 +15,7 @@ export default function ThemesPage() {
         backLabel="Foundations"
         badge="Tenant layer"
         title="Themes"
-        description="Themes apply tenant and vertical identity on top of the shared token contract, so the same UI can feel like Platform, BitHire, or Evnto without forking components."
+        description="Themes apply tenant and vertical identity on top of the shared token contract, so the same UI can feel like Rottay, BitHire, or Evnto without forking components."
         panels={[
           {
             title: 'Resolution order',

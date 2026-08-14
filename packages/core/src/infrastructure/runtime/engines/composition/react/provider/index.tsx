@@ -27,7 +27,7 @@
  * @package @rottay/design-system
  */
 
-import { claimRootAttribute } from '@/infrastructure/runtime/foundation/root-attributes';
+import { claimRootAttribute } from '@/infrastructure/runtime/foundation/root-attributes/registry';
 import React, {
   createContext,
   useContext,

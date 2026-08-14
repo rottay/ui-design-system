@@ -3,6 +3,7 @@ import {
   type EffectDefinition,
   type EffectId,
 } from '../../../../../foundation/contracts/runtime/effects';
+import { FIRST_PARTY_VERTICAL_SLUGS } from '../../../../../foundation/tokens/ts/presentation/brand-themes';
 
 const PURPOSES = new Set([
   'state',
@@ -34,7 +35,13 @@ const ARIA_STRATEGIES = new Set([
   'semantic-host',
   'described-alternative',
 ]);
-const VERTICALS = new Set(['platform', 'evnto', 'bithire']);
+// Derived, not restated. This was `new Set(['platform', 'evnto', 'bithire'])`
+// — a THIRD copy of the vertical set, and the most dangerous kind: a plain
+// runtime `Set<string>` that the closed `FirstPartyVerticalId` union cannot
+// see. When the union dropped `platform`, every typed site failed to compile
+// and this one kept silently rejecting `rottay` as an unknown vertical,
+// throwing `Invalid effect definition in closed registry` at module load.
+const VERTICALS: ReadonlySet<string> = new Set(FIRST_PARTY_VERTICAL_SLUGS);
 const ENGINES = new Set(['classic', 'modern', 'rustic']);
 const REDUCED_FALLBACKS = new Set([
   'final-state',

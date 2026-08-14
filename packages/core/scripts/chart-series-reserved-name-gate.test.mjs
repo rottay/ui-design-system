@@ -1,11 +1,12 @@
 /**
  * Self-test for chart-series-reserved-name-gate.mjs (W5 palette seam).
  *
- * Unit-drills the comment stripper and violation finder against in-memory
- * fixtures, then integration-checks the real tree: the authored runtime must
- * contain zero definitions of the reserved `--ds-chart-series-N` channel and
- * the sanctioned compiler emission must be visible to (and absorbed by) the
- * allowlist — proving the gate would bite if the emitter moved.
+ * The gate adjudicates syntactically: a finding is a DEFINITION position in a
+ * real parse tree (postcss for CSS, the TypeScript AST for TS/TSX), never a
+ * textual occurrence. These tests pin both halves of that contract — the green
+ * half (metadata strings, reads, comments, `var(` chains) and the red half
+ * (declarations, property keys, computed keys, `setProperty`, element-access
+ * assignment targets) — and then integration-check the real tree.
  */
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
@@ -15,13 +16,37 @@ import test from 'node:test';
 
 import {
   DEFINER_ALLOWLIST,
+  RESERVED_NAME,
   findViolations,
+  isStaticReservedName,
   runGate,
-  stripComments,
 } from './chart-series-reserved-name-gate.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const gate = join(scriptDir, 'chart-series-reserved-name-gate.mjs');
+
+/* ------------------------------------------------------------------ */
+/* Name classification                                                 */
+/* ------------------------------------------------------------------ */
+
+test('only canonical slots 1..10 are reserved names', () => {
+  for (let slot = 1; slot <= 10; slot += 1) {
+    assert.equal(isStaticReservedName(`${RESERVED_NAME}${slot}`), true, `slot ${slot}`);
+  }
+  for (const suffix of ['', '0', '11', '01', '1.0', '+1', '1e1', ' 1', '1 ', 'x', '*', '1a']) {
+    assert.equal(
+      isStaticReservedName(`${RESERVED_NAME}${suffix}`),
+      false,
+      `suffix ${JSON.stringify(suffix)} must not classify`,
+    );
+  }
+  assert.equal(isStaticReservedName('--ds-chart-paint-1'), false);
+  assert.equal(isStaticReservedName(undefined), false);
+});
+
+/* ------------------------------------------------------------------ */
+/* GREEN: consumption, metadata, prose                                 */
+/* ------------------------------------------------------------------ */
 
 test('consumption through var() chains never flags', () => {
   const css = [
@@ -34,7 +59,63 @@ test('consumption through var() chains never flags', () => {
 
   const ts = "const paint = `var(--ds-chart-series-${slot}, ${fallback})`;";
   assert.deepEqual(findViolations(ts, '.ts'), []);
+
+  const nested =
+    'const chain = `var(--ds-chart-category-${slot}, var(--ds-chart-series-${slot}, ${fallback}))`;';
+  assert.deepEqual(findViolations(nested, '.ts'), []);
 });
+
+test('a metadata registry listing derived channel names never flags', () => {
+  const source = [
+    'export const CAPABILITIES = [',
+    '  {',
+    "    id: 'palette.seeds',",
+    '    derivedChannels: [',
+    "      '--ds-color-primary',",
+    "      '--ds-chart-series-1',",
+    "      '--ds-color-text-on-primary',",
+    '    ],',
+    '  },',
+    '];',
+  ].join('\n');
+  assert.deepEqual(findViolations(source, '.ts'), []);
+});
+
+test('plain string values, reads and comparisons never flag', () => {
+  const source = [
+    "const documented = '--ds-chart-series-3';",
+    "const read = computedStyle.getPropertyValue('--ds-chart-series-3');",
+    "if (name === '--ds-chart-series-3') { report(name); }",
+    "const inValue = { color: 'var(--ds-chart-series-4, #123456)' };",
+    "emit(['--ds-chart-series-5']);",
+  ].join('\n');
+  assert.deepEqual(findViolations(source, '.ts'), []);
+});
+
+test('comment and JSDoc prose about the reserved channel never flags', () => {
+  const source = [
+    '/**',
+    ' * Derive the ten `--ds-chart-series-*` slot colors for a tenant.',
+    ' * Never define --ds-chart-series-1 outside the compiler.',
+    ' */',
+    '// also not here: --ds-chart-series-2: red;',
+    "const consumption = 'var(--ds-chart-series-2, #123456)';",
+  ].join('\n');
+  assert.deepEqual(findViolations(source, '.ts'), []);
+
+  const css = [
+    '/*',
+    ' * --ds-chart-series-1..10 are deliberately NOT registered here.',
+    ' * --ds-chart-series-N is emitted by the tenant appearance compiler.',
+    ' */',
+    '.scope { color: var(--ds-chart-series-1, red); }',
+  ].join('\n');
+  assert.deepEqual(findViolations(css, '.css'), []);
+});
+
+/* ------------------------------------------------------------------ */
+/* RED: definition positions                                           */
+/* ------------------------------------------------------------------ */
 
 test('a CSS declaration of the reserved channel flags with position', () => {
   const css = [
@@ -45,47 +126,139 @@ test('a CSS declaration of the reserved channel flags with position', () => {
   const violations = findViolations(css, '.css');
   assert.equal(violations.length, 1);
   assert.equal(violations[0].line, 2);
+  assert.equal(violations[0].column, 3);
   assert.match(violations[0].excerpt, /--ds-chart-series-3:/);
 });
 
-test('a TS style key or template assignment of the reserved channel flags', () => {
-  const styleKey = "const style = { '--ds-chart-series-1': color };";
-  assert.equal(findViolations(styleKey, '.tsx').length, 1);
-
-  const template = 'vars[`--ds-chart-series-${index + 1}`] = color;';
-  assert.equal(findViolations(template, '.ts').length, 1);
-});
-
-test('comment prose about the reserved channel never flags', () => {
-  const commented = [
-    '/* --ds-chart-series-1 is reserved for the compiler */',
-    '// never define --ds-chart-series-2 locally',
-    "const consumption = 'var(--ds-chart-series-2, #123456)';",
+test('a CSS declaration nested inside an at-rule flags', () => {
+  const css = [
+    '@media (prefers-color-scheme: dark) {',
+    '  .scope {',
+    '    --ds-chart-series-10: #101010;',
+    '  }',
+    '}',
   ].join('\n');
-  assert.deepEqual(findViolations(commented, '.ts'), []);
-});
-
-test('comment stripping preserves line positions', () => {
-  const source = '/* one\ntwo */\n--ds-chart-series-4: red;';
-  const stripped = stripComments(source, '.css');
-  assert.equal(stripped.split('\n').length, source.split('\n').length);
-  const violations = findViolations(source, '.css');
+  const violations = findViolations(css, '.css');
   assert.equal(violations.length, 1);
   assert.equal(violations[0].line, 3);
 });
 
-test('the real tree has zero violations and a live allowlisted emitter', () => {
+test('a TS object property key of the reserved channel flags', () => {
+  const source = [
+    'const style = {',
+    "  '--ds-chart-series-1': color,",
+    '};',
+  ].join('\n');
+  const violations = findViolations(source, '.tsx');
+  assert.equal(violations.length, 1);
+  assert.equal(violations[0].line, 2);
+  assert.equal(violations[0].column, 3);
+  assert.match(violations[0].excerpt, /--ds-chart-series-1/);
+});
+
+test('a computed property key of the reserved channel flags', () => {
+  const staticKey = [
+    'const style = {',
+    "  ['--ds-chart-series-2']: color,",
+    '};',
+  ].join('\n');
+  const staticViolations = findViolations(staticKey, '.ts');
+  assert.equal(staticViolations.length, 1);
+  assert.equal(staticViolations[0].line, 2);
+
+  const dynamicKey = [
+    'const style = {',
+    '  [`--ds-chart-series-${slot}`]: color,',
+    '};',
+  ].join('\n');
+  const dynamicViolations = findViolations(dynamicKey, '.ts');
+  assert.equal(dynamicViolations.length, 1);
+  assert.equal(dynamicViolations[0].line, 2);
+});
+
+test('a class property declaration of the reserved channel flags', () => {
+  const source = [
+    'class Vars {',
+    "  '--ds-chart-series-4' = '#000000';",
+    '}',
+  ].join('\n');
+  const violations = findViolations(source, '.ts');
+  assert.equal(violations.length, 1);
+  assert.equal(violations[0].line, 2);
+});
+
+test('a setProperty call defining the reserved channel flags', () => {
+  const source = [
+    'function paint(node: HTMLElement, color: string) {',
+    "  node.style.setProperty('--ds-chart-series-5', color);",
+    '}',
+  ].join('\n');
+  const violations = findViolations(source, '.ts');
+  assert.equal(violations.length, 1);
+  assert.equal(violations[0].line, 2);
+  assert.match(violations[0].excerpt, /setProperty/);
+
+  const dynamic = 'node.style.setProperty(`--ds-chart-series-${slot}`, color);';
+  assert.equal(findViolations(dynamic, '.ts').length, 1);
+});
+
+test('a template-built element-access assignment flags (the emitter shape)', () => {
+  const source = [
+    'palette.forEach((color, index) => {',
+    '  vars[`--ds-chart-series-${index + 1}`] = color;',
+    '});',
+  ].join('\n');
+  const violations = findViolations(source, '.ts');
+  assert.equal(violations.length, 1);
+  assert.equal(violations[0].line, 2);
+  assert.match(violations[0].excerpt, /vars\[/);
+
+  const staticTarget = "vars['--ds-chart-series-6'] = color;";
+  assert.equal(findViolations(staticTarget, '.ts').length, 1);
+});
+
+test('each definition is reported exactly once', () => {
+  const source = [
+    'const style = {',
+    "  '--ds-chart-series-1': a,",
+    "  '--ds-chart-series-2': b,",
+    '};',
+  ].join('\n');
+  const violations = findViolations(source, '.ts');
+  assert.equal(violations.length, 2);
+  assert.deepEqual(
+    violations.map((violation) => violation.line),
+    [2, 3],
+  );
+});
+
+/* ------------------------------------------------------------------ */
+/* Integration against the real tree                                   */
+/* ------------------------------------------------------------------ */
+
+test('the real tree has zero violations and exactly one allowlisted definer hit', () => {
   const { findings, scanned, allowlistedHits } = runGate();
   assert.deepEqual(findings, []);
   assert.ok(scanned > 100, `expected a real scan, saw ${scanned} files`);
-  // The appearance compiler emission must still be caught by the scanner and
-  // absorbed by the allowlist; zero hits would mean the emitter moved and the
-  // allowlist entry is stale.
-  assert.ok(
-    allowlistedHits >= 1,
-    `expected the sanctioned emitter to register, saw ${allowlistedHits}`,
+  // The appearance compiler's template assignment is the ONE sanctioned
+  // definition in the tree. Zero would mean the emitter moved and the
+  // allowlist entry is stale; more than one would mean a second definer
+  // slipped into an allowlisted path. The oklch derivation file names the
+  // channel only in prose, so it is no longer a hit under syntactic
+  // adjudication — it stays allowlisted so a future emission there is a
+  // reviewed change, not a silent one.
+  assert.equal(
+    allowlistedHits,
+    1,
+    `expected exactly the compiler emission, saw ${allowlistedHits}`,
   );
-  assert.ok(DEFINER_ALLOWLIST.length >= 1);
+});
+
+test('the definer allowlist cannot grow without touching this test', () => {
+  assert.deepEqual(DEFINER_ALLOWLIST, [
+    'infrastructure/compilers/kernel/runtime/appearance/index.ts',
+    'foundation/kernel/color/oklch/chart-series/index.ts',
+  ]);
 });
 
 test('--check exits 0 on the current tree', () => {
@@ -94,4 +267,5 @@ test('--check exits 0 on the current tree', () => {
   });
   assert.equal(result.status, 0, result.stdout + result.stderr);
   assert.match(result.stdout, /violations: 0/);
+  assert.match(result.stdout, /allowlisted definer occurrences: 1/);
 });

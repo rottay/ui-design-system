@@ -54,15 +54,9 @@ html[data-tenant='evnto']:not([data-theme='dark']):not(.dark) {
   /* Borders - subtle on light; --ds-color-border is the BrandTheme's. */
   --ds-color-border-primary: rgba(0, 0, 0, 0.08);
   --ds-color-border-secondary: rgba(0, 0, 0, 0.12);
-  --ds-color-border-focus: #171717;
 
   /* Border Radius - largest of the three brands (H4) */
   --ds-radius-full: 9999px;
-
-  /* Link colors */
-  --ds-color-link: #171717;
-  --ds-color-link-hover: #525252;
-  --ds-color-link-visited: #737373;
 
   /* Status colors - Neutral tones, avoid bright blue/red */
   --ds-color-success-bg: #f0fdf4;

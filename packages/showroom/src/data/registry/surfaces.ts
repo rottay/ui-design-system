@@ -64,9 +64,9 @@ const experience: SurfaceEntry[] = [
   { slug: 'editor', name: 'EditorSurface', group: 'experience', description: 'Rich content editor with toolbar and preview', engines: allEngines },
   { slug: 'empty-state', name: 'EmptyStateSurface', group: 'experience', description: 'Full-page empty state with illustration and CTA', engines: allEngines },
   { slug: 'marketing', name: 'MarketingSurface', group: 'experience', description: 'Marketing landing page layout', engines: allEngines },
+  { slug: 'oauth-transition', name: 'OAuthTransitionScreen', group: 'experience', description: 'Full-page branded transition shown while an OAuth redirect or return is in flight', engines: allEngines },
   { slug: 'media', name: 'MediaSurface', group: 'experience', description: 'Media gallery with lightbox and metadata', engines: allEngines },
   { slug: 'notification', name: 'NotificationSurface', group: 'experience', description: 'Notification center page with preferences', engines: allEngines },
-  { slug: 'onboarding', name: 'OnboardingSurface', group: 'experience', description: 'Guided onboarding flow with checklist', engines: allEngines },
   { slug: 'pricing', name: 'PricingSurface', group: 'experience', description: 'Pricing page with plan comparison and checkout', engines: allEngines },
 ];
 

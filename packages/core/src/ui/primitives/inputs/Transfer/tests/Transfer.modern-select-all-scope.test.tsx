@@ -37,7 +37,7 @@ describe('Transfer modern - select-all scope under search', () => {
         onSelectChange={handleSelectChange}
         titles={['Available', 'Selected']}
       />,
-      { engine: 'modern' },
+      'modern',
     );
 
     const panel = sourcePanel(container);
@@ -68,7 +68,7 @@ describe('Transfer modern - select-all scope under search', () => {
         onSelectChange={handleSelectChange}
         titles={['Available', 'Selected']}
       />,
-      { engine: 'modern' },
+      'modern',
     );
 
     const panel = sourcePanel(container);

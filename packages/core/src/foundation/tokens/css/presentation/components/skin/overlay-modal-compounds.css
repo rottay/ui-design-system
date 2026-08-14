@@ -1,16 +1,29 @@
 /**
  * overlay/Modal compounds + shared utils (WO-SKIN-04 checkpoint P).
  *
+ * INERT AS SHIPPED — do not read the rules below as live paint.
+ *
  * DELIBERATELY UNLAYERED, same rationale as every engine skin (P-47).
  *
- * NOT `components/skin/modal-compounds.css` — that file is `primitives/feedback/
- * Modal`'s SHIPPED compound skin (WO-SKIN-03) and paints a different component.
- * The two families rendered identical compound classnames until checkpoint P
- * renamed this one's to `rottay-overlay-modal-{header,body,footer}`; the CloseButton
- * never collided (`rottay-modal-close-button` here vs `rottay-modal-close` there).
- * Every rule below is anchored to a class unique to THIS family. `data-part` is a
- * shared vocabulary, not an identifier — a bare `[data-part='title']` would reach
- * into feedback/Modal, which is exactly the collision the rename resolved.
+ * This file was written when `primitives/overlay/Modal` looked like a second
+ * compound family, and checkpoint P renamed its selectors to
+ * `rottay-overlay-modal-{header,body,footer}` / `rottay-modal-close-button` to
+ * stop them colliding with `primitives/feedback/Modal`'s shipped compound skin
+ * (`components/skin/modal-compounds.css`, WO-SKIN-03). The second family was
+ * never real: overlay/Modal's compounds re-exported the feedback compounds
+ * verbatim, so the rename moved these selectors off the only elements that
+ * could ever have carried them. The feedback compounds emit
+ * `rottay-modal-{header,body,footer}` and `rottay-modal-close`; nothing in
+ * packages/core, the Showroom, or any app emits the four classes below.
+ * The shim tree is now retired, which makes that permanent.
+ *
+ * It still ships from base.css and styles.css because its four
+ * `--ds-modal-close-button-*` channels are declared and read ONLY here, and
+ * those reads are pinned into `hooks-manifest.json` by digest for
+ * `reads-adjudication-gate`. Dropping the file therefore belongs to the token
+ * drain wave, which regenerates that manifest — not to a source edit. Until
+ * then this is dead weight in the stylesheet, not a contract: do not add rules
+ * here, and do not cite it as evidence that a compound is painted.
  *
  * These compounds are engine-agnostic (one render tree, no engine split), so they
  * live in a single file rather than a modern/rustic pair. `Modal.Header` composes

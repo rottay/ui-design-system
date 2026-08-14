@@ -115,9 +115,13 @@ function expectedLayer(specifier) {
   if (normalized.includes("runtime/personality")) return "rottay-personality";
   if (normalized.includes("foundation/responsive/")) return "rottay-responsive";
   if (normalized.includes("foundation/animations/")) return "rottay-motion";
+  // Token-authoring channels only. This is an explicit per-channel list, not a
+  // broad `foundation/` catch-all: a new foundation channel must be classified
+  // deliberately, so it fails as "no cascade owner" until an owner declares it.
   if (
     normalized.includes("foundation/base/") ||
-    normalized.includes("foundation/themes/")
+    normalized.includes("foundation/themes/") ||
+    normalized.includes("foundation/monochrome/")
   )
     return "rottay-tokens";
   return null;

@@ -41,8 +41,10 @@ describe('Modern Image - error fallback accessible name', () => {
     expect(screen.getByRole('img', { name: 'Team photo' })).toBe(fallback);
   });
 
-  it('falls back to the published failure string when no alt was supplied', () => {
-    const { container } = render(<ModernImage src="/broken.png" />);
+  it('falls back to the published failure string when the caller supplied an empty alt', () => {
+    // `alt` is required by the public contract, so "no alt" reaches the engine
+    // as the empty string a decorative caller writes.
+    const { container } = render(<ModernImage src="/broken.png" alt="" />);
     failTheImage(container);
 
     const fallback = screen.getByRole('img', { name: 'Image failed to load' });

@@ -30,6 +30,9 @@
 /* Layer 1: DS foundation + default theme */
 @import "../../foundation/base/index.css" layer(rottay-tokens);
 @import "../../foundation/themes/default.css" layer(rottay-tokens);
+/* Perceptually-even grayscale ramp + ink/paper surface anchors. Distinct from the
+   hue-tinted `--ds-color-neutral-*` UI scale; see foundation/monochrome/index.css. */
+@import "../../foundation/monochrome/index.css" layer(rottay-tokens);
 @import "../../foundation/animations/index.css" layer(rottay-motion);
 
 /* Layer 2: Component tokens */
@@ -691,6 +694,32 @@
 @import "../../presentation/components/skin/chart-waterfall.css"
   layer(rottay-components);
 @import "../../presentation/components/skin/chart-c.css"
+  layer(rottay-components);
+
+/* Monochrome owners (ex-"commercial kit"). Reclassified by role, not by where they
+   are sold: primitives, patterns and a structure that paint through the grayscale
+   ramp above. They were previously concatenated into a private `dist/commercial.css`
+   by a directory-scanning build step; they now ship through this entrypoint like
+   every other DS skin. */
+@import "../../presentation/components/skin/ascii-frame.css"
+  layer(rottay-components);
+@import "../../presentation/components/skin/invert-section.css"
+  layer(rottay-components);
+@import "../../presentation/components/skin/crop-marks.css"
+  layer(rottay-components);
+@import "../../presentation/components/skin/texture-backdrop.css"
+  layer(rottay-components);
+@import "../../presentation/components/skin/typewriter.css"
+  layer(rottay-components);
+@import "../../presentation/components/skin/section-frame.css"
+  layer(rottay-components);
+@import "../../presentation/components/skin/ascii-diagram.css"
+  layer(rottay-components);
+@import "../../presentation/components/skin/terminal-block.css"
+  layer(rottay-components);
+@import "../../presentation/components/skin/mono-stat.css"
+  layer(rottay-components);
+@import "../../presentation/components/skin/tree-view-connector.css"
   layer(rottay-components);
 @import "../../runtime/engines/modern/skin/pattern-calendar-view.css"
   layer(rottay-engines);

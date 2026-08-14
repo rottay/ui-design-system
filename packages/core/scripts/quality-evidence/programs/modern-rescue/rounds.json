@@ -21,17 +21,17 @@
       "enabled": true,
       "name": "Truth, instrumentation and baseline",
       "scope": {
-        "families": 252,
+        "families": 255,
         "writes": "quality tooling and contracts only; no broad family styling"
       },
       "objectives": [
-        "source-and-barrel inventory equals 252-family contract",
+        "source-and-barrel inventory equals the active family contract",
         "every family has layer profile and applicable rubric dimensions",
         "quality-evidence v2 separates binary eligibility from 100-point sighted craft",
         "hard-veto, freshness and non-vacuity drills are executable",
         "control impact baseline distinguishes EXACT, INFERRED and UNKNOWN",
         "static-vs-db parity baseline is honest per capability",
-        "the 100-primitive denominator counts canonical SemanticSurface and treats deprecated OverlayModal as a compatibility alias of feedback Modal rather than a separate family",
+        "the 105-primitive denominator counts canonical SemanticSurface, and the deprecated OverlayModal alias is retired at source rather than counted as a separate family",
         "consumer censuses are complete for OverlayModal, BrandTheme.engineBridge and ComponentExtensions or EngineAwareProps.extensions before any retirement decision",
         "documents above the 200 Advanced tokenOverrides cap fail closed with one named error instead of truncating silently, after a census of existing documents",
         "every scored dimension requires observable evidence and every resilience declaration includes the applicable stressMatrix floor",
@@ -48,9 +48,9 @@
         "current worktree ownership and foreign WIP are frozen"
       ],
       "exit": [
-        "252-of-252 inventory correspondence",
+        "complete inventory correspondence with zero unmatched rows in either direction",
         "zero unknown family owner or layer profile",
-        "canonical primitive inventory is 100 including SemanticSurface, with OverlayModal tracked only as a compatibility migration",
+        "canonical primitive inventory is 105 including SemanticSurface, with OverlayModal retired from source and guarded against re-entry",
         "existing documents above the Expert cap are zero or explicitly migrated, and 201 tokenOverrides produce one named fail-closed result",
         "minimum reliable evidence policy and work-order admission are enforced rather than advisory",
         "roadmap registry confirms WO-CRA-23 as the owner-authorized standalone authority before claim",
@@ -109,7 +109,7 @@
       ],
       "exit": [
         "reference lab renders both tenant sources from canonical authorities with identical hardcoded content and zero product application dependency",
-        "all eight reference scenes load, and their union exposes primitives patterns charts structures surfaces compositions and commercial coverage without mounting the 252-family universe in one DOM",
+        "all eight reference scenes load, and their union exposes primitive pattern chart structure and surface coverage without mounting the whole family universe in one DOM",
         "all canaries pass binary contracts",
         "each canary proposed craft score at least 95",
         "each critical dimension at least 4-of-5",
@@ -307,7 +307,7 @@
       "enabled": true,
       "name": "Primitive depth and resilience",
       "scope": {
-        "primitives": 100
+        "primitives": 105
       },
       "objectives": [
         "apply accepted R1 grammar without shallow file visitation",
@@ -317,7 +317,7 @@
         "update observable contracts and negative drills once through the round integrator"
       ],
       "exit": [
-        "100-of-100 primitives have fresh scorecards",
+        "105-of-105 primitives have fresh scorecards",
         "static-layout primitives at least 90",
         "interactive-control-data-overlay primitives at least 92",
         "critical dimensions at least 4-of-5",
@@ -330,7 +330,7 @@
       "enabled": true,
       "name": "Patterns and chart grammar",
       "scope": {
-        "patterns": 56,
+        "patterns": 57,
         "charts": 18
       },
       "objectives": [
@@ -341,7 +341,7 @@
         "prove at least four independent customization axes per pattern or chart"
       ],
       "exit": [
-        "74-of-74 families have fresh scorecards",
+        "75-of-75 families have fresh scorecards",
         "every family at least 92",
         "all R3 calibration and cohort checkpoints from visual-craft-contract have explicit Codex GO receipts",
         "zero lower-layer reconstruction",
@@ -351,26 +351,23 @@
     {
       "id": "R4",
       "enabled": true,
-      "name": "Structures, surfaces, composition and commercial",
+      "name": "Structures and surfaces",
       "scope": {
-        "structures": 27,
-        "pageSurfaces": 36,
-        "surfaceCompositions": 4,
-        "commercialKit": 11
+        "structures": 39,
+        "pageSurfaces": 36
       },
       "objectives": [
         "compose complete resilient screens without product-domain leakage",
         "make mobile a priority-reduced composition",
         "prove adaptive solver behavior without unjustified internal holes",
-        "prove five axes for structures and six for surfaces and compositions",
+        "prove five axes for structures and six for surfaces",
         "make each complete screen recognizable by tenant in grayscale through chrome type geometry material rhythm and responsive composition",
-        "keep commercial kit a separate product expression not a second engine"
+        "hold the relocated marketing-showcase families to the same craft floor as their new neighbours rather than to a separate commercial standard"
       ],
       "exit": [
-        "78-of-78 families have fresh scorecards",
+        "75-of-75 families have fresh scorecards",
         "structures at least 93",
-        "surfaces and compositions at least 94",
-        "commercial at least 92",
+        "surfaces at least 94",
         "all R4 calibration and cohort checkpoints from visual-craft-contract have explicit Codex GO receipts",
         "zero hard vetoes and zero round prototypes pending"
       ]
@@ -380,7 +377,7 @@
       "enabled": true,
       "name": "Cross-system canon and propagation closure",
       "scope": {
-        "families": 252,
+        "families": 255,
         "controls": "all active Standard and Pro plus Expert entries changed by R1-R4"
       },
       "objectives": [
@@ -408,7 +405,7 @@
       "enabled": true,
       "name": "Independent Codex certification",
       "scope": {
-        "families": 252,
+        "families": 255,
         "tenants": [
           "bithire-static",
           "themanagement-db"
@@ -437,13 +434,13 @@
       "contract": "customization-model.json#r7Execution",
       "entry": [
         "R6 has a local Codex-accepted frozen-tree result",
-        "the 252-family R6 baseline remains immutable and source-bound",
+        "the R6 baseline over the complete active inventory remains immutable and source-bound",
         "the owner has explicitly authorized R7",
         "the live customization census is regenerated at R7 entry rather than copied from a prior report",
         "all R7 external references are non-normative benchmarks rather than naming visual or architectural authorities"
       ],
       "scope": {
-        "families": 252,
+        "families": 255,
         "standardControlsBaseline": 13,
         "proCapabilitiesBaseline": 7,
         "expertExactAllowlistBaseline": 294,
@@ -496,7 +493,7 @@
       ],
       "objectives": [
         "generalize the evidence sealer so R7 summaries derive family outcomes KPIs and capture counts from fresh round artifacts rather than R0 constants",
-        "map all 252 families to stable parts states property groups eligible customization axes invariant axes and exact fallbacks",
+        "map every family in the active inventory to stable parts states property groups eligible customization axes invariant axes and exact fallbacks",
         "adjudicate the complete Modern-reachable writer and reader graph without dead unowned disconnected or generated-only CSS",
         "expand the six current recipe families into all fourteen target semantic groups without duplicate authority",
         "prove each admitted recipe group has at least two productive families and two plausible tenant postures",
@@ -518,7 +515,7 @@
         "iterationLaw": "MAIN runs checkpoint-sized long iterations and does not stop for reversible choices already resolved by the contract"
       },
       "exit": [
-        "252-of-252 family customization dispositions are fresh source-bound and complete",
+        "family customization dispositions are fresh source-bound and complete for the entire active inventory with zero families unaccounted for",
         "14-of-14 target semantic recipe groups are productive",
         "coverage equals 1",
         "resilience equals 1",
@@ -545,7 +542,7 @@
         "R6 accepted baseline cannot be reproduced",
         "a proposed change requires tenant selectors tenant-conditional TSX a second compiler or a second engine",
         "a new public channel lacks productive consumers bounds static-DB parity or exact restore",
-        "a new family would silently change the 252 denominator",
+        "a new family would silently change the active family denominator",
         "shared-file ownership overlaps or more than one heavy browser or build process is active",
         "a cohort cannot pass without weakening tests baselines accessibility or resilience floors"
       ]

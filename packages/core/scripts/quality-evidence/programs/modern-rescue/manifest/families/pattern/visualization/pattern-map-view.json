@@ -9,14 +9,14 @@
       "PatternMapView"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/visualization",
+    "sourceOwner": "packages/core/src/ui/patterns/visualization/map-view",
     "publicComponents": [
       "PatternMapView"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "b12546c697850ef66ae5d8673486afc5ac38ce42a355fc0173e539325ed3f6c0"
+    "inventoryRowDigest": "802e91735253996fa50cd9bcbbec48dd18a5f3e9ac16ba53495896502c774e1f"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

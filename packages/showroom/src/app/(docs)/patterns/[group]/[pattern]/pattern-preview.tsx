@@ -8,7 +8,11 @@ import {
 } from '@/components/playground/surface-tokens';
 import { patterns } from '@/data/registry';
 import type { PatternGroup } from '@/data/registry';
-import { renderPatternPreview } from './pattern-preview-fixtures';
+import {
+  getPatternAdapterState,
+  renderPatternAdapterPendingNote,
+  renderPatternPreview,
+} from './pattern-preview-fixtures';
 
 const GROUP_META: Record<
   PatternGroup,
@@ -108,10 +112,16 @@ function MissingAdapterNotice({
 
 export function PatternPreview({ slug }: { slug: string }) {
   const entry = patterns.find((pattern) => pattern.slug === slug);
-  const preview = renderPatternPreview(slug);
   const meta = entry ? GROUP_META[entry.group] : null;
 
-  if (!preview) {
+  // Branch on the declared adapter state, not on whether some node came back.
+  // Only `live` earns the chrome below -- the group badge, the accent frame,
+  // and a note telling the reader to check "whether the runtime is coming from
+  // the real DS export". Wrapping that around a pending placeholder asserted
+  // render parity the placeholder does not have.
+  const state = getPatternAdapterState(slug);
+
+  if (state !== 'live') {
     return (
       <Box
         style={{
@@ -124,7 +134,9 @@ export function PatternPreview({ slug }: { slug: string }) {
           background: `linear-gradient(180deg, ${SHOWROOM_SURFACES.subtle} 0%, ${SHOWROOM_SURFACES.surface} 100%)`,
         }}
       >
-        {entry ? (
+        {state === 'pending' ? (
+          <Flex justify="center">{renderPatternAdapterPendingNote(slug)}</Flex>
+        ) : entry ? (
           <MissingAdapterNotice slug={entry.slug} name={entry.name} />
         ) : (
           <Stack spacing={8} align="center">
@@ -139,6 +151,8 @@ export function PatternPreview({ slug }: { slug: string }) {
       </Box>
     );
   }
+
+  const preview = renderPatternPreview(slug);
 
   const accent =
     entry?.group === 'data'

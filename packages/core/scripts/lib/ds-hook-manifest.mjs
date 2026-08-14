@@ -1157,20 +1157,18 @@ export const PROMOTIONS = Object.freeze([
       '--ds-record-facts-header-padding',
       '--ds-record-facts-compact-item-height',
       '--ds-record-facts-compact-item-padding',
-      '--ds-empty-state-card-padding-block',
-      '--ds-empty-state-card-padding-inline',
     ]),
-    owner: 'RecordFacts and EmptyState presentation families',
-    slot: 'one record-facts or empty-state surface scope',
+    owner: 'RecordFacts presentation family',
+    slot: 'one record-facts surface scope',
     valueType: 'DS spacing tokens or structural <length> values',
     fallback: 'the component family geometry',
     sinceVersion: '2.19.36',
     whiteLabelCompat: 'not-tenant-emitted',
-    subtreeRepaint: 'geometry of the one record or empty-state surface; no paint changes.',
+    subtreeRepaint: 'geometry of the one record-facts surface; no paint changes.',
     rationale:
-      'Record density and empty-state copy length are content-dependent composition ' +
-      'decisions. Exposing their local geometry keeps products on the canonical ' +
-      'components without giving the application ownership of global spacing tokens.',
+      'Record density is a content-dependent composition decision. The stable family ' +
+      'identifier predates the EmptyState retirement; its remaining hooks now describe ' +
+      'only RecordFacts geometry and do not grant global spacing authority.',
   }),
   Object.freeze({
     id: 'action-dock-and-sheet-geometry',

@@ -44,19 +44,42 @@ export type {
 export { SystemCssVariablesBridge } from '../presentation/adapters/react/css-variables-bridge';
 
 export {
+  censusRuntimeVisualPayload,
   resolveVisualAuthority,
   reportVisualAuthorityConflict,
   resetVisualAuthorityDiagnostics,
   appearanceMatchesArtifact,
+  verifyTenantThemeArtifactV1,
+  verifyMountedTenantThemeArtifact,
+  auditRetainedTenantThemeArtifact,
+  retainMountedTenantThemeArtifact,
+  // `armMountedTenantThemeArtifact` is deliberately NOT re-exported. It is the
+  // ledger's commit-phase write, and the only supported way to reach it is the
+  // claim below, which keeps render read-only.
+  prepareMountedTenantThemeArtifactClaim,
+  emitTenantThemeArtifactForSsr,
+  auditTenantThemeArtifactSsrReceipt,
+  tenantThemeArtifactElementId,
+  TENANT_THEME_ARTIFACT_ELEMENT_ID_PREFIX,
+  tenantThemeArtifactCssIntegrity,
+  TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE,
+  TENANT_THEME_ARTIFACT_SLUG_ATTRIBUTE,
+  TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE,
 } from '../foundation/visual-authority';
 export type {
   CompiledArtifactDeclaration,
+  PreparedTenantThemeArtifactClaim,
   ProviderDeclaration,
   RuntimeVisualPayloadCensus,
   VisualAuthorityDeclaration,
   VisualAuthorityInput,
   VisualAuthorityOrigin,
   VisualAuthorityResolution,
+  TenantThemeArtifactExpectation,
+  TenantThemeArtifactVerification,
+  MountedTenantThemeArtifactVerification,
+  TenantThemeArtifactSsrEmission,
+  TenantThemeArtifactSsrEmissionReceipt,
 } from '../foundation/visual-authority';
 
 export {

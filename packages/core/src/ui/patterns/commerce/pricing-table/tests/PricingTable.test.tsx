@@ -2,6 +2,7 @@ import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 
+import type { SupportedLocale } from '@/foundation/i18n/kernel/contracts';
 import { I18nProvider } from '@/infrastructure/runtime/i18n';
 
 import type { StableEngineName } from '../../../../../tooling/testing/helpers/engine';
@@ -16,6 +17,15 @@ const COMPONENTS: Record<StableEngineName, React.ComponentType<PricingTableProps
   modern: ModernPricingTable,
   rustic: RusticPricingTable,
 };
+
+// Each case is a shipped catalog locale paired with the translation that
+// catalog must produce, so a widened locale cannot slip in as a test case.
+const BILLING_TOGGLE_CATALOG_CASES: ReadonlyArray<readonly [SupportedLocale, string]> = [
+  ['es', 'Facturación anual'],
+  ['ar', 'الفوترة السنوية'],
+  ['pt', 'Faturamento anual'],
+  ['fr', 'Facturation annuelle'],
+];
 
 function createProps(overrides: Partial<PricingTableProps> = {}): PricingTableProps {
   return {
@@ -170,12 +180,7 @@ describe('PatternPricingTable', () => {
 
   // An English floor is indistinguishable from a missing key at the call site,
   // so parity is asserted against the shipped catalogs, not the fallback.
-  it.each([
-    ['es', 'Facturación anual'],
-    ['ar', 'الفوترة السنوية'],
-    ['pt', 'Faturamento anual'],
-    ['fr', 'Facturation annuelle'],
-  ])('names the billing toggle from the %s catalog, not the English floor', async (locale, expected) => {
+  it.each(BILLING_TOGGLE_CATALOG_CASES)('names the billing toggle from the %s catalog, not the English floor', async (locale, expected) => {
     render(
       <I18nProvider locale={locale} fallbackLocale={locale}>
         <ModernPricingTable {...createProps({ billingCycle: 'monthly', onBillingCycleChange: vi.fn() })} />

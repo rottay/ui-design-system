@@ -41,12 +41,12 @@ import {
   Text,
 } from '../../../../../primitives';
 import { FadeIn } from '@/graphics/motion';
-import { SurfaceActionBar } from '../../../../runtime/helpers/rendering';
+import { SurfaceActionBar } from '../../../../../structures/shell/surface-chrome';
 import { hasSurfaceError } from '../../../../runtime/helpers';
-import { SurfaceErrorState } from '../../../../runtime/helpers/states';
-import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
-import { resolveStackSpacing } from '../../../../runtime/profile-defaults/personality';
-import { useSurfaceResponsiveLayout } from '../../../../runtime/responsive';
+import { SurfaceErrorState } from '../../../../../structures/feedback/surface-lifecycle';
+import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
+import { resolveStackSpacing } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
+import { useSurfaceResponsiveLayout } from '../../../../../structures/foundation/chrome/runtime/responsive';
 import type { MarketingSurfaceConfig } from '../../../../foundation/contracts';
 
 export interface MarketingSurfaceProps {

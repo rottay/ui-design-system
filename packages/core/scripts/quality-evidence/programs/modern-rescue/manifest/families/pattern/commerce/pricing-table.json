@@ -6,17 +6,17 @@
     "category": "commerce",
     "name": "PricingTable",
     "components": [
-      "PricingTable"
+      "PatternPricingTable"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
     "sourceOwner": "packages/core/src/ui/patterns/commerce/pricing-table",
-    "publicComponents": [],
-    "unresolvedPublicComponents": [
-      "PricingTable"
+    "publicComponents": [
+      "PatternPricingTable"
     ],
+    "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "2b219073c73c9a6a274896fe661ec95055c33180c79f1414bfb61cba632514fc"
+    "inventoryRowDigest": "4008c253365b1812861b044bf4be42ea9c086f6f4260c6b8c7c9c74f3fbf6715"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

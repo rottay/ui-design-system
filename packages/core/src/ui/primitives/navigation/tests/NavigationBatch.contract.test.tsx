@@ -13,13 +13,13 @@ import { BackTop } from '../BackTop';
 import { Breadcrumb, BreadcrumbItem } from '../Breadcrumb';
 import { Anchor } from '../Anchor';
 import { Affix } from '../Affix';
-import { Link } from '../Link';
+import { NavLink } from '../Link';
 import { renderWithEngine } from '../../../../tooling/testing/helpers/engine';
 
 // ---------------------------------------------------------------------------
 // WO-SKIN-04 checkpoint N -- the navigation family (Menu, FloatButton, Tabs,
 // Steps, Stepper, Pagination, Segmented, BackTop, Breadcrumb, Anchor, Affix,
-// Link) data-part contract evidence.
+// NavLink) data-part contract evidence.
 //
 // The pre-step stamps `data-part` (plus data-status/data-selected/data-active/
 // data-disabled/data-open/data-current/data-placement/data-variant/data-shape/
@@ -406,14 +406,14 @@ describe('Navigation-family data-part contract (WO-SKIN-04 checkpoint N)', () =>
     });
   });
 
-  describe('Link', () => {
+  describe('NavLink', () => {
     it.each(ENGINES)(
       'stamps root(data-variant/data-disabled) under the %s engine',
       async (engine) => {
         const { container } = renderWithEngine(
-          <Link href="/x" type="primary" disabled>
+          <NavLink href="/x" type="primary" disabled>
             Link text
-          </Link>,
+          </NavLink>,
           engine,
         );
 

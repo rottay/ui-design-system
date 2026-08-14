@@ -2,7 +2,7 @@
  * Build vertical CSS bundles
  *
  * Creates per-vertical dist artifacts with a dual static scope:
- *   dist/platform.css = base tokens + modern engine + platform/rottay baseline
+ *   dist/rottay.css = base tokens + modern engine + rottay baseline
  *   dist/bithire.css  = BitHire font packs + base tokens + modern engine + bithire baseline
  *   dist/evnto.css    = base tokens + modern engine + evnto baseline
  *   dist/styles.css   = base tokens + modern engine + all file-owned vertical baselines
@@ -16,7 +16,7 @@
  * legacy arm, so it still wins over the engine baseline together with later source
  * order. A @layer wrapper is intentionally NOT used.
  *
- * styles/{index,modern,platform,rottay,bithire,evnto}.css are committed to git.
+ * styles/{index,modern,rottay,bithire,evnto}.css are committed to git.
  * They are the gate-checked source-of-truth mirrors; the npm tarball ships the
  * dist/ copies only (package.json `files` excludes styles/). dist and styles
  * copies are written from the same in-memory bundle, so each shipped dist file
@@ -45,9 +45,7 @@ import { wrapModernFrameworkLayer } from "./lib/modern-framework-layer.mjs";
 // build-vertical-artifacts.mjs, so this script runs after `tsc && vite build`
 // (build:vertical-css sequences it).
 import { springLinearEasing } from "../dist/infrastructure/compilers/kernel/foundation/motion/spring-easing/index.js";
-import { bithireBrandTheme } from "../dist/foundation/tokens/ts/presentation/brand-themes/bithire/index.js";
-import { evntoBrandTheme } from "../dist/foundation/tokens/ts/presentation/brand-themes/evnto/index.js";
-import { rottayBrandTheme } from "../dist/foundation/tokens/ts/presentation/brand-themes/platform/index.js";
+import { FIRST_PARTY_VERTICAL_ROSTER } from "../dist/foundation/tokens/ts/presentation/brand-themes/index.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = resolve(__dirname, "..");
@@ -193,26 +191,37 @@ const baseCssPath = resolve(srcCss, "facade/entrypoints/base.css");
 let baseCss = readFile(baseCssPath);
 baseCss = resolveImports(baseCss, dirname(baseCssPath));
 
-// Vertical definitions: name -> tenant CSS artifact file
-const verticals = [
-  {
-    name: "platform",
-    tenantFile: "facade/artifacts/rottay/index.css",
-    fontPacks: [],
-  },
-  {
-    name: "bithire",
-    tenantFile: "facade/artifacts/bithire/index.css",
-    // First-party vertical identity is file-owned. Customer tenant themes can
-    // still replace the semantic font-family channels through their DB theme.
-    fontPacks: ["humanist-text", "grotesk-display", "plex-mono"],
-  },
-  {
-    name: "evnto",
-    tenantFile: "facade/artifacts/evnto/index.css",
-    fontPacks: [],
-  },
-];
+// Vertical definitions, PROJECTED from the roster rather than restated.
+//
+// This was a hand-maintained table, and every field in it had drifted:
+//   - the first vertical used two different names, so the script carried
+//     remaps in four places and emitted differently named byte-identical
+//     bundles to paper over the disagreement;
+//   - its `fontPacks` disagreed with the roster on ALL THREE rows — rottay and
+//     evnto were `[]` here while the roster declares two and three packs, and
+//     bithire listed the same three packs in a different order. The roster's
+//     `fontPacks` were never read by this script at all, so a vertical could
+//     declare a typeface and silently ship a bundle with no @font-face layer
+//     for it.
+//
+// Deriving removes the whole class. `name` IS the slug, the artifact path and
+// the bundle basename, because the roster derives all three from one field.
+const CSS_SOURCE_PREFIX = "foundation/tokens/css/";
+const verticals = FIRST_PARTY_VERTICAL_ROSTER.map((row) => {
+  if (row.theme.id !== row.slug) {
+    throw new Error(`First-party roster mismatch: theme.id ${row.theme.id} !== slug ${row.slug}`);
+  }
+  if (!row.artifactPath.startsWith(CSS_SOURCE_PREFIX)) {
+    throw new Error(`First-party artifact path is outside the CSS source root: ${row.artifactPath}`);
+  }
+  return {
+    name: row.slug,
+    tenantFile: row.artifactPath.slice(CSS_SOURCE_PREFIX.length),
+    fontPacks: [...row.fontPacks],
+    theme: row.theme,
+    selector: row.selector,
+  };
+});
 
 function fontPackBundle(fontPacks) {
   return fontPacks
@@ -233,7 +242,8 @@ function fontPackBundle(fontPacks) {
 // (foundation/animations/transitions.css) is a cubic-bezier approximation. The
 // tenant-artifact path already emits a generated linear() for
 // --ds-motion-spring-gentle, but NOT for the primary --ds-motion-spring: that
-// only rides the runtime tokenOverrides path (visual-config generateTenantCss),
+// only rides the tenant/DB compile path (TenantThemeDocument ->
+// compileTenantThemeConfig, infrastructure/compilers/composition/tenant-theme),
 // which the static first-party artifact build does not render. Here the
 // first-party build derives the primary spring from each theme's own
 // tension/friction and injects a tenant-scoped override, honoring useSpring --
@@ -243,14 +253,9 @@ function fontPackBundle(fontPacks) {
 // on the same element as the tenant's other tokens. Injected UNLAYERED after the
 // tenant CSS, so it wins the base :root cubic-bezier by specificity + source
 // order.
-const BRAND_THEMES = {
-  platform: rottayBrandTheme,
-  bithire: bithireBrandTheme,
-  evnto: evntoBrandTheme,
-};
-
-function springOverrideBlock(name) {
-  const motion = BRAND_THEMES[name]?.motion;
+function springOverrideBlock(vertical) {
+  const { name, selector, theme } = vertical;
+  const motion = theme.motion;
   if (
     !motion ||
     typeof motion.springTension !== "number" ||
@@ -259,14 +264,13 @@ function springOverrideBlock(name) {
   ) {
     return null;
   }
-  const slug = name === "platform" ? "rottay" : name;
   const easing = springLinearEasing(
     motion.springTension,
     motion.springFriction
   );
   return [
     `/* === ${name} spring easing (precomputed linear() from the BrandTheme, useSpring) === */`,
-    `:is(html[data-tenant='${slug}'], :where([data-ds-root][data-vertical='${name}'])) {`,
+    `${selector} {`,
     `  --ds-motion-spring: ${easing};`,
     `}`,
   ].join("\n");
@@ -276,7 +280,8 @@ if (!check) {
   mkdirSync(styles, { recursive: true });
 }
 
-for (const { name, tenantFile, fontPacks } of verticals) {
+for (const vertical of verticals) {
+  const { name, tenantFile, fontPacks } = vertical;
   if (!check) console.log(`Building dist/${name}.css ...`);
 
   // Read and resolve the tenant-specific CSS
@@ -304,7 +309,7 @@ for (const { name, tenantFile, fontPacks } of verticals) {
   // DaisyUI is gone, and it was never the reason this had to be unlayered.
   // See infrastructure/runtime/theming/foundation/cascade-layers:
   // TENANT_PAINT_IS_UNLAYERED.
-  const springBlock = springOverrideBlock(name);
+  const springBlock = springOverrideBlock(vertical);
   const verticalFontPacks = fontPackBundle(fontPacks);
   const bundle = [
     `/* @rottay/design-system - ${name} vertical bundle */`,
@@ -327,7 +332,7 @@ for (const { name, tenantFile, fontPacks } of verticals) {
   // Verify no cross-tenant or cross-provider-root contamination.
   const otherTenants = verticals.filter((v) => v.name !== name);
   for (const other of otherTenants) {
-    const otherSlug = other.name === "platform" ? "rottay" : other.name;
+    const otherSlug = other.name;
     const forbiddenOwners = [
       `data-tenant='${otherSlug}'`,
       `data-tenant="${otherSlug}"`,
@@ -354,16 +359,10 @@ for (const { name, tenantFile, fontPacks } of verticals) {
 
   if (check) {
     compareToDisk(`styles/${name}.css`, bundle);
-    if (name === "platform") {
-      compareToDisk("styles/rottay.css", bundle);
-    }
   } else {
     const sizeKB = Math.round(bundle.length / 1024);
     writeFileSync(resolve(dist, `${name}.css`), bundle);
     writeFileSync(resolve(styles, `${name}.css`), bundle);
-    if (name === "platform") {
-      writeFileSync(resolve(styles, "rottay.css"), bundle);
-    }
     console.log(`  -> dist/${name}.css (${sizeKB}KB)`);
   }
 }
@@ -372,13 +371,9 @@ for (const { name, tenantFile, fontPacks } of verticals) {
 if (!check) console.log("Building dist/styles.css ...");
 
 // Concatenate all tenant artifact CSS (replaces the removed tenants/index.css barrel)
-const allTenantsCss = [
-  "facade/artifacts/rottay/index.css",
-  "facade/artifacts/bithire/index.css",
-  "facade/artifacts/evnto/index.css",
-]
-  .map((f) => {
-    const p = resolve(srcCss, f);
+const allTenantsCss = verticals
+  .map(({ tenantFile }) => {
+    const p = resolve(srcCss, tenantFile);
     return readFile(p);
   })
   .join("\n");
@@ -386,7 +381,7 @@ const allTenantsCss = [
 // Each per-tenant spring override is scoped to its own tenant root, so the
 // all-tenants bundle can carry every eligible one without cross-tenant bleed.
 const allSpringBlocks = verticals
-  .map((v) => springOverrideBlock(v.name))
+  .map((vertical) => springOverrideBlock(vertical))
   .filter(Boolean)
   .join("\n\n");
 
@@ -401,7 +396,7 @@ const stylesBundle = [
   `/* @rottay/design-system - full CSS bundle (all tenants) */`,
   `/* Generated by build-vertical-css.mjs */`,
   `/* Structure: base tokens + modern engine + all tenants (unlayered, wins by specificity) */`,
-  `/* Production apps should use styles/platform, styles/bithire, or styles/evnto instead. */`,
+  `/* Production apps should use ${verticals.map(({ name }) => `styles/${name}`).join(', ')} instead. */`,
   "",
   ...(allFontPacks
     ? ["/* === First-party vertical font packs === */", allFontPacks, ""]

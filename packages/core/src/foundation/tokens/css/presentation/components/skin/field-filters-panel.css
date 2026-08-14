@@ -11,7 +11,7 @@
  * `facade/entrypoints/styles.css` into `layer(rottay-components)` (the old
  * "deliberately unlayered" note predates the wiring).
  *
- * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
+ * SPECIFICITY (P-48): the Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
  * `border-color` on every element. Border paint reaches (0,4,0) through the
  * always-stamped root `data-part` ancestor — repeating a class or attribute

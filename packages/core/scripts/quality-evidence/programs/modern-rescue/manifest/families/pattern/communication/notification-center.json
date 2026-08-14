@@ -6,17 +6,17 @@
     "category": "communication",
     "name": "NotificationCenter",
     "components": [
-      "NotificationCenter"
+      "PatternNotificationCenter"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
     "sourceOwner": "packages/core/src/ui/patterns/communication/notification-center",
-    "publicComponents": [],
-    "unresolvedPublicComponents": [
-      "NotificationCenter"
+    "publicComponents": [
+      "PatternNotificationCenter"
     ],
+    "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "7a795253b68677c996e395dc314c4ffee2e4b38fdee795c4465aec69b6666bc9"
+    "inventoryRowDigest": "5345f30a65291d5409e13af363a39b17e44f7afa4e9062298e79dcf119b6a514"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

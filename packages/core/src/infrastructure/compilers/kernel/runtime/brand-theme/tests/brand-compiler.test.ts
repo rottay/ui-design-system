@@ -3,27 +3,31 @@ import type { BrandTheme } from "@/foundation/contracts/composition/tenants/them
 import {
   brandThemeToTokenOverrides,
   brandThemeToPersonality,
-  brandThemeToBranding,
   brandThemeToChromeVariables,
   deepMergeTokenOverrides,
   compileBrandTheme,
 } from "../index";
-import {
-  bithireBrandTheme,
-  evntoBrandTheme,
-} from "@/foundation/tokens/ts/presentation/brand-themes";
-import { generateTenantCss } from "@/infrastructure/compilers/runtime/tenant-css/visual-config";
-import type { TenantConfig } from "@/foundation/contracts";
+import { bithireBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes";
+import { getVerticalPreset } from "@/foundation/presets/verticals";
 
 const MOCK_BRAND_THEME: BrandTheme = {
   id: "test-brand",
   name: "Test Brand",
+  // The theme's OTHER mode (it declares no `appearance`, so its body is the
+  // implicit light default) is a typed overlay now, not a `dark`-prefixed
+  // pair of fields on the same palette object.
+  modes: {
+    dark: {
+      palette: {
+        primaryColor: "#CC0000",
+        accentColor: "#0000CC",
+      },
+    },
+  },
   palette: {
     primaryColor: "#FF0000",
     secondaryColor: "#00FF00",
     accentColor: "#0000FF",
-    darkPrimaryColor: "#CC0000",
-    darkAccentColor: "#0000CC",
     successColor: "#22C55E",
   },
   typography: {
@@ -118,27 +122,19 @@ describe("brandThemeToPersonality", () => {
   });
 });
 
-describe("brandThemeToBranding", () => {
-  it("maps palette to TenantBranding color fields", () => {
-    const result = brandThemeToBranding(MOCK_BRAND_THEME);
-    expect(result.primaryColor).toBe("#FF0000");
-    expect(result.secondaryColor).toBe("#00FF00");
-    expect(result.accentColor).toBe("#0000FF");
-    expect(result.darkPrimaryColor).toBe("#CC0000");
-    expect(result.darkAccentColor).toBe("#0000CC");
-    expect(result.successColor).toBe("#22C55E");
-  });
-
-  it("maps typography font families", () => {
-    const result = brandThemeToBranding(MOCK_BRAND_THEME);
-    expect(result.fontFamilyBase).toBe("Inter");
-  });
-
-  it("returns empty object when no palette or typography", () => {
-    const result = brandThemeToBranding({ id: "bare", name: "Bare" });
-    expect(result).toEqual({});
-  });
-});
+// `brandThemeToBranding` -- the palette-to-legacy-`TenantBranding` mapper --
+// is deleted, and nothing replaces it as a standalone function. The provider
+// used to pre-merge a compiled BrandTheme back into `config.branding` with
+// exactly this function so the classic engine's AntdConfigProvider (which
+// historically read colors off `config.branding`) would see them; per that
+// provider's own current comment ("this provider used to pre-merge it... one
+// resolution, downstream, from the raw config. Nothing is normalized here."),
+// that whole double-resolution step is retired architecturally, not merely
+// renamed. The classic engine now resolves color through the SAME downstream
+// chain as every other engine (`useTokens`, reading `compileBrandTheme`'s
+// `cssVariables`), not through a second `branding`-shaped normalization this
+// compiler owned. There is no successor at this module's level to migrate
+// `describe("brandThemeToBranding", ...)` onto.
 
 describe("brandTheme precedence", () => {
   it("tenant tokenOverrides can override brandTheme surfaces", () => {
@@ -156,15 +152,10 @@ describe("brandTheme precedence", () => {
     expect(merged.md).toBe("8px"); // brandTheme preserved
   });
 
-  it("effective branding uses brandTheme palette over config.branding", () => {
-    const configBranding = { companyName: "Acme", primaryColor: "#000000" };
-    const btBranding = brandThemeToBranding(MOCK_BRAND_THEME);
-
-    // Simulate: { ...configBranding, ...btBranding }
-    const effective = { ...configBranding, ...btBranding };
-    expect(effective.primaryColor).toBe("#FF0000"); // brandTheme wins
-    expect(effective.companyName).toBe("Acme"); // identity preserved
-  });
+  // "effective branding uses brandTheme palette over config.branding" is
+  // deleted with `brandThemeToBranding` above -- it simulated exactly the
+  // retired pre-merge step, and `config.branding` no longer has a compiler-
+  // level normalization to be "effective" against.
 });
 
 describe("deepMergeTokenOverrides", () => {
@@ -220,50 +211,18 @@ describe("deepMergeTokenOverrides", () => {
   });
 });
 
-describe("integration: classic engine with brandTheme", () => {
-  it("normalized config gives AntdConfigProvider effective colors", () => {
-    // Simulate what DesignSystemProvider does: normalize config before
-    // passing to TenantProvider. AntdConfigProvider reads config.branding
-    // from TenantProvider context, so it must see brandTheme.palette colors.
-    const tenantConfig = {
-      slug: "acme",
-      name: "Acme Corp",
-      engine: "classic" as const,
-      theme: "base",
-      plan: "enterprise" as const,
-      features: [],
-      branding: { companyName: "Acme Corp", primaryColor: "#000000" },
-      brandTheme: MOCK_BRAND_THEME,
-      tokenOverrides: {
-        glass: { blur: "20px" }, // partial override — should not wipe background/border
-      },
-    };
-
-    // Step 1: Normalize branding (brandTheme palette wins)
-    const btBranding = brandThemeToBranding(tenantConfig.brandTheme);
-    const normalizedBranding = { ...tenantConfig.branding, ...btBranding };
-    expect(normalizedBranding.primaryColor).toBe("#FF0000"); // brandTheme wins
-    expect(normalizedBranding.companyName).toBe("Acme Corp"); // identity stays
-
-    // Step 2: Deep-merge tokenOverrides (brandTheme + tenant partial)
-    const btOverrides = brandThemeToTokenOverrides(tenantConfig.brandTheme);
-    const normalizedOverrides = deepMergeTokenOverrides(
-      btOverrides,
-      tenantConfig.tokenOverrides
-    );
-    // brandTheme glass.blur is overridden by tenant, but other glass keys stay undefined
-    // (brandTheme didn't set glass, so base is empty — tenant's blur is the only value)
-    expect(normalizedOverrides.glass?.blur).toBe("20px");
-
-    // brandTheme surfaces are preserved
-    expect(normalizedOverrides.borderRadius?.sm).toBe("4px");
-    expect(normalizedOverrides.densityScale).toBe(1.1);
-
-    // This is what AntdConfigProvider would read from context:
-    // config.branding.primaryColor === '#FF0000' (from brandTheme, not '#000000')
-    expect(normalizedBranding.primaryColor).not.toBe("#000000");
-  });
-});
+// "integration: classic engine with brandTheme" is deleted in full. It
+// simulated the exact two-step pre-merge (`brandThemeToBranding` then
+// `deepMergeTokenOverrides` folded back into `config.branding` /
+// `config.tokenOverrides` for AntdConfigProvider to read) that the runtime
+// provider's own current source comments describes as retired: "this
+// provider used to pre-merge it... Pre-merging meant the same chain ran
+// twice on two different inputs, and the second run could not tell an
+// authored tenant value from a value the first run had just derived. One
+// resolution, downstream, from the raw config." The classic engine now goes
+// through the same single `useTokens` resolution as every other engine; that
+// resolution is not owned by this compiler module and is not this file's
+// test to write.
 
 describe("compileBrandTheme", () => {
   it("produces personality from brandTheme motion/charts/chrome", () => {
@@ -329,15 +288,27 @@ describe("compileBrandTheme", () => {
     expect(result.cssString).toContain("--ds-density-scale: 0.9;");
   });
 
-  it("produces normalized dark palette aliases", () => {
+  it("produces a typed dark mode block instead of --ds-color-dark-* aliases", () => {
+    // `--ds-color-dark-primary` / `--ds-color-dark-accent` (and the whole
+    // `--ds-color-dark-{role}-{step}` ramp family) are gone; a theme's other
+    // mode is now a real `CompiledBrandModeBlock`, scoped to its own
+    // selector, carrying the ordinary (non-`dark`-prefixed) channel names.
     const result = compileBrandTheme({
       brandTheme: MOCK_BRAND_THEME,
       tenantSlug: "test",
     });
-    expect(result.cssVariables["--ds-color-dark-primary"]).toBe("#CC0000");
-    expect(result.cssVariables["--ds-color-dark-accent"]).toBe("#0000CC");
-    expect(result.cssVariables["--ds-dark-color-primary"]).toBeUndefined();
-    expect(result.cssVariables["--ds-dark-color-accent"]).toBeUndefined();
+    expect(Object.keys(result.cssVariables).some((key) => key.startsWith("--ds-color-dark-"))).toBe(
+      false,
+    );
+    expect(result.modeBlocks).toHaveLength(1);
+    const darkBlock = result.modeBlocks![0];
+    expect(darkBlock.mode).toBe("dark");
+    expect(darkBlock.cssVariables["--ds-color-primary"]).toBe("#CC0000");
+    expect(darkBlock.cssVariables["--ds-color-accent"]).toBe("#0000CC");
+    // The light (base) block is unaffected -- it is still the theme's own
+    // authored primary/accent, not the dark overlay's.
+    expect(result.cssVariables["--ds-color-primary"]).toBe("#FF0000");
+    expect(result.cssVariables["--ds-color-accent"]).toBe("#0000FF");
   });
 
   it("produces scoped CSS string", () => {
@@ -569,15 +540,12 @@ describe("brandThemeToChromeVariables", () => {
 });
 
 describe("parity: first-party brand pipeline", () => {
-  it("bithire BrandTheme produces same palette as registry branding", () => {
-    // Demonstrates that the same BrandTheme works for both first-party
-    // (via registry) and DB-backed tenants (via compileBrandTheme).
-    // bithireBrandTheme imported at top of file
-    const branding = brandThemeToBranding(bithireBrandTheme);
-    expect(branding.primaryColor).toBe("#3A6FB0");
-    expect(branding.secondaryColor).toBe("#315F86");
-    expect(branding.accentColor).toBe("#86A6C2");
-  });
+  // "bithire BrandTheme produces same palette as registry branding" is
+  // deleted with `brandThemeToBranding` (see the note above the retired
+  // `describe("brandThemeToBranding", ...)` block). The property it wanted
+  // -- bithire's own seeds reach the compiled output -- is covered directly
+  // below via `cssVariables`, and by `--ds-color-primary` assertions
+  // elsewhere in this file and in `color-ramps.test.ts`.
 
   it("DB-backed tenant uses same pipeline as first-party", () => {
     // Hypothetical DB tenant with the same BrandTheme as bithire
@@ -606,354 +574,116 @@ describe("parity: first-party brand pipeline", () => {
   });
 });
 
-describe("parity: static generator with brandTheme", () => {
-  const bithireConfig: TenantConfig = {
-    slug: "bithire",
-    name: "BitHire",
-    engine: "classic",
-    theme: "base",
-    plan: "enterprise",
-    features: ["*"],
-    branding: {
-      companyName: "BitHire",
-      primaryColor: "#0A66C2",
-      secondaryColor: "#004182",
-      accentColor: "#7FC15E",
-    },
-    brandTheme: bithireBrandTheme,
-  };
+/**
+ * This block used to be "parity: static generator with brandTheme" and
+ * exercised the retired the retired runtime tenant-CSS generator end to end against a legacy
+ * TenantConfig shape: a `vertical: 'evnto'` STRING the generator looked up
+ * internally, tenant-level `personality`/`tokenOverrides` PARTIALS layered on
+ * top of an already-compiled result, and a `--ds-personality-*` CSS-variable
+ * emission that generator alone owned. That whole conversion is gone.
+ *
+ * What survives at THIS compiler's level, migrated below:
+ *   - compileBrandTheme itself still turns a BrandTheme's palette/surfaces
+ *     into CSS variables and a CSS string.
+ *   - the vertical -> brandTheme merge order is a first-class, still-live
+ *     compileBrandTheme feature (`verticalPersonality`/`verticalTokenOverrides`
+ *     params) -- migrated using the SAME real evnto VerticalPreset the legacy
+ *     config's `vertical: 'evnto'` string used to resolve to internally, now
+ *     resolved explicitly by the caller instead of by this compiler.
+ *   - personality is asserted on the STRUCTURED `result.personality` object,
+ *     not a `--ds-personality-*` CSS variable -- that channel-naming
+ *     conversion belonged to the retired generator and compileBrandTheme
+ *     never re-implemented it.
+ *
+ * Deleted outright, with no successor at this compiler's level:
+ *   - "tenant tokenOverrides layer on top of brandTheme in generator" and
+ *     "partial tenant personality override preserves unrelated brandTheme
+ *     dimensions": both simulated a tenant-level PARTIAL layered on top of an
+ *     ALREADY-COMPILED brandTheme result. compileBrandTheme has no such final
+ *     tenant-override parameter (see this file's own header: "Tenant-level
+ *     overrides ... are NOT applied here"); that layer is `useTokens` /
+ *     `DesignSystemProvider`'s job at runtime, not this module's.
+ *   - "brandTheme-only tenant produces same personality vars as legacy
+ *     tenant", "legacy path resolves vertical + profile (no brandTheme)", and
+ *     "tenant overrides win over profile in legacy path": all three compiled
+ *     a TenantConfig with NO BrandTheme at all, resolved purely through the
+ *     retired generator's vertical-string + product-profile lookup.
+ *     compileBrandTheme requires a BrandTheme; a vertical-only config never
+ *     reached this compiler and still does not.
+ *   - "keeps bundled and custom Evnto equal on density, radius, depth and
+ *     motion": the "custom" side was exactly the no-BrandTheme legacy path
+ *     above. The surviving half of its claim -- that evntoBrandTheme's own
+ *     authored axes equal the single canonical source of truth
+ *     (EVNTO_CANONICAL_SURFACES / EVNTO_CANONICAL_MOTION) -- is already
+ *     covered by `i0-inventory.test.ts`'s "Evnto canonical visual axes" block.
+ */
+describe("parity: compileBrandTheme with vertical baselines and real first-party tenants", () => {
+  const evntoVertical = getVerticalPreset("evnto")!;
 
-  it("generateTenantCss uses brandTheme palette for color variables", () => {
-    const css = generateTenantCss(bithireConfig, {
-      includeDarkSelector: false,
-    });
-    // The generator should produce color scale variables from the brandTheme palette
-    expect(css).toContain("html[data-tenant='bithire']");
-    // Primary color scale from #0A66C2
-    expect(css).toContain("--ds-color-primary-500");
+  it("compileBrandTheme produces a scoped CSS string with the palette's color scale", () => {
+    const result = compileBrandTheme({ brandTheme: bithireBrandTheme, tenantSlug: "bithire" });
+    expect(result.cssString).toContain("html[data-tenant='bithire']");
+    expect(result.cssString).toContain("--ds-color-primary-500");
   });
 
-  it("generateTenantCss uses brandTheme surfaces for token overrides", () => {
-    const css = generateTenantCss(bithireConfig, {
-      includeDarkSelector: false,
-    });
-    // densityScale from brandTheme.surfaces (0.9)
-    expect(css).toContain("--ds-density-scale");
+  it("compileBrandTheme produces the surfaces-derived densityScale token override", () => {
+    const result = compileBrandTheme({ brandTheme: bithireBrandTheme, tenantSlug: "bithire" });
+    expect(result.cssString).toContain("--ds-density-scale");
+    expect(result.tokenOverrides.densityScale).toBe(bithireBrandTheme.surfaces!.densityScale);
   });
 
-  it("DB-backed tenant with brandTheme produces valid CSS through same generator", () => {
-    const dbTenant: TenantConfig = {
-      slug: "db-customer",
-      name: "DB Customer",
-      engine: "modern",
-      theme: "base",
-      plan: "pro",
-      features: [],
-      branding: { companyName: "DB Corp" },
-      brandTheme: bithireBrandTheme, // reuse same brand
+  it("a DB-backed tenant reusing bithire's BrandTheme compiles the same way, under its own selector", () => {
+    const result = compileBrandTheme({ brandTheme: bithireBrandTheme, tenantSlug: "db-customer" });
+    expect(result.cssString).toContain("html[data-tenant='db-customer']");
+    expect(result.cssString).toContain("--ds-color-primary-500");
+    expect(result.cssString).toContain("--ds-density-scale");
+  });
+
+  it("compileBrandTheme derives personality from brandTheme.motion/charts/chrome/typography", () => {
+    const result = compileBrandTheme({ brandTheme: bithireBrandTheme, tenantSlug: "bithire" });
+    expect(result.personality.animation?.intensity).toBe(bithireBrandTheme.motion!.intensity);
+    expect(result.personality.animation?.entrance).toBe("fade");
+    expect(result.personality.chart?.lineStyle).toBe("smooth");
+    expect(result.personality.card?.paddingDensity).toBe("compact");
+    expect(result.personality.typography?.headingLetterSpacing).toBe("-0.025em");
+  });
+
+  it("vertical baseline layers UNDER brandTheme: a palette-only brandTheme still gets the vertical's personality/tokenOverrides", () => {
+    const partialBrand: BrandTheme = {
+      id: "partial-brand",
+      name: "Partial Brand",
+      // Only override palette — personality/tokenOverrides come from the vertical.
+      palette: { primaryColor: "#FF0000" },
     };
-    const css = generateTenantCss(dbTenant, { includeDarkSelector: false });
-    expect(css).toContain("html[data-tenant='db-customer']");
-    expect(css).toContain("--ds-color-primary-500"); // palette from brandTheme
-    expect(css).toContain("--ds-density-scale"); // surfaces from brandTheme
+    const result = compileBrandTheme({
+      brandTheme: partialBrand,
+      tenantSlug: "vertical-test",
+      verticalPersonality: evntoVertical.personality,
+      verticalTokenOverrides: evntoVertical.tokenOverrides,
+    });
+    expect(result.personality.animation?.entrance).toBe(evntoVertical.personality.animation?.entrance);
+    expect(result.personality.animation?.intensity).toBe(evntoVertical.personality.animation?.intensity);
+    expect(result.personality.card?.paddingDensity).toBe(evntoVertical.personality.card?.paddingDensity);
+    expect(result.tokenOverrides.densityScale).toBe(evntoVertical.tokenOverrides?.densityScale);
+    // Palette comes from the brandTheme itself, not the vertical.
+    expect(result.cssVariables["--ds-color-primary-500"]).toBeDefined();
   });
 
-  it("tenant tokenOverrides layer on top of brandTheme in generator", () => {
-    const configWithOverride: TenantConfig = {
-      ...bithireConfig,
-      tokenOverrides: { densityScale: 1.5 },
-    };
-    const css = generateTenantCss(configWithOverride, {
-      includeDarkSelector: false,
+  it("brandTheme overrides the vertical baseline for every key it defines itself", () => {
+    const result = compileBrandTheme({
+      brandTheme: bithireBrandTheme,
+      tenantSlug: "both-test",
+      verticalPersonality: evntoVertical.personality,
+      verticalTokenOverrides: evntoVertical.tokenOverrides,
     });
-    // Tenant override should win
-    expect(css).toContain("--ds-density-scale: 1.5");
-  });
-
-  it("generateTenantCss derives personality from brandTheme", () => {
-    // A tenant with brandTheme but no legacy personality should still
-    // produce --ds-personality-* CSS variables from brandTheme.motion/charts/chrome.
-    const css = generateTenantCss(bithireConfig, {
-      includeDarkSelector: false,
-    });
-    // Animation personality from brandTheme.motion
-    expect(css).toContain("--ds-personality-animation-intensity");
-    expect(css).toContain("--ds-personality-animation-entrance: fade");
-    // Chart personality from brandTheme.charts
-    expect(css).toContain("--ds-personality-chart-line-style: smooth");
-    // Card personality from brandTheme.chrome.card
-    expect(css).toContain("--ds-personality-card-padding-density: compact");
-    // Typography personality from brandTheme.typography
-    expect(css).toContain(
-      "--ds-personality-typography-heading-letter-spacing: -0.025em"
-    );
-  });
-
-  it("brandTheme-only tenant produces same personality vars as legacy tenant", () => {
-    // A tenant with no brandTheme but explicit personality should produce
-    // the same variables when values match.
-    const legacyConfig: TenantConfig = {
-      ...bithireConfig,
-      brandTheme: undefined,
-      personality: {
-        animation: {
-          intensity: 0.55,
-          entrance: "fade",
-          entranceDuration: 200,
-          hoverLift: 0,
-          hoverScale: 1.0,
-          useSpring: false,
-          springTension: 170,
-          springFriction: 26,
-          staggerDelay: 30,
-          staggerMax: 200,
-          pulseSpeed: "slow",
-          skeletonStyle: "pulse",
-          countUpEnabled: true,
-        },
-        typography: {
-          headingWeightBias: "heavier",
-          headingLetterSpacing: "-0.025em",
-          labelStyle: "sentence",
-        },
-      },
-    };
-    const brandCss = generateTenantCss(bithireConfig, {
-      includeDarkSelector: false,
-    });
-    const legacyCss = generateTenantCss(legacyConfig, {
-      includeDarkSelector: false,
-    });
-    // Both should contain the same personality animation intensity
-    expect(brandCss).toContain("--ds-personality-animation-intensity: 0.55");
-    expect(legacyCss).toContain("--ds-personality-animation-intensity: 0.55");
-    // Both should contain the same heading letter spacing
-    expect(brandCss).toContain(
-      "--ds-personality-typography-heading-letter-spacing: -0.025em"
-    );
-    expect(legacyCss).toContain(
-      "--ds-personality-typography-heading-letter-spacing: -0.025em"
-    );
-  });
-
-  it("partial tenant personality override preserves unrelated brandTheme dimensions", () => {
-    // A tenant overrides only animation.intensity but brandTheme also defines
-    // chart, card, accent, and typography. The per-dimension merge should
-    // preserve all unrelated dimensions in the generated CSS.
-    const configWithPartialOverride: TenantConfig = {
-      ...bithireConfig,
-      personality: {
-        animation: { intensity: 0.9 } as any, // only override intensity
-      },
-    };
-    const css = generateTenantCss(configWithPartialOverride, {
-      includeDarkSelector: false,
-    });
-    // Tenant override wins for animation intensity
-    expect(css).toContain("--ds-personality-animation-intensity: 0.9");
-    // BrandTheme chart preserved (not wiped by partial animation override)
-    expect(css).toContain("--ds-personality-chart-line-style: smooth");
-    // BrandTheme card preserved
-    expect(css).toContain("--ds-personality-card-padding-density: compact");
-    // BrandTheme accent policy preserved. BitHire deliberately disables
-    // chromatic edge rails so emphasis never depends on a colored left bar.
-    expect(css).toContain("--ds-personality-accent-bar-position: none");
-    // BrandTheme typography preserved
-    expect(css).toContain(
-      "--ds-personality-typography-heading-letter-spacing: -0.025em"
-    );
-    // BrandTheme animation.entrance preserved (tenant only overrode intensity)
-    expect(css).toContain("--ds-personality-animation-entrance: fade");
-  });
-
-  it("vertical baseline layers before brandTheme in static generator", () => {
-    // evnto vertical has the canonical slideUp entrance and spacious density,
-    // borderRadius sm:10px. The bithire brandTheme overrides most of these.
-    // The generator should resolve vertical -> brandTheme -> tenant.
-    const configWithVertical: TenantConfig = {
-      slug: "vertical-test",
-      name: "Vertical Test",
-      engine: "modern",
-      theme: "base",
-      plan: "pro",
-      features: [],
-      branding: { companyName: "Test" },
-      vertical: "evnto",
-      brandTheme: {
-        id: "partial-brand",
-        name: "Partial Brand",
-        // Only override palette — personality comes from vertical
-        palette: { primaryColor: "#FF0000" },
-      },
-    };
-    const css = generateTenantCss(configWithVertical, {
-      includeDarkSelector: false,
-    });
-    // Vertical personality should be present (brandTheme has no motion/charts/chrome)
-    expect(css).toContain("--ds-personality-animation-entrance: slideUp"); // from evnto vertical
-    expect(css).toContain("--ds-personality-animation-intensity: 1.5"); // from evnto canon
-    expect(css).toContain("--ds-personality-card-padding-density: spacious"); // from evnto vertical
-    // Vertical tokenOverrides should be present
-    expect(css).toContain("--ds-density-scale: 1.125"); // from evnto canon
-    // Palette from brandTheme
-    expect(css).toContain("--ds-color-primary-500");
-  });
-
-  it("brandTheme overrides vertical personality where both define values", () => {
-    const configWithBoth: TenantConfig = {
-      slug: "both-test",
-      name: "Both Test",
-      engine: "modern",
-      theme: "base",
-      plan: "pro",
-      features: [],
-      branding: { companyName: "Test" },
-      vertical: "evnto", // evnto vertical: slideUp, intensity 1.5
-      brandTheme: bithireBrandTheme, // bithire: fade, intensity 0.55
-    };
-    const css = generateTenantCss(configWithBoth, {
-      includeDarkSelector: false,
-    });
-    // BrandTheme wins over vertical for keys it defines
-    expect(css).toContain("--ds-personality-animation-entrance: fade"); // bithire brand wins
-    expect(css).toContain("--ds-personality-animation-intensity: 0.55"); // bithire brand wins
-    expect(css).toContain("--ds-personality-card-padding-density: compact"); // bithire brand wins
-    // BrandTheme surfaces win over vertical
-    expect(css).toContain("--ds-density-scale: 0.9"); // bithire brand wins over evnto 1.125
-  });
-
-  it("legacy path resolves vertical + profile (no brandTheme)", () => {
-    // evnto vertical has: slideUp, intensity 1.5, densityScale 1.125
-    // evnto vertical.defaultProductProfile = 'events.organizer'
-    // events.organizer derives the same structural/motion baseline.
-    const legacyWithVertical: TenantConfig = {
-      slug: "legacy-vertical",
-      name: "Legacy Vertical",
-      engine: "modern",
-      theme: "base",
-      plan: "pro",
-      features: [],
-      branding: { companyName: "Test", primaryColor: "#333333" },
-      vertical: "evnto",
-    };
-    const css = generateTenantCss(legacyWithVertical, {
-      includeDarkSelector: false,
-    });
-    expect(css).toContain("--ds-personality-animation-entrance: slideUp");
-    expect(css).toContain("--ds-personality-animation-intensity: 1.5");
-    expect(css).toContain("--ds-personality-card-padding-density: spacious"); // both have spacious
-    expect(css).toContain("--ds-density-scale: 1.125");
-    // Profile borderRadius applied
-    expect(css).toContain("--ds-radius-sm: 10px"); // from events.organizer
-    expect(css).toContain("--ds-radius-lg: 18px");
-    expect(css).toContain("--ds-radius-xl: 24px");
-    expect(css).not.toContain("--ds-radius-lg: 20px");
-    expect(css).not.toContain("--ds-radius-xl: 28px");
-  });
-
-  it("keeps bundled and custom Evnto equal on density, radius, depth and motion", () => {
-    const base = {
-      name: "Evnto parity",
-      engine: "modern" as const,
-      theme: "base",
-      plan: "pro" as const,
-      features: [],
-      branding: { companyName: "Evnto parity" },
-      vertical: "evnto",
-    };
-    const bundled = generateTenantCss(
-      {
-        ...base,
-        slug: "evnto-bundled",
-        brandTheme: evntoBrandTheme,
-      },
-      { includeDarkSelector: false }
-    );
-    const custom = generateTenantCss(
-      {
-        ...base,
-        slug: "evnto-custom",
-      },
-      { includeDarkSelector: false }
-    );
-    const axes = [
-      "--ds-density-scale",
-      "--ds-shadow-sm",
-      "--ds-shadow-md",
-      "--ds-shadow-lg",
-      "--ds-shadow-xl",
-      "--ds-personality-animation-intensity",
-      "--ds-personality-animation-entrance",
-      "--ds-personality-animation-entrance-duration",
-      "--ds-personality-animation-hover-lift",
-      "--ds-personality-animation-hover-scale",
-      "--ds-personality-animation-use-spring",
-      "--ds-personality-animation-spring-tension",
-      "--ds-personality-animation-spring-friction",
-      "--ds-personality-animation-stagger-delay",
-      "--ds-personality-animation-stagger-max",
-    ];
-    const valueOf = (css: string, token: string) =>
-      css.match(
-        new RegExp(`${token.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}: ([^;]+);`)
-      )?.[1];
-
-    for (const token of axes) {
-      expect(valueOf(custom, token), token).toBe(valueOf(bundled, token));
-    }
-
-    // Radius is compared on the RESTING value, not on a channel name, because
-    // the two paths carry the ramp differently on purpose. The BrandTheme path
-    // emits the dial operands `--ds-radius-{step}-base`, which the foundation
-    // multiplies by `--ds-radius-scale`. The legacy vertical-preset path emits
-    // no operand, so `withoutDialOperandRadius` keeps its flat `--ds-radius-
-    // {step}` rather than letting the step collapse to the DS literal. Equal
-    // paint is the contract; identical spelling never was.
-    const restingRadius = (css: string, step: string) => {
-      const scale = Number(valueOf(css, "--ds-radius-scale") ?? 1);
-      const flat = valueOf(css, `--ds-radius-${step}`);
-      if (flat !== undefined) return flat;
-      const operand = valueOf(css, `--ds-radius-${step}-base`)?.trim();
-      if (operand === undefined) return undefined;
-      const literal = /^(-?[\d.]+)px$/.exec(operand);
-      const divided = /^calc\((-?[\d.]+)px \/ ([\d.]+)\)$/.exec(operand);
-      const px = literal
-        ? Number(literal[1])
-        : divided
-          ? Number(divided[1]) / Number(divided[2])
-          : undefined;
-      return px === undefined ? undefined : `${px * scale}px`;
-    };
-
-    for (const step of ["sm", "md", "lg", "xl"]) {
-      const bundledRadius = restingRadius(bundled, step);
-      // Both sides must actually carry the step: two undefineds would compare
-      // equal and prove nothing.
-      expect(bundledRadius, `bundled ${step}`).toBeDefined();
-      expect(restingRadius(custom, step), `custom ${step}`).toBe(bundledRadius);
-    }
-  });
-
-  it("tenant overrides win over profile in legacy path", () => {
-    const legacyWithOverride: TenantConfig = {
-      slug: "legacy-override",
-      name: "Legacy Override",
-      engine: "modern",
-      theme: "base",
-      plan: "pro",
-      features: [],
-      branding: { companyName: "Test", primaryColor: "#333333" },
-      vertical: "evnto",
-      personality: {
-        animation: { intensity: 0.1 } as any, // tenant override
-      },
-    };
-    const css = generateTenantCss(legacyWithOverride, {
-      includeDarkSelector: false,
-    });
-    // Tenant wins for intensity
-    expect(css).toContain("--ds-personality-animation-intensity: 0.1");
-    // Profile still wins for entrance (tenant didn't override it)
-    expect(css).toContain("--ds-personality-animation-entrance: slideUp");
+    // BrandTheme wins over the vertical for every key it defines.
+    expect(result.personality.animation?.entrance).toBe("fade");
+    expect(result.personality.animation?.intensity).toBe(bithireBrandTheme.motion!.intensity);
+    expect(result.personality.card?.paddingDensity).toBe("compact");
+    expect(result.tokenOverrides.densityScale).toBe(bithireBrandTheme.surfaces!.densityScale);
+    // Sanity: bithire and the evnto vertical genuinely disagree on these axes,
+    // so "brandTheme wins" is actually exercised, not vacuously true.
+    expect(bithireBrandTheme.motion!.intensity).not.toBe(evntoVertical.personality.animation?.intensity);
+    expect(bithireBrandTheme.surfaces!.densityScale).not.toBe(evntoVertical.tokenOverrides?.densityScale);
   });
 });

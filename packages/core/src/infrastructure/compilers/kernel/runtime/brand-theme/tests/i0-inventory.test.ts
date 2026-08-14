@@ -21,8 +21,9 @@ import {
 } from "@/foundation/presets/policy/experience-baselines/evnto";
 import { PRODUCT_PROFILES } from "@/foundation/presets/product-profiles";
 import { VERTICAL_REGISTRY } from "@/foundation/presets/verticals";
-import { generateTenantCss } from "@/infrastructure/compilers/runtime/tenant-css/visual-config";
 import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+
+import { compileBrandTheme } from "../index";
 
 const DIST = resolve(process.cwd(), "dist");
 const CSS_SRC = resolve(process.cwd(), "src/foundation/tokens/css");
@@ -178,12 +179,29 @@ describe("public CSS export surface (from package.json)", () => {
     expect(stylesCss?.style).toBe("./dist/styles.css");
   });
 
-  it("./styles/rottay and ./styles/platform resolve to same dist file", () => {
+  it("publishes no retired style alias or retired bundle name", () => {
+    const retiredIdentity = ["plat", "form"].join("");
+    const retiredStyleEntry = `./styles/${retiredIdentity}`;
+
+    // The alias is gone rather than deprecated. `./styles/rottay` is the
+    // vertical bundle; `./styles/default` is the neutral-baseline name for
+    // consumers that do not want to spell a vertical at all. Both resolve to
+    // dist/rottay.css, which is ONE file, not two names for two files.
+    expect(
+      styleExports.find((e) => e.subpath === retiredStyleEntry),
+    ).toBeUndefined();
+
+    for (const exp of styleExports) {
+      expect(
+        exp.style,
+        `${exp.subpath} still points at the retired bundle name`,
+      ).not.toContain(retiredIdentity);
+    }
+
     const rottay = styleExports.find((e) => e.subpath === "./styles/rottay");
-    const platform = styleExports.find(
-      (e) => e.subpath === "./styles/platform"
-    );
-    expect(rottay?.style).toBe(platform?.style);
+    const neutral = styleExports.find((e) => e.subpath === "./styles/default");
+    expect(rottay?.style).toBe("./dist/rottay.css");
+    expect(neutral?.style).toBe("./dist/rottay.css");
   });
 
   it("each style export has style + import + default condition keys", () => {
@@ -251,7 +269,7 @@ describe("first-party artifact integrity", () => {
   it("public entrypoint source files exist in facade/entrypoints/", () => {
     for (const f of [
       "facade/entrypoints/styles.css",
-      "facade/entrypoints/platform.css",
+      "facade/entrypoints/rottay.css",
       "facade/entrypoints/bithire.css",
       "facade/entrypoints/evnto.css",
     ]) {
@@ -267,24 +285,38 @@ describe("first-party artifact integrity", () => {
 
 // ── Shared checkers for fields present in ALL three verticals ──
 
+/**
+ * A theme's OTHER mode -- the one that is not `appearance.defaultMode` --
+ * as a typed overlay. `BrandPalette.darkPrimaryColor` / `darkSecondaryColor`
+ * / `darkBackgroundColor` are gone: a palette authors exactly the mode it is
+ * FOR, and the other mode (when authored) is a sibling `modes.{light,dark}`
+ * overlay, never a second `dark`-prefixed field on the same palette object.
+ */
+function nonDefaultModePalette(bt: BrandTheme) {
+  const nonDefault = bt.appearance?.defaultMode === "dark" ? "light" : "dark";
+  return bt.modes?.[nonDefault]?.palette;
+}
+
 function checkPaletteBase(bt: BrandTheme, name: string) {
   describe(`${name} palette (base)`, () => {
     it("primaryColor", () => expect(bt.palette?.primaryColor).toBeTruthy());
     it("secondaryColor", () => expect(bt.palette?.secondaryColor).toBeTruthy());
     it("accentColor", () => expect(bt.palette?.accentColor).toBeTruthy());
-    it("darkPrimaryColor", () =>
-      expect(bt.palette?.darkPrimaryColor).toBeTruthy());
-    it("darkSecondaryColor", () =>
-      expect(bt.palette?.darkSecondaryColor).toBeTruthy());
-    // A theme must own the ground for the mode it renders in. `backgroundColor`
-    // is the clear-mode ground and `darkBackgroundColor` its dark twin; before
-    // WO-TOK-06 only the dark name existed and light-first themes stored a
-    // near-white in it. Requiring both would force a dark ground onto a product
-    // that has no dark mode.
-    it("declares a ground for the mode it renders in", () =>
-      expect(
-        bt.palette?.backgroundColor ?? bt.palette?.darkBackgroundColor
-      ).toBeTruthy());
+    // A theme must own the ground for the mode it renders in.
+    // `backgroundColor` is THIS theme's own ground -- the mode it declares
+    // via `appearance.defaultMode` -- with no `dark`-prefixed twin on the
+    // same object any more.
+    it("declares a ground for its own default mode", () =>
+      expect(bt.palette?.backgroundColor).toBeTruthy());
+    // The other mode, when authored, is a full sibling overlay: its own
+    // seeds and its own ground, not a same-object dark-prefixed pair.
+    it("its non-default mode overlay authors its own primary/secondary seeds", () => {
+      const overlay = nonDefaultModePalette(bt);
+      expect(overlay?.primaryColor).toBeTruthy();
+      expect(overlay?.secondaryColor).toBeTruthy();
+    });
+    it("its non-default mode overlay declares its own ground", () =>
+      expect(nonDefaultModePalette(bt)?.backgroundColor).toBeTruthy());
   });
 }
 
@@ -519,12 +551,16 @@ describe("H3 contract: rottay", () => {
   });
 
   describe("rottay dark-mode (filled I4)", () => {
-    // Rottay IS dark-first: darkPrimaryColor, darkBackgroundColor already in palette base.
+    // Rottay IS dark-first: dark is its DECLARED appearance.defaultMode, so
+    // the top-level palette.primaryColor / .backgroundColor already ARE its
+    // dark values -- there is no separate `dark`-prefixed field any more.
     // Chrome values (sidebar, layout, controls, table) are authored as dark values.
-    it("palette dark strategy: darkPrimaryColor", () =>
-      expect(rottayBrandTheme.palette?.darkPrimaryColor).toBeTruthy());
-    it("palette dark strategy: darkBackgroundColor", () =>
-      expect(rottayBrandTheme.palette?.darkBackgroundColor).toBe("#0C0C0E"));
+    it("declares dark as its default mode", () =>
+      expect(rottayBrandTheme.appearance?.defaultMode).toBe("dark"));
+    it("palette dark strategy: primaryColor", () =>
+      expect(rottayBrandTheme.palette?.primaryColor).toBeTruthy());
+    it("palette dark strategy: backgroundColor", () =>
+      expect(rottayBrandTheme.palette?.backgroundColor).toBe("#0C0C0E"));
     it("sidebar is dark-authored", () =>
       expect(rottayBrandTheme.chrome?.sidebar?.bg).toBe("#0D0D10"));
     it("layout is dark-authored", () =>
@@ -543,40 +579,25 @@ describe("H3 contract: rottay", () => {
       expect(rottayBrandTheme.chrome?.controls?.disabled?.opacity).toBe(0.4));
     it("disabled: text authored", () =>
       expect(rottayBrandTheme.chrome?.controls?.disabled?.text).toBeTruthy());
-    it("disabled: all button vars emitted in generated CSS", () => {
-      const css = generateTenantCss(
-        {
-          slug: "rottay",
-          name: "Rottay",
-          engine: "classic",
-          theme: "base",
-          plan: "enterprise",
-          features: ["*"],
-          branding: { companyName: "Rottay" },
-          brandTheme: rottayBrandTheme,
-        },
-        { includeDarkSelector: false }
-      );
+    it("disabled: all button vars emitted in compiled CSS", () => {
+      // Was the retired runtime tenant-CSS generator (the retired runtime tenant-CSS generator);
+      // compileBrandTheme's own cssString is the direct successor for "what
+      // does this BrandTheme actually compile to as CSS text".
+      const css = compileBrandTheme({
+        brandTheme: rottayBrandTheme,
+        tenantSlug: "rottay",
+      }).cssString;
       expect(css).toContain("--ds-button-disabled-opacity: 0.4");
       expect(css).toContain("--ds-button-disabled-bg");
       expect(css).toContain("--ds-button-disabled-color");
       expect(css).toContain("--ds-button-disabled-border:");
       expect(css).toContain("--ds-button-disabled-border-color");
     });
-    it("disabled: all input vars emitted in generated CSS", () => {
-      const css = generateTenantCss(
-        {
-          slug: "rottay",
-          name: "Rottay",
-          engine: "classic",
-          theme: "base",
-          plan: "enterprise",
-          features: ["*"],
-          branding: { companyName: "Rottay" },
-          brandTheme: rottayBrandTheme,
-        },
-        { includeDarkSelector: false }
-      );
+    it("disabled: all input vars emitted in compiled CSS", () => {
+      const css = compileBrandTheme({
+        brandTheme: rottayBrandTheme,
+        tenantSlug: "rottay",
+      }).cssString;
       expect(css).toContain("--ds-input-bg-disabled");
       expect(css).toContain("--ds-input-color-disabled");
       expect(css).toContain("--ds-input-border-disabled");
@@ -766,19 +787,26 @@ describe("H3 contract: bithire", () => {
       expect(bithireBrandTheme.chrome?.shell?.gridOpacity).toBe(0));
   });
 
-  describe("bithire dark-mode (filled I5)", () => {
-    // BitHire is light-first: its ground is `backgroundColor`, and its dark mode
-    // takes the design system's dark ground. The near-white it used to store in
-    // `darkBackgroundColor` was its CLEAR ground under a dark name.
-    it("palette dark strategy: darkPrimaryColor", () =>
-      expect(bithireBrandTheme.palette?.darkPrimaryColor).toBeTruthy());
-    it("palette: clear ground declared", () =>
+  describe("bithire dark-mode (filled I5, now a real authored overlay)", () => {
+    // BitHire is light-first (appearance.defaultMode: "light"). It used to
+    // have NO real dark surface at all: with no `darkBackgroundColor` field,
+    // its dark mode fell all the way back to the DS default ground and
+    // nothing else. It now authors a full typed `modes.dark` overlay --
+    // its own ground, its own seeded ramps, and its own full chrome set --
+    // so "no dark ground, so the DS default applies" is no longer true.
+    it("declares light as its default mode", () =>
+      expect(bithireBrandTheme.appearance?.defaultMode).toBe("light"));
+    it("palette: light (default) ground declared", () =>
       expect(bithireBrandTheme.palette?.backgroundColor).toBe("#F4F8FB"));
-    it("palette: no dark ground, so the DS default applies", () =>
-      expect(bithireBrandTheme.palette?.darkBackgroundColor).toBeUndefined());
-    // Sidebar is light-authored; dark treatment derives from palette.
+    it("palette: the dark overlay declares its OWN ground -- no longer falling back to the DS default", () =>
+      expect(bithireBrandTheme.modes?.dark?.palette?.backgroundColor).toBeTruthy());
+    it("palette: the dark overlay declares its own primary seed", () =>
+      expect(bithireBrandTheme.modes?.dark?.palette?.primaryColor).toBeTruthy());
+    // Sidebar is light-authored; dark treatment is now ALSO explicitly authored.
     it("sidebar authored (light-first)", () =>
       expect(bithireBrandTheme.chrome?.sidebar?.bg).toBe("#ffffff"));
+    it("dark overlay authors its own sidebar too", () =>
+      expect(bithireBrandTheme.modes?.dark?.chrome?.sidebar?.bg).toBeTruthy());
     it("layout authored", () =>
       expect(bithireBrandTheme.chrome?.layout?.bg).toBe("#F4F7FA"));
     it("controls authored", () =>
@@ -865,26 +893,14 @@ describe("H3 contract: bithire", () => {
     });
   });
 
-  describe("bithire surfaces in generated CSS", () => {
-    const css = generateTenantCss(
-      {
-        slug: "bithire",
-        name: "BitHire",
-        engine: "classic",
-        theme: "base",
-        plan: "enterprise",
-        features: ["*"],
-        branding: {
-          companyName: "BitHire",
-          primaryColor: "#0A66C2",
-          secondaryColor: "#004182",
-          accentColor: "#7FC15E",
-        },
-        brandTheme: bithireBrandTheme,
-      },
-      { includeDarkSelector: false }
-    );
-    // As in the artifact block above: the generator emits the dial operands.
+  describe("bithire surfaces in compiled CSS", () => {
+    // Was the retired runtime tenant-CSS generator (the retired runtime tenant-CSS generator);
+    // compileBrandTheme's own cssString is the direct successor.
+    const css = compileBrandTheme({
+      brandTheme: bithireBrandTheme,
+      tenantSlug: "bithire",
+    }).cssString;
+    // As in the artifact block above: the compiler emits the dial operands.
     // BitHire's scale is 1.25, so each operand is the authored value divided by
     // it and the foundation's multiply reproduces 7/10/14/18 at rest.
     it("radius dial operands sm/md/lg/xl", () => {
@@ -955,25 +971,11 @@ describe("H3 contract: bithire", () => {
       expect(artifact).toContain("--ds-button-disabled-opacity: 0.45");
       expect(artifact).toContain("--ds-input-disabled-opacity: 0.45");
     });
-    it("generated CSS includes chrome vars", () => {
-      const css = generateTenantCss(
-        {
-          slug: "bithire",
-          name: "BitHire",
-          engine: "classic",
-          theme: "base",
-          plan: "enterprise",
-          features: ["*"],
-          branding: {
-            companyName: "BitHire",
-            primaryColor: "#0A66C2",
-            secondaryColor: "#004182",
-            accentColor: "#7FC15E",
-          },
-          brandTheme: bithireBrandTheme,
-        },
-        { includeDarkSelector: false }
-      );
+    it("compiled CSS includes chrome vars", () => {
+      const css = compileBrandTheme({
+        brandTheme: bithireBrandTheme,
+        tenantSlug: "bithire",
+      }).cssString;
       expect(css).toContain("--ds-layout-bg: #F4F7FA");
       expect(css).toContain("--ds-shell-grid-size: 0px");
       expect(css).toContain("--ds-button-default-bg: var(--ds-control-surface)");
@@ -1096,10 +1098,12 @@ describe("H3 contract: evnto", () => {
   });
 
   describe("evnto dark-mode (filled I6)", () => {
-    it("palette: darkPrimaryColor", () =>
-      expect(evntoBrandTheme.palette?.darkPrimaryColor).toBeTruthy());
-    it("palette: darkBackgroundColor", () =>
-      expect(evntoBrandTheme.palette?.darkBackgroundColor).toBeTruthy());
+    // Evnto's dark values now live in its typed `modes.dark` overlay rather
+    // than a `dark`-prefixed pair on the same palette object.
+    it("palette: dark overlay declares its own primary seed", () =>
+      expect(evntoBrandTheme.modes?.dark?.palette?.primaryColor).toBeTruthy());
+    it("palette: dark overlay declares its own ground", () =>
+      expect(evntoBrandTheme.modes?.dark?.palette?.backgroundColor).toBeTruthy());
     it("sidebar authored (light-first)", () =>
       expect(evntoBrandTheme.chrome?.sidebar?.bg).toBe("#fafafa"));
     it("layout authored", () =>
@@ -1186,26 +1190,16 @@ describe("H3 contract: evnto", () => {
       expect(dark("--ds-input-disabled-opacity")).toBe("0.4");
       expect(dark("--ds-input-border-color-disabled")).toBeDefined();
     });
-    it("generated CSS includes chrome", () => {
-      const css = generateTenantCss(
-        {
-          slug: "evnto",
-          name: "Evnto",
-          engine: "classic",
-          theme: "base",
-          plan: "enterprise",
-          features: ["*"],
-          branding: {
-            companyName: "Evnto",
-            primaryColor: "#171717",
-            secondaryColor: "#B8A898",
-            accentColor: "#06b6d4",
-          },
-          vertical: "evnto",
-          brandTheme: evntoBrandTheme,
-        },
-        { includeDarkSelector: false }
-      );
+    it("compiled CSS includes chrome", () => {
+      // Was the retired runtime tenant-CSS generator (the retired runtime tenant-CSS generator);
+      // compileBrandTheme's own cssString is the direct successor. None of
+      // the pins below depend on vertical-baseline resolution (the old
+      // config's `vertical: "evnto"` field), only on evntoBrandTheme's own
+      // authored chrome, so dropping it changes nothing this test checks.
+      const css = compileBrandTheme({
+        brandTheme: evntoBrandTheme,
+        tenantSlug: "evnto",
+      }).cssString;
       expect(css).toContain("--ds-layout-bg: #FFFFFF");
       expect(css).toContain("--ds-shell-grid-size: 0px");
       expect(css).toContain("--ds-button-default-bg: #FFFFFF");

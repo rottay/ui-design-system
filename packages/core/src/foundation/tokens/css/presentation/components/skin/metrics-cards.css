@@ -46,8 +46,9 @@
 
 /* Root frame drained from the engine (premium wave): the former inline
    height/padding/flex frame. The panel block size rides a private dashboard
-   seam whose fallback follows the governed rhythm dial from the shipped 415px
-   measure; the runtime
+   seam whose fallback is the shipped 415px measure byte-exact, reading no
+   rhythm channel — rhythm owns the room around content, never a panel's
+   capacity; the runtime
    density channels stay inline on the root (the density suite pins them). */
 .ds-metrics-cards.ds-metrics-cards[data-part='root'] {
   display: flex;
@@ -57,7 +58,7 @@
      intrinsic (`auto-fit` over a private track floor); the container is what
      lets the panel CHROME answer its own measure too. */
   container: ds-metrics-cards / inline-size;
-  block-size: var(--_ds-dashboard-panel-block-size, calc(415px * var(--ds-rhythm-effective-scale, 1)));
+  block-size: var(--_ds-dashboard-panel-block-size, 415px);
   /* Panel frame rides the tenant density plane (Button-skin idiom); the
      density suite pins its own channels inline on this same root. */
   padding: calc(16px * var(--ds-density-effective-scale, 1));

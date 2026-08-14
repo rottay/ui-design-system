@@ -35,10 +35,10 @@ export const ENGINE_OPTIONS: PreviewOption<ShowroomEngine>[] = [
 export const THEME_OPTIONS: PreviewOption<ShowroomTheme>[] = [
   {
     key: 'rottay',
-    label: 'Platform',
-    shortLabel: 'PF',
+    label: 'Rottay',
+    shortLabel: 'RT',
     accent: 'var(--ds-color-primary-500)',
-    hint: 'Flagship admin baseline powered by the Rottay tenant and platform vertical preset.',
+    hint: 'Flagship admin baseline powered by the Rottay tenant and rottay vertical preset.',
   },
   {
     key: 'bithire',

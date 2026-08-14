@@ -38,21 +38,19 @@ function walk(dir: string, exts: string[], acc: string[] = []): string[] {
 const blankComments = (src: string): string =>
   src.replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, " "));
 
-/* Walked from the package source root, not from the token tree: the commercial kit keeps its CSS
- * co-located beside each component under `src/ui/patterns/commercial/**`, outside
- * `foundation/tokens/css` entirely. Rooting this at the token tree made eleven families invisible
- * to a drill whose own comment claimed to cover them. */
+/* Still walked from the package source root rather than the token tree: a `.css` file authored
+ * outside `foundation/tokens/css` would otherwise be invisible to a drill whose own comment
+ * claims to cover the package. (The ten monochrome stylesheets that motivated this were the
+ * last co-located ones; they now ship as ordinary skins, so the root walk currently finds
+ * nothing extra -- which is the point of keeping it.) */
 const CSS_FILES = walk(CORE, [".css"]);
 const TS_FILES = walk(CORE, [".ts", ".tsx"]);
 
-/* Classic and Rustic are read-only for this programme. The scope is Modern skin, the shared
- * engine-agnostic presentation skin where structures and charts live, and the commercial kit's
- * co-located files. */
+/* Classic and Rustic are read-only for this programme. The scope is the Modern skin plus the
+ * shared engine-agnostic presentation skin, where structures, charts and the monochrome
+ * cohort's stylesheets all live. */
 const IN_SCOPE = CSS_FILES.filter(
-  (f) =>
-    f.includes("/engines/modern/") ||
-    f.includes("/presentation/components/") ||
-    f.includes("/ui/patterns/commercial/"),
+  (f) => f.includes("/engines/modern/") || f.includes("/presentation/components/"),
 );
 
 const display = (file: string): string => file.slice(CORE.length + 1);

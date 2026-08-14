@@ -34,8 +34,9 @@ import {
   resolveSurfaceCapabilityRegistry,
   hasSurfaceError,
 } from '../../../../../runtime/helpers';
-import { SurfaceCapabilityAnatomy, SurfaceEmptyState, SurfaceErrorState } from '../../../../../runtime/helpers/states';
-import { useSurfaceTranslations } from '../../../../../runtime/helpers/states/i18n';
+import { SurfaceEmptyState, SurfaceErrorState } from '../../../../../../structures/feedback/surface-lifecycle';
+import { SurfaceCapabilityAnatomy } from '../../../../../../structures/feedback/capability-anatomy';
+import { useSurfaceTranslations } from '../../../../../../structures/foundation/chrome/runtime/i18n';
 import type { DensityKey } from '../../../../../../patterns/data/list-toolbar/contracts';
 import type { BulkAction } from '../../../../../../../foundation/contracts/runtime/components/patterns/core';
 import type { SortConfig, PaginationConfig, FilterDef } from '../../../../../../../foundation/contracts/runtime/components/patterns/core';

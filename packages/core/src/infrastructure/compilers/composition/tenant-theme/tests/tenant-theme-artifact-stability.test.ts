@@ -249,6 +249,17 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
       "--ds-chart-series-7",
       "--ds-chart-series-8",
       "--ds-chart-series-9",
+      // The shared interaction floor. These four are the SAME derivation the
+      // static BrandTheme path merges under its authored palette
+      // (`color-math/interaction-floor`), wired into the DB path so a
+      // customer's self-service primary and a code-owned vertical's authored
+      // primary imply the same ink, focus border, link and link hover. A
+      // document that authors any of them individually still wins for that
+      // channel; this document authors none, so all four arrive derived.
+      "--ds-color-border-focus",
+      "--ds-color-link",
+      "--ds-color-link-hover",
+      "--ds-color-primary-foreground",
       ON_PRIMARY_INK_TOKEN,
       DENSITY_MODE_FACTOR_TOKEN,
       "--ds-input-border-focus",

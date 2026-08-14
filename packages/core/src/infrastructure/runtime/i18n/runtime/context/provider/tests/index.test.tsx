@@ -3,7 +3,8 @@
  * authority, direction, and server-rendered `lang`/`dir`.
  */
 
-import { describe, expect, it, vi } from 'vitest';
+import { StrictMode } from 'react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, render, renderHook, waitFor } from '@testing-library/react';
 import { hydrateRoot, type Root } from 'react-dom/client';
 import { renderToString } from 'react-dom/server';
@@ -12,6 +13,7 @@ import {
   DEFAULT_FALLBACK_LOCALE,
   DEFAULT_LOCALE,
 } from '@/foundation/i18n/kernel/contracts';
+import { outstandingRootClaims } from '@/infrastructure/runtime/foundation/root-attributes';
 import {
   I18nProvider,
   useDirection,
@@ -271,6 +273,305 @@ describe('I18nProvider — server rendering', () => {
     );
 
     expect(container.firstElementChild?.getAttribute('data-part')).toBe('probe');
+  });
+});
+
+/**
+ * `<html lang>` / `<html dir>` are the APPLICATION's channels. The provider
+ * borrows them through the shared claim registry and hands the exact
+ * predecessor back, so these drills assert through `getAttribute` /
+ * `hasAttribute` rather than the reflected `.lang` / `.dir` properties: `dir`
+ * is an ENUMERATED reflected attribute, so `.dir` lowercases valid values and
+ * reads invalid ones as `''`. A claim restores the raw attribute byte for
+ * byte, and only the attribute API can observe that.
+ *
+ * ORDERING LAW, load-bearing: every drill captures the handed-back state,
+ * REPAIRS the root, and only then asserts. Asserting first would throw past
+ * the repair and leave the leak in place -- and this project runs with
+ * `retry: 1`, so the retry would re-baseline the dirty root and pass. Repair
+ * first and a real leak fails on both attempts.
+ */
+describe('I18nProvider — root ownership', () => {
+  const HOST_LANG = 'fr-CA';
+  const HOST_DIR = 'ltr';
+
+  let predecessor: readonly (readonly [string, string])[] = [];
+
+  /** Reads the pair the way the claim registry stores it: absent is absent. */
+  function readPair(): Record<'lang' | 'dir', string | null> {
+    const root = document.documentElement;
+    return { lang: root.getAttribute('lang'), dir: root.getAttribute('dir') };
+  }
+
+  function plantHostRoot(lang: string | null, dir: string | null): void {
+    const root = document.documentElement;
+    if (lang === null) root.removeAttribute('lang');
+    else root.setAttribute('lang', lang);
+    if (dir === null) root.removeAttribute('dir');
+    else root.setAttribute('dir', dir);
+  }
+
+  beforeEach(() => {
+    // Whatever the file's earlier drills left behind is this drill's host
+    // document; it is restored verbatim afterwards.
+    predecessor = Array.from(document.documentElement.attributes).map(
+      (attribute) => [attribute.name, attribute.value] as const,
+    );
+  });
+
+  afterEach(() => {
+    const root = document.documentElement;
+    const expected = new Map(predecessor);
+    for (const name of Array.from(root.attributes).map((attribute) => attribute.name)) {
+      if (!expected.has(name)) root.removeAttribute(name);
+    }
+    for (const [name, value] of predecessor) {
+      if (root.getAttribute(name) !== value) root.setAttribute(name, value);
+    }
+  });
+
+  // D1
+  it('hands a planted host predecessor back on unmount', async () => {
+    plantHostRoot(HOST_LANG, HOST_DIR);
+
+    const view = render(
+      <I18nProvider locale="ar">
+        <span>island</span>
+      </I18nProvider>
+    );
+    await waitFor(() => expect(readPair()).toEqual({ lang: 'ar', dir: 'rtl' }));
+
+    view.unmount();
+    const handedBack = readPair();
+    plantHostRoot(HOST_LANG, HOST_DIR);
+
+    expect(handedBack).toEqual({ lang: HOST_LANG, dir: HOST_DIR });
+  });
+
+  // D2
+  it('returns absent predecessors as absent, and empty ones as empty', async () => {
+    plantHostRoot(null, null);
+
+    const absentView = render(
+      <I18nProvider locale="ar">
+        <span>island</span>
+      </I18nProvider>
+    );
+    await waitFor(() => expect(readPair()).toEqual({ lang: 'ar', dir: 'rtl' }));
+    absentView.unmount();
+
+    const root = document.documentElement;
+    const afterAbsent = { lang: root.hasAttribute('lang'), dir: root.hasAttribute('dir') };
+
+    // `dir=""` is a real, present attribute -- restoring it as ABSENT would be
+    // a different document. This is the leg a bare `removeAttribute` cleanup
+    // gets wrong in the opposite direction from D1.
+    plantHostRoot('', '');
+    const emptyView = render(
+      <I18nProvider locale="ar">
+        <span>island</span>
+      </I18nProvider>
+    );
+    await waitFor(() => expect(readPair()).toEqual({ lang: 'ar', dir: 'rtl' }));
+    emptyView.unmount();
+
+    const afterEmpty = {
+      present: { lang: root.hasAttribute('lang'), dir: root.hasAttribute('dir') },
+      values: readPair(),
+    };
+    plantHostRoot(null, null);
+
+    expect(afterAbsent).toEqual({ lang: false, dir: false });
+    expect(afterEmpty).toEqual({
+      present: { lang: true, dir: true },
+      values: { lang: '', dir: '' },
+    });
+  });
+
+  // D3
+  it('keeps exactly one live owner per channel across a controlled ar -> en switch', async () => {
+    plantHostRoot(HOST_LANG, HOST_DIR);
+    const root = document.documentElement;
+
+    const view = render(
+      <I18nProvider locale="ar">
+        <span>island</span>
+      </I18nProvider>
+    );
+    await waitFor(() => expect(readPair()).toEqual({ lang: 'ar', dir: 'rtl' }));
+
+    view.rerender(
+      <I18nProvider locale="en">
+        <span>island</span>
+      </I18nProvider>
+    );
+    await waitFor(() => expect(readPair()).toEqual({ lang: 'en', dir: 'ltr' }));
+
+    // Two channels, one claim each. A switch that claimed without releasing
+    // would read four here and still look correct in the DOM -- until the
+    // stack unwound to the wrong value on unmount.
+    const claimsWhileMounted = outstandingRootClaims(root);
+
+    view.unmount();
+    const handedBack = readPair();
+    const claimsAfterUnmount = outstandingRootClaims(root);
+    plantHostRoot(HOST_LANG, HOST_DIR);
+
+    expect(claimsWhileMounted).toBe(2);
+    expect(handedBack).toEqual({ lang: HOST_LANG, dir: HOST_DIR });
+    expect(claimsAfterUnmount).toBe(0);
+  });
+
+  // D4
+  it('reaches the same fixed point under StrictMode double invocation', async () => {
+    plantHostRoot(HOST_LANG, HOST_DIR);
+    const root = document.documentElement;
+
+    const view = render(
+      <StrictMode>
+        <I18nProvider locale="ar">
+          <span>island</span>
+        </I18nProvider>
+      </StrictMode>
+    );
+    await waitFor(() => expect(readPair()).toEqual({ lang: 'ar', dir: 'rtl' }));
+    const claimsWhileMounted = outstandingRootClaims(root);
+
+    view.unmount();
+    const handedBack = readPair();
+    const claimsAfterUnmount = outstandingRootClaims(root);
+    plantHostRoot(HOST_LANG, HOST_DIR);
+
+    // StrictMode mounts, tears down, and remounts every effect. Identity-keyed
+    // claims make that a fixed point; value-keyed ownership would not.
+    expect(claimsWhileMounted).toBe(2);
+    expect(handedBack).toEqual({ lang: HOST_LANG, dir: HOST_DIR });
+    expect(claimsAfterUnmount).toBe(0);
+  });
+
+  // D5
+  it('leaves a channel an external writer took over, per channel', async () => {
+    plantHostRoot(HOST_LANG, HOST_DIR);
+
+    const view = render(
+      <I18nProvider locale="ar">
+        <span>island</span>
+      </I18nProvider>
+    );
+    await waitFor(() => expect(readPair()).toEqual({ lang: 'ar', dir: 'rtl' }));
+
+    // An app effect or a devtool takes `lang` while the claim is live. The
+    // registry is no longer the owner and must not restore over it. This reads
+    // as the opposite of D1 and is deliberate: it is the boundary of the
+    // restore contract, not an exception to it. `dir` is untouched and so
+    // still returns -- takeover is per channel, never wholesale.
+    document.documentElement.setAttribute('lang', 'de');
+
+    view.unmount();
+    const handedBack = readPair();
+    plantHostRoot(HOST_LANG, HOST_DIR);
+
+    expect(handedBack).toEqual({ lang: 'de', dir: HOST_DIR });
+  });
+
+  // D6
+  it('never touches the host root in element mode', async () => {
+    plantHostRoot(HOST_LANG, HOST_DIR);
+    const root = document.documentElement;
+
+    const view = render(
+      <I18nProvider locale="ar" directionScope="element">
+        <span data-part="probe">محتوى</span>
+      </I18nProvider>
+    );
+    await view.findByText('محتوى');
+
+    // Asserted WHILE MOUNTED. After unmount, "never claimed" and "claimed then
+    // restored" are indistinguishable in the DOM; the live claim count is the
+    // only thing that separates them, and it is what this drill exists for.
+    const whileMounted = { pair: readPair(), claims: outstandingRootClaims(root) };
+    const wrapper = view.container.firstElementChild as HTMLElement;
+    const published = {
+      lang: wrapper.getAttribute('lang'),
+      dir: wrapper.getAttribute('dir'),
+    };
+
+    view.unmount();
+    const afterUnmount = readPair();
+    plantHostRoot(HOST_LANG, HOST_DIR);
+
+    expect(whileMounted).toEqual({
+      pair: { lang: HOST_LANG, dir: HOST_DIR },
+      claims: 0,
+    });
+    expect(published).toEqual({ lang: 'ar', dir: 'rtl' });
+    expect(afterUnmount).toEqual({ lang: HOST_LANG, dir: HOST_DIR });
+  });
+
+  // D7
+  it('does not publish an island direction onto the document that contains it', async () => {
+    // The kernel contract's second use for `element`: an island whose direction
+    // DIFFERS from the surrounding document. Writing `<html dir>` here would
+    // not merely overreach -- it would flip the containing document to the
+    // island's direction, which is the inverse of the feature.
+    plantHostRoot('en', 'ltr');
+
+    const view = render(
+      <I18nProvider locale="ar" directionScope="element">
+        <span data-part="probe">محتوى</span>
+      </I18nProvider>
+    );
+    await view.findByText('محتوى');
+
+    const document_ = readPair();
+    const island = (view.container.firstElementChild as HTMLElement).getAttribute('dir');
+    view.unmount();
+    plantHostRoot(HOST_LANG, HOST_DIR);
+
+    expect(document_).toEqual({ lang: 'en', dir: 'ltr' });
+    expect(island).toBe('rtl');
+  });
+
+  // D8
+  it('releases the root pair when directionScope flips to element', async () => {
+    plantHostRoot(HOST_LANG, HOST_DIR);
+    const root = document.documentElement;
+
+    const view = render(
+      <I18nProvider locale="ar">
+        <span>island</span>
+      </I18nProvider>
+    );
+    await waitFor(() => expect(readPair()).toEqual({ lang: 'ar', dir: 'rtl' }));
+
+    // The mode is a dependency of the claim, not just of the render. If it
+    // were omitted the claims would survive the flip and strand the host root
+    // on the island's locale for the life of the document.
+    view.rerender(
+      <I18nProvider locale="ar" directionScope="element">
+        <span>island</span>
+      </I18nProvider>
+    );
+    await waitFor(() => expect(outstandingRootClaims(root)).toBe(0));
+    const afterFlip = readPair();
+
+    // Flipping back re-claims: the release is a handover, not a permanent
+    // forfeit of the channel.
+    view.rerender(
+      <I18nProvider locale="ar">
+        <span>island</span>
+      </I18nProvider>
+    );
+    await waitFor(() => expect(readPair()).toEqual({ lang: 'ar', dir: 'rtl' }));
+    const claimsAfterReclaim = outstandingRootClaims(root);
+
+    view.unmount();
+    const handedBack = readPair();
+    plantHostRoot(HOST_LANG, HOST_DIR);
+
+    expect(afterFlip).toEqual({ lang: HOST_LANG, dir: HOST_DIR });
+    expect(claimsAfterReclaim).toBe(2);
+    expect(handedBack).toEqual({ lang: HOST_LANG, dir: HOST_DIR });
   });
 });
 

@@ -34,25 +34,25 @@ import type {
   DashboardSurfaceConfig,
   DashboardSurfaceSection,
 } from "../../../../foundation/contracts";
-import { PageShellSurface } from "../../../../composition/layout/page-shell";
-import { resolveAdaptiveLayout } from "../../../../../patterns/data/widget-board/runtime/solver";
+import { PageShellSurface } from "../../../../../structures/shell/page-shell-surface";
+import { resolveAdaptiveLayout } from "../../../../../patterns/runtime/adaptive-layout/runtime";
 import {
   useAdaptiveEnvironment,
   useContainerPosture,
-} from "../../../../../patterns/data/widget-board/runtime/solver/react";
-import { useSurfaceProfileDefaultsWithOverrides } from "../../../../runtime/profile-defaults/overrides";
+} from "../../../../../patterns/runtime/adaptive-layout/presentation/react";
+import { useSurfaceProfileDefaultsWithOverrides } from "../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides";
 import {
   resolveResponsiveColumnCount,
   useSurfaceResponsiveLayout,
-} from "../../../../runtime/responsive";
+} from "../../../../../structures/foundation/chrome/runtime/responsive";
 import {
   resolveStackSpacing,
   SurfaceAccentBarWrapper,
-} from "../../../../runtime/profile-defaults/personality";
+} from "../../../../../structures/foundation/chrome/runtime/profile-defaults/personality";
 import {
   SurfaceEmptyState,
   SurfaceErrorState,
-} from "../../../../runtime/helpers/states";
+} from "../../../../../structures/feedback/surface-lifecycle";
 import { useMotionPolicy } from "@/infrastructure/runtime/motion";
 
 type SurfaceCardVariant = "outlined" | "elevated" | "filled" | "ghost";

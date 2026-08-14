@@ -6,17 +6,17 @@
     "category": "forms",
     "name": "StepWizard",
     "components": [
-      "StepWizard"
+      "PatternStepWizard"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
     "sourceOwner": "packages/core/src/ui/patterns/forms/step-wizard",
-    "publicComponents": [],
-    "unresolvedPublicComponents": [
-      "StepWizard"
+    "publicComponents": [
+      "PatternStepWizard"
     ],
+    "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "e65d68a18776d9319e5ece2bba7b29feb6dc3014c0fae74bbecb7eaf782067cd"
+    "inventoryRowDigest": "f6cf5e241dee813614203c6d68395ef9fa02cb3590cf945e455a7e4204d6af15"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

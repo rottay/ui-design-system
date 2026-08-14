@@ -20,6 +20,23 @@ import type { EngineName, TenantConfig } from '../../../../foundation/contracts'
 export const STABLE_ENGINES = ['classic', 'modern', 'rustic'] as const satisfies readonly EngineName[];
 export type StableEngineName = (typeof STABLE_ENGINES)[number];
 
+/**
+ * The shared engine fixture carries NO runtime visual payload.
+ *
+ * `censusRuntimeVisualPayload` counts every `branding` colour and font field as
+ * runtime paint. A tenant that carries paint without a verified, mounted,
+ * compiled artifact is refused by `resolveVisualAuthority`, and
+ * `DesignSystemProvider` fails closed on that conflict: it renders
+ * `<LoadingScreen />` and never mounts its children. This fixture used to
+ * declare six brand colours that no assertion in any engine suite ever read —
+ * decorative payload that would block every render through this helper.
+ *
+ * Engine suites assert engine-switched anatomy, not tenant paint, so the
+ * fixture stops claiming a paint authority it never had. `companyName` is
+ * deliberately kept: it is identity, not paint, and the census ignores it. A
+ * suite that genuinely needs compiled tenant paint must mount a verified
+ * artifact and declare `visualAuthority`; it must not re-add raw colours here.
+ */
 const TEST_TENANT_CONFIG: TenantConfig = {
   slug: 'test-tenant',
   name: 'Test Tenant',
@@ -31,12 +48,6 @@ const TEST_TENANT_CONFIG: TenantConfig = {
   features: ['testing'],
   branding: {
     companyName: 'Test Tenant',
-    primaryColor: '#2563eb',
-    secondaryColor: '#0f766e',
-    accentColor: '#7c3aed',
-    darkPrimaryColor: '#93c5fd',
-    darkSecondaryColor: '#5eead4',
-    darkAccentColor: '#c4b5fd',
   },
 };
 

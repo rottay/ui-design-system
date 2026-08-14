@@ -4,11 +4,10 @@
  * K4 Lane C probe (showroom): specialized display families.
  *
  * One identical component tree for the six Lane-C families (Carousel, Image,
- * QRCode, ColorPicker, FloatButton, Watermark) rendered under two opposing
- * governed sources:
- *  - `bithire-static`: the checked-in BitHire BrandTheme (file-first path);
- *  - `themanagement-db`: the DB Appearance construction mirrored from
- *    `@/components/brand-locale-evidence` (DB-owned runtime path).
+ * QRCode, ColorPicker, FloatButton, Watermark) rendered under the two opposing
+ * governed sources `@/components/showroom-tenant` owns:
+ *  - `bithire-static`: the bundled BitHire vertical, code-owned;
+ *  - `themanagement-db`: a published customer document, compiled and proven.
  *
  * The probe exists to give Pass-1/Pass-2 evidence a URL-addressable render of
  * the states K4-C changed:
@@ -26,9 +25,8 @@
  *    page; the fixed `end-6` placement is asserted in vitest instead.
  *  - Watermark: canvas pattern over content (verify-only family).
  *
- * Density sweeps compact | comfortable | spacious through
- * `appearance.general.density` only, locale sweeps EN/ES/AR with `dir="rtl"`
- * for Arabic, and `state` retunes the deterministic states on the SAME
+ * Density sweeps compact | comfortable | spacious, locale sweeps EN/ES/AR with
+ * `dir="rtl"` for Arabic, and `state` retunes the deterministic states on the SAME
  * markup. No fixture value here is product content.
  */
 
@@ -36,7 +34,6 @@ import {
   Box,
   Carousel,
   ColorPicker,
-  DesignSystemProvider,
   FloatButton,
   Heading,
   Image,
@@ -44,11 +41,9 @@ import {
   Stack,
   Text,
   Watermark,
-  bithireBrandTheme,
-  type TenantConfig,
 } from "@rottay/design-system";
 
-import { tenantConfigFor as brandLocaleTenantConfigFor } from "@/components/brand-locale-evidence";
+import { ShowroomTenantProvider } from "@/components/showroom-tenant";
 
 export type K4LaneCSource = "bithire-static" | "themanagement-db";
 export type K4LaneCLocale = "en" | "es" | "ar";
@@ -62,52 +57,6 @@ export interface K4LaneCProbeProps {
   density: K4LaneCDensity;
   state: K4LaneCState;
   theme?: K4LaneCTheme;
-}
-
-/**
- * The tenant-facing Appearance vocabulary has no `comfortable` literal:
- * `normal` is the canonical alias (TenantAppearanceGeneral['density']).
- */
-function toAppearanceDensity(
-  density: K4LaneCDensity
-): "compact" | "normal" | "spacious" {
-  return density === "comfortable" ? "normal" : density;
-}
-
-function tenantConfig(
-  source: K4LaneCSource,
-  locale: K4LaneCLocale,
-  density: K4LaneCDensity
-): TenantConfig {
-  if (source === "themanagement-db") {
-    const base = brandLocaleTenantConfigFor("themanagementmiami", locale);
-    return {
-      ...base,
-      appearance: {
-        ...base.appearance,
-        general: {
-          ...base.appearance?.general,
-          density: toAppearanceDensity(density),
-        },
-      },
-    };
-  }
-
-  return {
-    slug: "bithire",
-    name: "BitHire",
-    vertical: "bithire",
-    engine: "modern",
-    theme: "light",
-    plan: "enterprise",
-    features: ["*"],
-    branding: { companyName: "BitHire" },
-    // BitHire is first-party vertical identity and therefore comes from the
-    // checked-in DS theme, never from a customer DB fixture. The semantic
-    // posture enters exclusively through the Appearance channel.
-    brandTheme: bithireBrandTheme,
-    appearance: { general: { density: toAppearanceDensity(density) } },
-  };
 }
 
 const COPY: Record<K4LaneCLocale, Record<string, string>> = {
@@ -177,7 +126,7 @@ function slideCells(label: string) {
         justifyContent: "center",
         // K4-C round 2 (axe): the ink was `--ds-color-text-on-primary`,
         // which TMM's runtime channel never declares — it falls through to
-        // the dark :root platform fallback (#0C0C0E) and fails on every
+        // the dark :root system fallback (#0C0C0E) and fails on every
         // semantic bg (3.57:1 worst). The foundation white constant is
         // tenant-independent and clears AA on all six source/color pairs
         // (worst: bithire success 4.58:1).
@@ -336,12 +285,11 @@ function SpecimenTree({
 
 export function K4LaneCProbe({ source, locale, density, state, theme = "light" }: K4LaneCProbeProps) {
   return (
-    <DesignSystemProvider
-      tenantConfig={{ ...tenantConfig(source, locale, density), locale }}
-      vertical="bithire"
+    <ShowroomTenantProvider
+      source={source}
       locale={locale}
-      forceEngine="modern"
-      forceTheme={theme}
+      density={density}
+      theme={theme}
     >
       <Box
         data-testid="k4c-canvas"
@@ -386,7 +334,7 @@ export function K4LaneCProbe({ source, locale, density, state, theme = "light" }
           </main>
         </Box>
       </Box>
-    </DesignSystemProvider>
+    </ShowroomTenantProvider>
   );
 }
 

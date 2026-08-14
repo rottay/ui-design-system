@@ -50,13 +50,13 @@ import type {
 import type {
   SearchCommandBarConfig,
   SearchCommandBarCommand,
-} from '../../../../../structures/workspace/connected-command-palette/search-command-bar';
+} from '../../../../../structures/workspace/search-command-bar';
 import {
   isCollectionFilterValueActive,
   useCollectionWorkspace,
 } from '../../../../runtime/collection-workspace';
 import { useAdaptivePosture } from '../../../../runtime/adaptive-posture';
-import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
+import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
 import {
   resolveSurfacePermission,
   hasSurfaceError,
@@ -69,7 +69,7 @@ import { PatternListToolbar } from '../../../../../patterns/data/list-toolbar';
 import { ScopeSwitcher } from '../../../../../structures/workspace/scope-switcher';
 import { ColumnMenu } from '../../../../../structures/workspace/column-menu';
 import { CollectionHeader } from '../../../../../structures/headers/collection';
-import { SearchCommandBar } from '../../../../../structures/workspace/connected-command-palette/search-command-bar';
+import { SearchCommandBar } from '../../../../../structures/workspace/search-command-bar';
 import { ActiveFiltersBar } from '../../../../../structures/workspace/active-filters-bar';
 import { Box } from '../../../../../primitives/layout/Box';
 import { Stack } from '../../../../../primitives/layout/Stack';
@@ -78,7 +78,7 @@ import { Text } from '../../../../../primitives/display/Typography';
 import { Button } from '../../../../../primitives/inputs/Button';
 import { ActionDock } from '../../../../../structures/workspace/action-dock';
 import { AdaptiveOverlay } from '../../../../../patterns/feedback/adaptive-overlay';
-import { WorkspaceShell } from '../../../../composition/layout/collection-shell';
+import { WorkspaceShell } from '../../../../../structures/shell/workspace-shell';
 import { CollectionRenderDispatch } from './render-dispatch';
 import { CollectionFilterDropdown } from './filter-dropdown';
 import type { CollectionViewMode, CollectionViewModeConfigs } from '../../../../foundation/contracts/adaptive/collection';

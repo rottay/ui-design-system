@@ -6,7 +6,7 @@ import {
   Stack,
   Text,
   Button,
-  OverlayModal,
+  Modal,
   Tour,
   ConfirmDialog,
   AlertDialog,
@@ -32,6 +32,11 @@ import {
 // and Dropdown are forced to `trigger="click"` here (their defaults are
 // hover-based) so the spec can open them deterministically without a
 // hover-delay race. Watermark renders statically -- no open/closed state.
+// The Modal fixture below is the canonical `Modal`; it used to be imported as
+// `OverlayModal`, a retired alias for the same component. The
+// `probe-overlay-modal*` test ids and the `.rottay-overlay-modal-shell--*`
+// selectors keep their historical names because overlay-batch.spec.ts keys on
+// them and the engines still emit those classes -- do not rename them here.
 // This page is the visual-evidence half; OverlayBatch.contract.test.tsx
 // asserts the stamped data-part/data-open/data-placement/data-tone/
 // data-variant attributes and portal posture against its own React Testing
@@ -67,7 +72,7 @@ export function OverlayStates() {
           <Button data-testid="probe-overlay-modal-trigger" onClick={() => setModalOpen(true)}>
             Open modal
           </Button>
-          <OverlayModal
+          <Modal
             open={modalOpen}
             onClose={() => setModalOpen(false)}
             title="Overlay modal title"
@@ -75,7 +80,7 @@ export function OverlayStates() {
             footer={<Button onClick={() => setModalOpen(false)}>Close</Button>}
           >
             Overlay modal body content.
-          </OverlayModal>
+          </Modal>
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-overlay-tour">

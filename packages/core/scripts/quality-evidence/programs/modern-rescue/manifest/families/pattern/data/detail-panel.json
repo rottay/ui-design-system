@@ -6,17 +6,17 @@
     "category": "data",
     "name": "DetailPanel",
     "components": [
-      "DetailPanel"
+      "PatternDetailPanel"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
     "sourceOwner": "packages/core/src/ui/patterns/data/detail-panel",
-    "publicComponents": [],
-    "unresolvedPublicComponents": [
-      "DetailPanel"
+    "publicComponents": [
+      "PatternDetailPanel"
     ],
+    "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "bb6a2dc95ba0bba9cf81bf1674bc25ec0e21d97d52af930deb59825f55c8b8c0"
+    "inventoryRowDigest": "b49e1ac6e61e08e937ef08d7d8a70586d3ea1798465b86597047ca699dad48dc"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

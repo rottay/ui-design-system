@@ -8,6 +8,7 @@ import {
   censusRawSharedChrome,
   censusSupplierImports,
   censusTenantStyleBranches,
+  censusUndocumentedDsWrites,
   stripCssComments,
   stripTsComments,
 } from "./application-boundary-gate.mjs";
@@ -91,6 +92,23 @@ test("tenant style branch rejects concrete tenant identity but permits generic s
       "[data-account-tenant='customer-b']",
     ]
   );
+});
+
+test("undocumented DS writes ignore shipped names and comment ghosts", () => {
+  const shipped = new Set(["--ds-known-hook"]);
+  const source = `
+    .known { --ds-known-hook: var(--ds-spacing-2); }
+    /* .ghost { --ds-comment-only: 1px; } */
+    .unknown {
+      --ds-empty-state-card-padding-block: var(--ds-spacing-6);
+      --ds-empty-state-card-padding-inline: var(--ds-spacing-4);
+    }
+  `;
+
+  assert.deepEqual(censusUndocumentedDsWrites(source, shipped), [
+    "--ds-empty-state-card-padding-block",
+    "--ds-empty-state-card-padding-inline",
+  ]);
 });
 
 test("every executable boundary category has an owner and removal reason", () => {

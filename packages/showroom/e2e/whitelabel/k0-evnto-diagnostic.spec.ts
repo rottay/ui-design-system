@@ -6,9 +6,12 @@ import { test, type Page } from '@playwright/test';
 // K0.6 diagnostic — why does the evnto probe cell wash out?
 //
 // Compares the evnto render through the compiled-artifact path (the showroom's
-// own /verticals/evnto page, slug "evnto") against the K0 probe's runtime
-// compile path (slug "k0-evnto"), dumping the computed token values that
-// decide foreground/background ownership. Review artifact; no baselines.
+// own /verticals/evnto page) against the K0 probe's code-owned registry path,
+// dumping the computed token values that decide foreground/background
+// ownership. Both now render slug "evnto"; the probe no longer mints a
+// synthetic "k0-evnto" tenant, and it no longer patches evnto's undeclared
+// `palette.textPrimary*` / `chrome.tabs` channels, so the wash-out this
+// diagnostic measures is the real source gap. Review artifact; no baselines.
 // ---------------------------------------------------------------------------
 
 function repoRoot(): string {
@@ -68,22 +71,22 @@ test.describe('K0.6 evnto render diagnostic', () => {
       fullPage: false,
     });
 
-    // 2. Probe runtime-compile path: evnto.
-    await page.goto('/probe/k0-profiles?theme=evnto&profile=none&locale=en', {
+    // 2. Probe code-owned registry path: evnto.
+    await page.goto('/probe/k0-profiles?vertical=evnto&locale=en', {
       waitUntil: 'networkidle',
     });
     await page.getByTestId('pe-title').waitFor({ timeout: 30_000 });
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(300);
-    await dumpTokens(page, 'probe runtime-compile evnto');
+    await dumpTokens(page, 'probe code-owned registry evnto');
 
-    // 3. Probe runtime-compile path: bithire (known good).
-    await page.goto('/probe/k0-profiles?theme=bithire&profile=none&locale=en', {
+    // 3. Probe code-owned registry path: bithire (known good).
+    await page.goto('/probe/k0-profiles?vertical=bithire&locale=en', {
       waitUntil: 'networkidle',
     });
     await page.getByTestId('pe-title').waitFor({ timeout: 30_000 });
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(300);
-    await dumpTokens(page, 'probe runtime-compile bithire');
+    await dumpTokens(page, 'probe code-owned registry bithire');
   });
 });

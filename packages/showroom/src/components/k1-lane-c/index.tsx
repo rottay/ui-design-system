@@ -6,13 +6,15 @@
  * One identical component tree for the eight Lane-C families (Alert, Callout,
  * Message, Progress, Skeleton, Spinner, Empty, Result) rendered under two
  * opposing governed sources:
- *  - `bithire-static`: the checked-in BitHire BrandTheme (file-first path);
- *  - `themanagement-db`: the DB Appearance construction mirrored from
- *    `@/components/brand-locale-evidence` (DB-owned runtime path).
+ *  - `bithire-static`: the bundled BitHire vertical, code-owned;
+ *  - `themanagement-db`: a published customer document, compiled and proven.
  *
- * The density posture sweeps compact | comfortable | spacious through
- * `appearance.general.density` only (`comfortable` maps to the canonical
- * `normal` alias at the Appearance boundary), the locale sweep renders
+ * Both grounds are built by `@/components/showroom-tenant`; this probe states
+ * WHICH one it wants and nothing about how one is made.
+ *
+ * The density posture sweeps compact | comfortable | spacious -- carried by
+ * `DensityScope` on the code-owned source and by the compiled document's own
+ * density on the DB one, never by both, the locale sweep renders
  * EN/ES/AR with `dir="rtl"` for Arabic, and the state sweep (rest | loading |
  * empty | error) retunes tones/statuses on the SAME markup -- the tree never
  * changes shape, so every data-testid exists in every cell. Every cell is
@@ -24,7 +26,6 @@ import {
   Box,
   Button,
   Callout,
-  DesignSystemProvider,
   Empty,
   Heading,
   MessageItem,
@@ -33,11 +34,9 @@ import {
   Skeleton,
   Spinner,
   Stack,
-  bithireBrandTheme,
-  type TenantConfig,
 } from "@rottay/design-system";
 
-import { tenantConfigFor as brandLocaleTenantConfigFor } from "@/components/brand-locale-evidence";
+import { ShowroomTenantProvider } from "@/components/showroom-tenant";
 
 export type LaneCSource = "bithire-static" | "themanagement-db";
 export type LaneCLocale = "en" | "es" | "ar";
@@ -49,52 +48,6 @@ export interface K1LaneCProbeProps {
   locale: LaneCLocale;
   density: LaneCDensity;
   state: LaneCState;
-}
-
-/**
- * The tenant-facing Appearance vocabulary has no `comfortable` literal:
- * `normal` is the canonical alias (TenantAppearanceGeneral['density']).
- */
-function toAppearanceDensity(
-  density: LaneCDensity
-): "compact" | "normal" | "spacious" {
-  return density === "comfortable" ? "normal" : density;
-}
-
-function tenantConfig(
-  source: LaneCSource,
-  locale: LaneCLocale,
-  density: LaneCDensity
-): TenantConfig {
-  if (source === "themanagement-db") {
-    const base = brandLocaleTenantConfigFor("themanagementmiami", locale);
-    return {
-      ...base,
-      appearance: {
-        ...base.appearance,
-        general: {
-          ...base.appearance?.general,
-          density: toAppearanceDensity(density),
-        },
-      },
-    };
-  }
-
-  return {
-    slug: "bithire",
-    name: "BitHire",
-    vertical: "bithire",
-    engine: "modern",
-    theme: "light",
-    plan: "enterprise",
-    features: ["*"],
-    branding: { companyName: "BitHire" },
-    // BitHire is first-party vertical identity and therefore comes from the
-    // checked-in DS theme, never from a customer DB fixture. The semantic
-    // posture enters exclusively through the Appearance channel.
-    brandTheme: bithireBrandTheme,
-    appearance: { general: { density: toAppearanceDensity(density) } },
-  };
 }
 
 const COPY: Record<LaneCLocale, Record<string, string>> = {
@@ -279,13 +232,7 @@ function SpecimenTree({
 
 export function K1LaneCProbe({ source, locale, density, state }: K1LaneCProbeProps) {
   return (
-    <DesignSystemProvider
-      tenantConfig={{ ...tenantConfig(source, locale, density), locale }}
-      vertical="bithire"
-      locale={locale}
-      forceEngine="modern"
-      forceTheme="light"
-    >
+    <ShowroomTenantProvider source={source} locale={locale} density={density}>
       <Box
         data-testid="lc-canvas"
         style={{
@@ -311,6 +258,6 @@ export function K1LaneCProbe({ source, locale, density, state }: K1LaneCProbePro
           <SpecimenTree locale={locale} state={state} />
         </Box>
       </Box>
-    </DesignSystemProvider>
+    </ShowroomTenantProvider>
   );
 }

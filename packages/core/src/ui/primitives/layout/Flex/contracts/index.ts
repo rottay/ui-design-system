@@ -150,10 +150,32 @@ export const FLEX_GAP_MAP: Record<FlexGapToken, string> = {
  * Values can arrive from JavaScript, persisted preferences, or arithmetic even
  * when TypeScript authoring is strict. Negative and non-finite gaps collapse
  * to zero instead of leaking `NaNpx`, `Infinitypx`, or invalid negative CSS.
+ *
+ * THE TOKEN BRANCH FAILS CLOSED THE SAME WAY, and it did not used to. A bare
+ * `FLEX_GAP_MAP[value]` read is a lookup on a plain object literal, so it
+ * answers for names the map never declared:
+ *
+ *   - an unknown rung (`"huge"`, `""`, `null`, `{}`) returned `undefined`,
+ *     which the caller interpolated into `gap: undefined;` -- a declaration the
+ *     browser drops, silently restoring the engine default instead of the
+ *     author's intent, and worse inside the `[column, row]` shorthand where
+ *     `"var(--ds-spacing-4, 1rem) undefined"` invalidates BOTH axes;
+ *   - an INHERITED member name resolved through `Object.prototype`, so
+ *     `"toString"` returned a FUNCTION and `"__proto__"` an object. The
+ *     declared return type `string` was simply false, and the value stamped
+ *     into the style attribute was a function body.
+ *
+ * An own-property guard is what makes the token branch a closed vocabulary
+ * rather than a lookup. An unrecognized token resolves to the same output as
+ * the declared `none` rung: zero room, stated explicitly, never absent.
  */
 export function resolveFlexGapValue(value: FlexGapValue): string {
-  if (typeof value !== "number") return FLEX_GAP_MAP[value];
-  return Number.isFinite(value) && value >= 0 ? `${value}px` : "0px";
+  if (typeof value === "number") {
+    return Number.isFinite(value) && value >= 0 ? `${value}px` : "0px";
+  }
+  return Object.prototype.hasOwnProperty.call(FLEX_GAP_MAP, value as string)
+    ? FLEX_GAP_MAP[value]
+    : FLEX_GAP_MAP.none;
 }
 
 /**
@@ -202,4 +224,53 @@ export function resolveFlexGap(gap: FlexGap): string {
     return `${resolveFlexGapValue(gap[1])} ${resolveFlexGapValue(gap[0])}`;
   }
   return resolveFlexGapValue(gap);
+}
+
+/**
+ * The CLAMPED rhythm channel, read with the same `, 1` fallback the stylesheet
+ * uses so an unset tenant leaves a rung byte-identical to the pre-rhythm
+ * cascade. The raw `--ds-rhythm-scale` is the tenant input and reading it here
+ * would skip the 0.8..1.25 clamp the token floor declares.
+ */
+const RHYTHM_EFFECTIVE_SCALE = "var(--ds-rhythm-effective-scale, 1)";
+
+/**
+ * Resolves ONE gap value for a context that has no DOM attribute to key on.
+ *
+ * The scalar path stamps `data-gap-preset` and lets `layout-primitives.css`
+ * multiply the rung. The RESPONSIVE path cannot: its value changes per
+ * breakpoint, so a single root attribute cannot describe it and the generated
+ * breakpoint rule carries no preset spelling for any stylesheet to match. A
+ * rung therefore carries its own `calc()` there, decided by the SAME
+ * enumeration the stylesheet keys on (`FLEX_GAP_RHYTHM_PRESETS`, via
+ * `flexGapPresetSpelling`) rather than by a second list.
+ *
+ * A measurement, `none` and an invalid value are returned exactly as
+ * `resolveFlexGapValue` produced them: a caller who states geometry keeps it
+ * under rhythm for the same reason it keeps it under density, and zero has no
+ * room to scale.
+ */
+function resolveFlexGapValueWithRhythm(value: FlexGapValue): string {
+  const resolved = resolveFlexGapValue(value);
+  return flexGapPresetSpelling(value) === undefined
+    ? resolved
+    : `calc(${resolved} * ${RHYTHM_EFFECTIVE_SCALE})`;
+}
+
+/**
+ * `resolveFlexGap` with layout rhythm projected onto the preset axes only.
+ *
+ * Built on the same `resolveFlexGapValue` base as the unscaled resolver, so
+ * the two outputs can differ by nothing except the `calc()` wrapper. The
+ * public `[column, row]` tuple still emits the CSS `row column` shorthand, and
+ * each axis resolves INDEPENDENTLY: `[8, "md"]` scales the row rung and leaves
+ * the column measurement exact.
+ */
+export function resolveFlexGapWithRhythm(gap: FlexGap): string {
+  if (Array.isArray(gap)) {
+    return `${resolveFlexGapValueWithRhythm(
+      gap[1]
+    )} ${resolveFlexGapValueWithRhythm(gap[0])}`;
+  }
+  return resolveFlexGapValueWithRhythm(gap);
 }

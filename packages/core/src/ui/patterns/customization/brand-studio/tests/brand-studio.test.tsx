@@ -349,12 +349,13 @@ describe('PatternBrandStudio live preview repaint', () => {
   });
 });
 
-describe('PatternBrandStudio dark-primary/dark-background controls', () => {
-  it('drives --ds-color-primary from darkPrimaryColor on the dark surface only', () => {
+describe('PatternBrandStudio dark-mode overlay (BrandTheme.modes) controls', () => {
+  it('drives --ds-color-primary from modes.dark.palette.primaryColor on the dark surface only', () => {
     const theme: BrandTheme = {
       id: 'p',
       name: 'P',
-      palette: { primaryColor: '#4f46e5', darkPrimaryColor: '#a5b4fc' },
+      palette: { primaryColor: '#4f46e5' },
+      modes: { dark: { palette: { primaryColor: '#a5b4fc' } } },
     };
 
     const dark = buildSurfaceVariables(theme, DARK_SURFACE_UNDER_TEST).vars;
@@ -364,17 +365,18 @@ describe('PatternBrandStudio dark-primary/dark-background controls', () => {
     expect(light['--ds-color-primary']).toBe('#4f46e5');
   });
 
-  it('leaves --ds-color-primary at the base value on the dark surface when darkPrimaryColor is unset', () => {
+  it('leaves --ds-color-primary at the base value on the dark surface when modes.dark is unset', () => {
     const theme: BrandTheme = { id: 'p', name: 'P', palette: { primaryColor: '#4f46e5' } };
     const dark = buildSurfaceVariables(theme, DARK_SURFACE_UNDER_TEST).vars;
     expect(dark['--ds-color-primary']).toBe('#4f46e5');
   });
 
-  it('drives --ds-color-bg-primary from darkBackgroundColor on the dark surface only', () => {
+  it('drives --ds-color-bg-primary from modes.dark.palette.backgroundColor on the dark surface only', () => {
     const theme: BrandTheme = {
       id: 'p',
       name: 'P',
-      palette: { primaryColor: '#4f46e5', darkBackgroundColor: '#050507' },
+      palette: { primaryColor: '#4f46e5' },
+      modes: { dark: { palette: { backgroundColor: '#050507' } } },
     };
 
     const dark = buildSurfaceVariables(theme, DARK_SURFACE_UNDER_TEST).vars;
@@ -382,6 +384,25 @@ describe('PatternBrandStudio dark-primary/dark-background controls', () => {
 
     expect(dark['--ds-color-bg-primary']).toBe('#050507');
     expect(light['--ds-color-bg-primary']).toBe(DEFAULT_LIGHT_GROUND['--ds-color-bg-primary']);
+  });
+
+  it('resolves the OTHER direction too: a dark-default theme drives --ds-color-primary from modes.light.palette on the light surface only', () => {
+    // platform/rottay's real shape: appearance.defaultMode 'dark', with a
+    // `modes.light` overlay carrying the light variant. The base palette IS
+    // the dark surface's value; only the light surface pulls from the overlay.
+    const theme: BrandTheme = {
+      id: 'p',
+      name: 'P',
+      appearance: { defaultMode: 'dark' },
+      palette: { primaryColor: '#0b0f1a' },
+      modes: { light: { palette: { primaryColor: '#f4f4f0' } } },
+    };
+
+    const dark = buildSurfaceVariables(theme, DARK_SURFACE_UNDER_TEST).vars;
+    const light = buildSurfaceVariables(theme, LIGHT_SURFACE_UNDER_TEST).vars;
+
+    expect(dark['--ds-color-primary']).toBe('#0b0f1a');
+    expect(light['--ds-color-primary']).toBe('#f4f4f0');
   });
 });
 

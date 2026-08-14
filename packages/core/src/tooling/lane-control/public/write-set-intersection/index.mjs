@@ -9,25 +9,39 @@
  *
  * FIVE RULES, EVERY ONE OF THEM COMPUTED.
  *
+ *   R0 lane role      a lane is one of three shapes — a `family` bound to an
+ *                     inventory row, a `domain` bound to a synthetic row, or
+ *                     an `integrator` rooted in a declared shared region. Only
+ *                     an integrator may declare its own root
  *   R1 bound          every declared pattern resolves inside its row's
  *                     `writeRoot` and outside its `writeExcludes`
  *   R2 collision      no two lanes share a file that EXISTS today
  *   R3 territory      no two lanes can both match a common path that does
  *                     not exist yet — reported with a synthesised witness
- *   R4 single-owner   no lane silently covers a file with one architectural
- *                     or arithmetic owner, and at most one lane may CLAIM
- *                     each such file per plan
- *   R5 ledger drift   the ledger's own `sharedSkinFiles` map agrees with the
- *                     map re-derived from `rows[].skinFiles`
+ *   R4 single-owner   no lane silently covers a file in an architecturally
+ *                     shared region; at most one lane may CLAIM each such file
+ *                     per plan, and at most one lane may hold a shared DOMAIN
+ *                     per plan even when the files differ
  *
  * R2 IS NOT ENOUGH ON ITS OWN, and that is the whole reason R3 is here. Two
  * lanes rooted in the same directory with an empty intersection this
  * afternoon collide the moment either creates a file — which is precisely
  * what a writing lane is for. R2 proves today; R3 bounds tomorrow.
  *
+ * There was a fifth rule. It checked that a sealed R0 ledger's `sharedSkinFiles`
+ * summary agreed with the map re-derived from that same ledger's per-family
+ * `skinFiles`, because the single-owner set was half-derived from it. That set
+ * is now architectural — see `../../runtime/shared-files` — so the rule had
+ * nothing left to protect, and a rule whose only subject is an archive is a
+ * rule that makes the archive editable.
+ *
  * USAGE
  *   node packages/core/src/tooling/lane-control/write-set-intersection \
- *        --plan <plan.json> [--json] [--ledger <path>] [--synthetic <path>]
+ *        --plan <plan.json> [--json]
+ *
+ * The catalog is not an argument. `--inventory` / `--synthetic` are refused:
+ * a run that could name its own ownership rows could bind any lane to any
+ * subtree, which is not a check but a request.
  *
  * EXIT 0 clean · 1 violations found · 2 could not run.
  */
@@ -35,6 +49,7 @@ import { pathToFileURL } from 'node:url';
 import { territoryOverlap } from '../../foundation/glob/index.mjs';
 import { repoRoot } from '../../foundation/git/index.mjs';
 import { buildSingleOwnerSet, singleOwnerHits } from '../../runtime/shared-files/index.mjs';
+import { assertNoCatalogOverride } from '../../runtime/ownership-rows/index.mjs';
 import { loadContext, readPlan, resolveLane } from '../../composition/plan/index.mjs';
 import { conclude, createFindings, EXIT, parseArgs } from '../../foundation/report/index.mjs';
 
@@ -49,25 +64,18 @@ function listCapped(items) {
 export function checkPlan({ plan, context }) {
   const { add, findings } = createFindings();
   const lanes = plan.lanes.map((lane) => resolveLane(lane, context));
-  const singleOwner = buildSingleOwnerSet(context.rows.derivedSharedSkinFiles);
+  const singleOwner = buildSingleOwnerSet();
 
-  // R5 — the ledger's summary must agree with the ledger's rows. This runs
-  // FIRST because R4 is derived from it: a stale map would quietly shrink the
-  // set of files no family lane may touch.
-  const drift = context.rows.drift;
-  if (!drift.clean) {
-    add({
-      rule: 'R5-ledger-drift',
-      message:
-        'family-ledger.json `sharedSkinFiles` disagrees with the map re-derived from rows[].skinFiles; the single-owner set cannot be trusted until this is resolved.',
-      details: [
-        ...drift.missing.map((entry) => `missing from the ledger: ${entry.file} (owners ${entry.derivedOwners.join(', ')})`),
-        ...drift.extra.map((entry) => `recorded but not derivable: ${entry.file} (recorded ${entry.recordedOwners.join(', ')})`),
-        ...drift.mismatched.map(
-          (entry) => `owner set differs: ${entry.file} recorded=[${entry.recorded.join(', ')}] derived=[${entry.derived.join(', ')}]`,
-        ),
-      ],
-    });
+  // R0 — is the lane even a legal SHAPE? This runs first because the other
+  // rules all reason about a bound, and a lane that invented its own bound has
+  // already escaped the catalog before any of them look at it.
+  for (const lane of lanes) {
+    for (const violation of lane.roleViolations) {
+      add({
+        rule: 'R0-lane-role',
+        message: `lane ${lane.id} [${lane.laneRole}]: ${violation.message}`,
+      });
+    }
   }
 
   // R1 — containment of each declaration inside its own bound.
@@ -185,6 +193,30 @@ export function checkPlan({ plan, context }) {
       });
     }
   }
+
+  // SINGLETON PER DOMAIN, NOT PER FILE. Per-file singleton lets two lanes hold
+  // two different skin sheets at once, which is the scenario the rule exists to
+  // prevent: shared CSS is one cascade, and two writers in it produce
+  // interleaved change neither can review. A domain admits ONE integrator.
+  const domainClaimants = new Map();
+  for (const lane of lanes) {
+    for (const claim of lane.claimsSharedFiles) {
+      for (const hit of singleOwnerHits(claim, singleOwner)) {
+        if (!domainClaimants.has(hit.domain)) domainClaimants.set(hit.domain, new Map());
+        const byLane = domainClaimants.get(hit.domain);
+        if (!byLane.has(lane.id)) byLane.set(lane.id, []);
+        byLane.get(lane.id).push(claim);
+      }
+    }
+  }
+  for (const [domain, byLane] of domainClaimants) {
+    if (byLane.size <= 1) continue;
+    add({
+      rule: 'R4-single-owner',
+      message: `${byLane.size} lanes hold the "${domain}" domain in one plan: ${[...byLane.keys()].join(', ')} — a shared domain admits one integrator, even when the files differ`,
+      details: [...byLane].map(([id, claims]) => `${id} claims ${claims.length}: ${listCapped(claims).join('  ')}`),
+    });
+  }
   for (const lane of lanes) {
     const claimed = new Set(lane.claimsSharedFiles);
     const uncovered = [];
@@ -209,20 +241,17 @@ function main(argv) {
   const { flags } = parseArgs(argv);
   const planPath = flags.get('plan');
   if (!planPath || planPath === true) {
-    console.error('usage: write-set-intersection --plan <plan.json> [--json] [--ledger <path>] [--synthetic <path>]');
+    console.error('usage: write-set-intersection --plan <plan.json> [--json]');
     return EXIT.USAGE;
   }
 
   let context;
   let plan;
   try {
+    assertNoCatalogOverride(flags);
     const root = repoRoot();
     plan = readPlan(planPath);
-    context = loadContext({
-      root,
-      ledgerPath: typeof flags.get('ledger') === 'string' ? flags.get('ledger') : undefined,
-      syntheticPath: typeof flags.get('synthetic') === 'string' ? flags.get('synthetic') : undefined,
-    });
+    context = loadContext({ root });
   } catch (error) {
     console.error(`✗ write-set-intersection could not run: ${error.message}`);
     return EXIT.USAGE;

@@ -22,7 +22,7 @@
  * `ds-upload-dragger--${listType}` discriminator when `listType !== 'text'`,
  * mirroring rustic's pre-existing `rottay-upload--${listType}` BEM modifier).
  *
- * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
+ * SPECIFICITY (P-48): the Rottay artifact ships an unlayered
  * border-color floor at (0,3,1). Every rule that paints a border COLOR here
  * reaches (0,4,0) via a listType root modifier class, a stable semantic BEM
  * class on the target (`ds-upload__file-item` / `ds-upload__add-button`),

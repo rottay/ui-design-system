@@ -97,7 +97,13 @@ const HermesStack = forwardRef<HTMLElement, StackProps>((props, ref) => {
 
   // Responsive CSS generation
   const reactId = useId();
-  const responsiveEntries = collectStackResponsiveEntries(props);
+  // `rhythm: true` is Modern-only on purpose: the collector is shared with the
+  // read-only Classic and Rustic engines, whose emitted CSS must not move. A
+  // responsive preset rung stamps no `data-spacing` for the skin to key on, so
+  // this is the only place rhythm can reach it.
+  const responsiveEntries = collectStackResponsiveEntries(props, {
+    rhythm: true,
+  });
   const needsResponsiveCSS = responsiveEntries.length > 0;
 
   const elementId = needsResponsiveCSS

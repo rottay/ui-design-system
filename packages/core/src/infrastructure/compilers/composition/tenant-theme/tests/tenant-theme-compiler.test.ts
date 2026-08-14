@@ -289,11 +289,32 @@ describe("TenantThemeConfig v1 server contract", () => {
     // sentinel was widened, no assertion relaxed, and the digest was not
     // copied merely to turn the suite green. The new id is permanent per the
     // registry's supersede-never-reuse law.
+    // Modern-rescue plumbing re-anchor: both digests moved exactly once
+    // because `TENANT_THEME_OVERRIDE_TOKENS` STOPPED publishing four rows --
+    // `--ds-color-dark-primary`, `-secondary`, `-accent` and `-bg`. Another
+    // NARROWING, and the same shape as the OVL-PV-01 move above: no compiler
+    // emits that channel family and no stylesheet reads it, so allowing a
+    // tenant to write one was a knob wired to nothing. The static path's
+    // `dark*Color` palette fields and its the retired dark-ramp twin twin
+    // were withdrawn in the same change, so the family is gone from every
+    // producer, contract and allowlist at once rather than surviving on the
+    // input side alone.
+    //
+    // A tenant's dark values are not lost: they belong to its dark MODE and
+    // reach the PLAIN channel names while that mode is active -- through
+    // `palette.dark` and `light-dark()` on this DB path, and through
+    // `modes.dark` on the static one. Both were already the supported route.
+    //
+    // The move is confined to these two sentinels plus the populated-simple
+    // artifact digest, which moved for a different, separately declared
+    // reason (the shared interaction floor). No fixture or first-party
+    // document authors a `--ds-color-dark-*` override, so nothing else
+    // re-anchored. No sentinel was widened and no assertion relaxed.
     expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
-      "sha256-b87848042c7f2bb089c239710cafd9c3e0f9fec6e4d21eb3f0e16690679a85bf"
+      "sha256-4beabac2c0147b671abf92236230584950c5ba900d4f8750e3d036e84e088ce2"
     );
     expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
-      "sha256-55850bdc392f5f1fb12192613839fc45f49088cbdc290438e1ba83c386e1596e"
+      "sha256-2c4c6e60732ca8fee64938eb1e4959508408b22391f60c9d373f1c138bd10c53"
     );
     expect(Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA)).toBe(true);
     expect(Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA.documents.simple)).toBe(
@@ -613,13 +634,13 @@ describe("deterministic artifact compilation and isolation", () => {
             typography: { fontFamilyBase: "Inter, sans-serif" },
           },
         },
-        { ...IDENTITY, tenantId: "tenant_02", slug: "bithire" }
+        { ...IDENTITY, tenantId: "tenant_02", slug: "bithire-baseline" }
       )
     );
 
     expect(management.variables["--ds-color-primary"]).toBe("#0F766E");
     expect(bithire.variables["--ds-color-primary"]).toBe("#2563EB");
-    expect(management.css).not.toContain('data-tenant="bithire"');
+    expect(management.css).not.toContain('data-tenant="bithire-baseline"');
     expect(bithire.css).not.toContain('data-tenant="themanagementmiami"');
     expect(management.scopes.combinedSelector).not.toBe(
       bithire.scopes.combinedSelector
@@ -637,7 +658,7 @@ describe("deterministic artifact compilation and isolation", () => {
           mode: "simple",
           appearance: { palette: { primary: "#2563EB" } },
         },
-        { ...IDENTITY, tenantId: "tenant_02", slug: "bithire" }
+        { ...IDENTITY, tenantId: "tenant_02", slug: "bithire-baseline" }
       )
     );
     const managementRoot = document.createElement("section");
@@ -647,8 +668,8 @@ describe("deterministic artifact compilation and isolation", () => {
 
     for (const [root, slug] of [
       [managementRoot, "themanagementmiami"],
-      [nestedBithireRoot, "bithire"],
-      [siblingBithireRoot, "bithire"],
+      [nestedBithireRoot, "bithire-baseline"],
+      [siblingBithireRoot, "bithire-baseline"],
     ] as const) {
       root.setAttribute("data-ds-root", "");
       root.setAttribute("data-vertical", "bithire");
@@ -708,7 +729,7 @@ describe("deterministic artifact compilation and isolation", () => {
             surfaces: { elevation: "flat" },
           },
         },
-        { ...IDENTITY, tenantId: "tenant_02", slug: "bithire" }
+        { ...IDENTITY, tenantId: "tenant_02", slug: "bithire-baseline" }
       )
     );
     const changed = Object.keys(management.variables).filter(

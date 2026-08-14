@@ -2,8 +2,9 @@
  * BulkSelectToggle skin (WO-SKIN-06 CK-I).
  * Deliberately unlayered so the primitive engine skins and tenant wildcard
  * floor cannot displace the pattern's active ring. Its entrance keyframe is
- * local to this stable stylesheet so the pattern never depends on mounting a
- * separate TableCheckboxStyles component.
+ * local to this stable stylesheet, which is why the pattern survived the
+ * retirement of the mounted `<style>` component that used to ship table
+ * checkbox keyframes globally.
  */
 
 @keyframes ds-bulk-select-toggle-enter {

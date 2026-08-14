@@ -210,7 +210,7 @@
 
 /* Keyboard reachability: the roving tab stop lands DOM focus on the row
    without setting the engine's focus state, so the visible indicator is a
-   platform :focus-visible ring owned here (the state ring only exists once
+   Rottay :focus-visible ring owned here (the state ring only exists once
    the engine's focusedKey is set). */
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']:focus-visible {
   outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));

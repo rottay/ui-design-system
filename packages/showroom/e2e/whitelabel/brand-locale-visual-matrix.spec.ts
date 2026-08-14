@@ -9,7 +9,8 @@ import {
   type Page,
 } from "@playwright/test";
 
-import { themanagementmiamiBrandTheme as canonicalManagementTheme } from "../../../core/src/foundation/tokens/ts/presentation/brand-themes/fixtures/themanagementmiami";
+import { themanagementmiamiBrandTheme as canonicalManagementTheme } from "../../../core/src/tooling/testing/fixtures/brand-themes/themanagementmiami";
+import { SHOWROOM_TENANT_ARTIFACT_TESTID } from "../../src/components/showroom-tenant";
 import { themanagementmiamiBrandTheme as showroomManagementTheme } from "../../src/components/torture-surface/fixtures";
 
 type Fixture = "bithire" | "themanagementmiami";
@@ -163,6 +164,13 @@ interface ChromeReadings {
   cardRadius: string;
   cardBorderColor: string;
   cardShadow: string;
+}
+
+interface OverlayChromeReadings {
+  tooltipBackground: string;
+  tooltipRadius: string;
+  popoverBackground: string;
+  popoverRadius: string;
 }
 
 interface PixelDiffMetrics {
@@ -685,8 +693,12 @@ async function assertRuntimeEnvironment(
     true
   );
   expect(evidence.fontsStatus, "font loading did not settle").toBe("loaded");
+  // Only the bundled vertical ships web fonts. The published Management
+  // document authors system faces -- Optima base, Georgia heading -- so there
+  // is no font file to await for it; `readChrome` measures its computed
+  // families instead.
   const requiredFontFamilies =
-    fixture === "bithire" ? ["Public Sans", "Space Grotesk"] : ["Fraunces"];
+    fixture === "bithire" ? ["Public Sans", "Space Grotesk"] : [];
   for (const family of requiredFontFamilies) {
     expect(
       evidence.loadedFontFamilies,
@@ -908,7 +920,18 @@ async function readChrome(page: Page): Promise<ChromeReadings> {
   });
 }
 
-async function assertOverlayChrome(page: Page, fixture: Fixture): Promise<void> {
+/**
+ * Overlay chrome is now COMPILER-DERIVED for both tenants.
+ *
+ * The pinned `rgb(20, 34, 56)` / `rgb(255, 252, 246)` expectations this
+ * function used to carry were transcriptions of an `advanced.chrome.tooltip`
+ * and `advanced.chrome.popover` literal in a hand-authored appearance that the
+ * route no longer renders. The published Management document authors palette,
+ * type, shape, motion, density and surfaces only, so both tenants' overlays are
+ * derived rather than stated, and the honest assertion is divergence between
+ * the two -- checked once, after both cells are read.
+ */
+async function readOverlayChrome(page: Page): Promise<OverlayChromeReadings> {
   await page.getByTestId("evidence-tooltip-trigger").click();
   const tooltip = page.locator('[role="tooltip"]:visible');
   await expect(tooltip).toBeVisible();
@@ -942,17 +965,23 @@ async function assertOverlayChrome(page: Page, fixture: Fixture): Promise<void> 
       )
   );
 
-  if (fixture === "themanagementmiami") {
-    expect(tooltipChrome.background).toBe("rgb(20, 34, 56)");
-    expect(Number.parseFloat(tooltipChrome.radius)).toBeGreaterThan(5);
-    expect(Number.parseFloat(tooltipChrome.radius)).toBeLessThan(7);
-    expect(popoverChrome.background).toBe("rgb(255, 252, 246)");
-    expect(Number.parseFloat(popoverChrome.radius)).toBeGreaterThan(8);
-    expect(Number.parseFloat(popoverChrome.radius)).toBeLessThan(11);
-  } else {
-    expect(tooltipChrome.background).not.toBe("rgb(20, 34, 56)");
-    expect(popoverChrome.background).not.toBe("rgb(255, 252, 246)");
-  }
+  // A transparent overlay surface is the one reading that is wrong for every
+  // tenant: it means the overlay painted nothing at all.
+  expect(
+    tooltipChrome.background,
+    "tooltip surface painted nothing"
+  ).not.toBe("rgba(0, 0, 0, 0)");
+  expect(
+    popoverChrome.background,
+    "popover surface painted nothing"
+  ).not.toBe("rgba(0, 0, 0, 0)");
+
+  return {
+    tooltipBackground: tooltipChrome.background,
+    tooltipRadius: tooltipChrome.radius,
+    popoverBackground: popoverChrome.background,
+    popoverRadius: popoverChrome.radius,
+  };
 }
 
 async function pixelDiffMetrics(
@@ -1070,6 +1099,7 @@ for (const viewport of Object.keys(VIEWPORTS) as Viewport[]) {
 
           const screenshots = new Map<Fixture, Buffer>();
           const chrome = new Map<Fixture, ChromeReadings>();
+          const overlays = new Map<Fixture, OverlayChromeReadings>();
 
           for (const fixture of FIXTURES) {
             await gotoCell(page, fixture, locale);
@@ -1105,37 +1135,50 @@ for (const viewport of Object.keys(VIEWPORTS) as Viewport[]) {
             await assertResponsiveAnatomy(page, viewport);
             await assertEvidenceContrast(page);
             await assertRuntimeEnvironment(page, fixture, locale, viewport);
-            await assertOverlayChrome(page, fixture);
+            overlays.set(fixture, await readOverlayChrome(page));
             if (viewport === "mobile") await assertMobileTouchTargets(page);
 
-            const documentEvidence = await page.evaluate(() => ({
-              tenant: document.documentElement.dataset.tenant,
-              lang: document.documentElement.lang,
-              dir: document.documentElement.dir,
-              computedDirection: getComputedStyle(
-                document.querySelector(
-                  '[data-testid="brand-locale-evidence"]'
-                ) as Element
-              ).direction,
-              viewportOverflow:
-                document.documentElement.scrollWidth >
-                document.documentElement.clientWidth,
-              inlinePrimary: document.documentElement.style.getPropertyValue(
-                "--ds-color-primary"
-              ),
-              inlineEffectIntensity:
-                document.documentElement.style.getPropertyValue(
-                  "--ds-effect-intensity"
+            const documentEvidence = await page.evaluate((artifactTestId) => {
+              const root = document.querySelector(
+                '[data-testid="brand-locale-evidence"]'
+              ) as Element;
+              const artifacts = Array.from(
+                document.querySelectorAll<HTMLStyleElement>(
+                  `[data-testid="${artifactTestId}"]`
+                )
+              );
+              const artifactCss = artifacts
+                .map((style) => style.textContent ?? "")
+                .join("")
+                .toLowerCase();
+              return {
+                tenant: document.documentElement.dataset.tenant,
+                lang: document.documentElement.lang,
+                dir: document.documentElement.dir,
+                computedDirection: getComputedStyle(root).direction,
+                viewportOverflow:
+                  document.documentElement.scrollWidth >
+                  document.documentElement.clientWidth,
+                inlinePrimary: document.documentElement.style.getPropertyValue(
+                  "--ds-color-primary"
                 ),
-              inlineTooltipBackground:
-                document.documentElement.style.getPropertyValue(
-                  "--ds-tooltip-bordered-background"
+                inlineEffectIntensity:
+                  document.documentElement.style.getPropertyValue(
+                    "--ds-effect-intensity"
+                  ),
+                computedPrimary: getComputedStyle(root)
+                  .getPropertyValue("--ds-color-primary")
+                  .trim(),
+                computedEffectIntensity: getComputedStyle(root)
+                  .getPropertyValue("--ds-effect-intensity")
+                  .trim(),
+                artifactCount: artifacts.length,
+                artifactNestedInEvidence: Boolean(
+                  root.querySelector(`[data-testid="${artifactTestId}"]`)
                 ),
-              inlinePopoverBackground:
-                document.documentElement.style.getPropertyValue(
-                  "--ds-popover-bordered-background"
-                ),
-            }));
+                artifactDeclaresAuthoredPrimary: artifactCss.includes("#0f766e"),
+              };
+            }, SHOWROOM_TENANT_ARTIFACT_TESTID);
             expect(documentEvidence).toMatchObject({
               tenant: fixture,
               lang: locale,
@@ -1143,40 +1186,51 @@ for (const viewport of Object.keys(VIEWPORTS) as Viewport[]) {
               computedDirection: locale === "ar" ? "rtl" : "ltr",
               viewportOverflow: false,
             });
+            // NEITHER tenant may carry a provider-emitted inline layer. The
+            // bundled vertical never had one, and the customer no longer does
+            // either: under `compiled-artifact` authority the artifact IS the
+            // visual layer, so an inline variable here would be a second,
+            // competing authority rather than proof that the DB path ran.
+            expect(
+              documentEvidence.inlinePrimary,
+              `${fixture} emitted a competing inline visual layer`
+            ).toBe("");
+            expect(
+              documentEvidence.inlineEffectIntensity,
+              `${fixture} emitted a competing inline material layer`
+            ).toBe("");
+
             if (fixture === "themanagementmiami") {
+              // Exactly one artifact element per document per tenant scope, and
+              // it must mount OUTSIDE the provider subtree: the provider
+              // verifies the mount during its own render, so an artifact nested
+              // under the rendered evidence is invisible to that proof and the
+              // provider blocks into a permanent spinner.
               expect(
-                documentEvidence.inlinePrimary.toLowerCase(),
-                "The Management did not traverse the DB Appearance variable path"
-              ).toBe("#0f766e");
+                documentEvidence.artifactCount,
+                "The Management did not mount exactly one compiled artifact"
+              ).toBe(1);
               expect(
-                documentEvidence.inlineEffectIntensity,
+                documentEvidence.artifactNestedInEvidence,
+                "the compiled artifact mounted inside the rendered evidence"
+              ).toBe(false);
+              expect(
+                documentEvidence.artifactDeclaresAuthoredPrimary,
+                "the compiled artifact does not carry the authored primary seed"
+              ).toBe(true);
+              expect(
+                documentEvidence.computedPrimary,
+                "the compiled artifact selector never matched the mounted root"
+              ).not.toBe("");
+              expect(
+                Number.parseFloat(documentEvidence.computedEffectIntensity),
                 "The Management general surface-detail dial did not reach the runtime root"
-              ).toBe("0.45");
-              expect(
-                documentEvidence.inlineTooltipBackground.toLowerCase(),
-                "The Management tooltip chrome did not traverse the DB Appearance path"
-              ).toBe("#142238");
-              expect(
-                documentEvidence.inlinePopoverBackground.toLowerCase(),
-                "The Management popover chrome did not traverse the DB Appearance path"
-              ).toBe("#fffcf6");
+              ).toBeCloseTo(0.45, 5);
             } else {
               expect(
-                documentEvidence.inlinePrimary,
-                "BitHire static identity leaked into the DB Appearance path"
-              ).toBe("");
-              expect(
-                documentEvidence.inlineEffectIntensity,
-                "BitHire static material identity leaked into the DB Appearance path"
-              ).toBe("");
-              expect(
-                documentEvidence.inlineTooltipBackground,
-                "BitHire static tooltip identity leaked into the DB Appearance path"
-              ).toBe("");
-              expect(
-                documentEvidence.inlinePopoverBackground,
-                "BitHire static popover identity leaked into the DB Appearance path"
-              ).toBe("");
+                documentEvidence.artifactCount,
+                "the bundled vertical mounted a compiled customer artifact"
+              ).toBe(0);
             }
 
             chrome.set(fixture, await readChrome(page));
@@ -1233,10 +1287,27 @@ for (const viewport of Object.keys(VIEWPORTS) as Viewport[]) {
               changedChannels.join(", ") || "no"
             } chrome channels`
           ).toBeGreaterThanOrEqual(6);
+          const bithireOverlays = overlays.get("bithire");
+          const managementOverlays = overlays.get("themanagementmiami");
+          if (!bithireOverlays || !managementOverlays)
+            throw new Error("brand overlay readings missing");
+          const changedOverlayChannels = (
+            Object.keys(bithireOverlays) as Array<keyof OverlayChromeReadings>
+          ).filter(
+            (channel) =>
+              bithireOverlays[channel] !== managementOverlays[channel]
+          );
+          expect(
+            changedOverlayChannels,
+            "tenant overlay chrome is identical on every channel"
+          ).not.toEqual([]);
+
           expect(bithire.fontFamily).toContain("Public Sans");
           expect(bithire.headingFontFamily).toContain("Space Grotesk");
+          // The published Management document authors system faces: Optima for
+          // body, Georgia for headings.
           expect(management.fontFamily).toContain("Optima");
-          expect(management.headingFontFamily).toContain("Fraunces");
+          expect(management.headingFontFamily).toContain("Georgia");
           expect(bithire.fontFamily).not.toBe(management.fontFamily);
           expect(bithire.headingFontFamily).not.toBe(
             management.headingFontFamily
@@ -1321,17 +1392,19 @@ for (const viewport of Object.keys(VIEWPORTS) as Viewport[]) {
             EXPECTED_COPY.bithire[locale]
           );
           expect(await readChrome(page)).toEqual(bithire);
-          const cleanupEvidence = await page.evaluate(() => ({
-            inlinePrimary: document.documentElement.style.getPropertyValue(
-              "--ds-color-primary"
-            ),
-            staleManagementChrome: Boolean(
-              document.getElementById("ds-chrome-themanagementmiami")
-            ),
-          }));
+          const cleanupEvidence = await page.evaluate((artifactTestId) => {
+            return {
+              inlinePrimary: document.documentElement.style.getPropertyValue(
+                "--ds-color-primary"
+              ),
+              staleManagementArtifact: document.querySelectorAll(
+                `[data-testid="${artifactTestId}"]`
+              ).length,
+            };
+          }, SHOWROOM_TENANT_ARTIFACT_TESTID);
           expect(cleanupEvidence).toEqual({
             inlinePrimary: "",
-            staleManagementChrome: false,
+            staleManagementArtifact: 0,
           });
         });
       });

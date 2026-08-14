@@ -1,10 +1,10 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi, type MockInstance } from 'vitest';
 
 import ModernWatermark from '../engines/modern';
 
-function countCanvases(spy: ReturnType<typeof vi.spyOn>): number {
+function countCanvases(spy: MockInstance<typeof document.createElement>): number {
   return spy.mock.calls.filter(([tag]) => tag === 'canvas').length;
 }
 

@@ -24,15 +24,15 @@ import {
   hasSurfaceError,
 } from '../../../../runtime/helpers';
 import type { FormSurfaceConfig } from '../../../../foundation/contracts';
-import { PageShellSurface } from '../../../../composition/layout/page-shell';
-import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
-import { useSurfaceResponsiveLayout } from '../../../../runtime/responsive';
-import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
+import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
+import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
+import { useSurfaceResponsiveLayout } from '../../../../../structures/foundation/chrome/runtime/responsive';
+import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
 import {
   resolveStackSpacing,
   SurfaceAccentBarWrapper,
-} from '../../../../runtime/profile-defaults/personality';
-import { SurfaceErrorState } from '../../../../runtime/helpers/states';
+} from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
+import { SurfaceErrorState } from '../../../../../structures/feedback/surface-lifecycle';
 
 export interface FormSurfaceProps {
   config: FormSurfaceConfig;

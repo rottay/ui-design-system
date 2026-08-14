@@ -75,15 +75,34 @@
  * @package @rottay/design-system
  */
 
-import React, { ReactNode, useState, useEffect, useRef, useMemo, memo } from 'react';
+import React, {
+  ReactNode,
+  useState,
+  useEffect,
+  useInsertionEffect,
+  useLayoutEffect,
+  useReducer,
+  useRef,
+  useMemo,
+  useSyncExternalStore,
+  memo,
+} from 'react';
 import { EngineProvider } from '../../../../engines/composition/react/provider';
 import { ThemeProvider } from '../../../../theming';
-import type { VisualAuthority, VisualAuthorityDeclaration } from '../../../../theming';
+import type {
+  PreparedTenantThemeArtifactClaim,
+  VisualAuthorityDeclaration,
+} from '../../../../theming';
 import {
+  censusRuntimeVisualPayload,
+  prepareMountedTenantThemeArtifactClaim,
   reportVisualAuthorityConflict,
   resolveVisualAuthority,
 } from '../../../../theming';
-import { TenantProvider } from '../../../../tenant/composition/react/provider';
+import {
+  TenantProvider,
+  assertProviderTenantConfig,
+} from '../../../../tenant/composition/react/provider';
 import { ProductProfileProvider } from '../../../../product-profiles/composition/react/provider';
 import { FeatureProvider } from '../../../../features';
 import { I18nProvider } from '@/infrastructure/runtime/i18n';
@@ -107,19 +126,19 @@ import {
   getTenantConfig as resolveTenantConfig,
   DEFAULT_TENANT_SLUG,
 } from '../../../../tenant/runtime/store';
+import {
+  getCodeOwnedGovernedBehavior,
+  getCodeOwnedRuntimeConfig,
+  isCodeOwnedTenantConfig,
+  type CodeOwnedGovernedBehavior,
+} from '../../../../tenant/foundation/configuration/registry';
+import { ReservedTenantIdentityError } from '@/foundation/tokens/ts/presentation/brand-themes';
 import { getUnresolvedTenantConfig } from '../../../../tenant/foundation/configuration/defaults';
 import { SystemCssVariablesBridge } from '@/infrastructure/runtime/theming/presentation/adapters/react/css-variables-bridge';
 import { ResponsiveProvider } from '../../../../responsive';
 import { MotionProvider } from '../../../../motion';
 import { AntdConfigProvider } from '../../../../engines/presentation/adapters/antd';
-import { compileAppearanceVariables } from '@/infrastructure/compilers/kernel/runtime/appearance';
-import { isBundledTenant } from '../../../../tenant/foundation/configuration/registry';
 import { resolveEngine } from '../../../../engines/runtime/resolution';
-import {
-  generateTenantCssFromResolvedVisualConfig,
-  hasVisualBrandingFields,
-  resolveTenantVisualConfig,
-} from '../../../../../compilers/runtime/tenant-css/visual-config';
 import { CommandRegistryProvider } from '../../../../application/commands';
 import {
   RecipeProfileProvider,
@@ -161,20 +180,49 @@ export interface DesignSystemProviderProps {
    * compiled appearance echoed back through the config, and leaves uncovered
    * channels (personality) to their subordinate emitters.
    *
-   * With no declaration, first-party bundled verticals derive
-   * `compiled-artifact` authority and DB tenants without an envelope derive
-   * `provider` authority. A bare `'provider'` is therefore an explicit preview
-   * escape hatch, not the bundled default. A bare `'compiled-artifact'` string
-   * remains legal but unverifiable: any provider payload is reported as a
-   * conflict and every channel is suppressed.
+   * The declaration is EVIDENCE, not a switch, so there is no string form.
+   * `'compiled-artifact'` as a bare string used to mean "trust me, it is
+   * mounted"; it now resolves as `invalid-declaration` and the provider blocks,
+   * because a string carries neither the coverage to suppress nor the bytes to
+   * verify. `{ authority: 'provider' }` is the explicit context-only escape
+   * hatch and is refused if the config still carries runtime visual payload.
+   *
+   * Omitting the prop is the honest default for a tenant with no visual
+   * payload. It is NOT a way to skip the proof: a config carrying branding
+   * colors, tokenOverrides, appearance, personality or brandTheme with no
+   * declaration resolves `uncompiled-visual-payload` and blocks as well.
    */
-  visualAuthority?: VisualAuthority | VisualAuthorityDeclaration;
+  visualAuthority?: VisualAuthorityDeclaration;
   /**
    * Runtime tenant overrides applied on top of the resolved tenant.
    *
-   * This is the app-owned white-label entry point. Product teams can tune
-   * branding, token overrides, personality, and features without forking the
-   * DS or creating a new tenant package.
+   * The prop has TWO lanes, and the split is a contract, not an optimization.
+   *
+   * BEHAVIOR lane — exactly `locale`, `fallbackLocale`, `customTranslations`,
+   * `features` and `theme`. None of these is paint: they select a dictionary, a
+   * capability set, or a light/dark/auto MODE. They are delivered at the read
+   * sites that consume them (I18nProvider, FeatureProvider, ThemeProvider) and
+   * are NEVER folded into the published `TenantConfig`. A behavior-only
+   * override therefore publishes the SAME object it received — the exact
+   * code-owned instance keeps its registry identity, its governed motion dial
+   * and its `isCodeOwnedTenantConfig` membership. `theme` lands in the
+   * `explicitTenantTheme` slot, under `forceTheme`, and passes the same
+   * light/dark/auto validation the config's own `theme` passes; it can never
+   * introduce a raw token.
+   *
+   * VISUAL/IDENTITY lane — every other key (`branding`, `tokenOverrides`,
+   * `personality`, `brandTheme`, `appearance`, `slug`, ...). Supplying any of
+   * them REBUILDS the config, which is exactly what makes it visible to the
+   * runtime visual census and to the reserved-identity assert. That is the
+   * intended outcome, not a regression: an app that wants to paint must publish
+   * a compiled artifact, and an app that touches a code-owned tenant gets a
+   * `ReservedTenantIdentityError`.
+   *
+   * The rebuild is key-conditional and transparent: a section absent from the
+   * override is never fabricated, and a key present in the override is never
+   * pruned. `tokenOverrides: {}` stays `{}` — zero census keys, so it mounts —
+   * instead of expanding into seven empty sections that the census would read
+   * as a real visual payload.
    */
   tenantOverrides?: Partial<TenantConfig>;
   /**
@@ -187,7 +235,7 @@ export interface DesignSystemProviderProps {
   /**
    * Industry vertical preset.
    *
-   * Accepts a registered vertical key (e.g., 'evnto', 'bithire', 'platform')
+   * Accepts a registered vertical key (e.g., 'evnto', 'bithire', 'rottay')
    * or an inline VerticalPreset object. When provided, the vertical's engine
    * is used as the default (unless forceEngine overrides it) and the vertical's
    * defaultProductProfile is used when no explicit productProfile is given.
@@ -227,14 +275,102 @@ export interface DesignSystemProviderProps {
  */
 const LoadingScreen: React.FC = () => null;
 
+// Stable identities for the no-artifact case. useSyncExternalStore resubscribes
+// whenever the subscribe function changes, so these must not be inline.
+const NO_RETENTION_SUBSCRIPTION = (): (() => void) => () => {};
+const NO_RETENTION_REVOCATION = (): string | null => null;
+
+/**
+ * PHASE ONE. Arm the retained-artifact watch, from a commit, before anything
+ * below it exists.
+ *
+ * `useInsertionEffect` is the earliest committed moment React offers: it runs
+ * in the mutation phase, ahead of every descendant's insertion effect, every
+ * layout effect in the tree, and the paint. Arming here closes the window a
+ * descendant would otherwise have to touch the artifact unobserved, rather
+ * than narrowing it.
+ *
+ * It is a COMMITTED moment, which is the other half of the reason. Arming
+ * during render looked equivalent and was not: React abandons renders, and an
+ * abandoned arm leaves an observer and a permanent ledger entry that no
+ * cleanup will ever reach. The claim's `commit` hands back the release for
+ * exactly the hold it took, so React's own cleanup contract does the rest.
+ *
+ * The sentinel renders nothing. It is a position in the tree, and the position
+ * is the point.
+ */
+function RetainedArtifactArm({
+  claim,
+}: {
+  claim: PreparedTenantThemeArtifactClaim;
+}): null {
+  useInsertionEffect(() => claim.commit(), [claim]);
+  return null;
+}
+
+/**
+ * PHASE TWO. Settle the verdict after the whole subtree has run, before paint.
+ *
+ * A `MutationObserver` reports in a microtask, and a React commit yields none:
+ * the mutation phase, every layout effect and the browser's paint are one task.
+ * So a descendant can detach the artifact in its layout effect, restore it, and
+ * have the frame painted from a document the runtime is still vouching for --
+ * with the observer's records still sitting in a queue nobody has read.
+ *
+ * As the LAST child of the provider's own output, this sentinel's layout effect
+ * runs after every descendant's and before the provider's own hooks. It drains
+ * those records and re-audits the admitted node; the provider's store check --
+ * a parent layout effect, running immediately after this one -- sees the new
+ * verdict and re-renders synchronously into the block. No frame in between.
+ *
+ * THE EXACT REACH OF THIS SENTINEL, because an overstated law is worse than a
+ * narrow one. It runs in every commit the provider is PART OF: the mount, the
+ * provider's own updates, a StrictMode replay. A descendant that updates its
+ * own state commits without re-rendering the provider, and React runs only that
+ * subtree's effects -- this sentinel is not in that commit and does not fire.
+ * Nothing can change that; a component React did not render has no effect to
+ * run.
+ *
+ * That case is not uncovered, it is covered by the other half of the mechanism
+ * and one step later. The observer armed at mount is persistent and still
+ * judging; its records arrive in a microtask, and the store change that follows
+ * schedules React's sync lane in another. Both drain at the checkpoint that
+ * ends the task, and the event loop reaches its rendering step only after that
+ * checkpoint -- so the tampered frame still never paints. What the seal adds,
+ * and adds only here, is that the verdict is settled BEFORE CONTROL RETURNS,
+ * with no reliance on that ordering at all.
+ */
+function RetainedArtifactSeal({
+  claim,
+}: {
+  claim: PreparedTenantThemeArtifactClaim;
+}): null {
+  // Deliberately dependency-free: every commit is a fresh opportunity for a
+  // descendant to have touched the artifact, so every commit is sealed.
+  useLayoutEffect(() => { claim.seal(); });
+  return null;
+}
+
 const LEGACY_PROFILE_DURATION_MS: Readonly<Record<MotionProfile, number>> = {
   precise: 180,
   calm: 200,
   expressive: 350,
 };
 
-function resolveStaticExpressiveDefaults(config: TenantConfig | null) {
-  const selection = config?.brandTheme?.expressive;
+/**
+ * The static expressive selection for a config.
+ *
+ * A code-owned config reaches the runtime as an identity-only projection with
+ * `brandTheme` stripped, so its governed selection arrives through
+ * `governed` -- the bounded, non-visual slice the registry keeps keyed to the
+ * projection's identity. Nothing else changes: the selection is the same
+ * object the theme authored, resolved by the same fail-closed registry.
+ */
+function resolveStaticExpressiveDefaults(
+  config: TenantConfig | null,
+  governed?: CodeOwnedGovernedBehavior,
+) {
+  const selection = governed?.expressive ?? config?.brandTheme?.expressive;
   if (!selection) return undefined;
   return expandExpressiveProfiles(
     resolveExpressiveAxes(
@@ -252,13 +388,14 @@ function resolveStaticExpressiveDefaults(config: TenantConfig | null) {
 function resolveTenantMotionDial(
   config: TenantConfig | null,
   profile: MotionProfile,
+  governed?: CodeOwnedGovernedBehavior,
 ): TenantMotionDial | undefined {
   if (!config) return undefined;
 
   const explicit = config.appearance?.general?.motion;
-  const legacy = config.brandTheme?.motion;
+  const legacy = governed?.motion ?? config.brandTheme?.motion;
   const legacyDurationScale = config.tokenOverrides?.motion?.durationScale;
-  const expressive = resolveStaticExpressiveDefaults(config)?.motion;
+  const expressive = resolveStaticExpressiveDefaults(config, governed)?.motion;
   if (!explicit && !legacy && legacyDurationScale === undefined && !expressive) {
     return undefined;
   }
@@ -293,94 +430,279 @@ const MemoizedChildren = memo(function MemoizedChildren({
 });
 
 /**
- * Merges a resolved tenant with app-level overrides.
+ * The exact keys of `tenantOverrides` that select BEHAVIOR rather than paint.
  *
- * The rules here are intentional:
- * - scalar values: last write wins
- * - branding/token/personality objects: shallow-merge by section
- * - features: set union so apps can enable additional capabilities without
- *   accidentally dropping defaults shipped by the tenant registry
+ * The membership test is what makes a behavior-only override non-destructive,
+ * so the set is closed and deliberately small. Each member is a selection the
+ * runtime can honour without rebuilding the tenant config:
+ *
+ * - `locale` / `fallbackLocale` — which dictionary I18nProvider reads
+ * - `customTranslations`        — copy layered over that dictionary
+ * - `features`                  — the capability set FeatureProvider unions
+ * - `theme`                     — the light/dark/auto MODE, validated exactly
+ *                                 like the config's own `theme` and seated in
+ *                                 the same `explicitTenantTheme` slot, under
+ *                                 `forceTheme`. A mode is not a token, so this
+ *                                 admits no raw paint.
+ *
+ * Everything else — branding, tokenOverrides, personality, brandTheme,
+ * appearance, identity, `engine`, `componentPack` — is visual or identity
+ * payload and MUST travel through the config so the census and the
+ * reserved-identity assert can see it.
+ *
+ * Exported so the drill can assert against THIS declaration instead of a copy.
+ * A test that restates the tuple proves only that it agrees with itself, and
+ * would stay green through any widening of the real set. The export is
+ * module-internal by construction: every barrel above this file enumerates its
+ * exports by name (`bootstrap/facade/index.ts`, `entrypoints/public/runtime/
+ * provider/index.ts`), so nothing reaches the package API.
  */
-function mergeTenantConfig(
-  baseTenantConfig: TenantConfig,
-  tenantOverrides?: Partial<TenantConfig>
-): TenantConfig {
-  if (!tenantOverrides) {
-    return baseTenantConfig;
+export const BEHAVIOR_OVERRIDE_KEYS = [
+  'locale',
+  'fallbackLocale',
+  'customTranslations',
+  'features',
+  'theme',
+] as const;
+
+type BehaviorOverrideKey = (typeof BEHAVIOR_OVERRIDE_KEYS)[number];
+
+/**
+ * Partial by nature, not by convenience: the overlay holds whichever behavior
+ * keys the caller actually wrote. `TenantConfig['features']` is REQUIRED, so a
+ * total `Pick` claimed every overlay carries a feature list and could only be
+ * produced through a cast — a type that lied about the value it described.
+ */
+type TenantBehaviorOverlay = Partial<Pick<TenantConfig, BehaviorOverrideKey>>;
+
+const BEHAVIOR_OVERRIDE_KEY_SET: ReadonlySet<string> = new Set(
+  BEHAVIOR_OVERRIDE_KEYS,
+);
+
+interface TenantOverridePartition {
+  /** Behavior selections, delivered at read sites. `null` when none present. */
+  readonly behavior: TenantBehaviorOverlay | null;
+  /** Visual/identity payload, folded into the config. `null` when none. */
+  readonly config: Partial<TenantConfig> | null;
+}
+
+/**
+ * Splits the prop into its two lanes by OWN keys whose value is not
+ * `undefined`.
+ *
+ * `undefined` is treated as absence on purpose: `{ locale: undefined }` is what
+ * a caller writes when a conditional produced nothing, and reading it as "the
+ * key is present" would make a no-op override rebuild the config and take a
+ * code-owned tenant down with it.
+ */
+function partitionTenantOverrides(
+  tenantOverrides?: Partial<TenantConfig>,
+): TenantOverridePartition {
+  if (!tenantOverrides) return { behavior: null, config: null };
+
+  let behavior: Record<string, unknown> | null = null;
+  let config: Record<string, unknown> | null = null;
+
+  for (const key of Object.keys(tenantOverrides)) {
+    const value = (tenantOverrides as Record<string, unknown>)[key];
+    if (value === undefined) continue;
+    if (BEHAVIOR_OVERRIDE_KEY_SET.has(key)) {
+      (behavior ??= {})[key] = value;
+    } else {
+      (config ??= {})[key] = value;
+    }
   }
 
   return {
-    ...baseTenantConfig,
-    ...tenantOverrides,
-    branding: {
-      ...baseTenantConfig.branding,
-      ...tenantOverrides.branding,
-    },
-    tokenOverrides: {
-      ...baseTenantConfig.tokenOverrides,
-      ...tenantOverrides.tokenOverrides,
-      surface: {
-        ...baseTenantConfig.tokenOverrides?.surface,
-        ...tenantOverrides.tokenOverrides?.surface,
-      },
-      motion: {
-        ...baseTenantConfig.tokenOverrides?.motion,
-        ...tenantOverrides.tokenOverrides?.motion,
-      },
-      borderRadius: {
-        ...baseTenantConfig.tokenOverrides?.borderRadius,
-        ...tenantOverrides.tokenOverrides?.borderRadius,
-      },
-      shadows: {
-        ...baseTenantConfig.tokenOverrides?.shadows,
-        ...tenantOverrides.tokenOverrides?.shadows,
-      },
-      glass: {
-        ...baseTenantConfig.tokenOverrides?.glass,
-        ...tenantOverrides.tokenOverrides?.glass,
-      },
-      gradients: {
-        ...baseTenantConfig.tokenOverrides?.gradients,
-        ...tenantOverrides.tokenOverrides?.gradients,
-      },
-      overlays: {
-        ...baseTenantConfig.tokenOverrides?.overlays,
-        ...tenantOverrides.tokenOverrides?.overlays,
-      },
-    },
-    /**
-     * We intentionally do not deep-merge personality sections here.
-     *
-     * Reason:
-     * - `TenantConfig.personality` is stored as a partial shape
-     * - `useTokens()` is the place where personality becomes fully resolved
-     * - trying to deeply re-materialize the nested structure here creates noisy
-     *   type friction without adding real behavioral value
-     *
-     * In practice this keeps provider logic simple:
-     * - registry tenant provides the base partial
-     * - app override can replace that partial
-     * - token resolution later merges defaults + product profile + tenant
-     *
-     * Personality is now part of the BrandTheme -> useTokens() pipeline, but
-     * the shallow merge here is still correct for the TenantConfig.personality
-     * compat field.
-     */
-    personality: tenantOverrides.personality ?? baseTenantConfig.personality,
-    /**
-     * Translation dictionaries are nested objects, so a plain spread would make
-     * app-level overrides replace an entire namespace. We keep a tiny recursive
-     * merge here so teams can override just one surface string without forking
-     * the full locale tree.
-     */
-    customTranslations: mergeLocaleTranslations(
-      baseTenantConfig.customTranslations,
-      tenantOverrides.customTranslations
-    ),
-    features: Array.from(
-      new Set([...(baseTenantConfig.features ?? []), ...(tenantOverrides.features ?? [])])
-    ),
+    behavior: behavior as TenantBehaviorOverlay | null,
+    config: config as Partial<TenantConfig> | null,
   };
+}
+
+/**
+ * THE undefined discipline, in one place, for every object merge in this
+ * partition.
+ *
+ * Start from the base, copy only the override's OWN entries whose value is
+ * actually defined. Never delete a base key, never keep a new own key holding
+ * `undefined`, never invent a sibling neither side wrote.
+ *
+ * A plain `{ ...base, ...override }` fails all three at once, and it fails them
+ * SILENTLY: `{ logo: undefined }` is an own key, so the spread overwrites a real
+ * base logo with `undefined` and leaves the key standing. The tenant loses
+ * identity it never asked to drop, and the census gains a key to count.
+ *
+ * `undefined` means "I wrote nothing here" everywhere else in this file —
+ * `partitionTenantOverrides` is built on exactly that reading, because it is
+ * what a caller produces when a conditional yields nothing. This helper is that
+ * reading applied one level down, so branding and token sections cannot drift
+ * from the top-level rule they sit under.
+ */
+export function mergeDefinedOwnEntries<T extends object>(base: T, override: Partial<T>): T {
+  const merged: T = { ...base };
+  for (const key in override) {
+    if (!Object.prototype.hasOwnProperty.call(override, key)) continue;
+    const value = override[key];
+    if (value === undefined) continue;
+    merged[key] = value;
+  }
+  return merged;
+}
+
+const TOKEN_OVERRIDE_SECTIONS: ReadonlySet<string> = new Set([
+  'surface',
+  'motion',
+  'borderRadius',
+  'shadows',
+  'glass',
+  'gradients',
+  'overlays',
+]);
+
+/**
+ * Section-wise merge that FABRICATES NOTHING and PRUNES NOTHING.
+ *
+ * An earlier implementation spread all seven sections unconditionally, so any
+ * override at all produced `{ surface: {}, motion: {}, ... }` — seven keys the
+ * caller never wrote. `censusRuntimeVisualPayload` counts `tokenOverrides` keys,
+ * so that fabrication reported a runtime visual payload for a tenant that had
+ * none, and the provider blocked on `uncompiled-visual-payload`.
+ *
+ * Replacing it with `{ ...base, ...override }` fixed the fabrication and opened
+ * the mirror hole: `{ surface: undefined, motion: real }` is an own key, so the
+ * spread overwrote a REAL base surface with `undefined` and left the key behind
+ * — the tenant lost tokens it never asked to drop, and gained an artificial key
+ * for the census to count. `undefined` means "I wrote nothing here" everywhere
+ * else in this file (see `partitionTenantOverrides`); it means the same here.
+ *
+ * So: start from the base verbatim, copy only override entries whose value is
+ * actually defined, merge a section only when BOTH sides declare an object, and
+ * never invent a sibling neither side wrote.
+ *
+ * The SAME rule then applies one level further down. A section merged with a raw
+ * `{ ...baseValue, ...overrideValue }` reopens the identical hole a field at a
+ * time: `{ surface: { useGlass: undefined } }` would erase a real
+ * `surface.useGlass` and leave an undefined field in its place. `mergeTokenOverrides`
+ * would look correct at the top level and still lose tokens inside a section, so
+ * both levels run through `mergeDefinedOwnEntries`.
+ */
+export function mergeTokenOverrides(
+  base: TenantConfig['tokenOverrides'],
+  override: NonNullable<TenantConfig['tokenOverrides']>,
+): NonNullable<TenantConfig['tokenOverrides']> {
+  const merged: Record<string, unknown> = { ...base };
+
+  for (const key of Object.keys(override)) {
+    const overrideValue = (override as Record<string, unknown>)[key];
+    if (overrideValue === undefined) continue;
+
+    const baseValue = merged[key];
+    merged[key] =
+      TOKEN_OVERRIDE_SECTIONS.has(key) &&
+      isPlainObject(baseValue) &&
+      isPlainObject(overrideValue)
+        ? mergeDefinedOwnEntries(baseValue, overrideValue)
+        : overrideValue;
+  }
+
+  return merged as NonNullable<TenantConfig['tokenOverrides']>;
+}
+
+/**
+ * Applies the visual/identity lane on top of a resolved tenant.
+ *
+ * Called ONLY when that lane is non-empty, which is what preserves the object
+ * identity of a behavior-only mount. The merge is transparent: last write wins
+ * for scalars, `branding` and `tokenOverrides` merge field-wise under the
+ * undefined discipline when the override declares them, and no key the caller
+ * omitted is invented.
+ *
+ * The top-level spread below needs no such guard: `configOverrides` is the
+ * partition's config lane, already built by skipping every own key whose value
+ * was `undefined`. `branding` is where the rule has to be re-stated, because the
+ * caller's nested object arrives verbatim — `{ branding: { companyName, favicon:
+ * '/f.ico', logo: undefined } }` is the shape that erased a tenant's real logo
+ * while publishing a favicon, and the census would then have counted the key.
+ *
+ * `personality` is intentionally replaced rather than deep-merged. It is stored
+ * as a partial shape and `useTokens()` is where it becomes fully resolved;
+ * re-materializing the nested structure here would add type friction and no
+ * behavior. Note the replacement is key-conditional now — `personality: {}`
+ * publishes an empty object, which the census correctly reads as a declared
+ * personality channel, instead of silently falling back to the base value.
+ */
+function applyTenantConfigOverrides(
+  baseTenantConfig: TenantConfig,
+  configOverrides: Partial<TenantConfig>,
+): TenantConfig {
+  const merged: Record<string, unknown> = {
+    ...baseTenantConfig,
+    ...configOverrides,
+  };
+
+  if (configOverrides.branding !== undefined) {
+    // `TenantBranding` in, `TenantBranding` out: the helper is generic over the
+    // base's own shape, so `companyName` stays required and every identity and
+    // visual field keeps its declared type. Nothing here is cast.
+    merged.branding = mergeDefinedOwnEntries(
+      baseTenantConfig.branding,
+      configOverrides.branding,
+    );
+  }
+
+  if (configOverrides.tokenOverrides !== undefined) {
+    merged.tokenOverrides = mergeTokenOverrides(
+      baseTenantConfig.tokenOverrides,
+      configOverrides.tokenOverrides,
+    );
+  }
+
+  return merged as unknown as TenantConfig;
+}
+
+/**
+ * THE single derivation shared by the sync path, the async render path and the
+ * async `onTenantResolved` notification.
+ *
+ * Returning the base object untouched when the visual/identity lane is empty is
+ * the whole point: `Object.is(resolved, base)` stays true, so the registry
+ * WeakSet still recognises the config, `getCodeOwnedRuntimeConfig` still finds
+ * its cached projection, and the governed-behavior WeakMap still resolves the
+ * authored motion dial.
+ */
+function resolveTenantConfigWithOverrides(
+  baseTenantConfig: TenantConfig,
+  partition: TenantOverridePartition,
+): TenantConfig {
+  return partition.config === null
+    ? baseTenantConfig
+    : applyTenantConfigOverrides(baseTenantConfig, partition.config);
+}
+
+/** Runtime context never carries a second copy of tenant visual source. */
+function buildResolvedRuntimeConfig(
+  config: TenantConfig,
+  compiledAppearance: TenantConfig['appearance'],
+): TenantConfig {
+  const {
+    branding,
+    tokenOverrides: _tokenOverrides,
+    appearance: _appearance,
+    personality: _personality,
+    brandTheme: _brandTheme,
+    ...identityAndBehavior
+  } = config;
+  const identityBranding = {
+    companyName: branding.companyName,
+    ...(branding.logo === undefined ? {} : { logo: branding.logo }),
+    ...(branding.logoMark === undefined ? {} : { logoMark: branding.logoMark }),
+    ...(branding.favicon === undefined ? {} : { favicon: branding.favicon }),
+  };
+  return {
+    ...identityAndBehavior,
+    branding: identityBranding,
+    ...(compiledAppearance === undefined ? {} : { appearance: compiledAppearance }),
+  } as TenantConfig;
 }
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
@@ -446,24 +768,34 @@ export function DesignSystemProvider({
   onLocaleChange,
   onTenantResolved,
   onError,
-  skipCssLoading = true,
-  cssBaseUrl = '/themes',
 }: DesignSystemProviderProps): React.ReactElement {
+  // ONE partition, shared by the sync path, the async render path, the async
+  // resolution callback and every behavior read site below. Deriving it twice
+  // would let the published config and the delivered behavior disagree.
+  const overridePartition = useMemo(
+    () => partitionTenantOverrides(tenantOverrides),
+    [tenantOverrides],
+  );
+  const behaviorOverlay = overridePartition.behavior;
+
   // SYNC PATH: When propTenantConfig is provided, derive config with useMemo
   const syncTenantConfig = useMemo(() => {
     if (!propTenantConfig) return null;
-    return mergeTenantConfig(propTenantConfig, tenantOverrides);
-  }, [propTenantConfig, tenantOverrides]);
+    const resolved = resolveTenantConfigWithOverrides(
+      propTenantConfig,
+      overridePartition,
+    );
+    assertProviderTenantConfig(resolved);
+    return resolved;
+  }, [propTenantConfig, overridePartition]);
 
   // ASYNC PATH: When only tenantSlug is provided, resolve via storage facade
-  const asyncRequestSlug = (propTenantSlug ?? DEFAULT_TENANT_SLUG)
-    .trim()
-    .toLowerCase() || DEFAULT_TENANT_SLUG;
+  const asyncRequestSlug = propTenantSlug ?? DEFAULT_TENANT_SLUG;
   const asyncRequestKey = propTenantConfig ? null : asyncRequestSlug;
   const activeAsyncRequestRef = useRef(asyncRequestKey);
   activeAsyncRequestRef.current = asyncRequestKey;
-  const tenantOverridesRef = useRef(tenantOverrides);
-  tenantOverridesRef.current = tenantOverrides;
+  const overridePartitionRef = useRef(overridePartition);
+  overridePartitionRef.current = overridePartition;
   const onTenantResolvedRef = useRef(onTenantResolved);
   onTenantResolvedRef.current = onTenantResolved;
   const onErrorRef = useRef(onError);
@@ -472,27 +804,41 @@ export function DesignSystemProvider({
     key: string | null;
     config: TenantConfig | null;
     loading: boolean;
+    error: Error | null;
   }>(() => ({
     key: asyncRequestKey,
     config: null,
     loading: asyncRequestKey !== null,
+    error: null,
   }));
 
   useEffect(() => {
     if (!asyncRequestKey) return;
     const requestKey = asyncRequestKey;
     let cancelled = false;
-    setAsyncRequestState({ key: requestKey, config: null, loading: true });
+    setAsyncRequestState({ key: requestKey, config: null, loading: true, error: null });
 
     const loadTenant = async () => {
       let resolvedTenantConfig: TenantConfig;
       let resolvedFromSource = true;
       try {
         resolvedTenantConfig = await resolveTenantConfig(requestKey);
-        if (resolvedTenantConfig.slug.trim().toLowerCase() !== requestKey) {
+        if (resolvedTenantConfig.slug !== requestKey) {
           throw new Error('Resolved tenant payload identity mismatch');
         }
       } catch (error) {
+        if (error instanceof ReservedTenantIdentityError) {
+          onErrorRef.current?.(error);
+          if (!cancelled && activeAsyncRequestRef.current === requestKey) {
+            setAsyncRequestState({
+              key: requestKey,
+              config: null,
+              loading: false,
+              error,
+            });
+          }
+          return;
+        }
         resolvedFromSource = false;
         onErrorRef.current?.(error as Error);
         resolvedTenantConfig = getUnresolvedTenantConfig(requestKey);
@@ -503,14 +849,19 @@ export function DesignSystemProvider({
         key: requestKey,
         config: resolvedTenantConfig,
         loading: false,
+        error: null,
       });
       if (resolvedFromSource) {
-        const mergedTenantConfig = mergeTenantConfig(
+        // Same derivation as the render path, so the callback observes exactly
+        // the object the tree will publish -- the untouched base (code-owned
+        // identity intact) whenever the override is behavior-only.
+        const resolvedForCallback = resolveTenantConfigWithOverrides(
           resolvedTenantConfig,
-          tenantOverridesRef.current,
+          overridePartitionRef.current,
         );
         try {
-          onTenantResolvedRef.current?.(mergedTenantConfig);
+          assertProviderTenantConfig(resolvedForCallback);
+          onTenantResolvedRef.current?.(resolvedForCallback);
         } catch (error) {
           onErrorRef.current?.(error as Error);
         }
@@ -531,8 +882,13 @@ export function DesignSystemProvider({
     ) {
       return null;
     }
-    return mergeTenantConfig(asyncRequestState.config, tenantOverrides);
-  }, [asyncRequestKey, asyncRequestState, tenantOverrides]);
+    const resolved = resolveTenantConfigWithOverrides(
+      asyncRequestState.config,
+      overridePartition,
+    );
+    assertProviderTenantConfig(resolved);
+    return resolved;
+  }, [asyncRequestKey, asyncRequestState, overridePartition]);
   const loading = asyncRequestKey !== null && (
     asyncRequestState.key !== asyncRequestKey || asyncRequestState.loading
   );
@@ -552,25 +908,22 @@ export function DesignSystemProvider({
         : verticalSource;
   }, [vertical, tenantConfig?.vertical]);
 
-  // When brandTheme is present, normalize via the shared static/runtime visual
-  // resolver so branding, tokenOverrides, and compiled BrandTheme CSS follow
-  // one precedence path. For bundled first-party tenants, the precompiled CSS
-  // artifacts remain the owner of default palette/chrome unless the incoming
-  // tenant config explicitly sets visual branding fields.
-  // NOTE: This useMemo MUST run before the early return below to satisfy
-  // React's Rules of Hooks (hooks must execute in the same order every render).
-  const resolvedVisualConfig = useMemo(() => {
-    if (!tenantConfig) return null;
-    const bundledTenantUsesCssOwnedBranding =
-      isBundledTenant(tenantConfig.slug) && !hasVisualBrandingFields(tenantConfig.branding);
-
-    return resolveTenantVisualConfig(tenantConfig, {
-      vertical: resolvedVertical,
-      useCssOwnedBranding: bundledTenantUsesCssOwnedBranding,
-    });
-  }, [tenantConfig, resolvedVertical]);
-
-  const normalizedConfig = resolvedVisualConfig?.config ?? null;
+  // The resolved tenant config, RAW.
+  //
+  // This provider used to pre-merge it: it compiled the BrandTheme, folded the
+  // compiled personality and tokenOverrides back into the config, and
+  // back-filled `branding` from the theme's palette. Every one of those merges
+  // already existed downstream — `useTokens` resolves engine -> vertical ->
+  // brandTheme -> tenant for both structural tokens and personality, from the
+  // BrandTheme itself. Pre-merging meant the same chain ran twice on two
+  // different inputs, and the second run could not tell an authored tenant
+  // value from a value the first run had just derived.
+  //
+  // One resolution, downstream, from the raw config. Nothing is normalized here.
+  const normalizedConfig = tenantConfig;
+  const codeOwnedConfig = normalizedConfig && isCodeOwnedTenantConfig(normalizedConfig)
+    ? getCodeOwnedRuntimeConfig(normalizedConfig)
+    : null;
 
   // Which emitter owns each tenant visual channel. Resolved from a declaration
   // that carries the artifact's provenance rather than defaulted, so an app
@@ -578,20 +931,19 @@ export function DesignSystemProvider({
   // silently painted over, and an app that mounted one correctly is no longer
   // reported for echoing the artifact's own compiled appearance back.
   const {
-    authority: visualAuthority,
-    conflict: visualAuthorityConflict,
-    suppressedChannels,
+    conflict: admissionConflict,
+    artifact: verifiedArtifact,
+    mountedArtifact,
   } = useMemo(
     () =>
       resolveVisualAuthority({
         declaration: explicitVisualAuthority,
         slug: normalizedConfig?.slug ?? asyncRequestSlug,
-        hasBundledArtifact: isBundledTenant(normalizedConfig?.slug ?? asyncRequestSlug),
-        payload: {
-          visualBranding: hasVisualBrandingFields(normalizedConfig?.branding),
-          tokenOverrides: Object.keys(normalizedConfig?.tokenOverrides ?? {}).length > 0,
-          appearance: normalizedConfig?.appearance,
-        },
+        verticalKey:
+          typeof normalizedConfig?.vertical === 'string'
+            ? normalizedConfig.vertical
+            : resolvedVertical?.key,
+        payload: censusRuntimeVisualPayload(codeOwnedConfig ?? normalizedConfig),
       }),
     [
       explicitVisualAuthority,
@@ -599,34 +951,115 @@ export function DesignSystemProvider({
       normalizedConfig?.branding,
       normalizedConfig?.appearance,
       normalizedConfig?.tokenOverrides,
+      normalizedConfig?.personality,
+      normalizedConfig?.brandTheme,
+      codeOwnedConfig,
+      resolvedVertical?.key,
       asyncRequestSlug,
     ],
   );
+
+  // Admission proves the exact bytes are mounted at resolve time; retention
+  // keeps that proof alive for every moment in between. The invariant the two
+  // hold together: at any instant the runtime either has a byte-exact,
+  // uniquely-scoped artifact element mounted, or it blocks.
+  //
+  // RENDER PREPARES; A COMMIT ARMS. Everything this component does here is
+  // read-only: it resolves the admission and captures the claim it WOULD make.
+  // The arm itself belongs to `RetainedArtifactArm` below, because a render is
+  // not an event that happened -- React throws renders away when a sibling
+  // throws, a child suspends, or a concurrent pass is superseded -- and an arm
+  // performed by a discarded render leaves a permanent ledger entry no cleanup
+  // will ever reach. The claim is idempotent per (document, artifact identity),
+  // so a StrictMode replay joins the one live watch and never forks it.
+  //
+  // The subscription is an external store because the verdict has to outlive
+  // the admission it revoked -- see armMountedTenantThemeArtifact for why a
+  // re-resolve is not a re-proof. Reading it through useSyncExternalStore is
+  // NOT by itself the prepaint barrier -- that hook installs its listener from
+  // a passive effect -- so the explicit layout check below is what makes a
+  // revocation raised anywhere in this commit -- the arm's own audit, or the
+  // seal's drain in the last child's layout effect -- visible before the frame
+  // paints. The server snapshot is pinned to "not revoked" so hydration
+  // reproduces the server's markup instead of mismatching on a barrier the
+  // server could never have raised.
+  const claim = useMemo(
+    () =>
+      verifiedArtifact && mountedArtifact
+        ? prepareMountedTenantThemeArtifactClaim(verifiedArtifact, mountedArtifact)
+        : null,
+    [verifiedArtifact, mountedArtifact],
+  );
+  const revocation = useSyncExternalStore(
+    claim?.subscribe ?? NO_RETENTION_SUBSCRIPTION,
+    claim?.revocation ?? NO_RETENTION_REVOCATION,
+    NO_RETENTION_REVOCATION,
+  );
+
+  // THE PREPAINT BARRIER, and the reason the subscription cannot be it.
+  //
+  // `useSyncExternalStore` installs its listener from a PASSIVE effect. On an
+  // initial or default-lane commit React flushes passive work in a LATER task,
+  // after the frame that commit produced -- so the seal can record a revocation
+  // in the last child's layout effect and find nobody listening. The store is
+  // right, the store is unread, and the tampered frame paints anyway. A
+  // synchronous harness hides this precisely because `act` and the sync lane
+  // flush passive effects before returning control.
+  //
+  // So the provider reads the verdict a second time, from its OWN layout
+  // effect. React runs a parent's layout effect after every descendant's, the
+  // seal's included, so this is the first moment in the commit where the
+  // subtree's whole behaviour is already on the record. If the live verdict has
+  // moved away from the snapshot this render read, a plain state update is
+  // enough: React treats an update scheduled during the commit phase as
+  // synchronous work and flushes it before the browser paints. `flushSync` is
+  // deliberately NOT used -- it is invalid inside insertion, layout and
+  // lifecycle work, and it would buy nothing React does not already guarantee.
+  const [, forceRetentionRecheck] = useReducer(
+    (recheck: number): number => recheck + 1,
+    0,
+  );
+  // Dependency-free on purpose: every commit is a fresh opportunity for a
+  // descendant to have touched the artifact, so every commit re-reads the
+  // verdict. The update is raised only on a real disagreement, so the render it
+  // forces agrees with itself and no second one follows.
+  useLayoutEffect(() => {
+    if ((claim?.revocation() ?? null) !== revocation) forceRetentionRecheck();
+  });
+
+  const visualAuthorityConflict =
+    admissionConflict ??
+    (revocation && verifiedArtifact
+      ? `Tenant "${verifiedArtifact.slug}" ${revocation}.`
+      : null);
 
   useEffect(() => {
     if (visualAuthorityConflict) reportVisualAuthorityConflict(visualAuthorityConflict);
   }, [visualAuthorityConflict]);
 
-  const recipeProfileSelection = useMemo(() => {
-    const dbProfile = normalizedConfig?.appearance?.recipeProfile;
-    if (dbProfile) {
-      return {
-        profileId: dbProfile,
-        schemaVersion: RECIPE_PROFILE_SCHEMA_VERSION,
-      };
-    }
+  if (
+    asyncRequestKey
+    && asyncRequestState.key === asyncRequestKey
+    && asyncRequestState.error
+  ) {
+    throw asyncRequestState.error;
+  }
 
-    const staticSelection = normalizedConfig?.brandTheme?.recipes;
-    return staticSelection
-      ? {
-          profileId: staticSelection.profile,
-          schemaVersion: staticSelection.schemaVersion,
-        }
+  if (loading || !normalizedConfig || visualAuthorityConflict) {
+    return <LoadingScreen />;
+  }
+
+  const resolvedRuntimeConfig = codeOwnedConfig ?? buildResolvedRuntimeConfig(
+    normalizedConfig,
+    verifiedArtifact?.normalizedAppearance as TenantConfig['appearance'] | undefined,
+  );
+
+  const recipeProfileSelection = (() => {
+    const dbProfile = resolvedRuntimeConfig.appearance?.recipeProfile;
+    return dbProfile
+      ? { profileId: dbProfile, schemaVersion: RECIPE_PROFILE_SCHEMA_VERSION }
       : undefined;
-  }, [
-    normalizedConfig?.appearance?.recipeProfile,
-    normalizedConfig?.brandTheme?.recipes,
-  ]);
+  })();
   // C2b: governed icon posture — dual-source precedence (explicit DB Pro
   // axis or DB experience composition win over the static BrandTheme
   // selection). Delivered through the RSC-safe seam: assigned to the CLIENT
@@ -634,58 +1067,59 @@ export function DesignSystemProvider({
   // same value through the per-request box the application fills via
   // `provideServerIconExpressiveProfile` — both integration points share
   // this one pure resolver.
-  const iconExpressiveProfile = useMemo(
-    () => resolveActiveIconExpressiveProfile(normalizedConfig),
-    [
-      normalizedConfig?.appearance?.advanced,
-      normalizedConfig?.appearance?.general?.experienceProfile,
-      normalizedConfig?.brandTheme?.expressive,
-    ]
+  // Governed, non-visual behavior of a code-owned vertical. The runtime
+  // projection above strips `brandTheme` so static CSS stays the sole visual
+  // emitter; motion, density and icon posture are BEHAVIOR no stylesheet can
+  // express, so they arrive here instead of riding on the published config.
+  const governedBehavior = getCodeOwnedGovernedBehavior(resolvedRuntimeConfig);
+
+  const iconExpressiveProfile = resolveActiveIconExpressiveProfile(
+    governedBehavior
+      // A local read-model, never published: `resolveActiveIconExpressiveProfile`
+      // is structural and consumes exactly `{ expressive }` off this slot.
+      ? { appearance: resolvedRuntimeConfig.appearance, brandTheme: governedBehavior }
+      : resolvedRuntimeConfig,
   );
 
   const motionProfile = resolvedVertical?.motionProfile ?? 'calm';
-  const tenantMotionDial = useMemo(
-    () => resolveTenantMotionDial(normalizedConfig, motionProfile),
-    [motionProfile, normalizedConfig],
+  const tenantMotionDial = resolveTenantMotionDial(
+    resolvedRuntimeConfig,
+    motionProfile,
+    governedBehavior,
   );
 
-  // Resolve TenantAppearance (General + Advanced) into CSS custom properties.
-  // These are layered ON TOP of brandTheme/tokenOverrides in the merge chain.
-  const appearanceCssVars = useMemo(() => {
-    if (suppressedChannels.includes('appearance')) return undefined;
-    if (!normalizedConfig?.appearance) return undefined;
-    const vars = compileAppearanceVariables(normalizedConfig.appearance).variables;
-    return Object.keys(vars).length > 0 ? vars : undefined;
-  }, [normalizedConfig?.appearance, suppressedChannels]);
-
-  const generatedTenantCss = useMemo(() => {
-    if (suppressedChannels.includes('brand-chrome')) return undefined;
-    if (!resolvedVisualConfig) return undefined;
-    const config = resolvedVisualConfig.config;
-    if (!config?.brandTheme || isBundledTenant(config.slug)) return undefined;
-    return generateTenantCssFromResolvedVisualConfig(resolvedVisualConfig);
-  }, [resolvedVisualConfig, suppressedChannels]);
-
-  if (loading || !normalizedConfig) {
-    return <LoadingScreen />;
-  }
+  // Appearance is READ here (density posture, motion dial, backgroundMode,
+  // recipe profile, icon posture) and COMPILED nowhere. `compileAppearanceVariables`
+  // used to run in this provider and hand its output to ThemeProvider as
+  // inline root variables — a third compiler, competing with whichever
+  // artifact the application had already mounted. The appearance a tenant
+  // paints with is compiled once, by `compileTenantThemeConfig`, into the
+  // artifact; this provider consumes the artifact's `normalizedAppearance`
+  // through the config it is given.
 
   // Final precedence used by the runtime:
   // force props -> explicit tenant theme (light/dark/auto) -> appearance.backgroundMode -> DS fallback.
   const engine = resolveEngine({
     forceEngine,
     verticalEngine: resolvedVertical?.engine,
-    tenantEngine: normalizedConfig.engine,
-    tenantSlug: normalizedConfig.slug,
+    tenantEngine: resolvedRuntimeConfig.engine,
+    tenantSlug: resolvedRuntimeConfig.slug,
   });
   // backgroundMode maps: 'light' -> 'light', 'dark' -> 'dark', 'auto' -> 'auto'.
   // tenant.theme only wins if it's explicitly set to a real mode (not the default 'base').
-  const appearanceBackgroundMode = normalizedConfig.appearance?.general?.palette?.backgroundMode;
+  const appearanceBackgroundMode = resolvedRuntimeConfig.appearance?.general?.palette?.backgroundMode;
   const VALID_THEME_MODES = new Set(['light', 'dark', 'auto']);
-  const explicitTenantTheme = normalizedConfig.theme && VALID_THEME_MODES.has(normalizedConfig.theme)
-    ? normalizedConfig.theme
-    : undefined;
-  const theme = forceTheme ?? explicitTenantTheme ?? appearanceBackgroundMode ?? normalizedConfig.theme ?? 'base';
+  const toExplicitThemeMode = (mode: string | undefined): string | undefined =>
+    mode && VALID_THEME_MODES.has(mode) ? mode : undefined;
+  // The behavior overlay's `theme` occupies the SAME slot as the config's own
+  // `theme`, under `forceTheme`, and passes the SAME validation. A mode that is
+  // not light/dark/auto (including the 'base' sentinel) resolves to `undefined`
+  // and falls through, so an override can select a mode and nothing else -- it
+  // can neither reach `appearanceBackgroundMode` nor introduce a raw token.
+  const explicitTenantTheme =
+    toExplicitThemeMode(behaviorOverlay?.theme)
+    ?? toExplicitThemeMode(resolvedRuntimeConfig.theme);
+  const theme = forceTheme ?? explicitTenantTheme ?? appearanceBackgroundMode ?? resolvedRuntimeConfig.theme ?? 'base';
   // Normalized, not taken on trust. `normalizedConfig.locale` reaches here from
   // tenant DB branding and from application props, so it can be any string --
   // `'de'`, `'en-GB'`, `''`. An unsupported value used to flow straight through
@@ -697,15 +1131,40 @@ export function DesignSystemProvider({
   // which made the constant's own claim -- "every default in the subsystem
   // resolves through this ONE declaration" -- false for the primary mount point
   // of the whole design system.
-  const locale = toSupportedLocale(forcedLocale ?? normalizedConfig.locale);
+  //
+  // Behavior precedence throughout: app prop > tenantOverrides > tenant config.
+  // The overlay is an app-owned runtime tune, so it outranks what the tenant
+  // record shipped and yields to what this mount explicitly forced.
+  const locale = toSupportedLocale(
+    forcedLocale ?? behaviorOverlay?.locale ?? resolvedRuntimeConfig.locale,
+  );
   const fallbackLocale = toSupportedLocale(
-    forcedFallbackLocale ?? normalizedConfig.fallbackLocale,
+    forcedFallbackLocale
+      ?? behaviorOverlay?.fallbackLocale
+      ?? resolvedRuntimeConfig.fallbackLocale,
     locale,
   );
+  // Three layers, each surgical: the tenant's dictionary, the override's, then
+  // the app prop's. `mergeLocaleTranslations` recurses, so a single key can be
+  // replaced at any layer without forking the namespace above it.
   const customTranslations = mergeLocaleTranslations(
-    normalizedConfig.customTranslations,
+    mergeLocaleTranslations(
+      resolvedRuntimeConfig.customTranslations,
+      behaviorOverlay?.customTranslations,
+    ),
     appCustomTranslations
   );
+  // Union, not replacement: an override adds capabilities to whatever the
+  // tenant registry shipped. Deduped here because FeatureProvider is the one
+  // consumer and the published config must stay untouched.
+  const features = behaviorOverlay?.features
+    ? Array.from(
+        new Set([
+          ...(resolvedRuntimeConfig.features ?? []),
+          ...behaviorOverlay.features,
+        ]),
+      )
+    : resolvedRuntimeConfig.features ?? [];
 
   // Product profile intentionally resolves after vertical. Vertical answers
   // "which kind of product is this?", while product profile answers
@@ -716,9 +1175,8 @@ export function DesignSystemProvider({
   // authored static posture, then its expressive-profile default. Structural
   // `densityScale` remains a separate multiplier and is never reinterpreted.
   const rootDensityPosture = deriveDensityPosture(
-    normalizedConfig.appearance?.general?.density ??
-      normalizedConfig.brandTheme?.surfaces?.density ??
-      resolveStaticExpressiveDefaults(normalizedConfig)?.density,
+    resolvedRuntimeConfig.appearance?.general?.density ??
+      resolveStaticExpressiveDefaults(resolvedRuntimeConfig, governedBehavior)?.density,
   );
 
   // The provider is a client component, so the context object always exists
@@ -731,8 +1189,18 @@ export function DesignSystemProvider({
     );
   }
   return (
+    <>
+    {/*
+      The two sentinels bracket the entire tree, and the bracketing IS the
+      mechanism: the arm is the first thing committed, the seal the last thing
+      run before paint, and every descendant sits between them. Both render
+      null, so neither costs a node, a commit, or a byte of server markup --
+      and on a request with no DOM there is no claim to make, so neither is
+      rendered at all and hydration has nothing extra to reconcile.
+    */}
+    {claim ? <RetainedArtifactArm claim={claim} /> : null}
     <IconProfileCarrier.Provider value={iconExpressiveProfile}>
-    <TenantProvider config={normalizedConfig} vertical={resolvedVertical}>
+    <TenantProvider config={resolvedRuntimeConfig} vertical={resolvedVertical}>
       <RecipeProfileProvider
         profileId={recipeProfileSelection?.profileId}
         schemaVersion={recipeProfileSelection?.schemaVersion}
@@ -748,39 +1216,26 @@ export function DesignSystemProvider({
             <EngineProvider defaultEngine={engine}>
               <ThemeProvider
                 theme={theme}
-                tenant={normalizedConfig.slug}
-                visualAuthority={visualAuthority}
-                vertical={normalizedConfig.vertical ?? resolvedVertical?.key}
-                branding={
-                  suppressedChannels.includes('visual-branding')
-                    ? undefined
-                    : normalizedConfig.branding
-                }
-                tokenOverrides={
-                  suppressedChannels.includes('token-overrides')
-                    ? undefined
-                    : normalizedConfig.tokenOverrides
-                }
-                appearanceVars={appearanceCssVars}
-                generatedChromeCss={generatedTenantCss}
-                skipCssLoading={skipCssLoading}
-                cssBaseUrl={cssBaseUrl}
+                tenant={resolvedRuntimeConfig.slug}
               >
-                <FeatureProvider features={normalizedConfig.features ?? []}>
+                <FeatureProvider features={features}>
                   <MotionProvider profile={motionProfile} tenantDial={tenantMotionDial}>
                     <ResponsiveProvider>
                       <CommandRegistryProvider>
                         <AntdConfigProvider>
                           {/*
                             Personality is a subordinate product/vertical data
-                            axis, never a second tenant authority. The bridge
-                            stays mounted whenever the artifact does not cover
-                            `personality`, but publishes namespaced inputs only;
-                            the static projection owns canonical aliases.
+                            axis, never a second tenant authority, so the bridge
+                            is mounted unconditionally: it publishes namespaced
+                            inputs only and the static projection owns canonical
+                            aliases. It is not conditional on
+                            `suppressedChannels` because it cannot be -- an
+                            artifact is admitted only when its coverage is the
+                            exact ordered v1 coverage, and `personality` is
+                            deliberately outside that set. A guard here would
+                            read as a suppression that no input can produce.
                           */}
-                          {suppressedChannels.includes('personality') ? null : (
-                            <SystemCssVariablesBridge />
-                          )}
+                          <SystemCssVariablesBridge />
                           <MemoizedChildren>{children}</MemoizedChildren>
                         </AntdConfigProvider>
                       </CommandRegistryProvider>
@@ -795,5 +1250,7 @@ export function DesignSystemProvider({
       </RecipeProfileProvider>
     </TenantProvider>
     </IconProfileCarrier.Provider>
+    {claim ? <RetainedArtifactSeal claim={claim} /> : null}
+    </>
   );
 }

@@ -4,7 +4,7 @@ import { isChartGrammar, isChartGrammarId } from '..';
 export const CHART_GRAMMAR_IDS = Object.freeze([
   'neutral',
   'bithire',
-  'platform',
+  'rottay',
   'evnto',
 ] as const satisfies readonly ChartGrammarId[]);
 
@@ -40,12 +40,12 @@ const DEFINITIONS = [
     motion: 'calm-continuity',
   },
   {
-    id: 'platform',
+    id: 'rottay',
     posture: 'control-plane',
     channels: {
-      categorical: 'chart.palette.categorical.platform',
-      sequential: 'chart.palette.sequential.platform',
-      diverging: 'chart.palette.diverging.platform',
+      categorical: 'chart.palette.categorical.rottay',
+      sequential: 'chart.palette.sequential.rottay',
+      diverging: 'chart.palette.diverging.rottay',
       status: 'chart.palette.status.semantic',
     },
     grid: 'precise-compact',

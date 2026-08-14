@@ -28,19 +28,19 @@ import {
   resolveSurfaceDetailActionVariant,
   hasSurfaceError,
 } from "../../../../runtime/helpers";
-import { useSurfaceTranslations } from "../../../../runtime/helpers/states/i18n";
-import { useSurfaceProfileDefaultsWithOverrides } from "../../../../runtime/profile-defaults/overrides";
+import { useSurfaceTranslations } from "../../../../../structures/foundation/chrome/runtime/i18n";
+import { useSurfaceProfileDefaultsWithOverrides } from "../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides";
 import type {
   DetailSurfaceConfig,
   EntityAdapter,
   SurfaceCapabilityRegistration,
 } from "../../../../foundation/contracts";
 import {
-  SurfaceCapabilityAnatomy,
   SurfaceEmptyState,
   SurfaceErrorState,
-} from "../../../../runtime/helpers/states";
-import { PageShellSurface } from "../../../../composition/layout/page-shell";
+} from "../../../../../structures/feedback/surface-lifecycle";
+import { SurfaceCapabilityAnatomy } from "../../../../../structures/feedback/capability-anatomy";
+import { PageShellSurface } from "../../../../../structures/shell/page-shell-surface";
 
 /* The panel mounts only the active tab's node, so running the callback inside a component
    body is what makes the contract's "called only when the tab is active" literally true. */

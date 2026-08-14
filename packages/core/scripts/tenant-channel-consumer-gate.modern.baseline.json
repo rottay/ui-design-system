@@ -131,22 +131,6 @@
       "state": "never-consumed",
       "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
     },
-    "--ds-color-dark-accent": {
-      "state": "never-consumed",
-      "reason": "dark-seed override token; consumed once dual-ramp light-dark derivation lands (W4-C2 / W6)"
-    },
-    "--ds-color-dark-bg": {
-      "state": "never-consumed",
-      "reason": "dark-seed override token; consumed once dual-ramp light-dark derivation lands (W4-C2 / W6)"
-    },
-    "--ds-color-dark-primary": {
-      "state": "never-consumed",
-      "reason": "dark-seed override token; consumed once dual-ramp light-dark derivation lands (W4-C2 / W6)"
-    },
-    "--ds-color-dark-secondary": {
-      "state": "never-consumed",
-      "reason": "dark-seed override token; consumed once dual-ramp light-dark derivation lands (W4-C2 / W6)"
-    },
     "--ds-command-font": {
       "state": "never-consumed",
       "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"

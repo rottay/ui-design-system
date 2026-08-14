@@ -2,10 +2,18 @@
  * DS-Q001L matrix — computed-style and DOM-parity evidence, no screenshots.
  *
  * The specimen route renders one identical tree for the six DS-S001 families
- * under two opposing governed sources (static technical BrandTheme vs DB
- * editorial Appearance). This spec proves the machine-checkable half of the
- * exit contract; Codex performs the sighted inspection using the manifest in
- * the wave handoff.
+ * under the two opposing governed INGRESS PATHS: the code-owned `rottay`
+ * registry tenant, whose checked-in BrandTheme authors `rottay/technical-
+ * sharp@1` and whose CSS is bundled, versus a published customer document
+ * selecting `rottay/editorial-round@1`, compiled and mounted as a verified
+ * artifact. This spec proves the machine-checkable half of the exit contract;
+ * Codex performs the sighted inspection using the manifest in the wave handoff.
+ *
+ * Only the editorial side states expected colours literally: those bytes are
+ * authored by the specimen's own document. The technical side's canvas is
+ * Rottay's shipped identity, so it is asserted by CONTRACT — readable, and
+ * divergent from editorial — rather than by a number this spec would be
+ * restating from the brand theme and silently pinning.
  */
 import { devices, expect, test, type Page } from "@playwright/test";
 
@@ -102,19 +110,39 @@ async function assertNoHorizontalOverflow(page: Page): Promise<void> {
 }
 
 test.describe("DS-Q001L: opposing profile sources over one tree", () => {
+  test("each source mounts its own governed ingress, and only the DB one ships an artifact", async ({
+    page,
+  }) => {
+    const artifact = page.locator(
+      'style[data-testid="showroom-tenant-artifact"]'
+    );
+
+    await openCell(page, { source: "technical-static" });
+    await expect(page.getByTestId("specimen-frame")).toHaveAttribute(
+      "data-specimen-tenant",
+      "rottay"
+    );
+    // The code-owned path's CSS is bundled. An artifact here would mean the
+    // specimen had synthesised a second visual authority.
+    await expect(artifact).toHaveCount(0);
+
+    await openCell(page, { source: "editorial-db" });
+    await expect(page.getByTestId("specimen-frame")).toHaveAttribute(
+      "data-specimen-tenant",
+      "q001l-editorial"
+    );
+    // Exactly one: the provider's mount proof fails on candidates.length !== 1,
+    // and a blocked resolution renders as a spinner rather than an error.
+    await expect(artifact).toHaveCount(1);
+  });
+
   test("both governed sources paint their readable canvas contract", async ({
     page,
   }) => {
-    const expected = {
-      "technical-static": {
-        background: "rgb(244, 245, 247)",
-        foreground: "rgb(17, 24, 39)",
-      },
-      "editorial-db": {
-        background: "rgb(255, 250, 243)",
-        foreground: "rgb(44, 24, 16)",
-      },
-    } as const;
+    const canvases: Record<Source, Record<string, string>> = {
+      "technical-static": {},
+      "editorial-db": {},
+    };
 
     for (const source of SOURCES) {
       await openCell(page, { source });
@@ -124,11 +152,28 @@ test.describe("DS-Q001L: opposing profile sources over one tree", () => {
       ]);
       const cardBody = await computedOf(page, "specimen-card-body", ["color"]);
 
-      expect(canvas["background-color"]).toBe(expected[source].background);
-      expect(canvas.color).toBe(expected[source].foreground);
-      expect(cardBody.color).toBe(expected[source].foreground);
+      // Readable, and the body text inherits the same ink: the two ways a
+      // blocked or half-applied authority shows up as a legible-looking page.
       expect(canvas.color).not.toBe(canvas["background-color"]);
+      expect(cardBody.color).toBe(canvas.color);
+      canvases[source] = canvas;
     }
+
+    // The editorial ground is authored by the specimen's own document, so its
+    // compiled bytes are stated exactly.
+    expect(canvases["editorial-db"]["background-color"]).toBe(
+      "rgb(255, 250, 243)"
+    );
+    expect(canvases["editorial-db"].color).toBe("rgb(44, 24, 16)");
+
+    // Rottay's shipped canvas is not restated here; it only has to be a
+    // different ground from the customer's.
+    expect(canvases["technical-static"]["background-color"]).not.toBe(
+      canvases["editorial-db"]["background-color"]
+    );
+    expect(canvases["technical-static"].color).not.toBe(
+      canvases["editorial-db"].color
+    );
   });
 
   test("computed-style divergence between static technical and DB editorial", async ({
@@ -184,7 +229,10 @@ test.describe("DS-Q001L: opposing profile sources over one tree", () => {
     expect(technical.tableAttrs.recipe).toBe("ruled");
     expect(editorial.tableAttrs.recipe).toBe("minimal");
 
-    expect(technical.button["border-radius"]).toBe("0px");
+    // Geometry divergence is asserted as divergence. The literal `0px` this
+    // once pinned came from the deleted synthetic BrandTheme; the radius the
+    // registry tenant ships is Rottay's to change, and the profile contract is
+    // that the two postures do not agree.
     expect(technical.button["border-radius"]).not.toBe(
       editorial.button["border-radius"]
     );

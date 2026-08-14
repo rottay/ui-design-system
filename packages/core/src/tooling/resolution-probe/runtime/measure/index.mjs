@@ -44,8 +44,26 @@
  * the browser resolves to pixels. Both are captured; only the painted one
  * settles an argument.
  *
+ * REAL GEOMETRY, NOT JUST COMPUTED-STYLE STRINGS. `block-size`/`inline-size`/
+ * `height`/`width` from `getComputedStyle` are the AUTHORED box, but a
+ * `transform: scale(...)` or a `zoom` changes what the box actually occupies
+ * on screen without moving any of those computed longhands at all — the
+ * exact gap that let a control shrink or a touch target lose its footprint
+ * while every declared property still read "unchanged". The two reserved
+ * observable names `@rect-inline-size` and `@rect-block-size` (not real CSS
+ * properties, so they can never collide with one) are read from
+ * `Element.getBoundingClientRect()` instead: the browser's own answer to "how
+ * big is this, actually, right now". A mutation of padding, border or
+ * transform that changes the rendered box moves these even when it moves
+ * nothing else declared, so a control/touch-target/icon assertion bound to
+ * ONLY `block-size`/`height`-shaped strings can be fooled by exactly that
+ * mutation; binding the rect names too closes it.
+ *
  * @module Tooling/ResolutionProbe/Runtime/Measure
  */
+
+/** Reserved observable names read from `getBoundingClientRect`, never from `getComputedStyle`. */
+export const RECT_OBSERVABLES = Object.freeze(['@rect-inline-size', '@rect-block-size']);
 
 import {
   rootAttributes,
@@ -98,12 +116,23 @@ const CSS_URL = `${PROBE_ORIGIN}/bundle.css`;
 const BASE_LAYER_CANARY = Object.freeze(['--ds-radius-md']);
 const TENANT_LAYER_CANARY = Object.freeze(['--ds-radius-scale']);
 
-function canaryProperties(scope) {
+/**
+ * The canary tokens for one scope.
+ *
+ * Exported because a CAUSAL run reads the same tokens at a second position —
+ * on each measured element, not only on the document root. An element can be in
+ * the DOM while the inherited custom-property stream never reached it (a
+ * detached subtree, a shadow boundary, a fixture mounted before the sheet
+ * applied), and that element reports initial values that are indistinguishable
+ * from a channel a tenant genuinely cannot move. Same tokens, wider read
+ * position: one mechanism, not two.
+ */
+export function canaryProperties(scope) {
   const tenantLess = VERTICALS[scope.vertical]?.tenantSlug === null;
   return tenantLess ? [...BASE_LAYER_CANARY] : [...BASE_LAYER_CANARY, ...TENANT_LAYER_CANARY];
 }
 
-function buildDocument(scope, fixtures) {
+function buildDocument(scope, fixtures, cssUrl = CSS_URL) {
   const attributes = rootAttributes(scope);
   const classNames = rootClassNames(scope).join(' ');
   const body = fixtures.map((fixture) => fixture.html).join('\n');
@@ -111,7 +140,7 @@ function buildDocument(scope, fixtures) {
     '<!doctype html>',
     `<html ${rootAttributesToHtml(attributes)} class="${classNames}">`,
     '<head><meta charset="utf-8"><title>resolution-probe</title>',
-    `<link rel="stylesheet" href="${CSS_URL}">`,
+    `<link rel="stylesheet" href="${cssUrl}">`,
     '</head>',
     `<body class="${classNames}">`,
     body,
@@ -262,6 +291,16 @@ async function readAll(page, plan) {
       const computed = getComputedStyle(element);
       const values = {};
       for (const property of row.properties) {
+        // Reserved observables: the RENDERED box, not the authored longhand.
+        // getComputedStyle cannot see a transform/zoom-driven size change;
+        // getBoundingClientRect is the browser answering "how big is this,
+        // actually, right now" and is read fresh per property so a control
+        // that mutates the box between reads is never averaged away.
+        if (property === '@rect-inline-size' || property === '@rect-block-size') {
+          const rect = element.getBoundingClientRect();
+          values[property] = String(property === '@rect-inline-size' ? rect.width : rect.height);
+          continue;
+        }
         values[property] = computed.getPropertyValue(property).trim();
       }
       output[key] = { present: true, values };
@@ -294,6 +333,251 @@ async function applyDial(page, plan, dial, dialTarget) {
   // kept because they close different halves of the same hazard — this one
   // lets the frame commit, that one forces the recalculation.
   await page.evaluate(
+    () =>
+      new Promise((resolve) => {
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve(null)));
+      }),
+  );
+}
+
+/**
+ * The three-phase causal measurement: baseline, mutation, removal.
+ *
+ * ONE SCENE. Both ingress arms are measured against the same fixture set, the
+ * same scope and the same baseline CSS, so "static and DB are equivalent"
+ * becomes a diff of two arms of one run instead of a comparison between two
+ * runs that also differ in browser state and bundle sha.
+ *
+ * THE TWO ARMS REMOVE DIFFERENTLY, BECAUSE THEY LAND DIFFERENTLY.
+ *
+ *   root-inline-style   The provider's position. The mutation is applied with
+ *                       setProperty on the document element of the SAME page,
+ *                       and removal replays a plan built from an inline memo
+ *                       taken BEFORE the write — so a preexisting inline
+ *                       declaration comes back byte-identical with its
+ *                       priority, and a property the harness introduced is
+ *                       removed rather than zeroed to a "default" that only
+ *                       happens to match today.
+ *
+ *   tenant-scoped-      The compiled artifact's position. A stylesheet cannot
+ *   stylesheet-block    be un-declared inside a live document the way an
+ *                       inline property can, and a tenant unsetting a static
+ *                       control ships a bundle without the block. So the
+ *                       mutation phase serves baseline+block and the removal
+ *                       phase re-serves the BASELINE STRING UNCHANGED. That is
+ *                       this arm's byte-identical restore: the removal
+ *                       stylesheet is not merely equivalent, it is the same
+ *                       bytes, and the artifact records both hashes.
+ *
+ * @param {object} input
+ * @param {object} input.browser
+ * @param {string} input.css        the baseline CSS
+ * @param {object} input.scope
+ * @param {Array<object>} input.fixtures
+ * @param {object} input.arm        from runtime/ingress: composeStaticArm | composeDbArm
+ * @param {(memo: object) => {write: object[], restore: object[]}} [input.planFromMemo]
+ *   required for a root-inline-style arm. The memo is only observable inside the
+ *   page, so the planner is handed in rather than the plan.
+ */
+export async function measureCausalScope({
+  browser,
+  css,
+  scope,
+  fixtures,
+  arm,
+  planFromMemo = null,
+}) {
+  const validations = fixtures.map((fixture) => ({
+    fixture,
+    ...validateFixture(fixture, css),
+  }));
+  const matched = validations.filter((entry) => entry.matched).map((entry) => entry.fixture);
+  const canaries = canaryProperties(scope);
+
+  const context = await browser.newContext({
+    viewport: VIEWPORT,
+    deviceScaleFactor: 1,
+    colorScheme: scope.theme === 'dark' ? 'dark' : 'light',
+    reducedMotion: 'reduce',
+  });
+  const page = await context.newPage();
+  try {
+    // ONE DOCUMENT AND ONE STYLESHEET URL PER PHASE. A stylesheet-arm run
+    // navigates the same page three times, and a browser is entitled to serve
+    // the second and third `bundle.css` from its memory cache without the route
+    // handler being consulted. That would silently measure the BASELINE sheet
+    // during the mutation phase and report the control as inert — the single
+    // most convincing false negative this harness could produce. Distinct URLs
+    // make each phase a distinct subresource, so the cache cannot answer.
+    const cssByPhase = {
+      baseline: css,
+      // Removal deliberately re-serves the SAME BINDING as the baseline, not a
+      // recomposition of it, so the two phases are byte-identical by
+      // construction rather than by comparison.
+      removal: css,
+      mutation: arm.mutateCss(css),
+    };
+    const cssUrlFor = (phase) => `${CSS_URL}?phase=${phase}`;
+    const pageUrlFor = (phase) => `${PAGE_URL}?phase=${phase}`;
+    const documents = Object.fromEntries(
+      Object.keys(cssByPhase).map((phase) => [
+        phase,
+        buildDocument(scope, matched, cssUrlFor(phase)),
+      ]),
+    );
+
+    await page.route(`${PROBE_ORIGIN}/**`, (route) => {
+      const url = new URL(route.request().url());
+      const phase = url.searchParams.get('phase');
+      const target = `${url.origin}${url.pathname}`;
+      if (target === PAGE_URL && documents[phase]) {
+        return route.fulfill({ contentType: 'text/html; charset=utf-8', body: documents[phase] });
+      }
+      if (target === CSS_URL && cssByPhase[phase]) {
+        return route.fulfill({ contentType: 'text/css; charset=utf-8', body: cssByPhase[phase] });
+      }
+      return route.abort();
+    });
+
+    const plan = matched.flatMap((fixture) =>
+      fixture.targets.map((target) => ({
+        fixtureId: fixture.id,
+        targetId: target.id,
+        selector: target.selector,
+        properties: target.properties,
+      })),
+    );
+
+    const observe = async () => ({
+      readings: await readAll(page, plan),
+      rootAttributes: await readRootAttributes(page),
+      canaryReadings: await readTargetCanaries(page, plan, canaries),
+    });
+    const load = async (phase) => {
+      await page.goto(pageUrlFor(phase), { waitUntil: 'load' });
+      await assertStylesheetApplied(page, scope);
+    };
+
+    await load('baseline');
+    const baseline = await observe();
+
+    let phases;
+    let inline = null;
+    if (arm.position === 'root-inline-style') {
+      const memo = await readInlineMemo(page, Object.keys(arm.variables));
+      if (typeof planFromMemo !== 'function') {
+        throw new Error(
+          'resolution-probe: a root-inline-style arm needs planFromMemo so the removal plan is ' +
+            'built from the observed memo. Removing without a memo cannot tell "unset what I ' +
+            'wrote" from "delete what was already there".',
+        );
+      }
+      inline = { memo, ...planFromMemo(memo) };
+      await applyInlineOps(page, inline.write);
+      await settle(page);
+      const mutation = await observe();
+      await applyInlineOps(page, inline.restore);
+      await settle(page);
+      const removal = await observe();
+      phases = { baseline, mutation, removal };
+    } else {
+      await load('mutation');
+      const mutation = await observe();
+      await load('removal');
+      const removal = await observe();
+      phases = { baseline, mutation, removal };
+    }
+
+    return {
+      armId: arm.armId,
+      position: arm.position,
+      plan,
+      canaries,
+      phases,
+      inline,
+      // The caller hashes these; this unit must not import runtime/bundle,
+      // which is its own peer and therefore off limits.
+      cssByPhase,
+      unmatched: unmatchedRows(validations),
+    };
+  } finally {
+    await page.close();
+    await context.close();
+  }
+}
+
+/** Every attribute on the document element, plus its class list. */
+export async function readRootAttributes(page) {
+  return page.evaluate(() => {
+    const element = document.documentElement;
+    const attributes = {};
+    for (const attribute of [...element.attributes]) attributes[attribute.name] = attribute.value;
+    attributes['#classList'] = [...element.classList].sort().join(' ');
+    return attributes;
+  });
+}
+
+/**
+ * What each property currently reads on the document element's OWN inline
+ * style, before anything is written.
+ *
+ * `getPropertyValue` on `element.style` returns the inline declaration only —
+ * not the computed cascade — which is exactly the distinction removal needs.
+ */
+export async function readInlineMemo(page, names) {
+  return page.evaluate((properties) => {
+    const style = document.documentElement.style;
+    const memo = {};
+    for (const name of properties) {
+      const value = style.getPropertyValue(name);
+      memo[name] = {
+        present: value !== '',
+        value,
+        priority: style.getPropertyPriority(name),
+      };
+    }
+    return memo;
+  }, names);
+}
+
+/** Executes a plan. The page decides nothing; every decision was made in foundation/causality. */
+export async function applyInlineOps(page, ops) {
+  await page.evaluate((operations) => {
+    const style = document.documentElement.style;
+    for (const op of operations) {
+      if (op.op === 'remove') {
+        style.removeProperty(op.name);
+        continue;
+      }
+      style.setProperty(op.name, op.value, op.priority || '');
+    }
+  }, ops);
+}
+
+/** The layer canary tokens, read on every measured element rather than on the root. */
+export async function readTargetCanaries(page, plan, canaries) {
+  return page.evaluate(
+    ({ rows, properties }) => {
+      void document.documentElement.offsetHeight;
+      const output = {};
+      for (const row of rows) {
+        const element = document.querySelector(row.selector);
+        if (!element) continue;
+        const computed = getComputedStyle(element);
+        const values = {};
+        for (const property of properties) {
+          values[property] = computed.getPropertyValue(property).trim();
+        }
+        output[`${row.fixtureId}/${row.targetId}`] = values;
+      }
+      return output;
+    },
+    { rows: plan, properties: canaries },
+  );
+}
+
+function settle(page) {
+  return page.evaluate(
     () =>
       new Promise((resolve) => {
         requestAnimationFrame(() => requestAnimationFrame(() => resolve(null)));

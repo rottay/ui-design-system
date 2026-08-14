@@ -36,6 +36,14 @@ const GOVERNED_ROOT_ATTRIBUTES: Readonly<Record<string, string>> = {
   'data-theme': 'infrastructure/runtime/theming/composition/react/provider/index.tsx',
   'data-engine': 'infrastructure/runtime/engines/composition/react/provider/index.tsx',
   'data-density': 'infrastructure/runtime/foundation/density/index.ts',
+  // `lang`/`dir` used to be exempt from this census on the grounds that they
+  // were written through the reflected IDL properties and so could only be
+  // proven behaviourally. That exemption is gone: they are ordinary claims on
+  // the shared registry now, which means they are censused for a single writer
+  // and restored to their exact predecessor by the two drills below, on the
+  // same terms as every other governed channel.
+  lang: 'infrastructure/runtime/i18n/runtime/context/provider/index.tsx',
+  dir: 'infrastructure/runtime/i18n/runtime/context/provider/index.tsx',
 };
 
 /**
@@ -67,6 +75,17 @@ function isCensusedChannel(name: string): boolean {
 
 const THIS_TEST_FILE = 'root-attribute-authority.integration.test.tsx';
 
+/**
+ * The two leaf modules of the claim stack. Attribute writes carry the registry
+ * frame; style/class writes carry both leaves (the adapter closures live in
+ * presentation, claimChannel in registry). The facade at the old monolith path
+ * is a pure re-export barrel: it creates no frames, so it is not allowlisted.
+ */
+const CLAIM_STACK_MODULES: ReadonlySet<string> = new Set([
+  'infrastructure/runtime/foundation/root-attributes/registry/index.ts',
+  'infrastructure/runtime/foundation/root-attributes/presentation/index.ts',
+]);
+
 interface RootWrite {
   readonly attribute: string;
   readonly writer: string;
@@ -95,7 +114,7 @@ function callerModule(): string {
     // The claim registry performs the physical set/remove on behalf of a
     // semantic provider. Attribute the write to its first caller so two
     // providers cannot collapse into one apparent "root-attributes" writer.
-    if (relative === 'infrastructure/runtime/foundation/root-attributes/index.ts') {
+    if (CLAIM_STACK_MODULES.has(relative)) {
       crossedClaimRegistry = true;
       continue;
     }
@@ -162,7 +181,6 @@ function tenantConfig(overrides: Partial<TenantConfig> = {}): TenantConfig {
     plan: 'enterprise',
     features: [],
     branding: { companyName: 'Root attribute authority' },
-    appearance: { general: { density: 'compact' } },
     ...overrides,
   } as TenantConfig;
 }
@@ -208,6 +226,11 @@ async function mountFullTree(config: TenantConfig = tenantConfig()) {
     expect(document.documentElement.getAttribute('data-density')).toBeTruthy();
     expect(document.documentElement.getAttribute('data-engine')).toBeTruthy();
     expect(document.documentElement.getAttribute('data-tenant')).toBeTruthy();
+    // Waited on for the same reason as the four above: every governed channel
+    // must be live before a census reads its writers, or the anti-cheat below
+    // is measuring a tree that had not finished claiming.
+    expect(document.documentElement.getAttribute('lang')).toBeTruthy();
+    expect(document.documentElement.getAttribute('dir')).toBeTruthy();
   });
   return view;
 }
@@ -219,7 +242,7 @@ describe('root attribute authority', () => {
     // only from an update path is included in the census.
     view.rerender(
       <DesignSystemProvider
-        tenantConfig={tenantConfig({ theme: 'light', appearance: { general: { density: 'spacious' } } })}
+        tenantConfig={tenantConfig({ theme: 'light' })}
         vertical="bithire"
         forceEngine="rustic"
         locale="es"
@@ -230,7 +253,7 @@ describe('root attribute authority', () => {
     );
     await waitFor(() => {
       expect(document.documentElement.getAttribute('data-theme')).toBe('light');
-      expect(document.documentElement.getAttribute('data-density')).toBe('spacious');
+      expect(document.documentElement.getAttribute('data-engine')).toBe('rustic');
     });
     view.unmount();
 
@@ -265,16 +288,21 @@ describe('root attribute authority', () => {
     expect(writers.some((writer) => writer.endsWith(THIS_TEST_FILE))).toBe(true);
   });
 
-  it('leaves no governed root attribute behind on unmount', async () => {
+  it('restores every exact governed root predecessor on unmount', async () => {
+    const root = document.documentElement;
+    const predecessors = Object.fromEntries(
+      Object.keys(GOVERNED_ROOT_ATTRIBUTES).map((attribute) => [attribute, `ssr-${attribute}`]),
+    );
+    for (const [attribute, value] of Object.entries(predecessors)) {
+      root.setAttribute(attribute, value);
+    }
+    writes = [];
     const view = await mountFullTree();
     view.unmount();
 
     await waitFor(() => {
-      for (const attribute of Object.keys(GOVERNED_ROOT_ATTRIBUTES)) {
-        expect(
-          document.documentElement.hasAttribute(attribute),
-          `${attribute} survived unmount`,
-        ).toBe(false);
+      for (const [attribute, value] of Object.entries(predecessors)) {
+        expect(root.getAttribute(attribute), `${attribute} did not restore`).toBe(value);
       }
     });
   });
@@ -349,11 +377,18 @@ describe('root attribute authority', () => {
 
 describe('locale root attributes', () => {
   /**
-   * `dir`/`lang` are written through the reflected IDL properties rather than
-   * `setAttribute`, so they are proven behaviourally: one provider owns them,
-   * and the value tracks the active locale on both mount and switch.
+   * Single ownership and exact restore are covered generically above, now that
+   * `lang`/`dir` are governed channels like any other. What is specific to
+   * this pair, and so proven here, is that the VALUE tracks the active locale
+   * across a switch -- and that the switch does not accumulate owners.
+   *
+   * Assertions read `getAttribute`, not the reflected `.dir`/`.lang`: `dir` is
+   * an enumerated attribute, so the IDL property lowercases valid values and
+   * reports invalid ones as `''`. The claim registry stores and restores the
+   * raw attribute, and only the attribute API can observe that faithfully.
    */
   it('routes dir and lang through the single i18n owner', async () => {
+    const root = document.documentElement;
     const view = render(
       <DesignSystemProvider tenantConfig={tenantConfig()} locale="ar" skipCssLoading>
         <Probe />
@@ -361,8 +396,8 @@ describe('locale root attributes', () => {
     );
     await view.findByTestId('mounted');
     await waitFor(() => {
-      expect(document.documentElement.dir).toBe('rtl');
-      expect(document.documentElement.lang).toBe('ar');
+      expect(root.getAttribute('dir')).toBe('rtl');
+      expect(root.getAttribute('lang')).toBe('ar');
     });
 
     view.rerender(
@@ -371,8 +406,40 @@ describe('locale root attributes', () => {
       </DesignSystemProvider>,
     );
     await waitFor(() => {
-      expect(document.documentElement.dir).toBe('ltr');
-      expect(document.documentElement.lang).toBe('en');
+      expect(root.getAttribute('dir')).toBe('ltr');
+      expect(root.getAttribute('lang')).toBe('en');
     });
+
+    view.unmount();
+
+    expect(writersOf('lang')).toEqual([GOVERNED_ROOT_ATTRIBUTES.lang]);
+    expect(writersOf('dir')).toEqual([GOVERNED_ROOT_ATTRIBUTES.dir]);
+  });
+
+  it('leaves an application-owned locale pair exactly as it found it', async () => {
+    // The pair the SSR projection stamps. A provider that assigned rather than
+    // claimed would hand back its own last locale -- or nothing at all -- and
+    // the application's document would silently change language on unmount.
+    const root = document.documentElement;
+    root.setAttribute('lang', 'fr-CA');
+    root.setAttribute('dir', 'ltr');
+
+    const view = render(
+      <DesignSystemProvider tenantConfig={tenantConfig()} locale="ar" skipCssLoading>
+        <Probe />
+      </DesignSystemProvider>,
+    );
+    await view.findByTestId('mounted');
+    await waitFor(() => {
+      expect(root.getAttribute('dir')).toBe('rtl');
+      expect(root.getAttribute('lang')).toBe('ar');
+    });
+
+    view.unmount();
+    const handedBack = { lang: root.getAttribute('lang'), dir: root.getAttribute('dir') };
+    root.removeAttribute('lang');
+    root.removeAttribute('dir');
+
+    expect(handedBack).toEqual({ lang: 'fr-CA', dir: 'ltr' });
   });
 });

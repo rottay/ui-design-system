@@ -18,6 +18,7 @@
 
 import type {
   BrandTheme,
+  BrandThemeMode,
   BrandChrome,
   BrandPalette,
   BrandTypography,
@@ -116,7 +117,21 @@ function projectChrome(chrome: BrandChrome): AdvancedChrome {
 
 type TokenOverrides = NonNullable<TenantAppearanceAdvanced['tokenOverrides']>;
 
-/** palette field -> the exact `--ds-*` key the brand compiler emits for it. */
+/**
+ * palette field -> the exact `--ds-*` key the brand compiler emits for it.
+ *
+ * Deliberately base-block fields only. There is no bounded, single-valued
+ * `--ds-*` channel this flat map could route a mode overlay's colors to: the
+ * dead `darkPrimaryColor`/`darkSecondaryColor`/`darkAccentColor`/
+ * `darkBackgroundColor` fields used to alias here onto a `--ds-color-dark-*`
+ * family that nothing ever compiled or read. A theme's non-default mode now
+ * lives in `BrandTheme.modes.{light,dark}.palette` and compiles to its own
+ * scoped CSS block (`compileBrandTheme`'s `modeBlocks`) using the SAME
+ * `--ds-color-*` names as the base block — a shape `TenantAppearanceAdvanced.
+ * tokenOverrides` (flat, mode-agnostic) has no way to represent. See
+ * `brandThemeToTenantAppearance` below for the projection that DOES carry a
+ * theme's dark values, through `TenantAppearanceGeneral.palette.dark`.
+ */
 const PALETTE_TOKENS: Array<[keyof BrandPalette, `--ds-${string}`]> = [
   ['primaryColor', '--ds-color-primary'],
   ['secondaryColor', '--ds-color-secondary'],
@@ -132,10 +147,6 @@ const PALETTE_TOKENS: Array<[keyof BrandPalette, `--ds-${string}`]> = [
   ['warningColor', '--ds-color-warning'],
   ['errorColor', '--ds-color-error'],
   ['infoColor', '--ds-color-info'],
-  ['darkPrimaryColor', '--ds-color-dark-primary'],
-  ['darkSecondaryColor', '--ds-color-dark-secondary'],
-  ['darkAccentColor', '--ds-color-dark-accent'],
-  ['darkBackgroundColor', '--ds-color-dark-bg'],
 ];
 
 /** typography font families -> the `--ds-font-family-*` keys the compiler emits. */
@@ -213,61 +224,92 @@ export function brandThemeToTenantAppearanceAdvanced(theme: BrandTheme): TenantA
 }
 
 /**
+ * The palette values for `mode`: the theme's own body when `mode` is its
+ * declared `appearance.defaultMode` (absent means `light`), or the
+ * `modes.{mode}` overlay otherwise. Absent when the theme does not author
+ * that mode — a single-mode theme (bithire/evnto ship light + a `modes.dark`
+ * overlay; platform/rottay ships dark + a `modes.light` overlay) always
+ * resolves exactly one of the two, and a theme that ships only its default
+ * mode resolves the other to `undefined`.
+ */
+function palettePerMode(
+  theme: BrandTheme,
+  mode: BrandThemeMode
+): Partial<BrandPalette> | undefined {
+  const defaultMode: BrandThemeMode = theme.appearance?.defaultMode ?? 'light';
+  return mode === defaultMode ? theme.palette : theme.modes?.[mode]?.palette;
+}
+
+/**
  * Canonical migration projection for a DB-owned tenant. High-signal palette
  * and typography fields remain editable in General/Simple; expert chrome and
  * the remaining bounded channels stay in Advanced. The older Advanced-only
  * exporter remains available for backwards-compatible documents.
  */
 export function brandThemeToTenantAppearance(theme: BrandTheme): TenantAppearance {
-  const palette = theme.palette;
-  const foreground = palette && (
-    palette.textPrimaryColor
-    || palette.textSecondaryColor
-    || palette.textMutedColor
-    || palette.textDisabledColor
+  // `TenantAppearanceGeneral.palette.background` is documented as the
+  // "Clear-scheme page canvas" -- the base/plain fields are specifically the
+  // LIGHT-mode values, and `.dark` is specifically the DARK-mode values. Each
+  // resolves through `palettePerMode`, so it does not matter which mode a
+  // theme happens to declare as its own default: bithire/evnto's `modes.dark`
+  // overlay and platform/rottay's `modes.light` overlay both land in the
+  // channel their VALUES represent, not the channel their SOURCE happened to
+  // be authored in.
+  const lightPalette = palettePerMode(theme, 'light');
+  const darkPalette = palettePerMode(theme, 'dark');
+  const foreground = lightPalette && (
+    lightPalette.textPrimaryColor
+    || lightPalette.textSecondaryColor
+    || lightPalette.textMutedColor
+    || lightPalette.textDisabledColor
   ) ? {
-    primary: palette.textPrimaryColor,
-    secondary: palette.textSecondaryColor,
-    muted: palette.textMutedColor,
-    disabled: palette.textDisabledColor,
+    primary: lightPalette.textPrimaryColor,
+    secondary: lightPalette.textSecondaryColor,
+    muted: lightPalette.textMutedColor,
+    disabled: lightPalette.textDisabledColor,
   } : undefined;
-  const border = palette && (
-    palette.borderPrimaryColor || palette.borderSecondaryColor
+  const border = lightPalette && (
+    lightPalette.borderPrimaryColor || lightPalette.borderSecondaryColor
   ) ? {
-    primary: palette.borderPrimaryColor,
-    secondary: palette.borderSecondaryColor,
+    primary: lightPalette.borderPrimaryColor,
+    secondary: lightPalette.borderSecondaryColor,
   } : undefined;
 
   const general: NonNullable<TenantAppearance['general']> = {};
-  if (palette) {
+  if (lightPalette || darkPalette) {
     const tenantPalette: NonNullable<
       NonNullable<TenantAppearance['general']>['palette']
     > = {
-      primary: palette.primaryColor,
-      secondary: palette.secondaryColor,
-      accent: palette.accentColor,
+      primary: lightPalette?.primaryColor,
+      secondary: lightPalette?.secondaryColor,
+      accent: lightPalette?.accentColor,
       foreground,
       border,
-      backgroundMode: palette.backgroundColor && palette.darkBackgroundColor
-        ? 'auto'
-        : palette.darkBackgroundColor
-          ? 'dark'
-          : 'light',
+      // The mode the theme DECLARES it renders at rest, and nothing else.
+      //
+      // Not `'auto'` for a theme that merely ships both modes. `auto` is a
+      // specific runtime claim -- follow the OS colour-scheme preference --
+      // and it is what switches the appearance compiler into dual-ramp
+      // `light-dark()` emission. A theme with `defaultMode: 'light'` and a
+      // `modes.dark` overlay has not asked to follow the OS; it has said it is
+      // light, with a dark mode available when something selects it. Reading
+      // "both palettes exist" as "auto" projects a behaviour the theme never
+      // declared, and it would flip evnto and The Management -- both
+      // light-default with a dark overlay -- into system-driven grounds.
+      //
+      // The dark seeds below still travel, as the contract intends: inert
+      // under `light`/`dark`, live under an `auto` the DOCUMENT chooses.
+      backgroundMode: theme.appearance?.defaultMode ?? 'light',
     };
-    tenantPalette.background = palette.backgroundColor;
-    if (
-      palette.darkPrimaryColor
-      || palette.darkSecondaryColor
-      || palette.darkAccentColor
-      || palette.darkBackgroundColor
-    ) {
-      const darkPalette: NonNullable<typeof tenantPalette.dark> = {
-        primary: palette.darkPrimaryColor,
-        secondary: palette.darkSecondaryColor,
-        accent: palette.darkAccentColor,
+    tenantPalette.background = lightPalette?.backgroundColor;
+    if (darkPalette) {
+      const darkOut: NonNullable<typeof tenantPalette.dark> = {
+        primary: darkPalette.primaryColor,
+        secondary: darkPalette.secondaryColor,
+        accent: darkPalette.accentColor,
       };
-      darkPalette.background = palette.darkBackgroundColor;
-      tenantPalette.dark = darkPalette;
+      darkOut.background = darkPalette.backgroundColor;
+      tenantPalette.dark = darkOut;
     }
     general.palette = tenantPalette;
   }

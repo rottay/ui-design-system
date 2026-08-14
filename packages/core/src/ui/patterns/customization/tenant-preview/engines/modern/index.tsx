@@ -237,6 +237,17 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
          anchors on this attribute, and the contract tests query it by the
          exported constant. */
       data-ds-tenant-preview-root={preview.safeSlug}
+      /* `buildPreviewCss` names the axes it could not paint instead of dropping
+         them; discarding that here would put the silence back one layer up and
+         show a preview that looks complete. Every preset carries chart, card
+         and accent personality, and `compileBrandTheme` renders none of the
+         three -- so this attribute is normally PRESENT, and its absence is the
+         exceptional case. Space-separated because the values are dotted axis
+         paths with no spaces of their own, and absent rather than empty so
+         "nothing to report" cannot be confused with "never asked". */
+      {...(preview.unsupportedAxes.length > 0
+        ? { 'data-ds-tenant-preview-unsupported': preview.unsupportedAxes.join(' ') }
+        : {})}
       style={{
         ...style,
       }}

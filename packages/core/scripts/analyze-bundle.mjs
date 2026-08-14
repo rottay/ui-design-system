@@ -132,11 +132,10 @@ const TOTAL_JS_BUDGET = 9_100_000; // measured +10%, rounded upward to 100 KB
  */
 const CSS_BUDGET = {
   'dist/styles.css': 460_000, // 418,154 B measured
-  'dist/platform.css': 425_000, // 383,113 B measured
+  'dist/rottay.css': 425_000, // Rottay vertical bundle
   'dist/bithire.css': 430_000, // 389,050 B measured
   'dist/evnto.css': 410_000, // 368,166 B measured
   'dist/modern-engine.css': 30_000, // 25,744 B measured
-  'dist/commercial.css': 8_000, // 7,080 B measured
   'dist/style.css': 2_500, // 2,161 B measured
 };
 
@@ -207,11 +206,8 @@ function collectFiles(dir, predicate, results = []) {
  * public barrel (`index.ts`), matching what an app actually imports
  * (`import { Button } from '@rottay/design-system'`).
  *
- * Two components share a category name with a non-flagship sibling that lives in a DIFFERENT
+ * One component shares a category name with a non-flagship sibling that lives in a DIFFERENT
  * folder -- resolved by checking which one the public barrel actually exports as that name:
- *  - Modal: `primitives/feedback/Modal` is the canonical public `Modal` export (see
- *    `primitives/feedback/index.ts`); `primitives/overlay/Modal` is exported as `OverlayModal`
- *    (an internal/advanced primitive used by Sheet/Drawer), not this one.
  *  - Badge: `primitives/display/Badge` is the standalone flagship primitive;
  *    `primitives/display/Avatar/compound/Badge` is an Avatar-internal compound sub-part, not
  *    a top-level export.

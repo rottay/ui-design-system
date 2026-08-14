@@ -6,17 +6,17 @@
     "category": "communication",
     "name": "ActivityLog",
     "components": [
-      "ActivityLog"
+      "PatternActivityLog"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
     "sourceOwner": "packages/core/src/ui/patterns/communication/activity-log",
-    "publicComponents": [],
-    "unresolvedPublicComponents": [
-      "ActivityLog"
+    "publicComponents": [
+      "PatternActivityLog"
     ],
+    "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "cce326c689f6e08ef0ba4bd608e14425d16fce0a8593aa509568dfaf9bc8ec7e"
+    "inventoryRowDigest": "9cc8a9b66a66a2941ce34d71f413c8c6eb3792278224f79b0b478f6f09169e55"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

@@ -67,7 +67,7 @@
  * the suppressed outline), today-button hover/focus-visible, coarse-pointer
  * 44px floors, and the reduced-motion block.
  *
- * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
+ * SPECIFICITY (P-48): the Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
  * (0,3,1). Under a trigger root, a border-color rule reaches (0,4,0) via the
  * two root classes + the target's own `data-part` repeated. Under the
@@ -386,7 +386,7 @@
    drops the frame (and the legacy `bordered={false}` alias lands here too)
    while the focus ring and the error/warning border-color channels keep
    their own rules. The doubled data-part keeps the border-color declaration
-   above the Platform (0,3,1) floor. */
+   above the Rottay (0,3,1) floor. */
 .rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'][data-variant='filled']:not([data-status='error']):not([data-status='warning']),
 .rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'][data-variant='filled']:not([data-status='error']):not([data-status='warning']) {
   /* The inset well reads the field family's filled channel first (Input

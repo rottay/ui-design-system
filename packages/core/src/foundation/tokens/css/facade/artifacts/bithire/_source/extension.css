@@ -46,7 +46,6 @@ html[data-tenant="bithire"]:not([data-theme="dark"]):not(.dark) {
   --ds-color-border: #d4e0ea;
   --ds-color-border-tertiary: #e8e9f0;
   --ds-color-border-subtle: #e4e5ed;
-  --ds-color-border-focus: #3a6fb0;
 
   /* Border Radius - softer than classic enterprise (H4) */
   --ds-radius-full: 9999px;
@@ -160,11 +159,6 @@ html[data-tenant="bithire"]:not([data-theme="dark"]):not(.dark) {
     var(--ds-surface-card)
   );
   --ds-global-search-results-width: min(680px, calc(100vw - 48px));
-
-  /* Link colors */
-  --ds-color-link: #3a6fb0;
-  --ds-color-link-hover: #2c5587;
-  --ds-color-link-visited: #6b3fa0;
 
   /* Interactive states */
   --ds-color-interactive-border: #c4d2de;
@@ -524,8 +518,6 @@ html[data-tenant="bithire"] {
     var(--ds-color-primary) 22%,
     var(--ds-color-border-secondary)
   );
-  --ds-detail-control-shadow: inset 0 1px 0
-    color-mix(in srgb, white 42%, transparent);
   --ds-detail-continuous-boundary: color-mix(
     in srgb,
     var(--ds-color-text-primary) 7.5%,

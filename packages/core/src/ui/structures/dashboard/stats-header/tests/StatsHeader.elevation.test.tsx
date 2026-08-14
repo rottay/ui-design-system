@@ -44,7 +44,9 @@ function pingOpacities(root: Root): string[] {
   const values: string[] = [];
   root.walkAtRules('keyframes', (at) => {
     if (at.params !== 'pulse-dot-ping') return;
-    at.walkDecls('opacity', (decl) => values.push(decl.value));
+    at.walkDecls('opacity', (decl) => {
+      values.push(decl.value);
+    });
   });
   return values;
 }
@@ -91,7 +93,9 @@ describe('StatsHeader elevation', () => {
     const gridTracks: string[] = [];
     root.walkRules((rule) => {
       if (!rule.selector.includes("[data-part='card-grid']")) return;
-      rule.walkDecls('grid-template-columns', (decl) => gridTracks.push(decl.value));
+      rule.walkDecls('grid-template-columns', (decl) => {
+        gridTracks.push(decl.value);
+      });
     });
     // ONE grid declaration in the whole file: the cuts write the channel it
     // reads rather than restating the grid at a higher specificity.

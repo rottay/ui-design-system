@@ -167,6 +167,33 @@ export const SCOPED_OWNER_RANKS = Object.freeze({
     compilers: 0,
     runtime: 1,
   }),
+  // Presentation channels (style/class) consume the claim stack; the registry
+  // never reads styling.
+  'infrastructure/runtime/foundation/root-attributes': Object.freeze({
+    registry: 0,
+    presentation: 1,
+  }),
+  // Shade seeds and readable-ink measurement are the colour floor. The
+  // interaction floor is the policy on top of them: it asks what a hover or
+  // active shade may be and whether the ink still reads, so it consumes both
+  // and neither consumes it.
+  'infrastructure/compilers/kernel/foundation/css/color-math': Object.freeze({
+    'palette-derivations': 0,
+    'readable-ink': 0,
+    'interaction-floor': 1,
+  }),
+  // Repository paths are the probe's constant floor; scope builds the
+  // vertical/theme identifiers on top of them and nothing reads back down.
+  'tooling/resolution-probe/foundation': Object.freeze({
+    paths: 0,
+    scope: 1,
+  }),
+  // A receipt is the probe's output contract. `run` fills one in; a receipt
+  // never launches a run.
+  'tooling/resolution-probe/composition': Object.freeze({
+    receipt: 0,
+    run: 1,
+  }),
   // The top-layer host is the overlay substrate a portal resolves against:
   // it decides whether portaled content stays inside an open dialog's
   // top-layer subtree or falls back to the shared portal root.
@@ -177,6 +204,36 @@ export const SCOPED_OWNER_RANKS = Object.freeze({
   'ui/primitives/feedback/Toast/runtime/state': Object.freeze({
     'method-registry': 0,
     provider: 1,
+  }),
+  // `shell` is the page-chrome substrate every other structure group is hung
+  // on — the shell surface itself, and the action-bar/tabbed-label vocabulary
+  // a header paints into it. Headers compose that substrate; the substrate has
+  // never needed a header, and an edge back the other way is an inversion this
+  // table now reports rather than tolerates.
+  'ui/structures': Object.freeze({
+    shell: 0,
+    headers: 1,
+  }),
+  // Inside the shell group the same split repeats one level down: the chrome
+  // vocabulary is shared by the sidebar and by the header group above, so it
+  // sits below the navigation surfaces that render it.
+  'ui/structures/shell': Object.freeze({
+    'surface-chrome': 0,
+    navigation: 1,
+  }),
+  // The palette is the command widget; the command bar is the workspace chrome
+  // that mounts one. A palette that reached back into the bar would be a
+  // structure knowing which screen it is in.
+  'ui/structures/workspace': Object.freeze({
+    'connected-command-palette': 0,
+    'search-command-bar': 1,
+  }),
+  // One family, two internal branches: `states` are the lifecycle surfaces and
+  // `use-surface-state` is the hook that decides which one to render. The hook
+  // composes the states; the states do not observe the hook.
+  'ui/structures/feedback/surface-lifecycle': Object.freeze({
+    states: 0,
+    'use-surface-state': 1,
   }),
 });
 

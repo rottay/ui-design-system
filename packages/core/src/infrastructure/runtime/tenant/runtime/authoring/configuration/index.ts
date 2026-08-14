@@ -9,6 +9,7 @@
 import type { TenantConfig, EngineName, TenantPlan } from '../../../../../../foundation/contracts';
 import type { PersonalityTokens } from '../../../../../../foundation/contracts/kernel/tokens/personality';
 import type { TenantTokenOverrides } from '../../../../../../foundation/contracts/composition/tenants';
+import { assertTenantIdentityAllowed } from '@/foundation/tokens/ts/presentation/brand-themes';
 import {
   resolvePersonalityPreset,
   type PersonalityPreset,
@@ -95,6 +96,13 @@ export function createTenantConfig(config: TenantCreationConfig): TenantConfig {
     vertical,
     componentPack,
   } = config;
+
+  assertTenantIdentityAllowed({
+    slug,
+    name,
+    companyName: name,
+    verticalKey: vertical,
+  });
 
   const personalityTokens = resolvePersonalityPreset(personalityPreset) as PersonalityTokens;
   const { densityScale, paddingDensity } = resolveDensity(density);

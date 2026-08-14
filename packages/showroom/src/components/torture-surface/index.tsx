@@ -1,13 +1,17 @@
 'use client';
 
-import { useEffect, type ReactNode } from 'react';
+import { useEffect, useMemo, type ReactNode } from 'react';
 import {
   DesignSystemProvider,
   getKnownTenantConfig,
   type BrandTheme,
   type TenantConfig,
 } from '@rottay/design-system';
-import type { TenantThemeArtifact } from '@rottay/design-system/server';
+import {
+  compileBrandTheme,
+  emitTenantThemeArtifactForSsr,
+  type TenantThemeArtifact,
+} from '@rottay/design-system/server';
 
 import {
   compileCanonicalManagementArtifact,
@@ -31,11 +35,16 @@ import {
 // Renders children under one of five fixtures:
 //   - torture-dark / torture-light: synthetic hostile tenants that are NOT
 //     registered anywhere (not in BUNDLED_TENANT_SLUGS, not in the known-tenant
-//     registry). Because their slug is unbundled and they carry a brandTheme,
-//     DesignSystemProvider's generateTenantCssFromResolvedVisualConfig path
-//     compiles their CSS at render time -- the exact dynamic-tenant path a real
-//     hostile DB-driven customer tenant would take. Nothing needs to be
-//     registered for this to work.
+//     registry). Because their slug is unbundled and they carry a brandTheme
+//     with no compiled artifact behind it, DesignSystemProvider has nothing to
+//     paint them with on its own (the runtime tenant-CSS generator is gone).
+//     TortureSurface itself compiles their BrandTheme with `compileBrandTheme`
+//     and mounts the resulting CSS as a <style> element, then hands the
+//     provider the config WITHOUT the brandTheme -- the same static ingress
+//     path a code-owned vertical takes (compileBrandTheme ->
+//     renderFirstPartyArtifact, whose runtime projection also strips the
+//     theme), minus the build-time artifact step these ephemeral probe
+//     fixtures don't need. Nothing needs to be registered for this to work.
 //   - rottay: the real first-party tenant, used as the differential reference
 //     the Playwright spec compares the torture fixtures against.
 //   - bithire / themanagementmiami: the bithire vertical baseline and one
@@ -184,6 +193,52 @@ export function TortureSurface({
     : tortureTenantConfig(fixture);
   const brandTheme = tenantConfig?.brandTheme;
 
+  // The legacy-brand-fixture path: an unbundled, unregistered tenant carrying
+  // a BrandTheme with no compiled artifact and no bundled CSS. The compiled
+  // artifact and the bundled-vertical fixtures (rottay/bithire/evnto, which
+  // already carry their own pre-built stylesheet inside the DS bundle) both
+  // paint through a channel this surface does not own; this branch is what's
+  // left once those two are excluded. `compileBrandTheme` is the same pure
+  // static ingress path a code-owned vertical's build takes -- this surface
+  // just mounts the result itself instead of persisting it to disk, since a
+  // probe fixture has no build step.
+  const legacyBrandCss = useMemo(() => {
+    if (!brandTheme || !tenantConfig || compiledArtifact || KNOWN_TENANT_FIXTURES.has(fixture)) {
+      return undefined;
+    }
+    return compileBrandTheme({ brandTheme, tenantSlug: tenantConfig.slug }).cssString;
+  }, [brandTheme, tenantConfig, compiledArtifact, fixture]);
+
+  // Once this surface compiles and mounts the BrandTheme itself, the theme is
+  // no longer a payload the provider may act on -- it is CSS already in the
+  // document. Handing it to the provider anyway is a tenant carrying an
+  // uncompiled visual payload with nothing to verify against, which the
+  // resolver refuses outright. Stripping it here is the same projection the
+  // registry performs for a code-owned vertical, for the same reason: static
+  // CSS stays the sole visual emitter. The probe still reads the theme it
+  // ASKED for through `PROBE_BRAND_THEME_KEY` below, which is where that
+  // question belongs.
+  const providerConfig = useMemo(() => {
+    if (!tenantConfig || !legacyBrandCss) return tenantConfig;
+    const { brandTheme: _mountedSeparately, ...withoutTheme } = tenantConfig;
+    return withoutTheme as TenantConfig;
+  }, [tenantConfig, legacyBrandCss]);
+
+  // The receipt for the SERVER pass only. The artifact element itself is
+  // mounted first-in-body by `TortureFirstPaint`, and the mount proof admits
+  // exactly one -- so this surface must NOT mount a second copy of the same
+  // bytes. On the client the DOM proof supersedes the receipt entirely.
+  const ssrReceipt = useMemo(
+    () =>
+      compiledArtifact
+        ? emitTenantThemeArtifactForSsr(compiledArtifact, {
+            slug: compiledArtifact.slug,
+            verticalKey: compiledArtifact.verticalKey,
+          }).receipt
+        : undefined,
+    [compiledArtifact],
+  );
+
   // The probe's derivation check needs the value the tenant's theme ASKED for,
   // independent of the CSS cascade. Reading a --ds-* variable back off <html>
   // would only prove the component consumes that variable, not that the
@@ -197,7 +252,7 @@ export function TortureSurface({
     };
   }, [brandTheme]);
 
-  if (!tenantConfig) {
+  if (!providerConfig) {
     return null;
   }
 
@@ -205,14 +260,22 @@ export function TortureSurface({
     <DesignSystemProvider
       forceEngine={engine}
       forceTheme={ground ?? surfaceGroundFor(fixture)}
-      tenantConfig={tenantConfig}
+      tenantConfig={providerConfig}
       locale={rtl ? 'ar' : 'en'}
-      // The server already embedded this artifact's CSS, so declaring it
-      // silences exactly the four channels it covers. Without the declaration
-      // the resolver reads `origin: 'db-tenant'` and the provider paints a
-      // second visual layer over ground that is already correct.
+      // A declaration is EVIDENCE, so exactly one branch here can produce one:
+      //   - compiled-artifact: the server embedded this artifact's CSS and the
+      //     element is in the document, so the declaration names bytes the
+      //     resolver can verify and it silences exactly the channels the
+      //     artifact's `coverage` covers.
+      //   - legacy BrandTheme and bundled verticals: there is no v1 artifact to
+      //     name. Their CSS is static, `providerConfig` carries no visual
+      //     payload, and the resolver settles on `no-visual-payload` with
+      //     nothing suppressed. A declaration here would name an artifact the
+      //     mount proof could never find and would block the surface.
       visualAuthority={
-        compiledArtifact ? { authority: 'compiled-artifact', artifact: compiledArtifact } : undefined
+        compiledArtifact
+          ? { authority: 'compiled-artifact', artifact: compiledArtifact, ssrReceipt }
+          : undefined
       }
       // No `vertical` prop for ANY fixture, including rottay: a vertical
       // baseline would layer extra tokens under the BrandTheme and muddy the
@@ -220,6 +283,17 @@ export function TortureSurface({
       // alone, and the rottay reference must be layered identically to the
       // torture fixtures for the differential comparison to be apples-to-apples.
     >
+      {legacyBrandCss ? (
+        // The exact compiled BrandTheme, mounted once. Scoped to
+        // html[data-tenant='<slug>'] (+ [data-theme='<mode>'] for the mode
+        // overlay block) by compileBrandTheme itself; TenantProvider and
+        // ThemeProvider stamp those same attributes on <html>, so no selector
+        // is hand-written here.
+        <style
+          data-testid="torture-legacy-brand-style"
+          dangerouslySetInnerHTML={{ __html: legacyBrandCss }}
+        />
+      ) : null}
       {children}
     </DesignSystemProvider>
   );

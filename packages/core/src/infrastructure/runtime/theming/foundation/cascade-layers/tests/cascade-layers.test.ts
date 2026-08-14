@@ -6,7 +6,7 @@
  * Two defects produced this shape, and the tests are split accordingly.
  *
  * FIRST (fixed earlier): the entrypoints disagreed with each other --
- * `platform.css` mounted the rottay artifact unlayered while
+ * `rottay.css` mounted the Rottay artifact unlayered while
  * `bithire.css`/`evnto.css` mounted theirs `layer(rottay-tenants)`, so the
  * winner flipped per vertical. That was repaired by making all three agree.
  *
@@ -52,7 +52,7 @@ function parseDeclaredLayerOrder(css: string): string[] {
 
 /** The three first-party vertical entrypoints and the artifact each mounts. */
 const VERTICAL_ENTRYPOINTS = [
-  { entrypoint: 'platform.css', artifact: 'rottay' },
+  { entrypoint: 'rottay.css', artifact: 'rottay' },
   { entrypoint: 'bithire.css', artifact: 'bithire' },
   { entrypoint: 'evnto.css', artifact: 'evnto' },
 ] as const;
@@ -159,7 +159,7 @@ describe('shipped bundle parity (dev must equal prod)', () => {
    * writes both from one in-memory bundle and `--check` diffs them byte for
    * byte), so reading the mirror is reading production.
    */
-  const SHIPPED = ['bithire', 'evnto', 'platform', 'rottay', 'index'] as const;
+  const SHIPPED = ['bithire', 'evnto', 'rottay', 'index'] as const;
 
   it.each(SHIPPED)('styles/%s.css ships tenant paint unlayered', (bundle) => {
     const css = readCss(`styles/${bundle}.css`);

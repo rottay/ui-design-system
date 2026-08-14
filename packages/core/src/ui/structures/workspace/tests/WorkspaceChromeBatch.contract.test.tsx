@@ -12,7 +12,7 @@ import { ActiveFiltersBar } from "../active-filters-bar";
 import { ScopeSwitcher } from "../scope-switcher";
 import { ViewModeSwitcher } from "../view-mode-switcher";
 import { TableToolbar } from "../table-toolbar";
-import { SearchCommandBar } from "../connected-command-palette/search-command-bar";
+import { SearchCommandBar } from "../search-command-bar";
 import { PatternListToolbar } from "../../../patterns/data/list-toolbar";
 import type { FilterPillConfig } from "../../../patterns/data/list-toolbar";
 import { PatternSavedViewsBar } from "../../../patterns/data/saved-views";

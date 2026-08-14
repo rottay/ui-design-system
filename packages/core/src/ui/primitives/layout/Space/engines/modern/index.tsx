@@ -109,8 +109,21 @@ export const Space = React.forwardRef<HTMLDivElement, SpaceProps>(
     } else {
       // SPACE_SIZE_MAP is keyed by the legacy 'small' | 'middle' | 'large' spelling;
       // toLegacySize resolves either spelling to it.
+      //
+      // An own-property guard, not just the trailing `||`: a bare
+      // `SPACE_SIZE_MAP[key]` read is a lookup on a plain object literal, so an
+      // INHERITED member name ("toString", "constructor") resolves through
+      // `Object.prototype` to a FUNCTION, which is TRUTHY and therefore slips
+      // straight past a `|| SPACE_SIZE_MAP.small` fallback -- the same defect
+      // `resolveFlexGapValue` closes for Flex's gap map. An unrecognized value
+      // fails closed to the declared `small` rung instead.
       const legacySize = toLegacySize(size);
-      gapValue = SPACE_SIZE_MAP[legacySize || "small"] || SPACE_SIZE_MAP.small;
+      gapValue = Object.prototype.hasOwnProperty.call(
+        SPACE_SIZE_MAP,
+        legacySize as string
+      )
+        ? SPACE_SIZE_MAP[legacySize as keyof typeof SPACE_SIZE_MAP]
+        : SPACE_SIZE_MAP.small;
     }
 
     const customStyle: SpaceInstanceStyle = {

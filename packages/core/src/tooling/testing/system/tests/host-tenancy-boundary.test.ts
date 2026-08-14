@@ -50,9 +50,10 @@ describe('tenant registry', () => {
     expect(isKnownTenant('random-corp')).toBe(false);
   });
 
-  it('is case-insensitive', () => {
-    expect(isKnownTenant('Rottay')).toBe(true);
-    expect(isKnownTenant('BITHIRE')).toBe(true);
+  it('does not treat display-name variants as code-owned slugs', () => {
+    expect(isKnownTenant('Rottay')).toBe(false);
+    expect(isKnownTenant('BITHIRE')).toBe(false);
+    expect(isBundledTenant('BITHIRE')).toBe(false);
   });
 
   it('returns exactly the three file-owned vertical baselines', () => {

@@ -51,8 +51,13 @@ export interface PaletteDerivationSeeds {
  * the only evidence available for what "a hover shade" means in this system:
  * bithire steps its #3A6FB0 primary to #2C5587 (ΔL ≈ 0.06) and evnto steps its
  * near-black #171717 to #262626 (ΔL ≈ 0.05).
+ *
+ * Exported so `runtime/brand-theme`'s extended-palette floor
+ * (`--ds-color-link-hover`'s derived default) rides the SAME state-shade step
+ * this module already uses for `--ds-button-primary-bg-hover`, instead of a
+ * second hover-shade constant.
  */
-const HOVER_LIGHTNESS_STEP = 0.06;
+export const HOVER_LIGHTNESS_STEP = 0.06;
 
 /**
  * Lightness above which a seed is stepped DARKER for its hover state.
@@ -72,8 +77,13 @@ const SHADE_DIRECTION_LIGHTNESS = 0.5;
  * chain, a `light-dark()` pair, a named color), because a wrong shade is worse
  * than no shade: the channel then simply carries the seed and the authored
  * layer or the DS default still decides the state.
+ *
+ * Exported so `runtime/brand-theme`'s extended-palette floor can derive
+ * `--ds-color-link-hover` from the same primary seed with the same formula
+ * used here for `--ds-button-primary-bg-hover`, rather than a second color
+ * engine.
  */
-function shadeSeed(seedHex: string, step: number): string {
+export function shadeSeed(seedHex: string, step: number): string {
   if (!isHexColor(seedHex)) return seedHex;
   const seed = hexToOklch(normalizeHexColor(seedHex));
   const direction = seed.l > SHADE_DIRECTION_LIGHTNESS ? -1 : 1;
@@ -189,8 +199,7 @@ export function deriveBorderSubtle(
  * the focused-control treatment, both keyed to the one seed a tenant reliably
  * sets. `--ds-color-text-on-primary` is not among them — each compile path
  * emits that ink itself through the shared `color-math/readable-ink`
- * derivation, and a second author for the same channel is what
- * `assertSingleLightEmitter` exists to reject.
+ * derivation, and one channel keeps one author.
  */
 function derivePrimarySemantics(
   seeds: PaletteDerivationSeeds
@@ -207,13 +216,12 @@ function derivePrimarySemantics(
     "--ds-button-primary-color": "var(--ds-color-text-on-primary)",
 
     // Focus, on the control side only. `--ds-color-border-focus` itself is
-    // NOT claimed here: the legacy-branding emitter in
-    // `runtime/tenant-css/visual-config` already derives it from the same
-    // primary seed, and `assertSingleLightEmitter` rejects a channel with two
-    // authors rather than let a merge hide which one won. These two read
-    // THROUGH that channel, so the focused control still tracks the seed
-    // wherever the other emitter runs, and falls back to the primary where it
-    // does not. `--ds-color-link` is withheld for exactly the same reason.
+    // NOT claimed here: it belongs to the shared interaction floor
+    // (`color-math/interaction-floor`), which both compile paths merge under
+    // their authored palette. These two read THROUGH that channel, so the
+    // focused control tracks whatever the floor or the theme put there and
+    // falls back to the primary when neither did. `--ds-color-link` is
+    // withheld for exactly the same reason — one channel, one author.
     "--ds-input-border-focus": FOCUS,
     "--ds-input-shadow-focus": `0 0 0 3px ${wash(FOCUS, 20)}`,
   };

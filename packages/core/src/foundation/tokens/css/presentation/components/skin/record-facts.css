@@ -7,11 +7,15 @@
  * DIVISION OF RESPONSIBILITY (two skins, do NOT unify — the wiring imports
  * both): THIS shared presentation skin (layer rottay-components) owns the
  * baseline anatomy paint every engine renders — the three engines share one
- * foundation engine. The modern-only remediation layer lives in
+ * foundation engine. That includes the only motion this pattern has, the
+ * skeleton shimmer, and therefore its reduced-motion collapse: the sweep is
+ * declared here for all three engines, so a guard living in the modern skin
+ * would leave classic and rustic sweeping under `reduce`. Motion and its
+ * collapse stay in one file. The modern-only remediation layer lives in
  * `runtime/engines/modern/skin/record-facts.css` (layer rottay-engines,
  * sorted after this one): modern word-wrap/tabular-nums refinements and the
  * forced-colors re-expression, scoped on the `.ds-engine-modern` stamp so
- * classic/rustic paint stays untouched.
+ * classic/rustic paint stays untouched. It declares no motion of its own.
  */
 
 .ds-pattern-record-facts[data-part="root"][data-part="root"] {
@@ -401,8 +405,20 @@
   }
 }
 
+/* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
+   relaid out, or left waiting on an event that never arrives. The previous `animation: none`
+   removed the sweep outright, which is the one shape this guard must not take: `animationend`
+   never fires and anything sequenced on it stalls. The only motion here is the shimmer, an
+   INFINITE animation, so the iteration pin is what actually stops it looping — a near-zero
+   duration alone would leave it flickering forever. The transition longhand carries no
+   transition on this pattern; it is kept so the collapse is the same three longhands
+   everywhere, and it costs nothing where nothing transitions. The prelude is the base sweep
+   selector alone: the RTL rule above only re-points `animation-name`, and the element it
+   paints still matches this selector, so its duration and iteration collapse with it. */
 @media (prefers-reduced-motion: reduce) {
   .ds-pattern-record-facts .ds-record-facts__skeleton-line::after {
-    animation: none;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }

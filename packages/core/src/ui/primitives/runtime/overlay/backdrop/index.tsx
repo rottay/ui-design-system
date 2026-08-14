@@ -1,7 +1,14 @@
 /**
  * @fileoverview Overlay - full-viewport backdrop for modals, drawers, and sheets.
  * Supports optional blur, configurable background color, smooth opacity transitions,
- * and click-to-dismiss. The only importer today is `overlay/Modal`'s rustic engine.
+ * and click-to-dismiss.
+ *
+ * No in-package component imports it: the Modal engines render their own
+ * backdrop element so they can drive it from the motion recipe. It is published
+ * for consumers building an overlay the DS does not ship. (The previous note
+ * here named `overlay/Modal`'s rustic engine as its importer; that engine was a
+ * re-export shim onto `feedback/Modal`, which imports `Portal` and `FocusTrap`
+ * from this runtime but not `Overlay`.)
  *
  * @example
  * ```tsx

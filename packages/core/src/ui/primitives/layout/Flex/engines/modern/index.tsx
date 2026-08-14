@@ -63,48 +63,42 @@ export const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
       ...rest
     } = props;
 
-    // The resolver always returns all ten keys, so spreading it raw would let
-    // an absent one erase a consumer `data-*` that BaseComponentProps allows.
+    // The resolver always returns all ten keys explicitly (see
+    // `resolveFlexAttributes`'s own return statement), so `resolved` is used
+    // AS-IS below rather than rebuilt through a second, conditional pass.
     //
-    // The drop is spelled out key by key rather than looped: a computed
-    // `bag[key] = value` that ends up spread onto an element is an
-    // unresolvable paint site to the inline-paint census, which cannot prove
-    // the key is never `color` or `background`. Naming the ten keys proves it,
-    // and the compiler now fails here if the presentation contract grows an
-    // attribute this engine forgets to forward.
+    // A PRIOR version of this block rebuilt the object with
+    // `...(resolved[key] !== undefined && { [key]: resolved[key] })` per key.
+    // That conditional-spread OMITS the key entirely when the resolver has
+    // nothing to say for it, instead of carrying it forward as `undefined` --
+    // and an omitted key does not override anything. Spread AFTER `...rest`
+    // (below), an omitted `data-gap-preset` therefore left a caller-supplied
+    // `data-gap-preset` from `rest` standing untouched: `<Flex gap={24}
+    // data-gap-preset="4xl" />` rendered `data-gap-preset="4xl"` into the DOM
+    // even though `gap` is numeric (exact geometry, no preset), which the
+    // rhythm rule in layout-primitives.css would then multiply as if it were
+    // a real rung -- a caller-controlled owned-attribute forgery.
+    //
+    // These ten names are OWNED presentation attributes, not general consumer
+    // `data-*` passthrough (BaseComponentProps's index signature types them
+    // as legal props, but this component is the sole author of their
+    // meaning). `resolved` carries every key unconditionally -- including an
+    // `undefined` one -- so spreading it after `...rest` always clears
+    // whatever `rest` held for that name; React omits an attribute whose
+    // value is `undefined`. This is Flex's version of the SAME unconditional
+    // stamp Grid's modern engine already performs (engines/modern/index.tsx:
+    // `"data-gap-preset": gridGapPresetSpelling(...)` etc., written directly
+    // into the JSX object AFTER `...htmlAttributes`, always present, never
+    // conditionally spread).
+    //
+    // Using `resolved` directly (rather than a re-typed copy) is still a
+    // provably bounded, non-arbitrary paint site: `resolveFlexAttributes`'s
+    // return type is `FlexPresentationAttributes` itself, so the compiler
+    // fails here the moment that contract grows a key this engine forgets to
+    // return -- the same guarantee the old key-by-key spread offered, without
+    // the omission bug.
     const resolved = resolveFlexAttributes(props);
-    const presentationAttributes: FlexPresentationAttributes = {
-      ...(resolved["data-direction"] !== undefined && {
-        "data-direction": resolved["data-direction"],
-      }),
-      ...(resolved["data-wrap"] !== undefined && {
-        "data-wrap": resolved["data-wrap"],
-      }),
-      ...(resolved["data-justify"] !== undefined && {
-        "data-justify": resolved["data-justify"],
-      }),
-      ...(resolved["data-align"] !== undefined && {
-        "data-align": resolved["data-align"],
-      }),
-      ...(resolved["data-inline"] !== undefined && {
-        "data-inline": resolved["data-inline"],
-      }),
-      ...(resolved["data-gap"] !== undefined && {
-        "data-gap": resolved["data-gap"],
-      }),
-      ...(resolved["data-gap-preset"] !== undefined && {
-        "data-gap-preset": resolved["data-gap-preset"],
-      }),
-      ...(resolved["data-column-gap-preset"] !== undefined && {
-        "data-column-gap-preset": resolved["data-column-gap-preset"],
-      }),
-      ...(resolved["data-row-gap-preset"] !== undefined && {
-        "data-row-gap-preset": resolved["data-row-gap-preset"],
-      }),
-      ...(resolved["data-layout-motion"] !== undefined && {
-        "data-layout-motion": resolved["data-layout-motion"],
-      }),
-    };
+    const presentationAttributes: FlexPresentationAttributes = resolved;
     const parameterStyle = resolveFlexParameterStyle(props);
     const resolvedStyle =
       parameterStyle || consumerStyle
@@ -112,7 +106,13 @@ export const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
         : undefined;
 
     const reactId = useId();
-    const responsiveEntries = collectFlexResponsiveEntries(props);
+    // `rhythm: true` is Modern-only on purpose: the collector is shared with
+    // the read-only Classic and Rustic engines, whose emitted CSS must not
+    // move. A responsive preset gap has no `data-gap-preset` for the skin to
+    // key on, so this is the only place rhythm can reach it.
+    const responsiveEntries = collectFlexResponsiveEntries(props, {
+      rhythm: true,
+    });
     const needsResponsiveCSS = responsiveEntries.length > 0;
 
     const elementId = needsResponsiveCSS

@@ -2,6 +2,7 @@
   "id": "WO-AVA-01",
   "wave": 2,
   "batch": "wave-2-primitives-a",
+  "laneRole": "family",
   "row": "primitive/display/avatar",
   "model": {
     "name": "sonnet",

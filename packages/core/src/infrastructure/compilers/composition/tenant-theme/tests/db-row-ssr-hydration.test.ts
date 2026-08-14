@@ -17,7 +17,7 @@
  * A change can keep every value correct and still break the handover.
  */
 
-import { describe, it, expect } from 'vitest';
+import { afterEach, describe, it, expect } from 'vitest';
 
 import {
   THEMANAGEMENT_TENANT_THEME_DOCUMENT,
@@ -26,8 +26,11 @@ import {
 import { TENANT_THEME_V1_COVERAGE } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
 import { resolveDocumentRootAttributes } from '@/infrastructure/runtime/foundation/root-attributes/ssr';
 import {
+  TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE,
   resolveVisualAuthority,
   appearanceMatchesArtifact,
+  emitTenantThemeArtifactForSsr,
+  type TenantThemeArtifactSsrEmission,
 } from '@/infrastructure/runtime/theming/foundation/visual-authority';
 
 import {
@@ -74,17 +77,19 @@ function renderOnServer() {
   );
   const artifact = compileTenantThemeConfig(config, { verticalEnvelope: ENVELOPE });
 
+  // What the document actually carries. This used to be a hand-built object
+  // literal, so the test asserted against the HARNESS's idea of the embed --
+  // an element id and attribute names (`data-digest`, `data-compiler`) that no
+  // production path ever wrote. The runtime now owns the emission, so the
+  // assertions below are about the bytes and attributes a real request ships.
+  const emission = emitTenantThemeArtifactForSsr(artifact, {
+    slug: artifact.slug,
+    verticalKey: artifact.verticalKey,
+  });
+
   return {
     artifact,
-    // What the document actually carries: the scoped <style> and the root
-    // attributes its selector needs to match.
-    styleElement: {
-      id: 'rottay-runtime-tenant-theme',
-      'data-tenant': artifact.slug,
-      'data-digest': artifact.digest,
-      'data-compiler': artifact.compilerVersion,
-      css: artifact.css,
-    },
+    emission,
     // ONE source. This previously also spread `tenantThemeArtifactRootAttributes`,
     // which emits the same three tenant-scope attributes -- so the assertions
     // below could not fail: deleting the scope from the SSR projection was
@@ -125,7 +130,7 @@ describe('DB row -> SSR embed', () => {
   });
 
   it('embeds a style element whose selector the root attributes can match', () => {
-    const { artifact, styleElement, rootAttributes } = renderOnServer();
+    const { artifact, emission, rootAttributes } = renderOnServer();
 
     // The artifact scopes itself to `[data-ds-root][data-vertical][data-tenant]`.
     // If SSR stamps a different set, the CSS ships and matches nothing — a
@@ -133,8 +138,8 @@ describe('DB row -> SSR embed', () => {
     expect(rootAttributes['data-ds-root']).toBe('');
     expect(rootAttributes['data-vertical']).toBe('bithire');
     expect(rootAttributes['data-tenant']).toBe('themanagement');
-    expect(styleElement.css).toContain('themanagement');
-    expect(styleElement['data-digest']).toBe(artifact.digest);
+    expect(emission.css).toContain('themanagement');
+    expect(emission.attributes[TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE]).toBe(artifact.digest);
     // And the projection must not drift from the compiler's own scope helper.
     expect(scopeAttributesAgree(artifact)).toBe(true);
   });
@@ -149,11 +154,73 @@ describe('DB row -> SSR embed', () => {
   });
 });
 
+/**
+ * Mount what the server emitted, byte for byte.
+ *
+ * The hydrating client does not build this element — it INHERITS it from the
+ * SSR stream. Constructing it from `emission` rather than from the artifact is
+ * what keeps the two legs honest: if the emitter ever stopped stamping a proof
+ * attribute, hydration would stop recognising the mount here instead of the
+ * harness quietly supplying what production forgot.
+ */
+const mountedElements: HTMLStyleElement[] = [];
+
+function mountServerEmission(emission: TenantThemeArtifactSsrEmission): HTMLStyleElement {
+  const style = document.createElement('style');
+  for (const [name, value] of Object.entries(emission.attributes)) {
+    style.setAttribute(name, value);
+  }
+  style.textContent = emission.css;
+  document.head.appendChild(style);
+  mountedElements.push(style);
+  return style;
+}
+
+afterEach(() => {
+  while (mountedElements.length > 0) mountedElements.pop()?.remove();
+});
+
 describe('SSR embed -> hydration reuse', () => {
+  it('admits the server render against its own emission receipt', () => {
+    // The server leg. There is no DOM to observe, so the resolver may not fall
+    // back to "trust the declaration": it admits only because the design system
+    // itself produced these bytes and minted a receipt bound to them.
+    const { artifact, emission } = renderOnServer();
+
+    const resolution = resolveVisualAuthority({
+      declaration: {
+        authority: 'compiled-artifact',
+        artifact,
+        ssrReceipt: emission.receipt,
+      },
+      slug: artifact.slug,
+      verticalKey: artifact.verticalKey,
+      payload: {
+        visualBranding: false,
+        tokenOverrides: false,
+        appearance: artifact.normalizedAppearance,
+        personality: false,
+        brandTheme: false,
+      },
+      documentRoot: null,
+    });
+
+    expect(resolution.authority).toBe('compiled-artifact');
+    expect(resolution.origin).toBe('ssr-emission-receipt');
+    expect(resolution.conflict).toBeNull();
+    // Emission is not observation. Nothing on the server may claim a mounted
+    // element; only the client can prove that, and it does so below.
+    expect(resolution.mountedArtifact).toBeNull();
+    expect([...resolution.suppressedChannels].sort()).toEqual(
+      [...TENANT_THEME_V1_COVERAGE].sort(),
+    );
+  });
+
   it('recognises the server artifact instead of compiling a second one', () => {
     // The property that makes hydration safe: the client declares the artifact
     // the server already mounted, and the resolver verifies rather than trusts.
     const server = renderOnServer();
+    const serverElement = mountServerEmission(server.emission);
 
     // The RSC/JSON boundary produces a structurally identical, referentially
     // distinct object. Round-tripping models that faithfully.
@@ -162,7 +229,7 @@ describe('SSR embed -> hydration reuse', () => {
     const resolution = resolveVisualAuthority({
       declaration: { authority: 'compiled-artifact', artifact: overWire },
       slug: overWire.slug,
-      hasBundledArtifact: false,
+      verticalKey: overWire.verticalKey,
       payload: {
         visualBranding: false,
         tokenOverrides: false,
@@ -170,14 +237,48 @@ describe('SSR embed -> hydration reuse', () => {
         // READS it (density, motion dial, anatomy). It is an echo, not a
         // second authority, and the resolver must tell those apart.
         appearance: overWire.normalizedAppearance,
+        personality: false,
+        brandTheme: false,
       },
     });
 
     expect(resolution.authority).toBe('compiled-artifact');
+    expect(resolution.origin).toBe('compiled-envelope');
+    // "Reuse" is only meaningful if the proof is the SERVER's element. A client
+    // that recompiled and mounted its own would satisfy every other assertion
+    // here; identity is what distinguishes reuse from a second compile.
+    expect(resolution.mountedArtifact).toBe(serverElement);
     expect(resolution.conflict).toBeNull();
     expect([...resolution.suppressedChannels].sort()).toEqual(
       [...TENANT_THEME_V1_COVERAGE].sort(),
     );
+  });
+
+  it('DRILL: hydration refuses an artifact the server never mounted', () => {
+    // Deliberately no `mountServerEmission`. The declaration is otherwise
+    // perfect — correct tenant, correct digest, correct bytes — and it must
+    // still be refused, because on the client the mount is observable and
+    // therefore mandatory. A receipt is the server's affordance, not a way for
+    // a browser to skip the one check it is actually able to run.
+    const { artifact } = renderOnServer();
+    const overWire = JSON.parse(JSON.stringify(artifact));
+
+    const resolution = resolveVisualAuthority({
+      declaration: { authority: 'compiled-artifact', artifact: overWire },
+      slug: overWire.slug,
+      verticalKey: overWire.verticalKey,
+      payload: {
+        visualBranding: false,
+        tokenOverrides: false,
+        appearance: undefined,
+        personality: false,
+        brandTheme: false,
+      },
+    });
+
+    expect(resolution.origin).toBe('invalid-declaration');
+    expect(resolution.conflict).toMatch(/artifact is not mounted/);
+    expect(resolution.artifact).toBeNull();
   });
 
   it('identifies the echo structurally, surviving the JSON boundary', () => {
@@ -196,18 +297,35 @@ describe('SSR embed -> hydration reuse', () => {
   it('DRILL: an authored override is NOT mistaken for the echo', () => {
     // The other direction. A payload that genuinely differs must be reported as
     // a conflict, or a second painter ships silently.
-    const { artifact } = renderOnServer();
+    const { artifact, emission } = renderOnServer();
+
+    // The mount is genuine, so the appearance mismatch is the ONLY thing wrong.
+    // Without this the drill passed for the wrong reason: the resolver blocked
+    // on "not mounted" and `conflict !== null` was satisfied, which means it
+    // would have stayed green with the echo comparison deleted outright.
+    mountServerEmission(emission);
+
     const tampered = JSON.parse(JSON.stringify(artifact.normalizedAppearance));
     tampered.general = { ...(tampered.general ?? {}), density: 'compact' };
+    // Guards the tamper itself: if the fixture ever compiles to `compact`, the
+    // line above becomes a no-op and this drill would assert nothing.
+    expect(appearanceMatchesArtifact(tampered, artifact.normalizedAppearance)).toBe(false);
 
     const resolution = resolveVisualAuthority({
       declaration: { authority: 'compiled-artifact', artifact },
       slug: artifact.slug,
-      hasBundledArtifact: false,
-      payload: { visualBranding: false, tokenOverrides: false, appearance: tampered },
+      verticalKey: artifact.verticalKey,
+      payload: {
+        visualBranding: false,
+        tokenOverrides: false,
+        appearance: tampered,
+        personality: false,
+        brandTheme: false,
+      },
     });
 
-    expect(resolution.conflict).not.toBeNull();
+    expect(resolution.conflict).toMatch(/raw appearance differs from the artifact/);
+    expect(resolution.conflict).not.toMatch(/is not mounted/);
     // Suppression stays total under conflict: a reported ambiguity must never
     // become a second painter.
     expect([...resolution.suppressedChannels].sort()).toEqual(

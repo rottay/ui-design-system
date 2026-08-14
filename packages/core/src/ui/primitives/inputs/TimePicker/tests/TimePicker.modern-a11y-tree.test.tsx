@@ -39,7 +39,7 @@ describe('TimePicker modern accessibility tree', () => {
 
   it('lets an external FormField label own the trigger name', async () => {
     renderWithEngine(
-      <FormField label="Start time">
+      <FormField label="Start time" name="start-time">
         <ModernTimePicker placeholder="Select time" />
       </FormField>,
       'modern'

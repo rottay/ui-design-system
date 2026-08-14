@@ -27,10 +27,10 @@
     },
     "./styles": "./packages/core/dist/styles.css",
     "./styles.css": "./packages/core/dist/styles.css",
-    "./styles/platform": "./packages/core/dist/platform.css",
+    "./styles/default": "./packages/core/dist/rottay.css",
     "./styles/bithire": "./packages/core/dist/bithire.css",
     "./styles/evnto": "./packages/core/dist/evnto.css",
-    "./styles/rottay": "./packages/core/dist/platform.css",
+    "./styles/rottay": "./packages/core/dist/rottay.css",
     "./styles/modern": "./packages/core/dist/modern-engine.css"
   },
   "workspaces": [

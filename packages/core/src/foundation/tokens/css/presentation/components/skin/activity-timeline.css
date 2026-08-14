@@ -27,8 +27,9 @@
  * item rail padding, connector, icon well + anchor, item-content padding,
  * time dot, scroll region) moved here on LOGICAL properties — the former
  * physical `paddingLeft`/`left`/`right` offsets were LTR-only. The panel
- * block size rides a private dashboard seam whose fallback follows the
- * governed rhythm dial from the shipped 415px measure.
+ * block size rides a private dashboard seam whose fallback is the shipped
+ * 415px measure byte-exact, reading no rhythm channel — rhythm owns the room
+ * around content, never a panel's capacity.
  * The transition literals drained onto `--ds-motion-*` channels with the exact
  * replaced values as fallbacks. The timestamp is a real `<time>` element now
  * (its micro typography lives here); the chevron carries
@@ -43,7 +44,7 @@
 .ds-activity-timeline.ds-activity-timeline[data-part='root'] {
   display: flex;
   flex-direction: column;
-  block-size: var(--_ds-dashboard-panel-block-size, calc(415px * var(--ds-rhythm-effective-scale, 1)));
+  block-size: var(--_ds-dashboard-panel-block-size, 415px);
   padding: 16px;
   position: relative;
   overflow: hidden;

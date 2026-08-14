@@ -714,6 +714,33 @@ test('every declared promotion names a property the real DS actually reads', () 
   }
 });
 
+test('retired EmptyState card hooks stay closed while RecordFacts geometry remains public', () => {
+  const manifest = deriveHookManifest({ coreRoot: CORE_ROOT, postcss });
+  const published = JSON.parse(serializeHookManifest(manifest));
+  const retired = [
+    '--ds-empty-state-card-padding-block',
+    '--ds-empty-state-card-padding-inline',
+  ];
+  const recordFacts = [
+    '--ds-record-facts-header-height',
+    '--ds-record-facts-header-padding',
+    '--ds-record-facts-compact-item-height',
+    '--ds-record-facts-compact-item-padding',
+  ];
+
+  for (const property of retired) {
+    assert.equal(manifest.hookSet.has(property), false, `${property} reopened retired anatomy`);
+  }
+  for (const property of recordFacts) {
+    assert.equal(manifest.hookSet.has(property), true, `${property} lost its public slot`);
+    assert.equal(
+      published.declaredSlots[property].slot,
+      'one record-facts surface scope',
+      `${property} retained the retired EmptyState slot`,
+    );
+  }
+});
+
 test('a promotion pointing at a name the DS never reads is fatal, not silently dropped', () => {
   const root = coreFixture();
   const stale = { ...PROMOTIONS[0], id: 'stale', properties: ['--ds-nothing-reads-this'] };
@@ -884,7 +911,19 @@ test('an installed consumer resolves the contract through the package exports pa
   const appRoot = DEFAULT_APP_ROOT;
   const require = createRequire(join(appRoot, 'noop.js'));
   const resolved = require.resolve('@rottay/design-system/hooks-manifest');
-  assert.equal(resolved, DEFAULT_MANIFEST_PATH, 'resolved somewhere other than the published artifact');
+  assert.match(
+    resolved,
+    /node_modules[\\/]@rottay[\\/]design-system[\\/]hooks-manifest\.json$/u,
+    'the app did not resolve the published package subpath',
+  );
+
+  const appPackage = JSON.parse(readFileSync(join(appRoot, 'package.json'), 'utf8'));
+  const installedPackage = JSON.parse(readFileSync(join(dirname(resolved), 'package.json'), 'utf8'));
+  assert.equal(
+    installedPackage.version,
+    appPackage.dependencies?.['@rottay/design-system'],
+    'the installed contract version differs from the app exact dependency',
+  );
 
   const contract = JSON.parse(readFileSync(resolved, 'utf8'));
   assert.equal(contract.schemaVersion, 4);

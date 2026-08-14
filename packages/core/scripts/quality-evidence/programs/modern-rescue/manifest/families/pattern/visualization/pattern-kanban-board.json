@@ -9,14 +9,14 @@
       "PatternKanbanBoard"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/visualization",
+    "sourceOwner": "packages/core/src/ui/patterns/visualization/kanban-board",
     "publicComponents": [
       "PatternKanbanBoard"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "2fa6b74c528ad9bf605d21a9664edc38bfe1d96f59811d4e27e88f9d53489212"
+    "inventoryRowDigest": "85681a19d1bed7a1753bce1e233f7c54e642675fd0c625389d7455c7f1d9e820"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

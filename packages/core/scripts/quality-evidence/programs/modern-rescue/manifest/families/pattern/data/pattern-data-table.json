@@ -9,14 +9,14 @@
       "PatternDataTable"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/data",
+    "sourceOwner": "packages/core/src/ui/patterns/data/data-table",
     "publicComponents": [
       "PatternDataTable"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "0c449dfcf0ccea665be5267e9342d36e0fbd2da0f1f5a2fcfd0889adbeb2b526"
+    "inventoryRowDigest": "e16e2cdea55b8dfa54e7a42cb28bcdeae17e000d36d698c6f4493e3d232f5872"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -254,6 +254,13 @@
   "retiredThemeControls": [],
   "recipeAnatomy": {
     "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/patterns/data/data-table/contracts/index.ts#DataTableRecipe",
+      "packages/core/src/ui/patterns/data/data-table/contracts/index.ts#DataTablePatternProps",
+      "packages/core/src/ui/patterns/data/data-table/presentation/table/index.tsx",
+      "packages/core/src/ui/patterns/data/data-table/engines/modern/index.tsx",
+      "packages/core/src/ui/patterns/data/data-table/tests/DataTable.recipe-contract.test.tsx"
+    ],
     "groupBindings": [
       {
         "groupId": "data-table-presentation",
@@ -284,6 +291,9 @@
   },
   "instanceApi": {
     "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/patterns/data/data-table/contracts/index.ts#DataTablePatternProps"
+    ],
     "contractSymbol": "DataTablePatternProps<T>",
     "props": [
       "data",
@@ -326,7 +336,7 @@
     "controlledState": [
       "selectedKeys",
       "sorting",
-      "filters",
+      "filterValues",
       "pagination",
       "columnOrder",
       "columnWidths",
@@ -338,9 +348,14 @@
   },
   "hostAdaptation": {
     "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/patterns/data/data-table/presentation/table/index.tsx",
+      "packages/core/src/ui/patterns/data/data-table/presentation/table/mobile-cards/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table.css",
+      "packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/index.tsx"
+    ],
     "contexts": [
       "standalone-page",
-      "embedded-workbench",
       "collection-workspace-owned-posture"
     ],
     "containerRules": [
@@ -359,7 +374,11 @@
       "packages/core/src/ui/patterns/data/data-table/tests/DataTable.pass2-craft-contract.test.ts"
     ],
     "evidenceIds": [],
-    "nextAction": "PRODUCE_BROWSER_COMPUTED_AND_KEYBOARD_EVIDENCE_FOR_PAGE_AND_EMBED_HOSTS"
+    "nextAction": "PRODUCE_BROWSER_COMPUTED_AND_KEYBOARD_EVIDENCE_FOR_PAGE_AND_EMBED_HOSTS",
+    "unprovenClaims": [
+      "containerRules[0]: the ResizeObserver-over-viewport precedence is bound in source but NOT exercised by either sourceTest — the global ResizeObserver test double never invokes its callback, so containerWidth stays null in this suite.",
+      "invariants[0]: host-width resolution is proven for CollectionWorkspaceSurface, not inside this family."
+    ]
   },
   "statesMotion": {
     "assessmentState": "UNKNOWN",
@@ -372,15 +391,23 @@
   },
   "invariants": {
     "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/patterns/data/data-table/presentation/table/index.tsx",
+      "packages/core/src/ui/patterns/data/data-table/contracts/index.ts#DataTableMessages",
+      "packages/core/src/ui/patterns/data/data-table/OWNERSHIP.md",
+      "packages/core/src/ui/patterns/data/data-table/tests/PatternDataTable.responsive.test.tsx"
+    ],
     "entries": [
-      "Recipes never fork the data or interaction model.",
       "Responsive mode changes the renderer without duplicating controlled state.",
       "Custom cards receive canonical behavior context.",
-      "Apps own content and i18n; the DS owns anatomy, semantics and interaction mechanics.",
-      "Theme tokens paint stable parts but never select table versus cards or add actions."
+      "Apps own content and i18n; the DS owns anatomy, semantics and interaction mechanics."
     ],
     "evidenceIds": [],
-    "nextAction": "BIND_INVARIANTS_TO_FOCAL_TESTS_NEGATIVE_CONTROLS_AND_SIGHTED_RECEIPTS"
+    "nextAction": "BIND_INVARIANTS_TO_FOCAL_TESTS_NEGATIVE_CONTROLS_AND_SIGHTED_RECEIPTS",
+    "unprovenClaims": [
+      "Recipes never fork the data or interaction model. [no source or test grounding found; renderer selection is pure TS, but no quotable authority states the rule]",
+      "Theme tokens paint stable parts but never select table versus cards or add actions. [no source or test grounding found; renderer selection is pure TS, but no quotable authority states the rule]"
+    ]
   },
   "premiumCandidates": [
     {

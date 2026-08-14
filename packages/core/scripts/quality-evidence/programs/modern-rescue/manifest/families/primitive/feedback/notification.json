@@ -6,17 +6,23 @@
     "category": "feedback",
     "name": "Notification",
     "components": [
-      "Notification"
+      "NotificationProvider",
+      "NotificationItem",
+      "useNotification",
+      "notification"
     ],
     "sourceRoot": "packages/core/src/ui/primitives",
     "sourceOwner": "packages/core/src/ui/primitives/feedback/Notification",
-    "publicComponents": [],
-    "unresolvedPublicComponents": [
-      "Notification"
+    "publicComponents": [
+      "NotificationProvider",
+      "NotificationItem",
+      "useNotification",
+      "notification"
     ],
+    "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "994d7802104a21816a8422f893e119dd5fc796e0974c313e79f9054a1b7d481b"
+    "inventoryRowDigest": "b72c68e33442d022fbfa4a787862a78c4621e85e5a15263d1c36b8d754bf322e"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

@@ -25,12 +25,25 @@
  *   - can render its own direction scope element (`directionScope="element"`)
  *     for the cases `<html>` cannot serve: a design system mounted inside a
  *     shell it does not control, or a locale ISLAND whose direction differs
- *     from the document's;
- *   - keeps syncing `documentElement` so a client-side locale switch, and an
- *     application that has not wired its `<html>` yet, still converge.
+ *     from the document's. In that mode the wrapper is the SOLE publication
+ *     and `<html>` is left entirely alone -- writing it would hand the island's
+ *     direction to the document the island is embedded in;
+ *   - in the default `none` mode, CLAIMS `documentElement`'s `lang`/`dir` so a
+ *     client-side locale switch, and an application that has not wired its
+ *     `<html>` yet, still converge. A claim rather than a write, because the
+ *     pair is the application's: cleanup hands back the exact predecessor
+ *     instead of deleting a value this provider never created.
  */
 
-import { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useCallback,
+} from 'react';
 import type {
   SupportedLocale,
   I18nContextValue,
@@ -51,7 +64,20 @@ import {
   resolveTranslationOr,
 } from '@/foundation/i18n/runtime/resolution';
 import { warnOnceInDev } from '@/infrastructure/runtime/foundation/diagnostics/development-logging';
+import {
+  claimRootAttribute,
+  composeRootAttributeReleases,
+} from '@/infrastructure/runtime/foundation/root-attributes/registry';
 import type { I18nProviderProps } from '@/infrastructure/runtime/i18n/kernel/contracts';
+
+/**
+ * The root claim is a COMMIT-phase decision, so it runs before the browser
+ * paints rather than after it. On the server there is no layout phase and no
+ * document to claim, so the effect degrades to `useEffect` (which also never
+ * runs during `renderToString`).
+ */
+const useIsomorphicLayoutEffect =
+  typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 /** React context carrying the current locale, config, direction, and translate functions. */
 const I18nContext = createContext<I18nContextValue | undefined>(undefined);
@@ -157,15 +183,46 @@ export function I18nProvider({
   // Obtener configuración del locale actual
   const config: LocaleConfig = useMemo(() => LOCALE_CONFIGS[locale], [locale]);
 
-  // Converge the HTML element with the active locale. With the application's
-  // server layout already emitting the same pair, this is a no-op on first
-  // paint and only does real work on a client-side locale switch.
-  useEffect(() => {
-    if (typeof document !== 'undefined') {
-      document.documentElement.lang = config.code;
-      document.documentElement.dir = config.direction;
-    }
-  }, [config]);
+  // OWNERSHIP, not assignment -- and only in the mode that owns the document.
+  //
+  // `directionScope="element"` exists for a document this provider does NOT
+  // control, and for a locale ISLAND whose direction differs from the
+  // surrounding document. In both cases `<html>` belongs to someone else, and
+  // in the island case writing it would publish the island's direction over
+  // the document containing it, inverting the feature rather than merely
+  // overreaching. So that mode returns here and the scope element below is the
+  // sole DOM publication. The wrapper needs no claim of its own: React owns
+  // that node outright and creates and destroys it with this component, so
+  // there is no predecessor to preserve.
+  //
+  // In `none` mode `<html>` is the APPLICATION's, stamped by its server layout
+  // from the same `resolveDocumentLocaleAttributes` resolver `config` derives
+  // from. The provider therefore CLAIMS the two channels instead of writing
+  // them: a claim captures the predecessor, and its release hands that exact
+  // predecessor back -- including the difference between absent and
+  // present-but-empty, which a bare write could never restore. Claiming a
+  // value the channel already carries writes nothing, so hydration over a
+  // matching SSR stamp stays the no-op it has always been and only a
+  // client-side locale switch does real work. On a switch, cleanup releases
+  // the prior pair before the next claim installs the new one, so exactly one
+  // owner is live per channel; on unmount both predecessors return. An
+  // external writer that takes a channel over while the claim is live keeps
+  // it: the registry sees it is no longer the owner and declines to restore,
+  // which is the contract rather than a leak.
+  //
+  // The dependencies are the two published VALUES plus the mode, not the
+  // `config` object: those are what the claims carry, and a mode flip must
+  // release the root pair rather than strand it.
+  useIsomorphicLayoutEffect(() => {
+    if (directionScope === 'element') return;
+    if (typeof document === 'undefined') return;
+
+    const root = document.documentElement;
+    return composeRootAttributeReleases([
+      claimRootAttribute(root, 'lang', config.code),
+      claimRootAttribute(root, 'dir', config.direction),
+    ]);
+  }, [config.code, config.direction, directionScope]);
 
   // Valor del contexto
   const value: I18nContextValue = useMemo(

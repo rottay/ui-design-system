@@ -7,12 +7,15 @@ import {
   type VerifiedEffectProvenance,
 } from '../../../../../foundation/contracts/runtime/effects';
 import { isEffectDefinition } from '../../foundation/validation';
+import { FIRST_PARTY_VERTICAL_SLUGS } from '../../../../../foundation/tokens/ts/presentation/brand-themes';
 
 const CANONICAL_EFFECT_AUDIT =
   'docs-engineering/engineering/audits/ds-improvements/12-data-visualization-spatial-and-expressive-system.md';
 const OWNER_CONTINUATION = 'roadmap/craft.md#owner-continuation--efx-01a-effect-registry';
 
-const ALL_VERTICALS = ['platform', 'evnto', 'bithire'] as const;
+// Derived from the roster so "every vertical" cannot mean a different set here
+// than it does in the validator two modules away.
+const ALL_VERTICALS = FIRST_PARTY_VERTICAL_SLUGS;
 const ALL_ENGINES = ['classic', 'modern', 'rustic'] as const;
 const UNMEASURED_BUDGET = {
   status: 'unmeasured',

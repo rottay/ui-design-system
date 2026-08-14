@@ -29,7 +29,7 @@ import {
 } from '@/infrastructure/compilers/composition/tenant-theme';
 import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/bithire';
 import { evntoBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/evnto';
-import { rottayBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/platform';
+import { rottayBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/rottay';
 import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
 
 import {

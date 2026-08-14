@@ -15,7 +15,6 @@ html[data-tenant='rottay']:not([data-theme='light']):not(.light) {
   /* -- Primary - White/light scale for dark mode -- */
   --ds-color-primary-hover: #E0E0E0;
   --ds-color-primary-subtle: rgba(255, 255, 255, 0.08);
-  --ds-color-primary-foreground: #0C0C0E;
   --ds-color-primary-rgb: 255, 255, 255;
 
   /* -- Secondary - Neutral gray for dark ---------- */
@@ -53,7 +52,10 @@ html[data-tenant='rottay']:not([data-theme='light']):not(.light) {
   --ds-color-alpha-info-20: rgba(59, 130, 246, 0.18);
 
   /* -- Backgrounds - Tight dark hierarchy (Vercel/Linear) ------- */
-  --ds-color-bg-primary: #0A0A0C;
+  /* The compiler owns the #0C0C0E page ground from palette.backgroundColor,
+     emitting --ds-color-bg-primary, --ds-color-bg and --ds-color-background.
+     The stale #0A0A0C extension override is removed.
+     SIGHTED: --ds-color-bg-primary lifts #0A0A0C -> #0C0C0E. */
   --ds-color-bg-subtle: #0D0D10;
   --ds-color-bg-hover: #18181C;
   --ds-color-bg-canvas: #0A0A0C;
@@ -61,8 +63,6 @@ html[data-tenant='rottay']:not([data-theme='light']):not(.light) {
   --ds-color-bg-info: rgba(59, 130, 246, 0.10);
   --ds-color-bg-overlay: rgba(0, 0, 0, 0.64);
   --ds-color-bg-surface: #18181B;
-  --ds-color-bg: #0C0C0E;
-  --ds-color-background: #0C0C0E;
 
   /* -- Text - Light text on dark surfaces --------- */
   --ds-color-text-primary: #F0F0F0;
@@ -82,18 +82,12 @@ html[data-tenant='rottay']:not([data-theme='light']):not(.light) {
   --ds-color-border-secondary: #252529;
   --ds-color-border-subtle: #161619;
   --ds-color-border-tertiary: #161619;
-  --ds-color-border-focus: rgba(255, 255, 255, 0.20);
 
   /* -- Surfaces --------------------------------- */
   --ds-color-surface: #18181B;
   --ds-color-surface-secondary: #1A1A1E;
   --ds-color-surface-muted: #222226;
   --ds-color-shadow: rgba(0, 0, 0, 0.40);
-
-  /* -- Links ------------------------------------ */
-  --ds-color-link: #ECECEC;
-  --ds-color-link-hover: #FFFFFF;
-  --ds-color-link-visited: #A0A0A5;
 
   /* Success - Green */
   --ds-color-success-bg: rgba(34, 197, 94, 0.10);

@@ -192,6 +192,105 @@ describe('claimRootStyleProperty', () => {
     b();
     expect(root.style.getPropertyValue('color-scheme')).toBe('light');
   });
+
+  // ── CSSOM empty-declaration hazard ────────────────────────────────
+  //
+  // THE DEFECT THESE PIN. `setProperty(prop, '')` is specified to behave as
+  // `removeProperty(prop)`. A claim of `''` therefore deleted the declaration
+  // underneath it, the read-back came back ABSENT so the claim's stored value
+  // no longer matched the channel, and `release` classified its own damage as
+  // an external takeover and returned WITHOUT restoring the baseline. The SSR
+  // stamp was gone for the lifetime of the document. Each drill below produced
+  // exactly that outcome before the fix.
+
+  it('DRILL: an empty declaration is refused before it can delete a baseline', () => {
+    root.style.setProperty('--ds-color-primary', '#123456');
+
+    expect(() => claimRootStyleProperty(root, '--ds-color-primary', '')).toThrow(
+      /refuses the empty declaration/,
+    );
+
+    // Refused BEFORE mutating: the baseline is untouched, not restored after
+    // the fact.
+    expect(root.style.getPropertyValue('--ds-color-primary')).toBe('#123456');
+  });
+
+  it('DRILL: a whitespace-only declaration is refused the same way', () => {
+    // CSSOM trims, so "   " is an empty declaration wearing a disguise.
+    root.style.setProperty('--ds-color-primary', '#123456');
+
+    expect(() => claimRootStyleProperty(root, '--ds-color-primary', '   ')).toThrow(
+      /refuses the empty declaration/,
+    );
+    expect(root.style.getPropertyValue('--ds-color-primary')).toBe('#123456');
+  });
+
+  it('DRILL: a bare priority with no value is refused', () => {
+    // " !important" parses to an EMPTY value at important priority -- still a
+    // removal, and the string-suffix check that predated the explicit
+    // value+priority split waved it through.
+    root.style.setProperty('--ds-color-primary', '#123456');
+
+    expect(() => claimRootStyleProperty(root, '--ds-color-primary', ' !important')).toThrow(
+      /refuses the empty declaration/,
+    );
+    expect(root.style.getPropertyValue('--ds-color-primary')).toBe('#123456');
+  });
+
+  it('DRILL: a refused claim leaves no stack entry behind', () => {
+    // The rejection must not half-build a claim: a leftover record would make
+    // a LATER release hand the channel down to a value it never held.
+    root.style.setProperty('--ds-color-primary', '#123456');
+
+    expect(() => claimRootStyleProperty(root, '--ds-color-primary', '')).toThrow();
+    expect(outstandingRootClaims(root)).toBe(0);
+
+    const release = claimRootStyleProperty(root, '--ds-color-primary', '#abcdef');
+    expect(root.style.getPropertyValue('--ds-color-primary')).toBe('#abcdef');
+    release();
+    expect(root.style.getPropertyValue('--ds-color-primary')).toBe('#123456');
+  });
+
+  it('DRILL: an empty claim cannot strand the claim underneath it', () => {
+    // Two-deep: the outer claim used to delete the inner claim's value AND
+    // skip the hand-back, so releasing the outer left the channel absent
+    // while the inner claim was still mounted.
+    root.style.setProperty('--ds-color-primary', '#123456');
+    const inner = claimRootStyleProperty(root, '--ds-color-primary', '#aaaaaa');
+
+    expect(() => claimRootStyleProperty(root, '--ds-color-primary', '')).toThrow();
+
+    expect(root.style.getPropertyValue('--ds-color-primary')).toBe('#aaaaaa');
+    inner();
+    expect(root.style.getPropertyValue('--ds-color-primary')).toBe('#123456');
+  });
+
+  it('carries priority as CSSOM value+priority, not as replayed bytes', () => {
+    // A baseline that dropped `!important` is not the declaration it was
+    // handed: inline `!important` outranks everything, so losing it on
+    // restore silently changes the cascade.
+    root.style.setProperty('--ds-color-primary', '#123456', 'important');
+
+    const release = claimRootStyleProperty(root, '--ds-color-primary', '#abcdef');
+    expect(root.style.getPropertyValue('--ds-color-primary')).toBe('#abcdef');
+    expect(root.style.getPropertyPriority('--ds-color-primary')).toBe('');
+
+    release();
+    expect(root.style.getPropertyValue('--ds-color-primary')).toBe('#123456');
+    expect(root.style.getPropertyPriority('--ds-color-primary')).toBe('important');
+  });
+
+  it('claims a declaration that is itself important, and hands the priority back', () => {
+    root.style.setProperty('--ds-color-primary', '#123456');
+
+    const release = claimRootStyleProperty(root, '--ds-color-primary', '#abcdef !important');
+    expect(root.style.getPropertyValue('--ds-color-primary')).toBe('#abcdef');
+    expect(root.style.getPropertyPriority('--ds-color-primary')).toBe('important');
+
+    release();
+    expect(root.style.getPropertyValue('--ds-color-primary')).toBe('#123456');
+    expect(root.style.getPropertyPriority('--ds-color-primary')).toBe('');
+  });
 });
 
 describe('claimRootClass', () => {

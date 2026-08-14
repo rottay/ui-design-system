@@ -101,7 +101,7 @@ const ROOT_ONLY_EXPOSURE: Record<string, string[]> = {
     '--ds-radius-sm',
     '--ds-radius-md',
   ],
-  platform: [
+  rottay: [
     '--ds-color-bg-primary',
     '--ds-color-border',
     '--ds-color-text-primary',

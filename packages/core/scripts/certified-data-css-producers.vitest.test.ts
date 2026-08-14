@@ -6,8 +6,19 @@ import ts from 'typescript';
 import { describe, expect, it } from 'vitest';
 import { generateResponsiveGridCSS } from '../src/ui/primitives/layout/Grid/runtime/responsive';
 import { generateResponsiveCSS } from '../src/infrastructure/runtime/responsive/runtime/style-properties';
-import type { TenantConfig } from '../src/foundation/contracts';
-import { generateTenantCss } from '../src/infrastructure/compilers/runtime/tenant-css/visual-config';
+import {
+  FIRST_PARTY_ARTIFACT_SPECS,
+  renderFirstPartyArtifact,
+} from '../src/infrastructure/compilers/runtime/tenant-css';
+import { bithireBrandTheme } from '../src/foundation/tokens/ts/presentation/brand-themes';
+import {
+  compileTenantThemeConfig,
+  hydrateTenantThemeConfig,
+} from '../src/infrastructure/compilers/composition/tenant-theme';
+import type {
+  TenantThemeConfigIdentity,
+  TenantThemeDocument,
+} from '../src/foundation/contracts/composition/tenants/themes/tenant-theme';
 import { isEmbeddedCssPaintProperty } from './lib/embedded-css-paint-counter.mjs';
 import { collectSourceFiles } from './runtime-svg-paint-census.mjs';
 
@@ -88,23 +99,75 @@ describe('embedded CSS certified data producers', () => {
     expect(emitted.every((property) => !isEmbeddedCssPaintProperty(property))).toBe(true);
   });
 
-  it('executes the tenant generator and proves every output declaration is a custom property', () => {
-    const tenant: TenantConfig = {
+  it('executes the first-party static compiler and proves its generated block is custom-property-only', () => {
+    // FIRST-PARTY STATIC producer: compileBrandTheme -> renderFirstPartyArtifact.
+    // `compiled.cssVariables` / `compiled.modeBlocks[].cssVariables` are the
+    // GENERATED portion of the artifact -- the certified data channel. The
+    // hand-authored `_source/extension.css` merged into `.css` alongside it
+    // is real component/paint source, not generated data, and is deliberately
+    // excluded from this assertion (see the module header above).
+    const spec = FIRST_PARTY_ARTIFACT_SPECS.find((entry) => entry.slug === 'bithire');
+    if (!spec) throw new Error('no first-party artifact spec for slug "bithire"');
+    const extensionCss = readFileSync(
+      resolve(
+        dirname(fileURLToPath(import.meta.url)),
+        `../src/foundation/tokens/css/facade/artifacts/${spec.slug}/_source/extension.css`,
+      ),
+      'utf8',
+    );
+    const { compiled } = renderFirstPartyArtifact({ spec, brandTheme: bithireBrandTheme, extensionCss });
+
+    const generatedBlocks = [
+      compiled.cssVariables,
+      ...(compiled.modeBlocks ?? []).map((block) => block.cssVariables),
+    ];
+    expect(generatedBlocks.length).toBeGreaterThan(0);
+    for (const variables of generatedBlocks) {
+      const declared = Object.keys(variables);
+      expect(declared.length).toBeGreaterThan(0);
+      expect(declared.every((property) => property.startsWith('--'))).toBe(true);
+      expect(declared.every((property) => !isEmbeddedCssPaintProperty(property))).toBe(true);
+    }
+  });
+
+  it('executes the tenant/DB compiler and proves every artifact declaration is a custom property', () => {
+    // TENANT/DB producer: TenantThemeDocument -> compileTenantThemeConfig.
+    // `artifact.css` is rendered solely from `artifact.variables` (see
+    // renderArtifactCss in composition/tenant-theme), so -- unlike the
+    // first-party artifact above -- the whole rendered block is generated
+    // data with no hand-authored extension merged in.
+    const identity: TenantThemeConfigIdentity = {
+      tenantId: 'embedded-css-contract',
       slug: 'embedded-css-contract',
-      name: 'Embedded CSS Contract',
-      engine: 'modern',
-      theme: 'base',
-      locale: 'en',
-      fallbackLocale: 'en',
-      plan: 'enterprise',
-      features: [],
-      branding: {
-        companyName: 'Embedded CSS Contract',
-        primaryColor: '#336699',
+      verticalKey: 'bithire',
+      rowVersion: 1,
+    };
+    const document: TenantThemeDocument = {
+      schemaVersion: 1,
+      mode: 'simple',
+      appearance: {
+        palette: { primary: '#336699', secondary: '#336699', accent: '#336699' },
+        typography: {
+          fontFamilyBase: "Optima, Candara, 'Noto Sans', sans-serif",
+          fontFamilyHeading: "'Fraunces', Georgia, 'Times New Roman', serif",
+        },
+        density: 'normal',
+        motion: { intensity: 0.62, durationScale: 1.15, ambient: 'subtle' },
+        shape: { buttonStyle: 'soft' },
+        surfaces: { elevation: 'elevated' },
+        navigation: { sidebarTone: 'subtle' },
       },
     };
-    const emitted = declarationProperties(generateTenantCss(tenant));
-    expect(emitted.length).toBeGreaterThan(100);
+    const artifact = compileTenantThemeConfig(hydrateTenantThemeConfig(document, identity));
+    const emitted = declarationProperties(artifact.css);
+    // A "simple" mode document compiles a much smaller variable set than the
+    // retired generator's full tenant CSS (that produced 100+ declarations
+    // from a TenantConfig covering every channel). 20 mirrors the floor an
+    // equivalent simple-mode fixture already asserts elsewhere (see
+    // "emits variables in deterministic UTF-16 code-unit order" in
+    // composition/tenant-theme/tests/tenant-theme-artifact-stability.test.ts);
+    // this is a non-vacuity floor, not a product-shape pin.
+    expect(emitted.length).toBeGreaterThan(20);
     expect(emitted.every((property) => property.startsWith('--'))).toBe(true);
     expect(emitted.every((property) => !isEmbeddedCssPaintProperty(property))).toBe(true);
   });

@@ -8,7 +8,6 @@ import {
   Box,
   Button,
   Card,
-  DesignSystemProvider,
   Empty,
   Input,
   Menu,
@@ -28,12 +27,10 @@ import {
   Text,
   Tooltip,
   WidgetBoard,
-  bithireBrandTheme,
   type ColumnDef,
   type DensityKey,
   type FilterPillConfig,
   type ListToolbarProps,
-  type TenantConfig,
   type ViewMode,
   type WidgetBoardItem,
   type WidgetBoardLabels,
@@ -41,88 +38,57 @@ import {
 import { Icon } from "@rottay/design-system/icons";
 
 import {
-  tenantConfigFor as brandLocaleTenantConfigFor,
-  seedsOnlyTenantConfig,
-} from "@/components/brand-locale-evidence";
+  ShowroomTenantProvider,
+  showroomTenantGround,
+  type ShowroomDensityPosture,
+  type ShowroomTenantLocale,
+  type ShowroomTenantSource,
+  type ShowroomTenantTheme,
+} from "@/components/showroom-tenant";
 
 /**
  * R2 white-label canary (2026-07-27).
  *
  * ONE Candidates-style composition of the six premium-elevated Modern
  * families (shell/headers, tabs/buttons/pills, inputs/tables, cards/states,
- * overlays, widget-board) rendered as the SAME tree under two tenants:
- *  - `?source=bithire-static`   → BitHire static BrandTheme (DS file-first);
- *  - `?source=themanagement-db` → The Management DB fixture (teal #1F6F6B,
- *    sandstone, terracotta, Fraunces editorial, sharp radius 0.8, spacious,
- *    elevated, sidebarTone inverse) via brand-locale-evidence.
+ * overlays, widget-board) rendered as the SAME tree under three tenants:
+ *  - `?source=bithire-static`     → BitHire's bundled BrandTheme (file-first);
+ *  - `?source=themanagement-db`   → The Management's published DB document,
+ *    authoring the full visual foundation (teal, sandstone, terracotta,
+ *    editorial pairing, radius 0.8, spacious, elevated, strong sidebar tone);
+ *  - `?source=themanagement-seeds`→ the SAME customer authoring four colours
+ *    and nothing else, so everything else on screen is demonstrably derived.
+ *
+ * Every arm mounts through `ShowroomTenantProvider`, which is the fleet's one
+ * legal ground: the bundled vertical is the registry's own object UNSPREAD,
+ * and both DB arms are validated, hydrated, compiled artifacts whose `<style>`
+ * mounts outside the provider under a `compiled-artifact` declaration. This
+ * probe therefore authors NO tenant config and spreads none — the previous
+ * form did both, and both are silently blocking (a refused visual authority
+ * renders `<LoadingScreen />`, which photographs as a slow load).
  *
  * Axes: ?locale=en|es|ar (ar ⇒ dir="rtl"), ?density=compact|comfortable|
- * spacious, ?theme=light|dark (dark via appearance.general.backgroundMode).
+ * spacious, ?theme=light|dark, ?seedPrimary=#RRGGBB (seeds arm only). Each one
+ * travels as a governed provider prop, never as a config spread.
  * Overlays are opt-in for captures: &modal=1 / &sheet=1 (they portal above
  * everything by design, same convention as the daisy-regression probe).
  *
- * Tenant wiring mirrors the daisy-regression probe verbatim. All chrome copy
- * rides DS props (components i18nize their own chrome); section labels go
- * through a local en/es/ar dictionary so AR/RTL is real. Candidate fixture
- * names stay English on every locale per probe convention — no fixture value
- * here is product content.
+ * All chrome copy rides DS props (components i18nize their own chrome);
+ * section labels go through a local en/es/ar dictionary so AR/RTL is real.
+ * Candidate fixture names stay English on every locale per probe convention —
+ * no fixture value here is product content.
  *
  * Inline styles are LAYOUT ONLY (grid/flex/gap/padding). Zero paint: colors,
  * borders and shadows come from the components. No Daisy classes, no new CSS.
  */
 
-type Source = "bithire-static" | "themanagement-db" | "themanagement-seeds";
-type Locale = "en" | "es" | "ar";
-type Density = "compact" | "comfortable" | "spacious";
-type Theme = "light" | "dark";
-
-function tenantConfig(
-  source: Source,
-  locale: Locale,
-  density: Density,
-  theme: Theme,
-  seedPrimary?: string,
-) {
-  const appearanceDensity = density === "comfortable" ? ("normal" as const) : density;
-  if (source === "themanagement-seeds") {
-    // Deliberately NOT spread with density/theme: authoring anything beyond the
-    // four seeds would break the very property this source exists to prove.
-    return seedsOnlyTenantConfig(locale, seedPrimary);
-  }
-  if (source === "themanagement-db") {
-    // Same wiring as the daisy-regression probe: DB fixture tenant, dark via Appearance.
-    const base = brandLocaleTenantConfigFor("themanagementmiami", locale);
-    return {
-      ...base,
-      theme,
-      appearance: {
-        ...base.appearance,
-        general: {
-          ...base.appearance?.general,
-          density: appearanceDensity,
-          ...(theme === "dark" ? { backgroundMode: "dark" as const } : {}),
-        },
-      },
-    };
-  }
-  return {
-    slug: "bithire",
-    name: "BitHire",
-    vertical: "bithire",
-    engine: "modern" as const,
-    theme,
-    plan: "enterprise" as const,
-    features: ["*"],
-    branding: { companyName: "BitHire" },
-    brandTheme: bithireBrandTheme,
-    appearance: {
-      general: {
-        density: appearanceDensity,
-        ...(theme === "dark" ? { backgroundMode: "dark" as const } : {}),
-      },
-    },
-  };
-}
+// The probe's axes ARE the ground's governed vocabulary, aliased rather than
+// re-declared: a locally-widened union would let this route ask for a posture
+// the provider cannot honour and fail as a visual, not as a type error.
+type Source = ShowroomTenantSource;
+type Locale = ShowroomTenantLocale;
+type Density = ShowroomDensityPosture;
+type Theme = ShowroomTenantTheme;
 
 // ---------------------------------------------------------------------------
 // Localized copy (section labels only; fixture content stays English)
@@ -845,7 +811,7 @@ function StatesSection({ copy }: { copy: CanaryCopy }) {
 // Page
 // ---------------------------------------------------------------------------
 
-/** The only two mountable sources. Anything else is a hard failure. */
+/** The only mountable sources. Anything else is a hard failure. */
 const SOURCES: readonly Source[] = ["bithire-static", "themanagement-db", "themanagement-seeds"];
 
 /**
@@ -887,12 +853,16 @@ function ProbeContent() {
   const sheetInitiallyOpen = searchParams.get("sheet") === "1";
 
   const seedPrimary = searchParams.get("seedPrimary") ?? undefined;
-  const config = useMemo(
-    () => tenantConfig(source, locale, density, theme, seedPrimary),
-    [source, locale, density, theme, seedPrimary],
+  // The ground the provider is about to mount, resolved here so the identity
+  // guard below reads the tenant that will ACTUALLY render. It is the same
+  // cached object the provider resolves, not a second construction of it.
+  const ground = useMemo(
+    () => showroomTenantGround(source, { density, theme, seedPrimary }),
+    [source, density, theme, seedPrimary],
   );
   const copy = COPY[locale];
   const appearanceDensity: DensityKey = density;
+  const mountedSlug = ground.tenantConfig.slug;
 
   if (!sourceIsValid) return <ProbeFailure requested={requestedSource ?? ""} />;
 
@@ -904,15 +874,15 @@ function ProbeContent() {
       : source === "themanagement-seeds"
         ? "themanagementseeds"
         : "bithire";
-  if (config.slug !== expectedSlug) return <ProbeFailure requested={`${source} -> resolved '${config.slug}'`} />;
+  if (mountedSlug !== expectedSlug) return <ProbeFailure requested={`${source} -> resolved '${mountedSlug}'`} />;
 
   return (
-    <DesignSystemProvider
-      tenantConfig={{ ...config, locale } as TenantConfig}
-      vertical="bithire"
+    <ShowroomTenantProvider
+      source={source}
       locale={locale}
-      forceEngine="modern"
-      forceTheme={theme}
+      density={density}
+      theme={theme}
+      seedPrimary={seedPrimary}
     >
       <Box
         data-testid="wc-root"
@@ -921,7 +891,7 @@ function ProbeContent() {
         // never the query string it asked for. Comparing the two is what makes
         // a silent tenant substitution detectable from the DOM alone.
         data-canary-source={source}
-        data-canary-tenant={config.slug}
+        data-canary-tenant={mountedSlug}
         data-canary-engine="modern"
         data-canary-locale={locale}
         dir={locale === "ar" ? "rtl" : "ltr"}
@@ -964,7 +934,7 @@ function ProbeContent() {
           </Box>
         </Box>
       </Box>
-    </DesignSystemProvider>
+    </ShowroomTenantProvider>
   );
 }
 

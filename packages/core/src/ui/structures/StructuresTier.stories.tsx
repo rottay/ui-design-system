@@ -17,7 +17,7 @@ const FAMILIES = [
   { name: 'EditHeader', folder: 'headers/edit', desc: 'Header for entity edit pages' },
   { name: 'FormHeader', folder: 'headers/form', desc: 'Header for create-form pages' },
   // workspace/
-  { name: 'SearchCommandBar', folder: 'workspace/connected-command-palette/search-command-bar', desc: 'Command/search bar with voice + suggestions' },
+  { name: 'SearchCommandBar', folder: 'workspace/search-command-bar', desc: 'Command/search bar with voice + suggestions' },
   { name: 'ActiveFiltersBar', folder: 'workspace/active-filters-bar', desc: 'Horizontal active-filter chip strip' },
   { name: 'FieldFiltersPanel', folder: 'workspace/field-filters-panel', desc: 'Filter card grid with presets' },
   { name: 'ColumnMenu', folder: 'workspace/column-menu', desc: 'Column visibility/order panel' },
@@ -26,7 +26,11 @@ const FAMILIES = [
   { name: 'ScopeSwitcher', folder: 'workspace/scope-switcher', desc: 'Horizontal scope pill strip' },
   { name: 'TableToolbar', folder: 'workspace/table-toolbar', desc: 'One-row slot-driven toolbar' },
   // record/
-  { name: 'Record building blocks', folder: 'record/content', desc: 'SummaryStrip, FieldGrid, Field, ActionBar, Panel' },
+  { name: 'RecordSummaryStrip', folder: 'record/summary-strip', desc: 'Label/value summary card, 5 variants' },
+  { name: 'RecordFieldGrid', folder: 'record/field-grid', desc: 'Auto-fit grid wrapper for read fields' },
+  { name: 'RecordField', folder: 'record/field', desc: 'Read-only field card with copy/link/error' },
+  { name: 'RecordActionBar', folder: 'record/action-bar', desc: 'Action rail with meta slot' },
+  { name: 'RecordPanel', folder: 'record/panel', desc: 'Generic grouping container' },
   { name: 'FormSections / FormFactsCard', folder: 'record/form-sections', desc: 'Accordion form sections with tone variants' },
   // dashboard/
   { name: 'Metrics/Activity variants', folder: 'dashboard/insights', desc: '8 insight widget variants + useVariant' },

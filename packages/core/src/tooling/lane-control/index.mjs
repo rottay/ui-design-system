@@ -27,7 +27,7 @@
  */
 export * from './foundation/glob/index.mjs';
 export * from './foundation/git/index.mjs';
-export * from './runtime/ledger/index.mjs';
+export * from './runtime/ownership-rows/index.mjs';
 export * from './composition/plan/index.mjs';
 export * from './foundation/report/index.mjs';
 export * from './runtime/shared-files/index.mjs';

@@ -1,19 +1,24 @@
 'use client';
 
 /**
- * @fileoverview Link -- styled anchor element with semantic color types, external
+ * @fileoverview NavLink -- styled anchor element with semantic color types, external
  * link handling (auto target="_blank"), underline control, and disabled state.
+ *
+ * @remarks
+ * Published as `NavLink`. `Typography.Link` is a separate compound owned by
+ * the Typography primitive (`primitives/display/Typography/compound/Link`);
+ * this module must never declare or export a competing `Link`.
  *
  * @example
  * ```tsx
- * import { Link } from '@rottay/design-system';
+ * import { NavLink } from '@rottay/design-system';
  *
- * <Link href="/docs" type="primary">Documentation</Link>
- * <Link href="https://github.com" external>GitHub</Link>
- * <Link href="/restricted" disabled>Locked</Link>
+ * <NavLink href="/docs" type="primary">Documentation</NavLink>
+ * <NavLink href="https://github.com" external>GitHub</NavLink>
+ * <NavLink href="/restricted" disabled>Locked</NavLink>
  * ```
  *
- * @module Link
+ * @module NavLink
  * @category Navigation
  */
 
@@ -24,7 +29,7 @@ export type { LinkProps, LinkType } from './contracts';
 export { LINK_DEFAULTS, LINK_TYPE_COLORS } from './contracts';
 
 /** Styled anchor primitive resolved through the active engine. */
-export const Link = createEngineComponent<LinkProps>('Link', {
+export const NavLink = createEngineComponent<LinkProps>('NavLink', {
   /** Ant Design implementation - uses Typography.Link with full Ant styling */
   classic: () => import('./engines/classic'),
   /** DaisyUI/Tailwind implementation - utility-first with DaisyUI link classes */

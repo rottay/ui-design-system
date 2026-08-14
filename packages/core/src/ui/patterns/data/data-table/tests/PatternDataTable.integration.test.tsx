@@ -24,12 +24,6 @@ const TEST_TENANT_CONFIG: TenantConfig = {
   features: ['testing'],
   branding: {
     companyName: 'Pattern Test Tenant',
-    primaryColor: '#2563eb',
-    darkPrimaryColor: '#60a5fa',
-    secondaryColor: '#0f766e',
-    darkSecondaryColor: '#5eead4',
-    accentColor: '#7c3aed',
-    darkAccentColor: '#c4b5fd',
   },
 };
 

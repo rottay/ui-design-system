@@ -28,7 +28,7 @@ export interface StatusFilterPillOption {
 
 /**
  * Backwards-compatible alias for the original `FilterPill` type name from
- * the app-platform extraction. New consumers should prefer the explicit
+ * the Rottay-app extraction. New consumers should prefer the explicit
  * `StatusFilterPillOption` name.
  */
 export type FilterPill = StatusFilterPillOption;

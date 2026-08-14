@@ -49,10 +49,9 @@
   ],
   "_derivedFactsNote": "PINNED facts only. head.*, tree.dirty, universe.files and plan.coveredFiles are PROVENANCE — they move with ordinary work, so the writer refuses to pin them and reports them live instead. Listing one here is a P9 violation, which is the guard that stops --check becoming unsatisfiable again.",
   "derivedFacts": [
-    "ledger.families",
-    "ledger.syntheticRows",
-    "ledger.sharedSkinFiles",
-    "ledger.driftClean",
+    "inventory.families",
+    "manifest.controlFamilyCells",
+    "ownership.syntheticRows",
     "singleOwner.entries",
     "adjudication.accepted",
     "adjudication.assessedNotElevated",
@@ -62,7 +61,7 @@
   "allowedLiterals": [
     {
       "value": "11",
-      "reason": "The 11 in \"waves 3–11\" is a wave number, not a count. It collides with the commercial layer's family count only by coincidence, and the writer is right to have stopped on it until somebody said so."
+      "reason": "The 11 in \"waves 3–11\" is a wave number, not a count. It collided with a per-layer family count when this exception was written; that layer has since been retired, and the exception is kept rather than deleted because the collision is a coincidence that will recur as the catalog moves. The writer is right to stop on it until somebody says so."
     }
   ]
 }

@@ -34,8 +34,19 @@ const CAPTURE_BRAND_THEME: BrandTheme = {
     warningColor: '#d97706',
     errorColor: '#dc2626',
     infoColor: '#2563eb',
-    darkPrimaryColor: '#818cf8',
-    darkBackgroundColor: '#0b1020',
+  },
+  // Same shape as the theme-builder draft this capture route mirrors: the
+  // dark ground is a typed `modes.dark` overlay, not `dark`-prefixed palette
+  // twins. Keeping the two drafts identical matters here specifically --
+  // this route exists to photograph the studio, so a divergence between them
+  // would be a divergence between the capture and the page it stands in for.
+  modes: {
+    dark: {
+      palette: {
+        primaryColor: '#818cf8',
+        backgroundColor: '#0b1020',
+      },
+    },
   },
   typography: {
     fontFamilyBase: 'Inter, system-ui, sans-serif',

@@ -154,20 +154,23 @@ const CATEGORY_PREVIEW_COPY: Record<
   },
 };
 
+// A map rather than a ternary chain, because a chain has to end in a bare
+// `else`: overlay was that fallback, so any category the chain did not name
+// silently rendered in overlay's accent. That is what the deleted `foundation`
+// branch was patching by hand. Keyed on PrimitiveCategory, a seventh category
+// is a compile error here instead of a wrong color.
+const CATEGORY_CARD_ACCENTS: Record<PrimitiveCategory, string> = {
+  display: 'var(--ds-color-primary-500)',
+  inputs: 'var(--ds-color-info-500)',
+  feedback: 'var(--ds-color-warning-500)',
+  layout: 'var(--ds-color-secondary-500)',
+  navigation: 'var(--ds-color-success-500)',
+  overlay: 'var(--ds-color-danger-500)',
+};
+
 function PrimitiveCardPreview({ entry }: { entry: PrimitiveEntry }) {
   const preview = CATEGORY_PREVIEW_COPY[entry.category];
-  const accent =
-    entry.category === 'display'
-      ? 'var(--ds-color-primary-500)'
-      : entry.category === 'inputs'
-        ? 'var(--ds-color-info-500)'
-        : entry.category === 'feedback'
-          ? 'var(--ds-color-warning-500)'
-          : entry.category === 'layout'
-            ? 'var(--ds-color-secondary-500)'
-            : entry.category === 'navigation'
-              ? 'var(--ds-color-success-500)'
-              : 'var(--ds-color-danger-500)';
+  const accent = CATEGORY_CARD_ACCENTS[entry.category];
 
   return (
     <Box

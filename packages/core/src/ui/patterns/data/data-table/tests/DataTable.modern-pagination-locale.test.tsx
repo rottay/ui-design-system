@@ -2,6 +2,8 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
+import type { ColumnDef } from '@/foundation/contracts/runtime/components/patterns/core';
+import type { SupportedLocale } from '@/foundation/i18n/kernel/contracts';
 import { I18nProvider } from '@/infrastructure/runtime/i18n';
 import ModernDataTable from '../engines/modern';
 
@@ -10,11 +12,11 @@ interface Row {
   name: string;
 }
 
-const columns = [{ key: 'name', title: 'Name', dataIndex: 'name' as const }];
+const columns: ColumnDef<Row>[] = [{ key: 'name', header: 'Name', accessorKey: 'name' }];
 const data: Row[] = [{ id: 1, name: 'Ada' }];
 
 /** Renders the built-in pagination range floor under a given catalog locale. */
-function renderRange(locale: string) {
+function renderRange(locale: SupportedLocale) {
   const { container } = render(
     <I18nProvider locale={locale} fallbackLocale={locale}>
       <ModernDataTable<Row>

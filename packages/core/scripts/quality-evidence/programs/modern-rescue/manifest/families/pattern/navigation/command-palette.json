@@ -6,17 +6,17 @@
     "category": "navigation",
     "name": "CommandPalette",
     "components": [
-      "CommandPalette"
+      "PatternCommandPalette"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
     "sourceOwner": "packages/core/src/ui/patterns/navigation/command-palette",
-    "publicComponents": [],
-    "unresolvedPublicComponents": [
-      "CommandPalette"
+    "publicComponents": [
+      "PatternCommandPalette"
     ],
+    "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "503c2b85aad62dbc0fb1e3e7a15749d6b73ff2ae0b9ed7411662faebd0aaf26a"
+    "inventoryRowDigest": "8181572a556f48c3c6cdf625cd92cb56fe2ae650dc17eed09e05b6444b359df7"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

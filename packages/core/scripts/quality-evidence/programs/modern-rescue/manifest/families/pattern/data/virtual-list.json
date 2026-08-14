@@ -6,17 +6,17 @@
     "category": "data",
     "name": "VirtualList",
     "components": [
-      "VirtualList"
+      "PatternVirtualList"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
     "sourceOwner": "packages/core/src/ui/patterns/data/virtual-list",
-    "publicComponents": [],
-    "unresolvedPublicComponents": [
-      "VirtualList"
+    "publicComponents": [
+      "PatternVirtualList"
     ],
+    "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "d9dd4921b53f6b37ff2d934a4cf83350eefce5cd2715bb8661320b59dd20006e"
+    "inventoryRowDigest": "47f82c402117ac5baeed009ea7f1d3ea14eb7ed36a04994326abd953c9c45577"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

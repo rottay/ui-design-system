@@ -78,11 +78,26 @@ const resolveGap = (gap: GridGap | number | undefined): string | undefined => {
   if (typeof gap === "number") {
     return Number.isFinite(gap) && gap >= 0 ? `${gap}px` : "0px";
   }
-  return GAP_MAP[gap as GridGap] || GAP_MAP.md;
+  // `|| GAP_MAP.md` catches an unknown rung but NOT a prototype-inherited
+  // name: `GAP_MAP` is a plain object literal, so `"toString"` resolves to a
+  // truthy FUNCTION and a `||` fallback is never reached for a truthy left
+  // side. The own-property guard closes the vocabulary.
+  return Object.prototype.hasOwnProperty.call(GAP_MAP, gap as string)
+    ? GAP_MAP[gap as GridGap] || GAP_MAP.md
+    : GAP_MAP.md;
 };
 
-/** Inline style plus the bounded gap channel the preset path writes. */
-type GridParameterStyle = CSSProperties & { "--ds-grid-gap"?: string };
+/**
+ * Inline style plus the bounded gap channels the preset paths write. The two
+ * per-axis seams are private (`--_ds-`) on purpose: a family writer does not
+ * mint public `--ds-*` channels, and the governed public dial for this
+ * behaviour is the tenant rhythm scale, not a second grid name.
+ */
+type GridParameterStyle = CSSProperties & {
+  "--ds-grid-gap"?: string;
+  "--_ds-grid-column-gap"?: string;
+  "--_ds-grid-row-gap"?: string;
+};
 
 /**
  * The gap spellings layout rhythm may scale. Mirrors Flex's
@@ -217,15 +232,45 @@ const buildGridStyles = (props: GridProps): CSSProperties => {
   // stylesheet can reach and is therefore sovereign by construction. The two
   // paths are mutually exclusive, so a gap is never declared twice.
   const gapPreset = gridGapPresetSpelling(effectiveGap);
+  // The per-axis overrides ride the identical split, asked SEPARATELY because
+  // the two axes may mix a rung with a measurement -- the same law Flex
+  // declares for `[column, row]`. One enumeration answers all three questions.
+  const columnGapPreset = gridGapPresetSpelling(columnGap);
+  const rowGapPreset = gridGapPresetSpelling(rowGap);
+  const resolvedColumnGap = resolveGap(columnGap);
+  const resolvedRowGap = resolveGap(rowGap);
   if (resolvedGap) {
     if (gapPreset) {
       (computedStyle as GridParameterStyle)["--ds-grid-gap"] = resolvedGap;
+    } else if (columnGapPreset !== undefined || rowGapPreset !== undefined) {
+      // A measurement is still sovereign, but an inline `gap` SHORTHAND also
+      // sets the longhand a stylesheet-owned preset axis now answers for, and
+      // inline outranks every stylesheet. So the same measurement is declared
+      // only on the axes it still owns; an axis the caller stated explicitly
+      // is written by its own branch below. Same value, same geometry -- it
+      // just stops claiming an axis it no longer owns.
+      if (columnGap === undefined) computedStyle.columnGap = resolvedGap;
+      if (rowGap === undefined) computedStyle.rowGap = resolvedGap;
     } else {
       computedStyle.gap = resolvedGap;
     }
   }
-  if (columnGap !== undefined) computedStyle.columnGap = resolveGap(columnGap);
-  if (rowGap !== undefined) computedStyle.rowGap = resolveGap(rowGap);
+  if (resolvedColumnGap !== undefined) {
+    if (columnGapPreset !== undefined) {
+      (computedStyle as GridParameterStyle)["--_ds-grid-column-gap"] =
+        resolvedColumnGap;
+    } else {
+      computedStyle.columnGap = resolvedColumnGap;
+    }
+  }
+  if (resolvedRowGap !== undefined) {
+    if (rowGapPreset !== undefined) {
+      (computedStyle as GridParameterStyle)["--_ds-grid-row-gap"] =
+        resolvedRowGap;
+    } else {
+      computedStyle.rowGap = resolvedRowGap;
+    }
+  }
   if (autoFlow) computedStyle.gridAutoFlow = autoFlow;
   if (autoColumns) computedStyle.gridAutoColumns = autoColumns;
   if (autoRows) computedStyle.gridAutoRows = autoRows;
@@ -427,6 +472,12 @@ const ModernGrid = forwardRef<HTMLElement, GridProps>((props, ref) => {
           "data-gap-preset": gridGapPresetSpelling(
             props.gap ?? props.spacing ?? GRID_DEFAULTS.gap
           ),
+          // Stamped per axis and only for a rung. A numeric axis resolves to
+          // `undefined`, which React omits -- and, because these are written
+          // AFTER the caller's attributes, a caller cannot hand-stamp a preset
+          // onto exact geometry either.
+          "data-column-gap-preset": gridGapPresetSpelling(props.columnGap),
+          "data-row-gap-preset": gridGapPresetSpelling(props.rowGap),
           "data-grid-id": needsResponsiveCSS ? gridId : undefined,
           "data-layout-motion":
             props.motion === "rearrange" ? "rearrange" : undefined,

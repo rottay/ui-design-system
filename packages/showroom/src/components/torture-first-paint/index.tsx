@@ -1,4 +1,7 @@
-import { buildThemePrepaintScript } from '@rottay/design-system/server';
+import {
+  buildThemePrepaintScript,
+  emitTenantThemeArtifactForSsr,
+} from '@rottay/design-system/server';
 
 import {
   buildRootStampScript,
@@ -41,6 +44,19 @@ export function TortureFirstPaint({ query }: { query: TortureQuery }) {
     return null;
   }
 
+  // THE artifact element for this document, and the only one: the mount proof
+  // requires exactly one, so `TortureSurface` deliberately does not mount a
+  // second copy of the same bytes — it declares the artifact this node carries.
+  // The attributes come from the design system rather than from this file,
+  // because they are what `resolveVisualAuthority` queries for; the earlier
+  // hand-written `data-tenant`/`data-digest` pair named nothing it reads.
+  const emission = plan.artifact
+    ? emitTenantThemeArtifactForSsr(plan.artifact, {
+        slug: plan.artifact.slug,
+        verticalKey: plan.artifact.verticalKey,
+      })
+    : null;
+
   return (
     <>
       <script
@@ -49,13 +65,11 @@ export function TortureFirstPaint({ query }: { query: TortureQuery }) {
           __html: `${buildRootStampScript(plan.rootAttributes)};${buildThemePrepaintScript()}`,
         }}
       />
-      {plan.artifact ? (
+      {emission ? (
         <style
-          id="rottay-runtime-tenant-theme"
-          data-tenant={plan.artifact.slug}
-          data-digest={plan.artifact.digest}
-          data-compiler={plan.artifact.compilerVersion}
-          dangerouslySetInnerHTML={{ __html: plan.css }}
+          {...emission.attributes}
+          data-testid="probe-tenant-artifact-style"
+          dangerouslySetInnerHTML={{ __html: emission.css }}
         />
       ) : null}
     </>

@@ -1,7 +1,7 @@
 /**
  * @fileoverview Versioned, data-only tenant theme contract.
  *
- * This is the persistence boundary shared by app-platform, database DTOs,
+ * This is the persistence boundary shared by the Rottay app, database DTOs,
  * server rendering and the DS compiler. It intentionally contains visual
  * values only: engine selection, component/route topology, permissions,
  * semantic mappings, React/code, selectors and raw CSS are not representable.
@@ -134,10 +134,13 @@ export const TENANT_THEME_OVERRIDE_TOKENS = [
   "--ds-color-warning",
   "--ds-color-error",
   "--ds-color-info",
-  "--ds-color-dark-primary",
-  "--ds-color-dark-secondary",
-  "--ds-color-dark-accent",
-  "--ds-color-dark-bg",
+  // `--ds-color-dark-primary` / `-secondary` / `-accent` / `-bg` were allowed
+  // here. They are removed, not deprecated: no compiler emits that family and
+  // no stylesheet reads it, so allowing a tenant to write one was selling a
+  // knob wired to nothing. A tenant's dark values belong to its dark MODE and
+  // reach the plain channel names below while that mode is active -- through
+  // `palette.dark` and the `light-dark()` emission on this path, and through
+  // `modes.dark` on the static one.
   "--ds-color-bg-primary",
   "--ds-color-bg",
   "--ds-color-background",

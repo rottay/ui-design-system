@@ -2,7 +2,7 @@
  * @fileoverview Personality presets mapping keywords to full PersonalityTokens.
  * @description Four presets derived from existing product profiles:
  * - `formal` - BitHire / recruiting: compact, subtle animations, structured borders
- * - `neutral` - Platform admin: balanced defaults, sentence-case labels
+ * - `neutral` - Rottay admin: balanced defaults, sentence-case labels
  * - `playful` - Evnto / events: bouncy animations, spacious layout, gradient accents
  * - `expressive` - Rottay brand: spring animations, glassmorphism, medium lift
  *
@@ -78,7 +78,7 @@ const FORMAL_PERSONALITY: PersonalityTokens = {
 };
 
 /**
- * Neutral: modeled after generic.default / platform.admin.
+ * Neutral: modeled after generic.default / rottay.admin.
  * Balanced animations, standard borders, sentence-case labels.
  *
  * This is also the safe fallback when `resolvePersonalityPreset()` receives

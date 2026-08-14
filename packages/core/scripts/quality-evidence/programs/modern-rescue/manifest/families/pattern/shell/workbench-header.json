@@ -6,17 +6,17 @@
     "category": "shell",
     "name": "WorkbenchHeader",
     "components": [
-      "WorkbenchHeader"
+      "PatternWorkbenchHeader"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
     "sourceOwner": "packages/core/src/ui/patterns/shell/workbench-header",
-    "publicComponents": [],
-    "unresolvedPublicComponents": [
-      "WorkbenchHeader"
+    "publicComponents": [
+      "PatternWorkbenchHeader"
     ],
+    "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "dc3137fcb6857248c22bcdb6c2f02378560c1e49e54ce880142c146af3fcc345"
+    "inventoryRowDigest": "3c9d0a1f785d1f3fc0cd68a836780453d896cfed78e6c8c8f91842e5c847a843"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

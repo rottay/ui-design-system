@@ -2,7 +2,10 @@
 
 import { useContext, useMemo } from 'react';
 
-import { TenantContext } from '@/infrastructure/runtime/tenant';
+// The Context OBJECT from its sole owner, not the tenant facade. This module
+// is a UI leaf: it reads a vertical identity through the nearest provider and
+// never validates, resolves or publishes a tenant.
+import { TenantContext } from '@/infrastructure/runtime/tenant/foundation/context';
 import {
   resolveChartGrammar,
   type ChartGrammar,

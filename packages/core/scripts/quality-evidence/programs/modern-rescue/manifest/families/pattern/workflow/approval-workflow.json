@@ -6,17 +6,17 @@
     "category": "workflow",
     "name": "ApprovalWorkflow",
     "components": [
-      "ApprovalWorkflow"
+      "PatternApprovalWorkflow"
     ],
     "sourceRoot": "packages/core/src/ui/patterns",
     "sourceOwner": "packages/core/src/ui/patterns/workflow/approval-workflow",
-    "publicComponents": [],
-    "unresolvedPublicComponents": [
-      "ApprovalWorkflow"
+    "publicComponents": [
+      "PatternApprovalWorkflow"
     ],
+    "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "9c3880aaccffa6e8d60fb9067ff0ccbb429d7542723e09054f72788152c73d87"
+    "inventoryRowDigest": "8dd4496223ecffecd148da0f8ce01e0f170df679f00328a190f3a5351a8725a3"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

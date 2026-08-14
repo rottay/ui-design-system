@@ -23,11 +23,6 @@ const PACKAGE_MANIFEST = join(process.cwd(), 'package.json');
 const DS_ROOT = join(process.cwd(), '..', '..');
 const DECLARED_EXTENSION_MARKER =
   '/* === Declared artifact extension (authored source, mechanically scoped) === */';
-const VERTICAL_BY_ARTIFACT_TENANT: Readonly<Record<string, string>> = {
-  rottay: 'platform',
-  bithire: 'bithire',
-  evnto: 'evnto',
-};
 
 function collectFirstPartyArtifactFiles(root: string): string[] {
   if (!existsSync(root)) return [];
@@ -174,8 +169,7 @@ describe('source governance', () => {
     for (const file of tenantFiles) {
       const source = readFileSync(file, 'utf8');
       const slug = file.split('/').at(-2) ?? '';
-      const vertical = VERTICAL_BY_ARTIFACT_TENANT[slug] ?? slug;
-      const dualScope = `:is(html[data-tenant='${slug}'], :where([data-ds-root][data-vertical='${vertical}']))`;
+      const dualScope = `:is(html[data-tenant='${slug}'], :where([data-ds-root][data-vertical='${slug}']))`;
       if (!source.includes(dualScope) || !source.includes(DECLARED_EXTENSION_MARKER)) {
         matches.push(file);
       }

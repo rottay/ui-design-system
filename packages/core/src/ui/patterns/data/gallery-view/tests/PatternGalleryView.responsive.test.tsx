@@ -34,6 +34,7 @@ describe('PatternGalleryView responsive + style pass-through', () => {
         rowKey="id"
         minColumnWidth={320}
       />,
+      'modern',
     );
 
     const columns = (await root(container)).style.gridTemplateColumns;
@@ -51,6 +52,7 @@ describe('PatternGalleryView responsive + style pass-through', () => {
         loading
         style={{ maxWidth: '640px' }}
       />,
+      'modern',
     );
     expect((await root(loadingView.container)).style.maxWidth).toBe('640px');
 
@@ -62,6 +64,7 @@ describe('PatternGalleryView responsive + style pass-through', () => {
         rowKey="id"
         style={{ maxWidth: '640px' }}
       />,
+      'modern',
     );
     const loaded = (await root(loadedView.container));
     expect(loaded.getAttribute('data-empty')).toBe('false');

@@ -7,14 +7,18 @@ import {
   DensityAuthorityProbe,
   type DensityAuthorityDensity,
   type DensityAuthorityLocale,
-  type DensityAuthorityProfile,
   type DensityAuthoritySource,
 } from "@/components/density-authority";
 
+/**
+ * Two governed sources only. A mixed source that layered a customer Appearance
+ * over a reserved code-owned BrandTheme on one config is not admissible: the
+ * runtime resolves exactly one visual authority per tenant. There is no recipe
+ * axis here either — that one belongs to the recipe-profile probe, and carrying
+ * a dead copy of it would fake a cross-axis this route never tests.
+ */
 function sanitizeSource(value: string | null): DensityAuthoritySource {
-  return value === "themanagement-db" || value === "db-over-static"
-    ? value
-    : "bithire-static";
+  return value === "themanagement-db" ? value : "bithire-static";
 }
 
 function sanitizeDensity(value: string | null): DensityAuthorityDensity {
@@ -25,12 +29,6 @@ function sanitizeLocale(value: string | null): DensityAuthorityLocale {
   return value === "es" || value === "ar" ? value : "en";
 }
 
-function sanitizeProfile(value: string | null): DensityAuthorityProfile {
-  return value === "technical-sharp" || value === "editorial-round"
-    ? value
-    : "none";
-}
-
 function ProbeContent() {
   const searchParams = useSearchParams();
   const cell = useMemo(
@@ -38,7 +36,6 @@ function ProbeContent() {
       source: sanitizeSource(searchParams.get("source")),
       density: sanitizeDensity(searchParams.get("density")),
       locale: sanitizeLocale(searchParams.get("locale")),
-      profile: sanitizeProfile(searchParams.get("profile")),
     }),
     [searchParams]
   );

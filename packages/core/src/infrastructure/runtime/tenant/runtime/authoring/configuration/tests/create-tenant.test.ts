@@ -139,4 +139,31 @@ describe('createTenantConfig', () => {
     expect(config.personality!.animation!.intensity).toBe(neutralTokens.animation!.intensity);
     expect(config.personality!.animation!.entrance).toBe(neutralTokens.animation!.entrance);
   });
+
+  it.each([
+    { slug: 'Bit-Hire', name: 'Acme' },
+    { slug: 'acme', name: 'Ｒｏｔｔａｙ' },
+    { slug: 'acme', name: 'e\u200bvnto' },
+  ])('rejects reserved first-party identity before deriving config', (identity) => {
+    expect(() =>
+      createTenantConfig({
+        ...minimalConfig,
+        ...identity,
+      }),
+    ).toThrow(/reserved/);
+  });
+
+  it('allows a distinct customer name on a first-party vertical', () => {
+    expect(
+      createTenantConfig({
+        ...minimalConfig,
+        name: 'BitHire Labs',
+        vertical: 'bithire',
+      }),
+    ).toMatchObject({
+      slug: 'acme',
+      name: 'BitHire Labs',
+      vertical: 'bithire',
+    });
+  });
 });

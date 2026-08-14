@@ -14,7 +14,7 @@ import {
   createTenantConfig,
   type TenantCreationConfig,
 } from '../../../../../infrastructure/runtime/tenant/runtime/authoring/configuration';
-import { generateTenantCss } from '../../../../../infrastructure/runtime/tenant';
+import { buildPreviewCss, draftBrandTheme } from '../runtime/preview-css';
 import { PREVIEW_SCOPE_ATTRIBUTE } from '../../../../../infrastructure/runtime/tenant/runtime/preview-scope';
 import RusticTenantPreview from '../engines/rustic';
 import ClassicTenantPreview from '../engines/classic';
@@ -44,21 +44,42 @@ describe('TenantPreview', () => {
     });
 
     it('should generate CSS from the config', () => {
+      // `buildPreviewCss` takes the `TenantConfig` directly -- this is
+      // exactly the call shape the Classic/Rustic engines use
+      // (`buildPreviewCss(tenantConfig)`), so this test exercises the real
+      // production resolution path instead of pre-building a `PreviewSource`.
       const config = createTenantConfig(sampleConfig);
-      const css = generateTenantCss(config);
+      const { css } = buildPreviewCss(config);
 
       expect(css).toContain('test-tenant');
       expect(css).toContain('--ds-color-primary');
     });
 
-    it('should handle all personality presets', () => {
+    it('should produce genuinely different CSS across personality presets', () => {
+      // Restores 'should handle all personality presets', which looped
+      // presets through the retired runtime tenant-CSS generator and asserted
+      // only `css.length > 0` -- true for any non-empty string, so it proved
+      // nothing about personality actually affecting anything. Now that
+      // `buildPreviewCss` resolves a `TenantConfig` itself (see
+      // `liftTenantConfigToBrandTheme`), `personality.animation.entranceDuration`
+      // is lifted onto `BrandMotion.entranceDuration`, which
+      // `compileBrandTheme` feeds verbatim into `--ds-motion-calm`. Each of
+      // the four presets authors a different `entranceDuration`
+      // (formal 160, neutral 220, expressive 300, playful 400), so this
+      // checks the actual differing value per preset -- see
+      // `runtime/preview-css/tests/preview-css.test.ts` for why
+      // `--ds-motion-intensity` was rejected as the proof axis (two presets
+      // saturate to the same clamped value there).
       const presets = ['formal', 'neutral', 'playful', 'expressive'] as const;
+      const calmValues = presets.map((personality) => {
+        const config = createTenantConfig({ ...sampleConfig, personality });
+        const { css } = buildPreviewCss(config);
+        const line = css.split('\n').find((l) => l.trim().startsWith('--ds-motion-calm:'));
+        expect(line).toBeDefined();
+        return line;
+      });
 
-      for (const preset of presets) {
-        const config = createTenantConfig({ ...sampleConfig, personality: preset });
-        const css = generateTenantCss(config);
-        expect(css.length).toBeGreaterThan(0);
-      }
+      expect(new Set(calmValues).size).toBe(presets.length);
     });
   });
 
@@ -82,22 +103,29 @@ describe('TenantPreview', () => {
   });
 
   describe('CSS generation for preview', () => {
-    it('should generate dark mode selectors by default', () => {
-      const config = createTenantConfig(sampleConfig);
-      const css = generateTenantCss(config, {
-        includeDarkSelector: true,
-        includeSystemDarkSelector: true,
-      });
-
-      expect(css).toContain("data-theme='dark'");
-      expect(css).toContain('prefers-color-scheme: dark');
-    });
-
-    it('should generate without dark mode when disabled', () => {
-      const config = createTenantConfig(sampleConfig);
-      const css = generateTenantCss(config, {
-        includeDarkSelector: false,
-        includeSystemDarkSelector: false,
+    // 'should generate dark mode selectors by default' and 'should generate
+    // without dark mode when disabled' deleted: both exercised
+    // `includeDarkSelector`/`includeSystemDarkSelector`, options of the
+    // retired the retired runtime tenant-CSS generator call the old buildPreviewCss(TenantConfig)
+    // made internally. buildPreviewCss has no such option anymore, and
+    // draftBrandTheme never authors a BrandTheme.modes overlay for an
+    // authoring draft -- there is nothing for compileBrandTheme to compile a
+    // dark block FROM, so the toggle has no equivalent to migrate onto.
+    // Replaced below with the structural guarantee that follows from that:
+    // preview CSS never contains a dark-mode block at all -- for THIS
+    // authoring-draft arm specifically. A full `TenantConfig` carrying
+    // `branding.darkPrimaryColor` (etc.) is a different story: buildPreviewCss
+    // lifts those into a `modes.dark` overlay and DOES emit a scoped dark
+    // block for it -- see `runtime/preview-css/tests/preview-css.test.ts`
+    // ("dark/modes: branding dark-mode seeds emit a scoped, independent dark
+    // selector block"). The distinction is real, not an inconsistency: an
+    // authoring draft structurally has no field to carry a dark seed in the
+    // first place, so there is nothing to lift.
+    it('never emits a dark-mode selector block, because an authoring draft has no mode overlay', () => {
+      const { css } = buildPreviewCss({
+        kind: 'brand-theme',
+        slug: sampleConfig.slug,
+        brandTheme: draftBrandTheme(sampleConfig),
       });
 
       expect(css).not.toContain("data-theme='dark'");
@@ -105,11 +133,12 @@ describe('TenantPreview', () => {
     });
 
     it('should include secondary color scale when provided', () => {
-      const config = createTenantConfig({
-        ...sampleConfig,
-        secondaryColor: '#10B981',
+      const draft = { ...sampleConfig, secondaryColor: '#10B981' };
+      const { css } = buildPreviewCss({
+        kind: 'brand-theme',
+        slug: draft.slug,
+        brandTheme: draftBrandTheme(draft),
       });
-      const css = generateTenantCss(config);
 
       expect(css).toContain('--ds-color-secondary');
     });
@@ -233,12 +262,89 @@ describe('TenantPreview', () => {
 
       const styleEl = container.querySelector('style') as HTMLStyleElement;
       const cssText = styleEl.textContent ?? '';
-      expect(cssText).not.toContain('*');
       expect(cssText).not.toContain('--pwn9:');
       expect(cssText).not.toContain('html[data-tenant');
+      // Every selector-open line is scope-anchored -- proof no wildcard rule
+      // survived. A bare `.not.toContain('*')` would also flag
+      // compileBrandTheme's legitimate `calc(var(--x) * var(--y))`
+      // multiplication, unrelated to the injection vector under test here.
       for (const selector of styleSelectors(styleEl)) {
         expect(selector.startsWith(`[${PREVIEW_SCOPE_ATTRIBUTE}='`)).toBe(true);
       }
+    });
+
+    /* The three engines are three renderings of ONE tenant, so the stylesheet
+       they inject is not an engine choice -- it is the compiled tenant. The
+       preview-css suite pins that at the compiler boundary; these two pin it
+       at the engine boundary, which is where it can actually regress. Since
+       `buildPreviewCss` gained a `PreviewSource` arm, an engine could narrow
+       its own input before calling (`draftBrandTheme` carries no
+       `personality`/`tokenOverrides`) and lose axes SILENTLY, because a
+       pre-resolved source reports `unsupportedAxes: []` by definition. Then
+       the preset this very component renders as metadata would be missing
+       from the CSS it injects, and the engines would disagree. */
+    it.each(engines)('%s: the injected sheet carries the personality axis, not just the seeds', (_name, Engine) => {
+      // `personality.animation.entranceDuration` -> `BrandMotion` ->
+      // `--ds-motion-calm`, the same unclamped per-preset channel the
+      // preview-css suite pins at the compiler boundary; here it is read back
+      // through the rendered engine. Presence alone would prove nothing -- a
+      // default emits the variable too. Four pairwise-distinct values can only
+      // come from the preset itself reaching the compiler.
+      const lines = (['formal', 'neutral', 'playful', 'expressive'] as const).map((personality) => {
+        const { container } = render(<Engine config={{ ...sampleConfig, personality }} />);
+        const cssText = (container.querySelector('style') as HTMLStyleElement).textContent ?? '';
+        const calm = cssText.split('\n').find((line) => line.trim().startsWith('--ds-motion-calm:'));
+        expect(calm).toBeDefined();
+        return calm;
+      });
+
+      expect(new Set(lines).size).toBe(4);
+    });
+
+    /* The other half of the same honesty contract: what the preview could not
+       paint has to be readable from the rendered component, not just from the
+       builder's return value. `compileBrandTheme` renders no chart, card or
+       accent personality, and every preset carries all three, so a preset-built
+       preview ALWAYS has something to declare. */
+    it('modern: names the axes it could not paint, on the rendered root', () => {
+      const { container } = render(<ModernTenantPreview config={sampleConfig} />);
+      const root = container.querySelector(`[${PREVIEW_SCOPE_ATTRIBUTE}]`) as HTMLElement;
+
+      const declared = (root.getAttribute('data-ds-tenant-preview-unsupported') ?? '').split(' ');
+      expect(declared).toEqual(
+        expect.arrayContaining(['personality.chart', 'personality.card', 'personality.accent']),
+      );
+
+      // Named, and named ACCURATELY: the attribute must agree with the builder
+      // rather than being a constant string that happens to look right.
+      expect(declared).toEqual([...buildPreviewCss(createTenantConfig(sampleConfig)).unsupportedAxes]);
+    });
+
+    /* The attribute is absent rather than empty when there is no loss. That
+       branch is currently unreachable through `TenantPreviewProps` -- every
+       personality preset carries chart, card and accent, and the props expose
+       no way to author a config without a preset -- so it is pinned where it
+       IS reachable, on the builder, next to the component assertion above
+       rather than asserted through a fake config the component cannot produce. */
+    it('has an empty-loss case to be absent for', () => {
+      const config = createTenantConfig(sampleConfig);
+      const { unsupportedAxes } = buildPreviewCss({
+        kind: 'brand-theme',
+        slug: config.slug,
+        brandTheme: draftBrandTheme(sampleConfig),
+      });
+      expect(unsupportedAxes).toEqual([]);
+    });
+
+    it('renders the same compiled tenant in every engine', () => {
+      const config: TenantCreationConfig = { ...sampleConfig, personality: 'expressive', density: 'compact' };
+      const sheets = engines.map(([, Engine]) => {
+        const { container } = render(<Engine config={config} />);
+        return (container.querySelector('style') as HTMLStyleElement).textContent ?? '';
+      });
+
+      expect(sheets[0].length).toBeGreaterThan(0);
+      expect(new Set(sheets).size).toBe(1);
     });
   });
 });

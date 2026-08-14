@@ -9,14 +9,14 @@
       "ResponsiveSlot"
     ],
     "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/layout",
+    "sourceOwner": "packages/core/src/ui/primitives/layout/responsive/slot",
     "publicComponents": [
       "ResponsiveSlot"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "b55453fb04e83da3e0078b868d58a848ce5a4d4247c5d1bab19a4b59a4061484"
+    "inventoryRowDigest": "ed13333df57db53f48ba1b161e91b62cba532ef9c0d1766e011c878fd45ae0ce"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {

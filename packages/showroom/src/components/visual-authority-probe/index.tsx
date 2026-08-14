@@ -13,14 +13,18 @@ import {
   Stack,
   Text,
   getKnownTenantConfig,
-  resolveVisualAuthority,
   type ColumnDef,
   type TenantConfig,
   type VisualAuthorityDeclaration,
-  type VisualAuthorityResolution,
 } from '@rottay/design-system';
 import {
+  censusRuntimeVisualPayload,
   compileTenantThemeConfig,
+  emitTenantThemeArtifactForSsr,
+  getCodeOwnedRuntimeConfig,
+  isCodeOwnedTenantConfig,
+  resolveVisualAuthority,
+  type VisualAuthorityResolution,
   getTenantThemeVerticalEnvelope,
   tenantThemeAnatomyAttributes,
   tenantThemeArtifactRootAttributes,
@@ -246,20 +250,31 @@ export function VisualAuthorityProbe({
     [tenant],
   );
 
-  const declaration: VisualAuthorityDeclaration | undefined = useMemo(
+  // The element the resolver verifies, and the receipt covering the SSR pass
+  // where there is no document to verify against.
+  const emission = useMemo(
     () =>
       artifact
-        ? {
-            authority: 'compiled-artifact',
-            artifact: {
-              digest: artifact.digest,
-              compilerVersion: artifact.compilerVersion,
-              coverage: artifact.coverage,
-              normalizedAppearance: artifact.normalizedAppearance,
-            },
-          }
-        : undefined,
+        ? emitTenantThemeArtifactForSsr(artifact, {
+            slug: artifact.slug,
+            verticalKey: artifact.verticalKey,
+          })
+        : null,
     [artifact],
+  );
+
+  // The WHOLE artifact. An earlier version passed a four-field subset --
+  // digest, compilerVersion, coverage, normalizedAppearance -- which reads like
+  // "everything the provider needs" and is exactly what the resolver refuses:
+  // it re-derives the digest from the v1 source and re-renders `css`
+  // deterministically, so an artifact missing its own inputs cannot be
+  // verified and the surface blocks.
+  const declaration: VisualAuthorityDeclaration | undefined = useMemo(
+    () =>
+      artifact && emission
+        ? { authority: 'compiled-artifact', artifact, ssrReceipt: emission.receipt }
+        : undefined,
+    [artifact, emission],
   );
 
   const tenantConfig = useMemo(
@@ -271,22 +286,28 @@ export function VisualAuthorityProbe({
   );
 
   // The same call the provider makes, so the fact strip cannot drift from the
-  // resolution that actually governed the render. `visualBranding` is false by
-  // construction on the DB cell (identity-only branding), and the bundled cell
-  // resolves before the census is consulted, so the strip is exact for both.
+  // resolution that actually governed the render. The census comes from the
+  // design system's own reader rather than a hand-built literal: the earlier
+  // version omitted `personality` and `brandTheme` and passed a
+  // `hasBundledArtifact` flag the resolver has never accepted, so the strip
+  // could report a clean resolution for a payload that blocks.
   const resolution = useMemo(
     () =>
       resolveVisualAuthority({
         declaration,
         slug: tenantConfig.slug,
-        hasBundledArtifact: tenant === 'bithire',
-        payload: {
-          visualBranding: false,
-          tokenOverrides: Object.keys(tenantConfig.tokenOverrides ?? {}).length > 0,
-          appearance: tenantConfig.appearance,
-        },
+        verticalKey: typeof tenantConfig.vertical === 'string' ? tenantConfig.vertical : undefined,
+        // The projection runs BEFORE the census, exactly as it does inside the
+        // provider: the bundled cell's brandTheme is stripped, so the control
+        // resolves `no-visual-payload` rather than being reported as a tenant
+        // carrying an uncompiled payload.
+        payload: censusRuntimeVisualPayload(
+          isCodeOwnedTenantConfig(tenantConfig)
+            ? getCodeOwnedRuntimeConfig(tenantConfig)
+            : tenantConfig,
+        ),
       }),
-    [declaration, tenant, tenantConfig],
+    [declaration, tenantConfig],
   );
 
   const payload: VisualAuthorityProbePayload = {
@@ -319,22 +340,32 @@ export function VisualAuthorityProbe({
   });
 
   return (
-    <DesignSystemProvider
-      tenantConfig={tenantConfig}
-      vertical="bithire"
-      forceEngine="modern"
-      {...(declaration ? { visualAuthority: declaration } : {})}
-      {...(ground ? { forceTheme: ground } : {})}
-    >
-      {artifact ? (
+    <>
+      {/* OUTSIDE the provider, and that placement is the whole point of this
+          probe: the provider verifies the mount during its own render, before
+          any child has been committed. Mounted as a child — where this style
+          used to live — the artifact is invisible to the proof, the provider
+          blocks, the children never commit, and the artifact never mounts. The
+          probe would show a permanent loading screen for a document whose CSS
+          is correct. */}
+      {emission ? (
         <style
+          {...emission.attributes}
           data-testid="visual-authority-artifact-style"
-          dangerouslySetInnerHTML={{ __html: artifact.css }}
+          dangerouslySetInnerHTML={{ __html: emission.css }}
         />
       ) : null}
-      <Box {...rootAttributes} {...anatomyAttributes} data-testid="visual-authority-root">
-        <ProbeContent payload={payload} />
-      </Box>
-    </DesignSystemProvider>
+      <DesignSystemProvider
+        tenantConfig={tenantConfig}
+        vertical="bithire"
+        forceEngine="modern"
+        {...(declaration ? { visualAuthority: declaration } : {})}
+        {...(ground ? { forceTheme: ground } : {})}
+      >
+        <Box {...rootAttributes} {...anatomyAttributes} data-testid="visual-authority-root">
+          <ProbeContent payload={payload} />
+        </Box>
+      </DesignSystemProvider>
+    </>
   );
 }
