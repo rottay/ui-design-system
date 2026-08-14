@@ -46,12 +46,15 @@ export const evntoBrandTheme: FirstPartyBrandTheme = {
         secondaryColor: "#A89880",
         secondaryHoverColor: "#B8A890",
         accentColor: "#A89880",
+        accentHoverColor: "var(--ds-color-secondary-hover)",
         backgroundColor: "#131210",
         backgroundSecondaryColor: "#1C1A16",
         backgroundTertiaryColor: "#24221C",
         backgroundElevatedColor: "#2A2820",
+        backgroundOverlayColor: "rgba(2, 6, 23, 0.88)",
         textPrimaryColor: "#E8E8E0",
         textSecondaryColor: "#A8A898",
+        textTertiaryColor: "var(--ds-color-neutral-600)",
         textMutedColor: "#686858",
         textDisabledColor: "#484838",
         borderPrimaryColor: "#2E2C24",
@@ -60,6 +63,10 @@ export const evntoBrandTheme: FirstPartyBrandTheme = {
         linkColor: "var(--ds-color-primary)",
         linkHoverColor: "var(--ds-color-primary-hover)",
         linkVisitedColor: "var(--ds-color-neutral-600)",
+        successBgColor: "var(--ds-color-success-50)",
+        warningBgColor: "var(--ds-color-warning-50)",
+        errorBgColor: "var(--ds-color-error-50)",
+        infoBgColor: "var(--ds-color-info-50)",
         ramps: {
           primary: {
             50: "#FCFCFC",
@@ -96,6 +103,18 @@ export const evntoBrandTheme: FirstPartyBrandTheme = {
             700: "#42372B",
             800: "#292018",
             900: "#110C08",
+          },
+          neutral: {
+            50: "#0b1220",
+            100: "#111827",
+            200: "#1f2937",
+            300: "#334155",
+            400: "#475569",
+            500: "#64748b",
+            600: "#94a3b8",
+            700: "#cbd5e1",
+            800: "#e2e8f0",
+            900: "#f8fafc",
           },
           success: {
             50: "#F5FFF6",
@@ -207,18 +226,45 @@ export const evntoBrandTheme: FirstPartyBrandTheme = {
   },
 
   palette: {
+    ramps: {
+      neutral: {
+        50: '#fafafa',
+        100: '#f5f5f5',
+        200: '#e5e5e5',
+        300: '#d4d4d4',
+        400: '#a3a3a3',
+        500: '#737373',
+        600: '#525252',
+        700: '#404040',
+        800: '#262626',
+        900: '#171717',
+      },
+    },
     primaryColor: '#171717',
+    primaryHoverColor: '#262626',
     secondaryColor: '#7A6A5A',
+    secondaryHoverColor: '#5A4A3A',
     accentColor: '#7A6A5A',
+    accentHoverColor: '#5A4A3A',
     backgroundColor: '#FFFFFF',
     backgroundSecondaryColor: '#fafafa',
     backgroundTertiaryColor: '#f5f5f5',
     backgroundElevatedColor: '#ffffff',
+    backgroundOverlayColor: 'rgba(0, 0, 0, 0.5)',
+    textPrimaryColor: '#111111',
+    textSecondaryColor: '#3d3d3d',
+    textTertiaryColor: '#5c5c5c',
+    textMutedColor: '#737373',
+    textDisabledColor: '#b3b3b3',
     onPrimaryColor: '#ffffff',
     successColor: '#15803D',
+    successBgColor: '#f0fdf4',
     warningColor: '#A16207',
+    warningBgColor: '#fefce8',
     errorColor: '#B91C1C',
+    errorBgColor: '#fef2f2',
     infoColor: '#475569',
+    infoBgColor: '#f8fafc',
 
     /**
      * The six border channels this vertical used to leave silent, and so
@@ -264,6 +310,8 @@ export const evntoBrandTheme: FirstPartyBrandTheme = {
      * `--ds-color-border` at a higher specificity and keeps winning there, so
      * this reaches only the mode that had no author.
      */
+    borderPrimaryColor: 'rgba(0, 0, 0, 0.08)',
+    borderSecondaryColor: 'rgba(0, 0, 0, 0.12)',
     borderColor: 'var(--ds-color-border-primary)',
 
     borderSubtleColor:

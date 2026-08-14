@@ -22,6 +22,11 @@ import postcss from "postcss";
 import * as ts from "typescript";
 import { describe, expect, it } from "vitest";
 
+import { compileBrandTheme } from "../../../infrastructure/compilers/kernel/runtime/brand-theme";
+import { bithireBrandTheme } from "../ts/presentation/brand-themes/bithire";
+import { evntoBrandTheme } from "../ts/presentation/brand-themes/evnto";
+import { rottayBrandTheme } from "../ts/presentation/brand-themes/rottay";
+
 const ROOT = process.cwd();
 const TOKENS_DIR = join(ROOT, "src/foundation/tokens");
 const ARTIFACTS_DIR = join(TOKENS_DIR, "css/facade/artifacts");
@@ -172,6 +177,50 @@ const PALETTE_EVNTO_25 = [
 ] as const;
 
 const PALETTE_UNION_37 = [...new Set([...PALETTE_ROTTAY_35, ...PALETTE_BITHIRE_30, ...PALETTE_EVNTO_25])].sort();
+
+/**
+ * VERTICAL-PALETTE-90/89 — move byte-equivalent palette channels from the
+ * artifact extensions into the typed BrandPalette contract.
+ *
+ * planned90 = R35 + B30 + E25 (one name, --ds-color-bg-primary, collided with
+ * VERTICAL-CONFLICT-9 and was pre-retired). executed89 = R35 + B29 + E25.
+ */
+const PALETTE_BITHIRE_29 = PALETTE_BITHIRE_30.filter((n) => n !== "--ds-color-bg-primary");
+const PALETTE_UNION_36 = [...new Set([...PALETTE_ROTTAY_35, ...PALETTE_BITHIRE_29, ...PALETTE_EVNTO_25])].sort();
+const PALETTE_MEMBERSHIP_89 = [...PALETTE_ROTTAY_35, ...PALETTE_BITHIRE_29, ...PALETTE_EVNTO_25].sort();
+
+type RosterMode = "default" | "light" | "dark";
+
+/**
+ * Compile a brand theme live and hash the sorted "channel=value\n" pairs for
+ * every channel in a PALETTE roster. This catches byte-equivalent drift: a
+ * same-length value change (e.g. #D4D4D8 -> #A4A4A8) breaks the hash even though
+ * roster and declaration counts stay the same.
+ */
+function compileRosterEffectiveHash(
+  brandTheme: unknown,
+  slug: string,
+  roster: readonly string[],
+  mode: RosterMode,
+): { hash: string; pairs: string[]; vars: Record<string, string> } {
+  const compiled = compileBrandTheme({
+    brandTheme: brandTheme as never,
+    tenantSlug: slug,
+    verticalPersonality: {},
+    verticalTokenOverrides: {},
+  });
+  const baseVars = compiled.cssVariables;
+  const modeVars = compiled.modeBlocks?.find((b) => b.mode === mode)?.cssVariables ?? {};
+  const vars = mode === "default" ? baseVars : { ...baseVars, ...modeVars };
+  const pairs = roster
+    .map((ch) => {
+      const val = vars[ch];
+      return val === undefined ? `${ch}=` : `${ch}=${val}`;
+    })
+    .sort();
+  const hash = createHash("sha256").update(pairs.join("\n") + "\n").digest("hex");
+  return { hash, pairs, vars };
+}
 
 const ledger = JSON.parse(readFileSync(LEDGER_PATH, "utf8")) as Record<string, unknown>;
 const baseline = JSON.parse(readFileSync(BASELINE_PATH, "utf8")) as {
@@ -564,6 +613,48 @@ describe("VERTICAL-DEAD-61 authority pins", () => {
   });
 });
 
+describe("VERTICAL-PALETTE-90/89 authority pins", () => {
+  it("planned90 rosters hash to the signed values", () => {
+    expect(PALETTE_ROTTAY_35.length).toBe(35);
+    expect(PALETTE_BITHIRE_30.length).toBe(30);
+    expect(PALETTE_EVNTO_25.length).toBe(25);
+    expect(PALETTE_UNION_37.length).toBe(37);
+
+    expect(rosterHash(PALETTE_ROTTAY_35)).toBe(
+      "88d05e844187480a0f2c2312caf79b466239521ae1410288fc5ee428eae5bba0",
+    );
+    expect(rosterHash(PALETTE_BITHIRE_30)).toBe(
+      "94f64e7280f0e4029bcee683060a8fa24e626c746309e954ad592c4b19c1be57",
+    );
+    expect(rosterHash(PALETTE_EVNTO_25)).toBe(
+      "5a50d8e5ba17c4bd5e49b66a50012c28ea3e27767d8b73ea0b220d5a3ca0b7a4",
+    );
+    expect(rosterHash(PALETTE_UNION_37)).toBe(
+      "6439f22d5ca9c01a12efe893f28f1ec0df3db81ba11107b503523070b39a9416",
+    );
+  });
+
+  it("executed89 rosters reflect the pre-retired CONFLICT channel", () => {
+    expect(PALETTE_BITHIRE_29.length).toBe(29);
+    expect(PALETTE_BITHIRE_29).not.toContain("--ds-color-bg-primary");
+    expect(PALETTE_BITHIRE_30).toContain("--ds-color-bg-primary");
+
+    expect(PALETTE_ROTTAY_35.length + PALETTE_BITHIRE_29.length + PALETTE_EVNTO_25.length).toBe(89);
+
+    expect(rosterHash(PALETTE_BITHIRE_29)).toBe(
+      "76404390b375eeb6d9a0dec6785b166f2cdcd4272a82cd50e029d4409baa6663",
+    );
+    expect(PALETTE_UNION_36.length).toBe(36);
+    expect(rosterHash(PALETTE_UNION_36)).toBe(
+      "4f7522b8360f55ad7e7b514ec2e690b8aa08326eb3d5e8c2262545231a1d6a9e",
+    );
+    expect(PALETTE_MEMBERSHIP_89.length).toBe(89);
+    expect(rosterHash(PALETTE_MEMBERSHIP_89)).toBe(
+      "b46fb3b4d364e07f05ecba8f5b488367b998c1b4d7d8e8c6993775725ed0fb84",
+    );
+  });
+});
+
 // ── ledger closure ─────────────────────────────────────────────────────────
 
 describe("ledger is closed and the residue distribution is durable", () => {
@@ -715,6 +806,172 @@ describe("extensions no longer declare the DEAD names", () => {
   });
 });
 
+// ── VERTICAL-PALETTE-90/89 extension absence ───────────────────────────────
+
+describe("extensions no longer declare the PALETTE channels", () => {
+  function extensionText(slug: string) {
+    return readFileSync(join(ARTIFACTS_DIR, slug, "_source/extension.css"), "utf8");
+  }
+
+  it("rottay extension removed exactly the 35 PALETTE names", () => {
+    expect(enforceExtensionDeadAbsent(extensionText("rottay"), new Set(PALETTE_ROTTAY_35))).toEqual([]);
+  });
+
+  it("bithire extension removed exactly the 29 executed PALETTE names", () => {
+    expect(enforceExtensionDeadAbsent(extensionText("bithire"), new Set(PALETTE_BITHIRE_29))).toEqual([]);
+  });
+
+  it("bithire extension still does not declare the pre-retired --ds-color-bg-primary", () => {
+    const root = postcss.parse(extensionText("bithire"));
+    const violations: string[] = [];
+    root.walkDecls((d) => {
+      if (d.prop === "--ds-color-bg-primary") violations.push(d.prop);
+    });
+    expect(violations).toEqual([]);
+  });
+
+  it("evnto extension removed exactly the 25 PALETTE names", () => {
+    expect(enforceExtensionDeadAbsent(extensionText("evnto"), new Set(PALETTE_EVNTO_25))).toEqual([]);
+  });
+
+});
+
+// ── VERTICAL-PALETTE-90/89 compile-time propagation ────────────────────────
+
+describe("compileBrandTheme propagates the moved PALETTE channels", () => {
+  function compile(slug: string, theme: unknown) {
+    return compileBrandTheme({
+      brandTheme: theme as never,
+      tenantSlug: slug,
+      verticalPersonality: {},
+      verticalTokenOverrides: {},
+    });
+  }
+
+  it("rottay default (dark) emits the 35 moved channels from the base palette", () => {
+    const { cssVariables } = compile("rottay", rottayBrandTheme);
+    expect(cssVariables["--ds-color-primary-hover"]).toBe("#E0E0E0");
+    expect(cssVariables["--ds-color-neutral-50"]).toBe("#101012");
+    expect(cssVariables["--ds-color-bg-overlay"]).toBe("rgba(0, 0, 0, 0.64)");
+    expect(cssVariables["--ds-color-text-primary"]).toBe("#F0F0F0");
+    expect(cssVariables["--ds-color-border"]).toBe("#28282C");
+    expect(cssVariables["--ds-color-success-bg"]).toBe("rgba(34, 197, 94, 0.10)");
+    expect(cssVariables["--ds-color-interactive-bg-hover"]).toBe("rgba(255, 255, 255, 0.04)");
+  });
+
+  it("bithire default (light) emits the 29 executed channels from the base palette", () => {
+    const { cssVariables } = compile("bithire", bithireBrandTheme);
+    expect(cssVariables["--ds-color-primary-hover"]).toBe("#2c5587");
+    expect(cssVariables["--ds-color-neutral-50"]).toBe("#f3f2ef");
+    expect(cssVariables["--ds-color-bg-surface"]).toBe("#ffffff");
+    expect(cssVariables["--ds-color-text-tertiary"]).toBe("#7f859b");
+    expect(cssVariables["--ds-color-border"]).toBe("#d4e0ea");
+    expect(cssVariables["--ds-color-success-bg"]).toBe("#f0fdf4");
+    expect(cssVariables["--ds-color-interactive-bg-hover"]).toBe("rgba(10, 102, 194, 0.06)");
+  });
+
+  it("bithire --ds-color-bg-primary is the pre-retired CONFLICT channel, not a PALETTE re-ownership", () => {
+    const { cssVariables } = compile("bithire", bithireBrandTheme);
+    expect(cssVariables["--ds-color-bg-primary"]).toBe("#F4F8FB");
+    expect(PALETTE_BITHIRE_29).not.toContain("--ds-color-bg-primary");
+  });
+
+  it("evnto default (light) emits the 25 moved channels from the base palette", () => {
+    const { cssVariables } = compile("evnto", evntoBrandTheme);
+    expect(cssVariables["--ds-color-primary-hover"]).toBe("#262626");
+    expect(cssVariables["--ds-color-neutral-50"]).toBe("#fafafa");
+    expect(cssVariables["--ds-color-bg-overlay"]).toBe("rgba(0, 0, 0, 0.5)");
+    expect(cssVariables["--ds-color-text-primary"]).toBe("#111111");
+    expect(cssVariables["--ds-color-border-primary"]).toBe("rgba(0, 0, 0, 0.08)");
+    expect(cssVariables["--ds-color-success-bg"]).toBe("#f0fdf4");
+  });
+
+  it("evnto dark mode adds exactly the 7 signed reset pins", () => {
+    const { modeBlocks } = compile("evnto", evntoBrandTheme);
+    const dark = modeBlocks?.find((b) => b.mode === "dark");
+    expect(dark).toBeDefined();
+    expect(dark!.cssVariables["--ds-color-accent-hover"]).toBe("var(--ds-color-secondary-hover)");
+    expect(dark!.cssVariables["--ds-color-bg-overlay"]).toBe("rgba(2, 6, 23, 0.88)");
+    expect(dark!.cssVariables["--ds-color-text-tertiary"]).toBe("var(--ds-color-neutral-600)");
+    expect(dark!.cssVariables["--ds-color-success-bg"]).toBe("var(--ds-color-success-50)");
+    expect(dark!.cssVariables["--ds-color-warning-bg"]).toBe("var(--ds-color-warning-50)");
+    expect(dark!.cssVariables["--ds-color-error-bg"]).toBe("var(--ds-color-error-50)");
+    expect(dark!.cssVariables["--ds-color-info-bg"]).toBe("var(--ds-color-info-50)");
+
+    const newDarkPins = [
+      "--ds-color-accent-hover",
+      "--ds-color-bg-overlay",
+      "--ds-color-text-tertiary",
+      "--ds-color-success-bg",
+      "--ds-color-warning-bg",
+      "--ds-color-error-bg",
+      "--ds-color-info-bg",
+    ];
+    for (const pin of newDarkPins) {
+      expect(dark!.cssVariables[pin]).toBeDefined();
+    }
+  });
+});
+
+// ── VERTICAL-PALETTE-90/89 full byte-equivalent parity ─────────────────────
+
+describe("compileBrandTheme full roster parity (channel=value hash)", () => {
+  it("R35 default (dark) matches the signed effective-value hash", () => {
+    const { hash, pairs } = compileRosterEffectiveHash(rottayBrandTheme, "rottay", PALETTE_ROTTAY_35, "default");
+    expect(pairs).toHaveLength(35);
+    expect(hash).toBe("4c56c2cc2127928edc2eb328751cc85b8ad18479c85c8dedac528300069403dc");
+  });
+
+  it("B29 default (light) matches the signed effective-value hash", () => {
+    const { hash, pairs } = compileRosterEffectiveHash(bithireBrandTheme, "bithire", PALETTE_BITHIRE_29, "default");
+    expect(pairs).toHaveLength(29);
+    expect(hash).toBe("b566d5de5021bfbfa52edf27665ff8123f9447a74b7a985dc1f076eec53ce299");
+  });
+
+  it("E25 default (light) matches the signed effective-value hash", () => {
+    const { hash, pairs } = compileRosterEffectiveHash(evntoBrandTheme, "evnto", PALETTE_EVNTO_25, "default");
+    expect(pairs).toHaveLength(25);
+    expect(hash).toBe("4b95f40dd4b9b00733a1c0d383fd9eb47347f4e3166b18b0fcfe6ac90bf9211f");
+  });
+
+  it("R35 light mode effective map is complete and signed", () => {
+    const { hash, pairs } = compileRosterEffectiveHash(rottayBrandTheme, "rottay", PALETTE_ROTTAY_35, "light");
+    expect(pairs).toHaveLength(35);
+    expect(hash).toBe("b62b25c12e5e5cad6d830f9fdaa4a5685708798178296e6f8db6c879b2c3e4d7");
+  });
+
+  it("B29 dark mode effective map is complete and signed", () => {
+    const { hash, pairs } = compileRosterEffectiveHash(bithireBrandTheme, "bithire", PALETTE_BITHIRE_29, "dark");
+    expect(pairs).toHaveLength(29);
+    expect(hash).toBe("339ee08da2c71e97169d54166cc9ec562eb43bc33803d78486659b7574dcc538");
+  });
+
+  it("E25 dark mode effective map is complete and signed", () => {
+    const { hash, pairs } = compileRosterEffectiveHash(evntoBrandTheme, "evnto", PALETTE_EVNTO_25, "dark");
+    expect(pairs).toHaveLength(25);
+    expect(hash).toBe("b49d1045c5476d50e85ceb362dc7e8de5489af87d0d9968cc06ff5ccb35fe7c3");
+  });
+
+  it("same-length value drift breaks the roster parity hash", () => {
+    const mutated = JSON.parse(JSON.stringify(rottayBrandTheme)) as typeof rottayBrandTheme;
+    mutated.palette.ramps.neutral[700] = "#A4A4A8";
+    const { hash } = compileRosterEffectiveHash(mutated, "rottay", PALETTE_ROTTAY_35, "default");
+    expect(hash).not.toBe("4c56c2cc2127928edc2eb328751cc85b8ad18479c85c8dedac528300069403dc");
+  });
+
+  it("evnto dark neutral ramp deletion or mutation breaks the dark roster parity hash", () => {
+    const deleted = JSON.parse(JSON.stringify(evntoBrandTheme)) as typeof evntoBrandTheme;
+    delete (deleted.modes.dark.palette.ramps as { neutral?: unknown }).neutral;
+    const { hash: deletedHash } = compileRosterEffectiveHash(deleted, "evnto", PALETTE_EVNTO_25, "dark");
+    expect(deletedHash).not.toBe("b49d1045c5476d50e85ceb362dc7e8de5489af87d0d9968cc06ff5ccb35fe7c3");
+
+    const changed = JSON.parse(JSON.stringify(evntoBrandTheme)) as typeof evntoBrandTheme;
+    changed.modes.dark.palette.ramps.neutral[500] = "#555555";
+    const { hash: changedHash } = compileRosterEffectiveHash(changed, "evnto", PALETTE_EVNTO_25, "dark");
+    expect(changedHash).not.toBe("b49d1045c5476d50e85ceb362dc7e8de5489af87d0d9968cc06ff5ccb35fe7c3");
+  });
+});
+
 // ── durable baseline / gate contract ───────────────────────────────────────
 
 describe("artifact provenance gate ratchets hold after the drain", () => {
@@ -749,6 +1006,40 @@ describe("artifact provenance gate ratchets hold after the drain", () => {
         expect(liveSizes.get(key) ?? 0, `${slug} ${key}`).toBeLessThanOrEqual(ceiling);
       }
     }
+  });
+
+  it("R/B/E live volumes are at or below the post-PALETTE baseline (decrease-only)", async () => {
+    const gate = (await import("../../../../scripts/artifact-provenance-gate.mjs")) as {
+      run: (opts: { baseline: unknown }) => { results: GateResult[] };
+    };
+    const { results } = gate.run({ baseline });
+    for (const slug of ["rottay", "bithire", "evnto"] as const) {
+      const r = results.find((x) => x.slug === slug)!;
+      const cap = baseline.metrics[slug];
+      expect(r.metrics.total.bytes, `${slug} bytes`).toBeLessThanOrEqual(cap.bytes);
+      expect(r.metrics.total.declarations, `${slug} declarations`).toBeLessThanOrEqual(cap.declarations);
+      expect(r.metrics.total.literals, `${slug} literals`).toBeLessThanOrEqual(cap.literals);
+      expect(r.capabilityGaps, `${slug} capabilityGaps`).toBeLessThanOrEqual(baseline.capabilityGaps[slug]);
+
+      const allowedSizes = baseline.grandfather[slug].capabilityGapRegionSizes ?? {};
+      const liveSizes = new Map(r.observed.capabilityGapRegionSizes);
+      for (const [key, ceiling] of Object.entries(allowedSizes)) {
+        expect(liveSizes.get(key) ?? 0, `${slug} ${key}`).toBeLessThanOrEqual(ceiling);
+      }
+    }
+  });
+
+  it("no PALETTE name is among the live capability-gap re-declared channels", async () => {
+    const gate = (await import("../../../../scripts/artifact-provenance-gate.mjs")) as {
+      run: (opts: { baseline: unknown }) => { results: GateResult[] };
+    };
+    const { results } = gate.run({ baseline });
+    const paletteSet = new Set(PALETTE_UNION_36);
+    const liveChannels = new Set<string>();
+    for (const r of results) {
+      for (const ch of r.observed.capabilityGapChannels) liveChannels.add(ch);
+    }
+    expect([...paletteSet].filter((n) => liveChannels.has(n))).toEqual([]);
   });
 
   type GateResult = {
@@ -948,5 +1239,79 @@ describe("planted mutants turn red", () => {
     entries["--ds-color-bg"].finalState = "EXECUTED";
     const retired = Object.entries(entries).filter(([_, e]) => e.brandAuthoredResidue?.retiredBy === "VERTICAL-DEAD-61").length;
     expect(retired).not.toBe(61);
+  });
+});
+
+// ── VERTICAL-PALETTE-90/89 planted mutants ─────────────────────────────────
+
+describe("VERTICAL-PALETTE-90/89 planted mutants turn red", () => {
+  function insertDecl(cssText: string, selector: string, prop: string, value: string): string {
+    const root = postcss.parse(cssText);
+    root.walkRules((rule) => {
+      if (rule.selector === selector) rule.append(postcss.decl({ prop, value }));
+    });
+    return root.toString();
+  }
+
+  it("re-inserting a rottay PALETTE declaration is detected", () => {
+    const mutated = insertDecl(
+      readFileSync(join(ARTIFACTS_DIR, "rottay/_source/extension.css"), "utf8"),
+      "html[data-tenant='rottay']:not([data-theme='light']):not(.light)",
+      "--ds-color-bg-overlay",
+      "red",
+    );
+    expect(enforceExtensionDeadAbsent(mutated, new Set(PALETTE_ROTTAY_35))).toContain("--ds-color-bg-overlay");
+  });
+
+  it("re-inserting a bithire PALETTE declaration is detected", () => {
+    const mutated = insertDecl(
+      readFileSync(join(ARTIFACTS_DIR, "bithire/_source/extension.css"), "utf8"),
+      'html[data-tenant="bithire"]:not([data-theme="dark"]):not(.dark)',
+      "--ds-color-bg-surface",
+      "red",
+    );
+    expect(enforceExtensionDeadAbsent(mutated, new Set(PALETTE_BITHIRE_29))).toContain("--ds-color-bg-surface");
+  });
+
+  it("re-inserting an evnto PALETTE declaration is detected", () => {
+    const mutated = insertDecl(
+      readFileSync(join(ARTIFACTS_DIR, "evnto/_source/extension.css"), "utf8"),
+      "html[data-tenant='evnto']:not([data-theme='dark']):not(.dark)",
+      "--ds-color-text-primary",
+      "red",
+    );
+    expect(enforceExtensionDeadAbsent(mutated, new Set(PALETTE_EVNTO_25))).toContain("--ds-color-text-primary");
+  });
+
+  it("double-counting the pre-retired --ds-color-bg-primary in B29 is wrong", () => {
+    const b30AsB29 = [...PALETTE_BITHIRE_29, "--ds-color-bg-primary"];
+    expect(b30AsB29.length).toBe(30);
+    expect(rosterHash(b30AsB29)).not.toBe(rosterHash(PALETTE_BITHIRE_29));
+  });
+
+  it("an evnto dark reset pin omitted from modes.dark.palette is a compile regression", () => {
+    const theme = JSON.parse(JSON.stringify(evntoBrandTheme)) as typeof evntoBrandTheme;
+    delete (theme.modes.dark.palette as Record<string, unknown>).backgroundOverlayColor;
+    const { modeBlocks } = compileBrandTheme({
+      brandTheme: theme as never,
+      tenantSlug: "evnto",
+      verticalPersonality: {},
+      verticalTokenOverrides: {},
+    });
+    const dark = modeBlocks?.find((b) => b.mode === "dark");
+    expect(dark!.cssVariables["--ds-color-bg-overlay"]).not.toBe("rgba(2, 6, 23, 0.88)");
+  });
+
+  it("longer-prefix homonyms are not counted as PALETTE names", () => {
+    // Plant a custom property whose name is a strict prefix extension of a
+    // PALETTE channel. The shared enforcer matches declaration names exactly,
+    // so the homonym must stay green.
+    const mutated = [
+      "html[data-tenant='evnto']:not([data-theme='dark']):not(.dark) {",
+      "  --ds-color-text-primary-other: red;",
+      "}",
+      "",
+    ].join("\n");
+    expect(enforceExtensionDeadAbsent(mutated, new Set(PALETTE_EVNTO_25))).toEqual([]);
   });
 });

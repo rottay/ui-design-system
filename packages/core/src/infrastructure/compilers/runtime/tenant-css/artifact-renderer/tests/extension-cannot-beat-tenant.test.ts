@@ -59,6 +59,23 @@ function conflicts(slug: string, artifactCss: string): Conflict[] {
   return tenantOverrideConflicts(artifactCss).map((channel) => ({ slug, channel }));
 }
 
+/**
+ * Channels the extension authors in the default/light reachable state while the
+ * compiled block authors them ONLY in the OTHER mode. These are not conflicts
+ * because the two rules never match the same reachable state, but they are a
+ * stable category the test tracks with a decrease-only ceiling.
+ */
+function darkOnlyOverlaps(compiledCss: string, extensionCss: string): string[] {
+  const artifact = `${compiledCss}\n${EXTENSION_MARKER}\n${extensionCss}`;
+  const sections = splitArtifact(artifact);
+  const compiled = channelStates(sections.compiled);
+  const extension = channelStates(sections.extension);
+  return [...extension.keys()].filter((channel) => {
+    const states = compiled.get(channel);
+    return states !== undefined && states.size === 1 && states.has('dark');
+  });
+}
+
 function renderArtifact(slug: string, extensionOverride?: string): string {
   const spec = FIRST_PARTY_ARTIFACT_SPECS.find((candidate) => candidate.slug === slug);
   if (!spec) throw new Error(`no artifact spec for ${slug}`);
@@ -124,14 +141,25 @@ describe('EXTENSION-CANNOT-BEAT-TENANT · rendered first-party artifacts', () =>
     const compiled = channelStates(sections.compiled);
     const extension = channelStates(sections.extension);
 
-    const darkOnlyOverlap = [...extension.keys()].filter((channel) => {
-      const states = compiled.get(channel);
-      return states !== undefined && states.size === 1 && states.has('dark');
-    });
+    const overlap = darkOnlyOverlaps(sections.compiled, sections.extension);
+
+    // Decrease-only ceiling: these are channels the extension historically owned
+    // in the default/light state while the compiled block only authored them for
+    // dark mode. V1 may drain them; the test only enforces subset + bounded
+    // length, not an exact inventory.
+    const ALLOWED_DARK_ONLY_OVERLAP = new Set([
+      '--ds-color-interactive-border',
+      '--ds-radius-full',
+      '--ds-sidebar-group-margin-bottom',
+      '--ds-sidebar-group-margin-top',
+      '--ds-sidebar-group-padding-top',
+      '--ds-sidebar-item-indent',
+    ]);
+    expect(overlap.filter((channel) => !ALLOWED_DARK_ONLY_OVERLAP.has(channel))).toEqual([]);
+    expect(overlap.length).toBeLessThanOrEqual(ALLOWED_DARK_ONLY_OVERLAP.size);
 
     // The retired VERTICAL-CONFLICT-9 roster lived in the default state; none of
-    // those channels may reappear as dark-only overlap. The positive control
-    // below proves the set is still populated with real channels, not a fluke.
+    // those channels may reappear as dark-only overlap.
     const retiredRoster = new Set([
       '--ds-card-shadow-elevated',
       '--ds-color-bg-input',
@@ -143,11 +171,19 @@ describe('EXTENSION-CANNOT-BEAT-TENANT · rendered first-party artifacts', () =>
       '--ds-font-family-heading',
       '--ds-surface-card-border-strong',
     ]);
-    expect(darkOnlyOverlap.filter((channel) => retiredRoster.has(channel))).toEqual([]);
-    expect(darkOnlyOverlap.length).toBeGreaterThan(0);
+    expect(overlap.filter((channel) => retiredRoster.has(channel))).toEqual([]);
 
     const reported = new Set(conflicts('bithire', artifact).map((c) => c.channel));
-    expect(darkOnlyOverlap.filter((channel) => reported.has(channel))).toEqual([]);
+    expect(overlap.filter((channel) => reported.has(channel))).toEqual([]);
+  });
+
+  it('darkOnlyOverlaps helper is non-vacuous on a synthetic case', () => {
+    const compiled = `html[data-tenant='bithire'][data-theme='dark'],\nhtml[data-tenant='bithire'].dark {\n  --ds-x: #000000;\n}`;
+    const extension = `html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {\n  --ds-x: #ffffff;\n}`;
+    const overlap = darkOnlyOverlaps(compiled, extension);
+    expect(overlap).toContain('--ds-x');
+    const artifact = `${compiled}\n${EXTENSION_MARKER}\n${extension}`;
+    expect(conflicts('bithire', artifact).map((c) => c.channel)).not.toContain('--ds-x');
   });
 
   it('a mode-gated re-declaration IS a conflict when the compiled block is unconditional', () => {
@@ -259,5 +295,31 @@ describe('EXTENSION-CANNOT-BEAT-TENANT · VERTICAL-CONFLICT-9 mutants', () => {
   it('the committed inventory is empty and stays empty', () => {
     expect(KNOWN_SAME_STATE_REDECLARATIONS).toEqual([]);
     expect(observed()).toEqual([]);
+  });
+});
+
+describe('EXTENSION-CANNOT-BEAT-TENANT · VERTICAL-PALETTE-89 canary', () => {
+  it('a re-declared PALETTE channel in the default state is caught for each vertical', () => {
+    for (const spec of FIRST_PARTY_ARTIFACT_SPECS) {
+      const channel =
+        spec.slug === 'evnto'
+          ? '--ds-color-text-primary'
+          : spec.slug === 'bithire'
+            ? '--ds-color-border'
+            : '--ds-color-bg-overlay';
+      const planted = `html[data-tenant='${spec.slug}'] {\n  ${channel}: #123456;\n}\n`;
+      const found = conflicts(spec.slug, renderArtifact(spec.slug, planted)).map((c) => c.channel);
+      expect(found).toContain(channel);
+    }
+  });
+
+  it('the hostile re-declaration wins at the pixel, which is why it is red', () => {
+    const channel = '--ds-color-text-primary';
+    const planted = `html[data-tenant='evnto'] {\n  ${channel}: #123456;\n}\n`;
+    const artifact = renderArtifact('evnto', planted);
+    const compiledIndex = artifact.indexOf(`${channel}:`);
+    const plantedIndex = artifact.lastIndexOf(`${channel}: #123456;`);
+    expect(compiledIndex).toBeGreaterThan(-1);
+    expect(plantedIndex).toBeGreaterThan(compiledIndex);
   });
 });

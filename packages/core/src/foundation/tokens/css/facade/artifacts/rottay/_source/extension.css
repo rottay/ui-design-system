@@ -13,29 +13,16 @@ html[data-tenant='rottay']:not([data-theme='light']):not(.light) {
   color: var(--ds-color-text-primary, #F0F0F0);
 
   /* -- Primary - White/light scale for dark mode -- */
-  --ds-color-primary-hover: #E0E0E0;
   --ds-color-primary-subtle: rgba(255, 255, 255, 0.08);
   --ds-color-primary-rgb: 255, 255, 255;
 
   /* -- Secondary - Neutral gray for dark ---------- */
-  --ds-color-secondary-hover: #C0C0C4;
   --ds-color-secondary-rgb: 160, 160, 165;
 
   /* -- Accent - Neutral gray -------------------- */
-  --ds-color-accent-hover: #C0C0C4;
 
   /* -- Neutral - Cool dark scale ----------------- */
   --ds-color-neutral-0: #0C0C0E;
-  --ds-color-neutral-50: #101012;
-  --ds-color-neutral-100: #131316;
-  --ds-color-neutral-200: #1A1A1E;
-  --ds-color-neutral-300: #2A2A2F;
-  --ds-color-neutral-400: #6B6B72;
-  --ds-color-neutral-500: #A0A0A5;
-  --ds-color-neutral-600: #C0C0C4;
-  --ds-color-neutral-700: #D4D4D8;
-  --ds-color-neutral-800: #E4E4E8;
-  --ds-color-neutral-900: #ECECEC;
 
   /* -- Alpha semantic aliases ------------------- */
   --ds-color-alpha-primary-10: rgba(255, 255, 255, 0.08);
@@ -59,27 +46,16 @@ html[data-tenant='rottay']:not([data-theme='light']):not(.light) {
   --ds-color-bg-hover: #18181C;
   --ds-color-bg-canvas: #0A0A0C;
   --ds-color-bg-info: rgba(59, 130, 246, 0.10);
-  --ds-color-bg-overlay: rgba(0, 0, 0, 0.64);
   --ds-color-bg-surface: #18181B;
 
   /* -- Text - Light text on dark surfaces --------- */
-  --ds-color-text-primary: #F0F0F0;
-  --ds-color-text-secondary: #B0B0B5;
   /* Ladder re-leveled (W8): muted must clear APCA |Lc| 45 on the page ground
      (#808088 measured 34.9); tertiary rises with it so the
      secondary > tertiary > muted ordering is preserved. */
-  --ds-color-text-tertiary: #9A9AA2;
-  --ds-color-text-muted: #96969E;
-  --ds-color-text-disabled: #555560;
   --ds-color-text: #ECECEC;
   --ds-color-text-inverse: #0C0C0E;
 
   /* -- Borders - Nearly invisible on dark (Vercel style) ------- */
-  --ds-color-border: #28282C;
-  --ds-color-border-primary: #28282C;
-  --ds-color-border-secondary: #252529;
-  --ds-color-border-subtle: #161619;
-  --ds-color-border-tertiary: #161619;
 
   /* -- Surfaces --------------------------------- */
   --ds-color-surface: #18181B;
@@ -88,17 +64,9 @@ html[data-tenant='rottay']:not([data-theme='light']):not(.light) {
   --ds-color-shadow: rgba(0, 0, 0, 0.40);
 
   /* Success - Green */
-  --ds-color-success-bg: rgba(34, 197, 94, 0.10);
-  --ds-color-success-border: rgba(34, 197, 94, 0.22);
 
   /* Warning - Amber */
-  --ds-color-warning-bg: rgba(245, 158, 11, 0.10);
-  --ds-color-warning-border: rgba(245, 158, 11, 0.22);
-  --ds-color-error-bg: rgba(239, 68, 68, 0.10);
-  --ds-color-error-border: rgba(239, 68, 68, 0.22);
   --ds-color-danger: var(--ds-color-error-400);
-  --ds-color-info-bg: rgba(59, 130, 246, 0.10);
-  --ds-color-info-border: rgba(59, 130, 246, 0.22);
 
   /* Live/Online indicators */
   --ds-color-accent-live: #22C55E;
@@ -119,9 +87,6 @@ html[data-tenant='rottay']:not([data-theme='light']):not(.light) {
 
   /* -- Interactive states ----------------------- */
   --ds-color-interactive-border: rgba(255, 255, 255, 0.12);
-  --ds-color-interactive-bg-hover: rgba(255, 255, 255, 0.04);
-  --ds-color-interactive-bg-active: #2A2A2F;
-  --ds-color-interactive-bg-muted: #1A1A1E;
 
   /* -- Text aliases ----------------------------- */
   --ds-text-primary: #ECECEC;

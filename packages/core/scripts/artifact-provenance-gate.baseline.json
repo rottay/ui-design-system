@@ -7,29 +7,29 @@
   },
   "metrics": {
     "bithire": {
-      "bytes": 23339,
+      "bytes": 22191,
       "rules": 7,
-      "declarations": 209,
+      "declarations": 180,
       "important": 0,
-      "literals": 123,
+      "literals": 94,
       "appSelectors": 0,
       "engineSelectors": 0
     },
     "evnto": {
-      "bytes": 4680,
+      "bytes": 3602,
       "rules": 2,
-      "declarations": 57,
+      "declarations": 27,
       "important": 0,
-      "literals": 56,
+      "literals": 26,
       "appSelectors": 0,
       "engineSelectors": 0
     },
     "rottay": {
-      "bytes": 66191,
+      "bytes": 64757,
       "rules": 2,
-      "declarations": 1094,
+      "declarations": 1059,
       "important": 0,
-      "literals": 1248,
+      "literals": 1213,
       "appSelectors": 0,
       "engineSelectors": 0
     }
@@ -43,7 +43,7 @@
       "mediaDescendantSelectors": [],
       "structuralPaintSelectors": [],
       "capabilityGapRegionSizes": {
-        "capability-gap#04950ac6#1": 90,
+        "capability-gap#04950ac6#1": 61,
         "capability-gap#04950ac6#3": 12,
         "capability-gap#04950ac6#6": 93
       },
@@ -58,7 +58,7 @@
       "mediaDescendantSelectors": [],
       "structuralPaintSelectors": [],
       "capabilityGapRegionSizes": {
-        "capability-gap#04950ac6#1": 52
+        "capability-gap#04950ac6#1": 22
       },
       "capabilityGapChannels": [],
       "capabilityGapRawSelectors": []
@@ -71,7 +71,7 @@
       "mediaDescendantSelectors": [],
       "structuralPaintSelectors": [],
       "capabilityGapRegionSizes": {
-        "capability-gap#04950ac6#1": 583,
+        "capability-gap#04950ac6#1": 548,
         "capability-gap#f7c06ae1#1": 511
       },
       "capabilityGapChannels": [],
