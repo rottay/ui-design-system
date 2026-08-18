@@ -24,15 +24,15 @@
   /* MD - Medium (18px - Default) */
   --ds-radio-md-size: 1.125rem;         /* 18px */
   --ds-radio-md-font-size: 0.875rem;    /* 14px */
-  --ds-radio-md-border-width: 2px;
+  --ds-radio-md-border-width: var(--ds-border-width-2, 2px);
 
   /* LG - Large (20px) */
   --ds-radio-lg-font-size: 1rem;        /* 16px */
-  --ds-radio-lg-border-width: 2px;
+  --ds-radio-lg-border-width: var(--ds-border-width-2, 2px);
 
   /* XL - Extra Large (24px) */
   --ds-radio-xl-font-size: 1.125rem;    /* 18px */
-  --ds-radio-xl-border-width: 2px;
+  --ds-radio-xl-border-width: var(--ds-border-width-2, 2px);
 
   /* Size-agnostic default. The base component rule sizes an unqualified
      radio, so it needs a rung to read; this DERIVES from md rather than
@@ -106,7 +106,7 @@
      FOCUS
      Focus ring settings
      ======================================================================== */
-  --ds-radio-focus-ring-width: 2px;
-  --ds-radio-focus-ring-offset: 2px;
+  --ds-radio-focus-ring-width: var(--ds-focus-ring-width, 2px);
+  --ds-radio-focus-ring-offset: var(--ds-focus-ring-offset, 2px);
   --ds-radio-focus-ring-color: var(--ds-color-primary, #1890ff);
 }

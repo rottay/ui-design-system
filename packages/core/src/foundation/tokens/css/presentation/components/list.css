@@ -31,7 +31,7 @@
      ======================================================================== */
 
   --ds-list-border-color: var(--ds-color-neutral-200, #e5e7eb);
-  --ds-list-border-width: 1px;
+  --ds-list-border-width: var(--ds-border-width-1, 1px);
   --ds-list-border-radius: var(--ds-radius-md, 8px);
 
   /* Split/divider between items */
@@ -59,7 +59,7 @@
   --ds-list-header-padding-vertical: 12px;
   --ds-list-header-padding-horizontal: 16px;
   --ds-list-header-font-size: 14px;
-  --ds-list-header-font-weight: 600;
+  --ds-list-header-font-weight: var(--ds-font-weight-semibold, 600);
   --ds-list-header-background-color: var(--ds-color-neutral-50, #f9fafb);
 
   --ds-list-footer-padding-vertical: 12px;
@@ -73,7 +73,7 @@
 
   --ds-list-meta-avatar-margin-right: 16px;
   --ds-list-meta-title-font-size: 14px;
-  --ds-list-meta-title-font-weight: 500;
+  --ds-list-meta-title-font-weight: var(--ds-font-weight-medium, 500);
   --ds-list-meta-title-color: var(--ds-color-neutral-900, #111827);
   --ds-list-meta-description-font-size: 12px;
   --ds-list-meta-description-color: var(--ds-color-neutral-500, #6b7280);

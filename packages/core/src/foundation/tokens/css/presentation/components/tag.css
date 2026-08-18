@@ -45,7 +45,7 @@
      Border radius options for tags
      ======================================================================== */
 
-  --ds-tag-radius-none: 0;
+  --ds-tag-radius-none: var(--ds-radius-none, 0);
   --ds-tag-radius-sm: 0.125rem;              /* 2px */
   --ds-tag-radius-md: 0.25rem;               /* 4px */
   --ds-tag-radius-lg: 0.5rem;                /* 8px */
@@ -61,15 +61,15 @@
      Icon and close button spacing
      ======================================================================== */
 
-  --ds-tag-icon-gap: 0.25rem;                /* 4px */
-  --ds-tag-close-gap: 0.25rem;               /* 4px */
+  --ds-tag-icon-gap: var(--ds-spacing-1, 0.25rem);                /* 4px */
+  --ds-tag-close-gap: var(--ds-spacing-1, 0.25rem);               /* 4px */
 
   /* ========================================================================
      BORDER
      Border settings for bordered tags
      ======================================================================== */
 
-  --ds-tag-border-width: 1px;
+  --ds-tag-border-width: var(--ds-border-width-1, 1px);
 
   /* ========================================================================
      TRANSITIONS
@@ -85,6 +85,6 @@
      Font settings for tag content
      ======================================================================== */
 
-  --ds-tag-font-weight: 500;
-  --ds-tag-line-height: 1;
+  --ds-tag-font-weight: var(--ds-font-weight-medium, 500);
+  --ds-tag-line-height: var(--ds-line-height-none, 1);
 }

@@ -49,7 +49,7 @@
      CONTAINER
      Modal container positioning and appearance
      ======================================================================== */
-  --ds-modal-margin: 2rem;                 /* Margin from viewport edges */
+  --ds-modal-margin: var(--ds-spacing-8, 2rem);                 /* Margin from viewport edges */
   --ds-modal-margin-mobile: 1rem;
 
   /* ========================================================================
@@ -71,7 +71,7 @@
   --ds-modal-bg: var(--ds-color-white);
   --ds-modal-color: var(--ds-color-neutral-900);
   --ds-modal-border-radius: var(--ds-radius-xl);
-  --ds-modal-border-width: 0;
+  --ds-modal-border-width: var(--ds-border-width-0, 0);
   --ds-modal-border-color: transparent;
   /* NOT DELEGATED -- DEFERRED, and Modal's shadow causal cell is STRUCK for this
      round. This default briefly read
@@ -88,26 +88,26 @@
   --ds-modal-shadow: var(--ds-shadow-modal);
 
   /* Padding variants */
-  --ds-modal-padding: 1.5rem;              /* 24px - Default */
+  --ds-modal-padding: var(--ds-spacing-6, 1.5rem);              /* 24px - Default */
   --ds-modal-padding-none: 0;              /* No padding */
   --ds-modal-padding-sm: 12px;             /* Small: 12px */
   --ds-modal-padding-md: 16px;             /* Medium: 16px */
   --ds-modal-padding-lg: 24px;             /* Large: 24px */
 
   /* Border radius variants */
-  --ds-modal-radius-none: 0;               /* No border radius */
+  --ds-modal-radius-none: var(--ds-radius-none, 0);               /* No border radius */
   --ds-modal-radius-sm: 4px;               /* Small: 4px */
-  --ds-modal-radius-md: 8px;               /* Medium: 8px */
-  --ds-modal-radius-lg: 12px;              /* Large: 12px */
-  --ds-modal-radius-xl: 16px;              /* Extra large: 16px */
+  --ds-modal-radius-md: var(--ds-radius-md, 8px);               /* Medium: 8px */
+  --ds-modal-radius-lg: var(--ds-radius-lg, 12px);              /* Large: 12px */
+  --ds-modal-radius-xl: var(--ds-radius-xl, 16px);              /* Extra large: 16px */
 
   /* ========================================================================
      HEADER
      Modal header section
      ======================================================================== */
   --ds-modal-header-padding: var(--ds-modal-padding);
-  --ds-modal-header-padding-bottom: 1rem;
-  --ds-modal-header-border-width: 1px;
+  --ds-modal-header-padding-bottom: var(--ds-spacing-4, 1rem);
+  --ds-modal-header-border-width: var(--ds-border-width-1, 1px);
   --ds-modal-header-border-color: var(--ds-color-neutral-200);
   --ds-modal-header-bg: transparent;
 
@@ -120,14 +120,14 @@
   /* Subtitle */
   --ds-modal-subtitle-font-size: var(--ds-font-size-sm);
   --ds-modal-subtitle-color: var(--ds-color-neutral-600);
-  --ds-modal-subtitle-margin-top: 0.25rem;
+  --ds-modal-subtitle-margin-top: var(--ds-spacing-1, 0.25rem);
 
   /* ========================================================================
      BODY
      Modal content area
      ======================================================================== */
   --ds-modal-body-padding: var(--ds-modal-padding);
-  --ds-modal-body-padding-y: 1.5rem;
+  --ds-modal-body-padding-y: var(--ds-spacing-6, 1.5rem);
   --ds-modal-body-color: var(--ds-color-neutral-700);
   --ds-modal-body-font-size: var(--ds-font-size-base);
   --ds-modal-body-line-height: var(--ds-line-height-normal);
@@ -138,8 +138,8 @@
      Modal footer with actions
      ======================================================================== */
   --ds-modal-footer-padding: var(--ds-modal-padding);
-  --ds-modal-footer-padding-top: 1rem;
-  --ds-modal-footer-border-width: 1px;
+  --ds-modal-footer-padding-top: var(--ds-spacing-4, 1rem);
+  --ds-modal-footer-border-width: var(--ds-border-width-1, 1px);
   --ds-modal-footer-border-color: var(--ds-color-neutral-200);
   --ds-modal-footer-bg: var(--ds-color-neutral-50);
   --ds-modal-footer-justify: flex-end;
@@ -198,19 +198,19 @@
   /* Top modal */
   --ds-modal-top-align: flex-start;
   --ds-modal-top-justify: center;
-  --ds-modal-top-margin-top: 4rem;
+  --ds-modal-top-margin-top: var(--ds-spacing-16, 4rem);
 
   /* Drawer/Side modal */
   --ds-modal-drawer-width: 24rem;          /* 384px */
   --ds-modal-drawer-max-width: 90vw;
   --ds-modal-drawer-height: 100vh;
-  --ds-modal-drawer-border-radius: 0;
+  --ds-modal-drawer-border-radius: var(--ds-radius-none, 0);
 
   /* Bottom sheet (mobile) */
   --ds-modal-bottom-sheet-width: 100%;
   --ds-modal-bottom-sheet-max-height: 90vh;
   --ds-modal-bottom-sheet-border-radius-top: var(--ds-radius-2xl);
-  --ds-modal-bottom-sheet-border-radius-bottom: 0;
+  --ds-modal-bottom-sheet-border-radius-bottom: var(--ds-radius-none, 0);
 
   /* ========================================================================
      SEMANTIC VARIANTS
@@ -244,13 +244,13 @@
   --ds-modal-icon-size: 3rem;              /* 48px */
   --ds-modal-icon-size-sm: 2rem;           /* 32px */
   --ds-modal-icon-size-lg: 4rem;           /* 64px */
-  --ds-modal-icon-margin-bottom: 1rem;
+  --ds-modal-icon-margin-bottom: var(--ds-spacing-4, 1rem);
 
   /* ========================================================================
      SCROLLABLE CONTENT
      Settings for scrolling modal body
      ======================================================================== */
-  --ds-modal-scroll-padding: 0.5rem;
+  --ds-modal-scroll-padding: var(--ds-spacing-2, 0.5rem);
   --ds-modal-scroll-shadow-top: inset 0 8px 8px -8px rgba(0, 0, 0, 0.1);
   --ds-modal-scroll-shadow-bottom: inset 0 -8px 8px -8px rgba(0, 0, 0, 0.1);
 
@@ -274,7 +274,7 @@
      Focus trap and keyboard navigation
      ======================================================================== */
   --ds-modal-focus-ring: var(--ds-shadow-focus-ring);
-  --ds-modal-focus-ring-offset: 2px;
+  --ds-modal-focus-ring-offset: var(--ds-focus-ring-offset, 2px);
   --ds-modal-focus-outline: none;
 
   /* ========================================================================
@@ -283,7 +283,7 @@
      ======================================================================== */
   --ds-modal-mobile-width: calc(100vw - 2rem);
   --ds-modal-mobile-max-height: calc(100vh - 2rem);
-  --ds-modal-mobile-padding: 1rem;
+  --ds-modal-mobile-padding: var(--ds-spacing-4, 1rem);
   --ds-modal-mobile-border-radius: var(--ds-radius-lg);
 
   /* ========================================================================
@@ -292,7 +292,7 @@
      ======================================================================== */
   --ds-modal-divider-width: 1px;
   --ds-modal-divider-color: var(--ds-color-neutral-200);
-  --ds-modal-divider-margin-y: 1rem;
+  --ds-modal-divider-margin-y: var(--ds-spacing-4, 1rem);
 
   /* ========================================================================
      BACKDROP BLUR

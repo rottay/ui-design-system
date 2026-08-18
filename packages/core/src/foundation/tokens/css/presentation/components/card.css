@@ -10,10 +10,10 @@
      SIZES - Card Padding Variants
      Three size variants for different card densities
      ======================================================================== */
-  --ds-card-sm-padding: 0.75rem; /* 12px */
-  --ds-card-md-padding: 1rem; /* 16px - Default */
-  --ds-card-lg-padding: 1.5rem; /* 24px */
-  --ds-card-xl-padding: 2rem; /* 32px */
+  --ds-card-sm-padding: var(--ds-spacing-3, 0.75rem); /* 12px */
+  --ds-card-md-padding: var(--ds-spacing-4, 1rem); /* 16px - Default */
+  --ds-card-lg-padding: var(--ds-spacing-6, 1.5rem); /* 24px */
+  --ds-card-xl-padding: var(--ds-spacing-8, 2rem); /* 32px */
 
   --ds-card-default-padding: var(--ds-card-md-padding);
 
@@ -42,7 +42,7 @@
      BORDERS
      Border styling for cards
      ======================================================================== */
-  --ds-card-border-width: 1px;
+  --ds-card-border-width: var(--ds-border-width-1, 1px);
   --ds-card-border-color: var(--ds-color-neutral-200);
   --ds-card-border-color-hover: var(--ds-color-neutral-300);
   --ds-card-border-color-active: var(--ds-card-border-color-hover);
@@ -67,7 +67,7 @@
   --ds-card-radius-xl: var(--ds-radius-2xl);
 
   /* Borderless variant */
-  --ds-card-borderless-border-width: 0;
+  --ds-card-borderless-border-width: var(--ds-border-width-0, 0);
 
   /* ========================================================================
      SHADOWS
@@ -98,7 +98,7 @@
     var(--ds-spacing-6);
   --ds-card-header-gap: var(--ds-spacing-3);
   --ds-card-header-padding-bottom: calc(var(--ds-card-default-padding) * 0.75);
-  --ds-card-header-border-width: 1px;
+  --ds-card-header-border-width: var(--ds-border-width-1, 1px);
   --ds-card-header-border-color: var(--ds-color-neutral-200);
   --ds-card-header-bg: transparent;
   --ds-card-header-min-height: 4rem;
@@ -136,10 +136,10 @@
   /* Header subtitle */
   --ds-card-subtitle-font-size: var(--ds-font-size-sm);
   --ds-card-subtitle-color: var(--ds-color-neutral-600);
-  --ds-card-subtitle-margin-top: 0.25rem;
+  --ds-card-subtitle-margin-top: var(--ds-spacing-1, 0.25rem);
 
   /* Header actions */
-  --ds-card-header-actions-gap: 0.5rem;
+  --ds-card-header-actions-gap: var(--ds-spacing-2, 0.5rem);
 
   /* ========================================================================
      BODY
@@ -164,13 +164,13 @@
   --ds-card-footer-padding-lg: var(--ds-spacing-5)
     var(--ds-spacing-6);
   --ds-card-footer-padding-top: calc(var(--ds-card-default-padding) * 0.75);
-  --ds-card-footer-border-width: 1px;
+  --ds-card-footer-border-width: var(--ds-border-width-1, 1px);
   --ds-card-footer-border-color: var(--ds-color-neutral-200);
   --ds-card-footer-bg: transparent;
   --ds-card-footer-color: var(--ds-color-neutral-600);
 
   /* Footer actions */
-  --ds-card-footer-actions-gap: 0.5rem;
+  --ds-card-footer-actions-gap: var(--ds-spacing-2, 0.5rem);
   --ds-card-footer-actions-justify: flex-end;
   --ds-card-actions-gap: var(--ds-spacing-2);
   --ds-card-actions-margin-top: var(--ds-spacing-4);
@@ -181,7 +181,7 @@
      Card image and media styling
      ======================================================================== */
   --ds-card-media-border-radius-top: var(--ds-card-border-radius);
-  --ds-card-media-border-radius-bottom: 0;
+  --ds-card-media-border-radius-bottom: var(--ds-radius-none, 0);
   --ds-card-media-aspect-ratio: 16 / 9;
   --ds-card-media-object-fit: cover;
   --ds-card-image-height: 12.5rem;
@@ -234,12 +234,12 @@
 
   /* Flat variant (no border, no shadow) */
   --ds-card-flat-bg: var(--ds-surface-panel, var(--ds-card-bg));
-  --ds-card-flat-border-width: 0;
+  --ds-card-flat-border-width: var(--ds-border-width-0, 0);
   --ds-card-flat-shadow: none;
 
   /* Elevated variant (strong shadow, no border) */
   --ds-card-elevated-bg: var(--ds-card-bg);
-  --ds-card-elevated-border-width: 0;
+  --ds-card-elevated-border-width: var(--ds-border-width-0, 0);
   --ds-card-elevated-shadow: var(--ds-card-shadow, var(--ds-card-shadow-md));
   --ds-card-elevated-shadow-hover: var(--ds-card-shadow-hover, var(--ds-card-shadow-lg));
 
@@ -520,7 +520,7 @@
      ======================================================================== */
   --ds-card-divider-width: 1px;
   --ds-card-divider-color: var(--ds-color-neutral-200);
-  --ds-card-divider-margin-y: 0.75rem;
+  --ds-card-divider-margin-y: var(--ds-spacing-3, 0.75rem);
 
   /* ========================================================================
      META/BADGE
@@ -528,13 +528,13 @@
      ======================================================================== */
   --ds-card-meta-font-size: var(--ds-font-size-sm);
   --ds-card-meta-color: var(--ds-color-neutral-500);
-  --ds-card-meta-gap: 0.5rem;
+  --ds-card-meta-gap: var(--ds-spacing-2, 0.5rem);
 
   /* ========================================================================
      GRID/LAYOUT
      Settings for card grids
      ======================================================================== */
-  --ds-card-grid-gap: 1rem; /* 16px */
+  --ds-card-grid-gap: var(--ds-spacing-4, 1rem); /* 16px */
   --ds-card-grid-gap-sm: 0.75rem; /* 12px */
   --ds-card-grid-gap-lg: 1.5rem; /* 24px */
 
@@ -597,7 +597,7 @@
   --ds-card-focus-ring: var(--ds-shadow-focus-ring);
   --ds-card-focus-ring-color: var(--ds-focus-ring-color);
   --ds-card-focus-ring-width: var(--ds-focus-ring-width);
-  --ds-card-focus-ring-offset: 2px;
+  --ds-card-focus-ring-offset: var(--ds-focus-ring-offset, 2px);
   --ds-card-selected-outline-width: var(--ds-card-border-width);
   --ds-card-focus-outline: none;
 

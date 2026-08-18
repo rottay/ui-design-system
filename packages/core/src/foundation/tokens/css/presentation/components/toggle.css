@@ -94,7 +94,7 @@
      Settings for the toggle track/background
      ======================================================================== */
   --ds-toggle-track-border-radius: var(--ds-radius-full);
-  --ds-toggle-track-border-width: 1px;
+  --ds-toggle-track-border-width: var(--ds-border-width-1, 1px);
   --ds-toggle-track-border-style: solid;
 
   /* ========================================================================
@@ -104,12 +104,12 @@
   --ds-toggle-label-color: var(--ds-color-neutral-700);
   --ds-toggle-label-color-disabled: var(--ds-color-neutral-400);
   --ds-toggle-label-font-weight: var(--ds-font-weight-normal);
-  --ds-toggle-label-gap: 0.5rem;            /* 8px */
+  --ds-toggle-label-gap: var(--ds-spacing-2, 0.5rem);            /* 8px */
 
   /* Description text */
   --ds-toggle-description-color: var(--ds-color-neutral-500);
   --ds-toggle-description-font-size: 0.75rem;
-  --ds-toggle-description-margin-top: 0.25rem;
+  --ds-toggle-description-margin-top: var(--ds-spacing-1, 0.25rem);
 
   /* ========================================================================
      INNER LABELS - On/Off Text Inside Toggle
@@ -125,7 +125,7 @@
      ======================================================================== */
   --ds-toggle-helper-color: var(--ds-color-neutral-600);
   --ds-toggle-helper-font-size: 0.75rem;
-  --ds-toggle-helper-margin-top: 0.25rem;
+  --ds-toggle-helper-margin-top: var(--ds-spacing-1, 0.25rem);
 
   /* ========================================================================
      ERROR STATE
@@ -133,8 +133,8 @@
      ======================================================================== */
   --ds-toggle-error-border-color: var(--ds-color-error-500);
   --ds-toggle-error-message-color: var(--ds-color-error-600);
-  --ds-toggle-error-message-font-size: 0.75rem;
-  --ds-toggle-error-message-margin-top: 0.25rem;
+  --ds-toggle-error-message-font-size: var(--ds-font-size-xs, 0.75rem);
+  --ds-toggle-error-message-margin-top: var(--ds-spacing-1, 0.25rem);
 
   /* ========================================================================
      FOCUS STATE
@@ -142,7 +142,7 @@
      ======================================================================== */
   --ds-toggle-focus-ring-color: var(--ds-color-primary-200);
   --ds-toggle-focus-ring-width: 3px;
-  --ds-toggle-focus-ring-offset: 2px;
+  --ds-toggle-focus-ring-offset: var(--ds-focus-ring-offset, 2px);
   --ds-toggle-focus-shadow: 0 0 0 var(--ds-toggle-focus-ring-width) var(--ds-toggle-focus-ring-color);
 
   /* ========================================================================

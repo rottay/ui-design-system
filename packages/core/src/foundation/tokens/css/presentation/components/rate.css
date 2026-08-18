@@ -41,7 +41,7 @@
      SPACING
      Gap between stars
      ======================================================================== */
-  --ds-rate-gap: 0.25rem;               /* 4px */
+  --ds-rate-gap: var(--ds-spacing-1, 0.25rem);               /* 4px */
 
   /* ========================================================================
      TRANSITIONS
@@ -56,7 +56,7 @@
      Hover and focus states
      ======================================================================== */
   --ds-rate-hover-scale: 1.1;
-  --ds-rate-focus-ring-width: 2px;
+  --ds-rate-focus-ring-width: var(--ds-focus-ring-width, 2px);
   --ds-rate-focus-ring-color: var(--ds-color-primary-500);
-  --ds-rate-focus-ring-offset: 2px;
+  --ds-rate-focus-ring-offset: var(--ds-focus-ring-offset, 2px);
 }

@@ -49,7 +49,7 @@
 
   /* Border */
   --ds-qrcode-border-color: var(--ds-color-neutral-200, #e5e7eb);
-  --ds-qrcode-border-width: 1px;
+  --ds-qrcode-border-width: var(--ds-border-width-1, 1px);
   --ds-qrcode-border-radius: var(--ds-radius-md, 8px);
 
   /* ========================================================================

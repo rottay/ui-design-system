@@ -21,7 +21,7 @@
   --ds-badge-sm-min-width: 1rem;           /* 16px */
   --ds-badge-sm-height: 1rem;              /* 16px */
   --ds-badge-sm-font-size: 0.625rem;       /* 10px */
-  --ds-badge-sm-padding-x: 0.5rem;
+  --ds-badge-sm-padding-x: var(--ds-spacing-2, 0.5rem);
 
   /* MD - Medium (Default) */
   --ds-badge-md-min-width: 1.25rem;        /* 20px */
@@ -33,7 +33,7 @@
   --ds-badge-lg-min-width: 1.5rem;         /* 24px */
   --ds-badge-lg-height: 1.5rem;            /* 24px */
   --ds-badge-lg-font-size: 0.875rem;       /* 14px */
-  --ds-badge-lg-padding-x: 0.75rem;
+  --ds-badge-lg-padding-x: var(--ds-spacing-3, 0.75rem);
 
   /* XL - Extra Large */
   --ds-badge-xl-min-width: 1.75rem;        /* 28px */
@@ -101,7 +101,7 @@
      Border radius options for badges
      ======================================================================== */
 
-  --ds-badge-radius-none: 0;
+  --ds-badge-radius-none: var(--ds-radius-none, 0);
   --ds-badge-radius-sm: 0.125rem;          /* 2px */
   --ds-badge-radius-md: 0.25rem;           /* 4px */
   --ds-badge-radius-lg: 0.5rem;            /* 8px */
@@ -114,16 +114,16 @@
      ======================================================================== */
 
   --ds-badge-padding-x: 0.375rem;          /* 6px */
-  --ds-badge-padding-y: 0;
+  --ds-badge-padding-y: var(--ds-spacing-0, 0);
   --ds-badge-icon-gap: 0.25rem;            /* 4px */
-  --ds-badge-close-gap: 0.25rem;           /* 4px */
+  --ds-badge-close-gap: var(--ds-spacing-1, 0.25rem);           /* 4px */
 
   /* ========================================================================
      BORDER
      Border settings for bordered badges
      ======================================================================== */
 
-  --ds-badge-border-width: 2px;
+  --ds-badge-border-width: var(--ds-border-width-2, 2px);
   --ds-badge-border-color: var(--ds-color-white, #ffffff);
 
   /* ========================================================================
@@ -149,8 +149,8 @@
      Font settings for badge content
      ======================================================================== */
 
-  --ds-badge-font-weight: 500;
-  --ds-badge-line-height: 1;
+  --ds-badge-font-weight: var(--ds-font-weight-medium, 500);
+  --ds-badge-line-height: var(--ds-line-height-none, 1);
 
   /* ========================================================================
      COMPACT LABEL FAMILY — Badge / Chip / Pill
@@ -168,7 +168,7 @@
   --ds-badge-avatar-bleed: 0.125rem;
   --ds-badge-count-min-size: 1rem;
   --ds-badge-count-size: 1rem;
-  --ds-badge-count-padding-inline: 0.25rem;
+  --ds-badge-count-padding-inline: var(--ds-spacing-1, 0.25rem);
   --ds-badge-remove-size: 1.125rem;
   --ds-badge-remove-bleed: 0.1875rem;
   --ds-badge-disabled-opacity: 0.48;

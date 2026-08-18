@@ -12,7 +12,7 @@
 
   /* Dot sizes */
   --ds-timeline-dot-size: 12px;
-  --ds-timeline-dot-border-width: 2px;
+  --ds-timeline-dot-border-width: var(--ds-border-width-2, 2px);
 
   /* Line settings */
   --ds-timeline-line-width: 2px;
@@ -46,7 +46,7 @@
 
   /* Content styling */
   --ds-timeline-content-font-size: 14px;
-  --ds-timeline-content-line-height: 1.5;
+  --ds-timeline-content-line-height: var(--ds-line-height-normal, 1.5);
   --ds-timeline-content-color: var(--ds-color-neutral-700, #374151);
 
   /* Label styling */

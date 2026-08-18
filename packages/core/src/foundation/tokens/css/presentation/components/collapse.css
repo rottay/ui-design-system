@@ -23,7 +23,7 @@
   /* Root - Default Variant - Idle State */
   --ds-collapse-root-default-idle-bg: var(--ds-color-white);
   --ds-collapse-root-default-idle-border-color: var(--ds-color-neutral-200);
-  --ds-collapse-root-default-idle-border-width: 1px;
+  --ds-collapse-root-default-idle-border-width: var(--ds-border-width-1, 1px);
   --ds-collapse-root-default-idle-border-style: solid;
   --ds-collapse-root-default-idle-border-radius: var(--ds-radius-lg);
   --ds-collapse-root-default-idle-shadow: var(--ds-shadow-sm);
@@ -31,7 +31,7 @@
   /* Root - Bordered Variant - Idle State */
   --ds-collapse-root-bordered-idle-bg: transparent;
   --ds-collapse-root-bordered-idle-border-color: var(--ds-color-neutral-300);
-  --ds-collapse-root-bordered-idle-border-width: 1px;
+  --ds-collapse-root-bordered-idle-border-width: var(--ds-border-width-1, 1px);
   --ds-collapse-root-bordered-idle-border-style: solid;
   --ds-collapse-root-bordered-idle-border-radius: var(--ds-radius-lg);
   --ds-collapse-root-bordered-idle-shadow: none;
@@ -39,9 +39,9 @@
   /* Root - Ghost Variant - Idle State */
   --ds-collapse-root-ghost-idle-bg: transparent;
   --ds-collapse-root-ghost-idle-border-color: transparent;
-  --ds-collapse-root-ghost-idle-border-width: 0;
+  --ds-collapse-root-ghost-idle-border-width: var(--ds-border-width-0, 0);
   --ds-collapse-root-ghost-idle-border-style: none;
-  --ds-collapse-root-ghost-idle-border-radius: 0;
+  --ds-collapse-root-ghost-idle-border-radius: var(--ds-radius-none, 0);
   --ds-collapse-root-ghost-idle-shadow: none;
 
   /* ========================================================================
@@ -86,7 +86,7 @@
   --ds-collapse-header-ghost-idle-bg: transparent;
   --ds-collapse-header-ghost-idle-color: var(--ds-color-neutral-800);
   --ds-collapse-header-ghost-idle-border-color: transparent;
-  --ds-collapse-header-ghost-idle-border-width: 0;
+  --ds-collapse-header-ghost-idle-border-width: var(--ds-border-width-0, 0);
   --ds-collapse-header-ghost-idle-padding-x: var(--ds-spacing-3);
   --ds-collapse-header-ghost-idle-padding-y: var(--ds-spacing-2);
 
@@ -112,7 +112,7 @@
   --ds-collapse-content-ghost-idle-bg: transparent;
   --ds-collapse-content-ghost-idle-color: var(--ds-color-neutral-700);
   --ds-collapse-content-ghost-idle-border-color: transparent;
-  --ds-collapse-content-ghost-idle-border-width: 0;
+  --ds-collapse-content-ghost-idle-border-width: var(--ds-border-width-0, 0);
   --ds-collapse-content-ghost-idle-padding-x: var(--ds-spacing-3);
   --ds-collapse-content-ghost-idle-padding-y: var(--ds-spacing-2);
 
@@ -141,7 +141,7 @@
   --ds-collapse-icon-position-start-order: -1;
   --ds-collapse-icon-position-end-order: 1;
   --ds-collapse-icon-position-end-margin-left: auto;
-  --ds-collapse-icon-position-end-margin-right: 0;
+  --ds-collapse-icon-position-end-margin-right: var(--ds-spacing-0, 0);
 
   /* ========================================================================
      SIZES - Small, Middle, Large

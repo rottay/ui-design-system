@@ -13,7 +13,7 @@
 
   /* XS - Extra Small */
   --ds-input-xs-height: 1.5rem;            /* 24px */
-  --ds-input-xs-padding-x: 0.5rem;         /* 8px */
+  --ds-input-xs-padding-x: var(--ds-spacing-2, 0.5rem);         /* 8px */
   --ds-input-xs-padding-y: 0.125rem;       /* 2px */
   --ds-input-xs-font-size: 0.75rem;        /* 12px */
   --ds-input-xs-line-height: 1.25rem;      /* 20px */
@@ -23,7 +23,7 @@
   /* SM - Small */
   --ds-input-sm-height: 2rem;              /* 32px */
   --ds-input-sm-padding-x: 0.625rem;       /* 10px */
-  --ds-input-sm-padding-y: 0.25rem;        /* 4px */
+  --ds-input-sm-padding-y: var(--ds-spacing-1, 0.25rem);        /* 4px */
   --ds-input-sm-font-size: 0.8125rem;      /* 13px */
   --ds-input-sm-line-height: 1.5rem;       /* 24px */
   --ds-input-sm-icon-size: 1rem;           /* 16px */
@@ -32,7 +32,7 @@
   /* MD - Medium (Default) */
   --ds-input-md-height: 2.5rem;            /* 40px */
   --ds-input-md-padding-x: 0.75rem;        /* 12px */
-  --ds-input-md-padding-y: 0.5rem;         /* 8px */
+  --ds-input-md-padding-y: var(--ds-spacing-2, 0.5rem);         /* 8px */
   --ds-input-md-font-size: 0.875rem;       /* 14px */
   --ds-input-md-line-height: 1.5rem;       /* 24px */
   --ds-input-md-icon-size: 1.25rem;        /* 20px */
@@ -41,7 +41,7 @@
   /* LG - Large */
   --ds-input-lg-height: 3rem;              /* 48px */
   --ds-input-lg-padding-x: 0.875rem;       /* 14px */
-  --ds-input-lg-padding-y: 0.75rem;        /* 12px */
+  --ds-input-lg-padding-y: var(--ds-spacing-3, 0.75rem);        /* 12px */
   --ds-input-lg-font-size: 1rem;           /* 16px */
   --ds-input-lg-line-height: 1.75rem;      /* 28px */
   --ds-input-lg-icon-size: 1.5rem;         /* 24px */
@@ -49,8 +49,8 @@
 
   /* XL - Extra Large */
   --ds-input-xl-height: 3.5rem;            /* 56px */
-  --ds-input-xl-padding-x: 1rem;           /* 16px */
-  --ds-input-xl-padding-y: 1rem;           /* 16px */
+  --ds-input-xl-padding-x: var(--ds-spacing-4, 1rem);           /* 16px */
+  --ds-input-xl-padding-y: var(--ds-spacing-4, 1rem);           /* 16px */
   --ds-input-xl-font-size: 1.125rem;       /* 18px */
   --ds-input-xl-line-height: 2rem;         /* 32px */
   --ds-input-xl-icon-size: 1.75rem;        /* 28px */
@@ -88,7 +88,7 @@
   --ds-input-border-focus: var(--ds-input-border-color-focus);
   --ds-input-border-disabled: var(--ds-input-border-color-disabled);
 
-  --ds-input-border-width: 1px;
+  --ds-input-border-width: var(--ds-border-width-1, 1px);
   --ds-input-border-width-focus: 2px;
   --ds-input-border-style: solid;
   --ds-input-radius: var(--ds-radius-input, var(--ds-radius-md));
@@ -146,13 +146,13 @@
   --ds-input-addon-color: var(--ds-color-neutral-600);
   --ds-input-addon-border-color: var(--ds-color-neutral-300);
   --ds-input-addon-border: var(--ds-input-addon-border-color);
-  --ds-input-addon-padding-x: 0.75rem;
+  --ds-input-addon-padding-x: var(--ds-spacing-3, 0.75rem);
 
   --ds-input-affix-gap: 0.5rem;            /* Gap between affix and input text */
   --ds-input-affix-color: var(--ds-color-neutral-500);
   --ds-input-affix-size: var(--ds-input-md-icon-size);
   --ds-input-affix-size-compact: var(--ds-input-sm-icon-size);
-  --ds-input-affix-padding-x: 0;
+  --ds-input-affix-padding-x: var(--ds-spacing-0, 0);
   --ds-input-affix-bg: transparent;
   --ds-input-affix-border: 0 solid transparent;
   --ds-input-affix-radius: var(--ds-radius-sm);
@@ -163,7 +163,7 @@
      ======================================================================== */
   --ds-input-icon-color: var(--ds-color-neutral-500);
   --ds-input-icon-color-hover: var(--ds-color-neutral-600);
-  --ds-input-icon-gap: 0.5rem;
+  --ds-input-icon-gap: var(--ds-spacing-2, 0.5rem);
 
   /* ========================================================================
      CLEAR BUTTON
@@ -215,7 +215,7 @@
      ======================================================================== */
   --ds-input-helper-color: var(--ds-color-neutral-600);
   --ds-input-helper-font-size: var(--ds-font-size-sm);
-  --ds-input-helper-margin-top: 0.25rem;
+  --ds-input-helper-margin-top: var(--ds-spacing-1, 0.25rem);
   --ds-input-helper-line-height: var(--ds-line-height-snug);
 
   /* ========================================================================
@@ -224,7 +224,7 @@
      ======================================================================== */
   --ds-input-error-message-color: var(--ds-color-error-600);
   --ds-input-error-message-font-size: var(--ds-font-size-sm);
-  --ds-input-error-message-margin-top: 0.25rem;
+  --ds-input-error-message-margin-top: var(--ds-spacing-1, 0.25rem);
   --ds-input-error-message-icon-size: 1rem;
   --ds-input-error-message-font-weight: var(--ds-font-weight-medium);
 
@@ -234,19 +234,19 @@
      ======================================================================== */
   --ds-input-success-message-color: var(--ds-color-success-600);
   --ds-input-success-message-font-size: var(--ds-font-size-sm);
-  --ds-input-success-message-margin-top: 0.25rem;
+  --ds-input-success-message-margin-top: var(--ds-spacing-1, 0.25rem);
 
   /* ========================================================================
      GROUP/COMPACT
      Settings for input groups
      ======================================================================== */
-  --ds-input-group-gap: 0;
+  --ds-input-group-gap: var(--ds-spacing-0, 0);
   --ds-input-group-gap-separated: var(--ds-spacing-2);
   --ds-input-group-overlap: -1px;
   --ds-input-group-min-item-width: 12rem;
   --ds-input-group-border-radius-first: var(--ds-radius-md) 0 0 var(--ds-radius-md);
   --ds-input-group-border-radius-last: 0 var(--ds-radius-md) var(--ds-radius-md) 0;
-  --ds-input-group-border-radius-middle: 0;
+  --ds-input-group-border-radius-middle: var(--ds-radius-none, 0);
 
   /* ========================================================================
      SEARCH INPUT
