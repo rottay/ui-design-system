@@ -340,7 +340,69 @@
   ],
   "variantDisposition": "by-pack-enum",
   "variantsNote": "enumValues = los 6 pack ids con sufijo de rol (editorial-display, editorial-text, grotesk-display, humanist-text, geometric-display, plex-mono; tenant-theme:474-481) - un var() slot lleva UNA lista; el espejo nombra packs, no font-strings",
-  "variants": [],
+  "variants": [
+    {
+      "id": "editorial-display",
+      "value": "editorial-display",
+      "effects": {
+        "role": "display (FONT_PACK_MANIFEST, font-packs/manifest/index.ts:47)",
+        "channel": "--ds-font-pack-editorial-display, declarado en :root por font-packs/editorial-display/index.css:24",
+        "family": "'Fraunces', Georgia, 'Times New Roman', serif (fallbackStack manifest :50, identico al css :24)"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "editorial-text",
+      "value": "editorial-text",
+      "effects": {
+        "role": "text (FONT_PACK_MANIFEST, font-packs/manifest/index.ts:63)",
+        "channel": "--ds-font-pack-editorial-text, declarado en :root por font-packs/editorial-text/index.css:20",
+        "family": "'Newsreader', Georgia, 'Times New Roman', serif (fallbackStack manifest :66, identico al css :20)"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "grotesk-display",
+      "value": "grotesk-display",
+      "effects": {
+        "role": "display (FONT_PACK_MANIFEST, font-packs/manifest/index.ts:79)",
+        "channel": "--ds-font-pack-grotesk-display, declarado en :root por font-packs/grotesk-display/index.css:21",
+        "family": "'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif (fallbackStack manifest :82, identico al css :21)"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "humanist-text",
+      "value": "humanist-text",
+      "effects": {
+        "role": "text (FONT_PACK_MANIFEST, font-packs/manifest/index.ts:95)",
+        "channel": "--ds-font-pack-humanist-text, declarado en :root por font-packs/humanist-text/index.css:21",
+        "family": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif (fallbackStack manifest :98, identico al css :21)"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "geometric-display",
+      "value": "geometric-display",
+      "effects": {
+        "role": "display (FONT_PACK_MANIFEST, font-packs/manifest/index.ts:111)",
+        "channel": "--ds-font-pack-geometric-display, declarado en :root por font-packs/geometric-display/index.css:21",
+        "family": "'Outfit', ui-sans-serif, system-ui, -apple-system, sans-serif (fallbackStack manifest :114, identico al css :21)"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "plex-mono",
+      "value": "plex-mono",
+      "effects": {
+        "role": "mono (FONT_PACK_MANIFEST, font-packs/manifest/index.ts:127)",
+        "channel": "--ds-font-pack-plex-mono, declarado en :root por font-packs/plex-mono/index.css:28",
+        "family": "'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace (fallbackStack manifest :130, identico al css :28)"
+      },
+      "pinned": {}
+    }
+  ],
+  "variantsLaw": "Vocabulario cerrado en fuente por TENANT_THEME_FONT_PACK_IDS (foundation/contracts/composition/tenants/themes/tenant-theme/index.ts:473-480: los 6 ids en :474-479). Cierre EJECUTADO, no meramente declarado: isSafeFontFamily (infrastructure/compilers/composition/tenant-theme/index.ts:614-632) exige que TODO var() del valor autorado sea exactamente var(--ds-font-pack-<id>) y que el id este en ese allowlist, y rechaza fail-closed lo demas (:622-629); el resto del valor queda acotado al charset de :631 y a maxFontFamilyLength (compilers/kernel/foundation/schemas/tenant-theme/index.ts:2038). CADA PACK DECLARA UN SOLO CANAL, --ds-font-pack-<id>, en su propio css, y NO escribe ningun --ds-font-family-*: el aterrizaje sobre --ds-font-family-{base,heading,mono,display} lo decide el CAMPO AUTORADO del tema que referencia el pack por var() con fallback (testigo generado: foundation/tokens/css/facade/artifacts/bithire/index.css:373-376, donde humanist-text va a base, grotesk-display a display y heading, y plex-mono a mono). Por eso el par pack->canal de familia es autorado y no fijo por pack, y el `role` de FONT_PACK_MANIFEST (foundation/tokens/css/foundation/typography/font-packs/manifest/index.ts:44-152) es INTENCION DE SLOT, no restriccion aplicada por el compilador. El espejo nombra packs, nunca font-strings: la familia concreta vive en el css del pack y en fallbackStack, y se transcribe aqui sin inventar ninguna.",
   "overlaps": [
     {
       "withRoot": "typography.pairing",

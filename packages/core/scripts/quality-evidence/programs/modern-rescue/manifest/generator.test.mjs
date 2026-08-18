@@ -27,6 +27,7 @@ import {
   findForbiddenFamilyEdgeFields,
   checkSourceInventoryCorrespondence,
   resolveSourceBinding,
+  validateCascadeRoot,
   validateCell,
   validateControlOrthogonality,
   validateInternalChannelLaws,
@@ -941,4 +942,234 @@ test('schema.json, customization-model.json and the generator vocabularies agree
   assert.equal(SCHEMA.progressLaw.certificationRequiresUnknownZero, true);
   assert.equal(SCHEMA.progressLaw.bootstrapNeverOverwrites, true);
   assert.equal(SCHEMA.progressLaw.syncNeverDeletes, true);
+});
+
+// ---------------------------------------------------------------------------
+// Rule 7 — cascade roots: an empty closed vocabulary must say why
+// ---------------------------------------------------------------------------
+
+/**
+ * These grade a SYNTHETIC cascade root through the pure `validateCascadeRoot`
+ * entrypoint. They deliberately do NOT plant mutations into
+ * `manifest/cascade/roots/*.json` the way the program-check drills do: the
+ * authored roots are a live, concurrently edited surface, and a drill that
+ * writes and restores real files can only prove the law by racing whoever is
+ * filling those vocabularies. rules.mjs is documented as pure with respect to
+ * an explicit context object precisely so a fixture can be graded instead.
+ */
+const CASCADE_FIXTURE_SITE =
+  'packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/rules.mjs';
+
+const CASCADE_FIXTURE_CONTEXT = Object.freeze({
+  label: 'fixture/cascade/roots/fixture.axis.json',
+  repositoryRoot: REPOSITORY_ROOT,
+  activeControlIds: ['fixture.axis'],
+  controlTier: 'standard',
+  familyIds: new Set(),
+  socketOwnership: new Map(),
+});
+
+function cascadeRootFixture(overrides = {}) {
+  return {
+    schemaVersion: 1,
+    rootId: 'fixture.axis',
+    tier: 'standard',
+    rootChannel: {
+      channel: '--ds-fixture-axis',
+      emission: [{ kind: 'compiler-emit', site: CASCADE_FIXTURE_SITE }],
+    },
+    dependsOn: [],
+    derivations: [],
+    derivationsEmptyReason: 'fixture: no channel->channel edge is declared for this synthetic axis.',
+    terminalReach: [],
+    overlaps: [],
+    ...overrides,
+  };
+}
+
+const VARIANTS_HOLE = 'empty variants requires variantsEmptyReason';
+const VARIANTS_LIE = 'variantsEmptyReason is declared while variants is non-empty';
+
+const NAMED_VARIANT = Object.freeze({
+  id: 'estandar',
+  value: { level: 1 },
+  effects: { '--ds-fixture-axis': '1' },
+  pinned: {},
+});
+
+const VARIANTS_REASON =
+  'CERO variantes por diseno: el eje es un escape hatch, no un vocabulario cerrado. Declarado en fuente, no tapado: packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/rules.mjs:1.';
+
+test('a cascade root with an empty vocabulary and no declared reason fails closed', () => {
+  const errors = validateCascadeRoot(
+    cascadeRootFixture({ variants: [] }),
+    CASCADE_FIXTURE_CONTEXT,
+  );
+  assert.ok(
+    errors.some((error) => error.includes(VARIANTS_HOLE)),
+    `an empty variants without variantsEmptyReason must be rejected; got ${JSON.stringify(errors)}`,
+  );
+  // An ABSENT variants is the same silent hole as an empty one, not a way out.
+  const absent = cascadeRootFixture();
+  delete absent.variants;
+  assert.ok(
+    validateCascadeRoot(absent, CASCADE_FIXTURE_CONTEXT).some((error) =>
+      error.includes(VARIANTS_HOLE),
+    ),
+    'an absent variants must fail exactly like an empty one',
+  );
+});
+
+test('a cascade root with an empty vocabulary and a declared reason is accepted', () => {
+  assert.deepEqual(
+    validateCascadeRoot(
+      cascadeRootFixture({ variants: [], variantsEmptyReason: VARIANTS_REASON }),
+      CASCADE_FIXTURE_CONTEXT,
+    ),
+    [],
+  );
+});
+
+test('a reason for a hole that does not exist is a declared lie and fails closed', () => {
+  const errors = validateCascadeRoot(
+    cascadeRootFixture({ variants: [NAMED_VARIANT], variantsEmptyReason: VARIANTS_REASON }),
+    CASCADE_FIXTURE_CONTEXT,
+  );
+  assert.ok(
+    errors.some((error) => error.includes(VARIANTS_LIE)),
+    `variantsEmptyReason beside a non-empty vocabulary must be rejected; got ${JSON.stringify(errors)}`,
+  );
+});
+
+test('a cascade root with a real vocabulary and no reason is accepted', () => {
+  assert.deepEqual(
+    validateCascadeRoot(
+      cascadeRootFixture({ variants: [NAMED_VARIANT] }),
+      CASCADE_FIXTURE_CONTEXT,
+    ),
+    [],
+  );
+});
+
+test('variantsLaw stays optional, but an empty one is not a law', () => {
+  // Optional: three of the twenty authored roots carry it, seventeen do not.
+  assert.deepEqual(
+    validateCascadeRoot(
+      cascadeRootFixture({ variants: [NAMED_VARIANT] }),
+      CASCADE_FIXTURE_CONTEXT,
+    ),
+    [],
+  );
+  for (const empty of ['', '   ', 42]) {
+    assert.ok(
+      validateCascadeRoot(
+        cascadeRootFixture({ variants: [NAMED_VARIANT], variantsLaw: empty }),
+        CASCADE_FIXTURE_CONTEXT,
+      ).some((error) => error.includes('variantsLaw is optional')),
+      `variantsLaw ${JSON.stringify(empty)} must be rejected as a non-law`,
+    );
+  }
+  assert.deepEqual(
+    validateCascadeRoot(
+      cascadeRootFixture({
+        variants: [NAMED_VARIANT],
+        variantsLaw: 'Ninguna variante reordena DOM ni foco.',
+      }),
+      CASCADE_FIXTURE_CONTEXT,
+    ),
+    [],
+  );
+});
+
+// ---------------------------------------------------------------------------
+// Rule 8 — cascade roots: an empty derivation tail must say why
+// ---------------------------------------------------------------------------
+
+/**
+ * The tail's own tooth. `derivationsEmptyReason` was the sibling BOTH the head
+ * and the vocabulary cite by name, yet no line read it: five authored roots
+ * declared it into a gate that never looked. These grade the same SYNTHETIC
+ * root through the pure `validateCascadeRoot` entrypoint, for the same reason
+ * the vocabulary tests do — `manifest/cascade/roots/*.json` is a live,
+ * concurrently edited surface and must not be written by a test.
+ *
+ * `overlaps` has NO such test on purpose: `overlaps: []` is a complete
+ * assertion, not a silent hole. See the rule's docstring in rules.mjs.
+ */
+const DERIVATIONS_HOLE = 'empty derivations requires derivationsEmptyReason';
+const DERIVATIONS_LIE = 'derivationsEmptyReason is declared while derivations is non-empty';
+
+const NAMED_DERIVATION = Object.freeze({
+  from: '--ds-fixture-axis',
+  to: '--ds-fixture-axis-step',
+  rule: { kind: 'calc-multiply', factor: 2 },
+  state: 'LIVE',
+  site: CASCADE_FIXTURE_SITE,
+});
+
+const DERIVATIONS_REASON =
+  'CERO derivaciones por diseno: el eje emite su canal cabeza y nadie deriva de el. Declarado en fuente, no tapado: packages/core/scripts/quality-evidence/programs/modern-rescue/manifest/rules.mjs:1.';
+
+test('a cascade root with an empty derivation tail and no declared reason fails closed', () => {
+  const empty = cascadeRootFixture({ derivations: [] });
+  delete empty.derivationsEmptyReason;
+  const errors = validateCascadeRoot(empty, CASCADE_FIXTURE_CONTEXT);
+  assert.ok(
+    errors.some((error) => error.includes(DERIVATIONS_HOLE)),
+    `an empty derivations without derivationsEmptyReason must be rejected; got ${JSON.stringify(errors)}`,
+  );
+  // An ABSENT derivations is the same silent hole as an empty one, not a way out.
+  const absent = cascadeRootFixture();
+  delete absent.derivations;
+  delete absent.derivationsEmptyReason;
+  assert.ok(
+    validateCascadeRoot(absent, CASCADE_FIXTURE_CONTEXT).some((error) =>
+      error.includes(DERIVATIONS_HOLE),
+    ),
+    'an absent derivations must fail exactly like an empty one',
+  );
+  // A blank reason is not a reason, exactly as for the head and the vocabulary.
+  for (const blank of ['', '   ', 42]) {
+    assert.ok(
+      validateCascadeRoot(
+        cascadeRootFixture({ derivations: [], derivationsEmptyReason: blank }),
+        CASCADE_FIXTURE_CONTEXT,
+      ).some((error) => error.includes(DERIVATIONS_HOLE)),
+      `derivationsEmptyReason ${JSON.stringify(blank)} must be rejected as a non-reason`,
+    );
+  }
+});
+
+test('a cascade root with an empty derivation tail and a declared reason is accepted', () => {
+  assert.deepEqual(
+    validateCascadeRoot(
+      cascadeRootFixture({
+        variants: [NAMED_VARIANT],
+        derivations: [],
+        derivationsEmptyReason: DERIVATIONS_REASON,
+      }),
+      CASCADE_FIXTURE_CONTEXT,
+    ),
+    [],
+  );
+});
+
+test('a reason for a derivation hole that does not exist is a declared lie and fails closed', () => {
+  const errors = validateCascadeRoot(
+    cascadeRootFixture({
+      derivations: [NAMED_DERIVATION],
+      derivationsEmptyReason: DERIVATIONS_REASON,
+    }),
+    CASCADE_FIXTURE_CONTEXT,
+  );
+  assert.ok(
+    errors.some((error) => error.includes(DERIVATIONS_LIE)),
+    `derivationsEmptyReason beside a non-empty tail must be rejected; got ${JSON.stringify(errors)}`,
+  );
+});
+
+test('a cascade root with a real derivation tail and no reason is accepted', () => {
+  const live = cascadeRootFixture({ variants: [NAMED_VARIANT], derivations: [NAMED_DERIVATION] });
+  delete live.derivationsEmptyReason;
+  assert.deepEqual(validateCascadeRoot(live, CASCADE_FIXTURE_CONTEXT), []);
 });

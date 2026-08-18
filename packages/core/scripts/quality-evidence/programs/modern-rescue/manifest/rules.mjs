@@ -131,7 +131,8 @@ export function validateCascadeRoot(doc, { label, repositoryRoot, activeControlI
       }
     });
   }
-  (doc.derivations || []).forEach((d, i) => {
+  const derivations = doc.derivations;
+  (Array.isArray(derivations) ? derivations : []).forEach((d, i) => {
     const where = `${label}: derivations[${i}]`;
     if (!isGovernedChannel(d?.from)) errors.push(`${where} from must be a governed channel`);
     if (!isGovernedChannel(d?.to)) errors.push(`${where} to must be a governed channel`);
@@ -142,6 +143,48 @@ export function validateCascadeRoot(doc, { label, repositoryRoot, activeControlI
       if (reason) errors.push(`${where} site does not resolve: ${JSON.stringify(d?.site ?? null)} - ${reason}`);
     }
   });
+  /**
+   * CASCADA (enmienda cola vacia): el diente que la ley DABA POR PUESTO. `derivationsEmptyReason`
+   * es el hermano que citan la cabeza (`headEmptyReason`, cuyo propio mensaje de error se
+   * presenta como "the head's sibling of derivationsEmptyReason") y el vocabulario
+   * (`variantsEmptyReason`) -- pero hasta hoy NINGUNA linea lo leia: cinco raices lo declaraban
+   * y el gate no lo miraba. Una cola vacia sin razon pasaba en silencio, indistinguible de
+   * "nadie la lleno todavia". Se cierra fail-closed aqui, y la ley deja de apelar a un hermano
+   * que no existia como codigo.
+   *
+   * La simetria corre en las DOS direcciones, igual que en `variants`: una razon de hueco junto
+   * a una cola NO vacia es una mentira declarada -- afirma que no hay derivaciones mientras las
+   * lista -- y tambien va rojo, para que la razon no se fosilice cuando alguien llene la cola
+   * mas tarde.
+   *
+   * NIVEL DE EXIGENCIA, deliberado: string no vacio, exactamente el que piden hoy
+   * `headEmptyReason` y `variantsEmptyReason`. NO se endurece a "cita resoluble": subir las
+   * tres razones a cita resoluble es una enmienda aparte y coordinada, no un efecto colateral
+   * de darle dientes a esta.
+   *
+   * `overlaps` queda DELIBERADAMENTE fuera de esta ley, y no por olvido: 14 de las 20 raices
+   * autoradas llevan `overlaps: []` y ninguna trae razon. `overlaps: []` es una AFIRMACION
+   * COMPLETA -- "esta raiz no se solapa con ninguna otra" -- y validateCascadeSet ya la
+   * confronta contra la reciprocidad (C4) de las demas raices. A diferencia de un vocabulario
+   * cerrado ausente o de una cola de derivacion ausente, no oculta informacion faltante: no hay
+   * hueco mudo que tapar. Exigirle razon seria burocracia, no fail-closed.
+   */
+  if (derivations != null && !Array.isArray(derivations)) {
+    errors.push(`${label}: derivations must be an array when present`);
+  } else {
+    const derivationsEmpty = derivations == null || derivations.length === 0;
+    const derivationsReason = doc.derivationsEmptyReason;
+    if (derivationsEmpty && !isNonEmptyString(derivationsReason)) {
+      errors.push(
+        `${label}: empty derivations requires derivationsEmptyReason citing the source that proves this axis derives no further channel (the tail the head and the vocabulary both cite as their sibling)`,
+      );
+    }
+    if (!derivationsEmpty && derivationsReason != null) {
+      errors.push(
+        `${label}: derivationsEmptyReason is declared while derivations is non-empty (${derivations.length} declared); a reason for a hole that does not exist is a declared lie`,
+      );
+    }
+  }
   const reach = Array.isArray(doc.terminalReach) ? doc.terminalReach : [];
   const reachSet = new Set();
   reach.forEach((t, i) => {
@@ -165,6 +208,48 @@ export function validateCascadeRoot(doc, { label, repositoryRoot, activeControlI
         errors.push(`${label}: internalChannels edge ${channelId}@${fam} owned by ${doc.rootId} is missing from terminalReach (reverse cross-check)`);
       }
     }
+  }
+  /**
+   * CASCADA (enmienda vocabulario vacio): el diente simetrico de la COLA y de la CABEZA,
+   * aplicado ahora al VOCABULARIO. Una raiz declara en `variants` el vocabulario cerrado de
+   * su eje. Hasta hoy un `variants` ausente o vacio pasaba el gate en silencio: un hueco
+   * MUDO, indistinguible de "nadie lo lleno todavia". Se cierra fail-closed con el hermano
+   * literal de `derivationsEmptyReason`: `variantsEmptyReason`.
+   *
+   * La simetria corre en las DOS direcciones. Una razon de hueco junto a un vocabulario NO
+   * vacio es una mentira declarada -- afirma que no hay variantes mientras las lista -- y
+   * tambien va rojo, para que la razon no se fosilice cuando alguien llene el vocabulario
+   * mas tarde.
+   *
+   * NIVEL DE EXIGENCIA, deliberado: string no vacio, exactamente el que pide hoy
+   * `headEmptyReason` unas lineas mas arriba. No se endurece a "cita resoluble" porque el
+   * hermano que esta regla replica no lo hace (`derivationsEmptyReason` hoy no lo valida
+   * NINGUN gate, y `headEmptyReason` solo exige string no vacio). Una regla nueva no puede
+   * exigir mas prueba que la ley que dice replicar; endurecer las tres es una enmienda
+   * aparte y coordinada.
+   *
+   * `variantsLaw` es OPCIONAL y sigue siendolo: solo tres raices lo llevan. Se valida su
+   * forma cuando esta, nunca su presencia.
+   */
+  const variants = doc.variants;
+  if (variants != null && !Array.isArray(variants)) {
+    errors.push(`${label}: variants must be an array when present`);
+  } else {
+    const variantsEmpty = variants == null || variants.length === 0;
+    const variantsReason = doc.variantsEmptyReason;
+    if (variantsEmpty && !isNonEmptyString(variantsReason)) {
+      errors.push(
+        `${label}: empty variants requires variantsEmptyReason citing the source that proves this axis declares no closed vocabulary (the vocabulary's sibling of derivationsEmptyReason)`,
+      );
+    }
+    if (!variantsEmpty && variantsReason != null) {
+      errors.push(
+        `${label}: variantsEmptyReason is declared while variants is non-empty (${variants.length} declared); a reason for a hole that does not exist is a declared lie`,
+      );
+    }
+  }
+  if (doc.variantsLaw != null && !isNonEmptyString(doc.variantsLaw)) {
+    errors.push(`${label}: variantsLaw is optional, but when present it must be a non-empty string`);
   }
   (doc.overlaps || []).forEach((o, i) => {
     const where = `${label}: overlaps[${i}]`;

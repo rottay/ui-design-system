@@ -17,7 +17,38 @@
   "derivationsEmptyReason": "CERO descendientes: el grafo css extraido no registra ni una arista inbound ni outbound de --ds-recipe-profile. La receta seleccionada actua sobre la maquinaria --ds-recipe-* de cada familia (defaults de receta), no sobre una cadena canal->canal propia. Declarado, no tapado.",
   "terminalReach": [],
   "variantDisposition": "by-registry",
-  "variants": [],
+  "variants": [
+    {
+      "id": "rottay/technical-sharp@1",
+      "value": "rottay/technical-sharp@1",
+      "effects": {
+        "familyDefaults": "button {shape default, size sm, variant outline}, card {variant outlined}, tabs {recipe underline}, tag {size sm, radius none, bordered, outlined}, sectionCard {variant outlined}, dataTable {density compact, recipe ruled} (recipe-profiles/index.ts:80-87)",
+        "intent": "postura tecnica radius-cero: geometria cuadrada, contenedores outlined, superficies de datos regladas (description :78-79)"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "rottay/network-professional@1",
+      "value": "rottay/network-professional@1",
+      "effects": {
+        "familyDefaults": "button {shape default, variant primary}, card {variant elevated}, tabs {recipe underline}, tag {size sm, radius full, sin borde, sin outline}, sectionCard {variant elevated}, dataTable {density comfortable, recipe minimal} (recipe-profiles/index.ts:94-108)",
+        "intent": "postura de red profesional: accion primaria rellena a tamano natural, contenedores con lift suave, navegacion subrayada (description :92-93)"
+      },
+      "pinned": {
+        "noPillControls": "shape 'default' es DELIBERADO y esta anotado en fuente: mantiene el control fuera de la ruta pill, que es forbiddenOutcome nombrado para esta direccion (comentarios :95-97 y :100-101). El radius full de tag es la excepcion del idiom de chip, no un control pill (:103-104)."
+      }
+    },
+    {
+      "id": "rottay/editorial-round@1",
+      "value": "rottay/editorial-round@1",
+      "effects": {
+        "familyDefaults": "button {shape round, size lg, variant primary}, card {variant elevated}, tabs {recipe pills}, tag {size lg, radius full, sin borde, sin outline}, sectionCard {variant elevated}, dataTable {density comfortable, recipe minimal} (recipe-profiles/index.ts:115-122)",
+        "intent": "postura editorial ultra-redondeada: controles pill, contenedores elevados suaves, superficies de datos abiertas (description :113-114)"
+      },
+      "pinned": {}
+    }
+  ],
+  "variantsLaw": "Vocabulario cerrado por el registro first-party RECIPE_PROFILES (foundation/tokens/ts/presentation/recipe-profiles/index.ts:74-124). TRES filas y no mas, contadas en fuente: los unicos ids del array son :76, :90 y :111, y PROFILE_INDEX se construye desde ese mismo array (:126-128). Cierre fail-closed en dos tiempos: validateRecipeProfileSelection (:146) exige el patron de id namespaced/versionado (PROFILE_ID_PATTERN :71), la schemaVersion vigente y la pertenencia al indice, devolviendo malformed-id / unsupported-schema-version / unknown-id; resolveRecipeProfile (:163) traduce cualquiera de esos a undefined, o sea a los defaults de receta de familia -- nunca a un perfil aproximado. El contrato del tenant lo dice con las mismas palabras: solo se puede SELECCIONAR un id del registro cerrado y el compilador descarta lo desconocido o malformado (foundation/contracts/composition/tenants/themes/tenant-theme/index.ts:584-589). Una variante NO aporta canales propios de valor: fija DEFAULTS DE RECETA por familia sobre la maquinaria --ds-recipe-* existente, coherente con derivationsEmptyReason (cero aristas canal->canal). Agregar una fila es un cambio DS revisado (docstring :73).",
   "overlaps": [],
   "terminalReachLaw": "terminalReach es el cross-ref mecanico de internalChannels (semanticOwner = esta raiz), bidireccional fail-closed por validateCascadeRoot. Estado PRESCRIPCION: fase 1 es spec objetivo; la verdad transitiva la emite la capa GENERADA (cascade-extract/materialized), no se mantiene a mano (R1)."
 }
