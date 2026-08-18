@@ -2570,49 +2570,6 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "color.seeds",
-            "socketPattern": "--_ds-<comp>-progress-color",
-            "prop": "color del avance/actividad no-estado",
-            "tier": "standard",
-            "examples": [
-              "--_ds-progress-fill",
-              "--_ds-spinner-color"
-            ],
-            "sockets": [
-              "--_ds-drawer-body-bg",
-              "--_ds-drawer-body-color",
-              "--_ds-drawer-close-color",
-              "--_ds-drawer-footer-bg",
-              "--_ds-drawer-footer-divider",
-              "--_ds-drawer-header-divider"
-            ],
-            "socketsResolved": true
-          },
-          {
-            "root": "color.mode",
-            "socketPattern": null,
-            "prop": "background/color/border via los canales de color re-derivados por overlay",
-            "tier": "standard",
-            "examples": [],
-            "noSocketReason": "SIN socket propio: el modo viaja por los overlays de los canales compartidos --ds-color-*/--ds-surface-*",
-            "socketsResolved": true,
-            "carrier": "shared-channel"
-          },
-          {
-            "root": "color.status",
-            "socketPattern": null,
-            "prop": "tonos de estado via cascada compartida",
-            "tier": "standard",
-            "examples": [],
-            "noSocketReason": "SIN socket propio: los tonos de estado (error/info/success/warning) llegan por los canales compartidos --ds-color-*-ink / --ds-tint-* (nivel 2 de la forma canonica)",
-            "socketsResolved": true,
-            "carrier": "shared-channel"
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
             "--ds-color-bg-elevated",
@@ -2631,8 +2588,101 @@
             "--ds-surface-card",
             "--ds-surface-overlay"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-drawer-body-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/drawer-compounds.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/feedback/drawer"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/drawer-compounds.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-drawer-body-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/drawer-compounds.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/feedback/drawer"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/drawer-compounds.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-drawer-close-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/drawer-compounds.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/feedback/drawer"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/drawer-compounds.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-drawer-footer-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/drawer-compounds.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/feedback/drawer"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/drawer-compounds.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-drawer-footer-divider",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/drawer-compounds.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/feedback/drawer"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/drawer-compounds.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-drawer-header-divider",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/drawer-compounds.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/feedback/drawer"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/drawer-compounds.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "typography.pairing",
@@ -2694,25 +2744,6 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "type.scale",
-            "socketPattern": "--_ds-<comp>-font-size (cayendo a los pasos de la rampa multiplicada, ej. var(--ds-text-sm))",
-            "prop": "font-size de todo texto de componente",
-            "tier": "standard",
-            "examples": [
-              "--_ds-card-title-size",
-              "--_ds-input-font-size",
-              "--_ds-menu-item-font-size"
-            ],
-            "sockets": [
-              "--_ds-drawer-title-font-size"
-            ],
-            "socketsResolved": true
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
             "--ds-font-size-lg"
@@ -2721,8 +2752,26 @@
             "--ds-line-height-snug",
             "--ds-line-height-tight"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-drawer-title-font-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/drawer-compounds.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/feedback/drawer"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/drawer-compounds.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "shape.radius-scale",
@@ -2888,23 +2937,6 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "surface.finish",
-            "socketPattern": "--_ds-<comp>-signal-glow",
-            "prop": "box-shadow",
-            "tier": "premium",
-            "examples": [
-              "--_ds-badge-live-signal-glow"
-            ],
-            "sockets": [
-              "--_ds-drawer-overlay-opacity"
-            ],
-            "socketsResolved": true
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Canales compartidos porque OTRA familia los lee de verdad (nivel 2; el socket vive en la familia duena del namespace)": [
             "--ds-effect-intensity",
@@ -2915,8 +2947,26 @@
             "--ds-material-overlay-texture",
             "--ds-surface-highlight"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-drawer-overlay-opacity",
+          "semanticOwner": "surfaces.effect-intensity",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/drawer.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/feedback/drawer"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/drawer.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "navigation.sidebar-tone",

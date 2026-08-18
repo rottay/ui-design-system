@@ -4794,57 +4794,6 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "color.seeds",
-            "socketPattern": "--_ds-<comp>-selection-bg / --_ds-<comp>-selection-border",
-            "prop": "fondo y borde de fila/celda seleccionada (tint de marca)",
-            "tier": "standard",
-            "examples": [
-              "--_ds-data-table-selection-bg",
-              "--_ds-list-item-selected-bg"
-            ],
-            "sockets": [
-              "--_ds-decision-comparison-selection-bg",
-              "--_ds-decision-comparison-selection-border",
-              "--_ds-decision-comparison-bg",
-              "--_ds-decision-comparison-border",
-              "--_ds-decision-comparison-footer-bg",
-              "--_ds-decision-comparison-insight-bg",
-              "--_ds-decision-comparison-leading-accent",
-              "--_ds-decision-comparison-section-border",
-              "--_ds-decision-comparison-subject-bg",
-              "--_ds-decision-comparison-subject-leading-bg",
-              "--_ds-decision-comparison-toolbar-bg",
-              "--_ds-decision-comparison-verdict-bg",
-              "--_ds-decision-comparison-visual-grid-color"
-            ],
-            "socketsResolved": true
-          },
-          {
-            "root": "color.status",
-            "socketPattern": "--_ds-<comp>-cell-<status>-color",
-            "prop": "celdas y filas con estado",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-decision-comparison-cell-<status>-color"
-            ],
-            "socketsResolved": false
-          },
-          {
-            "root": "color.mode",
-            "socketPattern": null,
-            "prop": "idem",
-            "tier": "standard",
-            "examples": [],
-            "noSocketReason": "sin socket propio; mismo mecanismo",
-            "socketsResolved": true,
-            "carrier": "shared-channel"
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Estructural/runtime (correctitud)": [
             "--ds-decision-comparison-subject-index"
@@ -4880,8 +4829,272 @@
             "--ds-surface-chip-border",
             "--ds-surface-panel-bg"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-decision-comparison-selection-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-decision-comparison-selection-border",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-decision-comparison-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-decision-comparison-border",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-decision-comparison-footer-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-decision-comparison-insight-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-decision-comparison-leading-accent",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-decision-comparison-section-border",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-decision-comparison-subject-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-decision-comparison-subject-leading-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-decision-comparison-toolbar-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-decision-comparison-verdict-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-decision-comparison-visual-grid-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-decision-comparison-cell-success-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-decision-comparison-cell-warning-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-decision-comparison-cell-error-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-decision-comparison-cell-info-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "typography.pairing",
@@ -4891,23 +5104,6 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "type.pairing",
-            "socketPattern": "--_ds-<comp>-numeric-family",
-            "prop": "registro numerico/tabular (mono bajo tecnica, base en el resto)",
-            "tier": "standard",
-            "examples": [
-              "--_ds-data-table-numeric-family",
-              "--_ds-operational-ledger-family"
-            ],
-            "sockets": [
-              "--_ds-decision-comparison-numeric-family"
-            ],
-            "socketsResolved": true
-          }
-        ],
         "uncoveredByDesign": {
           "Brazo compartido (foundation o multi-lector; nivel 2/3) [FAM-08R redistribuido]": [
             "--ds-font-weight-bold",
@@ -4915,10 +5111,75 @@
             "--ds-font-weight-semibold",
             "--ds-typography-section-title-tracking",
             "--ds-typography-section-title-weight"
+          ],
+          "CONSUMO (migracion): ownedBy pattern/data/decision-comparison#typography.families": [
+            "--_ds-decision-comparison-numeric-family"
           ]
         },
-        "reviewedFrom": "anatomy"
-      }
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--ds-font-family-base",
+          "semanticOwner": "typography.pairing",
+          "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--ds-font-family-heading",
+          "semanticOwner": "typography.pairing",
+          "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--ds-letter-spacing-heading",
+          "semanticOwner": "typography.pairing",
+          "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root.css",
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--ds-line-height-display",
+          "semanticOwner": "typography.pairing",
+          "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography.css",
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
     },
     {
       "controlId": "typography.families",
@@ -4928,32 +5189,47 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "type.pairing",
-            "socketPattern": "--_ds-<comp>-numeric-family",
-            "prop": "registro numerico/tabular (mono bajo tecnica, base en el resto)",
-            "tier": "standard",
-            "examples": [
-              "--_ds-data-table-numeric-family",
-              "--_ds-operational-ledger-family"
-            ],
-            "sockets": [
-              "--_ds-decision-comparison-numeric-family",
-              "--_ds-typography-numeric-family"
-            ],
-            "socketsResolved": true
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o multi-lector; nivel 2/3) [FAM-08R redistribuido]": [
             "--ds-typography-section-title-family",
             "--ds-typography-supporting-family"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-decision-comparison-numeric-family",
+          "semanticOwner": "typography.families",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-typography-numeric-family",
+          "semanticOwner": "typography.families",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "typography.scale",
@@ -4963,30 +5239,76 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "type.scale",
-            "socketPattern": "--_ds-<comp>-cell-font-size",
-            "prop": "tamano de celda y header de tabla",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-decision-comparison-cell-font-size",
-              "--_ds-decision-comparison-body-font-size",
-              "--_ds-decision-comparison-detail-font-size",
-              "--_ds-decision-comparison-title-font-size"
-            ],
-            "socketsResolved": true
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o multi-lector; nivel 2/3) [FAM-08R redistribuido]": [
             "--ds-font-size-xl"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-decision-comparison-cell-font-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-decision-comparison-body-font-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-decision-comparison-detail-font-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-decision-comparison-title-font-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "shape.radius-scale",
@@ -4996,22 +5318,6 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "shape.corner",
-            "socketPattern": "--_ds-<comp>-container-radius",
-            "prop": "marco del pattern (tabla, kanban, galeria)",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-decision-comparison-container-radius",
-              "--_ds-decision-comparison-radius"
-            ],
-            "socketsResolved": true
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o multi-lector; nivel 2/3) [FAM-08R redistribuido]": [
             "--ds-radius-full",
@@ -5019,8 +5325,42 @@
             "--ds-radius-xl",
             "--ds-surface-chip-radius"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-decision-comparison-container-radius",
+          "semanticOwner": "shape.radius-scale",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-decision-comparison-radius",
+          "semanticOwner": "shape.radius-scale",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "shape.button-style",
@@ -5042,34 +5382,144 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "density.mode",
-            "socketPattern": "--_ds-<comp>-density-factor",
-            "prop": "altura de fila, padding de celda, gap de toolbar",
-            "tier": "standard",
-            "examples": [
-              "--_ds-data-table-density-factor",
-              "--_ds-kanban-card-density-factor"
-            ],
-            "sockets": [
-              "--_ds-decision-comparison-density-factor",
-              "--_ds-decision-comparison-badges-min-height",
-              "--_ds-decision-comparison-columns",
-              "--_ds-decision-comparison-identity-min-height",
-              "--_ds-decision-comparison-pad",
-              "--_ds-decision-comparison-row-height",
-              "--_ds-decision-comparison-toolbar-min-height",
-              "--_ds-decision-comparison-visual-grid-size",
-              "--_ds-decision-comparison-visual-min-height"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-decision-comparison-density-factor",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ],
-        "reviewedFrom": "anatomy"
-      }
+        },
+        {
+          "channelId": "--_ds-decision-comparison-badges-min-height",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-decision-comparison-columns",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-decision-comparison-identity-min-height",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-decision-comparison-pad",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-decision-comparison-row-height",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-decision-comparison-toolbar-min-height",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-decision-comparison-visual-grid-size",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-decision-comparison-visual-min-height",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
     },
     {
       "controlId": "spacing.rhythm",
@@ -5114,25 +5564,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "surface.elevation",
-            "socketPattern": "--_ds-<comp>-elevation",
-            "prop": "box-shadow",
-            "tier": "standard",
-            "examples": [
-              "--_ds-widget-card-elevation",
-              "--_ds-column-menu-elevation"
-            ],
-            "sockets": [
-              "--_ds-decision-comparison-elevation"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-decision-comparison-elevation",
+          "semanticOwner": "surfaces.elevation-posture",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -5209,22 +5658,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "shape.edge",
-            "socketPattern": "--_ds-<comp>-frame-style (marco) y --_ds-<comp>-row-rule-width (tier de fila, derivado de edge pero NO anulable por invisible)",
-            "prop": "marco del pattern y separadores internos de fila",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-decision-comparison-frame-style"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-decision-comparison-frame-style",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/decision-comparison"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "token-overrides",

@@ -2227,28 +2227,6 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "color.mode",
-            "socketPattern": null,
-            "prop": "idem",
-            "tier": "standard",
-            "examples": [],
-            "noSocketReason": "sin socket propio; mismo mecanismo",
-            "socketsResolved": true,
-            "carrier": "shared-channel"
-          },
-          {
-            "root": "color.seeds",
-            "prop": "remediacion propiedad",
-            "tier": "standard",
-            "sockets": [
-              "--_ds-envtoggle-accent"
-            ],
-            "socketsResolved": true
-          }
-        ],
         "uncoveredByDesign": {
           "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
             "--ds-color-border",
@@ -2262,8 +2240,25 @@
             "--ds-environment-toggle-touch-target"
           ]
         },
-        "reviewedFrom": "anatomy"
-      }
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-envtoggle-accent",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/navigation/environment-toggle"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
     },
     {
       "controlId": "typography.pairing",
@@ -2359,29 +2354,32 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "source": "huecos-fable",
-        "bindings": [
-          {
-            "root": "shape.corner",
-            "socketPattern": "--_ds-<familia>-panel-radius",
-            "prop": "radio de paneles propios (panel del locale-switcher y equivalentes)",
-            "tier": "standard",
-            "sockets": [
-              "--_ds-environment-toggle-control-panel-radius"
-            ],
-            "socketsResolved": true,
-            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
-          }
-        ],
         "uncoveredByDesign": {
           "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
             "--ds-radius-lg",
             "--ds-radius-md"
           ]
         },
-        "reviewedFrom": "anatomy"
-      }
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-environment-toggle-control-panel-radius",
+          "semanticOwner": "shape.radius-scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/navigation/environment-toggle"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
     },
     {
       "controlId": "shape.button-style",
@@ -2390,22 +2388,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "shape.control-silhouette",
-            "socketPattern": "--_ds-<comp>-control-radius",
-            "prop": "controles del locale-switcher y equivalentes",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-environment-toggle-control-radius"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-environment-toggle-control-radius",
+          "semanticOwner": "shape.button-style",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/navigation/environment-toggle"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "density.mode",
@@ -2415,23 +2415,6 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "source": "huecos-fable",
-        "bindings": [
-          {
-            "root": "density.mode",
-            "socketPattern": "--_ds-<familia>-item-density-factor",
-            "prop": "padding de items de los switchers/menus del grupo",
-            "tier": "standard",
-            "sockets": [
-              "--_ds-environment-toggle-control-item-density-factor",
-              "--_ds-environment-toggle-panel-min-width"
-            ],
-            "socketsResolved": true,
-            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
             "--ds-environment-toggle-touch-target",
@@ -2440,8 +2423,42 @@
             "--ds-spacing-4",
             "--ds-surface-inset"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-environment-toggle-control-item-density-factor",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/navigation/environment-toggle"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-environment-toggle-panel-min-width",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/navigation/environment-toggle"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "spacing.rhythm",
@@ -2464,22 +2481,6 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "motion.character",
-            "socketPattern": "--_ds-<comp>-transition-duration",
-            "prop": "transition-duration",
-            "tier": "standard",
-            "examples": [
-              "--_ds-command-palette-transition-duration"
-            ],
-            "sockets": [
-              "--_ds-environment-toggle-transition-duration"
-            ],
-            "socketsResolved": true
-          }
-        ],
         "uncoveredByDesign": {
           "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
             "--ds-motion-attention",
@@ -2487,8 +2488,26 @@
             "--ds-motion-fast"
           ]
         },
-        "reviewedFrom": "anatomy"
-      }
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-environment-toggle-transition-duration",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/navigation/environment-toggle"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -2531,23 +2550,107 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "navigation.tone",
-            "socketPattern": "--_ds-<comp>-sidebar-<leaf>",
-            "prop": "background-color / color",
-            "tier": "standard",
-            "examples": [
-              "--_ds-nav-section-label-color"
-            ],
-            "sockets": [
-              "--_ds-environment-toggle-sidebar-<leaf>"
-            ],
-            "socketsResolved": false
+        "uncoveredByDesign": {},
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-environment-toggle-sidebar-bg",
+          "semanticOwner": "navigation.sidebar-tone",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/navigation/environment-toggle"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        },
+        {
+          "channelId": "--_ds-environment-toggle-sidebar-text",
+          "semanticOwner": "navigation.sidebar-tone",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/navigation/environment-toggle"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-environment-toggle-sidebar-text-muted",
+          "semanticOwner": "navigation.sidebar-tone",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/navigation/environment-toggle"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-environment-toggle-sidebar-item-bg-hover",
+          "semanticOwner": "navigation.sidebar-tone",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/navigation/environment-toggle"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-environment-toggle-sidebar-item-bg-active",
+          "semanticOwner": "navigation.sidebar-tone",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/navigation/environment-toggle"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-environment-toggle-sidebar-item-color-active",
+          "semanticOwner": "navigation.sidebar-tone",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/navigation/environment-toggle"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
     },
     {
       "controlId": "experience.profile",
@@ -2588,24 +2691,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "focus.ring",
-            "socketPattern": "--_ds-<comp>-focus-ring-color",
-            "prop": "outline-color / box-shadow",
-            "tier": "standard",
-            "examples": [
-              "--_ds-command-palette-item-focus-ring-color"
-            ],
-            "sockets": [
-              "--_ds-environment-toggle-focus-ring-color"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-environment-toggle-focus-ring-color",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/navigation/environment-toggle"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "token-overrides",
@@ -2684,24 +2787,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "icon.posture",
-            "socketPattern": "--_ds-<comp>-icon-fill-mode",
-            "prop": "fill",
-            "tier": "standard",
-            "examples": [
-              "--_ds-command-palette-icon-fill-mode"
-            ],
-            "sockets": [
-              "--_ds-environment-toggle-icon-fill-mode"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-environment-toggle-icon-fill-mode",
+          "semanticOwner": "profiles.icon",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/navigation/environment-toggle"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "responsive.posture",

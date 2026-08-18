@@ -1959,29 +1959,6 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "color.mode",
-            "socketPattern": null,
-            "prop": "idem",
-            "tier": "standard",
-            "examples": [],
-            "noSocketReason": "sin socket propio; mismo mecanismo",
-            "socketsResolved": true,
-            "carrier": "shared-channel"
-          },
-          {
-            "root": "color.seeds",
-            "prop": "propiedad lector-unico (FAM-16)",
-            "tier": "standard",
-            "sockets": [
-              "--_ds-bottom-tab-bar-reserved-block-end"
-            ],
-            "socketsResolved": true
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
             "--ds-color-bg-primary",
@@ -2005,8 +1982,26 @@
           "Piso de accesibilidad (clase propia)": [
             "--ds-touch-target-min"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-bottom-tab-bar-reserved-block-end",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css",
+          "productiveConsumerFamilyIds": [
+            "structure/shell/bottom-tab-bar"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "typography.pairing",
@@ -2114,9 +2109,13 @@
           "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
             "--ds-radius-full",
             "--ds-radius-md"
+          ],
+          "CONSUMO (migracion): ownedBy pattern/shell/pattern-page-shell#shape.radius-scale": [
+            "--_ds-page-panel-radius"
           ]
         },
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -2162,25 +2161,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "space.rhythm",
-            "socketPattern": "--_ds-<comp>-section-gap",
-            "prop": "gap vertical entre secciones del shell via calc(base * var(--ds-rhythm-effective-scale))",
-            "tier": "standard",
-            "examples": [
-              "--_ds-page-section-gap",
-              "--_ds-layout-content-gap"
-            ],
-            "sockets": [
-              "--_ds-bottom-tab-bar-section-gap"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-bottom-tab-bar-section-gap",
+          "semanticOwner": "spacing.rhythm",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/shell/bottom-tab-bar"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "motion.dial",
@@ -2190,30 +2188,31 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "motion.character",
-            "socketPattern": "--_ds-<comp>-transition-duration",
-            "prop": "transition-duration",
-            "tier": "standard",
-            "examples": [
-              "--_ds-drawer-transition-duration",
-              "--_ds-sidebar-collapse-transition-duration"
-            ],
-            "sockets": [
-              "--_ds-bottom-tab-bar-transition-duration"
-            ],
-            "socketsResolved": true
-          }
-        ],
         "uncoveredByDesign": {
           "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
             "--ds-motion-ease-out"
           ]
         },
-        "reviewedFrom": "anatomy"
-      }
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-bottom-tab-bar-transition-duration",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/shell/bottom-tab-bar"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -2222,26 +2221,39 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "surface.elevation",
-            "socketPattern": "--_ds-<comp>-elevation",
-            "prop": "box-shadow",
-            "tier": "standard",
-            "examples": [
-              "--_ds-drawer-elevation"
-            ],
-            "sockets": [
-              "--_ds-bottom-tab-bar-elevation",
-              "--_ds-bottom-tab-bar-shadow"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-bottom-tab-bar-elevation",
+          "semanticOwner": "surfaces.elevation-posture",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/shell/bottom-tab-bar"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ],
-        "reviewedFrom": "anatomy"
-      }
+        },
+        {
+          "channelId": "--_ds-bottom-tab-bar-shadow",
+          "semanticOwner": "surfaces.elevation-posture",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/shell/bottom-tab-bar"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -2263,24 +2275,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "navigation.tone",
-            "socketPattern": "--_ds-<comp>-sidebar-bg",
-            "prop": "background-color",
-            "tier": "standard",
-            "examples": [
-              "--_ds-workspace-sidebar-bg"
-            ],
-            "sockets": [
-              "--_ds-bottom-tab-bar-sidebar-bg"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-bottom-tab-bar-sidebar-bg",
+          "semanticOwner": "navigation.sidebar-tone",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/shell/bottom-tab-bar"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "experience.profile",
@@ -2302,25 +2314,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "layer.stack",
-            "socketPattern": "--_ds-<comp>-z-index",
-            "prop": "z-index",
-            "tier": "standard",
-            "examples": [
-              "--_ds-drawer-z-index",
-              "--_ds-sidebar-sticky-z-index"
-            ],
-            "sockets": [
-              "--_ds-bottom-tab-bar-z-index"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-bottom-tab-bar-z-index",
+          "semanticOwner": "chrome.families",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/shell/bottom-tab-bar"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "chrome.anatomy",
@@ -2349,9 +2360,13 @@
           "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
             "--ds-focus-ring-color",
             "--ds-focus-ring-width"
+          ],
+          "CONSUMO (migracion): ownedBy pattern/shell/pattern-page-shell#chrome.anatomy": [
+            "--_ds-page-rule-style"
           ]
         },
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -2431,19 +2446,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "why": "iconos estructurales del chrome",
-        "source": "huecos-kimi",
-        "bindings": [
-          {
-            "root": "icon.posture",
-            "socketPattern": "--_ds-page-icon-stroke-width",
-            "prop": "stroke-width del chevron de collapse del sidebar",
-            "tier": "standard"
+      "internalChannels": [
+        {
+          "channelId": "--_ds-page-icon-stroke-width",
+          "semanticOwner": "profiles.icon",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/shell/bottom-tab-bar"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "responsive.posture",

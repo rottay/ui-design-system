@@ -1,0 +1,13 @@
+{
+  "generated": true,
+  "generator": "cascade-materialize.mjs",
+  "schemaVersion": 1,
+  "controlId": "profiles.expressive",
+  "tier": "pro",
+  "inputs": {
+    "variantsFrom": "manifest/controls/profiles.expressive.json (calibration.normalizedStops)",
+    "rulesFrom": "manifest/cascade/extracted/css-edges.json (cascade-extract.mjs)",
+    "authoredRoot": "manifest/cascade/roots/profiles.expressive.json"
+  },
+  "notMaterializable": "raiz multi-eje: el eje geometry aterriza via overlaps (shape.radius-scale / shape.button-style); edge/type/material via derivations LIVE del root autorado"
+}

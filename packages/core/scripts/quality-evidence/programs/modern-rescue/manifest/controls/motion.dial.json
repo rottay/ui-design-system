@@ -37,11 +37,45 @@
   },
   "calibration": {
     "assessmentState": "UNKNOWN",
-    "normalizedStops": [],
+    "normalizedStops": [
+      {
+        "id": "quieta",
+        "value": {
+          "intensity": 0,
+          "durationScale": 0.5
+        },
+        "law": "durationScale 0.5 esta bajo el piso tenant T3 {0.75,1.35}: vertical-only como parada, misma figura que recto"
+      },
+      {
+        "id": "estandar",
+        "value": {
+          "intensity": 1,
+          "durationScale": 1
+        }
+      },
+      {
+        "id": "expresiva",
+        "value": {
+          "intensity": 1,
+          "durationScale": 1.15
+        }
+      }
+    ],
     "staticDbParityEvidenceIds": [],
     "exactRestoreEvidenceIds": [],
     "negativeControls": [],
-    "nextAction": "CALIBRATE_LOWERERS_COMPUTED_DELTAS_NEGATIVES_AND_EXACT_RESTORE"
+    "nextAction": "CALIBRATE_LOWERERS_COMPUTED_DELTAS_NEGATIVES_AND_EXACT_RESTORE",
+    "dialBounds": {
+      "intensity": {
+        "min": 0,
+        "max": 1
+      },
+      "durationScale": {
+        "min": 0.5,
+        "max": 1.5
+      }
+    },
+    "dialBoundsLaw": "bounds en calibration, NO en domain.bounds: domain se regenera desde el registro (manifest/generator.mjs:171-206) y TenantCapabilityDeclaration.bounds es un `{min,max}` unico (capabilities/index.ts:48-49), incapaz de expresar los DOS diales numericos independientes de este control. Copia literal de MOTION_DIAL_BOUNDS (packages/core/src/foundation/contracts/runtime/motion/index.ts:10-13). Es el bound de CONTRATO: el schema del documento tenant lo consume por referencia, no lo redeclara (packages/core/src/infrastructure/compilers/kernel/foundation/schemas/tenant-theme/index.ts:187-189). No es el unico techo de la cadena: normalizedStops ya registra un piso tenant T3 mas estrecho para durationScale; ese techo se mantiene como estaba y no se toca aqui."
   },
   "retiredAliases": []
 }

@@ -1227,22 +1227,6 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": null,
-            "socketPattern": null,
-            "prop": "sockets propios de la superficie derivados de anatomy.sourceBindings",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-compare-divider-color",
-              "--_ds-compare-muted-color"
-            ],
-            "socketsResolved": true
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Brazos foundation compartidos (nivel 2/3 de la forma canonica) - la superficie los lee en directo (veredicto: receta declarativa)": [
             "--ds-color-bg-secondary",
@@ -1253,8 +1237,41 @@
           "Brazo compartido SIN dueno de familia (lo leen decenas de skins; se gobierna en nivel 2, no es de nadie)": [
             "--ds-surface-panel"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-compare-divider-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/compare.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "surface/data/compare"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/compare.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-compare-muted-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/compare.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "surface/data/compare"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/compare.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "typography.pairing",
@@ -1327,22 +1344,6 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "source": "huecos-fable",
-        "bindings": [
-          {
-            "root": "shape.corner",
-            "socketPattern": "--_ds-<page>-panel-radius",
-            "prop": "border-radius de los paneles que la receta compone (paginas de coleccion/datos)",
-            "tier": "standard",
-            "sockets": [
-              "--_ds-compare-section-radius"
-            ],
-            "socketsResolved": true,
-            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Brazos foundation compartidos (nivel 2/3 de la forma canonica) - la superficie los lee en directo (veredicto: receta declarativa)": [
             "--ds-radius-lg",
@@ -1351,8 +1352,26 @@
           "Canales compartidos: los leen 2+ familias (nivel 2; ownedBy = lector que pinta el elemento mas externo, resto consumo) [ownedBy primitive/feedback/skeleton]": [
             "--ds-skeleton-radius"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-compare-section-radius",
+          "semanticOwner": "shape.radius-scale",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/compare.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "surface/data/compare"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/compare.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "shape.button-style",
@@ -1380,24 +1399,23 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "source": "huecos-fable",
-        "bindings": [
-          {
-            "root": "density.mode",
-            "socketPattern": "--_ds-<page>-density-factor",
-            "prop": "factor local que la receta compone sobre var(--ds-density-effective-scale) para todo su contenido",
-            "tier": "standard",
-            "sockets": [
-              "--_ds-compare-section-padding"
-            ],
-            "socketsResolved": true,
-            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+      "internalChannels": [
+        {
+          "channelId": "--_ds-compare-section-padding",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/compare.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "surface/data/compare"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/compare.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
           }
-        ],
-        "reviewedFrom": "anatomy"
-      }
+        }
+      ]
     },
     {
       "controlId": "spacing.rhythm",
@@ -1560,24 +1578,23 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "source": "huecos-fable",
-        "bindings": [
-          {
-            "root": "shape.edge",
-            "socketPattern": "--_ds-<page>-section-rule-style",
-            "prop": "reglas entre secciones y marcos de panel de la receta",
-            "tier": "standard",
-            "sockets": [
-              "--_ds-compare-divider-width"
-            ],
-            "socketsResolved": true,
-            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+      "internalChannels": [
+        {
+          "channelId": "--_ds-compare-divider-width",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/compare.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "surface/data/compare"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/compare.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
           }
-        ],
-        "reviewedFrom": "anatomy"
-      }
+        }
+      ]
     },
     {
       "controlId": "token-overrides",

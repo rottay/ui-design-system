@@ -44,7 +44,12 @@
     "staticDbParityEvidenceIds": [],
     "exactRestoreEvidenceIds": [],
     "negativeControls": [],
-    "nextAction": "CALIBRATE_LOWERERS_COMPUTED_DELTAS_NEGATIVES_AND_EXACT_RESTORE"
+    "nextAction": "CALIBRATE_LOWERERS_COMPUTED_DELTAS_NEGATIVES_AND_EXACT_RESTORE",
+    "catalog": [
+      "rottay/bithire-technical@1",
+      "rottay/management-editorial@1"
+    ],
+    "catalogLaw": "catalogo en calibration, NO en enumValues: cerrado por REGISTRO first-party versionado (crece por registro, no por schema); ids permanentes, superseded por @N+1"
   },
   "retiredAliases": []
 }

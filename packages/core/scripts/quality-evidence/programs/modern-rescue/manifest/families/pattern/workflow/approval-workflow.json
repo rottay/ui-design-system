@@ -3303,9 +3303,7 @@
             "prop": "estados de paso (done/error/current)",
             "tier": "standard",
             "examples": [],
-            "sockets": [
-              "--_ds-approval-workflow-step-<status>-color"
-            ],
+            "sockets": [],
             "socketsResolved": false
           },
           {
@@ -3338,9 +3336,13 @@
           ],
           "EXCEPCION ARGUMENTADA - Piso de accesibilidad (touch-target): clase propia de exclusion, JAMAS socket - encoger el area tactil bajo el piso WCAG produce mis-taps; el propio mensaje del adjudicador la declara clase aparte y el archivo la contradecia": [
             "--ds-approval-touch-target-min"
+          ],
+          "PRESCRIPCION PARAMETRIZADA FUERA de internalChannels (FAM-PARAM patron 3): dominio de <status> no cerrado en fuente; expansion en fase 3": [
+            "--_ds-approval-workflow-step-<status>-color"
           ]
         },
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -3411,31 +3413,144 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "type.scale",
-            "socketPattern": "--_ds-<comp>-font-size",
-            "prop": "labels, mensajes, pasos",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-approval-workflow-font-size",
-              "--_ds-approval-action-font-size",
-              "--_ds-approval-approver-font-size",
-              "--_ds-approval-badge-font-size",
-              "--_ds-approval-comment-font-size",
-              "--_ds-approval-metadata-font-size",
-              "--_ds-approval-skeleton-line-height",
-              "--_ds-approval-timestamp-font-size",
-              "--_ds-approval-title-font-size"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-approval-workflow-font-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/workflow/approval-workflow"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ],
-        "reviewedFrom": "anatomy"
-      }
+        },
+        {
+          "channelId": "--_ds-approval-action-font-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/workflow/approval-workflow"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-approval-approver-font-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/workflow/approval-workflow"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-approval-badge-font-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/workflow/approval-workflow"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-approval-comment-font-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/workflow/approval-workflow"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-approval-metadata-font-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/workflow/approval-workflow"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-approval-skeleton-line-height",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/workflow/approval-workflow"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-approval-timestamp-font-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/workflow/approval-workflow"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-approval-title-font-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/workflow/approval-workflow"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
     },
     {
       "controlId": "shape.radius-scale",
@@ -3496,49 +3611,6 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "source": "huecos-fable",
-        "bindings": [
-          {
-            "root": "density.mode",
-            "socketPattern": "--_ds-timeline-item-density-factor",
-            "prop": "alto de item de timeline/inbox/steps (slug vivo: timeline)",
-            "tier": "standard",
-            "sockets": [
-              "--_ds-approval-action-height",
-              "--_ds-approval-action-padding-inline",
-              "--_ds-approval-actions-gap",
-              "--_ds-approval-approver-row-gap",
-              "--_ds-approval-comment-padding",
-              "--_ds-approval-connector-min-height",
-              "--_ds-approval-connector-width",
-              "--_ds-approval-dot-size",
-              "--_ds-approval-footer-padding-block-start",
-              "--_ds-approval-header-gap",
-              "--_ds-approval-skeleton-line-gap",
-              "--_ds-approval-skeleton-steps-gap",
-              "--_ds-approval-step-gap",
-              "--_ds-approval-step-padding-block-end"
-            ],
-            "socketsResolved": true,
-            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
-          },
-          {
-            "root": null,
-            "socketPattern": null,
-            "prop": "consumo via cascada (nivel 2)",
-            "tier": "standard",
-            "examples": [],
-            "noSocketReason": "CONSUMO, no socket propio (dedup Grupo B): el dueno del namespace es primitive/display/timeline (pinta rottay-timeline--modern) por regla de pintor/lector; un socket, un dueno.",
-            "socketsResolved": true,
-            "carrier": "shared-channel",
-            "ownedBy": "primitive/display/timeline",
-            "channels": [
-              "--ds-timeline-item-density-factor"
-            ]
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
             "--ds-approval-touch-target-min",
@@ -3547,8 +3619,220 @@
             "--ds-touch-target-min"
           ]
         },
-        "remediatedFrom": "dedup2-grupoB"
-      }
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-approval-action-height",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/workflow/approval-workflow"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-approval-action-padding-inline",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/workflow/approval-workflow"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-approval-actions-gap",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/workflow/approval-workflow"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-approval-approver-row-gap",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/workflow/approval-workflow"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-approval-comment-padding",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/workflow/approval-workflow"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-approval-connector-min-height",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/workflow/approval-workflow"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-approval-connector-width",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/workflow/approval-workflow"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-approval-dot-size",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/workflow/approval-workflow"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-approval-footer-padding-block-start",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/workflow/approval-workflow"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-approval-header-gap",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/workflow/approval-workflow"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-approval-skeleton-line-gap",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/workflow/approval-workflow"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-approval-skeleton-steps-gap",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/workflow/approval-workflow"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-approval-step-gap",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/workflow/approval-workflow"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-approval-step-padding-block-end",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/workflow/approval-workflow"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
     },
     {
       "controlId": "spacing.rhythm",
@@ -3558,23 +3842,6 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "space.rhythm",
-            "socketPattern": "--_ds-<comp>-item-gap",
-            "prop": "gap vertical de timeline/activity/steps",
-            "tier": "standard",
-            "examples": [
-              "--_ds-timeline-item-gap",
-              "--_ds-activity-log-item-gap"
-            ],
-            "sockets": [
-              "--_ds-approval-workflow-item-gap"
-            ],
-            "socketsResolved": true
-          }
-        ],
         "uncoveredByDesign": {
           "Margen interno -> composicion": [
             "--ds-approval-actions-margin-block-start",
@@ -3587,8 +3854,26 @@
             "--ds-approval-timestamp-margin-block-start"
           ]
         },
-        "reviewedFrom": "anatomy"
-      }
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-approval-workflow-item-gap",
+          "semanticOwner": "spacing.rhythm",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/workflow/approval-workflow"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
     },
     {
       "controlId": "motion.dial",
@@ -3598,21 +3883,6 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "why": "el stepper obedece al dial",
-        "source": "huecos-kimi",
-        "bindings": [
-          {
-            "root": "motion.character",
-            "socketPattern": "--_ds-steps-transition-duration",
-            "prop": "transition-duration del avance de paso y cambio de estado",
-            "tier": "standard",
-            "sockets": [
-              "--_ds-approval-pulse-duration"
-            ]
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
             "--ds-motion-deliberate",
@@ -3620,8 +3890,26 @@
             "--ds-motion-ease-out",
             "--ds-motion-fast"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-approval-pulse-duration",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/workflow/approval-workflow"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -3709,22 +3997,6 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "focus.ring",
-            "socketPattern": "--_ds-<comp>-focus-ring-color",
-            "prop": "outline-color / box-shadow",
-            "tier": "standard",
-            "examples": [
-              "--_ds-stepper-step-focus-ring-color"
-            ],
-            "sockets": [
-              "--_ds-approval-workflow-focus-ring-color"
-            ],
-            "socketsResolved": true
-          }
-        ],
         "uncoveredByDesign": {
           "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
             "--ds-focus-ring-color",
@@ -3732,8 +4004,26 @@
             "--ds-focus-ring-width"
           ]
         },
-        "reviewedFrom": "anatomy"
-      }
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-approval-workflow-focus-ring-color",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/workflow/approval-workflow"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
     },
     {
       "controlId": "token-overrides",
@@ -3812,19 +4102,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "why": "iconos de la libreria en el stepper",
-        "source": "huecos-kimi",
-        "bindings": [
-          {
-            "root": "icon.posture",
-            "socketPattern": "--_ds-steps-icon-stroke-width",
-            "prop": "stroke-width de checks e iconos de paso",
-            "tier": "standard"
+      "internalChannels": [
+        {
+          "channelId": "--_ds-steps-icon-stroke-width",
+          "semanticOwner": "profiles.icon",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/workflow/approval-workflow"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "responsive.posture",

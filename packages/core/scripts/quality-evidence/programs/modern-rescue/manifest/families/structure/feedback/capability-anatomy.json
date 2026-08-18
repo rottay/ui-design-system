@@ -535,9 +535,7 @@
               "--_ds-surface-error-state-color",
               "--_ds-surface-stale-banner-bg"
             ],
-            "sockets": [
-              "--_ds-capability-anatomy-<status>-color"
-            ],
+            "sockets": [],
             "socketsResolved": false
           },
           {
@@ -562,9 +560,13 @@
             "--ds-color-info-border",
             "--ds-spacing-2",
             "--ds-spacing-3"
+          ],
+          "PRESCRIPCION PARAMETRIZADA FUERA de internalChannels (FAM-PARAM patron 4): dominio no cerrado (ciclo de superficie vs semillas); adjudicacion pendiente; fase 3": [
+            "--_ds-capability-anatomy-<status>-color"
           ]
         },
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -575,30 +577,32 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "source": "huecos-fable",
-        "bindings": [
-          {
-            "root": "type.pairing",
-            "socketPattern": "(via canales compartidos, sin socket de familia)",
-            "prop": "titulos de estado sobre canales compartidos",
-            "tier": "standard",
-            "sockets": [
-              "--_ds-capability-anatomy-label-tracking"
-            ],
-            "socketsResolved": true,
-            "why": "debe reflejarse sin socket propio",
-            "noSocketReason": "via canales compartidos, sin socket de familia"
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Brazo compartido fundacion (nivel 2/3; noSocketReason)": [
             "--ds-font-weight-bold",
             "--ds-font-weight-semibold"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-capability-anatomy-label-tracking",
+          "semanticOwner": "typography.pairing",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/feedback/capability-anatomy",
+            "structure/feedback/surface-lifecycle"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "typography.families",
@@ -744,19 +748,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "why": "sockets heredados --_ds-loading-overlay-dots-duration y -pulse-duration",
-        "source": "huecos-kimi",
-        "bindings": [
-          {
-            "root": "motion.character",
-            "socketPattern": "--_ds-loading-dots-duration",
-            "prop": "animation-duration de dots/pulse del loading-overlay",
-            "tier": "standard"
+      "internalChannels": [
+        {
+          "channelId": "--_ds-loading-dots-duration",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/feedback/capability-anatomy"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -778,24 +787,40 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "why": "backdrop de overlay: lugar sancionado para glass",
-        "source": "huecos-kimi",
-        "bindings": [
-          {
-            "root": "surface.finish",
-            "socketPattern": "--_ds-loading-scrim-backdrop-filter",
-            "prop": "backdrop-filter del backdrop del loading-overlay",
-            "tier": "premium",
-            "sockets": [
-              "--_ds-capability-disabled-opacity",
-              "--_ds-capability-opacity"
-            ]
+      "internalChannels": [
+        {
+          "channelId": "--_ds-capability-disabled-opacity",
+          "semanticOwner": "surfaces.effect-intensity",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/feedback/capability-anatomy",
+            "structure/feedback/surface-lifecycle"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
           }
-        ],
-        "reviewedFrom": "anatomy"
-      }
+        },
+        {
+          "channelId": "--_ds-capability-opacity",
+          "semanticOwner": "surfaces.effect-intensity",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/feedback/capability-anatomy",
+            "structure/feedback/surface-lifecycle"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
     },
     {
       "controlId": "navigation.sidebar-tone",

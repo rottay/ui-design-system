@@ -1509,22 +1509,6 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "source": "huecos-fable",
-        "bindings": [
-          {
-            "root": "type.pairing",
-            "socketPattern": "(via canales compartidos, sin socket de familia)",
-            "prop": "sobre canales compartidos",
-            "tier": "standard",
-            "sockets": [
-              "--_ds-section-card-eyebrow-tracking"
-            ],
-            "socketsResolved": true,
-            "why": "debe reflejarse sin socket propio"
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
             "--ds-card-title-font-weight",
@@ -1532,8 +1516,26 @@
             "--ds-font-weight-semibold",
             "--ds-letter-spacing-heading"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-section-card-eyebrow-tracking",
+          "semanticOwner": "typography.pairing",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/shell/surface-chrome"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "typography.families",
@@ -1625,9 +1627,13 @@
         "uncoveredByDesign": {
           "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
             "--ds-radius-lg"
+          ],
+          "CONSUMO (migracion): ownedBy pattern/shell/pattern-page-shell#shape.radius-scale": [
+            "--_ds-page-panel-radius"
           ]
         },
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -1675,25 +1681,25 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "space.rhythm",
-            "socketPattern": "--_ds-<comp>-section-gap",
-            "prop": "gap vertical entre secciones del shell via calc(base * var(--ds-rhythm-effective-scale))",
-            "tier": "standard",
-            "examples": [
-              "--_ds-page-section-gap",
-              "--_ds-layout-content-gap"
-            ],
-            "sockets": [
-              "--_ds-surface-chrome-section-gap"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-surface-chrome-section-gap",
+          "semanticOwner": "spacing.rhythm",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/shell/surface-chrome"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-accent-bar.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "motion.dial",
@@ -1702,25 +1708,25 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "motion.character",
-            "socketPattern": "--_ds-<comp>-transition-duration",
-            "prop": "transition-duration",
-            "tier": "standard",
-            "examples": [
-              "--_ds-drawer-transition-duration",
-              "--_ds-sidebar-collapse-transition-duration"
-            ],
-            "sockets": [
-              "--_ds-surface-chrome-transition-duration"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-surface-chrome-transition-duration",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/shell/surface-chrome"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-accent-bar.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -1730,29 +1736,32 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "surface.elevation",
-            "socketPattern": "--_ds-<comp>-elevation",
-            "prop": "box-shadow",
-            "tier": "standard",
-            "examples": [
-              "--_ds-drawer-elevation"
-            ],
-            "sockets": [
-              "--_ds-surface-chrome-elevation"
-            ],
-            "socketsResolved": true
-          }
-        ],
         "uncoveredByDesign": {
           "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
             "--ds-card-shadow"
           ]
         },
-        "reviewedFrom": "anatomy"
-      }
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-surface-chrome-elevation",
+          "semanticOwner": "surfaces.elevation-posture",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/shell/surface-chrome"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-accent-bar.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -1774,24 +1783,25 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "navigation.tone",
-            "socketPattern": "--_ds-<comp>-sidebar-bg",
-            "prop": "background-color",
-            "tier": "standard",
-            "examples": [
-              "--_ds-workspace-sidebar-bg"
-            ],
-            "sockets": [
-              "--_ds-surface-chrome-sidebar-bg"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-surface-chrome-sidebar-bg",
+          "semanticOwner": "navigation.sidebar-tone",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/shell/surface-chrome"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-accent-bar.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "experience.profile",
@@ -1813,25 +1823,25 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "layer.stack",
-            "socketPattern": "--_ds-<comp>-z-index",
-            "prop": "z-index",
-            "tier": "standard",
-            "examples": [
-              "--_ds-drawer-z-index",
-              "--_ds-sidebar-sticky-z-index"
-            ],
-            "sockets": [
-              "--_ds-surface-chrome-z-index"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-surface-chrome-z-index",
+          "semanticOwner": "chrome.families",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/shell/surface-chrome"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-accent-bar.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "chrome.anatomy",
@@ -1855,7 +1865,13 @@
             "socketsResolved": true,
             "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
           }
-        ]
+        ],
+        "uncoveredByDesign": {
+          "CONSUMO (migracion): ownedBy pattern/shell/pattern-page-shell#chrome.anatomy": [
+            "--_ds-page-rule-style"
+          ]
+        },
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -1935,23 +1951,23 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "why": "iconos estructurales del chrome",
-        "source": "huecos-kimi",
-        "bindings": [
-          {
-            "root": "icon.posture",
-            "socketPattern": "--_ds-page-icon-stroke-width",
-            "prop": "stroke-width del chevron de collapse del sidebar",
-            "tier": "standard",
-            "sockets": [
-              "--_ds-section-card-icon-size"
-            ]
+      "internalChannels": [
+        {
+          "channelId": "--_ds-section-card-icon-size",
+          "semanticOwner": "profiles.icon",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/shell/surface-chrome"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
           }
-        ],
-        "reviewedFrom": "anatomy"
-      }
+        }
+      ]
     },
     {
       "controlId": "responsive.posture",

@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "rootId": "responsive.posture",
+  "tier": "pro",
+  "rootChannel": {
+    "channel": null,
+    "headEmptyReason": "NO EXISTE CABEZA CSS HONESTA: este eje es DATO, no canal, y esta declarado asi en la fuente -- packages/core/src/foundation/tokens/ts/presentation/responsive-postures/index.ts:26-28 dice literal 'DATA, NOT CSS: no channel is emitted for this axis. The selected id travels document -> schema -> artifact normalizedAppearance and is read at render by resolveActiveResponsivePosture'. El control lo espeja sin canales ni atributos: manifest/controls/responsive.posture.json:28-32 declara declaredOutputs.channels [] (:29) y rootAttributes [] (:30). Verificado a mano sobre packages/core/src, no asumido: cero coincidencias de '--ds-responsive' en todo src/ y cero setProperty en ui/patterns/runtime/adaptive-layout/ (ese arbol solo LEE --ds-type-scale, canal de typography.scale, en presentation/react/index.ts:49). DONDE ATERRIZA EN SU LUGAR: el id viaja como dato hasta el render y lo resuelve resolveActiveResponsivePosture (presentation/react/index.ts:67-81, precedencia documento DB sobre seleccion estatica), leido una sola vez por contexto en useActiveResponsivePosture (:87-91); de ahi salen (a) el bucketing de contenedor por el par de umbrales del perfil activo y (b) la puerta 2 del solver, env.spanBias (runtime/index.ts:133-137, acotado por el rango minSpan..maxSpan del propio item segun el comentario :127-130 y pisado entero por un spanHint explicito :139-141). La cadena termina en gridColumn/gridRow de estilo inline (runtime/index.ts:356-357): estilo calculado en JS, jamas una custom property. Por eso la cabeza se declara VACIA con razon citada en vez de fabricar un canal marcador para comprar el verde.",
+    "emission": [
+      {
+        "kind": "runtime-select",
+        "site": "packages/core/src/foundation/tokens/ts/presentation/responsive-postures/index.ts",
+        "note": "REGISTRO cerrado de 3 filas (RESPONSIVE_POSTURE_PROFILES :67-89): cada fila publica un par de umbrales de contenedor y un spanBias. El tenant SELECCIONA un id pelado; nunca autora umbrales ni bias. Resolucion fail-closed y TOTAL en resolveResponsivePosture :136-144 (id ausente/desconocido/malformado/de otro schemaVersion -> balanced). balanced es la fila IDENTIDAD: sus 639/839 y su bias 'preferred' SON las constantes que el runtime cableaba antes de abrir el eje, asi que ausente es byte-identico al pre-capability."
+      },
+      {
+        "kind": "compiler-emit",
+        "site": "packages/core/src/infrastructure/compilers/kernel/foundation/schemas/tenant-theme/index.ts",
+        "note": "cierre del vocabulario en la puerta DB: enumeration(...RESPONSIVE_POSTURE_PROFILES.map(p => p.id)) :1917-1918, montado en advanced :1921-1926. El docstring :1912-1915 lo declara literal: 'closed enum over the published first-party registry (compact | balanced | expansive)'. El valor NO se baja a ningun canal: viaja como DATO en normalizedAppearance.advanced.responsivePosture del artefacto compilado."
+      },
+      {
+        "kind": "runtime-select",
+        "site": "packages/core/src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts",
+        "note": "LECTURA en render, la unica: resolveActiveResponsivePosture :67-81 fija la precedencia canonica (documento DB advanced.responsivePosture gana sobre la seleccion estatica BrandTheme.responsive), y useActiveResponsivePosture :87-91 es el unico read de contexto. De ahi sale a useContainerPosture :219-243 (bucketing por umbrales del perfil activo) y al env del solver."
+      },
+      {
+        "kind": "runtime-select",
+        "site": "packages/core/src/ui/patterns/runtime/adaptive-layout/runtime/index.ts",
+        "note": "PUERTA 2 (la unica llegada a geometria): env.spanBias :133-137 elige DONDE dentro del rango minSpan..maxSpan que el item ya publico arranca la resolucion. No ensancha autoridad: el comentario :130 lo fija y un spanHint explicito :139-141 lo pisa entero. La salida es gridColumn/gridRow en estilo inline, no un canal."
+      }
+    ]
+  },
+  "rootChannelAbsentReason": "SIN CABEZA POR DISENO, dictaminado por el owner (ruling 2026-08-18: se registra el hueco, no se fabrica canal). Este eje NO EMITE canal gobernado alguno: ni --ds-*, ni --_ds-*, ni data-*. No es un hueco por llenar, es la ley del control, declarada en fuente: packages/core/src/foundation/tokens/ts/presentation/responsive-postures/index.ts:26-28 ('DATA, NOT CSS: no channel is emitted for this axis'), y el control declara declaredOutputs.channels: [] y rootAttributes: [] en controls/responsive.posture.json. Verificado a mano, no asumido: cero setProperty y cero escrituras --ds-* en ui/patterns/runtime/adaptive-layout/ y en ui/patterns/data/widget-board/runtime/ (adaptive-layout SOLO LEE --ds-type-scale en presentation/react/index.ts:49, canal de typography.scale); no existe ningun --ds-responsive-posture en todo src/; el registro de root-attributes no declara fila de posture; el data-posture de ui/structures/shell/app-shell/index.tsx:314 es ShellPosture (desktop/tablet/phone) derivado de viewport y NO es esta escalera; el data-size de ui/patterns/data/widget-board/engines/foundation/index.tsx:1185 es item.size autorado, aguas ARRIBA del bias, no aguas abajo. La cadena termina en gridColumn/gridRow inline. CHOQUE CON LA LEY, NO CON LA FUENTE: manifest/rules.mjs:80 exige rootChannel.channel gobernado y :83 exige emission no vacia (R2, 'the cascade needs a head'), incondicionalmente y sin estado 'no corresponde' para la CABEZA -- aunque la ley SI sabe expresar la cola vacia (derivations: [] + derivationsEmptyReason). El gate cobra este archivo a proposito: es un rojo VERDADERO ('este eje no tiene cabeza CSS y la ley todavia no sabe decirlo') y sustituye al rojo FALSO anterior ('falta el archivo'). Fabricar un canal marcador para comprar el verde quedo RECHAZADO de plano por el owner; el marcador --ds-experience-profile de experience.profile no es precedente a seguir sino deuda a revisar. La enmienda fail-closed de rules.mjs esta redactada y sin aplicar en /private/tmp/mr-CONSISTENCIA.md, para una pasada coordinada.",
+  "dependsOn": [],
+  "derivations": [],
+  "derivationsEmptyReason": "CERO derivaciones canal->canal, por construccion y no por deuda: sin canal cabeza no hay arista que salga. Lo que el perfil produce son DATOS TS -- un par de umbrales y un spanBias -- consumidos en JS por el bucketing de contenedor y por la puerta 2 del solver puro. No se declara ninguna: no existen en la fuente.",
+  "terminalReach": [],
+  "variantDisposition": "by-registry",
+  "variantsNote": "Cerrado por REGISTRO first-party de 3 filas (RESPONSIVE_POSTURE_PROFILES). La escalera es UNA FORMA, TRES ARRANQUES: cada umbral cae un pixel debajo de un multiplo de 40 (960/840/760/720/640/520) y cada perfil es el balanced corrido +/-120px en AMBOS bordes, asi que la banda compact->standard mide 200px exactos en los tres. El tenant elige CUANDO baja el escalon, nunca un reflow de otra forma (registro :12-16). Los efectos son DATO, no canal, igual que profiles.icon.",
+  "variants": [
+    {
+      "id": "compact",
+      "value": "compact",
+      "effects": {
+        "thresholds": "compactMaxPx 759 / standardMaxPx 959 - los tiers colapsan ANTES",
+        "spanBias": "min - cada item resuelve hacia su minSpan publicado: mas widgets por fila, cada uno con menos aire"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "balanced",
+      "value": "balanced",
+      "effects": {
+        "thresholds": "compactMaxPx 639 / standardMaxPx 839",
+        "spanBias": "preferred - cada item resuelve en su preferredSpan autorado"
+      },
+      "pinned": {
+        "identityRow": "FILA IDENTIDAD: 639/839 y 'preferred' SON las constantes pre-capability (registro :61-65). Es el valor al que resuelve toda entrada ausente, desconocida, malformada o de schemaVersion ajeno, por resolveResponsivePosture :136-144. Por eso 'desactivarlo' es un rollback exacto y no aproximado."
+      }
+    },
+    {
+      "id": "expansive",
+      "value": "expansive",
+      "effects": {
+        "thresholds": "compactMaxPx 519 / standardMaxPx 719 - los tiers aguantan su forma ancha MAS TIEMPO",
+        "spanBias": "max - cada item resuelve hacia su maxSpan publicado: menos widgets por fila, cada uno mas grande"
+      },
+      "pinned": {}
+    }
+  ],
+  "variantsLaw": "Ninguna variante puede desbordar, reordenar DOM/foco ni abrir un hueco evitable, porque el bias queda acotado por el contrato minSpan..maxSpan del propio item y por la capacidad del tier (adaptive-layout/runtime/index.ts:130-137). Tres cosas quedan SUPREMAS sobre la postura y ninguna variante las mueve: (1) un spanHint explicito del intent pisa el bias entero (runtime :139-141); (2) un argumento thresholds explicito a useContainerPosture gana sobre la escalera del tenant -- ley de caller-props (presentation/react :214-217); (3) el TIER de colapso de WidgetBoard NO es tenant-driven: foundation/tokens/css/presentation/components/skin/widget-board.css:6-7,1517,1532 espeja 639/839 como container queries que repuntan los tracks del grid, o sea es CSS co-autorado, y moverlo solo en JS fabricaria columnas implicitas.",
+  "overlaps": [],
+  "terminalReachLaw": "terminalReach es el cross-ref mecanico de internalChannels (semanticOwner = esta raiz), bidireccional fail-closed por validateCascadeRoot. Vacio VERIFICADO, no por escribir: el censo de families/** no registra ni una arista con semanticOwner responsive.posture, coherente con un eje que no baja a canal. Estado PRESCRIPCION: fase 1 es spec objetivo; la verdad transitiva la emite la capa GENERADA (cascade-extract/materialized), no se mantiene a mano (R1)."
+}

@@ -1,0 +1,13 @@
+{
+  "generated": true,
+  "generator": "cascade-materialize.mjs",
+  "schemaVersion": 1,
+  "controlId": "typography.families",
+  "tier": "standard",
+  "inputs": {
+    "variantsFrom": "manifest/controls/typography.families.json (calibration.normalizedStops)",
+    "rulesFrom": "manifest/cascade/extracted/css-edges.json (cascade-extract.mjs)",
+    "authoredRoot": "manifest/cascade/roots/typography.families.json"
+  },
+  "notMaterializable": "enum de familias tipograficas; efecto por tabla autorada (root pendiente)"
+}

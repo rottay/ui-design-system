@@ -2548,45 +2548,6 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "color.seeds",
-            "socketPattern": "--_ds-<comp>-selection-bg / --_ds-<comp>-selection-border",
-            "prop": "fondo y borde de fila/celda seleccionada (tint de marca)",
-            "tier": "standard",
-            "examples": [
-              "--_ds-data-table-selection-bg",
-              "--_ds-list-item-selected-bg"
-            ],
-            "sockets": [
-              "--_ds-column-settings-selection-bg",
-              "--_ds-column-settings-selection-border"
-            ],
-            "socketsResolved": true
-          },
-          {
-            "root": "color.status",
-            "socketPattern": "--_ds-<comp>-cell-<status>-color",
-            "prop": "celdas y filas con estado",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-column-settings-cell-<status>-color"
-            ],
-            "socketsResolved": false
-          },
-          {
-            "root": "color.mode",
-            "socketPattern": null,
-            "prop": "idem",
-            "tier": "standard",
-            "examples": [],
-            "noSocketReason": "sin socket propio; mismo mecanismo",
-            "socketsResolved": true,
-            "carrier": "shared-channel"
-          }
-        ],
         "uncoveredByDesign": {
           "Brazo compartido (foundation o multi-lector; nivel 2/3) [FAM-08R redistribuido]": [
             "--ds-color-border",
@@ -2601,8 +2562,106 @@
             "--ds-touch-target-min"
           ]
         },
-        "reviewedFrom": "anatomy"
-      }
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-column-settings-selection-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/column-settings"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-column-settings-selection-border",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/column-settings"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-column-settings-cell-success-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/column-settings"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-column-settings-cell-warning-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/column-settings"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-column-settings-cell-error-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/column-settings"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-column-settings-cell-info-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/column-settings"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
     },
     {
       "controlId": "typography.pairing",
@@ -2612,31 +2671,79 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "type.pairing",
-            "socketPattern": "--_ds-<comp>-numeric-family",
-            "prop": "registro numerico/tabular (mono bajo tecnica, base en el resto)",
-            "tier": "standard",
-            "examples": [
-              "--_ds-data-table-numeric-family",
-              "--_ds-operational-ledger-family"
-            ],
-            "sockets": [
-              "--_ds-column-settings-numeric-family"
-            ],
-            "socketsResolved": true
-          }
-        ],
         "uncoveredByDesign": {
           "Brazo compartido (foundation o multi-lector; nivel 2/3) [FAM-08R redistribuido]": [
             "--ds-font-weight-semibold",
             "--ds-letter-spacing-wide"
+          ],
+          "CONSUMO (migracion): ownedBy pattern/data/column-settings#typography.families": [
+            "--_ds-column-settings-numeric-family"
           ]
         },
-        "reviewedFrom": "anatomy"
-      }
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--ds-font-family-base",
+          "semanticOwner": "typography.pairing",
+          "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "productiveConsumerFamilyIds": [
+            "pattern/data/column-settings"
+          ],
+          "sourceBindings": [
+            "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--ds-font-family-heading",
+          "semanticOwner": "typography.pairing",
+          "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "productiveConsumerFamilyIds": [
+            "pattern/data/column-settings"
+          ],
+          "sourceBindings": [
+            "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--ds-letter-spacing-heading",
+          "semanticOwner": "typography.pairing",
+          "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root.css",
+          "productiveConsumerFamilyIds": [
+            "pattern/data/column-settings"
+          ],
+          "sourceBindings": [
+            "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--ds-line-height-display",
+          "semanticOwner": "typography.pairing",
+          "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography.css",
+          "productiveConsumerFamilyIds": [
+            "pattern/data/column-settings"
+          ],
+          "sourceBindings": [
+            "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
     },
     {
       "controlId": "typography.families",
@@ -2645,25 +2752,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "type.pairing",
-            "socketPattern": "--_ds-<comp>-numeric-family",
-            "prop": "registro numerico/tabular (mono bajo tecnica, base en el resto)",
-            "tier": "standard",
-            "examples": [
-              "--_ds-data-table-numeric-family",
-              "--_ds-operational-ledger-family"
-            ],
-            "sockets": [
-              "--_ds-column-settings-numeric-family"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-column-settings-numeric-family",
+          "semanticOwner": "typography.families",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/column-settings"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "typography.scale",
@@ -2673,30 +2779,62 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "type.scale",
-            "socketPattern": "--_ds-<comp>-cell-font-size",
-            "prop": "tamano de celda y header de tabla",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-column-settings-cell-font-size",
-              "--_ds-column-settings-label-font-size",
-              "--_ds-column-settings-pin-side-font-size"
-            ],
-            "socketsResolved": true
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o multi-lector; nivel 2/3) [FAM-08R redistribuido]": [
             "--ds-font-size-sm",
             "--ds-font-size-xs"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-column-settings-cell-font-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/column-settings"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-column-settings-label-font-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/column-settings"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-column-settings-pin-side-font-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/column-settings"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "shape.radius-scale",
@@ -2706,28 +2844,46 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "shape.corner",
-            "socketPattern": "--_ds-<comp>-container-radius",
-            "prop": "marco del pattern (tabla, kanban, galeria)",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-column-settings-container-radius",
-              "--_ds-column-settings-row-radius"
-            ],
-            "socketsResolved": true
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o multi-lector; nivel 2/3) [FAM-08R redistribuido]": [
             "--ds-radius-sm"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-column-settings-container-radius",
+          "semanticOwner": "shape.radius-scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/column-settings"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-column-settings-row-radius",
+          "semanticOwner": "shape.radius-scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/column-settings"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "shape.button-style",
@@ -2749,40 +2905,234 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "density.mode",
-            "socketPattern": "--_ds-<comp>-density-factor",
-            "prop": "altura de fila, padding de celda, gap de toolbar",
-            "tier": "standard",
-            "examples": [
-              "--_ds-data-table-density-factor",
-              "--_ds-kanban-card-density-factor"
-            ],
-            "sockets": [
-              "--_ds-column-settings-density-factor",
-              "--_ds-column-settings-empty-padding-block",
-              "--_ds-column-settings-empty-padding-inline",
-              "--_ds-column-settings-footer-padding-block",
-              "--_ds-column-settings-footer-padding-inline",
-              "--_ds-column-settings-header-padding-block",
-              "--_ds-column-settings-header-padding-block-end",
-              "--_ds-column-settings-header-padding-inline",
-              "--_ds-column-settings-list-max-block-size",
-              "--_ds-column-settings-list-padding-block",
-              "--_ds-column-settings-row-gap",
-              "--_ds-column-settings-row-padding-block",
-              "--_ds-column-settings-row-padding-inline",
-              "--_ds-column-settings-search-padding-block",
-              "--_ds-column-settings-search-padding-inline"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-column-settings-density-factor",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/column-settings"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ],
-        "reviewedFrom": "anatomy"
-      }
+        },
+        {
+          "channelId": "--_ds-column-settings-empty-padding-block",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/column-settings"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-column-settings-empty-padding-inline",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/column-settings"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-column-settings-footer-padding-block",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/column-settings"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-column-settings-footer-padding-inline",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/column-settings"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-column-settings-header-padding-block",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/column-settings"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-column-settings-header-padding-block-end",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/column-settings"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-column-settings-header-padding-inline",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/column-settings"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-column-settings-list-max-block-size",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/column-settings"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-column-settings-list-padding-block",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/column-settings"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-column-settings-row-gap",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/column-settings"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-column-settings-row-padding-block",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/column-settings"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-column-settings-row-padding-inline",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/column-settings"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-column-settings-search-padding-block",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/column-settings"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-column-settings-search-padding-inline",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/column-settings"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
     },
     {
       "controlId": "spacing.rhythm",
@@ -2827,25 +3177,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "surface.elevation",
-            "socketPattern": "--_ds-<comp>-elevation",
-            "prop": "box-shadow",
-            "tier": "standard",
-            "examples": [
-              "--_ds-widget-card-elevation",
-              "--_ds-column-menu-elevation"
-            ],
-            "sockets": [
-              "--_ds-column-settings-elevation"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-column-settings-elevation",
+          "semanticOwner": "surfaces.elevation-posture",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/column-settings"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -2923,30 +3272,48 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "shape.edge",
-            "socketPattern": "--_ds-<comp>-frame-style (marco) y --_ds-<comp>-row-rule-width (tier de fila, derivado de edge pero NO anulable por invisible)",
-            "prop": "marco del pattern y separadores internos de fila",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-column-settings-frame-style",
-              "--_ds-column-settings-hairline"
-            ],
-            "socketsResolved": true
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o multi-lector; nivel 2/3) [FAM-08R redistribuido]": [
             "--ds-focus-ring-color",
             "--ds-focus-ring-offset",
             "--ds-focus-ring-width"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-column-settings-frame-style",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/column-settings"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-column-settings-hairline",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/data/column-settings"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "token-overrides",

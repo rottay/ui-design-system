@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "rootId": "token-overrides",
+  "tier": "pro",
+  "rootChannel": {
+    "channel": "--ds-color-error",
+    "emission": [
+      {
+        "kind": "compiler-emit",
+        "site": "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
+        "note": "tokenOverrides pasa por el allowlist cerrado TENANT_THEME_OVERRIDE_TOKENS (foundation/contracts/composition/tenants/themes/tenant-theme/index.ts:156, 67 nombres; sin motion ni focus), max 200 entradas, fail-closed. Emision verbatim del valor autorado."
+      }
+    ]
+  },
+  "dependsOn": [],
+  "derivations": [],
+  "derivationsEmptyReason": "ESCAPE HATCH adjudicado: token-overrides ESCRIBE canales ajenos verbatim; no posee derivacion alguna. Los 194 descendientes transitivos medidos desde los 3 canales representativos (--ds-color-error, --ds-surface-card, --ds-color-bg-overlay) pertenecen a las cascadas de las raices semanticas duenas de esos canales (ley de hogar R6). Declarar cualquiera aqui seria doble hogar. No se inventa cascada.",
+  "terminalReach": [],
+  "variantDisposition": "escape-hatch",
+  "variants": [],
+  "overlaps": [],
+  "terminalReachLaw": "terminalReach es el cross-ref mecanico de internalChannels (semanticOwner = esta raiz), bidireccional fail-closed por validateCascadeRoot. Estado PRESCRIPCION: fase 1 es spec objetivo; la verdad transitiva la emite la capa GENERADA (cascade-extract/materialized), no se mantiene a mano (R1)."
+}

@@ -1,0 +1,2437 @@
+{
+  "generated": true,
+  "generator": "cascade-materialize.mjs",
+  "schemaVersion": 1,
+  "controlId": "shape.radius-scale",
+  "tier": "standard",
+  "inputs": {
+    "variantsFrom": "manifest/controls/shape.radius-scale.json (calibration.normalizedStops)",
+    "rulesFrom": "manifest/cascade/extracted/css-edges.json (cascade-extract.mjs)",
+    "authoredRoot": "manifest/cascade/roots/shape.radius-scale.json"
+  },
+  "effectKind": "byRule",
+  "variants": [
+    {
+      "id": "recto",
+      "value": 0.75,
+      "law": "vertical-only: bajo el piso tenant T3 {0.8,1.2} (rechazo); parada legitima del tema VERTICAL - asimetria adjudicada (edgeLaw)"
+    },
+    {
+      "id": "sutil",
+      "value": 0.9
+    },
+    {
+      "id": "suave",
+      "value": 1
+    },
+    {
+      "id": "amplio",
+      "value": 1.15
+    }
+  ],
+  "tables": [
+    {
+      "rootChannel": "--ds-radius-scale",
+      "table": [
+        {
+          "channel": "--ds-alert-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            },
+            {
+              "from": "--ds-radius-md",
+              "to": "--ds-alert-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:1219"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-autocomplete-dropdown-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            },
+            {
+              "from": "--ds-radius-md",
+              "to": "--ds-autocomplete-dropdown-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:1665"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-autocomplete-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            },
+            {
+              "from": "--ds-radius-md",
+              "to": "--ds-autocomplete-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:1653"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-avatar-radius-rounded",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            },
+            {
+              "from": "--ds-radius-md",
+              "to": "--ds-avatar-radius-rounded",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:1132"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-button-group-border-radius-first",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            },
+            {
+              "from": "--ds-radius-md",
+              "to": "--ds-button-group-border-radius-first",
+              "kind": "identity",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/button.css:294"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-button-group-border-radius-last",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            },
+            {
+              "from": "--ds-radius-md",
+              "to": "--ds-button-group-border-radius-last",
+              "kind": "identity",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/button.css:295"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-button-lg-border-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-lg",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771",
+              "operand": "--ds-radius-lg-base",
+              "operandValue": "12px"
+            },
+            {
+              "from": "--ds-radius-lg",
+              "to": "--ds-button-lg-border-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/button.css:59"
+            }
+          ],
+          "values": {
+            "recto": "9px",
+            "sutil": "10.8px",
+            "suave": "12px",
+            "amplio": "13.8px"
+          }
+        },
+        {
+          "channel": "--ds-button-lg-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-lg",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771",
+              "operand": "--ds-radius-lg-base",
+              "operandValue": "12px"
+            },
+            {
+              "from": "--ds-radius-lg",
+              "to": "--ds-button-lg-border-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/button.css:59"
+            },
+            {
+              "from": "--ds-button-lg-border-radius",
+              "to": "--ds-button-lg-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/button.css:60"
+            }
+          ],
+          "values": {
+            "recto": "9px",
+            "sutil": "10.8px",
+            "suave": "12px",
+            "amplio": "13.8px"
+          }
+        },
+        {
+          "channel": "--ds-button-md-border-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            },
+            {
+              "from": "--ds-radius-md",
+              "to": "--ds-button-md-border-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/button.css:47"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-button-md-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            },
+            {
+              "from": "--ds-radius-md",
+              "to": "--ds-button-md-border-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/button.css:47"
+            },
+            {
+              "from": "--ds-button-md-border-radius",
+              "to": "--ds-button-md-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/button.css:48"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-button-shape-rounded",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            },
+            {
+              "from": "--ds-radius-md",
+              "to": "--ds-button-shape-rounded",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/button.css:271"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-button-sm-border-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            },
+            {
+              "from": "--ds-radius-md",
+              "to": "--ds-button-sm-border-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/button.css:35"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-button-sm-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-sm",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:769",
+              "operand": "--ds-radius-sm-base",
+              "operandValue": "6px"
+            },
+            {
+              "from": "--ds-radius-sm",
+              "to": "--ds-button-sm-radius",
+              "kind": "data-attr-select",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/skin/guided-draft-form.css:186",
+              "operand": "--ds-radius-full",
+              "operandValue": "9999px"
+            }
+          ],
+          "values": {
+            "recto": "4.5px",
+            "sutil": "5.4px",
+            "suave": "6px",
+            "amplio": "6.9px"
+          }
+        },
+        {
+          "channel": "--ds-button-xl-border-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-lg",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771",
+              "operand": "--ds-radius-lg-base",
+              "operandValue": "12px"
+            },
+            {
+              "from": "--ds-radius-lg",
+              "to": "--ds-button-xl-border-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/button.css:71"
+            }
+          ],
+          "values": {
+            "recto": "9px",
+            "sutil": "10.8px",
+            "suave": "12px",
+            "amplio": "13.8px"
+          }
+        },
+        {
+          "channel": "--ds-button-xl-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-lg",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771",
+              "operand": "--ds-radius-lg-base",
+              "operandValue": "12px"
+            },
+            {
+              "from": "--ds-radius-lg",
+              "to": "--ds-button-xl-border-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/button.css:71"
+            },
+            {
+              "from": "--ds-button-xl-border-radius",
+              "to": "--ds-button-xl-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/button.css:72"
+            }
+          ],
+          "values": {
+            "recto": "9px",
+            "sutil": "10.8px",
+            "suave": "12px",
+            "amplio": "13.8px"
+          }
+        },
+        {
+          "channel": "--ds-button-xs-border-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-sm",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:769",
+              "operand": "--ds-radius-sm-base",
+              "operandValue": "6px"
+            },
+            {
+              "from": "--ds-radius-sm",
+              "to": "--ds-button-xs-border-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/button.css:23"
+            }
+          ],
+          "values": {
+            "recto": "4.5px",
+            "sutil": "5.4px",
+            "suave": "6px",
+            "amplio": "6.9px"
+          }
+        },
+        {
+          "channel": "--ds-button-xs-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-sm",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:769",
+              "operand": "--ds-radius-sm-base",
+              "operandValue": "6px"
+            },
+            {
+              "from": "--ds-radius-sm",
+              "to": "--ds-button-xs-border-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/button.css:23"
+            },
+            {
+              "from": "--ds-button-xs-border-radius",
+              "to": "--ds-button-xs-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/button.css:24"
+            }
+          ],
+          "values": {
+            "recto": "4.5px",
+            "sutil": "5.4px",
+            "suave": "6px",
+            "amplio": "6.9px"
+          }
+        },
+        {
+          "channel": "--ds-card-border-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-lg",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771",
+              "operand": "--ds-radius-lg-base",
+              "operandValue": "12px"
+            },
+            {
+              "from": "--ds-radius-lg",
+              "to": "--ds-card-border-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/card.css:63"
+            }
+          ],
+          "values": {
+            "recto": "9px",
+            "sutil": "10.8px",
+            "suave": "12px",
+            "amplio": "13.8px"
+          }
+        },
+        {
+          "channel": "--ds-card-header-extra-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-lg",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771",
+              "operand": "--ds-radius-lg-base",
+              "operandValue": "12px"
+            },
+            {
+              "from": "--ds-radius-lg",
+              "to": "--ds-card-header-extra-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/card.css:126"
+            }
+          ],
+          "values": {
+            "recto": "9px",
+            "sutil": "10.8px",
+            "suave": "12px",
+            "amplio": "13.8px"
+          }
+        },
+        {
+          "channel": "--ds-card-header-icon-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-lg",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771",
+              "operand": "--ds-radius-lg-base",
+              "operandValue": "12px"
+            },
+            {
+              "from": "--ds-radius-lg",
+              "to": "--ds-card-header-icon-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/card.css:109"
+            }
+          ],
+          "values": {
+            "recto": "9px",
+            "sutil": "10.8px",
+            "suave": "12px",
+            "amplio": "13.8px"
+          }
+        },
+        {
+          "channel": "--ds-card-media-border-radius-top",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-lg",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771",
+              "operand": "--ds-radius-lg-base",
+              "operandValue": "12px"
+            },
+            {
+              "from": "--ds-radius-lg",
+              "to": "--ds-card-border-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/card.css:63"
+            },
+            {
+              "from": "--ds-card-border-radius",
+              "to": "--ds-card-media-border-radius-top",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/card.css:183"
+            }
+          ],
+          "values": {
+            "recto": "9px",
+            "sutil": "10.8px",
+            "suave": "12px",
+            "amplio": "13.8px"
+          }
+        },
+        {
+          "channel": "--ds-card-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-lg",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771",
+              "operand": "--ds-radius-lg-base",
+              "operandValue": "12px"
+            },
+            {
+              "from": "--ds-radius-lg",
+              "to": "--ds-card-border-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/card.css:63"
+            },
+            {
+              "from": "--ds-card-border-radius",
+              "to": "--ds-card-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/card.css:64"
+            }
+          ],
+          "values": {
+            "recto": "9px",
+            "sutil": "10.8px",
+            "suave": "12px",
+            "amplio": "13.8px"
+          }
+        },
+        {
+          "channel": "--ds-card-radius-lg",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-xl",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:772",
+              "operand": "--ds-radius-xl-base",
+              "operandValue": "16px"
+            },
+            {
+              "from": "--ds-radius-xl",
+              "to": "--ds-card-radius-lg",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/card.css:66"
+            }
+          ],
+          "values": {
+            "recto": "12px",
+            "sutil": "14.4px",
+            "suave": "16px",
+            "amplio": "18.4px"
+          }
+        },
+        {
+          "channel": "--ds-card-radius-sm",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-sm",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:769",
+              "operand": "--ds-radius-sm-base",
+              "operandValue": "6px"
+            },
+            {
+              "from": "--ds-radius-sm",
+              "to": "--ds-card-radius-sm",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/card.css:65"
+            }
+          ],
+          "values": {
+            "recto": "4.5px",
+            "sutil": "5.4px",
+            "suave": "6px",
+            "amplio": "6.9px"
+          }
+        },
+        {
+          "channel": "--ds-card-skeleton-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-sm",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:769",
+              "operand": "--ds-radius-sm-base",
+              "operandValue": "6px"
+            },
+            {
+              "from": "--ds-radius-sm",
+              "to": "--ds-card-skeleton-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/card.css:514"
+            }
+          ],
+          "values": {
+            "recto": "4.5px",
+            "sutil": "5.4px",
+            "suave": "6px",
+            "amplio": "6.9px"
+          }
+        },
+        {
+          "channel": "--ds-collapse-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-lg",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771",
+              "operand": "--ds-radius-lg-base",
+              "operandValue": "12px"
+            },
+            {
+              "from": "--ds-radius-lg",
+              "to": "--ds-collapse-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:1919"
+            }
+          ],
+          "values": {
+            "recto": "9px",
+            "sutil": "10.8px",
+            "suave": "12px",
+            "amplio": "13.8px"
+          }
+        },
+        {
+          "channel": "--ds-collapse-root-bordered-idle-border-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-lg",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771",
+              "operand": "--ds-radius-lg-base",
+              "operandValue": "12px"
+            },
+            {
+              "from": "--ds-radius-lg",
+              "to": "--ds-collapse-root-bordered-idle-border-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css:36"
+            }
+          ],
+          "values": {
+            "recto": "9px",
+            "sutil": "10.8px",
+            "suave": "12px",
+            "amplio": "13.8px"
+          }
+        },
+        {
+          "channel": "--ds-collapse-root-default-idle-border-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-lg",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771",
+              "operand": "--ds-radius-lg-base",
+              "operandValue": "12px"
+            },
+            {
+              "from": "--ds-radius-lg",
+              "to": "--ds-collapse-root-default-idle-border-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css:28"
+            }
+          ],
+          "values": {
+            "recto": "9px",
+            "sutil": "10.8px",
+            "suave": "12px",
+            "amplio": "13.8px"
+          }
+        },
+        {
+          "channel": "--ds-collection-card-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-lg",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771",
+              "operand": "--ds-radius-lg-base",
+              "operandValue": "12px"
+            },
+            {
+              "from": "--ds-radius-lg",
+              "to": "--ds-card-border-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/card.css:63"
+            },
+            {
+              "from": "--ds-card-border-radius",
+              "to": "--ds-card-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/card.css:64"
+            },
+            {
+              "from": "--ds-card-radius",
+              "to": "--ds-premium-card-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/card.css:279"
+            },
+            {
+              "from": "--ds-premium-card-radius",
+              "to": "--ds-collection-card-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css:488"
+            }
+          ],
+          "values": {
+            "recto": "9px",
+            "sutil": "10.8px",
+            "suave": "12px",
+            "amplio": "13.8px"
+          }
+        },
+        {
+          "channel": "--ds-compact-card-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            },
+            {
+              "from": "--ds-radius-md",
+              "to": "--ds-compact-card-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css:464"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-datepicker-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            },
+            {
+              "from": "--ds-radius-md",
+              "to": "--ds-datepicker-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:1447"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-dropdown-item-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            },
+            {
+              "from": "--ds-radius-md",
+              "to": "--ds-dropdown-item-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:1816"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-dropdown-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-lg",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771",
+              "operand": "--ds-radius-lg-base",
+              "operandValue": "12px"
+            },
+            {
+              "from": "--ds-radius-lg",
+              "to": "--ds-dropdown-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:1811"
+            }
+          ],
+          "values": {
+            "recto": "9px",
+            "sutil": "10.8px",
+            "suave": "12px",
+            "amplio": "13.8px"
+          }
+        },
+        {
+          "channel": "--ds-image-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            },
+            {
+              "from": "--ds-radius-md",
+              "to": "--ds-image-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:1988"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-input-affix-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-sm",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:769",
+              "operand": "--ds-radius-sm-base",
+              "operandValue": "6px"
+            },
+            {
+              "from": "--ds-radius-sm",
+              "to": "--ds-input-affix-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/input.css:158"
+            }
+          ],
+          "values": {
+            "recto": "4.5px",
+            "sutil": "5.4px",
+            "suave": "6px",
+            "amplio": "6.9px"
+          }
+        },
+        {
+          "channel": "--ds-input-group-border-radius-first",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            },
+            {
+              "from": "--ds-radius-md",
+              "to": "--ds-input-group-border-radius-first",
+              "kind": "identity",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/input.css:247"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-input-group-border-radius-last",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            },
+            {
+              "from": "--ds-radius-md",
+              "to": "--ds-input-group-border-radius-last",
+              "kind": "identity",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/input.css:248"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-input-lg-border-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-lg",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771",
+              "operand": "--ds-radius-lg-base",
+              "operandValue": "12px"
+            },
+            {
+              "from": "--ds-radius-lg",
+              "to": "--ds-input-lg-border-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/input.css:48"
+            }
+          ],
+          "values": {
+            "recto": "9px",
+            "sutil": "10.8px",
+            "suave": "12px",
+            "amplio": "13.8px"
+          }
+        },
+        {
+          "channel": "--ds-input-md-border-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            },
+            {
+              "from": "--ds-radius-md",
+              "to": "--ds-input-md-border-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/input.css:39"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-input-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            },
+            {
+              "from": "--ds-radius-md",
+              "to": "--ds-radius-input",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/foundation/base/borders.css:28"
+            },
+            {
+              "from": "--ds-radius-input",
+              "to": "--ds-input-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/input.css:94"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-input-sm-border-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            },
+            {
+              "from": "--ds-radius-md",
+              "to": "--ds-input-sm-border-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/input.css:30"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-input-xl-border-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-lg",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771",
+              "operand": "--ds-radius-lg-base",
+              "operandValue": "12px"
+            },
+            {
+              "from": "--ds-radius-lg",
+              "to": "--ds-input-xl-border-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/input.css:57"
+            }
+          ],
+          "values": {
+            "recto": "9px",
+            "sutil": "10.8px",
+            "suave": "12px",
+            "amplio": "13.8px"
+          }
+        },
+        {
+          "channel": "--ds-input-xs-border-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-sm",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:769",
+              "operand": "--ds-radius-sm-base",
+              "operandValue": "6px"
+            },
+            {
+              "from": "--ds-radius-sm",
+              "to": "--ds-input-xs-border-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/input.css:21"
+            }
+          ],
+          "values": {
+            "recto": "4.5px",
+            "sutil": "5.4px",
+            "suave": "6px",
+            "amplio": "6.9px"
+          }
+        },
+        {
+          "channel": "--ds-inputnumber-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            },
+            {
+              "from": "--ds-radius-md",
+              "to": "--ds-inputnumber-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:1480"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-list-border-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            },
+            {
+              "from": "--ds-radius-md",
+              "to": "--ds-list-border-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/list.css:35"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-menu-border-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            },
+            {
+              "from": "--ds-radius-md",
+              "to": "--ds-menu-border-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:1883"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-menu-item-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            },
+            {
+              "from": "--ds-radius-md",
+              "to": "--ds-menu-item-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:1880"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-metric-card-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-lg",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771",
+              "operand": "--ds-radius-lg-base",
+              "operandValue": "12px"
+            },
+            {
+              "from": "--ds-radius-lg",
+              "to": "--ds-card-border-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/card.css:63"
+            },
+            {
+              "from": "--ds-card-border-radius",
+              "to": "--ds-card-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/card.css:64"
+            },
+            {
+              "from": "--ds-card-radius",
+              "to": "--ds-premium-card-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/card.css:279"
+            },
+            {
+              "from": "--ds-premium-card-radius",
+              "to": "--ds-metric-card-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css:367"
+            }
+          ],
+          "values": {
+            "recto": "9px",
+            "sutil": "10.8px",
+            "suave": "12px",
+            "amplio": "13.8px"
+          }
+        },
+        {
+          "channel": "--ds-modal-border-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-xl",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:772",
+              "operand": "--ds-radius-xl-base",
+              "operandValue": "16px"
+            },
+            {
+              "from": "--ds-radius-xl",
+              "to": "--ds-modal-border-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/modal.css:73"
+            }
+          ],
+          "values": {
+            "recto": "12px",
+            "sutil": "14.4px",
+            "suave": "16px",
+            "amplio": "18.4px"
+          }
+        },
+        {
+          "channel": "--ds-modal-close-border-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            },
+            {
+              "from": "--ds-radius-md",
+              "to": "--ds-modal-close-border-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/modal.css:157"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-modal-mobile-border-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-lg",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771",
+              "operand": "--ds-radius-lg-base",
+              "operandValue": "12px"
+            },
+            {
+              "from": "--ds-radius-lg",
+              "to": "--ds-modal-mobile-border-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/modal.css:287"
+            }
+          ],
+          "values": {
+            "recto": "9px",
+            "sutil": "10.8px",
+            "suave": "12px",
+            "amplio": "13.8px"
+          }
+        },
+        {
+          "channel": "--ds-modal-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-xl",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:772",
+              "operand": "--ds-radius-xl-base",
+              "operandValue": "16px"
+            },
+            {
+              "from": "--ds-radius-xl",
+              "to": "--ds-modal-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:1099"
+            }
+          ],
+          "values": {
+            "recto": "12px",
+            "sutil": "14.4px",
+            "suave": "16px",
+            "amplio": "18.4px"
+          }
+        },
+        {
+          "channel": "--ds-notification-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-lg",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771",
+              "operand": "--ds-radius-lg-base",
+              "operandValue": "12px"
+            },
+            {
+              "from": "--ds-radius-lg",
+              "to": "--ds-notification-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:1847"
+            }
+          ],
+          "values": {
+            "recto": "9px",
+            "sutil": "10.8px",
+            "suave": "12px",
+            "amplio": "13.8px"
+          }
+        },
+        {
+          "channel": "--ds-pagination-item-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            },
+            {
+              "from": "--ds-radius-md",
+              "to": "--ds-pagination-item-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:1861"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-popover-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-lg",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771",
+              "operand": "--ds-radius-lg-base",
+              "operandValue": "12px"
+            },
+            {
+              "from": "--ds-radius-lg",
+              "to": "--ds-popover-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:1829"
+            }
+          ],
+          "values": {
+            "recto": "9px",
+            "sutil": "10.8px",
+            "suave": "12px",
+            "amplio": "13.8px"
+          }
+        },
+        {
+          "channel": "--ds-premium-card-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-lg",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771",
+              "operand": "--ds-radius-lg-base",
+              "operandValue": "12px"
+            },
+            {
+              "from": "--ds-radius-lg",
+              "to": "--ds-card-border-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/card.css:63"
+            },
+            {
+              "from": "--ds-card-border-radius",
+              "to": "--ds-card-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/card.css:64"
+            },
+            {
+              "from": "--ds-card-radius",
+              "to": "--ds-premium-card-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/card.css:279"
+            }
+          ],
+          "values": {
+            "recto": "9px",
+            "sutil": "10.8px",
+            "suave": "12px",
+            "amplio": "13.8px"
+          }
+        },
+        {
+          "channel": "--ds-qrcode-border-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            },
+            {
+              "from": "--ds-radius-md",
+              "to": "--ds-qrcode-border-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/qrcode.css:53"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-qrcode-icon-border-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-sm",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:769",
+              "operand": "--ds-radius-sm-base",
+              "operandValue": "6px"
+            },
+            {
+              "from": "--ds-radius-sm",
+              "to": "--ds-qrcode-icon-border-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/qrcode.css:112"
+            }
+          ],
+          "values": {
+            "recto": "4.5px",
+            "sutil": "5.4px",
+            "suave": "6px",
+            "amplio": "6.9px"
+          }
+        },
+        {
+          "channel": "--ds-radius-button",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            },
+            {
+              "from": "--ds-radius-md",
+              "to": "--ds-radius-button",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/foundation/base/borders.css:27"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-radius-card",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-lg",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771",
+              "operand": "--ds-radius-lg-base",
+              "operandValue": "12px"
+            },
+            {
+              "from": "--ds-radius-lg",
+              "to": "--ds-radius-card",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/foundation/base/borders.css:29"
+            }
+          ],
+          "values": {
+            "recto": "9px",
+            "sutil": "10.8px",
+            "suave": "12px",
+            "amplio": "13.8px"
+          }
+        },
+        {
+          "channel": "--ds-radius-input",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            },
+            {
+              "from": "--ds-radius-md",
+              "to": "--ds-radius-input",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/foundation/base/borders.css:28"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-radius-lg",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-lg",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771",
+              "operand": "--ds-radius-lg-base",
+              "operandValue": "12px"
+            }
+          ],
+          "values": {
+            "recto": "9px",
+            "sutil": "10.8px",
+            "suave": "12px",
+            "amplio": "13.8px"
+          }
+        },
+        {
+          "channel": "--ds-radius-md",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-radius-modal",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-xl",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:772",
+              "operand": "--ds-radius-xl-base",
+              "operandValue": "16px"
+            },
+            {
+              "from": "--ds-radius-xl",
+              "to": "--ds-radius-modal",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/foundation/base/borders.css:30"
+            }
+          ],
+          "values": {
+            "recto": "12px",
+            "sutil": "14.4px",
+            "suave": "16px",
+            "amplio": "18.4px"
+          }
+        },
+        {
+          "channel": "--ds-radius-sm",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-sm",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:769",
+              "operand": "--ds-radius-sm-base",
+              "operandValue": "6px"
+            }
+          ],
+          "values": {
+            "recto": "4.5px",
+            "sutil": "5.4px",
+            "suave": "6px",
+            "amplio": "6.9px"
+          }
+        },
+        {
+          "channel": "--ds-radius-xl",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-xl",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:772",
+              "operand": "--ds-radius-xl-base",
+              "operandValue": "16px"
+            }
+          ],
+          "values": {
+            "recto": "12px",
+            "sutil": "14.4px",
+            "suave": "16px",
+            "amplio": "18.4px"
+          }
+        },
+        {
+          "channel": "--ds-segmented-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            },
+            {
+              "from": "--ds-radius-md",
+              "to": "--ds-segmented-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:1971"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-select-dropdown-border-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            },
+            {
+              "from": "--ds-radius-md",
+              "to": "--ds-select-dropdown-border-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/select.css:124"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-select-dropdown-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            },
+            {
+              "from": "--ds-radius-md",
+              "to": "--ds-select-dropdown-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:1426"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-select-lg-border-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-lg",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771",
+              "operand": "--ds-radius-lg-base",
+              "operandValue": "12px"
+            },
+            {
+              "from": "--ds-radius-lg",
+              "to": "--ds-select-lg-border-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/select.css:44"
+            }
+          ],
+          "values": {
+            "recto": "9px",
+            "sutil": "10.8px",
+            "suave": "12px",
+            "amplio": "13.8px"
+          }
+        },
+        {
+          "channel": "--ds-select-md-border-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            },
+            {
+              "from": "--ds-radius-md",
+              "to": "--ds-select-md-border-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/select.css:36"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-select-option-border-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-sm",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:769",
+              "operand": "--ds-radius-sm-base",
+              "operandValue": "6px"
+            },
+            {
+              "from": "--ds-radius-sm",
+              "to": "--ds-select-option-border-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/select.css:137"
+            }
+          ],
+          "values": {
+            "recto": "4.5px",
+            "sutil": "5.4px",
+            "suave": "6px",
+            "amplio": "6.9px"
+          }
+        },
+        {
+          "channel": "--ds-select-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            },
+            {
+              "from": "--ds-radius-md",
+              "to": "--ds-select-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:1414"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-select-sm-border-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            },
+            {
+              "from": "--ds-radius-md",
+              "to": "--ds-select-sm-border-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/select.css:28"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-select-tag-border-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-sm",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:769",
+              "operand": "--ds-radius-sm-base",
+              "operandValue": "6px"
+            },
+            {
+              "from": "--ds-radius-sm",
+              "to": "--ds-select-tag-border-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/select.css:171"
+            }
+          ],
+          "values": {
+            "recto": "4.5px",
+            "sutil": "5.4px",
+            "suave": "6px",
+            "amplio": "6.9px"
+          }
+        },
+        {
+          "channel": "--ds-select-tag-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-sm",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:769",
+              "operand": "--ds-radius-sm-base",
+              "operandValue": "6px"
+            },
+            {
+              "from": "--ds-radius-sm",
+              "to": "--ds-select-tag-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:1431"
+            }
+          ],
+          "values": {
+            "recto": "4.5px",
+            "sutil": "5.4px",
+            "suave": "6px",
+            "amplio": "6.9px"
+          }
+        },
+        {
+          "channel": "--ds-select-xl-border-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-lg",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771",
+              "operand": "--ds-radius-lg-base",
+              "operandValue": "12px"
+            },
+            {
+              "from": "--ds-radius-lg",
+              "to": "--ds-select-xl-border-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/select.css:52"
+            }
+          ],
+          "values": {
+            "recto": "9px",
+            "sutil": "10.8px",
+            "suave": "12px",
+            "amplio": "13.8px"
+          }
+        },
+        {
+          "channel": "--ds-select-xs-border-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-sm",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:769",
+              "operand": "--ds-radius-sm-base",
+              "operandValue": "6px"
+            },
+            {
+              "from": "--ds-radius-sm",
+              "to": "--ds-select-xs-border-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/select.css:20"
+            }
+          ],
+          "values": {
+            "recto": "4.5px",
+            "sutil": "5.4px",
+            "suave": "6px",
+            "amplio": "6.9px"
+          }
+        },
+        {
+          "channel": "--ds-signal-card-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-lg",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771",
+              "operand": "--ds-radius-lg-base",
+              "operandValue": "12px"
+            },
+            {
+              "from": "--ds-radius-lg",
+              "to": "--ds-card-border-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/card.css:63"
+            },
+            {
+              "from": "--ds-card-border-radius",
+              "to": "--ds-card-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/card.css:64"
+            },
+            {
+              "from": "--ds-card-radius",
+              "to": "--ds-premium-card-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/card.css:279"
+            },
+            {
+              "from": "--ds-premium-card-radius",
+              "to": "--ds-signal-card-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css:329"
+            }
+          ],
+          "values": {
+            "recto": "9px",
+            "sutil": "10.8px",
+            "suave": "12px",
+            "amplio": "13.8px"
+          }
+        },
+        {
+          "channel": "--ds-skeleton-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            },
+            {
+              "from": "--ds-radius-md",
+              "to": "--ds-skeleton-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:1762"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-table-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-lg",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771",
+              "operand": "--ds-radius-lg-base",
+              "operandValue": "12px"
+            },
+            {
+              "from": "--ds-radius-lg",
+              "to": "--ds-table-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:1699"
+            }
+          ],
+          "values": {
+            "recto": "9px",
+            "sutil": "10.8px",
+            "suave": "12px",
+            "amplio": "13.8px"
+          }
+        },
+        {
+          "channel": "--ds-tag-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            },
+            {
+              "from": "--ds-radius-md",
+              "to": "--ds-tag-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:1209"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-tall-card-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-xl",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:772",
+              "operand": "--ds-radius-xl-base",
+              "operandValue": "16px"
+            },
+            {
+              "from": "--ds-radius-xl",
+              "to": "--ds-tall-card-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css:474"
+            }
+          ],
+          "values": {
+            "recto": "12px",
+            "sutil": "14.4px",
+            "suave": "16px",
+            "amplio": "18.4px"
+          }
+        },
+        {
+          "channel": "--ds-textarea-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            },
+            {
+              "from": "--ds-radius-md",
+              "to": "--ds-radius-input",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/foundation/base/borders.css:28"
+            },
+            {
+              "from": "--ds-radius-input",
+              "to": "--ds-textarea-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/input.css:276"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-timepicker-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            },
+            {
+              "from": "--ds-radius-md",
+              "to": "--ds-timepicker-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:1560"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-tooltip-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-sm",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:769",
+              "operand": "--ds-radius-sm-base",
+              "operandValue": "6px"
+            },
+            {
+              "from": "--ds-radius-sm",
+              "to": "--ds-tooltip-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:1250"
+            }
+          ],
+          "values": {
+            "recto": "4.5px",
+            "sutil": "5.4px",
+            "suave": "6px",
+            "amplio": "6.9px"
+          }
+        },
+        {
+          "channel": "--ds-upload-button-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-md",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+              "operand": "--ds-radius-md-base",
+              "operandValue": "8px"
+            },
+            {
+              "from": "--ds-radius-md",
+              "to": "--ds-upload-button-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:1617"
+            }
+          ],
+          "values": {
+            "recto": "6px",
+            "sutil": "7.2px",
+            "suave": "8px",
+            "amplio": "9.2px"
+          }
+        },
+        {
+          "channel": "--ds-upload-dragger-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-lg",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771",
+              "operand": "--ds-radius-lg-base",
+              "operandValue": "12px"
+            },
+            {
+              "from": "--ds-radius-lg",
+              "to": "--ds-upload-dragger-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:1625"
+            }
+          ],
+          "values": {
+            "recto": "9px",
+            "sutil": "10.8px",
+            "suave": "12px",
+            "amplio": "13.8px"
+          }
+        },
+        {
+          "channel": "--ds-upload-file-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-sm",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:769",
+              "operand": "--ds-radius-sm-base",
+              "operandValue": "6px"
+            },
+            {
+              "from": "--ds-radius-sm",
+              "to": "--ds-upload-file-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:1631"
+            }
+          ],
+          "values": {
+            "recto": "4.5px",
+            "sutil": "5.4px",
+            "suave": "6px",
+            "amplio": "6.9px"
+          }
+        },
+        {
+          "channel": "--ds-workspace-card-radius",
+          "trace": [
+            {
+              "from": "--ds-radius-scale",
+              "to": "--ds-radius-lg",
+              "kind": "calc-multiply",
+              "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771",
+              "operand": "--ds-radius-lg-base",
+              "operandValue": "12px"
+            },
+            {
+              "from": "--ds-radius-lg",
+              "to": "--ds-card-border-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/card.css:63"
+            },
+            {
+              "from": "--ds-card-border-radius",
+              "to": "--ds-card-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/card.css:64"
+            },
+            {
+              "from": "--ds-card-radius",
+              "to": "--ds-premium-card-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/card.css:279"
+            },
+            {
+              "from": "--ds-premium-card-radius",
+              "to": "--ds-workspace-card-radius",
+              "kind": "alias",
+              "site": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css:450"
+            }
+          ],
+          "values": {
+            "recto": "9px",
+            "sutil": "10.8px",
+            "suave": "12px",
+            "amplio": "13.8px"
+          }
+        }
+      ]
+    }
+  ],
+  "uncomputable": [
+    {
+      "channel": "--radius-selector",
+      "reason": "data-attr-select sin operando literal resoluble (packages/core/src/foundation/tokens/css/runtime/engines/modern/framework-token-projection.css:42)"
+    },
+    {
+      "channel": "--_ds-button-icon-plate-radius",
+      "reason": "data-attr-select sin operando literal resoluble (packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css:244)"
+    },
+    {
+      "channel": "--ds-tooltip-radius-current",
+      "reason": "data-attr-select sin operando literal resoluble (packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:360)"
+    },
+    {
+      "channel": "--ds-decision-comparison-radius",
+      "reason": "data-attr-select sin operando literal resoluble (packages/core/src/foundation/tokens/css/presentation/components/skin/decision-comparison.css:622)"
+    },
+    {
+      "channel": "--radius-box",
+      "reason": "data-attr-select sin operando literal resoluble (packages/core/src/foundation/tokens/css/runtime/engines/modern/framework-token-projection.css:44)"
+    },
+    {
+      "channel": "--_ds-button-resolved-radius",
+      "reason": "data-attr-select sin operando literal resoluble (packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css:351)"
+    },
+    {
+      "channel": "--ds-list-toolbar-radius-control",
+      "reason": "data-attr-select sin operando literal resoluble (packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list-toolbar.css:47)"
+    },
+    {
+      "channel": "--_ds-card-radius-current",
+      "reason": "data-attr-select sin operando literal resoluble (packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css:129)"
+    },
+    {
+      "channel": "--radius-field",
+      "reason": "data-attr-select sin operando literal resoluble (packages/core/src/foundation/tokens/css/runtime/engines/modern/framework-token-projection.css:43)"
+    }
+  ]
+}

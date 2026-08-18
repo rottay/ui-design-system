@@ -8458,37 +8458,6 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "color.mode",
-            "socketPattern": null,
-            "prop": "idem",
-            "tier": "standard",
-            "examples": [],
-            "noSocketReason": "sin socket propio; mismo mecanismo",
-            "socketsResolved": true,
-            "carrier": "shared-channel"
-          },
-          {
-            "root": "color.seeds",
-            "prop": "propiedad por lector unico (FAM-14)",
-            "tier": "standard",
-            "sockets": [
-              "--_ds-form-sections-accent",
-              "--_ds-form-sections-accent-secondary",
-              "--_ds-form-sections-active-border",
-              "--_ds-form-sections-badge-bg",
-              "--_ds-form-sections-badge-border",
-              "--_ds-form-sections-border",
-              "--_ds-form-sections-grid-color",
-              "--_ds-form-sections-muted-surface",
-              "--_ds-form-sections-surface"
-            ],
-            "socketsResolved": true
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
             "--ds-color-bg-elevated",
@@ -8506,8 +8475,146 @@
             "--ds-motion-normal",
             "--ds-surface-card"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-form-sections-accent",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css",
+          "productiveConsumerFamilyIds": [
+            "structure/record/form-sections"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-form-sections-accent-secondary",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css",
+          "productiveConsumerFamilyIds": [
+            "structure/record/form-sections"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-form-sections-active-border",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css",
+          "productiveConsumerFamilyIds": [
+            "structure/record/form-sections"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-form-sections-badge-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css",
+          "productiveConsumerFamilyIds": [
+            "structure/record/form-sections"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-form-sections-badge-border",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css",
+          "productiveConsumerFamilyIds": [
+            "structure/record/form-sections"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-form-sections-border",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css",
+          "productiveConsumerFamilyIds": [
+            "structure/record/form-sections"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-form-sections-grid-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css",
+          "productiveConsumerFamilyIds": [
+            "structure/record/form-sections"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-form-sections-muted-surface",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css",
+          "productiveConsumerFamilyIds": [
+            "structure/record/form-sections"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-form-sections-surface",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css",
+          "productiveConsumerFamilyIds": [
+            "structure/record/form-sections"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "typography.pairing",
@@ -8547,29 +8654,31 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "source": "huecos-fable",
-        "bindings": [
-          {
-            "root": "type.pairing",
-            "socketPattern": "(via canales compartidos, sin socket de familia)",
-            "prop": "labels/valores del record sobre la base compartida",
-            "tier": "standard",
-            "sockets": [
-              "--_ds-form-sections-legend-family"
-            ],
-            "socketsResolved": true,
-            "why": "debe reflejarse sin socket propio",
-            "noSocketReason": "via canales compartidos, sin socket de familia"
-          }
-        ],
         "uncoveredByDesign": {
           "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
             "--ds-font-family-mono"
           ]
         },
-        "reviewedFrom": "anatomy"
-      }
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-form-sections-legend-family",
+          "semanticOwner": "typography.families",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/record/form-sections"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
     },
     {
       "controlId": "typography.scale",
@@ -8579,31 +8688,64 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "type.scale",
-            "socketPattern": "--_ds-<comp>-title-size / --_ds-<comp>-value-size",
-            "prop": "titulos de pagina y valores de metricas",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-form-sections-title-size",
-              "--_ds-form-sections-value-size",
-              "--_ds-line-height-none"
-            ],
-            "socketsResolved": true
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
             "--ds-font-size-2xs",
             "--ds-font-size-sm",
             "--ds-font-size-xs"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-form-sections-title-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/record/form-sections"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-form-sections-value-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/record/form-sections"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-line-height-none",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "productiveConsumerFamilyIds": [
+            "structure/record/form-sections"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "shape.radius-scale",
@@ -8613,23 +8755,6 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "shape.corner",
-            "socketPattern": "--_ds-<comp>-panel-radius",
-            "prop": "paneles, rails, metric cards",
-            "tier": "standard",
-            "examples": [
-              "--_ds-record-facts-radius",
-              "--_ds-stats-card-radius"
-            ],
-            "sockets": [
-              "--_ds-form-sections-panel-radius"
-            ],
-            "socketsResolved": true
-          }
-        ],
         "uncoveredByDesign": {
           "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
             "--ds-radius-lg",
@@ -8638,8 +8763,26 @@
             "--ds-radius-xl"
           ]
         },
-        "reviewedFrom": "anatomy"
-      }
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-form-sections-panel-radius",
+          "semanticOwner": "shape.radius-scale",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/record/form-sections"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
     },
     {
       "controlId": "shape.button-style",
@@ -8661,24 +8804,39 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "density.mode",
-            "socketPattern": "--_ds-<comp>-density-factor",
-            "prop": "padding de toolbar y field-grid",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-form-sections-density-factor",
-              "--_ds-form-sections-grid-size"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-form-sections-density-factor",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/record/form-sections"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ],
-        "reviewedFrom": "anatomy"
-      }
+        },
+        {
+          "channelId": "--_ds-form-sections-grid-size",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css",
+          "productiveConsumerFamilyIds": [
+            "structure/record/form-sections"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
     },
     {
       "controlId": "spacing.rhythm",
@@ -8798,19 +8956,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "why": "socket heredado --_ds-record-facts-header-tint",
-        "source": "huecos-kimi",
-        "bindings": [
-          {
-            "root": "chrome.families",
-            "socketPattern": "--_ds-record-header-tint",
-            "prop": "background-color del encabezado de record-facts",
-            "tier": "standard"
+      "internalChannels": [
+        {
+          "channelId": "--_ds-record-header-tint",
+          "semanticOwner": "chrome.families",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/record/form-sections"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "chrome.anatomy",
@@ -8820,43 +8983,64 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "shape.edge",
-            "socketPattern": "--_ds-<comp>-rule-style",
-            "prop": "reglas de field-grid y bordes de toolbar",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-form-sections-rule-style",
-              "--_ds-form-sections-divider"
-            ],
-            "socketsResolved": true
-          },
-          {
-            "root": "focus.ring",
-            "socketPattern": "--_ds-<comp>-focus-ring-color",
-            "prop": "outline-color / box-shadow",
-            "tier": "standard",
-            "examples": [
-              "--_ds-record-action-focus-ring-color"
-            ],
-            "sockets": [
-              "--_ds-form-sections-focus-ring-color"
-            ],
-            "socketsResolved": true
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
             "--ds-divider-style",
             "--ds-divider-width",
             "--ds-focus-ring"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-form-sections-rule-style",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/record/form-sections"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-form-sections-divider",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css",
+          "productiveConsumerFamilyIds": [
+            "structure/record/form-sections"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-form-sections-focus-ring-color",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/record/form-sections"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "token-overrides",
@@ -8935,24 +9119,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "icon.posture",
-            "socketPattern": "--_ds-<comp>-icon-stroke-width",
-            "prop": "stroke-width",
-            "tier": "standard",
-            "examples": [
-              "--_ds-record-field-icon-stroke-width"
-            ],
-            "sockets": [
-              "--_ds-form-sections-icon-stroke-width"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-form-sections-icon-stroke-width",
+          "semanticOwner": "profiles.icon",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/record/form-sections"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-sections.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "responsive.posture",

@@ -410,28 +410,30 @@
       "evidenceIds": [],
       "nextAction": "PROVE_CANONICAL_AND_LEGACY_PRESETS_AT_DENSITY_STOPS_STATIC_DB_WITH_NUMERIC_NEGATIVES_AND_EXACT_RESET",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "source": "huecos-fable",
-        "bindings": [
-          {
-            "root": "density.mode",
-            "socketPattern": "--_ds-collapse-density-factor",
-            "prop": "padding de header/body de Collapse (unica familia layout con filas); Box/Flex/Grid no densifican",
-            "tier": "standard",
-            "sockets": [
-              "--_ds-space-small-size"
-            ],
-            "socketsResolved": true,
-            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Intencion del consumidor (API de instancia o gap de layout): adjudicacion sostenida - el gap lo declara la app, no el tema": [
             "--ds-space-instance-gap"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-space-small-size",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/space.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/space"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "spacing.rhythm",
@@ -563,29 +565,46 @@
       "evidenceIds": [],
       "nextAction": "PROVE_DIAL_WITH_AND_WITHOUT_SPACE_SPECIFIC_DURATION_STATIC_DB_AND_REDUCED_MOTION_PRECEDENCE",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": null,
-            "socketPattern": null,
-            "prop": "sockets de familia derivados de anatomy.sourceBindings",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-space-motion-duration",
-              "--_ds-space-motion-easing"
-            ],
-            "socketsResolved": true
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
             "--ds-motion-ease-out",
             "--ds-motion-fast"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-space-motion-duration",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/space"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-space-motion-easing",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/space"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "surfaces.elevation-posture",

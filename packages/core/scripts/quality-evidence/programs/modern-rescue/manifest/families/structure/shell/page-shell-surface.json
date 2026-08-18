@@ -244,7 +244,13 @@
             "socketsResolved": true,
             "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
           }
-        ]
+        ],
+        "uncoveredByDesign": {
+          "CONSUMO (migracion): ownedBy pattern/shell/pattern-page-shell#shape.radius-scale": [
+            "--_ds-page-panel-radius"
+          ]
+        },
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -284,25 +290,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "space.rhythm",
-            "socketPattern": "--_ds-<comp>-section-gap",
-            "prop": "gap vertical entre secciones del shell via calc(base * var(--ds-rhythm-effective-scale))",
-            "tier": "standard",
-            "examples": [
-              "--_ds-page-section-gap",
-              "--_ds-layout-content-gap"
-            ],
-            "sockets": [
-              "--_ds-page-shell-surface-section-gap"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-page-shell-surface-section-gap",
+          "semanticOwner": "spacing.rhythm",
+          "producer": "packages/core/src/ui/structures/shell/page-shell-surface",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/shell/page-shell-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/structures/shell/page-shell-surface"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "motion.dial",
@@ -311,25 +316,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "motion.character",
-            "socketPattern": "--_ds-<comp>-transition-duration",
-            "prop": "transition-duration",
-            "tier": "standard",
-            "examples": [
-              "--_ds-drawer-transition-duration",
-              "--_ds-sidebar-collapse-transition-duration"
-            ],
-            "sockets": [
-              "--_ds-page-shell-surface-transition-duration"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-page-shell-surface-transition-duration",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/ui/structures/shell/page-shell-surface",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/shell/page-shell-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/structures/shell/page-shell-surface"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -338,24 +342,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "surface.elevation",
-            "socketPattern": "--_ds-<comp>-elevation",
-            "prop": "box-shadow",
-            "tier": "standard",
-            "examples": [
-              "--_ds-drawer-elevation"
-            ],
-            "sockets": [
-              "--_ds-page-shell-surface-elevation"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-page-shell-surface-elevation",
+          "semanticOwner": "surfaces.elevation-posture",
+          "producer": "packages/core/src/ui/structures/shell/page-shell-surface",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/shell/page-shell-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/structures/shell/page-shell-surface"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -377,24 +381,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "navigation.tone",
-            "socketPattern": "--_ds-<comp>-sidebar-bg",
-            "prop": "background-color",
-            "tier": "standard",
-            "examples": [
-              "--_ds-workspace-sidebar-bg"
-            ],
-            "sockets": [
-              "--_ds-page-shell-surface-sidebar-bg"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-page-shell-surface-sidebar-bg",
+          "semanticOwner": "navigation.sidebar-tone",
+          "producer": "packages/core/src/ui/structures/shell/page-shell-surface",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/shell/page-shell-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/structures/shell/page-shell-surface"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "experience.profile",
@@ -416,25 +420,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "layer.stack",
-            "socketPattern": "--_ds-<comp>-z-index",
-            "prop": "z-index",
-            "tier": "standard",
-            "examples": [
-              "--_ds-drawer-z-index",
-              "--_ds-sidebar-sticky-z-index"
-            ],
-            "sockets": [
-              "--_ds-page-shell-surface-z-index"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-page-shell-surface-z-index",
+          "semanticOwner": "chrome.families",
+          "producer": "packages/core/src/ui/structures/shell/page-shell-surface",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/shell/page-shell-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/structures/shell/page-shell-surface"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "chrome.anatomy",
@@ -458,7 +461,13 @@
             "socketsResolved": true,
             "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
           }
-        ]
+        ],
+        "uncoveredByDesign": {
+          "CONSUMO (migracion): ownedBy pattern/shell/pattern-page-shell#chrome.anatomy": [
+            "--_ds-page-rule-style"
+          ]
+        },
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -538,19 +547,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "why": "iconos estructurales del chrome",
-        "source": "huecos-kimi",
-        "bindings": [
-          {
-            "root": "icon.posture",
-            "socketPattern": "--_ds-page-icon-stroke-width",
-            "prop": "stroke-width del chevron de collapse del sidebar",
-            "tier": "standard"
+      "internalChannels": [
+        {
+          "channelId": "--_ds-page-icon-stroke-width",
+          "semanticOwner": "profiles.icon",
+          "producer": "packages/core/src/ui/structures/shell/page-shell-surface",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/shell/page-shell-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/structures/shell/page-shell-surface"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "responsive.posture",

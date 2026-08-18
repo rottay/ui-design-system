@@ -1102,23 +1102,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "type.scale",
-            "socketPattern": "--_ds-<comp>-font-size",
-            "prop": "labels, mensajes, pasos",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-assistant-font-size"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-assistant-font-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/communication/assistant"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ],
-        "reviewedFrom": "anatomy"
-      }
+        }
+      ]
     },
     {
       "controlId": "shape.radius-scale",
@@ -1236,30 +1237,32 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "motion.character",
-            "socketPattern": "--_ds-<comp>-transition-duration",
-            "prop": "transition-duration",
-            "tier": "standard",
-            "examples": [
-              "--_ds-presence-transition-duration"
-            ],
-            "sockets": [
-              "--_ds-assistant-transition-duration"
-            ],
-            "socketsResolved": true
-          }
-        ],
         "uncoveredByDesign": {
           "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
             "--ds-motion-ease-in-out",
             "--ds-motion-glacial"
           ]
         },
-        "reviewedFrom": "anatomy"
-      }
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-assistant-transition-duration",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/communication/assistant"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
     },
     {
       "controlId": "surfaces.elevation-posture",

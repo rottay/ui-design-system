@@ -4412,34 +4412,6 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "color.mode",
-            "socketPattern": null,
-            "prop": "idem",
-            "tier": "standard",
-            "examples": [],
-            "noSocketReason": "sin socket propio; mismo mecanismo",
-            "socketsResolved": true,
-            "carrier": "shared-channel"
-          },
-          {
-            "root": null,
-            "socketPattern": null,
-            "prop": "sockets de familia derivados de anatomy.sourceBindings",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-calendar-event-accent"
-            ],
-            "socketsResolved": true
-          }
-        ],
-        "reviewedFrom": "anatomy",
-        "namespaceDebt": [
-          "el prefijo nombra a primitive/display/calendar pero el unico lector es esta familia (regla corregida: el lector es el dueno)"
-        ],
         "uncoveredByDesign": {
           "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
             "--ds-color-border",
@@ -4452,8 +4424,26 @@
             "--ds-surface-card",
             "--ds-surface-inset"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-calendar-event-accent",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/visualization/pattern-calendar-view"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "typography.pairing",
@@ -4533,29 +4523,32 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "source": "huecos-fable",
-        "bindings": [
-          {
-            "root": "type.scale",
-            "socketPattern": "--_ds-<familia>-label-size",
-            "prop": "labels de la vista. EXCEPCION: ascii-diagram tiene par grid-size/line-cadence propio con piso 9px; su tamano es del contenido",
-            "tier": "standard",
-            "sockets": [
-              "--_ds-pattern-calendar-view-label-size"
-            ],
-            "socketsResolved": true,
-            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
-          }
-        ],
         "uncoveredByDesign": {
           "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
             "--ds-font-size-lg",
             "--ds-font-size-xs"
           ]
         },
-        "reviewedFrom": "anatomy"
-      }
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-pattern-calendar-view-label-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/visualization/pattern-calendar-view"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
     },
     {
       "controlId": "shape.radius-scale",
@@ -4601,24 +4594,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "source": "huecos-fable",
-        "bindings": [
-          {
-            "root": "shape.control-silhouette",
-            "socketPattern": "--_ds-calendar-view-nav-radius",
-            "prop": "controles PROPIOS de la vista (navegacion de mes, add-card de kanban, zoom del mapa) - chrome bespoke, no primitivas",
-            "tier": "standard",
-            "sockets": [
-              "--_ds-calendar-view-nav-radius"
-            ],
-            "socketsResolved": true,
-            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+      "internalChannels": [
+        {
+          "channelId": "--_ds-calendar-view-nav-radius",
+          "semanticOwner": "shape.button-style",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/visualization/pattern-calendar-view"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ],
-        "reviewedFrom": "anatomy"
-      }
+        }
+      ]
     },
     {
       "controlId": "density.mode",
@@ -4628,38 +4621,6 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "source": "huecos-fable",
-        "bindings": [
-          {
-            "root": null,
-            "socketPattern": null,
-            "prop": "consumo via cascada (nivel 2)",
-            "tier": "standard",
-            "examples": [],
-            "noSocketReason": "CONSUMO, no socket propio (dedup Grupo B, correccion de pintor): el elemento kanban card/column lo pinta pattern-kanban-board (kanban-board/engines/modern), no la surface page.",
-            "socketsResolved": true,
-            "carrier": "shared-channel",
-            "ownedBy": "pattern/visualization/pattern-kanban-board",
-            "channels": [
-              "--ds-kanban-card-density-factor"
-            ]
-          },
-          {
-            "root": null,
-            "socketPattern": null,
-            "prop": "sockets de familia derivados de anatomy.sourceBindings",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-calendar-view-cell-min-height",
-              "--_ds-calendar-view-cell-min-height-compact"
-            ],
-            "socketsResolved": true
-          }
-        ],
-        "remediatedFrom": "fam13-dup-sweep",
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Pisos de accesibilidad (touch-target-min): clase de exclusion propia - el piso no se negocia por tema": [
             "--ds-calendar-view-touch-target",
@@ -4668,8 +4629,41 @@
           "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
             "--ds-focus-ring-width"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-calendar-view-cell-min-height",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/visualization/pattern-calendar-view"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-calendar-view-cell-min-height-compact",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/visualization/pattern-calendar-view"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "spacing.rhythm",
@@ -4835,28 +4829,31 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "source": "huecos-fable",
-        "bindings": [
-          {
-            "root": "shape.edge",
-            "socketPattern": "--_ds-calendar-view-frame-style",
-            "prop": "marco de la vista; la GRILLA de dias del calendar y las guias del tree son tier interno derivado NO-anulable (el marco puede desaparecer, la reticula de datos no). EXCEPCION: ascii-diagram y el canvas del mapa son contenido, sus lineas no se tocan",
-            "tier": "standard",
-            "sockets": [
-              "--_ds-calendar-view-frame-style"
-            ],
-            "socketsResolved": true,
-            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
-          }
-        ],
         "uncoveredByDesign": {
           "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
             "--ds-focus-ring-color"
           ]
         },
-        "reviewedFrom": "anatomy"
-      }
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-calendar-view-frame-style",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/visualization/pattern-calendar-view"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
     },
     {
       "controlId": "token-overrides",

@@ -193,7 +193,21 @@
       "measuredScope",
       "sourceSha",
       "positiveControl"
-    ]
+    ],
+    "domainKinds": [
+      "enum",
+      "closed-enum",
+      "bounded",
+      "scale",
+      "color-set",
+      "chrome-map",
+      "token-map",
+      "font-stack",
+      "profile-id",
+      "enum-map",
+      "axis-enum-map"
+    ],
+    "domainKindsLaw": "Lista CERRADA de domain.kind (decision delegada FAM-KINDS). Espejo exacto de manifest/rules.mjs DOMAIN_KINDS; program-check.mjs cobra ambos lados y el kind de cada control. Un kind fuera de la lista es defecto de manifiesto y pone el gate en rojo."
   },
   "sourceBindingLaw": {
     "form": "<repository-relative path> or <repository-relative path>#<Symbol>",

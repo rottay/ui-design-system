@@ -1,0 +1,497 @@
+{
+  "generated": true,
+  "generator": "cascade-backlog.mjs",
+  "schemaVersion": 1,
+  "controlId": "typography.pairing",
+  "tier": "standard",
+  "rootChannel": "--ds-font-family-heading",
+  "homonymLaw": "stem = channelId sin el prefijo --ds-/--_ds-. El diff literal por channelId compara dos vocabularios distintos de frente (prescripcion 100% --_ds-*, alcance generado mayoria --ds-*) y da desalineacion total que no significa nada; la regla correcta es por homonimo.",
+  "planeVocabulary": [
+    "css",
+    "ts-compilers",
+    "ts-chrome-variables"
+  ],
+  "planeLaw": "El alcance transitivo sale del plano CSS unicamente. El vocabulario de planos es CERRADO y tiene TRES nombres (planeVocabulary: css, ts-compilers, ts-chrome-variables); planesNotScanned: ts-compilers, ts-chrome-variables. Una CLASE B puede ser en realidad CLASE A por cualquiera de los dos planos TS no escaneados; se declara, no se calla. CRITERIO FUNCIONAL, no postal: un archivo cuenta como productor cuando la compilacion en ejecucion emite el canal a traves de el. ts-compilers = escrituras explicitas vars[\"--ds-X\"] en el cuerpo del compilador (108 ocurrencias, 97 canales distintos en brand-theme 92 / appearance 6 / appearance-posture 10, mas 46 sitios de escritura templada; censo por ENUMERACION de fuente: 552 canales distintos = 183 literales + 378 interpolados). ts-chrome-variables = la tabla de mapeo de chrome-variables/index.ts, cuyos VALORES son los nombres de canal (censo por grep 1477: 477 como valor de tabla -- 352 derivados por 28 llamadas chromeVariableMap mas 125 literales -- y 1000 como clave de escritura directa; censo por ENUMERACION 1671 = 1154 literales + 546 interpolados, que es el que se usa para cobertura). Solape entre los dos planos TS: 8 canales, no 1 -- el 1 salia de comparar censos por grep. Union de semillas TS: 2215. Entra POR NOMBRE PROPIO y no diluido dentro de ts-compilers porque son figuras distintas y mezclarlas hace la cifra agregada no auditable por partes. Que chrome-variables viva fuera de las carpetas del compilador es DEUDA DE FASE 3 de ubicacion, no razon para descontarlo. radius-dial no es un plano: es una raiz de ts-compilers. COBERTURA (denominador 4547 canales leidos en el arbol de skin del motor modern, sembrando las 18 raices del manifiesto, variante generosa): solo-css 1490 = 32,8%; +ts-compilers 2438 = 53,6%; +ts-chrome-variables 2344 = 51,6%; UNION 2894 = 63,6%. Variante estricta: 25,9 / 47,4 / 47,7 / 60,8%. 1653 canales de U no tienen productor en NINGUN plano. Cifras y metodo completos en cascade-extract.mjs -> stats.coverage; son COTA INFERIOR por 3 emisiones interpoladas sin enumerador.",
+  "classLaw": {
+    "A": "el dial YA alcanza el homonimo --ds-X; falta solo abrir el socket en el sitio de lectura del skin: var(--_ds-X, var(--ds-X, literal)). Trabajo mecanico, una linea por sitio.",
+    "B": "el dial NO alcanza ni el homonimo; hacen falta el socket Y cablear el canal a la raiz. Trabajo de diseno."
+  },
+  "seedLaw": "alcance = BFS desde rootChannel MAS los 'to' de las derivations LIVE del root autorado (primer salto por seleccion de atributo, p.ej. chrome.anatomy: el grafo extraido clavea esas aristas por la var() leida, no por el atributo). Se excluyen literal-pin (fuera del dial, R8) y toIsPattern (pliegue a nivel de mapa, no canal literal).",
+  "inputs": {
+    "prescription": "manifest/cascade/roots/typography.pairing.json (terminalReach, autorado)",
+    "reach": "manifest/cascade/extracted/css-edges.json (cascade-extract.mjs, plano CSS)"
+  },
+  "reach": {
+    "channels": 10,
+    "sockets": 0,
+    "bare": 0
+  },
+  "totals": {
+    "prescribed": 51,
+    "classA": 1,
+    "classB": 50
+  },
+  "families": [
+    {
+      "familyId": "pattern/data/detail-panel",
+      "sockets": [
+        {
+          "socket": "--_ds-workspace-card-hover-transform",
+          "state": "PRESCRIPCION",
+          "stem": "workspace-card-hover-transform",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/data/list-toolbar",
+      "sockets": [
+        {
+          "socket": "--_ds-toolbar-title-font-weight",
+          "state": "PRESCRIPCION",
+          "stem": "toolbar-title-font-weight",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/data/pattern-data-table",
+      "sockets": [
+        {
+          "socket": "--_ds-text-eyebrow-letter-spacing",
+          "state": "PRESCRIPCION",
+          "stem": "text-eyebrow-letter-spacing",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-text-eyebrow-transform",
+          "state": "PRESCRIPCION",
+          "stem": "text-eyebrow-transform",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-typography-display-tracking",
+          "state": "PRESCRIPCION",
+          "stem": "typography-display-tracking",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-typography-label-tracking",
+          "state": "PRESCRIPCION",
+          "stem": "typography-label-tracking",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-typography-label-weight",
+          "state": "PRESCRIPCION",
+          "stem": "typography-label-weight",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/data/saved-views",
+      "sockets": [
+        {
+          "socket": "--_ds-saved-views-create-button-font-weight",
+          "state": "PRESCRIPCION",
+          "stem": "saved-views-create-button-font-weight",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-saved-views-pill-font-weight",
+          "state": "PRESCRIPCION",
+          "stem": "saved-views-pill-font-weight",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-saved-views-pill-font-weight-active",
+          "state": "PRESCRIPCION",
+          "stem": "saved-views-pill-font-weight-active",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/forms/pattern-form-builder",
+      "sockets": [
+        {
+          "socket": "--_ds-form-builder-section-title-letter-spacing",
+          "state": "PRESCRIPCION",
+          "stem": "form-builder-section-title-letter-spacing",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-form-builder-title-letter-spacing",
+          "state": "PRESCRIPCION",
+          "stem": "form-builder-title-letter-spacing",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/display/list",
+      "sockets": [
+        {
+          "socket": "--_ds-list-header-font-weight",
+          "state": "PRESCRIPCION",
+          "stem": "list-header-font-weight",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-list-meta-title-font-weight",
+          "state": "PRESCRIPCION",
+          "stem": "list-meta-title-font-weight",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/display/statistic",
+      "sockets": [
+        {
+          "socket": "--_ds-statistic-affix-font-weight",
+          "state": "PRESCRIPCION",
+          "stem": "statistic-affix-font-weight",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-statistic-affix-letter-spacing",
+          "state": "PRESCRIPCION",
+          "stem": "statistic-affix-letter-spacing",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-statistic-countdown-letter-spacing",
+          "state": "PRESCRIPCION",
+          "stem": "statistic-countdown-letter-spacing",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-statistic-title-font-weight",
+          "state": "PRESCRIPCION",
+          "stem": "statistic-title-font-weight",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-statistic-title-letter-spacing",
+          "state": "PRESCRIPCION",
+          "stem": "statistic-title-letter-spacing",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-statistic-title-transform",
+          "state": "PRESCRIPCION",
+          "stem": "statistic-title-transform",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-statistic-value-font-weight",
+          "state": "PRESCRIPCION",
+          "stem": "statistic-value-font-weight",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-statistic-value-letter-spacing",
+          "state": "PRESCRIPCION",
+          "stem": "statistic-value-letter-spacing",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/display/table",
+      "sockets": [
+        {
+          "socket": "--_ds-table-cell-numeric",
+          "state": "PRESCRIPCION",
+          "stem": "table-cell-numeric",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-table-header-font-weight",
+          "state": "PRESCRIPCION",
+          "stem": "table-header-font-weight",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-table-header-letter-spacing",
+          "state": "PRESCRIPCION",
+          "stem": "table-header-letter-spacing",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-table-header-text-transform",
+          "state": "PRESCRIPCION",
+          "stem": "table-header-text-transform",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-table-pagination-numeric",
+          "state": "PRESCRIPCION",
+          "stem": "table-pagination-numeric",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-table-title-font-weight",
+          "state": "PRESCRIPCION",
+          "stem": "table-title-font-weight",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/display/tag",
+      "sockets": [
+        {
+          "socket": "--_ds-tag-compact-font-weight",
+          "state": "PRESCRIPCION",
+          "stem": "tag-compact-font-weight",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-tag-font-weight",
+          "state": "PRESCRIPCION",
+          "stem": "tag-font-weight",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/display/timeline",
+      "sockets": [
+        {
+          "socket": "--_ds-timeline-label-font-variant-numeric",
+          "state": "PRESCRIPCION",
+          "stem": "timeline-label-font-variant-numeric",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-timeline-label-font-weight",
+          "state": "PRESCRIPCION",
+          "stem": "timeline-label-font-weight",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-timeline-label-letter-spacing",
+          "state": "PRESCRIPCION",
+          "stem": "timeline-label-letter-spacing",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/display/tooltip",
+      "sockets": [
+        {
+          "socket": "--_ds-tooltip-compact-type",
+          "state": "PRESCRIPCION",
+          "stem": "tooltip-compact-type",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-tooltip-rich-type",
+          "state": "PRESCRIPCION",
+          "stem": "tooltip-rich-type",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-tooltip-shortcut-key-type",
+          "state": "PRESCRIPCION",
+          "stem": "tooltip-shortcut-key-type",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-tooltip-spacious-type",
+          "state": "PRESCRIPCION",
+          "stem": "tooltip-spacious-type",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/display/tree",
+      "sockets": [
+        {
+          "socket": "--_ds-tree-node-font-weight-selected",
+          "state": "PRESCRIPCION",
+          "stem": "tree-node-font-weight-selected",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/dashboard/stats-header",
+      "sockets": [
+        {
+          "socket": "--_ds-stats-header-value-font-weight",
+          "state": "PRESCRIPCION",
+          "stem": "stats-header-value-font-weight",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/feedback/capability-anatomy",
+      "sockets": [
+        {
+          "socket": "--_ds-capability-anatomy-label-tracking",
+          "state": "PRESCRIPCION",
+          "stem": "capability-anatomy-label-tracking",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/collection-header",
+      "sockets": [
+        {
+          "socket": "--_ds-type-display-font-weight",
+          "state": "PRESCRIPCION",
+          "stem": "type-display-font-weight",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/dashboard-header",
+      "sockets": [
+        {
+          "socket": "--_ds-dashboard-header-title-tracking",
+          "state": "PRESCRIPCION",
+          "stem": "dashboard-header-title-tracking",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-type-numeric-font-size",
+          "state": "PRESCRIPCION",
+          "stem": "type-numeric-font-size",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-type-numeric-font-weight",
+          "state": "PRESCRIPCION",
+          "stem": "type-numeric-font-weight",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-type-numeric-line-height",
+          "state": "PRESCRIPCION",
+          "stem": "type-numeric-line-height",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/detail-header",
+      "sockets": [
+        {
+          "socket": "--_ds-detail-header-eyebrow-tracking",
+          "state": "PRESCRIPCION",
+          "stem": "detail-header-eyebrow-tracking",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-detail-header-metadata-chip-label-tracking",
+          "state": "PRESCRIPCION",
+          "stem": "detail-header-metadata-chip-label-tracking",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-detail-header-title-tracking",
+          "state": "PRESCRIPCION",
+          "stem": "detail-header-title-tracking",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-detail-header-title-weight",
+          "state": "PRESCRIPCION",
+          "stem": "detail-header-title-weight",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-typography-heading-letter-spacing",
+          "state": "PRESCRIPCION",
+          "stem": "typography-heading-letter-spacing",
+          "class": "A",
+          "homonym": "--ds-typography-heading-letter-spacing",
+          "homonymReaders": [
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/personality.css",
+              "line": 249,
+              "via": "letter-spacing",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/personality.css",
+              "line": 611,
+              "via": "letter-spacing",
+              "kind": "leaf-read"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "familyId": "structure/shell/surface-chrome",
+      "sockets": [
+        {
+          "socket": "--_ds-section-card-eyebrow-tracking",
+          "state": "PRESCRIPCION",
+          "stem": "section-card-eyebrow-tracking",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    }
+  ]
+}

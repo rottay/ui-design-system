@@ -1520,59 +1520,173 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "color.seeds",
-            "prop": "tintas y fondos de marca de la familia",
-            "tier": "standard",
-            "sockets": [
-              "--_ds-qrcode-background-color",
-              "--_ds-qrcode-border-color",
-              "--_ds-qrcode-icon-bg",
-              "--_ds-qrcode-loading-bg",
-              "--_ds-qrcode-refresh-button-bg",
-              "--_ds-qrcode-refresh-button-bg-hover",
-              "--_ds-qrcode-refresh-button-color"
-            ],
-            "socketsResolved": true
-          },
-          {
-            "root": "color.status",
-            "socketPattern": "--_ds-badge-<status>-bg / --_ds-tag-<status>-bg",
-            "prop": "fondos de badge/tag semanticos",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-qrcode-status-expired-overlay-bg",
-              "--_ds-qrcode-status-expired-text-color",
-              "--_ds-qrcode-status-scanned-overlay-bg",
-              "--_ds-qrcode-status-scanned-icon-color"
-            ],
-            "socketsResolved": false
-          },
-          {
-            "root": "color.mode",
-            "socketPattern": null,
-            "prop": "background/color/border via los canales de color re-derivados por overlay",
-            "tier": "standard",
-            "examples": [],
-            "noSocketReason": "SIN socket propio: el modo viaja por los overlays de los canales compartidos --ds-color-*/--ds-surface-*",
-            "socketsResolved": true,
-            "carrier": "shared-channel"
+      "internalChannels": [
+        {
+          "channelId": "--_ds-qrcode-background-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/display/qr-code"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
           }
-        ],
-        "reviewedFrom": "anatomy",
-        "sharedChannels": [
-          "--ds-color-border",
-          "--ds-color-primary",
-          "--ds-color-primary-hover",
-          "--ds-color-success",
-          "--ds-color-text-secondary",
-          "--ds-surface-card"
-        ]
-      }
+        },
+        {
+          "channelId": "--_ds-qrcode-border-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/display/qr-code"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-qrcode-icon-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/display/qr-code"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-qrcode-loading-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/display/qr-code"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-qrcode-refresh-button-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/display/qr-code"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-qrcode-refresh-button-bg-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/qr-code"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-qrcode-refresh-button-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/display/qr-code"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-qrcode-status-expired-overlay-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/display/qr-code"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-qrcode-status-expired-text-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/display/qr-code"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-qrcode-status-scanned-overlay-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/display/qr-code"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-qrcode-status-scanned-icon-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/display/qr-code"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
     },
     {
       "controlId": "typography.pairing",
@@ -1637,28 +1751,38 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "type.scale",
-            "socketPattern": "--_ds-<comp>-font-size (cayendo a los pasos de la rampa multiplicada, ej. var(--ds-text-sm))",
-            "prop": "font-size de todo texto de componente",
-            "tier": "standard",
-            "examples": [
-              "--_ds-card-title-size",
-              "--_ds-input-font-size",
-              "--_ds-menu-item-font-size"
-            ],
-            "sockets": [
-              "--_ds-qrcode-refresh-button-font-size",
-              "--_ds-qrcode-status-text-font-size"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-qrcode-refresh-button-font-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/qr-code"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
           }
-        ],
-        "reviewedFrom": "anatomy"
-      }
+        },
+        {
+          "channelId": "--_ds-qrcode-status-text-font-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/qr-code"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
     },
     {
       "controlId": "shape.radius-scale",
@@ -1667,32 +1791,38 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "shape.corner",
-            "socketPattern": "--_ds-<comp>-radius",
-            "prop": "border-radius de contenedores",
-            "tier": "standard",
-            "examples": [
-              "--_ds-card-radius",
-              "--_ds-table-radius",
-              "--_ds-image-radius"
-            ],
-            "sockets": [
-              "--_ds-qrcode-border-radius",
-              "--_ds-qrcode-icon-border-radius"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-qrcode-border-radius",
+          "semanticOwner": "shape.radius-scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/display/qr-code"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
           }
-        ],
-        "reviewedFrom": "anatomy",
-        "sharedChannels": [
-          "--ds-radius-md",
-          "--ds-radius-sm"
-        ]
-      }
+        },
+        {
+          "channelId": "--_ds-qrcode-icon-border-radius",
+          "semanticOwner": "shape.radius-scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/display/qr-code"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
     },
     {
       "controlId": "shape.button-style",
@@ -1719,33 +1849,68 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "density.mode",
-            "socketPattern": "--_ds-<comp>-density-factor",
-            "prop": "altura de fila y padding de item",
-            "tier": "standard",
-            "examples": [
-              "--_ds-table-row-density-factor",
-              "--_ds-menu-item-density-factor"
-            ],
-            "sockets": [
-              "--_ds-qrcode-root-padding",
-              "--_ds-qrcode-icon-padding",
-              "--_ds-qrcode-refresh-button-padding-x",
-              "--_ds-qrcode-refresh-button-size"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-qrcode-root-padding",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/qr-code"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
           }
-        ],
-        "reviewedFrom": "anatomy",
-        "sharedChannels": [
-          "--ds-spacing-2",
-          "--ds-touch-target-min"
-        ]
-      }
+        },
+        {
+          "channelId": "--_ds-qrcode-icon-padding",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/display/qr-code"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-qrcode-refresh-button-padding-x",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/qr-code"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-qrcode-refresh-button-size",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/display/qr-code"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
     },
     {
       "controlId": "spacing.rhythm",
@@ -1814,19 +1979,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "why": "socket heredado --_ds-icon-frame-glass-bg: consumidor natural de effect-intensity",
-        "source": "huecos-kimi",
-        "bindings": [
-          {
-            "root": "surface.finish",
-            "socketPattern": "--_ds-qrcode-glass-bg",
-            "prop": "background-color de la placa de vidrio del icono",
-            "tier": "premium"
+      "internalChannels": [
+        {
+          "channelId": "--_ds-qrcode-glass-bg",
+          "semanticOwner": "surfaces.effect-intensity",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/qr-code"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -1882,29 +2052,23 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "shape.edge",
-            "socketPattern": "--_ds-<comp>-border-style",
-            "prop": "marco de card/tabla/descripciones",
-            "tier": "standard",
-            "examples": [
-              "--_ds-card-border-style",
-              "--_ds-table-frame-style"
-            ],
-            "sockets": [
-              "--_ds-qrcode-border-width"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-qrcode-border-width",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/display/qr-code"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
           }
-        ],
-        "reviewedFrom": "anatomy",
-        "sharedChannels": [
-          "--ds-focus-ring"
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "token-overrides",
@@ -1987,27 +2151,38 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "icon.posture",
-            "socketPattern": null,
-            "prop": "stroke-width / fill",
-            "tier": "standard",
-            "examples": [
-              "Icon"
-            ],
-            "socketsResolved": true,
-            "carrier": "attribute+shared-socket",
-            "sockets": [
-              "--_ds-qrcode-spinner-size",
-              "--_ds-qrcode-status-icon-size"
-            ]
+      "internalChannels": [
+        {
+          "channelId": "--_ds-qrcode-spinner-size",
+          "semanticOwner": "profiles.icon",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/qr-code"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
           }
-        ],
-        "reviewedFrom": "anatomy"
-      }
+        },
+        {
+          "channelId": "--_ds-qrcode-status-icon-size",
+          "semanticOwner": "profiles.icon",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/qr-code"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
     },
     {
       "controlId": "responsive.posture",

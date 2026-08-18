@@ -6210,46 +6210,6 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "color.seeds",
-            "socketPattern": "--_ds-<comp>-accent-color",
-            "prop": "acentos de campo activo y acciones del builder",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-step-wizard-accent-color",
-              "--_ds-action-dock-edge-color"
-            ],
-            "socketsResolved": true
-          },
-          {
-            "root": "color.mode",
-            "socketPattern": null,
-            "prop": "idem",
-            "tier": "standard",
-            "examples": [],
-            "noSocketReason": "sin socket propio; mismo mecanismo",
-            "socketsResolved": true,
-            "carrier": "shared-channel"
-          },
-          {
-            "root": null,
-            "socketPattern": null,
-            "prop": "consumo via cascada (nivel 2)",
-            "tier": "standard",
-            "examples": [],
-            "noSocketReason": "CONSUMO, no socket propio (dedup Grupo B): el dueno del namespace es primitive/inputs/form-field (pinta data-part=error-text) por regla de pintor/lector; un socket, un dueno.",
-            "socketsResolved": true,
-            "carrier": "shared-channel",
-            "ownedBy": "primitive/inputs/form-field",
-            "channels": [
-              "--ds-form-field-error-color"
-            ]
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Estructural/runtime o interaccion (no eje de tema)": [
             "--ds-action-dock-reserved-block-end",
@@ -6281,10 +6241,32 @@
           ],
           "EXCEPCION ARGUMENTADA - Piso de accesibilidad (touch-target): clase propia de exclusion, JAMAS socket - encoger el area tactil bajo el piso WCAG produce mis-taps; el propio mensaje del adjudicador la declara clase aparte y el archivo la contradecia": [
             "--ds-step-wizard-touch-target-min"
+          ],
+          "CONSUMO (migracion): ownedBy structure/workspace/action-dock#palette.seeds": [
+            "--_ds-action-dock-edge-color"
           ]
         },
-        "remediatedFrom": "dedup2-grupoB"
-      }
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-step-wizard-accent-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/forms/step-wizard"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
     },
     {
       "controlId": "typography.pairing",
@@ -6346,20 +6328,6 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "type.scale",
-            "socketPattern": "--_ds-<comp>-font-size",
-            "prop": "labels, mensajes, pasos",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-step-wizard-font-size"
-            ],
-            "socketsResolved": true
-          }
-        ],
         "uncoveredByDesign": {
           "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
             "--ds-font-size-sm",
@@ -6368,8 +6336,27 @@
             "--ds-line-height-snug"
           ]
         },
-        "reviewedFrom": "anatomy"
-      }
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-step-wizard-font-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/forms/step-wizard"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
     },
     {
       "controlId": "shape.radius-scale",
@@ -6379,20 +6366,6 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "shape.corner",
-            "socketPattern": "--_ds-<comp>-field-radius",
-            "prop": "campos compuestos del builder",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-step-wizard-field-radius"
-            ],
-            "socketsResolved": true
-          }
-        ],
         "uncoveredByDesign": {
           "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
             "--ds-popover-radius",
@@ -6403,8 +6376,27 @@
             "--ds-radius-xs"
           ]
         },
-        "reviewedFrom": "anatomy"
-      }
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-step-wizard-field-radius",
+          "semanticOwner": "shape.radius-scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/forms/step-wizard"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
     },
     {
       "controlId": "shape.button-style",
@@ -6413,22 +6405,25 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "shape.control-silhouette",
-            "socketPattern": "--_ds-<comp>-control-radius",
-            "prop": "botones de accion del builder y grupos de accion",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-step-wizard-control-radius"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-step-wizard-control-radius",
+          "semanticOwner": "shape.button-style",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/forms/step-wizard"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "density.mode",
@@ -6438,34 +6433,6 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "density.mode",
-            "socketPattern": "--_ds-<comp>-density-factor",
-            "prop": "gap entre campos y padding interno",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-step-wizard-density-factor",
-              "--_ds-action-dock-gap",
-              "--_ds-action-dock-padding-block",
-              "--_ds-action-dock-padding-inline",
-              "--_ds-step-wizard-action-dock-reserved-space",
-              "--_ds-step-wizard-body-padding",
-              "--_ds-step-wizard-content-min-height",
-              "--_ds-step-wizard-error-gap",
-              "--_ds-step-wizard-progress-height",
-              "--_ds-step-wizard-rail-offset",
-              "--_ds-step-wizard-skeleton-content-height",
-              "--_ds-step-wizard-skeleton-progress-height",
-              "--_ds-step-wizard-split-gap",
-              "--_ds-step-wizard-vertical-rail-width"
-            ],
-            "socketsResolved": true
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
             "--ds-collection-filter-dropdown-width",
@@ -6488,9 +6455,184 @@
             "--ds-spacing-md",
             "--ds-step-wizard-touch-target-min",
             "--ds-virtual-keyboard-inset"
+          ],
+          "CONSUMO (migracion): ownedBy structure/workspace/action-dock#density.mode": [
+            "--_ds-action-dock-gap",
+            "--_ds-action-dock-padding-block",
+            "--_ds-action-dock-padding-inline"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-step-wizard-density-factor",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/forms/step-wizard"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-step-wizard-action-dock-reserved-space",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/forms/step-wizard"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-step-wizard-body-padding",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/forms/step-wizard"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-step-wizard-content-min-height",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/forms/step-wizard"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-step-wizard-error-gap",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/forms/step-wizard"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-step-wizard-progress-height",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/forms/step-wizard"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-step-wizard-rail-offset",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/forms/step-wizard"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-step-wizard-skeleton-content-height",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/forms/step-wizard"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-step-wizard-skeleton-progress-height",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/forms/step-wizard"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-step-wizard-split-gap",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/forms/step-wizard"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-step-wizard-vertical-rail-width",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/forms/step-wizard"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "spacing.rhythm",
@@ -6499,22 +6641,25 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "space.rhythm",
-            "socketPattern": "--_ds-<comp>-group-gap",
-            "prop": "aire entre GRUPOS de campos (no entre campo y campo, que es density)",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-step-wizard-group-gap"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-step-wizard-group-gap",
+          "semanticOwner": "spacing.rhythm",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/forms/step-wizard"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "motion.dial",
@@ -6524,21 +6669,6 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "why": "las transiciones del formulario obedecen al dial",
-        "source": "huecos-kimi",
-        "bindings": [
-          {
-            "root": "motion.character",
-            "socketPattern": "--_ds-form-transition-duration",
-            "prop": "transition-duration del reveal de secciones y del resumen de validacion",
-            "tier": "standard",
-            "sockets": [
-              "--_ds-step-wizard-skeleton-duration"
-            ]
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
             "--ds-list-preview-motion-duration",
@@ -6549,8 +6679,26 @@
             "--ds-motion-normal",
             "--ds-motion-slow"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-step-wizard-skeleton-duration",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/forms/step-wizard"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -6639,17 +6787,6 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "why": "las secciones pintan su encabezado por familia",
-        "source": "huecos-kimi",
-        "bindings": [
-          {
-            "root": "chrome.families",
-            "socketPattern": "--_ds-form-section-header-bg",
-            "prop": "background-color del encabezado de seccion de formulario",
-            "tier": "standard"
-          }
-        ],
         "uncoveredByDesign": {
           "Canales z NO cubiertos por adjudicacion --ds-z-* (correccion, no gusto; dos ortografias de una decision)": [
             "--ds-action-dock-sticky-z-index",
@@ -6662,8 +6799,27 @@
             "--ds-z-index-sticky"
           ]
         },
-        "reviewedFrom": "anatomy"
-      }
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-form-section-header-bg",
+          "semanticOwner": "chrome.families",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/forms/step-wizard"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
     },
     {
       "controlId": "chrome.anatomy",
@@ -6673,33 +6829,6 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "shape.edge",
-            "socketPattern": "--_ds-<comp>-field-border-style",
-            "prop": "bordes y subrayados de campos compuestos",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-step-wizard-field-border-style"
-            ],
-            "socketsResolved": true
-          },
-          {
-            "root": "focus.ring",
-            "socketPattern": "--_ds-<comp>-focus-ring-color",
-            "prop": "outline-color / box-shadow",
-            "tier": "standard",
-            "examples": [
-              "--_ds-form-section-focus-ring-color"
-            ],
-            "sockets": [
-              "--_ds-step-wizard-focus-ring-color"
-            ],
-            "socketsResolved": true
-          }
-        ],
         "uncoveredByDesign": {
           "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
             "--ds-divider-style",
@@ -6709,8 +6838,44 @@
             "--ds-focus-ring-width"
           ]
         },
-        "reviewedFrom": "anatomy"
-      }
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-step-wizard-field-border-style",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/forms/step-wizard"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-step-wizard-focus-ring-color",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/forms/step-wizard"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
     },
     {
       "controlId": "token-overrides",
@@ -6789,19 +6954,25 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "why": "precedente vivo --_ds-form-field-error-icon-*",
-        "source": "huecos-kimi",
-        "bindings": [
-          {
-            "root": "icon.posture",
-            "socketPattern": "--_ds-form-icon-stroke-width",
-            "prop": "stroke-width de los iconos de error/hint",
-            "tier": "standard"
+      "internalChannels": [
+        {
+          "channelId": "--_ds-form-icon-stroke-width",
+          "semanticOwner": "profiles.icon",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/forms/step-wizard"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "responsive.posture",

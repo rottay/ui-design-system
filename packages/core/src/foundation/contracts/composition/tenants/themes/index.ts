@@ -89,7 +89,7 @@ export interface BrandRecipeSelection {
 export interface BrandResponsiveSelection {
   /** Selection-contract version; see RESPONSIVE_POSTURE_SCHEMA_VERSION. */
   schemaVersion: number;
-  /** Namespaced versioned id, e.g. `rottay/dense-posture@1`. */
+  /** Bare registry id: `compact`, `balanced` or `expansive`. */
   posture: string;
 }
 

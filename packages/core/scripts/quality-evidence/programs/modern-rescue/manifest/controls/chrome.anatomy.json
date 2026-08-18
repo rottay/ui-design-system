@@ -45,7 +45,32 @@
     "staticDbParityEvidenceIds": [],
     "exactRestoreEvidenceIds": [],
     "negativeControls": [],
-    "nextAction": "CALIBRATE_LOWERERS_COMPUTED_DELTAS_NEGATIVES_AND_EXACT_RESTORE"
+    "nextAction": "CALIBRATE_LOWERERS_COMPUTED_DELTAS_NEGATIVES_AND_EXACT_RESTORE",
+    "catalog": {
+      "cardComponent": [
+        "default",
+        "framed",
+        "underline",
+        "ghost"
+      ],
+      "table": [
+        "default",
+        "ruled",
+        "zebra",
+        "open"
+      ],
+      "sidebar": [
+        "default",
+        "rail",
+        "panel"
+      ],
+      "layout": [
+        "default",
+        "flat",
+        "floating"
+      ]
+    },
+    "catalogLaw": "catalogo en calibration, NO en enumValues, por dos razones ejecutables: (a) domain se REGENERA entero desde TenantCapabilityDeclaration (manifest/generator.mjs:171-206); solo calibration y retiredAliases sobreviven, misma figura que recipe-profile; (b) el vocabulario es un MAPA por slot de chrome y TenantCapabilityDeclaration.enumValues es `readonly string[]` plano (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:47). Copia literal de TENANT_THEME_ANATOMY_VARIANTS (packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts:321-326). Mapa, no union plana: `zebra` solo existe en table, `rail`/`panel` solo en sidebar, `framed`/`underline`/`ghost` solo en cardComponent. `default` esta en los cuatro slots y es lo que significa el campo ausente, es decir cero cambio visual (misma fuente, :303-319)."
   },
   "retiredAliases": []
 }

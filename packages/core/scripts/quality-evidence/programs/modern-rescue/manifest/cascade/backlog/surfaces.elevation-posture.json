@@ -1,0 +1,1432 @@
+{
+  "generated": true,
+  "generator": "cascade-backlog.mjs",
+  "schemaVersion": 1,
+  "controlId": "surfaces.elevation-posture",
+  "tier": "standard",
+  "rootChannel": "--ds-elevation-1",
+  "homonymLaw": "stem = channelId sin el prefijo --ds-/--_ds-. El diff literal por channelId compara dos vocabularios distintos de frente (prescripcion 100% --_ds-*, alcance generado mayoria --ds-*) y da desalineacion total que no significa nada; la regla correcta es por homonimo.",
+  "planeVocabulary": [
+    "css",
+    "ts-compilers",
+    "ts-chrome-variables"
+  ],
+  "planeLaw": "El alcance transitivo sale del plano CSS unicamente. El vocabulario de planos es CERRADO y tiene TRES nombres (planeVocabulary: css, ts-compilers, ts-chrome-variables); planesNotScanned: ts-compilers, ts-chrome-variables. Una CLASE B puede ser en realidad CLASE A por cualquiera de los dos planos TS no escaneados; se declara, no se calla. CRITERIO FUNCIONAL, no postal: un archivo cuenta como productor cuando la compilacion en ejecucion emite el canal a traves de el. ts-compilers = escrituras explicitas vars[\"--ds-X\"] en el cuerpo del compilador (108 ocurrencias, 97 canales distintos en brand-theme 92 / appearance 6 / appearance-posture 10, mas 46 sitios de escritura templada; censo por ENUMERACION de fuente: 552 canales distintos = 183 literales + 378 interpolados). ts-chrome-variables = la tabla de mapeo de chrome-variables/index.ts, cuyos VALORES son los nombres de canal (censo por grep 1477: 477 como valor de tabla -- 352 derivados por 28 llamadas chromeVariableMap mas 125 literales -- y 1000 como clave de escritura directa; censo por ENUMERACION 1671 = 1154 literales + 546 interpolados, que es el que se usa para cobertura). Solape entre los dos planos TS: 8 canales, no 1 -- el 1 salia de comparar censos por grep. Union de semillas TS: 2215. Entra POR NOMBRE PROPIO y no diluido dentro de ts-compilers porque son figuras distintas y mezclarlas hace la cifra agregada no auditable por partes. Que chrome-variables viva fuera de las carpetas del compilador es DEUDA DE FASE 3 de ubicacion, no razon para descontarlo. radius-dial no es un plano: es una raiz de ts-compilers. COBERTURA (denominador 4547 canales leidos en el arbol de skin del motor modern, sembrando las 18 raices del manifiesto, variante generosa): solo-css 1490 = 32,8%; +ts-compilers 2438 = 53,6%; +ts-chrome-variables 2344 = 51,6%; UNION 2894 = 63,6%. Variante estricta: 25,9 / 47,4 / 47,7 / 60,8%. 1653 canales de U no tienen productor en NINGUN plano. Cifras y metodo completos en cascade-extract.mjs -> stats.coverage; son COTA INFERIOR por 3 emisiones interpoladas sin enumerador.",
+  "classLaw": {
+    "A": "el dial YA alcanza el homonimo --ds-X; falta solo abrir el socket en el sitio de lectura del skin: var(--_ds-X, var(--ds-X, literal)). Trabajo mecanico, una linea por sitio.",
+    "B": "el dial NO alcanza ni el homonimo; hacen falta el socket Y cablear el canal a la raiz. Trabajo de diseno."
+  },
+  "seedLaw": "alcance = BFS desde rootChannel MAS los 'to' de las derivations LIVE del root autorado (primer salto por seleccion de atributo, p.ej. chrome.anatomy: el grafo extraido clavea esas aristas por la var() leida, no por el atributo). Se excluyen literal-pin (fuera del dial, R8) y toIsPattern (pliegue a nivel de mapa, no canal literal).",
+  "inputs": {
+    "prescription": "manifest/cascade/roots/surfaces.elevation-posture.json (terminalReach, autorado)",
+    "reach": "manifest/cascade/extracted/css-edges.json (cascade-extract.mjs, plano CSS)"
+  },
+  "reach": {
+    "channels": 69,
+    "sockets": 3,
+    "bare": 4
+  },
+  "totals": {
+    "prescribed": 107,
+    "classA": 11,
+    "classB": 96
+  },
+  "families": [
+    {
+      "familyId": "pattern/data/bulk-select-toggle",
+      "sockets": [
+        {
+          "socket": "--_ds-bulk-select-toggle-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "bulk-select-toggle-elevation",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/data/column-settings",
+      "sockets": [
+        {
+          "socket": "--_ds-column-settings-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "column-settings-elevation",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/data/decision-comparison",
+      "sockets": [
+        {
+          "socket": "--_ds-decision-comparison-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "decision-comparison-elevation",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/data/decision-panorama",
+      "sockets": [
+        {
+          "socket": "--_ds-decision-panorama-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "decision-panorama-elevation",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/data/detail-panel",
+      "sockets": [
+        {
+          "socket": "--_ds-detail-panel-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "detail-panel-elevation",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/data/file-manager",
+      "sockets": [
+        {
+          "socket": "--_ds-file-manager-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "file-manager-elevation",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/data/list-toolbar",
+      "sockets": [
+        {
+          "socket": "--_ds-list-toolbar-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "list-toolbar-elevation",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-search-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "search-shadow",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-toolbar-controls-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "toolbar-controls-shadow",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/data/mono-stat",
+      "sockets": [
+        {
+          "socket": "--_ds-mono-stat-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "mono-stat-elevation",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/data/pattern-data-table",
+      "sockets": [
+        {
+          "socket": "--_ds-data-table-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "data-table-elevation",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-table-action-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "table-action-shadow",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-table-editorial-row-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "table-editorial-row-shadow",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-table-minimal-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "table-minimal-shadow",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-table-ruled-mobile-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "table-ruled-mobile-shadow",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-table-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "table-shadow",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/data/pattern-gallery-view",
+      "sockets": [
+        {
+          "socket": "--_ds-gallery-view-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "gallery-view-elevation",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/data/pattern-grid-view",
+      "sockets": [
+        {
+          "socket": "--_ds-collection-card-depth",
+          "state": "PRESCRIPCION",
+          "stem": "collection-card-depth",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-grid-view-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "grid-view-elevation",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/data/pattern-stats-grid",
+      "sockets": [
+        {
+          "socket": "--_ds-stats-grid-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "stats-grid-elevation",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/data/record-facts",
+      "sockets": [
+        {
+          "socket": "--_ds-record-facts-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "record-facts-elevation",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-record-facts-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "record-facts-shadow",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/data/saved-views",
+      "sockets": [
+        {
+          "socket": "--_ds-saved-views-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "saved-views-elevation",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/data/status-filter-pills",
+      "sockets": [
+        {
+          "socket": "--_ds-status-filter-pills-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "status-filter-pills-elevation",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/data/virtual-list",
+      "sockets": [
+        {
+          "socket": "--_ds-virtual-list-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "virtual-list-elevation",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/data/widget-board",
+      "sockets": [
+        {
+          "socket": "--_ds-widget-board-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "widget-board-elevation",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/feedback/adaptive-overlay",
+      "sockets": [
+        {
+          "socket": "--_ds-adaptive-overlay-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "adaptive-overlay-elevation",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/feedback/empty-state",
+      "sockets": [
+        {
+          "socket": "--_ds-empty-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "empty-shadow",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-empty-state-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "empty-state-shadow",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/shell/cockpit-header",
+      "sockets": [
+        {
+          "socket": "--_ds-cockpit-header-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "cockpit-header-elevation",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/shell/feature-workspace-frame",
+      "sockets": [
+        {
+          "socket": "--_ds-feature-workspace-frame-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "feature-workspace-frame-elevation",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/shell/pattern-page-shell",
+      "sockets": [
+        {
+          "socket": "--_ds-page-header-shadow-hover",
+          "state": "PRESCRIPCION",
+          "stem": "page-header-shadow-hover",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-page-shell-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "page-shell-elevation",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/shell/workbench-header",
+      "sockets": [
+        {
+          "socket": "--_ds-workbench-header-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "workbench-header-elevation",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/display/avatar",
+      "sockets": [
+        {
+          "socket": "--_ds-avatar-hover-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "avatar-hover-shadow",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/display/badge",
+      "sockets": [
+        {
+          "socket": "--_ds-badge-avatar-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "badge-avatar-shadow",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-badge-dot-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "badge-dot-shadow",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-badge-ghost-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "badge-ghost-shadow",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-badge-icon-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "badge-icon-shadow",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-badge-outline-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "badge-outline-shadow",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-badge-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "badge-shadow",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-badge-shadow-hover",
+          "state": "PRESCRIPCION",
+          "stem": "badge-shadow-hover",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-badge-shadow-pressed",
+          "state": "PRESCRIPCION",
+          "stem": "badge-shadow-pressed",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/display/callout",
+      "sockets": [
+        {
+          "socket": "--_ds-callout-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "callout-shadow",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/display/card",
+      "sockets": [
+        {
+          "socket": "--_ds-card-bordered-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "card-bordered-shadow",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-card-elevated-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "card-elevated-shadow",
+          "class": "A",
+          "homonym": "--ds-card-elevated-shadow",
+          "homonymReaders": [
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
+              "line": 148,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            }
+          ]
+        },
+        {
+          "socket": "--_ds-card-elevated-shadow-hover",
+          "state": "PRESCRIPCION",
+          "stem": "card-elevated-shadow-hover",
+          "class": "A",
+          "homonym": "--ds-card-elevated-shadow-hover",
+          "homonymReaders": [
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
+              "line": 205,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            }
+          ]
+        },
+        {
+          "socket": "--_ds-card-elevation-surface",
+          "state": "PRESCRIPCION",
+          "stem": "card-elevation-surface",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-card-flat-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "card-flat-shadow",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-card-ghost-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "card-ghost-shadow",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-card-nested-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "card-nested-shadow",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-card-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "card-shadow",
+          "class": "A",
+          "homonym": "--ds-card-shadow",
+          "homonymReaders": [
+            {
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/card.css",
+              "line": 243,
+              "via": "--ds-card-elevated-shadow",
+              "kind": "channel-reader"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/patterns-paint.css",
+              "line": 44,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+              "line": 33,
+              "via": "--ds-surface-card-shadow",
+              "kind": "channel-reader"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+              "line": 876,
+              "via": "--ds-command-home-card-shadow",
+              "kind": "channel-reader"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+              "line": 2816,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/search.css",
+              "line": 55,
+              "via": "--ds-card-shadow",
+              "kind": "channel-reader"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css",
+              "line": 28,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css",
+              "line": 415,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
+              "line": 186,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
+              "line": 617,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/card.css",
+              "line": 47,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/card.css",
+              "line": 180,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css",
+              "line": 162,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/detail-panel.css",
+              "line": 49,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css",
+              "line": 77,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css",
+              "line": 101,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+              "line": 8,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+              "line": 70,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+              "line": 113,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree-select.css",
+              "line": 143,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme.css",
+              "line": 501,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/personality.css",
+              "line": 204,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            }
+          ]
+        },
+        {
+          "socket": "--_ds-card-shadow-active",
+          "state": "PRESCRIPCION",
+          "stem": "card-shadow-active",
+          "class": "A",
+          "homonym": "--ds-card-shadow-active",
+          "homonymReaders": [
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
+              "line": 218,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            }
+          ]
+        },
+        {
+          "socket": "--_ds-card-shadow-hover",
+          "state": "PRESCRIPCION",
+          "stem": "card-shadow-hover",
+          "class": "A",
+          "homonym": "--ds-card-shadow-hover",
+          "homonymReaders": [
+            {
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/card.css",
+              "line": 244,
+              "via": "--ds-card-elevated-shadow-hover",
+              "kind": "channel-reader"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/card.css",
+              "line": 381,
+              "via": "--ds-premium-card-shadow-hover",
+              "kind": "channel-reader"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+              "line": 37,
+              "via": "--ds-surface-card-shadow-hover",
+              "kind": "channel-reader"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+              "line": 883,
+              "via": "--ds-command-home-card-shadow-hover",
+              "kind": "channel-reader"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css",
+              "line": 423,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css",
+              "line": 109,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+              "line": 54,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme.css",
+              "line": 507,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/personality.css",
+              "line": 214,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/personality.css",
+              "line": 322,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            }
+          ]
+        },
+        {
+          "socket": "--_ds-card-shadow-selected",
+          "state": "PRESCRIPCION",
+          "stem": "card-shadow-selected",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/display/descriptions",
+      "sockets": [
+        {
+          "socket": "--_ds-descriptions-header-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "descriptions-header-shadow",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-descriptions-header-shadow-hover",
+          "state": "PRESCRIPCION",
+          "stem": "descriptions-header-shadow-hover",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-descriptions-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "descriptions-shadow",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/display/table",
+      "sockets": [
+        {
+          "socket": "--_ds-table-header-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "table-header-shadow",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-table-page-button-hover-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "table-page-button-hover-shadow",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/display/tag",
+      "sockets": [
+        {
+          "socket": "--_ds-tag-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "tag-shadow",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/feedback/alert",
+      "sockets": [
+        {
+          "socket": "--_ds-alert-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "alert-shadow",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/feedback/modal",
+      "sockets": [
+        {
+          "socket": "--_ds-modal-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "modal-shadow",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/feedback/result",
+      "sockets": [
+        {
+          "socket": "--_ds-result-icon-well-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "result-icon-well-shadow",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/layout/aspect-ratio",
+      "sockets": [
+        {
+          "socket": "--_ds-aspect-ratio-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "aspect-ratio-shadow",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/layout/collapse",
+      "sockets": [
+        {
+          "socket": "--_ds-collapse-root-default-idle-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "collapse-root-default-idle-shadow",
+          "class": "A",
+          "homonym": "--ds-collapse-root-default-idle-shadow",
+          "homonymReaders": [
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+              "line": 132,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            }
+          ]
+        },
+        {
+          "socket": "--_ds-collapse-root-ghost-idle-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "collapse-root-ghost-idle-shadow",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/layout/container",
+      "sockets": [
+        {
+          "socket": "--_ds-container-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "container-shadow",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/overlay/alert-dialog",
+      "sockets": [
+        {
+          "socket": "--_ds-alert-dialog-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "alert-dialog-elevation",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/overlay/confirm-dialog",
+      "sockets": [
+        {
+          "socket": "--_ds-confirm-dialog-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "confirm-dialog-elevation",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/overlay/context-menu",
+      "sockets": [
+        {
+          "socket": "--_ds-context-menu-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "context-menu-elevation",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/overlay/dropdown",
+      "sockets": [
+        {
+          "socket": "--_ds-dropdown-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "dropdown-elevation",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/overlay/hover-card",
+      "sockets": [
+        {
+          "socket": "--_ds-hover-card-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "hover-card-elevation",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/overlay/popconfirm",
+      "sockets": [
+        {
+          "socket": "--_ds-popconfirm-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "popconfirm-elevation",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/overlay/popover",
+      "sockets": [
+        {
+          "socket": "--_ds-popover-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "popover-elevation",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/overlay/sheet",
+      "sockets": [
+        {
+          "socket": "--_ds-sheet-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "sheet-elevation",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/overlay/tour",
+      "sockets": [
+        {
+          "socket": "--_ds-tour-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "tour-elevation",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/overlay/watermark",
+      "sockets": [
+        {
+          "socket": "--_ds-watermark-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "watermark-elevation",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/dashboard/dashboard-insights",
+      "sockets": [
+        {
+          "socket": "--_ds-compact-card-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "compact-card-shadow",
+          "class": "A",
+          "homonym": "--ds-compact-card-shadow"
+        },
+        {
+          "socket": "--_ds-dashboard-insights-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "dashboard-insights-elevation",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-metric-card-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "metric-card-shadow",
+          "class": "A",
+          "homonym": "--ds-metric-card-shadow",
+          "homonymReaders": [
+            {
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+              "line": 142,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css",
+              "line": 102,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+              "line": 132,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-rows.css",
+              "line": 123,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            }
+          ]
+        },
+        {
+          "socket": "--_ds-metric-card-shadow-hover",
+          "state": "PRESCRIPCION",
+          "stem": "metric-card-shadow-hover",
+          "class": "A",
+          "homonym": "--ds-metric-card-shadow-hover",
+          "homonymReaders": [
+            {
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-metrics-interactions.css",
+              "line": 28,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-metrics-interactions.css",
+              "line": 123,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-metrics-interactions.css",
+              "line": 189,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-metrics-interactions.css",
+              "line": 272,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            }
+          ]
+        },
+        {
+          "socket": "--_ds-signal-card-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "signal-card-shadow",
+          "class": "A",
+          "homonym": "--ds-signal-card-shadow",
+          "homonymReaders": [
+            {
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+              "line": 68,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css",
+              "line": 46,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+              "line": 70,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-rows.css",
+              "line": 64,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            }
+          ]
+        },
+        {
+          "socket": "--_ds-signal-card-shadow-hover",
+          "state": "PRESCRIPCION",
+          "stem": "signal-card-shadow-hover",
+          "class": "A",
+          "homonym": "--ds-signal-card-shadow-hover",
+          "homonymReaders": [
+            {
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/patterns-paint.css",
+              "line": 416,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/patterns-paint.css",
+              "line": 425,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+              "line": 3180,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+              "line": 3189,
+              "via": "box-shadow",
+              "kind": "leaf-read"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "familyId": "structure/dashboard/data-terminal-card",
+      "sockets": [
+        {
+          "socket": "--_ds-data-terminal-card-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "data-terminal-card-elevation",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/dashboard/stats-header",
+      "sockets": [
+        {
+          "socket": "--_ds-stats-header-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "stats-header-elevation",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/collection-header",
+      "sockets": [
+        {
+          "socket": "--_ds-collection-header-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "collection-header-shadow",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-collection-header-shadow-hover",
+          "state": "PRESCRIPCION",
+          "stem": "collection-header-shadow-hover",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/dashboard-header",
+      "sockets": [
+        {
+          "socket": "--_ds-dashboard-header-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "dashboard-header-shadow",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/detail-header",
+      "sockets": [
+        {
+          "socket": "--_ds-detail-control-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "detail-control-shadow",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/edit-header",
+      "sockets": [
+        {
+          "socket": "--_ds-edit-header-stuck-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "edit-header-stuck-shadow",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/form-header",
+      "sockets": [
+        {
+          "socket": "--_ds-form-header-stuck-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "form-header-stuck-shadow",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/header-surface",
+      "sockets": [
+        {
+          "socket": "--_ds-header-surface-stuck-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "header-surface-stuck-shadow",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/mobile-header",
+      "sockets": [
+        {
+          "socket": "--_ds-mobile-header-stuck-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "mobile-header-stuck-shadow",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/section-frame",
+      "sockets": [
+        {
+          "socket": "--_ds-section-frame-stuck-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "section-frame-stuck-shadow",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/shell/app-shell",
+      "sockets": [
+        {
+          "socket": "--_ds-app-shell-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "app-shell-elevation",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-shell-footer-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "shell-footer-shadow",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-shell-header-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "shell-header-shadow",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-shell-main-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "shell-main-shadow",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-shell-navigation-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "shell-navigation-shadow",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-shell-skip-link-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "shell-skip-link-shadow",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/shell/bottom-tab-bar",
+      "sockets": [
+        {
+          "socket": "--_ds-bottom-tab-bar-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "bottom-tab-bar-elevation",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-bottom-tab-bar-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "bottom-tab-bar-shadow",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/shell/page-shell-surface",
+      "sockets": [
+        {
+          "socket": "--_ds-page-shell-surface-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "page-shell-surface-elevation",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/shell/surface-chrome",
+      "sockets": [
+        {
+          "socket": "--_ds-surface-chrome-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "surface-chrome-elevation",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/shell/workspace-shell",
+      "sockets": [
+        {
+          "socket": "--_ds-workspace-shell-elevation",
+          "state": "PRESCRIPCION",
+          "stem": "workspace-shell-elevation",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "surface/data/search",
+      "sockets": [
+        {
+          "socket": "--_ds-search-result-shadow",
+          "state": "PRESCRIPCION",
+          "stem": "search-result-shadow",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "generated": true,
+  "generator": "cascade-materialize.mjs",
+  "schemaVersion": 1,
+  "controlId": "responsive.posture",
+  "tier": "pro",
+  "inputs": {
+    "variantsFrom": "manifest/controls/responsive.posture.json (calibration.normalizedStops)",
+    "rulesFrom": "manifest/cascade/extracted/css-edges.json (cascade-extract.mjs)"
+  },
+  "notMaterializable": "landing 100% TS (thresholds del runtime adaptativo); sin canal gobernado — root en borrador, enmienda de rules.mjs pedida al adjudicador"
+}

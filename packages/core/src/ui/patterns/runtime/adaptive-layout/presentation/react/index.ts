@@ -59,7 +59,7 @@ function readTypeScale(): string {
  * artifact's normalizedAppearance) beats the static BrandTheme selection.
  *
  * Resolution is fail-closed and TOTAL: an absent, unknown, malformed or
- * foreign-schema id yields `rottay/standard-posture@1`, whose thresholds are
+ * foreign-schema id yields `balanced`, whose thresholds are
  * literally the 639/839 pair this runtime hardcoded before the axis opened.
  * Absent is therefore byte-for-byte the pre-capability ladder, which is what
  * makes "unset it" a true rollback.

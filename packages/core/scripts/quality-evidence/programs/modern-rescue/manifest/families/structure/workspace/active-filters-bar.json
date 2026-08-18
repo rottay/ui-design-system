@@ -2737,33 +2737,6 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "color.seeds",
-            "socketPattern": "--_ds-<comp>-accent-color",
-            "prop": "acentos de toolbar y filtros activos",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-active-filters-bar-accent-color",
-              "--_ds-active-filters-bar-chips-basis",
-              "--_ds-active-filters-bar-count-color"
-            ],
-            "socketsResolved": true
-          },
-          {
-            "root": "color.mode",
-            "socketPattern": null,
-            "prop": "idem",
-            "tier": "standard",
-            "examples": [],
-            "noSocketReason": "sin socket propio; mismo mecanismo",
-            "socketsResolved": true,
-            "carrier": "shared-channel"
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Brazo compartido foundation (nivel 2/3)": [
             "--ds-color-bg-primary",
@@ -2781,8 +2754,57 @@
           "SHARED multi-lector (ownedBy pendiente de grupo)": [
             "--ds-surface-card"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-active-filters-bar-accent-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/workspace/active-filters-bar"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-active-filters-bar-chips-basis",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/workspace/active-filters-bar"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-active-filters-bar-count-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/workspace/active-filters-bar"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "typography.pairing",
@@ -2873,25 +2895,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "shape.corner",
-            "socketPattern": "--_ds-<comp>-panel-radius",
-            "prop": "paneles, rails, metric cards",
-            "tier": "standard",
-            "examples": [
-              "--_ds-record-facts-radius",
-              "--_ds-stats-card-radius"
-            ],
-            "sockets": [
-              "--_ds-active-filters-bar-panel-radius"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-active-filters-bar-panel-radius",
+          "semanticOwner": "shape.radius-scale",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/workspace/active-filters-bar"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "shape.button-style",
@@ -2900,22 +2921,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "shape.control-silhouette",
-            "socketPattern": "--_ds-<comp>-control-radius",
-            "prop": "botones de toolbar",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-active-filters-bar-control-radius"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-active-filters-bar-control-radius",
+          "semanticOwner": "shape.button-style",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/workspace/active-filters-bar"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "density.mode",
@@ -2925,31 +2948,91 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "density.mode",
-            "socketPattern": "--_ds-<comp>-density-factor",
-            "prop": "padding de toolbar y field-grid",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-active-filters-bar-density-factor",
-              "--_ds-active-filters-bar-count-block-size",
-              "--_ds-active-filters-bar-embedded-padding-block",
-              "--_ds-active-filters-bar-padding-block",
-              "--_ds-active-filters-bar-padding-inline"
-            ],
-            "socketsResolved": true
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "CONSUMO/shared (multi-lector): ownedBy pattern/data/list-toolbar.json": [
             "--ds-control-size-sm"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-active-filters-bar-density-factor",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/workspace/active-filters-bar"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-active-filters-bar-count-block-size",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/workspace/active-filters-bar"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-active-filters-bar-embedded-padding-block",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/workspace/active-filters-bar"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-active-filters-bar-padding-block",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/workspace/active-filters-bar"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-active-filters-bar-padding-inline",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/workspace/active-filters-bar"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "spacing.rhythm",
@@ -2958,22 +3041,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "space.rhythm",
-            "socketPattern": "--_ds-<comp>-grid-gap",
-            "prop": "gap de grillas de widgets y de zonas de trabajo",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-active-filters-bar-grid-gap"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-active-filters-bar-grid-gap",
+          "semanticOwner": "spacing.rhythm",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/workspace/active-filters-bar"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "motion.dial",
@@ -2983,30 +3068,46 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "motion.character",
-            "socketPattern": "--_ds-<comp>-transition-duration",
-            "prop": "transition-duration",
-            "tier": "standard",
-            "examples": [
-              "--_ds-panel-transition-duration"
-            ],
-            "sockets": [
-              "--_ds-active-filters-bar-transition-duration",
-              "--_ds-active-filters-bar-motion-duration"
-            ],
-            "socketsResolved": true
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Brazo compartido foundation (nivel 2/3)": [
             "--ds-motion-ease-out"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-active-filters-bar-transition-duration",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/workspace/active-filters-bar"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-active-filters-bar-motion-duration",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/workspace/active-filters-bar"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -3075,19 +3176,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "why": "los paneles del lienzo pintan su encabezado por familia",
-        "source": "huecos-kimi",
-        "bindings": [
-          {
-            "root": "chrome.families",
-            "socketPattern": "--_ds-active-filters-bar-panel-header-bg",
-            "prop": "background-color del encabezado de panel",
-            "tier": "standard"
+      "internalChannels": [
+        {
+          "channelId": "--_ds-active-filters-bar-panel-header-bg",
+          "semanticOwner": "chrome.families",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/workspace/active-filters-bar"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "chrome.anatomy",
@@ -3096,22 +3202,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "shape.edge",
-            "socketPattern": "--_ds-<comp>-rule-style",
-            "prop": "reglas de field-grid y bordes de toolbar",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-active-filters-bar-rule-style"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-active-filters-bar-rule-style",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/workspace/active-filters-bar"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "token-overrides",
@@ -3194,19 +3302,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "why": "iconos de la libreria",
-        "source": "huecos-kimi",
-        "bindings": [
-          {
-            "root": "icon.posture",
-            "socketPattern": "--_ds-active-filters-bar-icon-stroke-width",
-            "prop": "stroke-width de los iconos de toolbar de panel",
-            "tier": "standard"
+      "internalChannels": [
+        {
+          "channelId": "--_ds-active-filters-bar-icon-stroke-width",
+          "semanticOwner": "profiles.icon",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/workspace/active-filters-bar"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "responsive.posture",

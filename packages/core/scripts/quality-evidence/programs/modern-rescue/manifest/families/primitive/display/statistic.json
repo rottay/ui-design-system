@@ -1538,57 +1538,100 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "color.seeds",
-            "prop": "tintas y fondos de marca de la familia",
-            "tier": "standard",
-            "sockets": [
-              "--_ds-statistic-color",
-              "--_ds-statistic-title-color",
-              "--_ds-statistic-prefix-color",
-              "--_ds-statistic-suffix-color",
-              "--_ds-statistic-value-color"
-            ],
-            "socketsResolved": true
-          },
-          {
-            "root": "color.status",
-            "socketPattern": "--_ds-badge-<status>-bg / --_ds-tag-<status>-bg",
-            "prop": "fondos de badge/tag semanticos",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-statistic-negative-color"
-            ],
-            "socketsResolved": false
-          },
-          {
-            "root": "color.mode",
-            "socketPattern": null,
-            "prop": "background/color/border via los canales de color re-derivados por overlay",
-            "tier": "standard",
-            "examples": [],
-            "noSocketReason": "SIN socket propio: el modo viaja por los overlays de los canales compartidos --ds-color-*/--ds-surface-*",
-            "socketsResolved": true,
-            "carrier": "shared-channel"
+      "internalChannels": [
+        {
+          "channelId": "--_ds-statistic-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/statistic"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
           }
-        ],
-        "reviewedFrom": "anatomy",
-        "sharedChannels": [
-          "--ds-color-bg-elevated",
-          "--ds-color-border-subtle",
-          "--ds-color-error",
-          "--ds-color-success",
-          "--ds-color-warning",
-          "--ds-color-neutral-900",
-          "--ds-color-text-primary",
-          "--ds-color-text-secondary",
-          "--ds-surface-panel"
-        ]
-      }
+        },
+        {
+          "channelId": "--_ds-statistic-title-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/statistic.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/display/statistic"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/statistic-compounds.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-statistic-prefix-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/statistic.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/display/statistic"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-statistic-suffix-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/statistic.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/display/statistic"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-statistic-value-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/statistic.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/display/statistic"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/statistic-compounds.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-statistic-negative-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/statistic.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/display/statistic"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
     },
     {
       "controlId": "typography.pairing",
@@ -1597,34 +1640,128 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "type.pairing",
-            "socketPattern": "--_ds-<comp>-heading-family / --_ds-<comp>-value-family",
-            "prop": "font-family de titulares y valores de display",
-            "tier": "standard",
-            "examples": [
-              "--_ds-typography-heading-family",
-              "--_ds-statistic-value-family",
-              "--_ds-kbd-family (mono)"
-            ],
-            "sockets": [
-              "--_ds-statistic-title-font-weight",
-              "--_ds-statistic-value-font-weight",
-              "--_ds-statistic-affix-font-weight",
-              "--_ds-statistic-title-letter-spacing",
-              "--_ds-statistic-value-letter-spacing",
-              "--_ds-statistic-affix-letter-spacing",
-              "--_ds-statistic-countdown-letter-spacing",
-              "--_ds-statistic-title-transform"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-statistic-title-font-weight",
+          "semanticOwner": "typography.pairing",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/statistic"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
           }
-        ],
-        "reviewedFrom": "anatomy"
-      }
+        },
+        {
+          "channelId": "--_ds-statistic-value-font-weight",
+          "semanticOwner": "typography.pairing",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/statistic.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/display/statistic"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-statistic-affix-font-weight",
+          "semanticOwner": "typography.pairing",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/statistic"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-statistic-title-letter-spacing",
+          "semanticOwner": "typography.pairing",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/statistic"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-statistic-value-letter-spacing",
+          "semanticOwner": "typography.pairing",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/statistic"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-statistic-affix-letter-spacing",
+          "semanticOwner": "typography.pairing",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/statistic"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-statistic-countdown-letter-spacing",
+          "semanticOwner": "typography.pairing",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/statistic"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-statistic-title-transform",
+          "semanticOwner": "typography.pairing",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/statistic"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
     },
     {
       "controlId": "typography.families",
@@ -1633,33 +1770,38 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "type.pairing",
-            "socketPattern": "--_ds-<comp>-heading-family / --_ds-<comp>-value-family",
-            "prop": "font-family de titulares y valores de display",
-            "tier": "standard",
-            "examples": [
-              "--_ds-typography-heading-family",
-              "--_ds-statistic-value-family",
-              "--_ds-kbd-family (mono)"
-            ],
-            "sockets": [
-              "--_ds-statistic-title-font-family",
-              "--_ds-statistic-value-font-family"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-statistic-title-font-family",
+          "semanticOwner": "typography.families",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/statistic"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
           }
-        ],
-        "reviewedFrom": "anatomy",
-        "sharedChannels": [
-          "--ds-font-family-base",
-          "--ds-font-family-heading",
-          "--ds-font-family-mono"
-        ]
-      }
+        },
+        {
+          "channelId": "--_ds-statistic-value-font-family",
+          "semanticOwner": "typography.families",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/statistic"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
     },
     {
       "controlId": "typography.scale",
@@ -1668,35 +1810,53 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "type.scale",
-            "socketPattern": "--_ds-<comp>-font-size (cayendo a los pasos de la rampa multiplicada, ej. var(--ds-text-sm))",
-            "prop": "font-size de todo texto de componente",
-            "tier": "standard",
-            "examples": [
-              "--_ds-card-title-size",
-              "--_ds-input-font-size",
-              "--_ds-menu-item-font-size"
-            ],
-            "sockets": [
-              "--_ds-statistic-title-font-size",
-              "--_ds-statistic-value-font-size",
-              "--_ds-statistic-affix-font-size"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-statistic-title-font-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/statistic.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/display/statistic"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
           }
-        ],
-        "reviewedFrom": "anatomy",
-        "sharedChannels": [
-          "--ds-font-size-2xl",
-          "--ds-font-size-xs",
-          "--ds-line-height-2xl",
-          "--ds-line-height-sm"
-        ]
-      }
+        },
+        {
+          "channelId": "--_ds-statistic-value-font-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/statistic.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/display/statistic"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-statistic-affix-font-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/statistic"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
     },
     {
       "controlId": "shape.radius-scale",
@@ -1705,27 +1865,23 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "shape.corner",
-            "socketPattern": "--_ds-<comp>-radius",
-            "prop": "border-radius de contenedores",
-            "tier": "standard",
-            "examples": [
-              "--_ds-card-radius",
-              "--_ds-table-radius",
-              "--_ds-image-radius"
-            ],
-            "sockets": [
-              "--_ds-statistic-affix-radius"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-statistic-affix-radius",
+          "semanticOwner": "shape.radius-scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/statistic"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
           }
-        ],
-        "reviewedFrom": "anatomy"
-      }
+        }
+      ]
     },
     {
       "controlId": "shape.button-style",
@@ -1751,35 +1907,38 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "density.mode",
-            "socketPattern": "--_ds-<comp>-density-factor",
-            "prop": "altura de fila y padding de item",
-            "tier": "standard",
-            "examples": [
-              "--_ds-table-row-density-factor",
-              "--_ds-menu-item-density-factor"
-            ],
-            "sockets": [
-              "--_ds-statistic-affix-height",
-              "--_ds-statistic-affix-padding-x"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-statistic-affix-height",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/statistic"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
           }
-        ],
-        "reviewedFrom": "anatomy",
-        "sharedChannels": [
-          "--ds-spacing-1",
-          "--ds-spacing-2",
-          "--ds-spacing-4",
-          "--ds-spacing-8",
-          "--ds-spacing-16",
-          "--ds-spacing-24"
-        ]
-      }
+        },
+        {
+          "channelId": "--_ds-statistic-affix-padding-x",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/statistic"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
     },
     {
       "controlId": "spacing.rhythm",
@@ -1851,19 +2010,25 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "why": "socket heredado --_ds-icon-frame-glass-bg: consumidor natural de effect-intensity",
-        "source": "huecos-kimi",
-        "bindings": [
-          {
-            "root": "surface.finish",
-            "socketPattern": "--_ds-statistic-glass-bg",
-            "prop": "background-color de la placa de vidrio del icono",
-            "tier": "premium"
+      "internalChannels": [
+        {
+          "channelId": "--_ds-statistic-glass-bg",
+          "semanticOwner": "surfaces.effect-intensity",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/statistic"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/statistic-compounds.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "navigation.sidebar-tone",

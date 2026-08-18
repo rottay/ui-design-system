@@ -19,6 +19,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { loadProgramContracts } from '../../v2/contracts.mjs';
 import { validateCustomizationManifest } from './manifest/generator.mjs';
+import { DOMAIN_KINDS, validateCascadeRoot, validateCascadeSet } from './manifest/rules.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -256,6 +257,89 @@ function collectTextualFailures() {
   if (rulesText) {
     if (!rulesText.includes("'--ds-'") || !rulesText.includes("'--_ds-'") || !rulesText.includes("'data-'")) {
       failures.push('manifest/rules.mjs CHANNEL_PREFIXES must include --ds-, --_ds- and data-');
+    }
+  }
+
+  // 6b. manifest schema/rules/controls domain kinds (FAM-KINDS; same figure as 6)
+  if (schema) {
+    const kinds = schema.vocabulary?.domainKinds;
+    const mismatch =
+      !Array.isArray(kinds) ||
+      kinds.length !== DOMAIN_KINDS.length ||
+      DOMAIN_KINDS.some((k) => !kinds.includes(k)) ||
+      kinds.some((k) => !DOMAIN_KINDS.includes(k));
+    if (mismatch) {
+      failures.push('manifest/schema.json vocabulary.domainKinds must match rules.mjs DOMAIN_KINDS exactly');
+    }
+  }
+  // 6c. CASCADA (adjudicacion): validar manifest/cascade/roots/* con diente
+  const cascadeDir = join(repoRoot, PROGRAM_DIR, 'manifest/cascade/roots');
+  if (existsSync(cascadeDir)) {
+    const famDir = join(repoRoot, PROGRAM_DIR, 'manifest/families');
+    const famIds = new Set();
+    const socketOwnership = new Map();
+    const walkFam = (dir, prefix) => {
+      for (const e of readdirSync(dir, { withFileTypes: true })) {
+        const rel = prefix ? `${prefix}/${e.name}` : e.name;
+        if (e.isDirectory()) walkFam(join(dir, e.name), rel);
+        else if (e.name.endsWith('.json')) {
+          const famId = rel.replace(/\.json$/, '');
+          famIds.add(famId);
+          const doc = readJson(join(PROGRAM_DIR, 'manifest/families', rel));
+          for (const cell of doc?.themeControls ?? []) {
+            for (const edge of cell?.internalChannels ?? []) {
+              if (!edge?.channelId || !String(edge.channelId).startsWith('--_ds-')) continue;
+              const own = socketOwnership.get(edge.channelId) ?? { owner: edge.semanticOwner, families: new Set() };
+              own.families.add(famId);
+              socketOwnership.set(edge.channelId, own);
+            }
+          }
+        }
+      }
+    };
+    if (existsSync(famDir)) walkFam(famDir, '');
+    const cascadeControlsDir = join(repoRoot, PROGRAM_DIR, 'manifest/controls');
+    const controlIdsForCascade = existsSync(cascadeControlsDir)
+      ? readdirSync(cascadeControlsDir).filter((f) => f.endsWith('.json')).map((f) => f.slice(0, -5))
+      : [];
+    const docs = [];
+    for (const entry of readdirSync(cascadeDir)) {
+      if (!entry.endsWith('.json')) continue;
+      const doc = readJson(join(PROGRAM_DIR, 'manifest/cascade/roots', entry));
+      if (!doc) { failures.push(`manifest/cascade/roots/${entry} is not valid JSON`); continue; }
+      docs.push(doc);
+      const control = readJson(join(PROGRAM_DIR, 'manifest/controls', `${doc.rootId}.json`));
+      failures.push(
+        ...validateCascadeRoot(doc, {
+          label: `manifest/cascade/roots/${entry}`,
+          repositoryRoot: repoRoot,
+          activeControlIds: controlIdsForCascade,
+          controlTier: control?.tier ?? null,
+          familyIds: famIds,
+          socketOwnership,
+        }),
+      );
+    }
+    failures.push(...validateCascadeSet(docs, { label: 'manifest/cascade/roots' }));
+    // completitud (orden del adjudicador): TODO control activo tiene su root file
+    for (const cid of controlIdsForCascade) {
+      if (!existsSync(join(cascadeDir, `${cid}.json`))) {
+        failures.push(`manifest/cascade/roots/${cid}.json is missing for active control ${cid}`);
+      }
+    }
+  }
+
+  const controlsDir = join(repoRoot, PROGRAM_DIR, 'manifest/controls');
+  if (existsSync(controlsDir)) {
+    for (const entry of readdirSync(controlsDir)) {
+      if (!entry.endsWith('.json')) continue;
+      const control = readJson(join(PROGRAM_DIR, 'manifest/controls', entry));
+      const kind = control?.domain?.kind;
+      if (!DOMAIN_KINDS.includes(kind)) {
+        failures.push(
+          `manifest/controls/${entry} domain.kind ${JSON.stringify(kind ?? null)} is not a governed domain kind`,
+        );
+      }
     }
   }
 

@@ -1,0 +1,393 @@
+{
+  "schemaVersion": 1,
+  "rootId": "profiles.expressive",
+  "tier": "pro",
+  "rootChannel": {
+    "channel": "--ds-edge-emphasis-width",
+    "emission": [
+      {
+        "kind": "table-lookup",
+        "site": "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts",
+        "note": "tablas de perfil: EDGE_PROFILE_VARIABLES (:207-221, emite --ds-edge-hairline/standard/emphasis-width), filas material (:310-333, --ds-material-card-highlight), tableHeader.textTransform (:146, --ds-table-header-text-transform), GEOMETRY_PROFILE_FIELDS (:189-197). El compilador las baja en brand-theme:760 (expansion.variables) y :764 (fieldDefaults por appearancePostureToVariables)."
+      }
+    ]
+  },
+  "dependsOn": [
+    "experience.profile"
+  ],
+  "derivations": [
+    {
+      "from": "--ds-edge-emphasis-width",
+      "to": "--ds-table-header-rule-width",
+      "rule": {
+        "kind": "alias"
+      },
+      "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+      "state": "LIVE",
+      "line": 746
+    },
+    {
+      "from": "--ds-type-label-text-transform",
+      "to": "--ds-button-text-transform",
+      "rule": {
+        "kind": "alias"
+      },
+      "site": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+      "state": "LIVE",
+      "line": 325
+    },
+    {
+      "from": "--ds-material-card-highlight",
+      "to": "--ds-premium-card-depth",
+      "rule": {
+        "kind": "color-mix"
+      },
+      "site": "packages/core/src/foundation/tokens/css/presentation/components/card.css",
+      "state": "LIVE",
+      "line": 409
+    }
+  ],
+  "derivationsLaw": "Cuarta arista medida y NO declarada: --ds-material-card-highlight -> --_surface-highlight (data-attr-select, semantic-surface.css:141) queda fuera porque --_surface-highlight no es canal gobernado (prefijos --ds-/--_ds-/data-); se reporta, no se fuerza.",
+  "terminalReach": [],
+  "variantDisposition": "by-pack-enum",
+  "variants": [
+    {
+      "id": "type:technical",
+      "value": "technical",
+      "effects": {
+        "axis": "type",
+        "table": "TYPE_PROFILE_ROWS expansion/index.ts:83 (filas :92/:102/:112/:122)"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "type:editorial",
+      "value": "editorial",
+      "effects": {
+        "axis": "type",
+        "table": "TYPE_PROFILE_ROWS expansion/index.ts:83 (filas :92/:102/:112/:122)"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "type:humanist",
+      "value": "humanist",
+      "effects": {
+        "axis": "type",
+        "table": "TYPE_PROFILE_ROWS expansion/index.ts:83 (filas :92/:102/:112/:122)"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "type:geometric",
+      "value": "geometric",
+      "effects": {
+        "axis": "type",
+        "table": "TYPE_PROFILE_ROWS expansion/index.ts:83 (filas :92/:102/:112/:122)"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "geometry:sharp",
+      "value": "sharp",
+      "effects": {
+        "axis": "geometry",
+        "table": "GEOMETRY_PROFILE_FIELDS expansion/index.ts:189 (filas :193-196)"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "geometry:soft",
+      "value": "soft",
+      "effects": {
+        "axis": "geometry",
+        "table": "GEOMETRY_PROFILE_FIELDS expansion/index.ts:189 (filas :193-196)"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "geometry:rounded",
+      "value": "rounded",
+      "effects": {
+        "axis": "geometry",
+        "table": "GEOMETRY_PROFILE_FIELDS expansion/index.ts:189 (filas :193-196)"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "geometry:pill-accented",
+      "value": "pill-accented",
+      "effects": {
+        "axis": "geometry",
+        "table": "GEOMETRY_PROFILE_FIELDS expansion/index.ts:189 (filas :193-196)"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "edge:borderless-shadow",
+      "value": "borderless-shadow",
+      "effects": {
+        "axis": "edge",
+        "table": "EDGE_PROFILE_VARIABLES expansion/index.ts:206 (filas :210-250)"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "edge:hairline",
+      "value": "hairline",
+      "effects": {
+        "axis": "edge",
+        "table": "EDGE_PROFILE_VARIABLES expansion/index.ts:206 (filas :210-250)"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "edge:outlined",
+      "value": "outlined",
+      "effects": {
+        "axis": "edge",
+        "table": "EDGE_PROFILE_VARIABLES expansion/index.ts:206 (filas :210-250)"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "edge:ruled",
+      "value": "ruled",
+      "effects": {
+        "axis": "edge",
+        "table": "EDGE_PROFILE_VARIABLES expansion/index.ts:206 (filas :210-250)"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "edge:inset-double",
+      "value": "inset-double",
+      "effects": {
+        "axis": "edge",
+        "table": "EDGE_PROFILE_VARIABLES expansion/index.ts:206 (filas :210-250)"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "elevation:flat",
+      "value": "flat",
+      "effects": {
+        "axis": "elevation",
+        "table": "ELEVATION_PROFILE_FIELDS/VARIABLES expansion/index.ts:252/:263 (filas :256-260/:271-303)"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "elevation:hairline-lift",
+      "value": "hairline-lift",
+      "effects": {
+        "axis": "elevation",
+        "table": "ELEVATION_PROFILE_FIELDS/VARIABLES expansion/index.ts:252/:263 (filas :256-260/:271-303)"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "elevation:soft-depth",
+      "value": "soft-depth",
+      "effects": {
+        "axis": "elevation",
+        "table": "ELEVATION_PROFILE_FIELDS/VARIABLES expansion/index.ts:252/:263 (filas :256-260/:271-303)"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "elevation:dramatic",
+      "value": "dramatic",
+      "effects": {
+        "axis": "elevation",
+        "table": "ELEVATION_PROFILE_FIELDS/VARIABLES expansion/index.ts:252/:263 (filas :256-260/:271-303)"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "elevation:luminous-glow",
+      "value": "luminous-glow",
+      "effects": {
+        "axis": "elevation",
+        "table": "ELEVATION_PROFILE_FIELDS/VARIABLES expansion/index.ts:252/:263 (filas :256-260/:271-303)"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "material:flat",
+      "value": "flat",
+      "effects": {
+        "axis": "material",
+        "table": "MATERIAL_PROFILE_VARIABLES expansion/index.ts:304 (filas :307-350)"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "material:paper",
+      "value": "paper",
+      "effects": {
+        "axis": "material",
+        "table": "MATERIAL_PROFILE_VARIABLES expansion/index.ts:304 (filas :307-350)"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "material:soft-depth",
+      "value": "soft-depth",
+      "effects": {
+        "axis": "material",
+        "table": "MATERIAL_PROFILE_VARIABLES expansion/index.ts:304 (filas :307-350)"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "material:frosted",
+      "value": "frosted",
+      "effects": {
+        "axis": "material",
+        "table": "MATERIAL_PROFILE_VARIABLES expansion/index.ts:304 (filas :307-350)"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "material:luminous",
+      "value": "luminous",
+      "effects": {
+        "axis": "material",
+        "table": "MATERIAL_PROFILE_VARIABLES expansion/index.ts:304 (filas :307-350)"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "motif:none",
+      "value": "none",
+      "effects": {
+        "axis": "motif",
+        "table": "MOTIF_PROFILE_VARIABLES expansion/index.ts:351 (filas :354-385)"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "motif:micro-grid",
+      "value": "micro-grid",
+      "effects": {
+        "axis": "motif",
+        "table": "MOTIF_PROFILE_VARIABLES expansion/index.ts:351 (filas :354-385)"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "motif:pinstripe",
+      "value": "pinstripe",
+      "effects": {
+        "axis": "motif",
+        "table": "MOTIF_PROFILE_VARIABLES expansion/index.ts:351 (filas :354-385)"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "motif:contour",
+      "value": "contour",
+      "effects": {
+        "axis": "motif",
+        "table": "MOTIF_PROFILE_VARIABLES expansion/index.ts:351 (filas :354-385)"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "icon:linear",
+      "value": "linear",
+      "effects": {
+        "axis": "icon",
+        "table": "EXPRESSIVE_ICON_PROFILES expressive-profiles/index.ts:88-93"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "icon:strong-outline",
+      "value": "strong-outline",
+      "effects": {
+        "axis": "icon",
+        "table": "EXPRESSIVE_ICON_PROFILES expressive-profiles/index.ts:88-93"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "icon:duotone",
+      "value": "duotone",
+      "effects": {
+        "axis": "icon",
+        "table": "EXPRESSIVE_ICON_PROFILES expressive-profiles/index.ts:88-93"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "icon:solid-active",
+      "value": "solid-active",
+      "effects": {
+        "axis": "icon",
+        "table": "EXPRESSIVE_ICON_PROFILES expressive-profiles/index.ts:88-93"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "density:compact",
+      "value": "compact",
+      "effects": {
+        "axis": "density",
+        "table": "union literal ExpressiveAxes.density expressive-profiles/index.ts:111"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "density:normal",
+      "value": "normal",
+      "effects": {
+        "axis": "density",
+        "table": "union literal ExpressiveAxes.density expressive-profiles/index.ts:111"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "density:spacious",
+      "value": "spacious",
+      "effects": {
+        "axis": "density",
+        "table": "union literal ExpressiveAxes.density expressive-profiles/index.ts:111"
+      },
+      "pinned": {}
+    }
+  ],
+  "variantsLaw": "el dominio es un mapa de EJES derivado leyendo cada tabla del modulo expansion (rutas arriba). El eje motion NO tiene tabla cerrada: intensity/durationScale numericos + ambient off|subtle (ExpressiveAxes, expressive-profiles/index.ts:112-116) - se declara como eje numerico, no se inventa vocabulario. Los nombres del adjudicador border/surface se llaman edge/material en fuente.",
+  "overlaps": [
+    {
+      "withRoot": "shape.radius-scale",
+      "axis": "geometry",
+      "withTier": "standard",
+      "landsOn": "--ds-radius-scale",
+      "mechanism": "la postura pro co-suministra radiusScale como DEFAULT de perfil (sharp .85 / soft 1.15 / rounded 1.25 / pill-accented 1.1)",
+      "mechanismSite": "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts",
+      "precedence": "authored-field-wins",
+      "precedenceSite": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+      "precedenceNote": "R7: orden de escritura ejecutable del compilador (brand-theme:758-772): el perfil escribe primero, los campos autorados sobrescriben solo los canales que poseen.",
+      "line": 189,
+      "mechanismLine": 189,
+      "precedenceLine": 758
+    },
+    {
+      "withRoot": "shape.button-style",
+      "axis": "geometry",
+      "withTier": "standard",
+      "landsOn": "--ds-radius-button",
+      "mechanism": "la postura pro co-suministra buttonStyle (sharp 2px / soft var(--ds-radius-md,8px) / pill 9999px; BUTTON_STYLE_RADIUS appearance-posture:47-53, plegado dial-reachable :145-154)",
+      "mechanismSite": "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts",
+      "precedence": "authored-field-wins",
+      "precedenceSite": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+      "precedenceNote": "Mismo orden ejecutable (brand-theme:758-772). RECIPROCIDAD PENDIENTE: roots/shape.button-style.json aun no existe (lo autora Fable); validateCascadeSet la exigira cuando aterrice (C4).",
+      "line": 189,
+      "mechanismLine": 189,
+      "precedenceLine": 758
+    }
+  ],
+  "terminalReachLaw": "terminalReach es el cross-ref mecanico de internalChannels (semanticOwner = esta raiz), bidireccional fail-closed por validateCascadeRoot. Estado PRESCRIPCION: fase 1 es spec objetivo; la verdad transitiva la emite la capa GENERADA (cascade-extract/materialized), no se mantiene a mano (R1)."
+}

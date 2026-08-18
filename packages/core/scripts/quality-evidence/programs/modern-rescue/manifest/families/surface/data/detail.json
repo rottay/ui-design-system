@@ -357,24 +357,23 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "source": "huecos-fable",
-        "bindings": [
-          {
-            "root": "density.mode",
-            "socketPattern": "--_ds-<page>-density-factor",
-            "prop": "factor local que la receta compone sobre var(--ds-density-effective-scale) para todo su contenido",
-            "tier": "standard",
-            "sockets": [
-              "--_ds-detail-state-gap"
-            ],
-            "socketsResolved": true,
-            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+      "internalChannels": [
+        {
+          "channelId": "--_ds-detail-state-gap",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/detail.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "surface/data/detail"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/detail.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
           }
-        ],
-        "reviewedFrom": "anatomy"
-      }
+        }
+      ]
     },
     {
       "controlId": "spacing.rhythm",

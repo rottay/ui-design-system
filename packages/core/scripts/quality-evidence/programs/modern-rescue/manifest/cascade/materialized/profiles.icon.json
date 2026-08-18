@@ -1,0 +1,47 @@
+{
+  "generated": true,
+  "generator": "cascade-materialize.mjs",
+  "schemaVersion": 1,
+  "controlId": "profiles.icon",
+  "tier": "pro",
+  "inputs": {
+    "variantsFrom": "manifest/controls/profiles.icon.json (calibration.normalizedStops)",
+    "rulesFrom": "manifest/cascade/extracted/css-edges.json (cascade-extract.mjs)",
+    "authoredRoot": "manifest/cascade/roots/profiles.icon.json"
+  },
+  "effectKind": "perVariant-authored",
+  "note": "raiz enum: la tabla autorada ES la regla; se cita, no se deriva",
+  "variants": [
+    {
+      "id": "linear",
+      "value": "linear",
+      "effects": {
+        "iconRoleWeights": "regular en los 5 roles (identidad; ausente = byte-identico)"
+      }
+    },
+    {
+      "id": "strong-outline",
+      "value": "strong-outline",
+      "effects": {
+        "iconRoleWeights": "bold en los 5 roles"
+      }
+    },
+    {
+      "id": "duotone",
+      "value": "duotone",
+      "effects": {
+        "iconRoleWeights": "control regular; navigation/feature/status duotone; illustration duotone"
+      }
+    },
+    {
+      "id": "solid-active",
+      "value": "solid-active",
+      "effects": {
+        "iconRoleWeights": "control/navigation regular; feature/status fill; illustration duotone"
+      },
+      "pinned": {
+        "stateWeights": "STATE_WEIGHT supremo sobre la postura (feedback beats decoration)"
+      }
+    }
+  ]
+}

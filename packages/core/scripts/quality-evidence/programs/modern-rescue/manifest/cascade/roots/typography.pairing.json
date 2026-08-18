@@ -1,0 +1,362 @@
+{
+  "schemaVersion": 1,
+  "rootId": "typography.pairing",
+  "tier": "standard",
+  "rootChannel": {
+    "channel": "--ds-font-family-heading",
+    "emission": [
+      {
+        "kind": "compiler-emit",
+        "site": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+        "note": "tabla TYPE_PAIRINGS aplicada como preset ANTES de las familias autorales (brand-theme ~:772); emite family-base/heading + letter-spacing-heading + line-height-display (+ mono solo en technical)"
+      }
+    ]
+  },
+  "dependsOn": [],
+  "derivations": [
+    {
+      "from": "--ds-font-family-heading",
+      "to": "--ds-letter-spacing-heading",
+      "rule": {
+        "kind": "table-lookup",
+        "operand": "TYPE_PAIRINGS.<id>"
+      },
+      "site": "packages/core/src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts",
+      "state": "LIVE",
+      "note": "typePairingToTypography devuelve letterSpacing.heading (appearance-posture:56-71); escrito en :117 condicionado a posture.typePairing. El escritor del campo AUTORADO (bt.typography.letterSpacing.heading) es brand-theme:889 - otro kind, otro sitio.",
+      "line": 117
+    },
+    {
+      "from": "--ds-font-family-heading",
+      "to": "--ds-line-height-display",
+      "rule": {
+        "kind": "table-lookup"
+      },
+      "site": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+      "state": "LIVE"
+    }
+  ],
+  "terminalReach": [
+    {
+      "channelId": "--_ds-workspace-card-hover-transform",
+      "familyId": "pattern/data/detail-panel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toolbar-title-font-weight",
+      "familyId": "pattern/data/list-toolbar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-text-eyebrow-letter-spacing",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-text-eyebrow-transform",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-typography-display-tracking",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-typography-label-tracking",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-typography-label-weight",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-saved-views-create-button-font-weight",
+      "familyId": "pattern/data/saved-views",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-saved-views-pill-font-weight",
+      "familyId": "pattern/data/saved-views",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-saved-views-pill-font-weight-active",
+      "familyId": "pattern/data/saved-views",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-builder-section-title-letter-spacing",
+      "familyId": "pattern/forms/pattern-form-builder",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-builder-title-letter-spacing",
+      "familyId": "pattern/forms/pattern-form-builder",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-list-header-font-weight",
+      "familyId": "primitive/display/list",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-list-meta-title-font-weight",
+      "familyId": "primitive/display/list",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-statistic-affix-font-weight",
+      "familyId": "primitive/display/statistic",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-statistic-affix-letter-spacing",
+      "familyId": "primitive/display/statistic",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-statistic-countdown-letter-spacing",
+      "familyId": "primitive/display/statistic",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-statistic-title-font-weight",
+      "familyId": "primitive/display/statistic",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-statistic-title-letter-spacing",
+      "familyId": "primitive/display/statistic",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-statistic-title-transform",
+      "familyId": "primitive/display/statistic",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-statistic-value-font-weight",
+      "familyId": "primitive/display/statistic",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-statistic-value-letter-spacing",
+      "familyId": "primitive/display/statistic",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-cell-numeric",
+      "familyId": "primitive/display/table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-header-font-weight",
+      "familyId": "primitive/display/table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-header-letter-spacing",
+      "familyId": "primitive/display/table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-header-text-transform",
+      "familyId": "primitive/display/table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-pagination-numeric",
+      "familyId": "primitive/display/table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-title-font-weight",
+      "familyId": "primitive/display/table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tag-compact-font-weight",
+      "familyId": "primitive/display/tag",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tag-font-weight",
+      "familyId": "primitive/display/tag",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-timeline-label-font-variant-numeric",
+      "familyId": "primitive/display/timeline",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-timeline-label-font-weight",
+      "familyId": "primitive/display/timeline",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-timeline-label-letter-spacing",
+      "familyId": "primitive/display/timeline",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tooltip-compact-type",
+      "familyId": "primitive/display/tooltip",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tooltip-rich-type",
+      "familyId": "primitive/display/tooltip",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tooltip-shortcut-key-type",
+      "familyId": "primitive/display/tooltip",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tooltip-spacious-type",
+      "familyId": "primitive/display/tooltip",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tree-node-font-weight-selected",
+      "familyId": "primitive/display/tree",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stats-header-value-font-weight",
+      "familyId": "structure/dashboard/stats-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-capability-anatomy-label-tracking",
+      "familyId": "structure/feedback/capability-anatomy",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-type-display-font-weight",
+      "familyId": "structure/headers/collection-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-dashboard-header-title-tracking",
+      "familyId": "structure/headers/dashboard-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-type-numeric-font-size",
+      "familyId": "structure/headers/dashboard-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-type-numeric-font-weight",
+      "familyId": "structure/headers/dashboard-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-type-numeric-line-height",
+      "familyId": "structure/headers/dashboard-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-detail-header-eyebrow-tracking",
+      "familyId": "structure/headers/detail-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-detail-header-metadata-chip-label-tracking",
+      "familyId": "structure/headers/detail-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-detail-header-title-tracking",
+      "familyId": "structure/headers/detail-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-detail-header-title-weight",
+      "familyId": "structure/headers/detail-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-typography-heading-letter-spacing",
+      "familyId": "structure/headers/detail-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-section-card-eyebrow-tracking",
+      "familyId": "structure/shell/surface-chrome",
+      "state": "PRESCRIPCION"
+    }
+  ],
+  "variants": [
+    {
+      "id": "sober",
+      "value": "sober",
+      "effects": {
+        "--ds-font-family-heading": "fila sober",
+        "--ds-font-family-base": "fila sober"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "editorial",
+      "value": "editorial",
+      "effects": {
+        "--ds-font-family-heading": "fila editorial (serif display)",
+        "--ds-font-family-base": "fila editorial"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "geometric",
+      "value": "geometric",
+      "effects": {
+        "--ds-font-family-heading": "fila geometric",
+        "--ds-font-family-base": "fila geometric"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "technical",
+      "value": "technical",
+      "effects": {
+        "--ds-font-family-heading": "fila technical (grotesk)",
+        "--ds-font-family-mono": "fila technical (unica con mono)"
+      },
+      "pinned": {}
+    }
+  ],
+  "overlaps": [
+    {
+      "withRoot": "typography.families",
+      "withTier": "standard",
+      "landsOn": "--ds-font-family-base",
+      "mechanism": "families sobreescribe como valor autoral lo que pairing preseteo (families GANA)",
+      "mechanismSite": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+      "mechanismLine": 772,
+      "precedence": "authored-field-wins",
+      "precedenceSite": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+      "precedenceLine": 758,
+      "precedenceNote": "orden de escritura EJECUTABLE (brand-theme:758-772): el perfil expresivo escribe primero, los campos autorados sobreescriben; verbatim \"these authored fields intentionally overwrite only the channels they own\""
+    },
+    {
+      "withRoot": "experience.profile",
+      "withTier": "standard",
+      "landsOn": "--ds-letter-spacing-heading",
+      "mechanism": "la tabla de perfil de tipo escribe el DEFAULT literal por fila (expansion/index.ts:144; filas technical -0.015em :92, editorial 0em :102, humanist -0.005em :112, geometric 0.01em :122)",
+      "mechanismSite": "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts",
+      "mechanismLine": 144,
+      "precedence": "authored-field-wins",
+      "precedenceSite": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+      "precedenceLine": 760,
+      "precedenceNote": "orden ejecutable de Object.assign - perfil en :760 (expansion.variables), campos autorados despues en :770+; comentario :752-756 verbatim: Profile channels land OVER the neutral structural seeds and UNDER every authored write below ... without a second writer per channel",
+      "note": "ASIMETRIA DELIBERADA - NO HOMOGENEIZAR: display va envuelto en var(--ds-letter-spacing-display, literal) - el perfil CEDE por fallback css; heading va literal pelado - el perfil ESCRIBE y decide el orden del compilador. expansion:86-89 declara que esa divergencia es exactamente lo que mide el acid test. Ambos llegan a authored-wins por mecanismos distintos."
+    }
+  ],
+  "terminalReachLaw": "state = alcance en la cascada; deteccion de UN SALTO en sitio de lectura = COTA INFERIOR. El alcance transitivo es de la capa GENERADA (cascade-extract/materialized, ley R1); el diff con estas prescripciones ES el backlog de fase 3."
+}

@@ -1,0 +1,651 @@
+{
+  "schemaVersion": 1,
+  "rootId": "profiles.icon",
+  "tier": "pro",
+  "rootChannel": {
+    "channel": "--ds-icon-stroke-width",
+    "emission": [
+      {
+        "kind": "runtime-table-select",
+        "site": "packages/core/src/graphics/icons/foundation/contracts/registry/policy/index.ts",
+        "note": "la postura selecciona tablas de peso por rol en TS (PROFILE_ROLE_WEIGHT :28-53: linear/strong-outline/duotone/solid-active x control/navigation/feature/status/illustration); STATE_WEIGHT queda supremo sobre cualquier postura. El canal css es la BASELINE pre-perfil: declarado en presentation/components/icon.css:38 (1.5) y leido como fallback por la factory (graphics/icons/runtime/factory/index.tsx:57, 'var(--ds-icon-stroke-width, 1.5)') solo cuando la postura no proveyó strokeWidth. La raiz NO escribe el canal: aterriza aguas arriba de el, en la prop."
+      }
+    ]
+  },
+  "dependsOn": [
+    "profiles.expressive"
+  ],
+  "derivations": [],
+  "derivationsEmptyReason": "CERO descendientes en el grafo css extraido (medido: ninguna arista nace de --ds-icon-stroke-width). El aterrizaje real es la seleccion de pesos en el runtime de iconos (policy/index.ts) resuelta a prop strokeWidth en la factory; el canal es solo el fallback de la baseline. No se tapa: se declara vacio.",
+  "terminalReach": [
+    {
+      "channelId": "--_ds-action-dock-icon-stroke-width",
+      "familyId": "structure/workspace/action-dock",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-active-filters-bar-icon-stroke-width",
+      "familyId": "structure/workspace/active-filters-bar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-affix-icon-fill-mode",
+      "familyId": "primitive/navigation/affix",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-anchor-icon-fill-mode",
+      "familyId": "primitive/navigation/anchor",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-autocomplete-icon-stroke-width",
+      "familyId": "primitive/inputs/auto-complete",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-avatar-fallback-icon-size",
+      "familyId": "primitive/display/avatar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-back-top-icon-fill-mode",
+      "familyId": "primitive/navigation/back-top",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-icon-size",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-breadcrumb-icon-fill-mode",
+      "familyId": "primitive/navigation/breadcrumb",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-icon-stroke-width",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-lg-icon-size",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-md-icon-size",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-sm-icon-size",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-spinner-stroke-width",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-xl-icon-size",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-xs-icon-size",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-header-icon-size",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-image-error-icon-size",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-image-loading-stroke",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-spinner-stroke",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-carousel-arrow-size",
+      "familyId": "primitive/display/carousel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-carousel-arrow-size-coarse",
+      "familyId": "primitive/display/carousel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-cascader-icon-stroke-width",
+      "familyId": "primitive/inputs/cascader",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-cockpit-header-icon-size",
+      "familyId": "pattern/shell/cockpit-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-code-block-copy-tick-size",
+      "familyId": "primitive/display/code-block",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-collection-header-icon-stroke-width",
+      "familyId": "structure/headers/collection-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-color-picker-icon-stroke-width",
+      "familyId": "primitive/inputs/color-picker",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-column-menu-icon-stroke-width",
+      "familyId": "structure/workspace/column-menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-command-palette-icon-fill-mode",
+      "familyId": "pattern/navigation/command-palette",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-connected-command-palette-icon-stroke-width",
+      "familyId": "structure/workspace/connected-command-palette",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-dashboard-header-icon-size",
+      "familyId": "structure/headers/dashboard-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-dashboard-header-icon-stroke-width",
+      "familyId": "structure/headers/dashboard-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-datepicker-icon-stroke-width",
+      "familyId": "primitive/inputs/date-picker",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-detail-header-icon-stroke-width",
+      "familyId": "structure/headers/detail-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-edit-fields-icon-stroke-width",
+      "familyId": "structure/record/edit-fields",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-edit-header-icon-stroke-width",
+      "familyId": "structure/headers/edit-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-empty-icon-size",
+      "familyId": "primitive/display/empty",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-empty-state-icon-stroke-width",
+      "familyId": "pattern/feedback/empty-state",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-environment-toggle-icon-fill-mode",
+      "familyId": "pattern/navigation/environment-toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-export-button-icon-stroke-width",
+      "familyId": "structure/workspace/export-button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-field-filters-panel-icon-stroke-width",
+      "familyId": "structure/workspace/field-filters-panel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-float-button-icon-fill-mode",
+      "familyId": "primitive/navigation/float-button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-header-icon-stroke-width",
+      "familyId": "structure/headers/form-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-icon-stroke-width",
+      "familyId": "pattern/forms/filter-builder",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-icon-stroke-width",
+      "familyId": "pattern/forms/filter-panel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-icon-stroke-width",
+      "familyId": "pattern/forms/invoice-template",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-icon-stroke-width",
+      "familyId": "pattern/forms/pattern-form-builder",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-icon-stroke-width",
+      "familyId": "pattern/forms/step-wizard",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-icon-stroke-width",
+      "familyId": "primitive/inputs/form",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-sections-icon-stroke-width",
+      "familyId": "structure/record/form-sections",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-header-surface-icon-stroke-width",
+      "familyId": "structure/headers/header-surface",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-icon-frame-icon-stroke-width",
+      "familyId": "primitive/display/icon-frame",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-image-fallback-icon-size",
+      "familyId": "primitive/display/image",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-loading-stroke",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-md-icon-size",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-link-icon-fill-mode",
+      "familyId": "primitive/navigation/link",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-loading-indicator-stroke-width",
+      "familyId": "primitive/feedback/loading-indicator",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-locale-switcher-icon-fill-mode",
+      "familyId": "pattern/navigation/pattern-locale-switcher",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-mentions-icon-stroke-width",
+      "familyId": "primitive/inputs/mentions",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-menu-icon-fill-mode",
+      "familyId": "primitive/navigation/menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-menu-icon-size",
+      "familyId": "primitive/navigation/menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-mobile-header-icon-stroke-width",
+      "familyId": "structure/headers/mobile-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-otp-input-icon-stroke-width",
+      "familyId": "primitive/inputs/otp-input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-page-icon-stroke-width",
+      "familyId": "pattern/shell/feature-workspace-frame",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-page-icon-stroke-width",
+      "familyId": "pattern/shell/pattern-page-shell",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-page-icon-stroke-width",
+      "familyId": "structure/shell/app-shell",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-page-icon-stroke-width",
+      "familyId": "structure/shell/bottom-tab-bar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-page-icon-stroke-width",
+      "familyId": "structure/shell/page-shell-surface",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-page-icon-stroke-width",
+      "familyId": "structure/shell/sidebar-surface",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-page-icon-stroke-width",
+      "familyId": "structure/shell/workspace-shell",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-pagination-icon-fill-mode",
+      "familyId": "primitive/navigation/pagination",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-qrcode-spinner-size",
+      "familyId": "primitive/display/qr-code",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-qrcode-status-icon-size",
+      "familyId": "primitive/display/qr-code",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-action-bar-icon-stroke-width",
+      "familyId": "structure/record/record-action-bar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-field-grid-icon-stroke-width",
+      "familyId": "structure/record/record-field-grid",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-field-icon-stroke-width",
+      "familyId": "structure/record/record-field",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-panel-icon-stroke-width",
+      "familyId": "structure/record/record-panel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-summary-strip-icon-stroke-width",
+      "familyId": "structure/record/record-summary-strip",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-saved-views-menu-icon-stroke-width",
+      "familyId": "structure/workspace/saved-views-menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-scope-switcher-icon-stroke-width",
+      "familyId": "structure/workspace/scope-switcher",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-search-command-bar-icon-stroke-width",
+      "familyId": "structure/workspace/search-command-bar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-section-card-icon-size",
+      "familyId": "structure/shell/surface-chrome",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-section-frame-icon-stroke-width",
+      "familyId": "structure/headers/section-frame",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-segmented-icon-fill-mode",
+      "familyId": "primitive/navigation/segmented",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-segmented-lg-icon-size",
+      "familyId": "primitive/navigation/segmented",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-segmented-md-icon-size",
+      "familyId": "primitive/navigation/segmented",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-segmented-sm-icon-size",
+      "familyId": "primitive/navigation/segmented",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-selection-preview-rail-icon-stroke-width",
+      "familyId": "structure/workspace/selection-preview-rail",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-shortcuts-overlay-icon-fill-mode",
+      "familyId": "pattern/navigation/shortcuts-overlay",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-spinner-lg-ring-width",
+      "familyId": "primitive/feedback/spinner",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-spinner-md-ring-width",
+      "familyId": "primitive/feedback/spinner",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-spinner-sm-ring-width",
+      "familyId": "primitive/feedback/spinner",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-spinner-xl-ring-width",
+      "familyId": "primitive/feedback/spinner",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stats-icon-stroke-width",
+      "familyId": "structure/dashboard/dashboard-insights",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stats-icon-stroke-width",
+      "familyId": "structure/dashboard/data-terminal-card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stats-icon-stroke-width",
+      "familyId": "structure/dashboard/stats-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stepper-icon-fill-mode",
+      "familyId": "primitive/navigation/stepper",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-steps-icon-fill-mode",
+      "familyId": "primitive/navigation/steps",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-steps-icon-stroke-width",
+      "familyId": "pattern/workflow/approval-inbox",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-steps-icon-stroke-width",
+      "familyId": "pattern/workflow/approval-workflow",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-steps-icon-stroke-width",
+      "familyId": "pattern/workflow/moderation-gallery",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-steps-icon-stroke-width",
+      "familyId": "pattern/workflow/operational-ledger",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-steps-icon-stroke-width",
+      "familyId": "pattern/workflow/shift-matrix",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-toolbar-icon-stroke-width",
+      "familyId": "structure/workspace/table-toolbar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-icon-fill-mode",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-lg-icon-size",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-loading-stroke",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-md-icon-size",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-responsive-icon-size",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-sm-icon-size",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tag-icon-size",
+      "familyId": "primitive/display/tag",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-timepicker-icon-stroke-width",
+      "familyId": "primitive/inputs/time-picker",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tree-icon-size",
+      "familyId": "primitive/display/tree",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tree-loading-size",
+      "familyId": "primitive/display/tree",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tree-select-chevron-stroke-width",
+      "familyId": "primitive/inputs/tree-select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-view-mode-switcher-icon-stroke-width",
+      "familyId": "structure/workspace/view-mode-switcher",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-workbench-header-icon-size",
+      "familyId": "pattern/shell/workbench-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-workspace-switcher-icon-fill-mode",
+      "familyId": "pattern/navigation/workspace-switcher",
+      "state": "PRESCRIPCION"
+    }
+  ],
+  "variantDisposition": "by-registry",
+  "variants": [
+    {
+      "id": "linear",
+      "value": "linear",
+      "effects": {
+        "iconRoleWeights": "regular en los 5 roles (identidad; ausente = byte-identico)"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "strong-outline",
+      "value": "strong-outline",
+      "effects": {
+        "iconRoleWeights": "bold en los 5 roles"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "duotone",
+      "value": "duotone",
+      "effects": {
+        "iconRoleWeights": "control regular; navigation/feature/status duotone; illustration duotone"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "solid-active",
+      "value": "solid-active",
+      "effects": {
+        "iconRoleWeights": "control/navigation regular; feature/status fill; illustration duotone"
+      },
+      "pinned": {
+        "stateWeights": "STATE_WEIGHT supremo sobre la postura (feedback beats decoration)"
+      }
+    }
+  ],
+  "overlaps": [],
+  "terminalReachLaw": "terminalReach es el cross-ref mecanico de internalChannels (semanticOwner = esta raiz), bidireccional fail-closed por validateCascadeRoot. Estado PRESCRIPCION: fase 1 es spec objetivo; la verdad transitiva la emite la capa GENERADA (cascade-extract/materialized), no se mantiene a mano (R1)."
+}

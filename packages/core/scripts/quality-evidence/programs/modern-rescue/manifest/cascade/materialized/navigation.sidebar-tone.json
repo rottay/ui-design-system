@@ -1,0 +1,37 @@
+{
+  "generated": true,
+  "generator": "cascade-materialize.mjs",
+  "schemaVersion": 1,
+  "controlId": "navigation.sidebar-tone",
+  "tier": "standard",
+  "inputs": {
+    "variantsFrom": "manifest/controls/navigation.sidebar-tone.json (calibration.normalizedStops)",
+    "rulesFrom": "manifest/cascade/extracted/css-edges.json (cascade-extract.mjs)",
+    "authoredRoot": "manifest/cascade/roots/navigation.sidebar-tone.json"
+  },
+  "effectKind": "perVariant-authored",
+  "note": "raiz enum: la tabla autorada ES la regla; se cita, no se deriva",
+  "variants": [
+    {
+      "id": "subtle",
+      "value": "subtle",
+      "effects": {
+        "(6 hojas)": "receta subtle del contest"
+      }
+    },
+    {
+      "id": "strong",
+      "value": "strong",
+      "effects": {
+        "(6 hojas)": "receta strong del contest"
+      }
+    },
+    {
+      "id": "inverse",
+      "value": "inverse",
+      "effects": {
+        "(6 hojas)": "receta inverse + tintas on-tone"
+      }
+    }
+  ]
+}

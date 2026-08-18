@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { renameSync } from "node:fs";
+import { readFileSync, renameSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
@@ -203,6 +203,110 @@ test("r7Enabled stays false across all contracts", () => {
     "r7Execution.enabled must equal agent-orchestration.json r7Execution.enabled",
     "model r7 enabled=true must be rejected"
   );
+});
+
+
+
+
+
+test("home law: pattern folds stay green, literal duplicates go red", () => {
+  const a = join(programRoot, "manifest/cascade/roots/surfaces.effect-intensity.json");
+  const b = join(programRoot, "manifest/cascade/roots/typography.scale.json");
+  const origA = readFileSync(a, "utf8");
+  const origB = readFileSync(b, "utf8");
+  try {
+    // VERDE: dos raices con to "--ds-*" y toIsPattern true NO conflictuan
+    let da = JSON.parse(origA); let db = JSON.parse(origB);
+    da.derivations[0].to = "--ds-*"; da.derivations[0].toIsPattern = true;
+    db.derivations[0].to = "--ds-*"; db.derivations[0].toIsPattern = true;
+    writeFileSync(a, `${JSON.stringify(da, null, 2)}\n`);
+    writeFileSync(b, `${JSON.stringify(db, null, 2)}\n`);
+    let errors = validateModernRescueContracts(baseline, { includeManifestGate: false });
+    assert.ok(!errors.some((e) => e.includes("has two homes")), `pattern folds must not conflict; got ${JSON.stringify(errors.filter((e) => e.includes("two homes")))}`);
+    // ROJO: mismo canal LITERAL en dos raices
+    da = JSON.parse(origA); db = JSON.parse(origB);
+    da.derivations[0].to = "--ds-canal-duplicado"; delete da.derivations[0].toIsPattern;
+    db.derivations[0].to = "--ds-canal-duplicado"; delete db.derivations[0].toIsPattern;
+    writeFileSync(a, `${JSON.stringify(da, null, 2)}\n`);
+    writeFileSync(b, `${JSON.stringify(db, null, 2)}\n`);
+    errors = validateModernRescueContracts(baseline, { includeManifestGate: false });
+    expectError(errors, "has two homes", "literal duplicate channel must fail R6");
+  } finally {
+    writeFileSync(a, origA);
+    writeFileSync(b, origB);
+  }
+});
+
+test("planted missing cascade root fails closed", () => {
+  const target = join(programRoot, "manifest/cascade/roots/density.mode.json");
+  const backup = `${target}.t1-test-backup`;
+  try {
+    renameSync(target, backup);
+    const errors = validateModernRescueContracts(baseline, { includeManifestGate: false });
+    expectError(errors, "is missing for active control", "missing cascade root must fail");
+  } finally {
+    renameSync(backup, target);
+  }
+});
+test("planted cascade defects fail closed (kind, site, orphan terminalReach)", () => {
+  const target = join(programRoot, "manifest/cascade/roots/shape.radius-scale.json");
+  const original = readFileSync(target, "utf8");
+  const run = () => validateModernRescueContracts(baseline, { includeManifestGate: false });
+  try {
+    // 1) kind inventado
+    let doc = JSON.parse(original);
+    doc.derivations[0].rule.kind = "vibes-derive";
+    writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
+    expectError(run(), "is not a governed derivation kind", "invented derivation kind must fail");
+    // 2) site inexistente
+    doc = JSON.parse(original);
+    doc.derivations[0].site = "packages/core/NO-EXISTE.css";
+    writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
+    expectError(run(), "site does not resolve", "nonexistent site must fail");
+    // 3) terminalReach huerfano (sin edge que lo respalde)
+    doc = JSON.parse(original);
+    doc.terminalReach.push({ channelId: "--_ds-fantasma-radius", familyId: "primitive/inputs/button", state: "LIVE" });
+    writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
+    expectError(run(), "orphan terminalReach", "orphan terminalReach must fail");
+  } finally {
+    writeFileSync(target, original);
+  }
+});
+
+test("cabeza nula: sin razon citada va rojo, bien declarada va verde", () => {
+  const target = join(programRoot, "manifest/cascade/roots/responsive.posture.json");
+  const original = readFileSync(target, "utf8");
+  const run = () => validateModernRescueContracts(baseline, { includeManifestGate: false });
+  try {
+    // ROJO: cabeza nula SIN headEmptyReason -- la razon es obligatoria, como en la cola
+    const doc = JSON.parse(original);
+    delete doc.rootChannel.headEmptyReason;
+    writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
+    expectError(run(), "requires rootChannel.headEmptyReason", "null head without a cited reason must fail");
+    // VERDE: el estado real de hoy -- cabeza nula con razon citada y colas vacias
+    writeFileSync(target, original);
+    const errors = run();
+    assert.ok(
+      !errors.some((e) => e.includes("responsive.posture.json")),
+      `declared null head must be accepted; got ${JSON.stringify(errors.filter((e) => e.includes("responsive.posture")))}`
+    );
+  } finally {
+    writeFileSync(target, original);
+  }
+});
+
+test("planted invented domain.kind fails closed", () => {
+  const target = join(programRoot, "manifest/controls/density.mode.json");
+  const original = readFileSync(target, "utf8");
+  try {
+    const doc = JSON.parse(original);
+    doc.domain.kind = "vibes-based";
+    writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
+    const errors = validateModernRescueContracts(baseline, { includeManifestGate: false });
+    expectError(errors, "is not a governed domain kind", "invented kind must fail the gate");
+  } finally {
+    writeFileSync(target, original);
+  }
 });
 
 test("manifest deep regression fails closed", () => {

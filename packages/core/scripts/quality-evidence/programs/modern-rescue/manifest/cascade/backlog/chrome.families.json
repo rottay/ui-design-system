@@ -1,0 +1,696 @@
+{
+  "generated": true,
+  "generator": "cascade-backlog.mjs",
+  "schemaVersion": 1,
+  "controlId": "chrome.families",
+  "tier": "pro",
+  "rootChannel": "--ds-button-primary-bg",
+  "homonymLaw": "stem = channelId sin el prefijo --ds-/--_ds-. El diff literal por channelId compara dos vocabularios distintos de frente (prescripcion 100% --_ds-*, alcance generado mayoria --ds-*) y da desalineacion total que no significa nada; la regla correcta es por homonimo.",
+  "planeVocabulary": [
+    "css",
+    "ts-compilers",
+    "ts-chrome-variables"
+  ],
+  "planeLaw": "El alcance transitivo sale del plano CSS unicamente. El vocabulario de planos es CERRADO y tiene TRES nombres (planeVocabulary: css, ts-compilers, ts-chrome-variables); planesNotScanned: ts-compilers, ts-chrome-variables. Una CLASE B puede ser en realidad CLASE A por cualquiera de los dos planos TS no escaneados; se declara, no se calla. CRITERIO FUNCIONAL, no postal: un archivo cuenta como productor cuando la compilacion en ejecucion emite el canal a traves de el. ts-compilers = escrituras explicitas vars[\"--ds-X\"] en el cuerpo del compilador (108 ocurrencias, 97 canales distintos en brand-theme 92 / appearance 6 / appearance-posture 10, mas 46 sitios de escritura templada; censo por ENUMERACION de fuente: 552 canales distintos = 183 literales + 378 interpolados). ts-chrome-variables = la tabla de mapeo de chrome-variables/index.ts, cuyos VALORES son los nombres de canal (censo por grep 1477: 477 como valor de tabla -- 352 derivados por 28 llamadas chromeVariableMap mas 125 literales -- y 1000 como clave de escritura directa; censo por ENUMERACION 1671 = 1154 literales + 546 interpolados, que es el que se usa para cobertura). Solape entre los dos planos TS: 8 canales, no 1 -- el 1 salia de comparar censos por grep. Union de semillas TS: 2215. Entra POR NOMBRE PROPIO y no diluido dentro de ts-compilers porque son figuras distintas y mezclarlas hace la cifra agregada no auditable por partes. Que chrome-variables viva fuera de las carpetas del compilador es DEUDA DE FASE 3 de ubicacion, no razon para descontarlo. radius-dial no es un plano: es una raiz de ts-compilers. COBERTURA (denominador 4547 canales leidos en el arbol de skin del motor modern, sembrando las 18 raices del manifiesto, variante generosa): solo-css 1490 = 32,8%; +ts-compilers 2438 = 53,6%; +ts-chrome-variables 2344 = 51,6%; UNION 2894 = 63,6%. Variante estricta: 25,9 / 47,4 / 47,7 / 60,8%. 1653 canales de U no tienen productor en NINGUN plano. Cifras y metodo completos en cascade-extract.mjs -> stats.coverage; son COTA INFERIOR por 3 emisiones interpoladas sin enumerador.",
+  "classLaw": {
+    "A": "el dial YA alcanza el homonimo --ds-X; falta solo abrir el socket en el sitio de lectura del skin: var(--_ds-X, var(--ds-X, literal)). Trabajo mecanico, una linea por sitio.",
+    "B": "el dial NO alcanza ni el homonimo; hacen falta el socket Y cablear el canal a la raiz. Trabajo de diseno."
+  },
+  "seedLaw": "alcance = BFS desde rootChannel MAS los 'to' de las derivations LIVE del root autorado (primer salto por seleccion de atributo, p.ej. chrome.anatomy: el grafo extraido clavea esas aristas por la var() leida, no por el atributo). Se excluyen literal-pin (fuera del dial, R8) y toIsPattern (pliegue a nivel de mapa, no canal literal).",
+  "inputs": {
+    "prescription": "manifest/cascade/roots/chrome.families.json (terminalReach, autorado)",
+    "reach": "manifest/cascade/extracted/css-edges.json (cascade-extract.mjs, plano CSS)"
+  },
+  "reach": {
+    "channels": 0,
+    "sockets": 0,
+    "bare": 0
+  },
+  "totals": {
+    "prescribed": 55,
+    "classA": 0,
+    "classB": 55
+  },
+  "families": [
+    {
+      "familyId": "pattern/feedback/adaptive-overlay",
+      "sockets": [
+        {
+          "socket": "--_ds-adaptive-overlay-z-index",
+          "state": "PRESCRIPCION",
+          "stem": "adaptive-overlay-z-index",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/forms/filter-builder",
+      "sockets": [
+        {
+          "socket": "--_ds-form-section-header-bg",
+          "state": "PRESCRIPCION",
+          "stem": "form-section-header-bg",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/forms/filter-panel",
+      "sockets": [
+        {
+          "socket": "--_ds-form-section-header-bg",
+          "state": "PRESCRIPCION",
+          "stem": "form-section-header-bg",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/forms/invoice-template",
+      "sockets": [
+        {
+          "socket": "--_ds-form-section-header-bg",
+          "state": "PRESCRIPCION",
+          "stem": "form-section-header-bg",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/forms/pattern-form-builder",
+      "sockets": [
+        {
+          "socket": "--_ds-form-section-header-bg",
+          "state": "PRESCRIPCION",
+          "stem": "form-section-header-bg",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/forms/step-wizard",
+      "sockets": [
+        {
+          "socket": "--_ds-form-section-header-bg",
+          "state": "PRESCRIPCION",
+          "stem": "form-section-header-bg",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/shell/cockpit-header",
+      "sockets": [
+        {
+          "socket": "--_ds-cockpit-header-z-index",
+          "state": "PRESCRIPCION",
+          "stem": "cockpit-header-z-index",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/shell/feature-workspace-frame",
+      "sockets": [
+        {
+          "socket": "--_ds-feature-workspace-frame-z-index",
+          "state": "PRESCRIPCION",
+          "stem": "feature-workspace-frame-z-index",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/shell/pattern-page-shell",
+      "sockets": [
+        {
+          "socket": "--_ds-page-shell-z-index",
+          "state": "PRESCRIPCION",
+          "stem": "page-shell-z-index",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/shell/workbench-header",
+      "sockets": [
+        {
+          "socket": "--_ds-workbench-header-z-index",
+          "state": "PRESCRIPCION",
+          "stem": "workbench-header-z-index",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/overlay/alert-dialog",
+      "sockets": [
+        {
+          "socket": "--_ds-alert-dialog-z-index",
+          "state": "PRESCRIPCION",
+          "stem": "alert-dialog-z-index",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/overlay/confirm-dialog",
+      "sockets": [
+        {
+          "socket": "--_ds-confirm-dialog-z-index",
+          "state": "PRESCRIPCION",
+          "stem": "confirm-dialog-z-index",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/overlay/context-menu",
+      "sockets": [
+        {
+          "socket": "--_ds-context-menu-z-index",
+          "state": "PRESCRIPCION",
+          "stem": "context-menu-z-index",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/overlay/dropdown",
+      "sockets": [
+        {
+          "socket": "--_ds-dropdown-z-index",
+          "state": "PRESCRIPCION",
+          "stem": "dropdown-z-index",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/overlay/hover-card",
+      "sockets": [
+        {
+          "socket": "--_ds-hover-card-z-index",
+          "state": "PRESCRIPCION",
+          "stem": "hover-card-z-index",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/overlay/popconfirm",
+      "sockets": [
+        {
+          "socket": "--_ds-popconfirm-z-index",
+          "state": "PRESCRIPCION",
+          "stem": "popconfirm-z-index",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/overlay/popover",
+      "sockets": [
+        {
+          "socket": "--_ds-popover-z-index",
+          "state": "PRESCRIPCION",
+          "stem": "popover-z-index",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/overlay/sheet",
+      "sockets": [
+        {
+          "socket": "--_ds-sheet-z-index",
+          "state": "PRESCRIPCION",
+          "stem": "sheet-z-index",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/overlay/tour",
+      "sockets": [
+        {
+          "socket": "--_ds-tour-z-index",
+          "state": "PRESCRIPCION",
+          "stem": "tour-z-index",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/overlay/watermark",
+      "sockets": [
+        {
+          "socket": "--_ds-watermark-z-index",
+          "state": "PRESCRIPCION",
+          "stem": "watermark-z-index",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/dashboard/dashboard-insights",
+      "sockets": [
+        {
+          "socket": "--_ds-stats-cell-tint",
+          "state": "PRESCRIPCION",
+          "stem": "stats-cell-tint",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/dashboard/data-terminal-card",
+      "sockets": [
+        {
+          "socket": "--_ds-stats-cell-tint",
+          "state": "PRESCRIPCION",
+          "stem": "stats-cell-tint",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/dashboard/stats-header",
+      "sockets": [
+        {
+          "socket": "--_ds-stats-cell-tint",
+          "state": "PRESCRIPCION",
+          "stem": "stats-cell-tint",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/collection-header",
+      "sockets": [
+        {
+          "socket": "--_ds-collection-header-z-index",
+          "state": "PRESCRIPCION",
+          "stem": "collection-header-z-index",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/dashboard-header",
+      "sockets": [
+        {
+          "socket": "--_ds-dashboard-header-z-index",
+          "state": "PRESCRIPCION",
+          "stem": "dashboard-header-z-index",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/detail-header",
+      "sockets": [
+        {
+          "socket": "--_ds-detail-header-z-index",
+          "state": "PRESCRIPCION",
+          "stem": "detail-header-z-index",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/edit-header",
+      "sockets": [
+        {
+          "socket": "--_ds-edit-header-z-index",
+          "state": "PRESCRIPCION",
+          "stem": "edit-header-z-index",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/form-header",
+      "sockets": [
+        {
+          "socket": "--_ds-form-header-z-index",
+          "state": "PRESCRIPCION",
+          "stem": "form-header-z-index",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/header-surface",
+      "sockets": [
+        {
+          "socket": "--_ds-header-surface-z-index",
+          "state": "PRESCRIPCION",
+          "stem": "header-surface-z-index",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/mobile-header",
+      "sockets": [
+        {
+          "socket": "--_ds-mobile-header-z-index",
+          "state": "PRESCRIPCION",
+          "stem": "mobile-header-z-index",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/section-frame",
+      "sockets": [
+        {
+          "socket": "--_ds-section-frame-z-index",
+          "state": "PRESCRIPCION",
+          "stem": "section-frame-z-index",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/record/edit-fields",
+      "sockets": [
+        {
+          "socket": "--_ds-record-header-tint",
+          "state": "PRESCRIPCION",
+          "stem": "record-header-tint",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/record/form-sections",
+      "sockets": [
+        {
+          "socket": "--_ds-record-header-tint",
+          "state": "PRESCRIPCION",
+          "stem": "record-header-tint",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/record/record-action-bar",
+      "sockets": [
+        {
+          "socket": "--_ds-record-header-tint",
+          "state": "PRESCRIPCION",
+          "stem": "record-header-tint",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/record/record-field",
+      "sockets": [
+        {
+          "socket": "--_ds-record-header-tint",
+          "state": "PRESCRIPCION",
+          "stem": "record-header-tint",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/record/record-field-grid",
+      "sockets": [
+        {
+          "socket": "--_ds-record-header-tint",
+          "state": "PRESCRIPCION",
+          "stem": "record-header-tint",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/record/record-panel",
+      "sockets": [
+        {
+          "socket": "--_ds-record-header-tint",
+          "state": "PRESCRIPCION",
+          "stem": "record-header-tint",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/record/record-summary-strip",
+      "sockets": [
+        {
+          "socket": "--_ds-record-header-tint",
+          "state": "PRESCRIPCION",
+          "stem": "record-header-tint",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/shell/app-shell",
+      "sockets": [
+        {
+          "socket": "--_ds-app-shell-z-index",
+          "state": "PRESCRIPCION",
+          "stem": "app-shell-z-index",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/shell/bottom-tab-bar",
+      "sockets": [
+        {
+          "socket": "--_ds-bottom-tab-bar-z-index",
+          "state": "PRESCRIPCION",
+          "stem": "bottom-tab-bar-z-index",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/shell/page-shell-surface",
+      "sockets": [
+        {
+          "socket": "--_ds-page-shell-surface-z-index",
+          "state": "PRESCRIPCION",
+          "stem": "page-shell-surface-z-index",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/shell/surface-chrome",
+      "sockets": [
+        {
+          "socket": "--_ds-surface-chrome-z-index",
+          "state": "PRESCRIPCION",
+          "stem": "surface-chrome-z-index",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/shell/workspace-shell",
+      "sockets": [
+        {
+          "socket": "--_ds-workspace-shell-z-index",
+          "state": "PRESCRIPCION",
+          "stem": "workspace-shell-z-index",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/action-dock",
+      "sockets": [
+        {
+          "socket": "--_ds-action-dock-panel-header-bg",
+          "state": "PRESCRIPCION",
+          "stem": "action-dock-panel-header-bg",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/active-filters-bar",
+      "sockets": [
+        {
+          "socket": "--_ds-active-filters-bar-panel-header-bg",
+          "state": "PRESCRIPCION",
+          "stem": "active-filters-bar-panel-header-bg",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/column-menu",
+      "sockets": [
+        {
+          "socket": "--_ds-column-menu-panel-header-bg",
+          "state": "PRESCRIPCION",
+          "stem": "column-menu-panel-header-bg",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/connected-command-palette",
+      "sockets": [
+        {
+          "socket": "--_ds-connected-command-palette-panel-header-bg",
+          "state": "PRESCRIPCION",
+          "stem": "connected-command-palette-panel-header-bg",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/export-button",
+      "sockets": [
+        {
+          "socket": "--_ds-export-button-panel-header-bg",
+          "state": "PRESCRIPCION",
+          "stem": "export-button-panel-header-bg",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/field-filters-panel",
+      "sockets": [
+        {
+          "socket": "--_ds-field-filters-panel-panel-header-bg",
+          "state": "PRESCRIPCION",
+          "stem": "field-filters-panel-panel-header-bg",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/saved-views-menu",
+      "sockets": [
+        {
+          "socket": "--_ds-saved-views-menu-panel-header-bg",
+          "state": "PRESCRIPCION",
+          "stem": "saved-views-menu-panel-header-bg",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/scope-switcher",
+      "sockets": [
+        {
+          "socket": "--_ds-scope-switcher-panel-header-bg",
+          "state": "PRESCRIPCION",
+          "stem": "scope-switcher-panel-header-bg",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/search-command-bar",
+      "sockets": [
+        {
+          "socket": "--_ds-search-command-bar-panel-header-bg",
+          "state": "PRESCRIPCION",
+          "stem": "search-command-bar-panel-header-bg",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/selection-preview-rail",
+      "sockets": [
+        {
+          "socket": "--_ds-selection-preview-rail-panel-header-bg",
+          "state": "PRESCRIPCION",
+          "stem": "selection-preview-rail-panel-header-bg",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/table-toolbar",
+      "sockets": [
+        {
+          "socket": "--_ds-table-toolbar-panel-header-bg",
+          "state": "PRESCRIPCION",
+          "stem": "table-toolbar-panel-header-bg",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/view-mode-switcher",
+      "sockets": [
+        {
+          "socket": "--_ds-view-mode-switcher-panel-header-bg",
+          "state": "PRESCRIPCION",
+          "stem": "view-mode-switcher-panel-header-bg",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    }
+  ]
+}

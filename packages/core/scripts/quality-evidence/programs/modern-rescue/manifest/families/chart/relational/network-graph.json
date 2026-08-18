@@ -2415,19 +2415,6 @@
         "status": "MUST_REACH",
         "bindings": [
           {
-            "root": "color.seeds",
-            "socketPattern": "--_ds-chart-series-<n>",
-            "prop": "fill/stroke de series categoricas",
-            "tier": "standard",
-            "examples": [
-              "--_ds-chart-series-1 -> var(--ds-chart-series-1, <literal>)"
-            ],
-            "sockets": [
-              "--_ds-chart-series-<n>"
-            ],
-            "socketsResolved": false
-          },
-          {
             "root": "color.mode",
             "socketPattern": null,
             "prop": "fill/stroke SVG via var(--ds-color-*)",
@@ -2436,6 +2423,30 @@
             "noSocketReason": "sin socket propio; useChartTheme re-resuelve los hex contra el modo activo",
             "socketsResolved": true,
             "carrier": "shared-channel"
+          },
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "paleta de series del chart via cascada",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO a nivel foundation (adjudicacion Grupo A): el namespace chart-series lo porta packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation.css (unico lector verificado de series-1..10); no hay familia duena ni elemento mas externo - chart-foundation.css es chrome compartido de las 18. Sin socket propio: contaria 18 veces.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": null,
+            "carrierFile": "packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation.css",
+            "channels": [
+              "--ds-chart-series-1",
+              "--ds-chart-series-2",
+              "--ds-chart-series-3",
+              "--ds-chart-series-4",
+              "--ds-chart-series-5",
+              "--ds-chart-series-6",
+              "--ds-chart-series-7",
+              "--ds-chart-series-8",
+              "--ds-chart-series-9",
+              "--ds-chart-series-10"
+            ]
           }
         ],
         "uncoveredByDesign": {
@@ -2475,7 +2486,8 @@
             "--ds-motion-reveal"
           ]
         },
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "remediatedFrom": "grupoA-charts"
       }
     },
     {
@@ -2486,21 +2498,75 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "type.pairing",
-            "socketPattern": "--_ds-chart-label-family",
-            "prop": "font-family de ejes, leyendas y tooltips",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-chart-label-family"
-            ],
-            "socketsResolved": true
+        "uncoveredByDesign": {
+          "PRESCRIPCION FUERA de internalChannels (FAM-CHART3): cero lecturas en el repo, portador chart-foundation.css deliberadamente sin dueño, PORTADORAS∩LECTORAS=vacio; fase 3 decide con el selector a la vista (puntero: label-family->typography.families, label-size->typography.scale, focus-ring-color->focus.ring)": [
+            "--_ds-chart-label-family"
+          ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--ds-font-family-base",
+          "semanticOwner": "typography.pairing",
+          "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "productiveConsumerFamilyIds": [
+            "chart/relational/network-graph"
+          ],
+          "sourceBindings": [
+            "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
           }
-        ]
-      }
+        },
+        {
+          "channelId": "--ds-font-family-heading",
+          "semanticOwner": "typography.pairing",
+          "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "productiveConsumerFamilyIds": [
+            "chart/relational/network-graph"
+          ],
+          "sourceBindings": [
+            "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--ds-letter-spacing-heading",
+          "semanticOwner": "typography.pairing",
+          "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root.css",
+          "productiveConsumerFamilyIds": [
+            "chart/relational/network-graph"
+          ],
+          "sourceBindings": [
+            "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--ds-line-height-display",
+          "semanticOwner": "typography.pairing",
+          "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography.css",
+          "productiveConsumerFamilyIds": [
+            "chart/relational/network-graph"
+          ],
+          "sourceBindings": [
+            "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
     },
     {
       "controlId": "typography.families",
@@ -2518,12 +2584,16 @@
             "prop": "font-family de ejes, leyendas y tooltips",
             "tier": "standard",
             "examples": [],
-            "sockets": [
-              "--_ds-chart-label-family"
-            ],
+            "sockets": [],
             "socketsResolved": true
           }
-        ]
+        ],
+        "uncoveredByDesign": {
+          "PRESCRIPCION FUERA de internalChannels (FAM-CHART3): cero lecturas; portador chart-foundation.css sin dueño deliberado; PORTADORAS∩LECTORAS=vacio; fase 3 con el selector a la vista": [
+            "--_ds-chart-label-family"
+          ]
+        },
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -2542,12 +2612,16 @@
             "prop": "tamano de labels/ejes/leyendas",
             "tier": "standard",
             "examples": [],
-            "sockets": [
-              "--_ds-chart-label-size"
-            ],
+            "sockets": [],
             "socketsResolved": true
           }
-        ]
+        ],
+        "uncoveredByDesign": {
+          "PRESCRIPCION FUERA de internalChannels (FAM-CHART3): cero lecturas; portador chart-foundation.css sin dueño deliberado; PORTADORAS∩LECTORAS=vacio; fase 3 con el selector a la vista": [
+            "--_ds-chart-label-size"
+          ]
+        },
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -2629,19 +2703,23 @@
         "status": "MUST_REACH",
         "bindings": [
           {
-            "root": "motion.character",
-            "socketPattern": "--_ds-chart-<fam>-enter-duration",
-            "prop": "animation-duration",
+            "root": null,
+            "socketPattern": null,
+            "prop": "duracion de entrada/reveal del chart via cascada",
             "tier": "standard",
-            "examples": [
-              "--_ds-chart-line-enter-duration"
-            ],
-            "sockets": [
-              "--_ds-chart-<fam>-enter-duration"
-            ],
-            "socketsResolved": false
+            "examples": [],
+            "noSocketReason": "CONSUMO a nivel foundation (adjudicacion Grupo A): el mecanismo real es el socket --_ds-chart-reveal-duration, DEFINIDO en packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation.css:1123 y leido por chart-bar.css:42, chart-line.css:87 y chart-c.css:77 con fallback var(--ds-motion-reveal, var(--ds-motion-calm)). El placeholder --_ds-chart-<fam>-enter-duration no correspondia a ningun canal real.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": null,
+            "carrierFile": "packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation.css",
+            "channels": [
+              "--ds-motion-reveal"
+            ]
           }
-        ]
+        ],
+        "remediatedFrom": "grupoA-charts",
+        "reviewedFrom": "anatomy"
       }
     },
     {
@@ -2747,12 +2825,16 @@
             "examples": [
               "--_ds-chart-focus-ring-color"
             ],
-            "sockets": [
-              "--_ds-chart-focus-ring-color"
-            ],
+            "sockets": [],
             "socketsResolved": true
           }
-        ]
+        ],
+        "uncoveredByDesign": {
+          "PRESCRIPCION FUERA de internalChannels (FAM-CHART3): cero lecturas; portador chart-foundation.css sin dueño deliberado; PORTADORAS∩LECTORAS=vacio; fase 3 con el selector a la vista": [
+            "--_ds-chart-focus-ring-color"
+          ]
+        },
+        "migratedToInternalChannels": true
       }
     },
     {

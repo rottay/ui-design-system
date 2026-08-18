@@ -1,0 +1,1377 @@
+{
+  "schemaVersion": 1,
+  "rootId": "motion.dial",
+  "tier": "standard",
+  "rootChannel": {
+    "channel": "--ds-motion-duration-scale",
+    "emission": [
+      {
+        "kind": "compiler-emit",
+        "site": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+        "clampSite": "packages/core/src/foundation/contracts/runtime/motion/index.ts",
+        "note": "setMotionVariables (brand-theme:1077-1118) emite las 15; clamp T1 MOTION_DIAL_BOUNDS intensity {0,1} durationScale {0.5,1.5} (motion/index.ts:10-13) aplicado en posture :170-187; T3 tenant {0,0.8}/{0.75,1.35}"
+      }
+    ]
+  },
+  "dependsOn": [],
+  "derivations": [
+    {
+      "from": "--ds-motion-duration-scale",
+      "to": "--ds-motion-feedback",
+      "rule": {
+        "kind": "calc-multiply",
+        "operand": "--ds-motion-fast (120ms)"
+      },
+      "site": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css",
+      "line": 103,
+      "state": "LIVE"
+    },
+    {
+      "from": "--ds-motion-duration-scale",
+      "to": "--ds-motion-reveal",
+      "rule": {
+        "kind": "calc-multiply",
+        "operand": "--ds-motion-normal (200ms)"
+      },
+      "site": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css",
+      "line": 106,
+      "state": "LIVE"
+    },
+    {
+      "from": "--ds-motion-duration-scale",
+      "to": "--ds-motion-disclosure",
+      "rule": {
+        "kind": "calc-multiply"
+      },
+      "site": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css",
+      "line": 109,
+      "state": "LIVE"
+    },
+    {
+      "from": "--ds-motion-duration-scale",
+      "to": "--ds-motion-resize",
+      "rule": {
+        "kind": "calc-multiply"
+      },
+      "site": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css",
+      "line": 112,
+      "state": "LIVE"
+    },
+    {
+      "from": "--ds-motion-duration-scale",
+      "to": "--ds-motion-rearrange",
+      "rule": {
+        "kind": "calc-multiply",
+        "operand": "--ds-motion-slow (320ms)"
+      },
+      "site": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css",
+      "line": 115,
+      "state": "LIVE"
+    },
+    {
+      "from": "--ds-motion-duration-scale",
+      "to": "--ds-motion-attention",
+      "rule": {
+        "kind": "calc-multiply"
+      },
+      "site": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css",
+      "line": 118,
+      "state": "LIVE"
+    },
+    {
+      "from": "--ds-motion-duration-scale",
+      "to": "--ds-motion-fast",
+      "rule": {
+        "kind": "literal-pin",
+        "value": "120ms",
+        "why": "INALCANZABLE: pineado, no emitido, fuera del allowlist (delta canon: rebind-or-retire)"
+      },
+      "site": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css",
+      "line": 94,
+      "state": "LIVE"
+    },
+    {
+      "from": "--ds-motion-duration-scale",
+      "to": "--ds-motion-normal",
+      "rule": {
+        "kind": "literal-pin",
+        "value": "200ms",
+        "why": "inalcanzable"
+      },
+      "site": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css",
+      "line": 95,
+      "state": "LIVE"
+    },
+    {
+      "from": "--ds-motion-duration-scale",
+      "to": "--ds-motion-slow",
+      "rule": {
+        "kind": "literal-pin",
+        "value": "320ms",
+        "why": "inalcanzable"
+      },
+      "site": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css",
+      "line": 96,
+      "state": "LIVE"
+    },
+    {
+      "from": "--ds-motion-duration-scale",
+      "to": "--ds-motion-glacial",
+      "rule": {
+        "kind": "literal-pin",
+        "value": "500ms",
+        "why": "inalcanzable"
+      },
+      "site": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css",
+      "line": 97,
+      "state": "LIVE"
+    },
+    {
+      "from": "--ds-motion-duration-scale",
+      "to": "--ds-motion-ease-out",
+      "rule": {
+        "kind": "literal-pin",
+        "value": "cubic-bezier(0.16,1,0.3,1)",
+        "why": "inalcanzable"
+      },
+      "site": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css",
+      "line": 123,
+      "state": "LIVE"
+    },
+    {
+      "from": "--ds-motion-duration-scale",
+      "to": "--ds-motion-ease-in-out",
+      "rule": {
+        "kind": "literal-pin",
+        "value": "cubic-bezier(0.4,0,0.6,1)",
+        "why": "inalcanzable"
+      },
+      "site": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css",
+      "line": 124,
+      "state": "LIVE"
+    }
+  ],
+  "terminalReach": [
+    {
+      "channelId": "--_ds-pricing-table-motion-duration",
+      "familyId": "pattern/commerce/pricing-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-pricing-table-motion-timing",
+      "familyId": "pattern/commerce/pricing-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-activity-log-transition-duration",
+      "familyId": "pattern/communication/activity-log",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-assistant-transition-duration",
+      "familyId": "pattern/communication/assistant",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-comment-thread-transition-duration",
+      "familyId": "pattern/communication/comment-thread",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-live-feed-skeleton-duration",
+      "familyId": "pattern/communication/live-feed",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-live-feed-transition-duration",
+      "familyId": "pattern/communication/live-feed",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-notification-center-transition-duration",
+      "familyId": "pattern/communication/notification-center",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-presence-transition-duration",
+      "familyId": "pattern/communication/presence",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-adaptive-overlay-transition-duration",
+      "familyId": "pattern/feedback/adaptive-overlay",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-empty-char-cadence",
+      "familyId": "pattern/feedback/empty-state",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-empty-state-spinner-duration",
+      "familyId": "pattern/feedback/empty-state",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-transition-duration",
+      "familyId": "pattern/forms/filter-builder",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-transition-duration",
+      "familyId": "pattern/forms/filter-panel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-transition-duration",
+      "familyId": "pattern/forms/invoice-template",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-builder-skeleton-duration",
+      "familyId": "pattern/forms/pattern-form-builder",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-step-wizard-skeleton-duration",
+      "familyId": "pattern/forms/step-wizard",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-command-palette-transition-duration",
+      "familyId": "pattern/navigation/command-palette",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-environment-toggle-transition-duration",
+      "familyId": "pattern/navigation/environment-toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-locale-switcher-transition-duration",
+      "familyId": "pattern/navigation/pattern-locale-switcher",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-shortcuts-overlay-transition-duration",
+      "familyId": "pattern/navigation/shortcuts-overlay",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-workspace-switcher-transition-duration",
+      "familyId": "pattern/navigation/workspace-switcher",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-page-transition-duration",
+      "familyId": "pattern/shell/cockpit-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-feature-workspace-skeleton-duration",
+      "familyId": "pattern/shell/feature-workspace-frame",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-page-header-sheen-duration",
+      "familyId": "pattern/shell/pattern-page-shell",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-page-transition-duration",
+      "familyId": "pattern/shell/workbench-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-duration-slow",
+      "familyId": "pattern/visualization/ascii-diagram",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-kanban-line-cadence",
+      "familyId": "pattern/visualization/ascii-diagram",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-duration-fast",
+      "familyId": "pattern/visualization/pattern-tree-view",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-kanban-line-cadence",
+      "familyId": "pattern/visualization/pattern-tree-view",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tree-view-skeleton-duration",
+      "familyId": "pattern/visualization/pattern-tree-view",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-steps-transition-duration",
+      "familyId": "pattern/workflow/approval-inbox",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-approval-pulse-duration",
+      "familyId": "pattern/workflow/approval-workflow",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-steps-transition-duration",
+      "familyId": "pattern/workflow/moderation-gallery",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-steps-transition-duration",
+      "familyId": "pattern/workflow/operational-ledger",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-steps-transition-duration",
+      "familyId": "pattern/workflow/shift-matrix",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-avatar-active-scale",
+      "familyId": "primitive/display/avatar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-avatar-hover-scale",
+      "familyId": "primitive/display/avatar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-avatar-hover-transform",
+      "familyId": "primitive/display/avatar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-avatar-press-transform",
+      "familyId": "primitive/display/avatar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-avatar-transition-duration",
+      "familyId": "primitive/display/avatar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-avatar-transition-timing",
+      "familyId": "primitive/display/avatar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-hover-transform",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-motion-duration",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-motion-easing",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-press-transform",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-pulse-duration",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-pulse-scale",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-pulse-timing",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-remove-hover-transform",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-spinner-duration",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-active-transform",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-hover-transform",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-image-loading-duration",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-interactive-transform-hover",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-skeleton-duration",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-spinner-duration",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-transition-duration",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-transition-timing",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-carousel-slide-transform",
+      "familyId": "primitive/display/carousel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-code-block-copy-transition-duration",
+      "familyId": "primitive/display/code-block",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-code-block-motion-duration",
+      "familyId": "primitive/display/code-block",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-descriptions-label-transform",
+      "familyId": "primitive/display/descriptions",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-icon-frame-loading-duration",
+      "familyId": "primitive/display/icon-frame",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-image-pulse-duration",
+      "familyId": "primitive/display/image",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-image-reveal-duration",
+      "familyId": "primitive/display/image",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-image-reveal-timing",
+      "familyId": "primitive/display/image",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-alert-action-active-transform",
+      "familyId": "primitive/feedback/alert",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-loading-indicator-duration",
+      "familyId": "primitive/feedback/loading-indicator",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-message-duration",
+      "familyId": "primitive/feedback/message",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-message-enter-duration",
+      "familyId": "primitive/feedback/message",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-message-enter-easing",
+      "familyId": "primitive/feedback/message",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-message-exit-duration",
+      "familyId": "primitive/feedback/message",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-message-exit-easing",
+      "familyId": "primitive/feedback/message",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-notification-duration",
+      "familyId": "primitive/feedback/notification",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-notification-enter-duration",
+      "familyId": "primitive/feedback/notification",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-notification-enter-easing",
+      "familyId": "primitive/feedback/notification",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-notification-exit-duration",
+      "familyId": "primitive/feedback/notification",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-notification-exit-easing",
+      "familyId": "primitive/feedback/notification",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-rate-hover-scale",
+      "familyId": "primitive/feedback/rate",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-skeleton-animation-duration",
+      "familyId": "primitive/feedback/skeleton",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-skeleton-animation-easing",
+      "familyId": "primitive/feedback/skeleton",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-spinner-duration",
+      "familyId": "primitive/feedback/spinner",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-spinner-spin-easing",
+      "familyId": "primitive/feedback/spinner",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toast-duration",
+      "familyId": "primitive/feedback/toast",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toast-enter-duration",
+      "familyId": "primitive/feedback/toast",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toast-enter-easing",
+      "familyId": "primitive/feedback/toast",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toast-exit-duration",
+      "familyId": "primitive/feedback/toast",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toast-exit-easing",
+      "familyId": "primitive/feedback/toast",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toast-stack-transform",
+      "familyId": "primitive/feedback/toast",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-autocomplete-transition-duration",
+      "familyId": "primitive/inputs/auto-complete",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-active-filter",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-active-transform",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-attention-iteration-count",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-hover-filter",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-hover-transform",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-icon-active-transform",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-icon-hover-transform",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-spinner-color",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-spinner-duration",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-transition-duration",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-transition-timing",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-cascader-spinner-duration",
+      "familyId": "primitive/inputs/cascader",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-cascader-transition-duration",
+      "familyId": "primitive/inputs/cascader",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-checkbox-transition-duration",
+      "familyId": "primitive/inputs/checkbox",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-color-picker-transition-duration",
+      "familyId": "primitive/inputs/color-picker",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-spinner-duration",
+      "familyId": "primitive/inputs/form",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-transition-duration",
+      "familyId": "primitive/inputs/form",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-action-active-transform",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-loading-duration",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-transition-duration",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-transition-timing",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-mentions-transition-duration",
+      "familyId": "primitive/inputs/mentions",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-otp-input-transition-duration",
+      "familyId": "primitive/inputs/otp-input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-radio-dot-scale",
+      "familyId": "primitive/inputs/radio",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-radio-transition-duration",
+      "familyId": "primitive/inputs/radio",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-action-active-transform",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-arrow-rotate",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-arrow-rotate-open",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-enter-y",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-switch-transition-duration",
+      "familyId": "primitive/inputs/switch",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toggle-checked-hover-filter",
+      "familyId": "primitive/inputs/toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toggle-loading-duration",
+      "familyId": "primitive/inputs/toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toggle-transition-duration",
+      "familyId": "primitive/inputs/toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tree-select-spinner-duration",
+      "familyId": "primitive/inputs/tree-select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-voice-input-button-pulse-duration",
+      "familyId": "primitive/inputs/voice-input-button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-aspect-ratio-motion-duration",
+      "familyId": "primitive/layout/aspect-ratio",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-aspect-ratio-motion-easing",
+      "familyId": "primitive/layout/aspect-ratio",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-collapse-transition-duration",
+      "familyId": "primitive/layout/collapse",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-collapse-transition-timing",
+      "familyId": "primitive/layout/collapse",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-container-motion-duration",
+      "familyId": "primitive/layout/container",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-container-motion-easing",
+      "familyId": "primitive/layout/container",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-divider-motion-duration",
+      "familyId": "primitive/layout/divider",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-divider-motion-easing",
+      "familyId": "primitive/layout/divider",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-layout-sider-collapse-duration",
+      "familyId": "primitive/layout/layout",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-layout-sider-collapse-timing",
+      "familyId": "primitive/layout/layout",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-resize-handle-transition-duration",
+      "familyId": "primitive/layout/resize-handle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-semantic-surface-transition-duration",
+      "familyId": "primitive/layout/semantic-surface",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-space-motion-duration",
+      "familyId": "primitive/layout/space",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-space-motion-easing",
+      "familyId": "primitive/layout/space",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-splitter-gutter-transition-duration",
+      "familyId": "primitive/layout/splitter",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-splitter-gutter-transition-timing",
+      "familyId": "primitive/layout/splitter",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-affix-transition-duration",
+      "familyId": "primitive/navigation/affix",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-affix-transition-timing",
+      "familyId": "primitive/navigation/affix",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-anchor-transition-duration",
+      "familyId": "primitive/navigation/anchor",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-anchor-transition-timing",
+      "familyId": "primitive/navigation/anchor",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-back-top-transition-duration",
+      "familyId": "primitive/navigation/back-top",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-backtop-enter-duration",
+      "familyId": "primitive/navigation/back-top",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-backtop-hover-transform",
+      "familyId": "primitive/navigation/back-top",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-backtop-pressed-transform",
+      "familyId": "primitive/navigation/back-top",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-backtop-transition-duration",
+      "familyId": "primitive/navigation/back-top",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-backtop-transition-timing",
+      "familyId": "primitive/navigation/back-top",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-breadcrumb-transition-duration",
+      "familyId": "primitive/navigation/breadcrumb",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-float-button-transition-duration",
+      "familyId": "primitive/navigation/float-button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-floatbutton-panel-duration",
+      "familyId": "primitive/navigation/float-button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-floatbutton-panel-timing",
+      "familyId": "primitive/navigation/float-button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-link-motion-duration",
+      "familyId": "primitive/navigation/link",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-link-motion-easing",
+      "familyId": "primitive/navigation/link",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-link-transition-duration",
+      "familyId": "primitive/navigation/link",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-menu-panel-enter-distance",
+      "familyId": "primitive/navigation/menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-menu-transition-duration",
+      "familyId": "primitive/navigation/menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-pagination-transition-duration",
+      "familyId": "primitive/navigation/pagination",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-segmented-item-transform-selected",
+      "familyId": "primitive/navigation/segmented",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-segmented-transition-duration",
+      "familyId": "primitive/navigation/segmented",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stepper-transition-duration",
+      "familyId": "primitive/navigation/stepper",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-steps-transition-duration",
+      "familyId": "primitive/navigation/steps",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-active-reveal-duration",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-active-transform",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-icon-transform-active",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-loading-duration",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-motion-duration",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-motion-easing",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-panel-motion-duration",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-panel-motion-easing",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-pressed-transform",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-transition-duration",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-alert-dialog-motion-scale",
+      "familyId": "primitive/overlay/alert-dialog",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-alert-dialog-transition-duration",
+      "familyId": "primitive/overlay/alert-dialog",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-confirm-dialog-motion-scale",
+      "familyId": "primitive/overlay/confirm-dialog",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-confirm-dialog-transition-duration",
+      "familyId": "primitive/overlay/confirm-dialog",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-context-menu-transition-duration",
+      "familyId": "primitive/overlay/context-menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-dropdown-transition-duration",
+      "familyId": "primitive/overlay/dropdown",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-hover-card-motion-scale",
+      "familyId": "primitive/overlay/hover-card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-hover-card-transition-duration",
+      "familyId": "primitive/overlay/hover-card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-popconfirm-motion-scale",
+      "familyId": "primitive/overlay/popconfirm",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-popconfirm-transition-duration",
+      "familyId": "primitive/overlay/popconfirm",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-popover-closed-transform",
+      "familyId": "primitive/overlay/popover",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-popover-enter-duration",
+      "familyId": "primitive/overlay/popover",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-popover-enter-easing",
+      "familyId": "primitive/overlay/popover",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-popover-motion-scale",
+      "familyId": "primitive/overlay/popover",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-popover-transition-duration",
+      "familyId": "primitive/overlay/popover",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-sheet-transition-duration",
+      "familyId": "primitive/overlay/sheet",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tour-transition-duration",
+      "familyId": "primitive/overlay/tour",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-watermark-transition-duration",
+      "familyId": "primitive/overlay/watermark",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-metric-card-hover-transform",
+      "familyId": "structure/dashboard/dashboard-insights",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-dtc-duration-ambient",
+      "familyId": "structure/dashboard/data-terminal-card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-dtc-duration-drift",
+      "familyId": "structure/dashboard/data-terminal-card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-dtc-duration-entrance",
+      "familyId": "structure/dashboard/data-terminal-card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-dtc-duration-flow",
+      "familyId": "structure/dashboard/data-terminal-card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-dtc-duration-heartbeat",
+      "familyId": "structure/dashboard/data-terminal-card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-dtc-duration-pulse",
+      "familyId": "structure/dashboard/data-terminal-card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-dtc-duration-scan",
+      "familyId": "structure/dashboard/data-terminal-card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-dtc-duration-tick",
+      "familyId": "structure/dashboard/data-terminal-card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stats-header-ping-duration",
+      "familyId": "structure/dashboard/stats-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-loading-dots-duration",
+      "familyId": "structure/feedback/capability-anatomy",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-loading-dots-duration",
+      "familyId": "structure/feedback/loading-overlay",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-loading-dots-duration",
+      "familyId": "structure/feedback/surface-lifecycle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-collection-header-sheen-duration",
+      "familyId": "structure/headers/collection-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-dashboard-header-sheen-duration",
+      "familyId": "structure/headers/dashboard-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-detail-header-transition-duration",
+      "familyId": "structure/headers/detail-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-edit-header-transition-duration",
+      "familyId": "structure/headers/edit-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-header-transition-duration",
+      "familyId": "structure/headers/form-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-header-surface-transition-duration",
+      "familyId": "structure/headers/header-surface",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-mobile-header-transition-duration",
+      "familyId": "structure/headers/mobile-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-section-frame-transition-duration",
+      "familyId": "structure/headers/section-frame",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-app-shell-transition-duration",
+      "familyId": "structure/shell/app-shell",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-shell-collapse-transition",
+      "familyId": "structure/shell/app-shell",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-bottom-tab-bar-transition-duration",
+      "familyId": "structure/shell/bottom-tab-bar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-page-shell-surface-transition-duration",
+      "familyId": "structure/shell/page-shell-surface",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-surface-chrome-transition-duration",
+      "familyId": "structure/shell/surface-chrome",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-workspace-shell-transition-duration",
+      "familyId": "structure/shell/workspace-shell",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-action-dock-transition-duration",
+      "familyId": "structure/workspace/action-dock",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-active-filters-bar-motion-duration",
+      "familyId": "structure/workspace/active-filters-bar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-active-filters-bar-transition-duration",
+      "familyId": "structure/workspace/active-filters-bar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-column-menu-transition-duration",
+      "familyId": "structure/workspace/column-menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-connected-command-palette-transition-duration",
+      "familyId": "structure/workspace/connected-command-palette",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-export-button-toast-duration",
+      "familyId": "structure/workspace/export-button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-export-button-transition-duration",
+      "familyId": "structure/workspace/export-button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-field-filters-panel-transition-duration",
+      "familyId": "structure/workspace/field-filters-panel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-saved-views-menu-transition-duration",
+      "familyId": "structure/workspace/saved-views-menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-scope-switcher-transition-duration",
+      "familyId": "structure/workspace/scope-switcher",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-search-command-bar-transition-duration",
+      "familyId": "structure/workspace/search-command-bar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-selection-preview-rail-transition-duration",
+      "familyId": "structure/workspace/selection-preview-rail",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-toolbar-transition-duration",
+      "familyId": "structure/workspace/table-toolbar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-view-mode-switcher-transition-duration",
+      "familyId": "structure/workspace/view-mode-switcher",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-dashboard-skeleton-duration",
+      "familyId": "surface/data/dashboard",
+      "state": "PRESCRIPCION"
+    }
+  ],
+  "variants": [
+    {
+      "id": "quieta",
+      "value": {
+        "intensity": 0,
+        "durationScale": 0.5
+      },
+      "effects": {
+        "--ds-motion-intensity": "0",
+        "--ds-motion-duration-scale": "0.5"
+      },
+      "pinned": {},
+      "law": "vertical-only: durationScale 0.5 bajo piso T3 {0.75,1.35}"
+    },
+    {
+      "id": "estandar",
+      "value": {
+        "intensity": 1,
+        "durationScale": 1
+      },
+      "effects": {
+        "--ds-motion-intensity": "1",
+        "--ds-motion-duration-scale": "1"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "expresiva",
+      "value": {
+        "intensity": 1,
+        "durationScale": 1.15
+      },
+      "effects": {
+        "--ds-motion-intensity": "1",
+        "--ds-motion-duration-scale": "1.15"
+      },
+      "pinned": {}
+    }
+  ],
+  "overlaps": [],
+  "terminalReachLaw": "state = alcance en la cascada; deteccion de UN SALTO en sitio de lectura = COTA INFERIOR. El alcance transitivo es de la capa GENERADA (cascade-extract/materialized, ley R1); el diff con estas prescripciones ES el backlog de fase 3."
+}

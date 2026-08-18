@@ -2074,29 +2074,6 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "color.mode",
-            "socketPattern": null,
-            "prop": "idem",
-            "tier": "standard",
-            "examples": [],
-            "noSocketReason": "sin socket propio; mismo mecanismo",
-            "socketsResolved": true,
-            "carrier": "shared-channel"
-          },
-          {
-            "root": "color.seeds",
-            "prop": "propiedad lector-unico (FAM-16)",
-            "tier": "standard",
-            "sockets": [
-              "--_ds-stats-header-columns"
-            ],
-            "socketsResolved": true
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
             "--ds-color-bg-primary",
@@ -2111,8 +2088,26 @@
             "--ds-spacing-2",
             "--ds-spacing-3"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-stats-header-columns",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/stats-header"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "typography.pairing",
@@ -2122,29 +2117,34 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "type.pairing",
-            "socketPattern": "--_ds-<comp>-value-family",
-            "prop": "valores de metric cards",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-stats-header-value-family",
-              "--_ds-stats-header-value-font-weight"
-            ],
-            "socketsResolved": true
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
             "--ds-font-weight-medium",
             "--ds-font-weight-semibold"
+          ],
+          "CONSUMO (migracion): ownedBy structure/dashboard/stats-header#typography.families": [
+            "--_ds-stats-header-value-family"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-stats-header-value-font-weight",
+          "semanticOwner": "typography.pairing",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/stats-header"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "typography.families",
@@ -2153,22 +2153,25 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "type.pairing",
-            "socketPattern": "--_ds-<comp>-value-family",
-            "prop": "valores de metric cards",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-stats-header-value-family"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-stats-header-value-family",
+          "semanticOwner": "typography.families",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/stats-header"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header-keyframes.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "typography.scale",
@@ -2178,33 +2181,110 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "type.scale",
-            "socketPattern": "--_ds-<comp>-title-size / --_ds-<comp>-value-size",
-            "prop": "titulos de pagina y valores de metricas",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-stats-header-title-size",
-              "--_ds-stats-header-value-size",
-              "--_ds-stats-header-kicker-font-size",
-              "--_ds-stats-header-label-font-size",
-              "--_ds-stats-header-meta-font-size",
-              "--_ds-stats-header-value-font-size"
-            ],
-            "socketsResolved": true
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
             "--ds-font-size-2xs",
             "--ds-font-size-sm"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-stats-header-title-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/stats-header"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header-keyframes.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-stats-header-value-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/stats-header"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header-keyframes.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-stats-header-kicker-font-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/stats-header"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-stats-header-label-font-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/stats-header"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-stats-header-meta-font-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/stats-header"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-stats-header-value-font-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/stats-header"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "shape.radius-scale",
@@ -2214,30 +2294,32 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "shape.corner",
-            "socketPattern": "--_ds-<comp>-panel-radius",
-            "prop": "paneles, rails, metric cards",
-            "tier": "standard",
-            "examples": [
-              "--_ds-record-facts-radius",
-              "--_ds-stats-card-radius"
-            ],
-            "sockets": [
-              "--_ds-stats-header-panel-radius"
-            ],
-            "socketsResolved": true
-          }
-        ],
         "uncoveredByDesign": {
           "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
             "--ds-radius-lg"
           ]
         },
-        "reviewedFrom": "anatomy"
-      }
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-stats-header-panel-radius",
+          "semanticOwner": "shape.radius-scale",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/stats-header"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header-keyframes.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
     },
     {
       "controlId": "shape.button-style",
@@ -2259,26 +2341,57 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "source": "huecos-fable",
-        "bindings": [
-          {
-            "root": "density.mode",
-            "socketPattern": "--_ds-stats-density-factor",
-            "prop": "padding de metric cards y alto de fila de widgets (slug vivo: stats)",
-            "tier": "standard",
-            "sockets": [
-              "--_ds-stats-density-factor",
-              "--_ds-stats-header-card-min-height",
-              "--_ds-stats-header-card-padding"
-            ],
-            "socketsResolved": true,
-            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+      "internalChannels": [
+        {
+          "channelId": "--_ds-stats-density-factor",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/stats-header",
+            "structure/dashboard/dashboard-insights",
+            "structure/dashboard/data-terminal-card"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header-keyframes.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ],
-        "reviewedFrom": "anatomy"
-      }
+        },
+        {
+          "channelId": "--_ds-stats-header-card-min-height",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/stats-header"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-stats-header-card-padding",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/stats-header"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
     },
     {
       "controlId": "spacing.rhythm",
@@ -2287,22 +2400,25 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "space.rhythm",
-            "socketPattern": "--_ds-<comp>-grid-gap",
-            "prop": "gap de grillas de widgets y de zonas de trabajo",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-stats-header-grid-gap"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-stats-header-grid-gap",
+          "semanticOwner": "spacing.rhythm",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/stats-header"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header-keyframes.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "motion.dial",
@@ -2312,27 +2428,30 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "why": "el tablero obedece al dial",
-        "source": "huecos-kimi",
-        "bindings": [
-          {
-            "root": "motion.character",
-            "socketPattern": "--_ds-stats-transition-duration",
-            "prop": "transition-duration del rearrange de widgets",
-            "tier": "standard",
-            "sockets": [
-              "--_ds-stats-header-ping-duration"
-            ]
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
             "--ds-motion-ease-out"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-stats-header-ping-duration",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/stats-header"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -2341,24 +2460,25 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "surface.elevation",
-            "socketPattern": "--_ds-<comp>-elevation",
-            "prop": "box-shadow",
-            "tier": "standard",
-            "examples": [
-              "--_ds-dashboard-panel-elevation"
-            ],
-            "sockets": [
-              "--_ds-stats-header-elevation"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-stats-header-elevation",
+          "semanticOwner": "surfaces.elevation-posture",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/stats-header"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header-keyframes.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -2410,19 +2530,25 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "why": "socket heredado --_ds-widget-board-cell-tint",
-        "source": "huecos-kimi",
-        "bindings": [
-          {
-            "root": "chrome.families",
-            "socketPattern": "--_ds-stats-cell-tint",
-            "prop": "background-color de las celdas del widget board",
-            "tier": "standard"
+      "internalChannels": [
+        {
+          "channelId": "--_ds-stats-cell-tint",
+          "semanticOwner": "chrome.families",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/stats-header"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header-keyframes.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "chrome.anatomy",
@@ -2432,28 +2558,34 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "source": "huecos-fable",
-        "bindings": [
-          {
-            "root": "shape.edge",
-            "socketPattern": "--_ds-stats-rule-style",
-            "prop": "bordes de metric cards y reglas de la grilla de widgets",
-            "tier": "standard",
-            "sockets": [
-              "--_ds-stats-rule-style"
-            ],
-            "socketsResolved": true,
-            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
-          }
-        ],
         "uncoveredByDesign": {
           "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
             "--ds-focus-ring-color"
           ]
         },
-        "reviewedFrom": "anatomy"
-      }
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-stats-rule-style",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/stats-header",
+            "structure/dashboard/dashboard-insights",
+            "structure/dashboard/data-terminal-card"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header-keyframes.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
     },
     {
       "controlId": "token-overrides",
@@ -2532,19 +2664,25 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "why": "iconos de la libreria",
-        "source": "huecos-kimi",
-        "bindings": [
-          {
-            "root": "icon.posture",
-            "socketPattern": "--_ds-stats-icon-stroke-width",
-            "prop": "stroke-width de los iconos de accion de widget",
-            "tier": "standard"
+      "internalChannels": [
+        {
+          "channelId": "--_ds-stats-icon-stroke-width",
+          "semanticOwner": "profiles.icon",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/stats-header"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header-keyframes.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "responsive.posture",

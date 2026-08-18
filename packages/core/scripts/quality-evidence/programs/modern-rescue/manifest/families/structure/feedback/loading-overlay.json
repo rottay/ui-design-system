@@ -716,9 +716,7 @@
               "--_ds-surface-error-state-color",
               "--_ds-surface-stale-banner-bg"
             ],
-            "sockets": [
-              "--_ds-loading-overlay-<status>-color"
-            ],
+            "sockets": [],
             "socketsResolved": false
           },
           {
@@ -739,9 +737,13 @@
             "--ds-font-mono",
             "--ds-motion-glacial",
             "--ds-spacing-3"
+          ],
+          "PRESCRIPCION PARAMETRIZADA FUERA de internalChannels (FAM-PARAM patron 4): dominio no cerrado (ciclo de superficie vs semillas); adjudicacion pendiente; fase 3": [
+            "--_ds-loading-overlay-<status>-color"
           ]
         },
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -823,23 +825,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "source": "huecos-fable",
-        "bindings": [
-          {
-            "root": "shape.corner",
-            "socketPattern": "--_ds-loading-overlay-radius",
-            "prop": "radio de paneles de estado (loading-overlay, error/empty states; slug vivo: loading-overlay)",
-            "tier": "standard",
-            "sockets": [
-              "--_ds-loading-overlay-radius"
-            ],
-            "socketsResolved": true,
-            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+      "internalChannels": [
+        {
+          "channelId": "--_ds-loading-overlay-radius",
+          "semanticOwner": "shape.radius-scale",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/feedback/loading-overlay"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "shape.button-style",
@@ -895,24 +898,31 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "why": "sockets heredados --_ds-loading-overlay-dots-duration y -pulse-duration",
-        "source": "huecos-kimi",
-        "bindings": [
-          {
-            "root": "motion.character",
-            "socketPattern": "--_ds-loading-dots-duration",
-            "prop": "animation-duration de dots/pulse del loading-overlay",
-            "tier": "standard"
-          }
-        ],
         "uncoveredByDesign": {
           "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
             "--ds-motion-ease-in-out"
           ]
         },
-        "reviewedFrom": "anatomy"
-      }
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-loading-dots-duration",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/feedback/loading-overlay"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -934,24 +944,38 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "why": "backdrop de overlay: lugar sancionado para glass",
-        "source": "huecos-kimi",
-        "bindings": [
-          {
-            "root": "surface.finish",
-            "socketPattern": "--_ds-loading-scrim-backdrop-filter",
-            "prop": "backdrop-filter del backdrop del loading-overlay",
-            "tier": "premium",
-            "sockets": [
-              "--_ds-loading-overlay-backdrop",
-              "--_ds-loading-overlay-scrim-opacity"
-            ]
+      "internalChannels": [
+        {
+          "channelId": "--_ds-loading-overlay-backdrop",
+          "semanticOwner": "surfaces.effect-intensity",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/feedback/loading-overlay"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
           }
-        ],
-        "reviewedFrom": "anatomy"
-      }
+        },
+        {
+          "channelId": "--_ds-loading-overlay-scrim-opacity",
+          "semanticOwner": "surfaces.effect-intensity",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/feedback/loading-overlay"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -999,23 +1023,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "source": "huecos-fable",
-        "bindings": [
-          {
-            "root": "shape.edge",
-            "socketPattern": "--_ds-loading-overlay-border-style",
-            "prop": "borde de los paneles de estado",
-            "tier": "standard",
-            "sockets": [
-              "--_ds-loading-overlay-border-style"
-            ],
-            "socketsResolved": true,
-            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+      "internalChannels": [
+        {
+          "channelId": "--_ds-loading-overlay-border-style",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/feedback/loading-overlay"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "token-overrides",

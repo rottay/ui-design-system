@@ -1049,36 +1049,72 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "color.status",
-            "socketPattern": "--_ds-badge-<status>-bg / --_ds-tag-<status>-bg",
-            "prop": "fondos de badge/tag semanticos",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-icon-frame-badge-bg",
-              "--_ds-icon-frame-badge-color",
-              "--_ds-icon-frame-bg",
-              "--_ds-icon-frame-icon-color"
-            ],
-            "socketsResolved": true
-          },
-          {
-            "root": "color.mode",
-            "socketPattern": null,
-            "prop": "background/color/border via los canales de color re-derivados por overlay",
-            "tier": "standard",
-            "examples": [],
-            "noSocketReason": "SIN socket propio: el modo viaja por los overlays de los canales compartidos --ds-color-*/--ds-surface-*",
-            "socketsResolved": true,
-            "carrier": "shared-channel"
+      "internalChannels": [
+        {
+          "channelId": "--_ds-icon-frame-badge-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/ui/primitives/foundation/IconFrame",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/icon-frame"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/primitives/foundation/IconFrame"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ],
-        "reviewedFrom": "anatomy"
-      }
+        },
+        {
+          "channelId": "--_ds-icon-frame-badge-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/ui/primitives/foundation/IconFrame",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/icon-frame"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/primitives/foundation/IconFrame"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-icon-frame-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/ui/primitives/foundation/IconFrame",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/icon-frame"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/primitives/foundation/IconFrame"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-icon-frame-icon-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/ui/primitives/foundation/IconFrame",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/icon-frame"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/primitives/foundation/IconFrame"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
     },
     {
       "controlId": "typography.pairing",
@@ -1141,27 +1177,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "shape.corner",
-            "socketPattern": "--_ds-<comp>-radius",
-            "prop": "border-radius de contenedores",
-            "tier": "standard",
-            "examples": [
-              "--_ds-card-radius",
-              "--_ds-table-radius",
-              "--_ds-image-radius"
-            ],
-            "sockets": [
-              "--_ds-icon-frame-radius"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-icon-frame-radius",
+          "semanticOwner": "shape.radius-scale",
+          "producer": "packages/core/src/ui/primitives/foundation/IconFrame",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/icon-frame"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/primitives/foundation/IconFrame"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ],
-        "reviewedFrom": "anatomy"
-      }
+        }
+      ]
     },
     {
       "controlId": "shape.button-style",
@@ -1188,28 +1221,56 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "density.mode",
-            "socketPattern": "--_ds-<comp>-density-factor",
-            "prop": "altura de fila y padding de item",
-            "tier": "standard",
-            "examples": [
-              "--_ds-table-row-density-factor",
-              "--_ds-menu-item-density-factor"
-            ],
-            "sockets": [
-              "--_ds-icon-frame-badge-size",
-              "--_ds-icon-frame-padding",
-              "--_ds-icon-frame-size"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-icon-frame-badge-size",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/ui/primitives/foundation/IconFrame",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/icon-frame"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/primitives/foundation/IconFrame"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ],
-        "reviewedFrom": "anatomy"
-      }
+        },
+        {
+          "channelId": "--_ds-icon-frame-padding",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/ui/primitives/foundation/IconFrame",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/icon-frame"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/primitives/foundation/IconFrame"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-icon-frame-size",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/ui/primitives/foundation/IconFrame",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/icon-frame"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/primitives/foundation/IconFrame"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
     },
     {
       "controlId": "spacing.rhythm",
@@ -1238,23 +1299,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": null,
-            "socketPattern": null,
-            "prop": "sockets de familia derivados de anatomy (sin skin modern declarado)",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-icon-frame-loading-duration"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-icon-frame-loading-duration",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/ui/primitives/foundation/IconFrame",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/icon-frame"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/primitives/foundation/IconFrame"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ],
-        "reviewedFrom": "anatomy"
-      }
+        }
+      ]
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -1281,25 +1343,40 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "why": "socket heredado --_ds-icon-frame-glass-bg: consumidor natural de effect-intensity",
-        "source": "huecos-kimi",
-        "bindings": [
-          {
-            "root": "surface.finish",
-            "socketPattern": "--_ds-icon-frame-glass-bg",
-            "prop": "background-color de la placa de vidrio del icono",
-            "tier": "premium",
-            "sockets": [
-              "--_ds-icon-frame-glass-bg",
-              "--_ds-icon-frame-subtle-strength"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-icon-frame-glass-bg",
+          "semanticOwner": "surfaces.effect-intensity",
+          "producer": "packages/core/src/ui/primitives/foundation/IconFrame",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/icon-frame"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/primitives/foundation/IconFrame"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ],
-        "reviewedFrom": "anatomy"
-      }
+        },
+        {
+          "channelId": "--_ds-icon-frame-subtle-strength",
+          "semanticOwner": "surfaces.effect-intensity",
+          "producer": "packages/core/src/ui/primitives/foundation/IconFrame",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/icon-frame"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/primitives/foundation/IconFrame"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -1364,26 +1441,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "shape.edge",
-            "socketPattern": "--_ds-<comp>-border-style",
-            "prop": "marco de card/tabla/descripciones",
-            "tier": "standard",
-            "examples": [
-              "--_ds-card-border-style",
-              "--_ds-table-frame-style"
-            ],
-            "sockets": [
-              "--_ds-icon-frame-border-width"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-icon-frame-border-width",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/ui/primitives/foundation/IconFrame",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/icon-frame"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/primitives/foundation/IconFrame"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ],
-        "reviewedFrom": "anatomy"
-      }
+        }
+      ]
     },
     {
       "controlId": "token-overrides",
@@ -1467,27 +1542,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "icon.posture",
-            "socketPattern": null,
-            "prop": "stroke-width / fill",
-            "tier": "standard",
-            "examples": [
-              "Icon"
-            ],
-            "noSocketReason": "data-icon-posture heredado + --_ds-icon-stroke-width",
-            "socketsResolved": true,
-            "carrier": "attribute+shared-socket",
-            "sockets": [
-              "--_ds-icon-frame-icon-stroke-width"
-            ]
+      "internalChannels": [
+        {
+          "channelId": "--_ds-icon-frame-icon-stroke-width",
+          "semanticOwner": "profiles.icon",
+          "producer": "packages/core/src/ui/primitives/foundation/IconFrame",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/icon-frame"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/primitives/foundation/IconFrame"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ],
-        "reviewedFrom": "anatomy"
-      }
+        }
+      ]
     },
     {
       "controlId": "responsive.posture",

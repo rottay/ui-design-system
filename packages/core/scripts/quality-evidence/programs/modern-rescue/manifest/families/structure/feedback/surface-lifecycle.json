@@ -655,9 +655,7 @@
               "--_ds-surface-error-state-color",
               "--_ds-surface-stale-banner-bg"
             ],
-            "sockets": [
-              "--_ds-surface-lifecycle-<status>-color"
-            ],
+            "sockets": [],
             "socketsResolved": false
           },
           {
@@ -679,9 +677,13 @@
             "--ds-color-info-border",
             "--ds-spacing-2",
             "--ds-spacing-3"
+          ],
+          "PRESCRIPCION PARAMETRIZADA FUERA de internalChannels (FAM-PARAM patron 4): dominio no cerrado (ciclo de superficie vs semillas); adjudicacion pendiente; fase 3": [
+            "--_ds-surface-lifecycle-<status>-color"
           ]
         },
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -712,8 +714,12 @@
           "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
             "--ds-font-weight-bold",
             "--ds-font-weight-semibold"
+          ],
+          "CONSUMO (migracion): ownedBy structure/feedback/capability-anatomy#typography.pairing": [
+            "--_ds-capability-anatomy-label-tracking"
           ]
-        }
+        },
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -858,19 +864,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "why": "sockets heredados --_ds-loading-overlay-dots-duration y -pulse-duration",
-        "source": "huecos-kimi",
-        "bindings": [
-          {
-            "root": "motion.character",
-            "socketPattern": "--_ds-loading-dots-duration",
-            "prop": "animation-duration de dots/pulse del loading-overlay",
-            "tier": "standard"
+      "internalChannels": [
+        {
+          "channelId": "--_ds-loading-dots-duration",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/feedback/surface-lifecycle"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -908,7 +919,14 @@
             ]
           }
         ],
-        "reviewedFrom": "anatomy"
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "CONSUMO (migracion): ownedBy structure/feedback/capability-anatomy#surfaces.effect-intensity": [
+            "--_ds-capability-disabled-opacity",
+            "--_ds-capability-opacity"
+          ]
+        },
+        "migratedToInternalChannels": true
       }
     },
     {

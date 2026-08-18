@@ -1,0 +1,2410 @@
+{
+  "generated": true,
+  "generator": "cascade-backlog.mjs",
+  "schemaVersion": 1,
+  "controlId": "motion.dial",
+  "tier": "standard",
+  "rootChannel": "--ds-motion-duration-scale",
+  "homonymLaw": "stem = channelId sin el prefijo --ds-/--_ds-. El diff literal por channelId compara dos vocabularios distintos de frente (prescripcion 100% --_ds-*, alcance generado mayoria --ds-*) y da desalineacion total que no significa nada; la regla correcta es por homonimo.",
+  "planeVocabulary": [
+    "css",
+    "ts-compilers",
+    "ts-chrome-variables"
+  ],
+  "planeLaw": "El alcance transitivo sale del plano CSS unicamente. El vocabulario de planos es CERRADO y tiene TRES nombres (planeVocabulary: css, ts-compilers, ts-chrome-variables); planesNotScanned: ts-compilers, ts-chrome-variables. Una CLASE B puede ser en realidad CLASE A por cualquiera de los dos planos TS no escaneados; se declara, no se calla. CRITERIO FUNCIONAL, no postal: un archivo cuenta como productor cuando la compilacion en ejecucion emite el canal a traves de el. ts-compilers = escrituras explicitas vars[\"--ds-X\"] en el cuerpo del compilador (108 ocurrencias, 97 canales distintos en brand-theme 92 / appearance 6 / appearance-posture 10, mas 46 sitios de escritura templada; censo por ENUMERACION de fuente: 552 canales distintos = 183 literales + 378 interpolados). ts-chrome-variables = la tabla de mapeo de chrome-variables/index.ts, cuyos VALORES son los nombres de canal (censo por grep 1477: 477 como valor de tabla -- 352 derivados por 28 llamadas chromeVariableMap mas 125 literales -- y 1000 como clave de escritura directa; censo por ENUMERACION 1671 = 1154 literales + 546 interpolados, que es el que se usa para cobertura). Solape entre los dos planos TS: 8 canales, no 1 -- el 1 salia de comparar censos por grep. Union de semillas TS: 2215. Entra POR NOMBRE PROPIO y no diluido dentro de ts-compilers porque son figuras distintas y mezclarlas hace la cifra agregada no auditable por partes. Que chrome-variables viva fuera de las carpetas del compilador es DEUDA DE FASE 3 de ubicacion, no razon para descontarlo. radius-dial no es un plano: es una raiz de ts-compilers. COBERTURA (denominador 4547 canales leidos en el arbol de skin del motor modern, sembrando las 18 raices del manifiesto, variante generosa): solo-css 1490 = 32,8%; +ts-compilers 2438 = 53,6%; +ts-chrome-variables 2344 = 51,6%; UNION 2894 = 63,6%. Variante estricta: 25,9 / 47,4 / 47,7 / 60,8%. 1653 canales de U no tienen productor en NINGUN plano. Cifras y metodo completos en cascade-extract.mjs -> stats.coverage; son COTA INFERIOR por 3 emisiones interpoladas sin enumerador.",
+  "classLaw": {
+    "A": "el dial YA alcanza el homonimo --ds-X; falta solo abrir el socket en el sitio de lectura del skin: var(--_ds-X, var(--ds-X, literal)). Trabajo mecanico, una linea por sitio.",
+    "B": "el dial NO alcanza ni el homonimo; hacen falta el socket Y cablear el canal a la raiz. Trabajo de diseno."
+  },
+  "seedLaw": "alcance = BFS desde rootChannel MAS los 'to' de las derivations LIVE del root autorado (primer salto por seleccion de atributo, p.ej. chrome.anatomy: el grafo extraido clavea esas aristas por la var() leida, no por el atributo). Se excluyen literal-pin (fuera del dial, R8) y toIsPattern (pliegue a nivel de mapa, no canal literal).",
+  "inputs": {
+    "prescription": "manifest/cascade/roots/motion.dial.json (terminalReach, autorado)",
+    "reach": "manifest/cascade/extracted/css-edges.json (cascade-extract.mjs, plano CSS)"
+  },
+  "reach": {
+    "channels": 24,
+    "sockets": 0,
+    "bare": 0
+  },
+  "totals": {
+    "prescribed": 236,
+    "classA": 6,
+    "classB": 230
+  },
+  "families": [
+    {
+      "familyId": "pattern/commerce/pricing-table",
+      "sockets": [
+        {
+          "socket": "--_ds-pricing-table-motion-duration",
+          "state": "PRESCRIPCION",
+          "stem": "pricing-table-motion-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-pricing-table-motion-timing",
+          "state": "PRESCRIPCION",
+          "stem": "pricing-table-motion-timing",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/communication/activity-log",
+      "sockets": [
+        {
+          "socket": "--_ds-activity-log-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "activity-log-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/communication/assistant",
+      "sockets": [
+        {
+          "socket": "--_ds-assistant-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "assistant-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/communication/comment-thread",
+      "sockets": [
+        {
+          "socket": "--_ds-comment-thread-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "comment-thread-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/communication/live-feed",
+      "sockets": [
+        {
+          "socket": "--_ds-live-feed-skeleton-duration",
+          "state": "PRESCRIPCION",
+          "stem": "live-feed-skeleton-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-live-feed-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "live-feed-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/communication/notification-center",
+      "sockets": [
+        {
+          "socket": "--_ds-notification-center-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "notification-center-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/communication/presence",
+      "sockets": [
+        {
+          "socket": "--_ds-presence-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "presence-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/feedback/adaptive-overlay",
+      "sockets": [
+        {
+          "socket": "--_ds-adaptive-overlay-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "adaptive-overlay-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/feedback/empty-state",
+      "sockets": [
+        {
+          "socket": "--_ds-empty-char-cadence",
+          "state": "PRESCRIPCION",
+          "stem": "empty-char-cadence",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-empty-state-spinner-duration",
+          "state": "PRESCRIPCION",
+          "stem": "empty-state-spinner-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/forms/filter-builder",
+      "sockets": [
+        {
+          "socket": "--_ds-form-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "form-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/forms/filter-panel",
+      "sockets": [
+        {
+          "socket": "--_ds-form-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "form-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/forms/invoice-template",
+      "sockets": [
+        {
+          "socket": "--_ds-form-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "form-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/forms/pattern-form-builder",
+      "sockets": [
+        {
+          "socket": "--_ds-form-builder-skeleton-duration",
+          "state": "PRESCRIPCION",
+          "stem": "form-builder-skeleton-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/forms/step-wizard",
+      "sockets": [
+        {
+          "socket": "--_ds-step-wizard-skeleton-duration",
+          "state": "PRESCRIPCION",
+          "stem": "step-wizard-skeleton-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/navigation/command-palette",
+      "sockets": [
+        {
+          "socket": "--_ds-command-palette-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "command-palette-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/navigation/environment-toggle",
+      "sockets": [
+        {
+          "socket": "--_ds-environment-toggle-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "environment-toggle-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/navigation/pattern-locale-switcher",
+      "sockets": [
+        {
+          "socket": "--_ds-locale-switcher-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "locale-switcher-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/navigation/shortcuts-overlay",
+      "sockets": [
+        {
+          "socket": "--_ds-shortcuts-overlay-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "shortcuts-overlay-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/navigation/workspace-switcher",
+      "sockets": [
+        {
+          "socket": "--_ds-workspace-switcher-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "workspace-switcher-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/shell/cockpit-header",
+      "sockets": [
+        {
+          "socket": "--_ds-page-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "page-transition-duration",
+          "class": "A",
+          "homonym": "--ds-page-transition-duration",
+          "homonymReaders": [
+            {
+              "file": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css",
+              "line": 440,
+              "via": "animation",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css",
+              "line": 446,
+              "via": "animation",
+              "kind": "leaf-read"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/shell/feature-workspace-frame",
+      "sockets": [
+        {
+          "socket": "--_ds-feature-workspace-skeleton-duration",
+          "state": "PRESCRIPCION",
+          "stem": "feature-workspace-skeleton-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/shell/pattern-page-shell",
+      "sockets": [
+        {
+          "socket": "--_ds-page-header-sheen-duration",
+          "state": "PRESCRIPCION",
+          "stem": "page-header-sheen-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/shell/workbench-header",
+      "sockets": [
+        {
+          "socket": "--_ds-page-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "page-transition-duration",
+          "class": "A",
+          "homonym": "--ds-page-transition-duration",
+          "homonymReaders": [
+            {
+              "file": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css",
+              "line": 440,
+              "via": "animation",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css",
+              "line": 446,
+              "via": "animation",
+              "kind": "leaf-read"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/visualization/ascii-diagram",
+      "sockets": [
+        {
+          "socket": "--_ds-duration-slow",
+          "state": "PRESCRIPCION",
+          "stem": "duration-slow",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-kanban-line-cadence",
+          "state": "PRESCRIPCION",
+          "stem": "kanban-line-cadence",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/visualization/pattern-tree-view",
+      "sockets": [
+        {
+          "socket": "--_ds-duration-fast",
+          "state": "PRESCRIPCION",
+          "stem": "duration-fast",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-kanban-line-cadence",
+          "state": "PRESCRIPCION",
+          "stem": "kanban-line-cadence",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-tree-view-skeleton-duration",
+          "state": "PRESCRIPCION",
+          "stem": "tree-view-skeleton-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/workflow/approval-inbox",
+      "sockets": [
+        {
+          "socket": "--_ds-steps-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "steps-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/workflow/approval-workflow",
+      "sockets": [
+        {
+          "socket": "--_ds-approval-pulse-duration",
+          "state": "PRESCRIPCION",
+          "stem": "approval-pulse-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/workflow/moderation-gallery",
+      "sockets": [
+        {
+          "socket": "--_ds-steps-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "steps-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/workflow/operational-ledger",
+      "sockets": [
+        {
+          "socket": "--_ds-steps-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "steps-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/workflow/shift-matrix",
+      "sockets": [
+        {
+          "socket": "--_ds-steps-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "steps-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/display/avatar",
+      "sockets": [
+        {
+          "socket": "--_ds-avatar-active-scale",
+          "state": "PRESCRIPCION",
+          "stem": "avatar-active-scale",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-avatar-hover-scale",
+          "state": "PRESCRIPCION",
+          "stem": "avatar-hover-scale",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-avatar-hover-transform",
+          "state": "PRESCRIPCION",
+          "stem": "avatar-hover-transform",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-avatar-press-transform",
+          "state": "PRESCRIPCION",
+          "stem": "avatar-press-transform",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-avatar-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "avatar-transition-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-avatar-transition-timing",
+          "state": "PRESCRIPCION",
+          "stem": "avatar-transition-timing",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/display/badge",
+      "sockets": [
+        {
+          "socket": "--_ds-badge-hover-transform",
+          "state": "PRESCRIPCION",
+          "stem": "badge-hover-transform",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-badge-motion-duration",
+          "state": "PRESCRIPCION",
+          "stem": "badge-motion-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-badge-motion-easing",
+          "state": "PRESCRIPCION",
+          "stem": "badge-motion-easing",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-badge-press-transform",
+          "state": "PRESCRIPCION",
+          "stem": "badge-press-transform",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-badge-pulse-duration",
+          "state": "PRESCRIPCION",
+          "stem": "badge-pulse-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-badge-pulse-scale",
+          "state": "PRESCRIPCION",
+          "stem": "badge-pulse-scale",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-badge-pulse-timing",
+          "state": "PRESCRIPCION",
+          "stem": "badge-pulse-timing",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-badge-remove-hover-transform",
+          "state": "PRESCRIPCION",
+          "stem": "badge-remove-hover-transform",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-badge-spinner-duration",
+          "state": "PRESCRIPCION",
+          "stem": "badge-spinner-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/display/card",
+      "sockets": [
+        {
+          "socket": "--_ds-card-active-transform",
+          "state": "PRESCRIPCION",
+          "stem": "card-active-transform",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-card-hover-transform",
+          "state": "PRESCRIPCION",
+          "stem": "card-hover-transform",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-card-image-loading-duration",
+          "state": "PRESCRIPCION",
+          "stem": "card-image-loading-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-card-interactive-transform-hover",
+          "state": "PRESCRIPCION",
+          "stem": "card-interactive-transform-hover",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-card-skeleton-duration",
+          "state": "PRESCRIPCION",
+          "stem": "card-skeleton-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-card-spinner-duration",
+          "state": "PRESCRIPCION",
+          "stem": "card-spinner-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-card-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "card-transition-duration",
+          "class": "A",
+          "homonym": "--ds-card-transition-duration",
+          "homonymReaders": [
+            {
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/card.css",
+              "line": 553,
+              "via": "--ds-card-transition",
+              "kind": "channel-reader"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
+              "line": 73,
+              "via": "transition",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
+              "line": 92,
+              "via": "transition",
+              "kind": "leaf-read"
+            }
+          ]
+        },
+        {
+          "socket": "--_ds-card-transition-timing",
+          "state": "PRESCRIPCION",
+          "stem": "card-transition-timing",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/display/carousel",
+      "sockets": [
+        {
+          "socket": "--_ds-carousel-slide-transform",
+          "state": "PRESCRIPCION",
+          "stem": "carousel-slide-transform",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/display/code-block",
+      "sockets": [
+        {
+          "socket": "--_ds-code-block-copy-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "code-block-copy-transition-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-code-block-motion-duration",
+          "state": "PRESCRIPCION",
+          "stem": "code-block-motion-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/display/descriptions",
+      "sockets": [
+        {
+          "socket": "--_ds-descriptions-label-transform",
+          "state": "PRESCRIPCION",
+          "stem": "descriptions-label-transform",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/display/icon-frame",
+      "sockets": [
+        {
+          "socket": "--_ds-icon-frame-loading-duration",
+          "state": "PRESCRIPCION",
+          "stem": "icon-frame-loading-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/display/image",
+      "sockets": [
+        {
+          "socket": "--_ds-image-pulse-duration",
+          "state": "PRESCRIPCION",
+          "stem": "image-pulse-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-image-reveal-duration",
+          "state": "PRESCRIPCION",
+          "stem": "image-reveal-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-image-reveal-timing",
+          "state": "PRESCRIPCION",
+          "stem": "image-reveal-timing",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/feedback/alert",
+      "sockets": [
+        {
+          "socket": "--_ds-alert-action-active-transform",
+          "state": "PRESCRIPCION",
+          "stem": "alert-action-active-transform",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/feedback/loading-indicator",
+      "sockets": [
+        {
+          "socket": "--_ds-loading-indicator-duration",
+          "state": "PRESCRIPCION",
+          "stem": "loading-indicator-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/feedback/message",
+      "sockets": [
+        {
+          "socket": "--_ds-message-duration",
+          "state": "PRESCRIPCION",
+          "stem": "message-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-message-enter-duration",
+          "state": "PRESCRIPCION",
+          "stem": "message-enter-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-message-enter-easing",
+          "state": "PRESCRIPCION",
+          "stem": "message-enter-easing",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-message-exit-duration",
+          "state": "PRESCRIPCION",
+          "stem": "message-exit-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-message-exit-easing",
+          "state": "PRESCRIPCION",
+          "stem": "message-exit-easing",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/feedback/notification",
+      "sockets": [
+        {
+          "socket": "--_ds-notification-duration",
+          "state": "PRESCRIPCION",
+          "stem": "notification-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-notification-enter-duration",
+          "state": "PRESCRIPCION",
+          "stem": "notification-enter-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-notification-enter-easing",
+          "state": "PRESCRIPCION",
+          "stem": "notification-enter-easing",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-notification-exit-duration",
+          "state": "PRESCRIPCION",
+          "stem": "notification-exit-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-notification-exit-easing",
+          "state": "PRESCRIPCION",
+          "stem": "notification-exit-easing",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/feedback/rate",
+      "sockets": [
+        {
+          "socket": "--_ds-rate-hover-scale",
+          "state": "PRESCRIPCION",
+          "stem": "rate-hover-scale",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/feedback/skeleton",
+      "sockets": [
+        {
+          "socket": "--_ds-skeleton-animation-duration",
+          "state": "PRESCRIPCION",
+          "stem": "skeleton-animation-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-skeleton-animation-easing",
+          "state": "PRESCRIPCION",
+          "stem": "skeleton-animation-easing",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/feedback/spinner",
+      "sockets": [
+        {
+          "socket": "--_ds-spinner-duration",
+          "state": "PRESCRIPCION",
+          "stem": "spinner-duration",
+          "class": "A",
+          "homonym": "--ds-spinner-duration",
+          "homonymReaders": [
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css",
+              "line": 290,
+              "via": "animation",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css",
+              "line": 67,
+              "via": "animation",
+              "kind": "leaf-read"
+            }
+          ]
+        },
+        {
+          "socket": "--_ds-spinner-spin-easing",
+          "state": "PRESCRIPCION",
+          "stem": "spinner-spin-easing",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/feedback/toast",
+      "sockets": [
+        {
+          "socket": "--_ds-toast-duration",
+          "state": "PRESCRIPCION",
+          "stem": "toast-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-toast-enter-duration",
+          "state": "PRESCRIPCION",
+          "stem": "toast-enter-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-toast-enter-easing",
+          "state": "PRESCRIPCION",
+          "stem": "toast-enter-easing",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-toast-exit-duration",
+          "state": "PRESCRIPCION",
+          "stem": "toast-exit-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-toast-exit-easing",
+          "state": "PRESCRIPCION",
+          "stem": "toast-exit-easing",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-toast-stack-transform",
+          "state": "PRESCRIPCION",
+          "stem": "toast-stack-transform",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/inputs/auto-complete",
+      "sockets": [
+        {
+          "socket": "--_ds-autocomplete-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "autocomplete-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/inputs/button",
+      "sockets": [
+        {
+          "socket": "--_ds-button-active-filter",
+          "state": "PRESCRIPCION",
+          "stem": "button-active-filter",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-button-active-transform",
+          "state": "PRESCRIPCION",
+          "stem": "button-active-transform",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-button-attention-iteration-count",
+          "state": "PRESCRIPCION",
+          "stem": "button-attention-iteration-count",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-button-hover-filter",
+          "state": "PRESCRIPCION",
+          "stem": "button-hover-filter",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-button-hover-transform",
+          "state": "PRESCRIPCION",
+          "stem": "button-hover-transform",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-button-icon-active-transform",
+          "state": "PRESCRIPCION",
+          "stem": "button-icon-active-transform",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-button-icon-hover-transform",
+          "state": "PRESCRIPCION",
+          "stem": "button-icon-hover-transform",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-button-spinner-color",
+          "state": "PRESCRIPCION",
+          "stem": "button-spinner-color",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-button-spinner-duration",
+          "state": "PRESCRIPCION",
+          "stem": "button-spinner-duration",
+          "class": "A",
+          "homonym": "--ds-button-spinner-duration",
+          "homonymReaders": [
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+              "line": 261,
+              "via": "animation",
+              "kind": "leaf-read"
+            }
+          ]
+        },
+        {
+          "socket": "--_ds-button-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "button-transition-duration",
+          "class": "A",
+          "homonym": "--ds-button-transition-duration",
+          "homonymReaders": [
+            {
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+              "line": 311,
+              "via": "--ds-button-transition",
+              "kind": "channel-reader"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+              "line": 117,
+              "via": "transition",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+              "line": 157,
+              "via": "transition",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+              "line": 219,
+              "via": "transition",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/personality.css",
+              "line": 111,
+              "via": "--ds-button-transition",
+              "kind": "channel-reader"
+            }
+          ]
+        },
+        {
+          "socket": "--_ds-button-transition-timing",
+          "state": "PRESCRIPCION",
+          "stem": "button-transition-timing",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/inputs/cascader",
+      "sockets": [
+        {
+          "socket": "--_ds-cascader-spinner-duration",
+          "state": "PRESCRIPCION",
+          "stem": "cascader-spinner-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-cascader-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "cascader-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/inputs/checkbox",
+      "sockets": [
+        {
+          "socket": "--_ds-checkbox-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "checkbox-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/inputs/color-picker",
+      "sockets": [
+        {
+          "socket": "--_ds-color-picker-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "color-picker-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/inputs/form",
+      "sockets": [
+        {
+          "socket": "--_ds-form-spinner-duration",
+          "state": "PRESCRIPCION",
+          "stem": "form-spinner-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-form-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "form-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/inputs/input",
+      "sockets": [
+        {
+          "socket": "--_ds-input-action-active-transform",
+          "state": "PRESCRIPCION",
+          "stem": "input-action-active-transform",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-input-loading-duration",
+          "state": "PRESCRIPCION",
+          "stem": "input-loading-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-input-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "input-transition-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-input-transition-timing",
+          "state": "PRESCRIPCION",
+          "stem": "input-transition-timing",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/inputs/mentions",
+      "sockets": [
+        {
+          "socket": "--_ds-mentions-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "mentions-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/inputs/otp-input",
+      "sockets": [
+        {
+          "socket": "--_ds-otp-input-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "otp-input-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/inputs/radio",
+      "sockets": [
+        {
+          "socket": "--_ds-radio-dot-scale",
+          "state": "PRESCRIPCION",
+          "stem": "radio-dot-scale",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-radio-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "radio-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/inputs/select",
+      "sockets": [
+        {
+          "socket": "--_ds-select-action-active-transform",
+          "state": "PRESCRIPCION",
+          "stem": "select-action-active-transform",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-select-arrow-rotate",
+          "state": "PRESCRIPCION",
+          "stem": "select-arrow-rotate",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-select-arrow-rotate-open",
+          "state": "PRESCRIPCION",
+          "stem": "select-arrow-rotate-open",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-select-enter-y",
+          "state": "PRESCRIPCION",
+          "stem": "select-enter-y",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/inputs/switch",
+      "sockets": [
+        {
+          "socket": "--_ds-switch-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "switch-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/inputs/toggle",
+      "sockets": [
+        {
+          "socket": "--_ds-toggle-checked-hover-filter",
+          "state": "PRESCRIPCION",
+          "stem": "toggle-checked-hover-filter",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-toggle-loading-duration",
+          "state": "PRESCRIPCION",
+          "stem": "toggle-loading-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-toggle-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "toggle-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/inputs/tree-select",
+      "sockets": [
+        {
+          "socket": "--_ds-tree-select-spinner-duration",
+          "state": "PRESCRIPCION",
+          "stem": "tree-select-spinner-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/inputs/voice-input-button",
+      "sockets": [
+        {
+          "socket": "--_ds-voice-input-button-pulse-duration",
+          "state": "PRESCRIPCION",
+          "stem": "voice-input-button-pulse-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/layout/aspect-ratio",
+      "sockets": [
+        {
+          "socket": "--_ds-aspect-ratio-motion-duration",
+          "state": "PRESCRIPCION",
+          "stem": "aspect-ratio-motion-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-aspect-ratio-motion-easing",
+          "state": "PRESCRIPCION",
+          "stem": "aspect-ratio-motion-easing",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/layout/collapse",
+      "sockets": [
+        {
+          "socket": "--_ds-collapse-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "collapse-transition-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-collapse-transition-timing",
+          "state": "PRESCRIPCION",
+          "stem": "collapse-transition-timing",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/layout/container",
+      "sockets": [
+        {
+          "socket": "--_ds-container-motion-duration",
+          "state": "PRESCRIPCION",
+          "stem": "container-motion-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-container-motion-easing",
+          "state": "PRESCRIPCION",
+          "stem": "container-motion-easing",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/layout/divider",
+      "sockets": [
+        {
+          "socket": "--_ds-divider-motion-duration",
+          "state": "PRESCRIPCION",
+          "stem": "divider-motion-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-divider-motion-easing",
+          "state": "PRESCRIPCION",
+          "stem": "divider-motion-easing",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/layout/layout",
+      "sockets": [
+        {
+          "socket": "--_ds-layout-sider-collapse-duration",
+          "state": "PRESCRIPCION",
+          "stem": "layout-sider-collapse-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-layout-sider-collapse-timing",
+          "state": "PRESCRIPCION",
+          "stem": "layout-sider-collapse-timing",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/layout/resize-handle",
+      "sockets": [
+        {
+          "socket": "--_ds-resize-handle-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "resize-handle-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/layout/semantic-surface",
+      "sockets": [
+        {
+          "socket": "--_ds-semantic-surface-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "semantic-surface-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/layout/space",
+      "sockets": [
+        {
+          "socket": "--_ds-space-motion-duration",
+          "state": "PRESCRIPCION",
+          "stem": "space-motion-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-space-motion-easing",
+          "state": "PRESCRIPCION",
+          "stem": "space-motion-easing",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/layout/splitter",
+      "sockets": [
+        {
+          "socket": "--_ds-splitter-gutter-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "splitter-gutter-transition-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-splitter-gutter-transition-timing",
+          "state": "PRESCRIPCION",
+          "stem": "splitter-gutter-transition-timing",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/navigation/affix",
+      "sockets": [
+        {
+          "socket": "--_ds-affix-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "affix-transition-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-affix-transition-timing",
+          "state": "PRESCRIPCION",
+          "stem": "affix-transition-timing",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/navigation/anchor",
+      "sockets": [
+        {
+          "socket": "--_ds-anchor-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "anchor-transition-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-anchor-transition-timing",
+          "state": "PRESCRIPCION",
+          "stem": "anchor-transition-timing",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/navigation/back-top",
+      "sockets": [
+        {
+          "socket": "--_ds-back-top-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "back-top-transition-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-backtop-enter-duration",
+          "state": "PRESCRIPCION",
+          "stem": "backtop-enter-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-backtop-hover-transform",
+          "state": "PRESCRIPCION",
+          "stem": "backtop-hover-transform",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-backtop-pressed-transform",
+          "state": "PRESCRIPCION",
+          "stem": "backtop-pressed-transform",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-backtop-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "backtop-transition-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-backtop-transition-timing",
+          "state": "PRESCRIPCION",
+          "stem": "backtop-transition-timing",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/navigation/breadcrumb",
+      "sockets": [
+        {
+          "socket": "--_ds-breadcrumb-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "breadcrumb-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/navigation/float-button",
+      "sockets": [
+        {
+          "socket": "--_ds-float-button-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "float-button-transition-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-floatbutton-panel-duration",
+          "state": "PRESCRIPCION",
+          "stem": "floatbutton-panel-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-floatbutton-panel-timing",
+          "state": "PRESCRIPCION",
+          "stem": "floatbutton-panel-timing",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/navigation/link",
+      "sockets": [
+        {
+          "socket": "--_ds-link-motion-duration",
+          "state": "PRESCRIPCION",
+          "stem": "link-motion-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-link-motion-easing",
+          "state": "PRESCRIPCION",
+          "stem": "link-motion-easing",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-link-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "link-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/navigation/menu",
+      "sockets": [
+        {
+          "socket": "--_ds-menu-panel-enter-distance",
+          "state": "PRESCRIPCION",
+          "stem": "menu-panel-enter-distance",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-menu-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "menu-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/navigation/pagination",
+      "sockets": [
+        {
+          "socket": "--_ds-pagination-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "pagination-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/navigation/segmented",
+      "sockets": [
+        {
+          "socket": "--_ds-segmented-item-transform-selected",
+          "state": "PRESCRIPCION",
+          "stem": "segmented-item-transform-selected",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-segmented-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "segmented-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/navigation/stepper",
+      "sockets": [
+        {
+          "socket": "--_ds-stepper-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "stepper-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/navigation/steps",
+      "sockets": [
+        {
+          "socket": "--_ds-steps-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "steps-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/navigation/tabs",
+      "sockets": [
+        {
+          "socket": "--_ds-tabs-active-reveal-duration",
+          "state": "PRESCRIPCION",
+          "stem": "tabs-active-reveal-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-tabs-active-transform",
+          "state": "PRESCRIPCION",
+          "stem": "tabs-active-transform",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-tabs-icon-transform-active",
+          "state": "PRESCRIPCION",
+          "stem": "tabs-icon-transform-active",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-tabs-loading-duration",
+          "state": "PRESCRIPCION",
+          "stem": "tabs-loading-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-tabs-motion-duration",
+          "state": "PRESCRIPCION",
+          "stem": "tabs-motion-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-tabs-motion-easing",
+          "state": "PRESCRIPCION",
+          "stem": "tabs-motion-easing",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-tabs-panel-motion-duration",
+          "state": "PRESCRIPCION",
+          "stem": "tabs-panel-motion-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-tabs-panel-motion-easing",
+          "state": "PRESCRIPCION",
+          "stem": "tabs-panel-motion-easing",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-tabs-pressed-transform",
+          "state": "PRESCRIPCION",
+          "stem": "tabs-pressed-transform",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-tabs-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "tabs-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/overlay/alert-dialog",
+      "sockets": [
+        {
+          "socket": "--_ds-alert-dialog-motion-scale",
+          "state": "PRESCRIPCION",
+          "stem": "alert-dialog-motion-scale",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-alert-dialog-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "alert-dialog-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/overlay/confirm-dialog",
+      "sockets": [
+        {
+          "socket": "--_ds-confirm-dialog-motion-scale",
+          "state": "PRESCRIPCION",
+          "stem": "confirm-dialog-motion-scale",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-confirm-dialog-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "confirm-dialog-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/overlay/context-menu",
+      "sockets": [
+        {
+          "socket": "--_ds-context-menu-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "context-menu-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/overlay/dropdown",
+      "sockets": [
+        {
+          "socket": "--_ds-dropdown-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "dropdown-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/overlay/hover-card",
+      "sockets": [
+        {
+          "socket": "--_ds-hover-card-motion-scale",
+          "state": "PRESCRIPCION",
+          "stem": "hover-card-motion-scale",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-hover-card-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "hover-card-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/overlay/popconfirm",
+      "sockets": [
+        {
+          "socket": "--_ds-popconfirm-motion-scale",
+          "state": "PRESCRIPCION",
+          "stem": "popconfirm-motion-scale",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-popconfirm-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "popconfirm-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/overlay/popover",
+      "sockets": [
+        {
+          "socket": "--_ds-popover-closed-transform",
+          "state": "PRESCRIPCION",
+          "stem": "popover-closed-transform",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-popover-enter-duration",
+          "state": "PRESCRIPCION",
+          "stem": "popover-enter-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-popover-enter-easing",
+          "state": "PRESCRIPCION",
+          "stem": "popover-enter-easing",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-popover-motion-scale",
+          "state": "PRESCRIPCION",
+          "stem": "popover-motion-scale",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-popover-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "popover-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/overlay/sheet",
+      "sockets": [
+        {
+          "socket": "--_ds-sheet-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "sheet-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/overlay/tour",
+      "sockets": [
+        {
+          "socket": "--_ds-tour-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "tour-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/overlay/watermark",
+      "sockets": [
+        {
+          "socket": "--_ds-watermark-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "watermark-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/dashboard/dashboard-insights",
+      "sockets": [
+        {
+          "socket": "--_ds-metric-card-hover-transform",
+          "state": "PRESCRIPCION",
+          "stem": "metric-card-hover-transform",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/dashboard/data-terminal-card",
+      "sockets": [
+        {
+          "socket": "--_ds-dtc-duration-ambient",
+          "state": "PRESCRIPCION",
+          "stem": "dtc-duration-ambient",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-dtc-duration-drift",
+          "state": "PRESCRIPCION",
+          "stem": "dtc-duration-drift",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-dtc-duration-entrance",
+          "state": "PRESCRIPCION",
+          "stem": "dtc-duration-entrance",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-dtc-duration-flow",
+          "state": "PRESCRIPCION",
+          "stem": "dtc-duration-flow",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-dtc-duration-heartbeat",
+          "state": "PRESCRIPCION",
+          "stem": "dtc-duration-heartbeat",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-dtc-duration-pulse",
+          "state": "PRESCRIPCION",
+          "stem": "dtc-duration-pulse",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-dtc-duration-scan",
+          "state": "PRESCRIPCION",
+          "stem": "dtc-duration-scan",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-dtc-duration-tick",
+          "state": "PRESCRIPCION",
+          "stem": "dtc-duration-tick",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/dashboard/stats-header",
+      "sockets": [
+        {
+          "socket": "--_ds-stats-header-ping-duration",
+          "state": "PRESCRIPCION",
+          "stem": "stats-header-ping-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/feedback/capability-anatomy",
+      "sockets": [
+        {
+          "socket": "--_ds-loading-dots-duration",
+          "state": "PRESCRIPCION",
+          "stem": "loading-dots-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/feedback/loading-overlay",
+      "sockets": [
+        {
+          "socket": "--_ds-loading-dots-duration",
+          "state": "PRESCRIPCION",
+          "stem": "loading-dots-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/feedback/surface-lifecycle",
+      "sockets": [
+        {
+          "socket": "--_ds-loading-dots-duration",
+          "state": "PRESCRIPCION",
+          "stem": "loading-dots-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/collection-header",
+      "sockets": [
+        {
+          "socket": "--_ds-collection-header-sheen-duration",
+          "state": "PRESCRIPCION",
+          "stem": "collection-header-sheen-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/dashboard-header",
+      "sockets": [
+        {
+          "socket": "--_ds-dashboard-header-sheen-duration",
+          "state": "PRESCRIPCION",
+          "stem": "dashboard-header-sheen-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/detail-header",
+      "sockets": [
+        {
+          "socket": "--_ds-detail-header-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "detail-header-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/edit-header",
+      "sockets": [
+        {
+          "socket": "--_ds-edit-header-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "edit-header-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/form-header",
+      "sockets": [
+        {
+          "socket": "--_ds-form-header-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "form-header-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/header-surface",
+      "sockets": [
+        {
+          "socket": "--_ds-header-surface-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "header-surface-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/mobile-header",
+      "sockets": [
+        {
+          "socket": "--_ds-mobile-header-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "mobile-header-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/section-frame",
+      "sockets": [
+        {
+          "socket": "--_ds-section-frame-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "section-frame-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/shell/app-shell",
+      "sockets": [
+        {
+          "socket": "--_ds-app-shell-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "app-shell-transition-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-shell-collapse-transition",
+          "state": "PRESCRIPCION",
+          "stem": "shell-collapse-transition",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/shell/bottom-tab-bar",
+      "sockets": [
+        {
+          "socket": "--_ds-bottom-tab-bar-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "bottom-tab-bar-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/shell/page-shell-surface",
+      "sockets": [
+        {
+          "socket": "--_ds-page-shell-surface-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "page-shell-surface-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/shell/surface-chrome",
+      "sockets": [
+        {
+          "socket": "--_ds-surface-chrome-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "surface-chrome-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/shell/workspace-shell",
+      "sockets": [
+        {
+          "socket": "--_ds-workspace-shell-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "workspace-shell-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/action-dock",
+      "sockets": [
+        {
+          "socket": "--_ds-action-dock-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "action-dock-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/active-filters-bar",
+      "sockets": [
+        {
+          "socket": "--_ds-active-filters-bar-motion-duration",
+          "state": "PRESCRIPCION",
+          "stem": "active-filters-bar-motion-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-active-filters-bar-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "active-filters-bar-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/column-menu",
+      "sockets": [
+        {
+          "socket": "--_ds-column-menu-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "column-menu-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/connected-command-palette",
+      "sockets": [
+        {
+          "socket": "--_ds-connected-command-palette-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "connected-command-palette-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/export-button",
+      "sockets": [
+        {
+          "socket": "--_ds-export-button-toast-duration",
+          "state": "PRESCRIPCION",
+          "stem": "export-button-toast-duration",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-export-button-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "export-button-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/field-filters-panel",
+      "sockets": [
+        {
+          "socket": "--_ds-field-filters-panel-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "field-filters-panel-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/saved-views-menu",
+      "sockets": [
+        {
+          "socket": "--_ds-saved-views-menu-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "saved-views-menu-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/scope-switcher",
+      "sockets": [
+        {
+          "socket": "--_ds-scope-switcher-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "scope-switcher-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/search-command-bar",
+      "sockets": [
+        {
+          "socket": "--_ds-search-command-bar-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "search-command-bar-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/selection-preview-rail",
+      "sockets": [
+        {
+          "socket": "--_ds-selection-preview-rail-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "selection-preview-rail-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/table-toolbar",
+      "sockets": [
+        {
+          "socket": "--_ds-table-toolbar-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "table-toolbar-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/view-mode-switcher",
+      "sockets": [
+        {
+          "socket": "--_ds-view-mode-switcher-transition-duration",
+          "state": "PRESCRIPCION",
+          "stem": "view-mode-switcher-transition-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "surface/data/dashboard",
+      "sockets": [
+        {
+          "socket": "--_ds-dashboard-skeleton-duration",
+          "state": "PRESCRIPCION",
+          "stem": "dashboard-skeleton-duration",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    }
+  ]
+}

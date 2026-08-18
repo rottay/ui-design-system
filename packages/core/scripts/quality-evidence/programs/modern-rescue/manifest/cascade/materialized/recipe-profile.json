@@ -1,0 +1,13 @@
+{
+  "generated": true,
+  "generator": "cascade-materialize.mjs",
+  "schemaVersion": 1,
+  "controlId": "recipe-profile",
+  "tier": "pro",
+  "inputs": {
+    "variantsFrom": "manifest/controls/recipe-profile.json (calibration.normalizedStops)",
+    "rulesFrom": "manifest/cascade/extracted/css-edges.json (cascade-extract.mjs)",
+    "authoredRoot": "manifest/cascade/roots/recipe-profile.json"
+  },
+  "notMaterializable": "profile-id: seleccion gobernada de registro (fail-closed); cero descendientes en el grafo extraido (ver root autorado)"
+}

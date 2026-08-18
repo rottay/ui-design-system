@@ -1,0 +1,2137 @@
+{
+  "schemaVersion": 1,
+  "rootId": "typography.scale",
+  "tier": "standard",
+  "rootChannel": {
+    "channel": "--ds-type-scale",
+    "emission": [
+      {
+        "kind": "compiler-emit",
+        "site": "packages/core/src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts",
+        "clampSite": "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts",
+        "note": "clamp T1 TENANT_THEME_TYPE_SCALE_BOUNDS {0.9,1.1} (posture:127-134; constante tenant-theme:507-510); techo VINCULANTE tenant T3 {0.92,1.08} (rechazo)"
+      }
+    ]
+  },
+  "dependsOn": [],
+  "derivations": [
+    {
+      "from": "--ds-type-scale",
+      "to": "--ds-font-size-*",
+      "rule": {
+        "kind": "calc-multiply",
+        "formula": "rampa de font-size multiplicada por el dial"
+      },
+      "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+      "line": 608,
+      "state": "LIVE",
+      "toIsPattern": true,
+      "note": "pliegue real: la rampa --ds-font-size-{xs..6xl} multiplicada por var(--ds-type-scale, 1) en default.css:608-617, mas los pasos 2xs/md/7xl-9xl en foundation/base/typography.css:62-76 y el rol semantico --ds-type-*-font-size en default.css:535. La familia --ds-text-* la emite setTypeRampVariables (brand-theme/index.ts:1185-1195) con tamanos LITERALES de TYPE_RAMP (:1131-1167) y NO lee el dial. Adjudicado 2026-08-18: --ds-text-* es familia de compatibilidad de bajo alcance (2 archivos del skin modern, ninguno de ellos lector de tamano - data-table.css lee --ds-text-eyebrow-letter-spacing/-transform y timeline.css lee --ds-text-primary, que es color - mas 7 archivos del segundo arbol de skin y 3 sitios tsx de produccion) frente a --ds-font-size-* (94 archivos del skin modern, 63 del segundo arbol, 227 sitios tsx). Por lo tanto --ds-text-* no es la ruta de la impronta ni un defecto que haya que cablear"
+    }
+  ],
+  "terminalReach": [
+    {
+      "channelId": "--_ds-pricing-table-price-amount-size",
+      "familyId": "pattern/commerce/pricing-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-pricing-table-price-size",
+      "familyId": "pattern/commerce/pricing-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-activity-log-font-size",
+      "familyId": "pattern/communication/activity-log",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-assistant-font-size",
+      "familyId": "pattern/communication/assistant",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-comment-thread-font-size",
+      "familyId": "pattern/communication/comment-thread",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-live-feed-control-font-size",
+      "familyId": "pattern/communication/live-feed",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-live-feed-font-size",
+      "familyId": "pattern/communication/live-feed",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-notification-center-font-size",
+      "familyId": "pattern/communication/notification-center",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-presence-font-size",
+      "familyId": "pattern/communication/presence",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-text-body-xs-size",
+      "familyId": "pattern/customization/pattern-brand-studio",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-bulk-select-toggle-cell-font-size",
+      "familyId": "pattern/data/bulk-select-toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-column-settings-cell-font-size",
+      "familyId": "pattern/data/column-settings",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-column-settings-label-font-size",
+      "familyId": "pattern/data/column-settings",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-column-settings-pin-side-font-size",
+      "familyId": "pattern/data/column-settings",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-decision-comparison-body-font-size",
+      "familyId": "pattern/data/decision-comparison",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-decision-comparison-cell-font-size",
+      "familyId": "pattern/data/decision-comparison",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-decision-comparison-detail-font-size",
+      "familyId": "pattern/data/decision-comparison",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-decision-comparison-title-font-size",
+      "familyId": "pattern/data/decision-comparison",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-decision-panorama-cell-font-size",
+      "familyId": "pattern/data/decision-panorama",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-detail-panel-cell-font-size",
+      "familyId": "pattern/data/detail-panel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-file-manager-cell-font-size",
+      "familyId": "pattern/data/file-manager",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-list-toolbar-cell-font-size",
+      "familyId": "pattern/data/list-toolbar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toolbar-search-font-size",
+      "familyId": "pattern/data/list-toolbar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toolbar-title-font-size",
+      "familyId": "pattern/data/list-toolbar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-mono-stat-cell-font-size",
+      "familyId": "pattern/data/mono-stat",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-data-table-cell-font-size",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-caption-font-size",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-cell-line-height",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-editor-error-font-size",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-editor-input-line-height",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-editorial-mobile-title-size",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-empty-title-font-size",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-typography-label-size",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-typography-supporting-size",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-gallery-view-cell-font-size",
+      "familyId": "pattern/data/pattern-gallery-view",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-grid-view-cell-font-size",
+      "familyId": "pattern/data/pattern-grid-view",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stats-grid-cell-font-size",
+      "familyId": "pattern/data/pattern-stats-grid",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-facts-cell-font-size",
+      "familyId": "pattern/data/record-facts",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-facts-label-size",
+      "familyId": "pattern/data/record-facts",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-facts-title-size",
+      "familyId": "pattern/data/record-facts",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-saved-views-cell-font-size",
+      "familyId": "pattern/data/saved-views",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-saved-views-input-font-size",
+      "familyId": "pattern/data/saved-views",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-saved-views-pill-font-size",
+      "familyId": "pattern/data/saved-views",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-saved-views-pill-line-height",
+      "familyId": "pattern/data/saved-views",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-status-filter-pills-cell-font-size",
+      "familyId": "pattern/data/status-filter-pills",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-virtual-list-cell-font-size",
+      "familyId": "pattern/data/virtual-list",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-widget-board-cell-font-size",
+      "familyId": "pattern/data/widget-board",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-empty-state-description-size",
+      "familyId": "pattern/feedback/empty-state",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-empty-state-lg-title-size",
+      "familyId": "pattern/feedback/empty-state",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-empty-state-sm-title-size",
+      "familyId": "pattern/feedback/empty-state",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-empty-state-title-size",
+      "familyId": "pattern/feedback/empty-state",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-terminal-block-font-size",
+      "familyId": "pattern/feedback/terminal-block",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-filter-builder-font-size",
+      "familyId": "pattern/forms/filter-builder",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-filter-panel-font-size",
+      "familyId": "pattern/forms/filter-panel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-invoice-template-font-size",
+      "familyId": "pattern/forms/invoice-template",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-builder-counter-font-size",
+      "familyId": "pattern/forms/pattern-form-builder",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-builder-font-size",
+      "familyId": "pattern/forms/pattern-form-builder",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-builder-section-description-font-size",
+      "familyId": "pattern/forms/pattern-form-builder",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-builder-section-title-font-size",
+      "familyId": "pattern/forms/pattern-form-builder",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-builder-title-font-size",
+      "familyId": "pattern/forms/pattern-form-builder",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-builder-title-line-height",
+      "familyId": "pattern/forms/pattern-form-builder",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-step-wizard-font-size",
+      "familyId": "pattern/forms/step-wizard",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-workspace-switcher-trigger-name-font-size",
+      "familyId": "pattern/navigation/workspace-switcher",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-ascii-diagram-label-size",
+      "familyId": "pattern/visualization/ascii-diagram",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-pattern-calendar-view-label-size",
+      "familyId": "pattern/visualization/pattern-calendar-view",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-pattern-kanban-board-label-size",
+      "familyId": "pattern/visualization/pattern-kanban-board",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-pattern-map-view-label-size",
+      "familyId": "pattern/visualization/pattern-map-view",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-pattern-timeline-label-size",
+      "familyId": "pattern/visualization/pattern-timeline",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-timeline-badge-font-size",
+      "familyId": "pattern/visualization/pattern-timeline",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-pattern-tree-view-label-size",
+      "familyId": "pattern/visualization/pattern-tree-view",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-approval-inbox-font-size",
+      "familyId": "pattern/workflow/approval-inbox",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-approval-action-font-size",
+      "familyId": "pattern/workflow/approval-workflow",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-approval-approver-font-size",
+      "familyId": "pattern/workflow/approval-workflow",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-approval-badge-font-size",
+      "familyId": "pattern/workflow/approval-workflow",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-approval-comment-font-size",
+      "familyId": "pattern/workflow/approval-workflow",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-approval-metadata-font-size",
+      "familyId": "pattern/workflow/approval-workflow",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-approval-skeleton-line-height",
+      "familyId": "pattern/workflow/approval-workflow",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-approval-timestamp-font-size",
+      "familyId": "pattern/workflow/approval-workflow",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-approval-title-font-size",
+      "familyId": "pattern/workflow/approval-workflow",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-approval-workflow-font-size",
+      "familyId": "pattern/workflow/approval-workflow",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-moderation-gallery-font-size",
+      "familyId": "pattern/workflow/moderation-gallery",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-operational-ledger-font-size",
+      "familyId": "pattern/workflow/operational-ledger",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-shift-matrix-font-size",
+      "familyId": "pattern/workflow/shift-matrix",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-avatar-2xl-font-size",
+      "familyId": "primitive/display/avatar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-avatar-3xl-font-size",
+      "familyId": "primitive/display/avatar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-avatar-lg-font-size",
+      "familyId": "primitive/display/avatar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-avatar-md-font-size",
+      "familyId": "primitive/display/avatar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-avatar-sm-font-size",
+      "familyId": "primitive/display/avatar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-avatar-xl-font-size",
+      "familyId": "primitive/display/avatar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-avatar-xs-font-size",
+      "familyId": "primitive/display/avatar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-count-font-size",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-line-height",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-md-font-size",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-body-font-size",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-body-font-size-sm",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-body-line-height",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-header-eyebrow-size",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-subtitle-font-size",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-title-font-size",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-title-font-size-lg",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-title-font-size-sm",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-title-line-height",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-code-block-font-size",
+      "familyId": "primitive/display/code-block",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-code-block-line-height",
+      "familyId": "primitive/display/code-block",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-descriptions-content-font-size",
+      "familyId": "primitive/display/descriptions",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-descriptions-content-line-height",
+      "familyId": "primitive/display/descriptions",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-descriptions-label-font-size",
+      "familyId": "primitive/display/descriptions",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-descriptions-label-line-height",
+      "familyId": "primitive/display/descriptions",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-descriptions-title-font-size",
+      "familyId": "primitive/display/descriptions",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-descriptions-title-line-height",
+      "familyId": "primitive/display/descriptions",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-empty-description-font-size",
+      "familyId": "primitive/display/empty",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-kbd-lg-font-size",
+      "familyId": "primitive/display/kbd",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-kbd-md-font-size",
+      "familyId": "primitive/display/kbd",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-kbd-sm-font-size",
+      "familyId": "primitive/display/kbd",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-list-default-font-size",
+      "familyId": "primitive/display/list",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-list-footer-font-size",
+      "familyId": "primitive/display/list",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-list-header-font-size",
+      "familyId": "primitive/display/list",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-list-lg-font-size",
+      "familyId": "primitive/display/list",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-list-meta-description-font-size",
+      "familyId": "primitive/display/list",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-list-meta-title-font-size",
+      "familyId": "primitive/display/list",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-list-sm-font-size",
+      "familyId": "primitive/display/list",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-markdown-view-code-font-size",
+      "familyId": "primitive/display/markdown-view",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-markdown-view-font-size",
+      "familyId": "primitive/display/markdown-view",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-meter-label-font-size",
+      "familyId": "primitive/display/meter",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-meter-value-font-size",
+      "familyId": "primitive/display/meter",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-qrcode-refresh-button-font-size",
+      "familyId": "primitive/display/qr-code",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-qrcode-status-text-font-size",
+      "familyId": "primitive/display/qr-code",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-statistic-affix-font-size",
+      "familyId": "primitive/display/statistic",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-statistic-title-font-size",
+      "familyId": "primitive/display/statistic",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-statistic-value-font-size",
+      "familyId": "primitive/display/statistic",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-header-font-size",
+      "familyId": "primitive/display/table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-pagination-font-size",
+      "familyId": "primitive/display/table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tag-default-font-size",
+      "familyId": "primitive/display/tag",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tag-lg-font-size",
+      "familyId": "primitive/display/tag",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tag-line-height",
+      "familyId": "primitive/display/tag",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tag-md-font-size",
+      "familyId": "primitive/display/tag",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tag-sm-font-size",
+      "familyId": "primitive/display/tag",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tag-xl-font-size",
+      "familyId": "primitive/display/tag",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tag-xs-font-size",
+      "familyId": "primitive/display/tag",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-timeline-content-font-size",
+      "familyId": "primitive/display/timeline",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-timeline-content-line-height",
+      "familyId": "primitive/display/timeline",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-timeline-label-font-size",
+      "familyId": "primitive/display/timeline",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-alert-description-size",
+      "familyId": "primitive/feedback/alert",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-alert-label-size",
+      "familyId": "primitive/feedback/alert",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-drawer-title-font-size",
+      "familyId": "primitive/feedback/drawer",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-loading-indicator-label-font-size",
+      "familyId": "primitive/feedback/loading-indicator",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-modal-action-font-size",
+      "familyId": "primitive/feedback/modal",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-modal-body-font-size",
+      "familyId": "primitive/feedback/modal",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-modal-body-line-height",
+      "familyId": "primitive/feedback/modal",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-modal-description-size",
+      "familyId": "primitive/feedback/modal",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-modal-title-font-size",
+      "familyId": "primitive/feedback/modal",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-modal-title-line-height",
+      "familyId": "primitive/feedback/modal",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-modal-title-size",
+      "familyId": "primitive/feedback/modal",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-result-code-size",
+      "familyId": "primitive/feedback/result",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-result-description-size",
+      "familyId": "primitive/feedback/result",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-result-title-size",
+      "familyId": "primitive/feedback/result",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-skeleton-line-height",
+      "familyId": "primitive/feedback/skeleton",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-autocomplete-font-size",
+      "familyId": "primitive/inputs/auto-complete",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-lg-font-size",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-lg-line-height",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-md-font-size",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-md-line-height",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-sm-font-size",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-sm-line-height",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-xl-font-size",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-xl-line-height",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-xs-font-size",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-xs-line-height",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-cascader-font-size",
+      "familyId": "primitive/inputs/cascader",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-checkbox-description-font-size",
+      "familyId": "primitive/inputs/checkbox",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-checkbox-description-line-height",
+      "familyId": "primitive/inputs/checkbox",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-checkbox-label-font-size",
+      "familyId": "primitive/inputs/checkbox",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-checkbox-label-line-height",
+      "familyId": "primitive/inputs/checkbox",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-checkbox-lg-font-size",
+      "familyId": "primitive/inputs/checkbox",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-checkbox-md-font-size",
+      "familyId": "primitive/inputs/checkbox",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-checkbox-sm-font-size",
+      "familyId": "primitive/inputs/checkbox",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-checkbox-xl-font-size",
+      "familyId": "primitive/inputs/checkbox",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-checkbox-xs-font-size",
+      "familyId": "primitive/inputs/checkbox",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-color-picker-font-size",
+      "familyId": "primitive/inputs/color-picker",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-datepicker-panel-title-font-size",
+      "familyId": "primitive/inputs/date-picker",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-datepicker-weekday-font-size",
+      "familyId": "primitive/inputs/date-picker",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-badge-font-size",
+      "familyId": "primitive/inputs/form",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-badge-line-height",
+      "familyId": "primitive/inputs/form",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-font-size",
+      "familyId": "primitive/inputs/form",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-label-font-size-lg",
+      "familyId": "primitive/inputs/form",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-label-font-size-md",
+      "familyId": "primitive/inputs/form",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-label-font-size-sm",
+      "familyId": "primitive/inputs/form",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-label-line-height",
+      "familyId": "primitive/inputs/form",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-supporting-line-height",
+      "familyId": "primitive/inputs/form",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-tooltip-font-size",
+      "familyId": "primitive/inputs/form",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-field-lg-helper-font-size",
+      "familyId": "primitive/inputs/form-field",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-field-lg-label-font-size",
+      "familyId": "primitive/inputs/form-field",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-field-sm-helper-font-size",
+      "familyId": "primitive/inputs/form-field",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-field-sm-label-font-size",
+      "familyId": "primitive/inputs/form-field",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-label-line-height",
+      "familyId": "primitive/inputs/form-field",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-helper-font-size",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-helper-line-height",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-lg-font-size",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-lg-line-height",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-md-font-size",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-md-line-height",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-sm-font-size",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-sm-line-height",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-xl-font-size",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-xl-line-height",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-xs-font-size",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-xs-line-height",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-number-lg-font-size",
+      "familyId": "primitive/inputs/input-number",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-number-md-font-size",
+      "familyId": "primitive/inputs/input-number",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-number-sm-font-size",
+      "familyId": "primitive/inputs/input-number",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-number-stepper-font-size",
+      "familyId": "primitive/inputs/input-number",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-mentions-font-size",
+      "familyId": "primitive/inputs/mentions",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-otp-error-font-size",
+      "familyId": "primitive/inputs/otp-input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-otp-error-line-height",
+      "familyId": "primitive/inputs/otp-input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-otp-input-font-size",
+      "familyId": "primitive/inputs/otp-input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-otp-slot-lg-font-size",
+      "familyId": "primitive/inputs/otp-input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-otp-slot-md-font-size",
+      "familyId": "primitive/inputs/otp-input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-otp-slot-sm-font-size",
+      "familyId": "primitive/inputs/otp-input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-radio-description-font-size",
+      "familyId": "primitive/inputs/radio",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-radio-description-line-height",
+      "familyId": "primitive/inputs/radio",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-radio-label-font-size",
+      "familyId": "primitive/inputs/radio",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-radio-label-line-height",
+      "familyId": "primitive/inputs/radio",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-radio-lg-font-size",
+      "familyId": "primitive/inputs/radio",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-radio-md-font-size",
+      "familyId": "primitive/inputs/radio",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-radio-sm-font-size",
+      "familyId": "primitive/inputs/radio",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-radio-xl-font-size",
+      "familyId": "primitive/inputs/radio",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-radio-xs-font-size",
+      "familyId": "primitive/inputs/radio",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-option-font-size",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-trigger-font-size",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-trigger-lg-font-size",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-trigger-lg-line-height",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-trigger-line-height",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-trigger-md-font-size",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-trigger-md-line-height",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-trigger-sm-font-size",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-trigger-sm-line-height",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-trigger-xl-font-size",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-trigger-xl-line-height",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-trigger-xs-font-size",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-trigger-xs-line-height",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-slider-mark-font-size",
+      "familyId": "primitive/inputs/slider",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-switch-label-font-size",
+      "familyId": "primitive/inputs/switch",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-switch-label-line-height",
+      "familyId": "primitive/inputs/switch",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tag-input-chip-font-size",
+      "familyId": "primitive/inputs/tag-input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tag-input-font-size",
+      "familyId": "primitive/inputs/tag-input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-textarea-count-font-size",
+      "familyId": "primitive/inputs/textarea",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-textarea-lg-font-size",
+      "familyId": "primitive/inputs/textarea",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-textarea-lg-line-height",
+      "familyId": "primitive/inputs/textarea",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-textarea-md-font-size",
+      "familyId": "primitive/inputs/textarea",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-textarea-md-line-height",
+      "familyId": "primitive/inputs/textarea",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-textarea-sm-font-size",
+      "familyId": "primitive/inputs/textarea",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-textarea-sm-line-height",
+      "familyId": "primitive/inputs/textarea",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-timepicker-column-label-font-size",
+      "familyId": "primitive/inputs/time-picker",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-timepicker-option-font-size",
+      "familyId": "primitive/inputs/time-picker",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toggle-description-font-size",
+      "familyId": "primitive/inputs/toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toggle-description-line-height",
+      "familyId": "primitive/inputs/toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toggle-helper-font-size",
+      "familyId": "primitive/inputs/toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toggle-label-font-size",
+      "familyId": "primitive/inputs/toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toggle-label-line-height",
+      "familyId": "primitive/inputs/toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toggle-lg-label-font-size",
+      "familyId": "primitive/inputs/toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toggle-md-label-font-size",
+      "familyId": "primitive/inputs/toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toggle-sm-label-font-size",
+      "familyId": "primitive/inputs/toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toggle-state-label-font-size",
+      "familyId": "primitive/inputs/toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toggle-state-label-line-height",
+      "familyId": "primitive/inputs/toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toggle-xl-label-font-size",
+      "familyId": "primitive/inputs/toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toggle-xs-label-font-size",
+      "familyId": "primitive/inputs/toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-transfer-count-font-size",
+      "familyId": "primitive/inputs/transfer",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-transfer-header-font-size",
+      "familyId": "primitive/inputs/transfer",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-transfer-item-font-size",
+      "familyId": "primitive/inputs/transfer",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tree-select-option-font-size",
+      "familyId": "primitive/inputs/tree-select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-upload-action-font-size",
+      "familyId": "primitive/inputs/upload",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-upload-file-font-size",
+      "familyId": "primitive/inputs/upload",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-upload-file-name-font-size",
+      "familyId": "primitive/inputs/upload",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-upload-file-size-font-size",
+      "familyId": "primitive/inputs/upload",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-upload-hint-font-size",
+      "familyId": "primitive/inputs/upload",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-upload-preview-close-font-size",
+      "familyId": "primitive/inputs/upload",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-upload-trigger-font-size",
+      "familyId": "primitive/inputs/upload",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-collapse-content-default-idle-font-size",
+      "familyId": "primitive/layout/collapse",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-collapse-content-default-idle-line-height",
+      "familyId": "primitive/layout/collapse",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-collapse-header-default-idle-font-size",
+      "familyId": "primitive/layout/collapse",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-collapse-header-default-idle-line-height",
+      "familyId": "primitive/layout/collapse",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-divider-label-font-size",
+      "familyId": "primitive/layout/divider",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-divider-label-line-height",
+      "familyId": "primitive/layout/divider",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-layout-sider-trigger-font-size",
+      "familyId": "primitive/layout/layout",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-affix-font-size",
+      "familyId": "primitive/navigation/affix",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-anchor-font-size",
+      "familyId": "primitive/navigation/anchor",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-anchor-item-font-size",
+      "familyId": "primitive/navigation/anchor",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-anchor-item-line-height",
+      "familyId": "primitive/navigation/anchor",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-back-top-font-size",
+      "familyId": "primitive/navigation/back-top",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-breadcrumb-font-size",
+      "familyId": "primitive/navigation/breadcrumb",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-float-button-font-size",
+      "familyId": "primitive/navigation/float-button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-floatbutton-badge-font-size",
+      "familyId": "primitive/navigation/float-button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-floatbutton-badge-line-height",
+      "familyId": "primitive/navigation/float-button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-link-font-size",
+      "familyId": "primitive/navigation/link",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-menu-font-size",
+      "familyId": "primitive/navigation/menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-menu-group-font-size",
+      "familyId": "primitive/navigation/menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-menu-item-font-size",
+      "familyId": "primitive/navigation/menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-menu-item-font-size-child",
+      "familyId": "primitive/navigation/menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-pagination-font-size",
+      "familyId": "primitive/navigation/pagination",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-pagination-lg-font-size",
+      "familyId": "primitive/navigation/pagination",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-pagination-md-font-size",
+      "familyId": "primitive/navigation/pagination",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-pagination-range-font-size",
+      "familyId": "primitive/navigation/pagination",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-pagination-sm-font-size",
+      "familyId": "primitive/navigation/pagination",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-segmented-font-size",
+      "familyId": "primitive/navigation/segmented",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-segmented-lg-font-size",
+      "familyId": "primitive/navigation/segmented",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-segmented-lg-line-height",
+      "familyId": "primitive/navigation/segmented",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-segmented-md-font-size",
+      "familyId": "primitive/navigation/segmented",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-segmented-md-line-height",
+      "familyId": "primitive/navigation/segmented",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-segmented-sm-font-size",
+      "familyId": "primitive/navigation/segmented",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-segmented-sm-line-height",
+      "familyId": "primitive/navigation/segmented",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stepper-description-font-size-lg",
+      "familyId": "primitive/navigation/stepper",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stepper-description-font-size-md",
+      "familyId": "primitive/navigation/stepper",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stepper-description-font-size-sm",
+      "familyId": "primitive/navigation/stepper",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stepper-font-size",
+      "familyId": "primitive/navigation/stepper",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stepper-item-font-size-lg",
+      "familyId": "primitive/navigation/stepper",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stepper-item-font-size-md",
+      "familyId": "primitive/navigation/stepper",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stepper-item-font-size-sm",
+      "familyId": "primitive/navigation/stepper",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stepper-label-font-size-lg",
+      "familyId": "primitive/navigation/stepper",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stepper-label-font-size-md",
+      "familyId": "primitive/navigation/stepper",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stepper-label-font-size-sm",
+      "familyId": "primitive/navigation/stepper",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-steps-description-font-size",
+      "familyId": "primitive/navigation/steps",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-steps-font-size",
+      "familyId": "primitive/navigation/steps",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-steps-item-font-size",
+      "familyId": "primitive/navigation/steps",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-steps-item-font-size-sm",
+      "familyId": "primitive/navigation/steps",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-steps-label-font-size",
+      "familyId": "primitive/navigation/steps",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-steps-label-font-size-sm",
+      "familyId": "primitive/navigation/steps",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-steps-subtitle-font-size",
+      "familyId": "primitive/navigation/steps",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-badge-font-size",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-font-size",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-item-line-height",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-lg-font-size",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-md-font-size",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-responsive-font-size",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-sm-font-size",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-alert-dialog-font-size",
+      "familyId": "primitive/overlay/alert-dialog",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-confirm-dialog-font-size",
+      "familyId": "primitive/overlay/confirm-dialog",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-context-menu-font-size",
+      "familyId": "primitive/overlay/context-menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-dropdown-font-size",
+      "familyId": "primitive/overlay/dropdown",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-hover-card-font-size",
+      "familyId": "primitive/overlay/hover-card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-popconfirm-font-size",
+      "familyId": "primitive/overlay/popconfirm",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-popover-font-size",
+      "familyId": "primitive/overlay/popover",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-sheet-font-size",
+      "familyId": "primitive/overlay/sheet",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tour-action-font-size",
+      "familyId": "primitive/overlay/tour",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tour-font-size",
+      "familyId": "primitive/overlay/tour",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tour-title-line-height",
+      "familyId": "primitive/overlay/tour",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-watermark-font-size",
+      "familyId": "primitive/overlay/watermark",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-dashboard-insights-title-size",
+      "familyId": "structure/dashboard/dashboard-insights",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-dashboard-insights-value-size",
+      "familyId": "structure/dashboard/dashboard-insights",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-data-terminal-card-title-size",
+      "familyId": "structure/dashboard/data-terminal-card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-data-terminal-card-value-size",
+      "familyId": "structure/dashboard/data-terminal-card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stats-header-kicker-font-size",
+      "familyId": "structure/dashboard/stats-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stats-header-label-font-size",
+      "familyId": "structure/dashboard/stats-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stats-header-meta-font-size",
+      "familyId": "structure/dashboard/stats-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stats-header-title-size",
+      "familyId": "structure/dashboard/stats-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stats-header-value-font-size",
+      "familyId": "structure/dashboard/stats-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stats-header-value-size",
+      "familyId": "structure/dashboard/stats-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-collection-header-title-size",
+      "familyId": "structure/headers/collection-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-collection-header-value-size",
+      "familyId": "structure/headers/collection-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-type-display-line-height",
+      "familyId": "structure/headers/collection-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-dashboard-header-title-size",
+      "familyId": "structure/headers/dashboard-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-dashboard-header-value-size",
+      "familyId": "structure/headers/dashboard-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-detail-header-title-size",
+      "familyId": "structure/headers/detail-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-detail-header-value-size",
+      "familyId": "structure/headers/detail-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-edit-header-title-font-size",
+      "familyId": "structure/headers/edit-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-edit-header-title-size",
+      "familyId": "structure/headers/edit-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-edit-header-value-size",
+      "familyId": "structure/headers/edit-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-header-title-font-size",
+      "familyId": "structure/headers/form-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-header-title-size",
+      "familyId": "structure/headers/form-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-header-value-size",
+      "familyId": "structure/headers/form-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-header-surface-title-size",
+      "familyId": "structure/headers/header-surface",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-header-surface-value-size",
+      "familyId": "structure/headers/header-surface",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-mobile-header-title-size",
+      "familyId": "structure/headers/mobile-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-mobile-header-value-size",
+      "familyId": "structure/headers/mobile-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-section-frame-title-size",
+      "familyId": "structure/headers/section-frame",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-section-frame-value-size",
+      "familyId": "structure/headers/section-frame",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-edit-fields-title-size",
+      "familyId": "structure/record/edit-fields",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-edit-fields-value-size",
+      "familyId": "structure/record/edit-fields",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-sections-title-size",
+      "familyId": "structure/record/form-sections",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-sections-value-size",
+      "familyId": "structure/record/form-sections",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-line-height-none",
+      "familyId": "structure/record/form-sections",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-action-bar-title-size",
+      "familyId": "structure/record/record-action-bar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-action-bar-value-size",
+      "familyId": "structure/record/record-action-bar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-field-title-size",
+      "familyId": "structure/record/record-field",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-field-value-size",
+      "familyId": "structure/record/record-field",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-field-grid-title-size",
+      "familyId": "structure/record/record-field-grid",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-field-grid-value-size",
+      "familyId": "structure/record/record-field-grid",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-panel-title-size",
+      "familyId": "structure/record/record-panel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-panel-value-size",
+      "familyId": "structure/record/record-panel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-heading-font-size",
+      "familyId": "structure/record/record-summary-strip",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-summary-strip-title-size",
+      "familyId": "structure/record/record-summary-strip",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-summary-strip-value-size",
+      "familyId": "structure/record/record-summary-strip",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-audit-muted-size",
+      "familyId": "surface/admin/audit",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-profile-name-size",
+      "familyId": "surface/admin/profile",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-list-card-label-size",
+      "familyId": "surface/data/list",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-auth-heading-size",
+      "familyId": "surface/experience/auth",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-chat-heading-size",
+      "familyId": "surface/experience/chat",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-editor-heading-size",
+      "familyId": "surface/experience/editor",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-empty-state-heading-size",
+      "familyId": "surface/experience/empty-state",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-marketing-heading-size",
+      "familyId": "surface/experience/marketing",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-media-heading-size",
+      "familyId": "surface/experience/media",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-notification-heading-size",
+      "familyId": "surface/experience/notification",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-oauth-transition-heading-size",
+      "familyId": "surface/experience/oauth-transition",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-pricing-heading-size",
+      "familyId": "surface/experience/pricing",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-detail-form-heading-size",
+      "familyId": "surface/forms/detail-form",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-heading-size",
+      "familyId": "surface/forms/form",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-guided-draft-form-heading-size",
+      "familyId": "surface/forms/guided-draft-form",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-wizard-heading-size",
+      "familyId": "surface/forms/wizard",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-activity-heading-size",
+      "familyId": "surface/operations/activity",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-kanban-heading-size",
+      "familyId": "surface/operations/kanban",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-operational-heading-size",
+      "familyId": "surface/operations/operational",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-scheduler-heading-size",
+      "familyId": "surface/operations/scheduler",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-collection-workspace-heading-size",
+      "familyId": "surface/workspace/collection-workspace",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-command-center-heading-size",
+      "familyId": "surface/workspace/command-center",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-decision-inbox-heading-size",
+      "familyId": "surface/workspace/decision-inbox",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-workbench-heading-size",
+      "familyId": "surface/workspace/record-workbench",
+      "state": "PRESCRIPCION"
+    }
+  ],
+  "variants": [
+    {
+      "id": "compacta",
+      "value": 0.94,
+      "effects": {
+        "--ds-type-scale": "0.94"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "normal",
+      "value": 1,
+      "effects": {
+        "--ds-type-scale": "1"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "amplia",
+      "value": 1.06,
+      "effects": {
+        "--ds-type-scale": "1.06"
+      },
+      "pinned": {}
+    }
+  ],
+  "overlaps": [],
+  "terminalReachLaw": "state = alcance en la cascada; deteccion de UN SALTO en sitio de lectura = COTA INFERIOR. El alcance transitivo es de la capa GENERADA (cascade-extract/materialized, ley R1); el diff con estas prescripciones ES el backlog de fase 3."
+}

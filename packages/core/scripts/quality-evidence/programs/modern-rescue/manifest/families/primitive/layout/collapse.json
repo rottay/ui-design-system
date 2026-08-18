@@ -666,43 +666,6 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "color.mode",
-            "socketPattern": null,
-            "prop": "background/color/border via los canales de color re-derivados por overlay",
-            "tier": "standard",
-            "examples": [],
-            "noSocketReason": "SIN socket propio: el modo viaja por los overlays de los canales compartidos --ds-color-*/--ds-surface-*",
-            "socketsResolved": true,
-            "carrier": "shared-channel"
-          },
-          {
-            "root": null,
-            "socketPattern": null,
-            "prop": "sockets de familia derivados de anatomy.sourceBindings",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-collapse-arrow-hover-color",
-              "--_ds-collapse-content-default-idle-bg",
-              "--_ds-collapse-content-default-idle-color",
-              "--_ds-collapse-content-ghost-idle-bg",
-              "--_ds-collapse-header-default-disabled-bg",
-              "--_ds-collapse-header-default-disabled-color",
-              "--_ds-collapse-header-default-expanded-bg",
-              "--_ds-collapse-header-default-expanded-color",
-              "--_ds-collapse-header-default-idle-bg",
-              "--_ds-collapse-header-default-idle-color",
-              "--_ds-collapse-header-ghost-idle-bg",
-              "--_ds-collapse-root-default-idle-border-color",
-              "--_ds-collapse-root-ghost-idle-bg"
-            ],
-            "socketsResolved": true
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Canales compartidos porque OTRA familia los lee de verdad (nivel 2; sus sockets viven en la familia duena)": [
             "--ds-card-bg",
@@ -713,8 +676,206 @@
             "--ds-color-primary",
             "--ds-color-text-disabled"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-collapse-arrow-hover-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-collapse-content-default-idle-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-collapse-content-default-idle-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-collapse-content-ghost-idle-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-collapse-header-default-disabled-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-collapse-header-default-disabled-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-collapse-header-default-expanded-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-collapse-header-default-expanded-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-collapse-header-default-idle-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-collapse-header-default-idle-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-collapse-header-ghost-idle-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-collapse-root-default-idle-border-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-collapse-root-ghost-idle-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "typography.pairing",
@@ -769,27 +930,68 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "source": "huecos-fable",
-        "bindings": [
-          {
-            "root": "type.scale",
-            "socketPattern": "(via canales compartidos, sin socket de familia)",
-            "prop": "sobre la rampa compartida",
-            "tier": "standard",
-            "sockets": [
-              "--_ds-collapse-content-default-idle-font-size",
-              "--_ds-collapse-content-default-idle-line-height",
-              "--_ds-collapse-header-default-idle-font-size",
-              "--_ds-collapse-header-default-idle-line-height"
-            ],
-            "socketsResolved": true,
-            "why": "debe reflejarse sin socket propio"
+      "internalChannels": [
+        {
+          "channelId": "--_ds-collapse-content-default-idle-font-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
           }
-        ],
-        "reviewedFrom": "anatomy"
-      }
+        },
+        {
+          "channelId": "--_ds-collapse-content-default-idle-line-height",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-collapse-header-default-idle-font-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-collapse-header-default-idle-line-height",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
     },
     {
       "controlId": "shape.radius-scale",
@@ -799,31 +1001,46 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "shape.corner",
-            "socketPattern": "--_ds-<comp>-radius",
-            "prop": "border-radius de collapse/panels",
-            "tier": "standard",
-            "examples": [
-              "--_ds-collapse-radius"
-            ],
-            "sockets": [
-              "--_ds-collapse-root-default-idle-border-radius",
-              "--_ds-collapse-root-ghost-idle-border-radius"
-            ],
-            "socketsResolved": true
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
             "--ds-radius-md",
             "--ds-radius-sm"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-collapse-root-default-idle-border-radius",
+          "semanticOwner": "shape.radius-scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-collapse-root-ghost-idle-border-radius",
+          "semanticOwner": "shape.radius-scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "shape.button-style",
@@ -851,35 +1068,6 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "source": "huecos-fable",
-        "bindings": [
-          {
-            "root": "density.mode",
-            "socketPattern": "--_ds-collapse-density-factor",
-            "prop": "padding de header/body de Collapse (unica familia layout con filas); Box/Flex/Grid no densifican",
-            "tier": "standard",
-            "sockets": [
-              "--_ds-collapse-content-default-idle-padding-x",
-              "--_ds-collapse-content-default-idle-padding-y",
-              "--_ds-collapse-content-lg-idle-padding-x",
-              "--_ds-collapse-content-lg-idle-padding-y",
-              "--_ds-collapse-content-sm-idle-padding-x",
-              "--_ds-collapse-content-sm-idle-padding-y",
-              "--_ds-collapse-header-default-idle-padding-x",
-              "--_ds-collapse-header-default-idle-padding-y",
-              "--_ds-collapse-header-ghost-idle-padding-x",
-              "--_ds-collapse-header-ghost-idle-padding-y",
-              "--_ds-collapse-header-lg-idle-padding-x",
-              "--_ds-collapse-header-lg-idle-padding-y",
-              "--_ds-collapse-header-sm-idle-padding-x",
-              "--_ds-collapse-header-sm-idle-padding-y"
-            ],
-            "socketsResolved": true,
-            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Pisos de accesibilidad (touch-target-min): clase de exclusion propia, no brazo compartido - el piso no se negocia por tema": [
             "--ds-collapse-touch-target-min",
@@ -888,8 +1076,221 @@
           "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
             "--ds-focus-ring-width"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-collapse-content-default-idle-padding-x",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-collapse-content-default-idle-padding-y",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-collapse-content-lg-idle-padding-x",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-collapse-content-lg-idle-padding-y",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-collapse-content-sm-idle-padding-x",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-collapse-content-sm-idle-padding-y",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-collapse-header-default-idle-padding-x",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-collapse-header-default-idle-padding-y",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-collapse-header-ghost-idle-padding-x",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-collapse-header-ghost-idle-padding-y",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-collapse-header-lg-idle-padding-x",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-collapse-header-lg-idle-padding-y",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-collapse-header-sm-idle-padding-x",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-collapse-header-sm-idle-padding-y",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "spacing.rhythm",
@@ -899,27 +1300,30 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": null,
-            "socketPattern": null,
-            "prop": "sockets de familia derivados de anatomy.sourceBindings",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-collapse-extra-margin-inline-start"
-            ],
-            "socketsResolved": true
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
             "--ds-spacing-2"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-collapse-extra-margin-inline-start",
+          "semanticOwner": "spacing.rhythm",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "motion.dial",
@@ -929,29 +1333,46 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": null,
-            "socketPattern": null,
-            "prop": "sockets de familia derivados de anatomy.sourceBindings",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-collapse-transition-duration",
-              "--_ds-collapse-transition-timing"
-            ],
-            "socketsResolved": true
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
             "--ds-motion-ease-out",
             "--ds-motion-fast"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-collapse-transition-duration",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-collapse-transition-timing",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -960,24 +1381,38 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": null,
-            "socketPattern": null,
-            "prop": "sockets de familia derivados de anatomy.sourceBindings",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-collapse-root-default-idle-shadow",
-              "--_ds-collapse-root-ghost-idle-shadow"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-collapse-root-default-idle-shadow",
+          "semanticOwner": "surfaces.elevation-posture",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
           }
-        ],
-        "reviewedFrom": "anatomy"
-      }
+        },
+        {
+          "channelId": "--_ds-collapse-root-ghost-idle-shadow",
+          "semanticOwner": "surfaces.elevation-posture",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -987,29 +1422,30 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "why": "Box/Flex/Grid no tienen superficie propia que acabar",
-        "source": "huecos-kimi",
-        "bindings": [
-          {
-            "root": null,
-            "socketPattern": null,
-            "prop": "sockets de familia derivados de anatomy.sourceBindings",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-collapse-header-default-disabled-opacity"
-            ],
-            "socketsResolved": true
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Canales compartidos porque OTRA familia los lee de verdad (nivel 2; sus sockets viven en la familia duena)": [
             "--ds-material-card-background"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-collapse-header-default-disabled-opacity",
+          "semanticOwner": "surfaces.effect-intensity",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -1075,24 +1511,6 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "shape.edge",
-            "socketPattern": "--_ds-divider-style",
-            "prop": "estilo del Divider",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-collapse-arrow-focus-ring-radius",
-              "--_ds-collapse-header-focus-ring-radius",
-              "--_ds-collapse-root-default-idle-border-style",
-              "--_ds-collapse-root-default-idle-border-width"
-            ],
-            "socketsResolved": true
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Correctitud estructural, no punto de customizacion": [
             "--ds-collapse-header-default-disabled-cursor",
@@ -1102,8 +1520,71 @@
             "--ds-focus-ring-color",
             "--ds-focus-ring-offset"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-collapse-arrow-focus-ring-radius",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-collapse-header-focus-ring-radius",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-collapse-root-default-idle-border-style",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-collapse-root-default-idle-border-width",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/collapse"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "token-overrides",

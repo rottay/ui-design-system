@@ -34,6 +34,195 @@ export const CELL_MECHANISMS = new Set(['THEME_CONTROL', 'RECIPE_OR_ANATOMY', 'I
 export const CHANNEL_PREFIXES = Object.freeze(['--ds-', '--_ds-', 'data-']);
 
 /**
+ * FAM-KINDS: closed list of control domain kinds. Mirror of
+ * schema.json#vocabulary.domainKinds; program-check.mjs enforces both sides.
+ */
+/**
+ * CASCADA (adjudicacion R4): closed vocabulary of derivation rule kinds.
+ * Mirror-enforced by validateCascadeRoot; program-check drills a planted kind.
+ */
+export const DERIVATION_KINDS = Object.freeze([
+  'calc-multiply',
+  'calc-divide',
+  'clamp',
+  'alias',
+  'identity',
+  'data-attr-select',
+  'table-lookup',
+  'color-mix',
+  'ramp-derive',
+  'contest-rank',
+  'literal-pin',
+]);
+
+/** CASCADA (C5/R7): closed precedence vocabulary for overlaps. */
+export const PRECEDENCE_KINDS = Object.freeze([
+  'authored-field-wins',
+  'explicit-root-over-composite',
+  'producer-rank',
+  'floor-ceiling',
+]);
+
+/** CASCADA (R5): scratch markers; a scratch channel is never a customization socket. */
+export const SCRATCH_CHANNEL = /(-resolved-|-resolved$|-computed-|-computed$|-effective-|-effective$|-current-|-current$)/;
+
+/**
+ * CASCADA: validate one authored root file (manifest/cascade/roots/<id>.json).
+ * socketOwnership: Map<channelId, { owner: controlId, families: Set<familyId> }>
+ * built from families internalChannels (semanticOwner edges).
+ */
+export function validateCascadeRoot(doc, { label, repositoryRoot, activeControlIds, controlTier, familyIds, socketOwnership }) {
+  const errors = [];
+  if (!doc || typeof doc !== 'object') { errors.push(`${label}: cascade root must be an object`); return errors; }
+  if (!activeControlIds.includes(doc.rootId)) errors.push(`${label}: rootId ${JSON.stringify(doc.rootId ?? null)} is not an active control`);
+  if (controlTier && doc.tier !== controlTier) errors.push(`${label}: tier ${JSON.stringify(doc.tier ?? null)} must mirror controls tier (${controlTier})`);
+  const rc = doc.rootChannel;
+  /**
+   * CASCADA (enmienda cabeza-nula): la ley sabia expresar la COLA vacia
+   * (`derivations: []` + `derivationsEmptyReason`) pero no la CABEZA vacia, y por eso
+   * cobraba como defecto un eje que POR DISENO no baja a ningun canal CSS. Se enmienda la
+   * ley, nunca el marcador: fabricar un canal de mentira para comprar el verde queda
+   * prohibido, y un `channel` ausente/mal escrito sigue dando el error de siempre.
+   *
+   * `channel: null` es una declaracion EXPLICITA y solo se admite bajo la conjuncion
+   * completa: razon citada (`headEmptyReason`, hermano literal de `derivationsEmptyReason`)
+   * y las tres colas de canal vacias. Sin cabeza no hay arista que salga, asi que una
+   * derivacion, un terminalReach o un solape contradicen la propia declaracion.
+   *
+   * Los `declaredOutputs` del control (channels/rootAttributes vacios) NO se consultan aqui:
+   * no viajan en el contexto explicito de esta funcion y este modulo es puro respecto de ese
+   * contexto — leer manifest/controls por path clavaria el arbol real y un drill ya no podria
+   * graduar un fixture temporal. La conjuncion de arriba es la prueba que el propio doc puede
+   * dar; el cross-check inverso de socketOwnership (mas abajo) sigue delatando cualquier
+   * arista de canal que esta raiz posea de verdad.
+   */
+  const headDeclaredEmpty = rc != null && typeof rc === 'object' && rc.channel === null;
+  if (!rc || !(isGovernedChannel(rc.channel) || headDeclaredEmpty)) {
+    errors.push(`${label}: rootChannel.channel must be a governed channel`);
+  } else if (headDeclaredEmpty) {
+    if (!isNonEmptyString(rc.headEmptyReason)) {
+      errors.push(
+        `${label}: rootChannel.channel null requires rootChannel.headEmptyReason citing the source that proves this axis emits no governed channel (the head's sibling of derivationsEmptyReason)`,
+      );
+    }
+    for (const field of ['derivations', 'terminalReach', 'overlaps']) {
+      const value = doc[field];
+      const empty = value == null || (Array.isArray(value) && value.length === 0);
+      if (!empty) {
+        errors.push(
+          `${label}: rootChannel.channel null requires ${field} to be empty; a head that emits no channel cannot originate ${field}`,
+        );
+      }
+    }
+  }
+  const emission = rc?.emission;
+  if (!Array.isArray(emission) || emission.length === 0) {
+    errors.push(`${label}: rootChannel.emission must be a non-empty array (R2: the cascade needs a head)`);
+  } else {
+    emission.forEach((e, i) => {
+      for (const f of ['kind', 'site']) if (!isNonEmptyString(e?.[f])) errors.push(`${label}: emission[${i}] missing ${f}`);
+      const reason = e?.site ? resolveSourceBinding(e.site, { repositoryRoot }) : null;
+      if (reason) errors.push(`${label}: emission[${i}] site does not resolve: ${e.site} - ${reason}`);
+      for (const opt of ['clampSite', 'tenantRejectSite']) {
+        if (e?.[opt] != null) {
+          const rr = resolveSourceBinding(e[opt], { repositoryRoot });
+          if (rr) errors.push(`${label}: emission[${i}] ${opt} does not resolve: ${e[opt]} - ${rr}`);
+        }
+      }
+    });
+  }
+  (doc.derivations || []).forEach((d, i) => {
+    const where = `${label}: derivations[${i}]`;
+    if (!isGovernedChannel(d?.from)) errors.push(`${where} from must be a governed channel`);
+    if (!isGovernedChannel(d?.to)) errors.push(`${where} to must be a governed channel`);
+    if (!DERIVATION_KINDS.includes(d?.rule?.kind)) errors.push(`${where} rule.kind ${JSON.stringify(d?.rule?.kind ?? null)} is not a governed derivation kind`);
+    if (!['LIVE', 'PRESCRIPCION'].includes(d?.state)) errors.push(`${where} state must be LIVE or PRESCRIPCION`);
+    if (d?.state !== 'PRESCRIPCION') {
+      const reason = isNonEmptyString(d?.site) ? resolveSourceBinding(d.site, { repositoryRoot }) : 'missing site';
+      if (reason) errors.push(`${where} site does not resolve: ${JSON.stringify(d?.site ?? null)} - ${reason}`);
+    }
+  });
+  const reach = Array.isArray(doc.terminalReach) ? doc.terminalReach : [];
+  const reachSet = new Set();
+  reach.forEach((t, i) => {
+    const where = `${label}: terminalReach[${i}]`;
+    if (!isNonEmptyString(t?.channelId) || !t.channelId.startsWith('--_ds-')) errors.push(`${where} channelId must be a --_ds- family socket`);
+    if (t?.channelId && SCRATCH_CHANNEL.test(t.channelId)) errors.push(`${where} channel ${t.channelId} carries a scratch marker and is not a customization socket (R5)`);
+    if (!familyIds.has(t?.familyId)) errors.push(`${where} familyId ${JSON.stringify(t?.familyId ?? null)} is not a canonical family id`);
+    if (t?.channelId && t?.familyId) {
+      reachSet.add(`${t.familyId} ${t.channelId}`);
+      const own = socketOwnership.get(t.channelId);
+      if (!own || own.owner !== doc.rootId || !own.families.has(t.familyId)) {
+        errors.push(`${where} ${t.channelId}@${t.familyId} is not backed by an internalChannels edge owned by ${doc.rootId} (orphan terminalReach)`);
+      }
+    }
+  });
+  for (const [channelId, own] of socketOwnership) {
+    if (own.owner !== doc.rootId) continue;
+    if (SCRATCH_CHANNEL.test(channelId)) continue;
+    for (const fam of own.families) {
+      if (!reachSet.has(`${fam} ${channelId}`)) {
+        errors.push(`${label}: internalChannels edge ${channelId}@${fam} owned by ${doc.rootId} is missing from terminalReach (reverse cross-check)`);
+      }
+    }
+  }
+  (doc.overlaps || []).forEach((o, i) => {
+    const where = `${label}: overlaps[${i}]`;
+    if (!activeControlIds.includes(o?.withRoot)) errors.push(`${where} withRoot must be an active control`);
+    if (!PRECEDENCE_KINDS.includes(o?.precedence)) errors.push(`${where} precedence ${JSON.stringify(o?.precedence ?? null)} is not a governed precedence kind`);
+    for (const f of ['mechanismSite', 'precedenceSite']) {
+      if (isNonEmptyString(o?.[f])) {
+        const reason = resolveSourceBinding(o[f], { repositoryRoot });
+        if (reason) errors.push(`${where} ${f} does not resolve: ${o[f]} - ${reason}`);
+      } else errors.push(`${where} missing ${f}`);
+    }
+  });
+  return errors;
+}
+
+/**
+ * CASCADA set-level laws: single home per derived channel (R6; duplicates
+ * escalate, never invent) and overlap reciprocity (C4).
+ */
+export function validateCascadeSet(docs, { label }) {
+  const errors = [];
+  const homes = new Map();
+  for (const doc of docs) {
+    for (const d of doc.derivations || []) {
+      if (!d?.to) continue;
+      if (d.toIsPattern === true) continue; // un placeholder de patron no es un canal: dos pliegues de mapa no comparten hogar
+      if (homes.has(d.to) && homes.get(d.to) !== doc.rootId) {
+        errors.push(`${label}: channel ${d.to} has two homes (${homes.get(d.to)}, ${doc.rootId}) - escalate to adjudicator, do not invent (R6)`);
+      } else homes.set(d.to, doc.rootId);
+    }
+  }
+  const byId = new Map(docs.map((d) => [d.rootId, d]));
+  for (const doc of docs) {
+    for (const o of doc.overlaps || []) {
+      const other = byId.get(o?.withRoot);
+      if (!other) continue;
+      const mirrored = (other.overlaps || []).some((b) => b?.withRoot === doc.rootId);
+      if (!mirrored) errors.push(`${label}: overlap ${doc.rootId} -> ${o.withRoot} lacks its reciprocal (C4)`);
+    }
+  }
+  return errors;
+}
+
+export const DOMAIN_KINDS = Object.freeze([
+  'enum',
+  'closed-enum',
+  'bounded',
+  'scale',
+  'color-set',
+  'chrome-map',
+  'token-map',
+  'font-stack',
+  'profile-id',
+  'enum-map',
+  'axis-enum-map',
+]);
+
+/**
  * customization-model.json#controlImpactContract.forbiddenControlSegmentFields, verbatim.
  *
  * Families own applicability edges; a control that hand-lists them creates a second,

@@ -1,0 +1,1322 @@
+{
+  "generated": true,
+  "generator": "cascade-backlog.mjs",
+  "schemaVersion": 1,
+  "controlId": "profiles.icon",
+  "tier": "pro",
+  "rootChannel": "--ds-icon-stroke-width",
+  "homonymLaw": "stem = channelId sin el prefijo --ds-/--_ds-. El diff literal por channelId compara dos vocabularios distintos de frente (prescripcion 100% --_ds-*, alcance generado mayoria --ds-*) y da desalineacion total que no significa nada; la regla correcta es por homonimo.",
+  "planeVocabulary": [
+    "css",
+    "ts-compilers",
+    "ts-chrome-variables"
+  ],
+  "planeLaw": "El alcance transitivo sale del plano CSS unicamente. El vocabulario de planos es CERRADO y tiene TRES nombres (planeVocabulary: css, ts-compilers, ts-chrome-variables); planesNotScanned: ts-compilers, ts-chrome-variables. Una CLASE B puede ser en realidad CLASE A por cualquiera de los dos planos TS no escaneados; se declara, no se calla. CRITERIO FUNCIONAL, no postal: un archivo cuenta como productor cuando la compilacion en ejecucion emite el canal a traves de el. ts-compilers = escrituras explicitas vars[\"--ds-X\"] en el cuerpo del compilador (108 ocurrencias, 97 canales distintos en brand-theme 92 / appearance 6 / appearance-posture 10, mas 46 sitios de escritura templada; censo por ENUMERACION de fuente: 552 canales distintos = 183 literales + 378 interpolados). ts-chrome-variables = la tabla de mapeo de chrome-variables/index.ts, cuyos VALORES son los nombres de canal (censo por grep 1477: 477 como valor de tabla -- 352 derivados por 28 llamadas chromeVariableMap mas 125 literales -- y 1000 como clave de escritura directa; censo por ENUMERACION 1671 = 1154 literales + 546 interpolados, que es el que se usa para cobertura). Solape entre los dos planos TS: 8 canales, no 1 -- el 1 salia de comparar censos por grep. Union de semillas TS: 2215. Entra POR NOMBRE PROPIO y no diluido dentro de ts-compilers porque son figuras distintas y mezclarlas hace la cifra agregada no auditable por partes. Que chrome-variables viva fuera de las carpetas del compilador es DEUDA DE FASE 3 de ubicacion, no razon para descontarlo. radius-dial no es un plano: es una raiz de ts-compilers. COBERTURA (denominador 4547 canales leidos en el arbol de skin del motor modern, sembrando las 18 raices del manifiesto, variante generosa): solo-css 1490 = 32,8%; +ts-compilers 2438 = 53,6%; +ts-chrome-variables 2344 = 51,6%; UNION 2894 = 63,6%. Variante estricta: 25,9 / 47,4 / 47,7 / 60,8%. 1653 canales de U no tienen productor en NINGUN plano. Cifras y metodo completos en cascade-extract.mjs -> stats.coverage; son COTA INFERIOR por 3 emisiones interpoladas sin enumerador.",
+  "classLaw": {
+    "A": "el dial YA alcanza el homonimo --ds-X; falta solo abrir el socket en el sitio de lectura del skin: var(--_ds-X, var(--ds-X, literal)). Trabajo mecanico, una linea por sitio.",
+    "B": "el dial NO alcanza ni el homonimo; hacen falta el socket Y cablear el canal a la raiz. Trabajo de diseno."
+  },
+  "seedLaw": "alcance = BFS desde rootChannel MAS los 'to' de las derivations LIVE del root autorado (primer salto por seleccion de atributo, p.ej. chrome.anatomy: el grafo extraido clavea esas aristas por la var() leida, no por el atributo). Se excluyen literal-pin (fuera del dial, R8) y toIsPattern (pliegue a nivel de mapa, no canal literal).",
+  "inputs": {
+    "prescription": "manifest/cascade/roots/profiles.icon.json (terminalReach, autorado)",
+    "reach": "manifest/cascade/extracted/css-edges.json (cascade-extract.mjs, plano CSS)"
+  },
+  "reach": {
+    "channels": 0,
+    "sockets": 0,
+    "bare": 0
+  },
+  "totals": {
+    "prescribed": 118,
+    "classA": 0,
+    "classB": 118
+  },
+  "families": [
+    {
+      "familyId": "pattern/feedback/empty-state",
+      "sockets": [
+        {
+          "socket": "--_ds-empty-state-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "empty-state-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/forms/filter-builder",
+      "sockets": [
+        {
+          "socket": "--_ds-form-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "form-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/forms/filter-panel",
+      "sockets": [
+        {
+          "socket": "--_ds-form-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "form-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/forms/invoice-template",
+      "sockets": [
+        {
+          "socket": "--_ds-form-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "form-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/forms/pattern-form-builder",
+      "sockets": [
+        {
+          "socket": "--_ds-form-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "form-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/forms/step-wizard",
+      "sockets": [
+        {
+          "socket": "--_ds-form-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "form-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/navigation/command-palette",
+      "sockets": [
+        {
+          "socket": "--_ds-command-palette-icon-fill-mode",
+          "state": "PRESCRIPCION",
+          "stem": "command-palette-icon-fill-mode",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/navigation/environment-toggle",
+      "sockets": [
+        {
+          "socket": "--_ds-environment-toggle-icon-fill-mode",
+          "state": "PRESCRIPCION",
+          "stem": "environment-toggle-icon-fill-mode",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/navigation/pattern-locale-switcher",
+      "sockets": [
+        {
+          "socket": "--_ds-locale-switcher-icon-fill-mode",
+          "state": "PRESCRIPCION",
+          "stem": "locale-switcher-icon-fill-mode",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/navigation/shortcuts-overlay",
+      "sockets": [
+        {
+          "socket": "--_ds-shortcuts-overlay-icon-fill-mode",
+          "state": "PRESCRIPCION",
+          "stem": "shortcuts-overlay-icon-fill-mode",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/navigation/workspace-switcher",
+      "sockets": [
+        {
+          "socket": "--_ds-workspace-switcher-icon-fill-mode",
+          "state": "PRESCRIPCION",
+          "stem": "workspace-switcher-icon-fill-mode",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/shell/cockpit-header",
+      "sockets": [
+        {
+          "socket": "--_ds-cockpit-header-icon-size",
+          "state": "PRESCRIPCION",
+          "stem": "cockpit-header-icon-size",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/shell/feature-workspace-frame",
+      "sockets": [
+        {
+          "socket": "--_ds-page-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "page-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/shell/pattern-page-shell",
+      "sockets": [
+        {
+          "socket": "--_ds-page-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "page-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/shell/workbench-header",
+      "sockets": [
+        {
+          "socket": "--_ds-workbench-header-icon-size",
+          "state": "PRESCRIPCION",
+          "stem": "workbench-header-icon-size",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/workflow/approval-inbox",
+      "sockets": [
+        {
+          "socket": "--_ds-steps-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "steps-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/workflow/approval-workflow",
+      "sockets": [
+        {
+          "socket": "--_ds-steps-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "steps-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/workflow/moderation-gallery",
+      "sockets": [
+        {
+          "socket": "--_ds-steps-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "steps-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/workflow/operational-ledger",
+      "sockets": [
+        {
+          "socket": "--_ds-steps-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "steps-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/workflow/shift-matrix",
+      "sockets": [
+        {
+          "socket": "--_ds-steps-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "steps-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/display/avatar",
+      "sockets": [
+        {
+          "socket": "--_ds-avatar-fallback-icon-size",
+          "state": "PRESCRIPCION",
+          "stem": "avatar-fallback-icon-size",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/display/badge",
+      "sockets": [
+        {
+          "socket": "--_ds-badge-icon-size",
+          "state": "PRESCRIPCION",
+          "stem": "badge-icon-size",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/display/card",
+      "sockets": [
+        {
+          "socket": "--_ds-card-header-icon-size",
+          "state": "PRESCRIPCION",
+          "stem": "card-header-icon-size",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-card-image-error-icon-size",
+          "state": "PRESCRIPCION",
+          "stem": "card-image-error-icon-size",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-card-image-loading-stroke",
+          "state": "PRESCRIPCION",
+          "stem": "card-image-loading-stroke",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-card-spinner-stroke",
+          "state": "PRESCRIPCION",
+          "stem": "card-spinner-stroke",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/display/carousel",
+      "sockets": [
+        {
+          "socket": "--_ds-carousel-arrow-size",
+          "state": "PRESCRIPCION",
+          "stem": "carousel-arrow-size",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-carousel-arrow-size-coarse",
+          "state": "PRESCRIPCION",
+          "stem": "carousel-arrow-size-coarse",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/display/code-block",
+      "sockets": [
+        {
+          "socket": "--_ds-code-block-copy-tick-size",
+          "state": "PRESCRIPCION",
+          "stem": "code-block-copy-tick-size",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/display/empty",
+      "sockets": [
+        {
+          "socket": "--_ds-empty-icon-size",
+          "state": "PRESCRIPCION",
+          "stem": "empty-icon-size",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/display/icon-frame",
+      "sockets": [
+        {
+          "socket": "--_ds-icon-frame-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "icon-frame-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/display/image",
+      "sockets": [
+        {
+          "socket": "--_ds-image-fallback-icon-size",
+          "state": "PRESCRIPCION",
+          "stem": "image-fallback-icon-size",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/display/qr-code",
+      "sockets": [
+        {
+          "socket": "--_ds-qrcode-spinner-size",
+          "state": "PRESCRIPCION",
+          "stem": "qrcode-spinner-size",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-qrcode-status-icon-size",
+          "state": "PRESCRIPCION",
+          "stem": "qrcode-status-icon-size",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/display/tag",
+      "sockets": [
+        {
+          "socket": "--_ds-tag-icon-size",
+          "state": "PRESCRIPCION",
+          "stem": "tag-icon-size",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/display/tree",
+      "sockets": [
+        {
+          "socket": "--_ds-tree-icon-size",
+          "state": "PRESCRIPCION",
+          "stem": "tree-icon-size",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-tree-loading-size",
+          "state": "PRESCRIPCION",
+          "stem": "tree-loading-size",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/feedback/loading-indicator",
+      "sockets": [
+        {
+          "socket": "--_ds-loading-indicator-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "loading-indicator-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/feedback/spinner",
+      "sockets": [
+        {
+          "socket": "--_ds-spinner-lg-ring-width",
+          "state": "PRESCRIPCION",
+          "stem": "spinner-lg-ring-width",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-spinner-md-ring-width",
+          "state": "PRESCRIPCION",
+          "stem": "spinner-md-ring-width",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-spinner-sm-ring-width",
+          "state": "PRESCRIPCION",
+          "stem": "spinner-sm-ring-width",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-spinner-xl-ring-width",
+          "state": "PRESCRIPCION",
+          "stem": "spinner-xl-ring-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/inputs/auto-complete",
+      "sockets": [
+        {
+          "socket": "--_ds-autocomplete-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "autocomplete-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/inputs/button",
+      "sockets": [
+        {
+          "socket": "--_ds-button-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "button-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-button-lg-icon-size",
+          "state": "PRESCRIPCION",
+          "stem": "button-lg-icon-size",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-button-md-icon-size",
+          "state": "PRESCRIPCION",
+          "stem": "button-md-icon-size",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-button-sm-icon-size",
+          "state": "PRESCRIPCION",
+          "stem": "button-sm-icon-size",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-button-spinner-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "button-spinner-stroke-width",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-button-xl-icon-size",
+          "state": "PRESCRIPCION",
+          "stem": "button-xl-icon-size",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-button-xs-icon-size",
+          "state": "PRESCRIPCION",
+          "stem": "button-xs-icon-size",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/inputs/cascader",
+      "sockets": [
+        {
+          "socket": "--_ds-cascader-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "cascader-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/inputs/color-picker",
+      "sockets": [
+        {
+          "socket": "--_ds-color-picker-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "color-picker-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/inputs/date-picker",
+      "sockets": [
+        {
+          "socket": "--_ds-datepicker-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "datepicker-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/inputs/form",
+      "sockets": [
+        {
+          "socket": "--_ds-form-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "form-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/inputs/input",
+      "sockets": [
+        {
+          "socket": "--_ds-input-loading-stroke",
+          "state": "PRESCRIPCION",
+          "stem": "input-loading-stroke",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-input-md-icon-size",
+          "state": "PRESCRIPCION",
+          "stem": "input-md-icon-size",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/inputs/mentions",
+      "sockets": [
+        {
+          "socket": "--_ds-mentions-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "mentions-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/inputs/otp-input",
+      "sockets": [
+        {
+          "socket": "--_ds-otp-input-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "otp-input-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/inputs/time-picker",
+      "sockets": [
+        {
+          "socket": "--_ds-timepicker-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "timepicker-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/inputs/tree-select",
+      "sockets": [
+        {
+          "socket": "--_ds-tree-select-chevron-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "tree-select-chevron-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/navigation/affix",
+      "sockets": [
+        {
+          "socket": "--_ds-affix-icon-fill-mode",
+          "state": "PRESCRIPCION",
+          "stem": "affix-icon-fill-mode",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/navigation/anchor",
+      "sockets": [
+        {
+          "socket": "--_ds-anchor-icon-fill-mode",
+          "state": "PRESCRIPCION",
+          "stem": "anchor-icon-fill-mode",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/navigation/back-top",
+      "sockets": [
+        {
+          "socket": "--_ds-back-top-icon-fill-mode",
+          "state": "PRESCRIPCION",
+          "stem": "back-top-icon-fill-mode",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/navigation/breadcrumb",
+      "sockets": [
+        {
+          "socket": "--_ds-breadcrumb-icon-fill-mode",
+          "state": "PRESCRIPCION",
+          "stem": "breadcrumb-icon-fill-mode",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/navigation/float-button",
+      "sockets": [
+        {
+          "socket": "--_ds-float-button-icon-fill-mode",
+          "state": "PRESCRIPCION",
+          "stem": "float-button-icon-fill-mode",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/navigation/link",
+      "sockets": [
+        {
+          "socket": "--_ds-link-icon-fill-mode",
+          "state": "PRESCRIPCION",
+          "stem": "link-icon-fill-mode",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/navigation/menu",
+      "sockets": [
+        {
+          "socket": "--_ds-menu-icon-fill-mode",
+          "state": "PRESCRIPCION",
+          "stem": "menu-icon-fill-mode",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-menu-icon-size",
+          "state": "PRESCRIPCION",
+          "stem": "menu-icon-size",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/navigation/pagination",
+      "sockets": [
+        {
+          "socket": "--_ds-pagination-icon-fill-mode",
+          "state": "PRESCRIPCION",
+          "stem": "pagination-icon-fill-mode",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/navigation/segmented",
+      "sockets": [
+        {
+          "socket": "--_ds-segmented-icon-fill-mode",
+          "state": "PRESCRIPCION",
+          "stem": "segmented-icon-fill-mode",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-segmented-lg-icon-size",
+          "state": "PRESCRIPCION",
+          "stem": "segmented-lg-icon-size",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-segmented-md-icon-size",
+          "state": "PRESCRIPCION",
+          "stem": "segmented-md-icon-size",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-segmented-sm-icon-size",
+          "state": "PRESCRIPCION",
+          "stem": "segmented-sm-icon-size",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/navigation/stepper",
+      "sockets": [
+        {
+          "socket": "--_ds-stepper-icon-fill-mode",
+          "state": "PRESCRIPCION",
+          "stem": "stepper-icon-fill-mode",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/navigation/steps",
+      "sockets": [
+        {
+          "socket": "--_ds-steps-icon-fill-mode",
+          "state": "PRESCRIPCION",
+          "stem": "steps-icon-fill-mode",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/navigation/tabs",
+      "sockets": [
+        {
+          "socket": "--_ds-tabs-icon-fill-mode",
+          "state": "PRESCRIPCION",
+          "stem": "tabs-icon-fill-mode",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-tabs-lg-icon-size",
+          "state": "PRESCRIPCION",
+          "stem": "tabs-lg-icon-size",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-tabs-loading-stroke",
+          "state": "PRESCRIPCION",
+          "stem": "tabs-loading-stroke",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-tabs-md-icon-size",
+          "state": "PRESCRIPCION",
+          "stem": "tabs-md-icon-size",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-tabs-responsive-icon-size",
+          "state": "PRESCRIPCION",
+          "stem": "tabs-responsive-icon-size",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-tabs-sm-icon-size",
+          "state": "PRESCRIPCION",
+          "stem": "tabs-sm-icon-size",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/dashboard/dashboard-insights",
+      "sockets": [
+        {
+          "socket": "--_ds-stats-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "stats-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/dashboard/data-terminal-card",
+      "sockets": [
+        {
+          "socket": "--_ds-stats-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "stats-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/dashboard/stats-header",
+      "sockets": [
+        {
+          "socket": "--_ds-stats-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "stats-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/collection-header",
+      "sockets": [
+        {
+          "socket": "--_ds-collection-header-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "collection-header-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/dashboard-header",
+      "sockets": [
+        {
+          "socket": "--_ds-dashboard-header-icon-size",
+          "state": "PRESCRIPCION",
+          "stem": "dashboard-header-icon-size",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-dashboard-header-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "dashboard-header-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/detail-header",
+      "sockets": [
+        {
+          "socket": "--_ds-detail-header-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "detail-header-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/edit-header",
+      "sockets": [
+        {
+          "socket": "--_ds-edit-header-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "edit-header-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/form-header",
+      "sockets": [
+        {
+          "socket": "--_ds-form-header-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "form-header-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/header-surface",
+      "sockets": [
+        {
+          "socket": "--_ds-header-surface-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "header-surface-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/mobile-header",
+      "sockets": [
+        {
+          "socket": "--_ds-mobile-header-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "mobile-header-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/section-frame",
+      "sockets": [
+        {
+          "socket": "--_ds-section-frame-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "section-frame-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/record/edit-fields",
+      "sockets": [
+        {
+          "socket": "--_ds-edit-fields-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "edit-fields-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/record/form-sections",
+      "sockets": [
+        {
+          "socket": "--_ds-form-sections-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "form-sections-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/record/record-action-bar",
+      "sockets": [
+        {
+          "socket": "--_ds-record-action-bar-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "record-action-bar-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/record/record-field",
+      "sockets": [
+        {
+          "socket": "--_ds-record-field-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "record-field-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/record/record-field-grid",
+      "sockets": [
+        {
+          "socket": "--_ds-record-field-grid-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "record-field-grid-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/record/record-panel",
+      "sockets": [
+        {
+          "socket": "--_ds-record-panel-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "record-panel-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/record/record-summary-strip",
+      "sockets": [
+        {
+          "socket": "--_ds-record-summary-strip-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "record-summary-strip-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/shell/app-shell",
+      "sockets": [
+        {
+          "socket": "--_ds-page-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "page-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/shell/bottom-tab-bar",
+      "sockets": [
+        {
+          "socket": "--_ds-page-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "page-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/shell/page-shell-surface",
+      "sockets": [
+        {
+          "socket": "--_ds-page-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "page-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/shell/sidebar-surface",
+      "sockets": [
+        {
+          "socket": "--_ds-page-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "page-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/shell/surface-chrome",
+      "sockets": [
+        {
+          "socket": "--_ds-section-card-icon-size",
+          "state": "PRESCRIPCION",
+          "stem": "section-card-icon-size",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/shell/workspace-shell",
+      "sockets": [
+        {
+          "socket": "--_ds-page-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "page-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/action-dock",
+      "sockets": [
+        {
+          "socket": "--_ds-action-dock-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "action-dock-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/active-filters-bar",
+      "sockets": [
+        {
+          "socket": "--_ds-active-filters-bar-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "active-filters-bar-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/column-menu",
+      "sockets": [
+        {
+          "socket": "--_ds-column-menu-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "column-menu-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/connected-command-palette",
+      "sockets": [
+        {
+          "socket": "--_ds-connected-command-palette-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "connected-command-palette-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/export-button",
+      "sockets": [
+        {
+          "socket": "--_ds-export-button-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "export-button-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/field-filters-panel",
+      "sockets": [
+        {
+          "socket": "--_ds-field-filters-panel-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "field-filters-panel-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/saved-views-menu",
+      "sockets": [
+        {
+          "socket": "--_ds-saved-views-menu-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "saved-views-menu-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/scope-switcher",
+      "sockets": [
+        {
+          "socket": "--_ds-scope-switcher-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "scope-switcher-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/search-command-bar",
+      "sockets": [
+        {
+          "socket": "--_ds-search-command-bar-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "search-command-bar-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/selection-preview-rail",
+      "sockets": [
+        {
+          "socket": "--_ds-selection-preview-rail-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "selection-preview-rail-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/table-toolbar",
+      "sockets": [
+        {
+          "socket": "--_ds-table-toolbar-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "table-toolbar-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/view-mode-switcher",
+      "sockets": [
+        {
+          "socket": "--_ds-view-mode-switcher-icon-stroke-width",
+          "state": "PRESCRIPCION",
+          "stem": "view-mode-switcher-icon-stroke-width",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    }
+  ]
+}

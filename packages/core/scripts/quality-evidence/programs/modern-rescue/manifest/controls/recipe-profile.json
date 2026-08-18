@@ -40,7 +40,13 @@
     "staticDbParityEvidenceIds": [],
     "exactRestoreEvidenceIds": [],
     "negativeControls": [],
-    "nextAction": "CALIBRATE_LOWERERS_COMPUTED_DELTAS_NEGATIVES_AND_EXACT_RESTORE"
+    "nextAction": "CALIBRATE_LOWERERS_COMPUTED_DELTAS_NEGATIVES_AND_EXACT_RESTORE",
+    "catalog": [
+      "rottay/technical-sharp@1",
+      "rottay/network-professional@1",
+      "rottay/editorial-round@1"
+    ],
+    "catalogLaw": "catalogo en calibration, NO en enumValues: cerrado por registro (recipe-profiles/index.ts:74-111)"
   },
   "retiredAliases": []
 }

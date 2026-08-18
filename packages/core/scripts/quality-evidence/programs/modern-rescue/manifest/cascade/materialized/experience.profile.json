@@ -1,0 +1,13 @@
+{
+  "generated": true,
+  "generator": "cascade-materialize.mjs",
+  "schemaVersion": 1,
+  "controlId": "experience.profile",
+  "tier": "standard",
+  "inputs": {
+    "variantsFrom": "manifest/controls/experience.profile.json (calibration.normalizedStops)",
+    "rulesFrom": "manifest/cascade/extracted/css-edges.json (cascade-extract.mjs)",
+    "authoredRoot": "manifest/cascade/roots/experience.profile.json"
+  },
+  "notMaterializable": "raiz de composicion: su efecto se reparte a los ejes (dependsOn inverso de profiles.expressive); sin canal numerico propio"
+}

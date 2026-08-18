@@ -19993,73 +19993,6 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "color.mode",
-            "socketPattern": null,
-            "prop": "idem",
-            "tier": "standard",
-            "examples": [],
-            "noSocketReason": "sin socket propio; mismo mecanismo",
-            "socketsResolved": true,
-            "carrier": "shared-channel"
-          },
-          {
-            "root": "color.seeds",
-            "prop": "propiedad lector-unico (FAM-16)",
-            "tier": "standard",
-            "sockets": [
-              "--_ds-compact-card-bg",
-              "--_ds-compact-card-border",
-              "--_ds-metric-card-",
-              "--_ds-metric-card-bg",
-              "--_ds-metric-card-body-color",
-              "--_ds-metric-card-border",
-              "--_ds-metric-card-border-hover",
-              "--_ds-metric-card-footer-bg",
-              "--_ds-metric-card-footer-border",
-              "--_ds-metric-card-footer-color",
-              "--_ds-metric-card-icon-bg",
-              "--_ds-metric-card-icon-border",
-              "--_ds-metric-card-icon-color",
-              "--_ds-metric-card-label-color",
-              "--_ds-metric-card-meter-fill",
-              "--_ds-metric-card-meter-fill-error",
-              "--_ds-metric-card-meter-fill-success",
-              "--_ds-metric-card-meter-track",
-              "--_ds-metric-card-meter-track-border",
-              "--_ds-metric-card-overlay",
-              "--_ds-metric-card-status-bg",
-              "--_ds-metric-card-status-border",
-              "--_ds-metric-card-status-color",
-              "--_ds-metric-card-trend-color",
-              "--_ds-metric-card-trend-color-error",
-              "--_ds-metric-card-trend-color-warning",
-              "--_ds-metric-card-trend-error-bg",
-              "--_ds-metric-card-trend-error-border",
-              "--_ds-metric-card-value-color",
-              "--_ds-metric-card-value-color-hover",
-              "--_ds-shell-shimmer-faint",
-              "--_ds-signal-card-",
-              "--_ds-signal-card-accent",
-              "--_ds-signal-card-badge-bg",
-              "--_ds-signal-card-badge-border",
-              "--_ds-signal-card-badge-color",
-              "--_ds-signal-card-bg",
-              "--_ds-signal-card-body-color",
-              "--_ds-signal-card-border",
-              "--_ds-signal-card-border-hover",
-              "--_ds-signal-card-icon-bg",
-              "--_ds-signal-card-icon-border",
-              "--_ds-signal-card-section-alt-bg",
-              "--_ds-signal-card-section-bg",
-              "--_ds-signal-card-title-color"
-            ],
-            "socketsResolved": true
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
             "--ds-color-",
@@ -20101,8 +20034,763 @@
           "Piso de accesibilidad (clase propia)": [
             "--ds-touch-target-min"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-compact-card-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-rows.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-compact-card-border",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-rows.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-metric-card-",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-metric-card-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-rows.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-metric-card-body-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-metric-card-border",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-rows.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-metric-card-border-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-metrics-interactions.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-metrics-interactions.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-metric-card-footer-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-metric-card-footer-border",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-metric-card-footer-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-metric-card-icon-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-rows.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-metric-card-icon-border",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-rows.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-metrics-interactions.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-metric-card-icon-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-rows.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-metric-card-label-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-metric-card-meter-fill",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-metric-card-meter-fill-error",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-metric-card-meter-fill-success",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-metric-card-meter-track",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-metric-card-meter-track-border",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-metric-card-overlay",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-metric-card-status-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-metric-card-status-border",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-metric-card-status-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-metric-card-trend-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-rows.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-metric-card-trend-color-error",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-rows.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-metric-card-trend-color-warning",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-metric-card-trend-error-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-metric-card-trend-error-border",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-metric-card-value-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-rows.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-metric-card-value-color-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-metrics-interactions.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-shell-shimmer-faint",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-rows.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-rows.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-signal-card-",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-signal-card-accent",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-rows.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-metrics-interactions.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-signal-card-badge-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-rows.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-signal-card-badge-border",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-rows.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-signal-card-badge-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-rows.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-metrics-interactions.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-signal-card-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-rows.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-signal-card-body-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-signal-card-border",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-rows.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-signal-card-border-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-metrics-interactions.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-metrics-interactions.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-signal-card-icon-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-rows.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-signal-card-icon-border",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-rows.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-metrics-interactions.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-signal-card-section-alt-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-metrics-interactions.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-metrics-interactions.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-signal-card-section-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-signal-card-title-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-rows.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "typography.pairing",
@@ -20111,21 +20799,75 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "type.pairing",
-            "socketPattern": "--_ds-<comp>-value-family",
-            "prop": "valores de metric cards",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-dashboard-insights-value-family"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--ds-font-family-base",
+          "semanticOwner": "typography.pairing",
+          "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
           }
-        ]
+        },
+        {
+          "channelId": "--ds-font-family-heading",
+          "semanticOwner": "typography.pairing",
+          "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--ds-letter-spacing-heading",
+          "semanticOwner": "typography.pairing",
+          "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--ds-line-height-display",
+          "semanticOwner": "typography.pairing",
+          "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ],
+      "targetBinding": {
+        "uncoveredByDesign": {
+          "CONSUMO (migracion): ownedBy structure/dashboard/dashboard-insights#typography.families": [
+            "--_ds-dashboard-insights-value-family"
+          ]
+        },
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -20136,27 +20878,40 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "type.pairing",
-            "socketPattern": "--_ds-<comp>-value-family",
-            "prop": "valores de metric cards",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-dashboard-insights-value-family"
-            ],
-            "socketsResolved": true
-          }
-        ],
         "uncoveredByDesign": {
           "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
             "--ds-font-family-mono"
           ]
         },
-        "reviewedFrom": "anatomy"
-      }
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-dashboard-insights-value-family",
+          "semanticOwner": "typography.families",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-rows.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-metrics-interactions.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/activity-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/activity-compact.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/activity-ticker.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/activity-timeline.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-activity-interactions.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
     },
     {
       "controlId": "typography.scale",
@@ -20166,29 +20921,66 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "type.scale",
-            "socketPattern": "--_ds-<comp>-title-size / --_ds-<comp>-value-size",
-            "prop": "titulos de pagina y valores de metricas",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-dashboard-insights-title-size",
-              "--_ds-dashboard-insights-value-size"
-            ],
-            "socketsResolved": true
-          }
-        ],
         "uncoveredByDesign": {
           "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
             "--ds-font-size-2xs",
             "--ds-font-size-base"
           ]
         },
-        "reviewedFrom": "anatomy"
-      }
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-dashboard-insights-title-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-rows.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-metrics-interactions.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/activity-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/activity-compact.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/activity-ticker.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/activity-timeline.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-activity-interactions.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-dashboard-insights-value-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-rows.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-metrics-interactions.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/activity-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/activity-compact.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/activity-ticker.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/activity-timeline.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-activity-interactions.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
     },
     {
       "controlId": "shape.radius-scale",
@@ -20198,35 +20990,96 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "shape.corner",
-            "socketPattern": "--_ds-<comp>-panel-radius",
-            "prop": "paneles, rails, metric cards",
-            "tier": "standard",
-            "examples": [
-              "--_ds-record-facts-radius",
-              "--_ds-stats-card-radius"
-            ],
-            "sockets": [
-              "--_ds-dashboard-insights-panel-radius",
-              "--_ds-compact-card-radius",
-              "--_ds-metric-card-radius",
-              "--_ds-signal-card-radius"
-            ],
-            "socketsResolved": true
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
             "--ds-premium-card-radius",
             "--ds-radius-lg",
             "--ds-radius-md"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-dashboard-insights-panel-radius",
+          "semanticOwner": "shape.radius-scale",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-rows.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-metrics-interactions.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/activity-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/activity-compact.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/activity-ticker.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/activity-timeline.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-activity-interactions.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-compact-card-radius",
+          "semanticOwner": "shape.radius-scale",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-rows.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-metric-card-radius",
+          "semanticOwner": "shape.radius-scale",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-rows.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-signal-card-radius",
+          "semanticOwner": "shape.radius-scale",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-rows.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "shape.button-style",
@@ -20249,31 +21102,65 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "source": "huecos-fable",
-        "bindings": [
-          {
-            "root": "density.mode",
-            "socketPattern": "--_ds-stats-density-factor",
-            "prop": "padding de metric cards y alto de fila de widgets (slug vivo: stats)",
-            "tier": "standard",
-            "sockets": [
-              "--_ds-stats-density-factor",
-              "--_ds-metric-card-gap",
-              "--_ds-metric-card-grid-size",
-              "--_ds-metric-card-meter-height"
-            ],
-            "socketsResolved": true,
-            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
             "--ds-surface-card-grid-size"
+          ],
+          "CONSUMO (migracion): ownedBy structure/dashboard/stats-header#density.mode": [
+            "--_ds-stats-density-factor"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-metric-card-gap",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-metric-card-grid-size",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-metric-card-meter-height",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "spacing.rhythm",
@@ -20291,22 +21178,33 @@
       ],
       "evidenceIds": [],
       "nextAction": "RUN_COMPLETE_PROPERTY_CLASSIFIER_BEFORE_ANY_SOURCE_EDIT",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "space.rhythm",
-            "socketPattern": "--_ds-<comp>-grid-gap",
-            "prop": "gap de grillas de widgets y de zonas de trabajo",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-dashboard-insights-grid-gap"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-dashboard-insights-grid-gap",
+          "semanticOwner": "spacing.rhythm",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-rows.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-metrics-interactions.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/activity-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/activity-compact.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/activity-ticker.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/activity-timeline.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-activity-interactions.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "motion.dial",
@@ -20316,28 +21214,31 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "why": "el tablero obedece al dial",
-        "source": "huecos-kimi",
-        "bindings": [
-          {
-            "root": "motion.character",
-            "socketPattern": "--_ds-stats-transition-duration",
-            "prop": "transition-duration del rearrange de widgets",
-            "tier": "standard",
-            "sockets": [
-              "--_ds-metric-card-hover-transform"
-            ]
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
             "--ds-motion-ease-enter",
             "--ds-motion-ease-out"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-metric-card-hover-transform",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-metrics-interactions.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-metrics-interactions.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -20347,34 +21248,125 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "surface.elevation",
-            "socketPattern": "--_ds-<comp>-elevation",
-            "prop": "box-shadow",
-            "tier": "standard",
-            "examples": [
-              "--_ds-dashboard-panel-elevation"
-            ],
-            "sockets": [
-              "--_ds-dashboard-insights-elevation",
-              "--_ds-compact-card-shadow",
-              "--_ds-metric-card-shadow",
-              "--_ds-metric-card-shadow-hover",
-              "--_ds-signal-card-shadow",
-              "--_ds-signal-card-shadow-hover"
-            ],
-            "socketsResolved": true
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
             "--ds-premium-card-shadow"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-dashboard-insights-elevation",
+          "semanticOwner": "surfaces.elevation-posture",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-rows.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-metrics-interactions.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/activity-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/activity-compact.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/activity-ticker.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/activity-timeline.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-activity-interactions.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-compact-card-shadow",
+          "semanticOwner": "surfaces.elevation-posture",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-rows.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-metric-card-shadow",
+          "semanticOwner": "surfaces.elevation-posture",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-rows.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-metrics-interactions.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-metric-card-shadow-hover",
+          "semanticOwner": "surfaces.elevation-posture",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-metrics-interactions.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-metrics-interactions.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-signal-card-shadow",
+          "semanticOwner": "surfaces.elevation-posture",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-rows.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-signal-card-shadow-hover",
+          "semanticOwner": "surfaces.elevation-posture",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-metrics-interactions.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-metrics-interactions.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -20433,19 +21425,33 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "why": "socket heredado --_ds-widget-board-cell-tint",
-        "source": "huecos-kimi",
-        "bindings": [
-          {
-            "root": "chrome.families",
-            "socketPattern": "--_ds-stats-cell-tint",
-            "prop": "background-color de las celdas del widget board",
-            "tier": "standard"
+      "internalChannels": [
+        {
+          "channelId": "--_ds-stats-cell-tint",
+          "semanticOwner": "chrome.families",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-rows.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-metrics-interactions.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/activity-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/activity-compact.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/activity-ticker.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/activity-timeline.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-activity-interactions.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "chrome.anatomy",
@@ -20455,31 +21461,35 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "source": "huecos-fable",
-        "bindings": [
-          {
-            "root": "shape.edge",
-            "socketPattern": "--_ds-stats-rule-style",
-            "prop": "bordes de metric cards y reglas de la grilla de widgets",
-            "tier": "standard",
-            "sockets": [
-              "--_ds-stats-rule-style",
-              "--_ds-metric-card-grid-line"
-            ],
-            "socketsResolved": true,
-            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
             "--ds-focus-ring-color",
             "--ds-focus-ring-offset",
             "--ds-focus-ring-width"
+          ],
+          "CONSUMO (migracion): ownedBy structure/dashboard/stats-header#chrome.anatomy": [
+            "--_ds-stats-rule-style"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-metric-card-grid-line",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "token-overrides",
@@ -20558,19 +21568,33 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "why": "iconos de la libreria",
-        "source": "huecos-kimi",
-        "bindings": [
-          {
-            "root": "icon.posture",
-            "socketPattern": "--_ds-stats-icon-stroke-width",
-            "prop": "stroke-width de los iconos de accion de widget",
-            "tier": "standard"
+      "internalChannels": [
+        {
+          "channelId": "--_ds-stats-icon-stroke-width",
+          "semanticOwner": "profiles.icon",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/dashboard/dashboard-insights"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-minimal.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-chart.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/metrics-rows.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-metrics-interactions.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/activity-cards.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/activity-compact.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/activity-ticker.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/activity-timeline.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-activity-interactions.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "responsive.posture",

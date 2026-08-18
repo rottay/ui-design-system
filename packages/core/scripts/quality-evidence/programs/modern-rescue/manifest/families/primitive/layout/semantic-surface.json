@@ -269,39 +269,120 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "color.mode",
-            "socketPattern": null,
-            "prop": "background/color/border via los canales de color re-derivados por overlay",
-            "tier": "standard",
-            "examples": [],
-            "noSocketReason": "SIN socket propio: el modo viaja por los overlays de los canales compartidos --ds-color-*/--ds-surface-*",
-            "socketsResolved": true,
-            "carrier": "shared-channel"
-          },
-          {
-            "root": null,
-            "socketPattern": null,
-            "prop": "sockets de familia derivados de anatomy (sin skin modern declarado)",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-semantic-surface-bg",
-              "--_ds-semantic-surface-bg-active",
-              "--_ds-semantic-surface-bg-disabled",
-              "--_ds-semantic-surface-bg-hover",
-              "--_ds-semantic-surface-bg-selected",
-              "--_ds-semantic-surface-fg",
-              "--_ds-semantic-surface-support-bg"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-semantic-surface-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/ui/primitives/layout/SemanticSurface",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/semantic-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/primitives/layout/SemanticSurface"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ],
-        "reviewedFrom": "anatomy"
-      }
+        },
+        {
+          "channelId": "--_ds-semantic-surface-bg-active",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/ui/primitives/layout/SemanticSurface",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/semantic-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/primitives/layout/SemanticSurface"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-semantic-surface-bg-disabled",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/ui/primitives/layout/SemanticSurface",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/semantic-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/primitives/layout/SemanticSurface"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-semantic-surface-bg-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/ui/primitives/layout/SemanticSurface",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/semantic-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/primitives/layout/SemanticSurface"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-semantic-surface-bg-selected",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/ui/primitives/layout/SemanticSurface",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/semantic-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/primitives/layout/SemanticSurface"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-semantic-surface-fg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/ui/primitives/layout/SemanticSurface",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/semantic-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/primitives/layout/SemanticSurface"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-semantic-surface-support-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/ui/primitives/layout/SemanticSurface",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/semantic-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/primitives/layout/SemanticSurface"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
     },
     {
       "controlId": "typography.pairing",
@@ -367,25 +448,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "shape.corner",
-            "socketPattern": "--_ds-<comp>-radius",
-            "prop": "border-radius de collapse/panels",
-            "tier": "standard",
-            "examples": [
-              "--_ds-collapse-radius"
-            ],
-            "sockets": [
-              "--_ds-semantic-surface-radius"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-semantic-surface-radius",
+          "semanticOwner": "shape.radius-scale",
+          "producer": "packages/core/src/ui/primitives/layout/SemanticSurface",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/semantic-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/primitives/layout/SemanticSurface"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ],
-        "reviewedFrom": "anatomy"
-      }
+        }
+      ]
     },
     {
       "controlId": "shape.button-style",
@@ -412,25 +492,40 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "source": "huecos-fable",
-        "bindings": [
-          {
-            "root": "density.mode",
-            "socketPattern": "--_ds-collapse-density-factor",
-            "prop": "padding de header/body de Collapse (unica familia layout con filas); Box/Flex/Grid no densifican",
-            "tier": "standard",
-            "sockets": [
-              "--_ds-semantic-surface-gap",
-              "--_ds-semantic-surface-padding"
-            ],
-            "socketsResolved": true,
-            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+      "internalChannels": [
+        {
+          "channelId": "--_ds-semantic-surface-gap",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/ui/primitives/layout/SemanticSurface",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/semantic-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/primitives/layout/SemanticSurface"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ],
-        "reviewedFrom": "anatomy"
-      }
+        },
+        {
+          "channelId": "--_ds-semantic-surface-padding",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/ui/primitives/layout/SemanticSurface",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/semantic-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/primitives/layout/SemanticSurface"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
     },
     {
       "controlId": "spacing.rhythm",
@@ -457,23 +552,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": null,
-            "socketPattern": null,
-            "prop": "sockets de familia derivados de anatomy (sin skin modern declarado)",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-semantic-surface-transition-duration"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-semantic-surface-transition-duration",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/ui/primitives/layout/SemanticSurface",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/semantic-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/primitives/layout/SemanticSurface"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ],
-        "reviewedFrom": "anatomy"
-      }
+        }
+      ]
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -576,24 +672,40 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "shape.edge",
-            "socketPattern": "--_ds-divider-style",
-            "prop": "estilo del Divider",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-semantic-surface-border-width",
-              "--_ds-semantic-surface-focus-ring-color"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-semantic-surface-border-width",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/ui/primitives/layout/SemanticSurface",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/semantic-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/primitives/layout/SemanticSurface"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ],
-        "reviewedFrom": "anatomy"
-      }
+        },
+        {
+          "channelId": "--_ds-semantic-surface-focus-ring-color",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/ui/primitives/layout/SemanticSurface",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/semantic-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/primitives/layout/SemanticSurface"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
     },
     {
       "controlId": "token-overrides",

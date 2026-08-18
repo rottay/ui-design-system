@@ -1,0 +1,34 @@
+{
+  "generated": true,
+  "generator": "cascade-materialize.mjs",
+  "schemaVersion": 1,
+  "controlId": "surfaces.elevation-posture",
+  "tier": "standard",
+  "inputs": {
+    "variantsFrom": "manifest/controls/surfaces.elevation-posture.json (calibration.normalizedStops)",
+    "rulesFrom": "manifest/cascade/extracted/css-edges.json (cascade-extract.mjs)",
+    "authoredRoot": "manifest/cascade/roots/surfaces.elevation-posture.json"
+  },
+  "effectKind": "perVariant-authored",
+  "note": "raiz enum: la tabla autorada ES la regla; se cita, no se deriva",
+  "variants": [
+    {
+      "id": "flat",
+      "value": "flat",
+      "effects": {
+        "--ds-elevation-1": "none",
+        "--ds-elevation-2": "none",
+        "--ds-elevation-3": "minimal"
+      }
+    },
+    {
+      "id": "elevated",
+      "value": "elevated",
+      "effects": {
+        "--ds-elevation-1": "preset.elevated[1]",
+        "--ds-elevation-2": "preset.elevated[2]",
+        "--ds-elevation-3": "preset.elevated[3]"
+      }
+    }
+  ]
+}

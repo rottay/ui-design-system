@@ -506,7 +506,13 @@
             "socketsResolved": true,
             "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
           }
-        ]
+        ],
+        "uncoveredByDesign": {
+          "CONSUMO (migracion): ownedBy pattern/shell/pattern-page-shell#shape.radius-scale": [
+            "--_ds-page-panel-radius"
+          ]
+        },
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -563,7 +569,13 @@
             ],
             "socketsResolved": true
           }
-        ]
+        ],
+        "uncoveredByDesign": {
+          "CONSUMO (migracion): ownedBy structure/shell/sidebar-surface#navigation.sidebar-tone": [
+            "--_ds-sidebar-surface-section-gap"
+          ]
+        },
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -590,7 +602,13 @@
             ],
             "socketsResolved": true
           }
-        ]
+        ],
+        "uncoveredByDesign": {
+          "CONSUMO (migracion): ownedBy structure/shell/sidebar-surface#navigation.sidebar-tone": [
+            "--_ds-sidebar-surface-transition-duration"
+          ]
+        },
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -616,7 +634,13 @@
             ],
             "socketsResolved": true
           }
-        ]
+        ],
+        "uncoveredByDesign": {
+          "CONSUMO (migracion): ownedBy structure/shell/sidebar-surface#navigation.sidebar-tone": [
+            "--_ds-sidebar-surface-elevation"
+          ]
+        },
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -639,27 +663,56 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "navigation.tone",
-            "socketPattern": "--_ds-<comp>-sidebar-bg",
-            "prop": "background-color",
-            "tier": "standard",
-            "examples": [
-              "--_ds-workspace-sidebar-bg"
-            ],
-            "sockets": [
-              "--_ds-sidebar-item-bg-active",
-              "--_ds-sidebar-item-bg-hover",
-              "--_ds-sidebar-surface-sidebar-bg"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-sidebar-item-bg-active",
+          "semanticOwner": "navigation.sidebar-tone",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "productiveConsumerFamilyIds": [
+            "structure/shell/sidebar-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ],
-        "reviewedFrom": "anatomy"
-      }
+        },
+        {
+          "channelId": "--_ds-sidebar-item-bg-hover",
+          "semanticOwner": "navigation.sidebar-tone",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "productiveConsumerFamilyIds": [
+            "structure/shell/sidebar-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-sidebar-surface-sidebar-bg",
+          "semanticOwner": "navigation.sidebar-tone",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/shell/sidebar-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
     },
     {
       "controlId": "experience.profile",
@@ -698,7 +751,13 @@
             ],
             "socketsResolved": true
           }
-        ]
+        ],
+        "uncoveredByDesign": {
+          "CONSUMO (migracion): ownedBy structure/shell/sidebar-surface#navigation.sidebar-tone": [
+            "--_ds-sidebar-surface-z-index"
+          ]
+        },
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -723,7 +782,13 @@
             "socketsResolved": true,
             "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
           }
-        ]
+        ],
+        "uncoveredByDesign": {
+          "CONSUMO (migracion): ownedBy pattern/shell/pattern-page-shell#chrome.anatomy": [
+            "--_ds-page-rule-style"
+          ]
+        },
+        "migratedToInternalChannels": true
       }
     },
     {
@@ -803,19 +868,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "why": "iconos estructurales del chrome",
-        "source": "huecos-kimi",
-        "bindings": [
-          {
-            "root": "icon.posture",
-            "socketPattern": "--_ds-page-icon-stroke-width",
-            "prop": "stroke-width del chevron de collapse del sidebar",
-            "tier": "standard"
+      "internalChannels": [
+        {
+          "channelId": "--_ds-page-icon-stroke-width",
+          "semanticOwner": "profiles.icon",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/shell/sidebar-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "responsive.posture",

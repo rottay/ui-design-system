@@ -1,0 +1,496 @@
+{
+  "schemaVersion": 1,
+  "rootId": "spacing.rhythm",
+  "tier": "standard",
+  "rootChannel": {
+    "channel": "--ds-rhythm-scale",
+    "emission": [
+      {
+        "kind": "compiler-emit",
+        "site": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+        "clampSite": "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts",
+        "note": "emision con clamp INLINE a TENANT_THEME_RHYTHM_SCALE_BOUNDS {0.8,1.25} (brand-theme:745-750); doctrina verbatim del contrato: \"a value outside this range is clamped, never honoured\" (tenant-theme:520-524); sin fila T3 numerica - el tenant elige el enum"
+      }
+    ]
+  },
+  "dependsOn": [],
+  "derivations": [
+    {
+      "from": "--ds-rhythm-scale",
+      "to": "--ds-rhythm-effective-scale",
+      "rule": {
+        "kind": "clamp",
+        "formula": "clamp(0.8, .., 1.25)"
+      },
+      "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+      "line": 682,
+      "state": "LIVE",
+      "note": "el canal que los gaps de seccion componen via calc(base * effective)"
+    }
+  ],
+  "terminalReach": [
+    {
+      "channelId": "--_ds-comment-thread-rail-offset",
+      "familyId": "pattern/communication/comment-thread",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-live-feed-banner-margin-block-end",
+      "familyId": "pattern/communication/live-feed",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-live-feed-footer-margin-block-start",
+      "familyId": "pattern/communication/live-feed",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-live-feed-header-margin-block-end",
+      "familyId": "pattern/communication/live-feed",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-facts-section-gap",
+      "familyId": "pattern/data/record-facts",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-filter-builder-group-gap",
+      "familyId": "pattern/forms/filter-builder",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-filter-panel-group-gap",
+      "familyId": "pattern/forms/filter-panel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-invoice-template-group-gap",
+      "familyId": "pattern/forms/invoice-template",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-builder-group-gap",
+      "familyId": "pattern/forms/pattern-form-builder",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-step-wizard-group-gap",
+      "familyId": "pattern/forms/step-wizard",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-cockpit-header-section-gap",
+      "familyId": "pattern/shell/cockpit-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-feature-workspace-frame-section-gap",
+      "familyId": "pattern/shell/feature-workspace-frame",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-page-shell-section-gap",
+      "familyId": "pattern/shell/pattern-page-shell",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-workbench-header-section-gap",
+      "familyId": "pattern/shell/workbench-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tree-view-search-margin-block-end",
+      "familyId": "pattern/visualization/pattern-tree-view",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-approval-inbox-item-gap",
+      "familyId": "pattern/workflow/approval-inbox",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-approval-workflow-item-gap",
+      "familyId": "pattern/workflow/approval-workflow",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-moderation-gallery-item-gap",
+      "familyId": "pattern/workflow/moderation-gallery",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-operational-ledger-item-gap",
+      "familyId": "pattern/workflow/operational-ledger",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-shift-matrix-item-gap",
+      "familyId": "pattern/workflow/shift-matrix",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-calendar-header-margin-block-end",
+      "familyId": "primitive/display/calendar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-actions-margin-top",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-skeleton-stack-gap",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-skeleton-stack-margin-top",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-subtitle-margin-top",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-descriptions-section-gap",
+      "familyId": "primitive/display/descriptions",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-message-stack-offset",
+      "familyId": "primitive/feedback/message",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-notification-stack-inline-gutter",
+      "familyId": "primitive/feedback/notification",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-notification-stack-offset",
+      "familyId": "primitive/feedback/notification",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toast-viewport-gutter",
+      "familyId": "primitive/feedback/toast",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-collapse-extra-margin-inline-start",
+      "familyId": "primitive/layout/collapse",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-dashboard-insights-grid-gap",
+      "familyId": "structure/dashboard/dashboard-insights",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-data-terminal-card-grid-gap",
+      "familyId": "structure/dashboard/data-terminal-card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stats-header-grid-gap",
+      "familyId": "structure/dashboard/stats-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-collection-header-below-gap",
+      "familyId": "structure/headers/collection-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-dashboard-header-below-gap",
+      "familyId": "structure/headers/dashboard-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-detail-header-below-gap",
+      "familyId": "structure/headers/detail-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-detail-header-context-rail-margin-block-start",
+      "familyId": "structure/headers/detail-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-detail-header-metadata-card-children-margin-block-start",
+      "familyId": "structure/headers/detail-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-detail-header-metadata-card-margin-block-start",
+      "familyId": "structure/headers/detail-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-detail-header-root-margin-block-end",
+      "familyId": "structure/headers/detail-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-edit-header-below-gap",
+      "familyId": "structure/headers/edit-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-header-below-gap",
+      "familyId": "structure/headers/form-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-header-root-margin",
+      "familyId": "structure/headers/form-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-header-surface-below-gap",
+      "familyId": "structure/headers/header-surface",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-mobile-header-below-gap",
+      "familyId": "structure/headers/mobile-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-section-frame-below-gap",
+      "familyId": "structure/headers/section-frame",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-app-shell-section-gap",
+      "familyId": "structure/shell/app-shell",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-bottom-tab-bar-section-gap",
+      "familyId": "structure/shell/bottom-tab-bar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-page-shell-surface-section-gap",
+      "familyId": "structure/shell/page-shell-surface",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-surface-chrome-section-gap",
+      "familyId": "structure/shell/surface-chrome",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-workspace-shell-section-gap",
+      "familyId": "structure/shell/workspace-shell",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-action-dock-grid-gap",
+      "familyId": "structure/workspace/action-dock",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-active-filters-bar-grid-gap",
+      "familyId": "structure/workspace/active-filters-bar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-column-menu-grid-gap",
+      "familyId": "structure/workspace/column-menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-connected-command-palette-grid-gap",
+      "familyId": "structure/workspace/connected-command-palette",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-export-button-grid-gap",
+      "familyId": "structure/workspace/export-button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-field-filters-panel-grid-gap",
+      "familyId": "structure/workspace/field-filters-panel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-saved-views-menu-grid-gap",
+      "familyId": "structure/workspace/saved-views-menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-scope-switcher-grid-gap",
+      "familyId": "structure/workspace/scope-switcher",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-search-command-bar-grid-gap",
+      "familyId": "structure/workspace/search-command-bar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-selection-preview-rail-grid-gap",
+      "familyId": "structure/workspace/selection-preview-rail",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-toolbar-grid-gap",
+      "familyId": "structure/workspace/table-toolbar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-view-mode-switcher-grid-gap",
+      "familyId": "structure/workspace/view-mode-switcher",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-profile-section-gap",
+      "familyId": "surface/admin/profile",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-list-card-label-spacing",
+      "familyId": "surface/data/list",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-auth-section-gap",
+      "familyId": "surface/experience/auth",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-chat-section-gap",
+      "familyId": "surface/experience/chat",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-editor-section-gap",
+      "familyId": "surface/experience/editor",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-empty-state-section-gap",
+      "familyId": "surface/experience/empty-state",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-marketing-section-gap",
+      "familyId": "surface/experience/marketing",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-media-section-gap",
+      "familyId": "surface/experience/media",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-notification-section-gap",
+      "familyId": "surface/experience/notification",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-oauth-transition-section-gap",
+      "familyId": "surface/experience/oauth-transition",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-pricing-section-gap",
+      "familyId": "surface/experience/pricing",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-detail-form-section-gap",
+      "familyId": "surface/forms/detail-form",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-section-gap",
+      "familyId": "surface/forms/form",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-guided-draft-form-section-gap",
+      "familyId": "surface/forms/guided-draft-form",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-wizard-section-gap",
+      "familyId": "surface/forms/wizard",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-activity-section-gap",
+      "familyId": "surface/operations/activity",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-kanban-section-gap",
+      "familyId": "surface/operations/kanban",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-operational-section-gap",
+      "familyId": "surface/operations/operational",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-scheduler-section-gap",
+      "familyId": "surface/operations/scheduler",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-collection-workspace-section-gap",
+      "familyId": "surface/workspace/collection-workspace",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-command-center-section-gap",
+      "familyId": "surface/workspace/command-center",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-decision-inbox-section-gap",
+      "familyId": "surface/workspace/decision-inbox",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-workbench-section-gap",
+      "familyId": "surface/workspace/record-workbench",
+      "state": "PRESCRIPCION"
+    }
+  ],
+  "variants": [
+    {
+      "id": "tight",
+      "value": 0.85,
+      "effects": {
+        "--ds-rhythm-scale": "0.85"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "normal",
+      "value": 1,
+      "effects": {
+        "--ds-rhythm-scale": "1"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "airy",
+      "value": 1.2,
+      "effects": {
+        "--ds-rhythm-scale": "1.2"
+      },
+      "pinned": {}
+    }
+  ],
+  "overlaps": [],
+  "terminalReachLaw": "state = alcance en la cascada; deteccion de UN SALTO en sitio de lectura = COTA INFERIOR. El alcance transitivo es de la capa GENERADA (cascade-extract/materialized, ley R1); el diff con estas prescripciones ES el backlog de fase 3."
+}

@@ -1,0 +1,4906 @@
+{
+  "schemaVersion": 1,
+  "rootId": "density.mode",
+  "tier": "standard",
+  "rootChannel": {
+    "channel": "--ds-density-mode-factor",
+    "emission": [
+      {
+        "kind": "compiler-emit",
+        "site": "packages/core/src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts",
+        "note": "postura density -> mode-factor (tabla de posturas, appearance-posture ~:159); el input estructural --ds-density-scale lo emite brand-theme (~:710) con sobre T3 {0.85,1.15}"
+      }
+    ]
+  },
+  "dependsOn": [],
+  "derivations": [
+    {
+      "from": "--ds-density-mode-factor",
+      "to": "--ds-density-global-effective-scale",
+      "rule": {
+        "kind": "clamp",
+        "formula": "clamp(.., density-scale x mode-factor, 3)"
+      },
+      "site": "packages/core/src/foundation/tokens/css/foundation/base/density.css",
+      "line": 66,
+      "state": "LIVE"
+    },
+    {
+      "from": "--ds-density-global-effective-scale",
+      "to": "--ds-density-effective-scale",
+      "rule": {
+        "kind": "clamp",
+        "formula": "clamp(0.5, global x local-factor, 3)"
+      },
+      "site": "packages/core/src/foundation/tokens/css/foundation/base/density.css",
+      "line": 69,
+      "state": "LIVE",
+      "note": "EL canal que los componentes leen; jamas se autora a mano (derivado con clamp propio)"
+    }
+  ],
+  "terminalReach": [
+    {
+      "channelId": "--_ds-pricing-table-card-gap",
+      "familyId": "pattern/commerce/pricing-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-pricing-table-card-padding",
+      "familyId": "pattern/commerce/pricing-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-pricing-table-features-head-min-inline-size",
+      "familyId": "pattern/commerce/pricing-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-activity-log-padding",
+      "familyId": "pattern/communication/activity-log",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-comment-thread-comment-gap",
+      "familyId": "pattern/communication/comment-thread",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-comment-thread-composer-gap",
+      "familyId": "pattern/communication/comment-thread",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-comment-thread-rail-padding",
+      "familyId": "pattern/communication/comment-thread",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-comment-thread-rail-width",
+      "familyId": "pattern/communication/comment-thread",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-comment-thread-row-gap",
+      "familyId": "pattern/communication/comment-thread",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-live-feed-banner-gap",
+      "familyId": "pattern/communication/live-feed",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-live-feed-banner-height",
+      "familyId": "pattern/communication/live-feed",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-live-feed-banner-padding-inline",
+      "familyId": "pattern/communication/live-feed",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-live-feed-body-padding",
+      "familyId": "pattern/communication/live-feed",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-live-feed-control-height",
+      "familyId": "pattern/communication/live-feed",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-live-feed-control-padding-inline",
+      "familyId": "pattern/communication/live-feed",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-live-feed-empty-padding-block",
+      "familyId": "pattern/communication/live-feed",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-live-feed-load-more-gap",
+      "familyId": "pattern/communication/live-feed",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-live-feed-refresh-size",
+      "familyId": "pattern/communication/live-feed",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-live-feed-skeleton-row-gap",
+      "familyId": "pattern/communication/live-feed",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-live-feed-skeleton-row-height",
+      "familyId": "pattern/communication/live-feed",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-live-feed-skeleton-title-gap",
+      "familyId": "pattern/communication/live-feed",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-live-feed-skeleton-title-height",
+      "familyId": "pattern/communication/live-feed",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-notification-center-panel-width",
+      "familyId": "pattern/communication/notification-center",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tenant-preview-input-max-width",
+      "familyId": "pattern/customization/tenant-preview",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-bulk-select-toggle-density-factor",
+      "familyId": "pattern/data/bulk-select-toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-column-settings-density-factor",
+      "familyId": "pattern/data/column-settings",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-column-settings-empty-padding-block",
+      "familyId": "pattern/data/column-settings",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-column-settings-empty-padding-inline",
+      "familyId": "pattern/data/column-settings",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-column-settings-footer-padding-block",
+      "familyId": "pattern/data/column-settings",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-column-settings-footer-padding-inline",
+      "familyId": "pattern/data/column-settings",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-column-settings-header-padding-block",
+      "familyId": "pattern/data/column-settings",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-column-settings-header-padding-block-end",
+      "familyId": "pattern/data/column-settings",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-column-settings-header-padding-inline",
+      "familyId": "pattern/data/column-settings",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-column-settings-list-max-block-size",
+      "familyId": "pattern/data/column-settings",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-column-settings-list-padding-block",
+      "familyId": "pattern/data/column-settings",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-column-settings-row-gap",
+      "familyId": "pattern/data/column-settings",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-column-settings-row-padding-block",
+      "familyId": "pattern/data/column-settings",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-column-settings-row-padding-inline",
+      "familyId": "pattern/data/column-settings",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-column-settings-search-padding-block",
+      "familyId": "pattern/data/column-settings",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-column-settings-search-padding-inline",
+      "familyId": "pattern/data/column-settings",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-decision-comparison-badges-min-height",
+      "familyId": "pattern/data/decision-comparison",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-decision-comparison-columns",
+      "familyId": "pattern/data/decision-comparison",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-decision-comparison-density-factor",
+      "familyId": "pattern/data/decision-comparison",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-decision-comparison-identity-min-height",
+      "familyId": "pattern/data/decision-comparison",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-decision-comparison-pad",
+      "familyId": "pattern/data/decision-comparison",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-decision-comparison-row-height",
+      "familyId": "pattern/data/decision-comparison",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-decision-comparison-toolbar-min-height",
+      "familyId": "pattern/data/decision-comparison",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-decision-comparison-visual-grid-size",
+      "familyId": "pattern/data/decision-comparison",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-decision-comparison-visual-min-height",
+      "familyId": "pattern/data/decision-comparison",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-decision-panorama-decision-title-size",
+      "familyId": "pattern/data/decision-panorama",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-decision-panorama-density-factor",
+      "familyId": "pattern/data/decision-panorama",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-decision-panorama-score-size",
+      "familyId": "pattern/data/decision-panorama",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-decision-panorama-title-size",
+      "familyId": "pattern/data/decision-panorama",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-detail-panel-content-gap",
+      "familyId": "pattern/data/detail-panel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-detail-panel-density-factor",
+      "familyId": "pattern/data/detail-panel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-detail-panel-item-gap",
+      "familyId": "pattern/data/detail-panel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-detail-panel-padding",
+      "familyId": "pattern/data/detail-panel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-detail-panel-section-gap",
+      "familyId": "pattern/data/detail-panel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-detail-rail-width",
+      "familyId": "pattern/data/detail-panel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-listing-grid-gap",
+      "familyId": "pattern/data/detail-panel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-workspace-card-min-height",
+      "familyId": "pattern/data/detail-panel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-workspace-card-padding",
+      "familyId": "pattern/data/detail-panel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-file-manager-content-min-height",
+      "familyId": "pattern/data/file-manager",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-file-manager-density-factor",
+      "familyId": "pattern/data/file-manager",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-list-toolbar-density-factor",
+      "familyId": "pattern/data/list-toolbar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toolbar-control-gap",
+      "familyId": "pattern/data/list-toolbar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toolbar-controls-padding",
+      "familyId": "pattern/data/list-toolbar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toolbar-primary-action-max-width",
+      "familyId": "pattern/data/list-toolbar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toolbar-search-height",
+      "familyId": "pattern/data/list-toolbar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toolbar-search-max-width",
+      "familyId": "pattern/data/list-toolbar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toolbar-search-min-width",
+      "familyId": "pattern/data/list-toolbar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toolbar-search-wide-max-width",
+      "familyId": "pattern/data/list-toolbar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toolbar-title-gap",
+      "familyId": "pattern/data/list-toolbar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toolbar-title-max-width",
+      "familyId": "pattern/data/list-toolbar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toolbar-title-section-padding",
+      "familyId": "pattern/data/list-toolbar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-mono-stat-density-factor",
+      "familyId": "pattern/data/mono-stat",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-data-table-density-factor",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-modern-table-action-cell-padding",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-modern-table-cell-padding",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-modern-table-control-size",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-modern-table-leading-cell-padding",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-modern-table-selection-cell-padding",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-action-gap",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-bulk-bar-min-height",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-bulk-bar-padding",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-collapsed-min-inline-size",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-control-size",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-control-size-compact",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-control-size-spacious",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-drag-grip-offset",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-drop-indicator-inset",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-editor-checkbox-size",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-editor-input-padding",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-editorial-cell-padding-block",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-editorial-header-padding-block",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-expanded-padding",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-header-block-size",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-header-content-gap",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-min-inline-size",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-mobile-actions-padding-block",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-mobile-bulk-padding",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-mobile-control-size",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-mobile-pagination-padding",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-mobile-selected-outline-offset",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-mobile-state-min-height",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-mobile-state-padding",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-mobile-summary-min-height",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-mobile-summary-padding-block",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-mobile-summary-padding-inline",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-open-cell-padding-block",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-pagination-min-height",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-pagination-padding",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-resize-bar-height",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-resize-bar-height-active",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-resize-bar-width",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-resize-bar-width-active",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-resize-hit-size",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-sort-control-offset",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-sort-control-size",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-state-copy-max-inline-size",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-toolbar-gap",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-gallery-view-density-factor",
+      "familyId": "pattern/data/pattern-gallery-view",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-collection-card-grid-size",
+      "familyId": "pattern/data/pattern-grid-view",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-collection-card-min-height",
+      "familyId": "pattern/data/pattern-grid-view",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-grid-view-density-factor",
+      "familyId": "pattern/data/pattern-grid-view",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stats-grid-density-factor",
+      "familyId": "pattern/data/pattern-stats-grid",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-facts-compact-item-height",
+      "familyId": "pattern/data/record-facts",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-facts-compact-item-padding",
+      "familyId": "pattern/data/record-facts",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-facts-density-factor",
+      "familyId": "pattern/data/record-facts",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-facts-header-height",
+      "familyId": "pattern/data/record-facts",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-facts-header-padding",
+      "familyId": "pattern/data/record-facts",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-facts-item-height",
+      "familyId": "pattern/data/record-facts",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-facts-item-padding",
+      "familyId": "pattern/data/record-facts",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-facts-value-size",
+      "familyId": "pattern/data/record-facts",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-saved-views-bar-min-height",
+      "familyId": "pattern/data/saved-views",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-saved-views-bar-padding-inline",
+      "familyId": "pattern/data/saved-views",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-saved-views-create-button-gap",
+      "familyId": "pattern/data/saved-views",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-saved-views-create-button-padding-block",
+      "familyId": "pattern/data/saved-views",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-saved-views-create-button-padding-inline",
+      "familyId": "pattern/data/saved-views",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-saved-views-create-form-gap",
+      "familyId": "pattern/data/saved-views",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-saved-views-create-form-padding-block",
+      "familyId": "pattern/data/saved-views",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-saved-views-density-factor",
+      "familyId": "pattern/data/saved-views",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-saved-views-gap",
+      "familyId": "pattern/data/saved-views",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-saved-views-input-height",
+      "familyId": "pattern/data/saved-views",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-saved-views-input-padding-inline",
+      "familyId": "pattern/data/saved-views",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-saved-views-input-width",
+      "familyId": "pattern/data/saved-views",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-saved-views-pill-gap",
+      "familyId": "pattern/data/saved-views",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-saved-views-pill-label-max-width",
+      "familyId": "pattern/data/saved-views",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-saved-views-pill-padding-block",
+      "familyId": "pattern/data/saved-views",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-saved-views-pill-padding-inline",
+      "familyId": "pattern/data/saved-views",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-saved-views-unsaved-dot-size",
+      "familyId": "pattern/data/saved-views",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-status-filter-pills-density-factor",
+      "familyId": "pattern/data/status-filter-pills",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-virtual-list-density-factor",
+      "familyId": "pattern/data/virtual-list",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-widget-board-catalog-no-results-min-height",
+      "familyId": "pattern/data/widget-board",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-widget-board-catalog-search-max-width",
+      "familyId": "pattern/data/widget-board",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-widget-board-density-factor",
+      "familyId": "pattern/data/widget-board",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-widget-board-entry-offset",
+      "familyId": "pattern/data/widget-board",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-empty-state-actions-gap",
+      "familyId": "pattern/feedback/empty-state",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-empty-state-content-width",
+      "familyId": "pattern/feedback/empty-state",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-empty-state-lg-min-height",
+      "familyId": "pattern/feedback/empty-state",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-empty-state-lg-visual-size",
+      "familyId": "pattern/feedback/empty-state",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-empty-state-loading-height",
+      "familyId": "pattern/feedback/empty-state",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-empty-state-min-height",
+      "familyId": "pattern/feedback/empty-state",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-empty-state-padding",
+      "familyId": "pattern/feedback/empty-state",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-empty-state-sm-min-height",
+      "familyId": "pattern/feedback/empty-state",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-empty-state-sm-padding",
+      "familyId": "pattern/feedback/empty-state",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-empty-state-sm-visual-size",
+      "familyId": "pattern/feedback/empty-state",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-empty-state-visual-size",
+      "familyId": "pattern/feedback/empty-state",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-filter-builder-control-min",
+      "familyId": "pattern/forms/filter-builder",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-filter-builder-density-factor",
+      "familyId": "pattern/forms/filter-builder",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-filter-builder-dropdown-max-height",
+      "familyId": "pattern/forms/filter-builder",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-filter-builder-dropdown-min-width",
+      "familyId": "pattern/forms/filter-builder",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-filter-builder-logic-width",
+      "familyId": "pattern/forms/filter-builder",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-filter-builder-row-gap",
+      "familyId": "pattern/forms/filter-builder",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-filter-builder-row-padding-y",
+      "familyId": "pattern/forms/filter-builder",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-filter-builder-row-padding-y-compact",
+      "familyId": "pattern/forms/filter-builder",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-filter-builder-value-min",
+      "familyId": "pattern/forms/filter-builder",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-filter-panel-content-max-height",
+      "familyId": "pattern/forms/filter-panel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-filter-panel-density-factor",
+      "familyId": "pattern/forms/filter-panel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-filter-panel-field-gap",
+      "familyId": "pattern/forms/filter-panel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-filter-panel-inline-control-width",
+      "familyId": "pattern/forms/filter-panel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-filter-panel-inline-gap",
+      "familyId": "pattern/forms/filter-panel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-filter-panel-inline-min-width",
+      "familyId": "pattern/forms/filter-panel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-filter-panel-option-gap",
+      "familyId": "pattern/forms/filter-panel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-filter-panel-range-gap",
+      "familyId": "pattern/forms/filter-panel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-filter-panel-stacked-gap",
+      "familyId": "pattern/forms/filter-panel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-invoice-template-density-factor",
+      "familyId": "pattern/forms/invoice-template",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-invoice-template-document-padding",
+      "familyId": "pattern/forms/invoice-template",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-invoice-template-logo-height",
+      "familyId": "pattern/forms/invoice-template",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-invoice-template-max-width",
+      "familyId": "pattern/forms/invoice-template",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-invoice-template-totals-width",
+      "familyId": "pattern/forms/invoice-template",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-builder-density-factor",
+      "familyId": "pattern/forms/pattern-form-builder",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-builder-empty-padding-block",
+      "familyId": "pattern/forms/pattern-form-builder",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-builder-max-inline-size",
+      "familyId": "pattern/forms/pattern-form-builder",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-builder-section-header-gap",
+      "familyId": "pattern/forms/pattern-form-builder",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-builder-section-header-padding",
+      "familyId": "pattern/forms/pattern-form-builder",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-builder-step-list-offset",
+      "familyId": "pattern/forms/pattern-form-builder",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-builder-wizard-nav-offset",
+      "familyId": "pattern/forms/pattern-form-builder",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-step-wizard-action-dock-reserved-space",
+      "familyId": "pattern/forms/step-wizard",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-step-wizard-body-padding",
+      "familyId": "pattern/forms/step-wizard",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-step-wizard-content-min-height",
+      "familyId": "pattern/forms/step-wizard",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-step-wizard-density-factor",
+      "familyId": "pattern/forms/step-wizard",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-step-wizard-error-gap",
+      "familyId": "pattern/forms/step-wizard",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-step-wizard-progress-height",
+      "familyId": "pattern/forms/step-wizard",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-step-wizard-rail-offset",
+      "familyId": "pattern/forms/step-wizard",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-step-wizard-skeleton-content-height",
+      "familyId": "pattern/forms/step-wizard",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-step-wizard-skeleton-progress-height",
+      "familyId": "pattern/forms/step-wizard",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-step-wizard-split-gap",
+      "familyId": "pattern/forms/step-wizard",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-step-wizard-vertical-rail-width",
+      "familyId": "pattern/forms/step-wizard",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-command-palette-control-item-density-factor",
+      "familyId": "pattern/navigation/command-palette",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-environment-toggle-control-item-density-factor",
+      "familyId": "pattern/navigation/environment-toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-environment-toggle-panel-min-width",
+      "familyId": "pattern/navigation/environment-toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-locale-switcher-control-item-density-factor",
+      "familyId": "pattern/navigation/pattern-locale-switcher",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-shortcuts-overlay-control-item-density-factor",
+      "familyId": "pattern/navigation/shortcuts-overlay",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-workspace-switcher-control-item-density-factor",
+      "familyId": "pattern/navigation/workspace-switcher",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-workspace-switcher-item-gap",
+      "familyId": "pattern/navigation/workspace-switcher",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-workspace-switcher-list-max-height",
+      "familyId": "pattern/navigation/workspace-switcher",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-workspace-switcher-panel-gap",
+      "familyId": "pattern/navigation/workspace-switcher",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-workspace-switcher-panel-gap-block",
+      "familyId": "pattern/navigation/workspace-switcher",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-workspace-switcher-panel-width",
+      "familyId": "pattern/navigation/workspace-switcher",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-workspace-switcher-trigger-gap",
+      "familyId": "pattern/navigation/workspace-switcher",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-workspace-switcher-trigger-height",
+      "familyId": "pattern/navigation/workspace-switcher",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-workspace-switcher-trigger-padding-inline",
+      "familyId": "pattern/navigation/workspace-switcher",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-calendar-view-cell-min-height",
+      "familyId": "pattern/visualization/pattern-calendar-view",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-calendar-view-cell-min-height-compact",
+      "familyId": "pattern/visualization/pattern-calendar-view",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-kanban-card-density-factor",
+      "familyId": "pattern/visualization/pattern-kanban-board",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-kanban-column-max-height",
+      "familyId": "pattern/visualization/pattern-kanban-board",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-kanban-column-min-width",
+      "familyId": "pattern/visualization/pattern-kanban-board",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-timeline-badge-padding-inline",
+      "familyId": "pattern/visualization/pattern-timeline",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-timeline-empty-padding-block",
+      "familyId": "pattern/visualization/pattern-timeline",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-timeline-loading-padding-block",
+      "familyId": "pattern/visualization/pattern-timeline",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-timeline-marker-size",
+      "familyId": "pattern/visualization/pattern-timeline",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tree-view-body-padding",
+      "familyId": "pattern/visualization/pattern-tree-view",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tree-view-skeleton-gap",
+      "familyId": "pattern/visualization/pattern-tree-view",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tree-view-skeleton-padding",
+      "familyId": "pattern/visualization/pattern-tree-view",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tree-view-skeleton-row-height",
+      "familyId": "pattern/visualization/pattern-tree-view",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-approval-action-height",
+      "familyId": "pattern/workflow/approval-workflow",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-approval-action-padding-inline",
+      "familyId": "pattern/workflow/approval-workflow",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-approval-actions-gap",
+      "familyId": "pattern/workflow/approval-workflow",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-approval-approver-row-gap",
+      "familyId": "pattern/workflow/approval-workflow",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-approval-comment-padding",
+      "familyId": "pattern/workflow/approval-workflow",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-approval-connector-min-height",
+      "familyId": "pattern/workflow/approval-workflow",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-approval-connector-width",
+      "familyId": "pattern/workflow/approval-workflow",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-approval-dot-size",
+      "familyId": "pattern/workflow/approval-workflow",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-approval-footer-padding-block-start",
+      "familyId": "pattern/workflow/approval-workflow",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-approval-header-gap",
+      "familyId": "pattern/workflow/approval-workflow",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-approval-skeleton-line-gap",
+      "familyId": "pattern/workflow/approval-workflow",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-approval-skeleton-steps-gap",
+      "familyId": "pattern/workflow/approval-workflow",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-approval-step-gap",
+      "familyId": "pattern/workflow/approval-workflow",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-approval-step-padding-block-end",
+      "familyId": "pattern/workflow/approval-workflow",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-avatar-2xl-status-size",
+      "familyId": "primitive/display/avatar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-avatar-3xl-status-size",
+      "familyId": "primitive/display/avatar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-avatar-lg-status-size",
+      "familyId": "primitive/display/avatar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-avatar-sm-status-size",
+      "familyId": "primitive/display/avatar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-avatar-status-offset-x",
+      "familyId": "primitive/display/avatar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-avatar-status-size",
+      "familyId": "primitive/display/avatar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-avatar-touch-target-min",
+      "familyId": "primitive/display/avatar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-avatar-xl-status-size",
+      "familyId": "primitive/display/avatar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-avatar-xs-status-size",
+      "familyId": "primitive/display/avatar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-avatar-bleed",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-avatar-size",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-chip-max-inline-size",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-chip-min-height",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-count-padding-inline",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-dot-md-size",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-dot-size",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-gap",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-icon-gap",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-indicator-dot-size",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-indicator-max-inline-size",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-max-inline-size",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-md-height",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-padding-x",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-pill-max-inline-size",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-pill-min-height",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-remove-bleed",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-remove-size",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-remove-touch-size",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-touch-target",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-calendar-compact-width",
+      "familyId": "primitive/display/calendar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-calendar-compact-width-coarse",
+      "familyId": "primitive/display/calendar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-calendar-padding",
+      "familyId": "primitive/display/calendar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-calendar-year-cell-padding",
+      "familyId": "primitive/display/calendar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-callout-description-size",
+      "familyId": "primitive/display/callout",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-callout-description-width",
+      "familyId": "primitive/display/callout",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-callout-gap",
+      "familyId": "primitive/display/callout",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-callout-icon-well-size",
+      "familyId": "primitive/display/callout",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-callout-padding",
+      "familyId": "primitive/display/callout",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-callout-title-size",
+      "familyId": "primitive/display/callout",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-actions-gap",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-actions-justify",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-actions-padding-top",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-body-inline-min-size",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-body-padding",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-body-padding-lg",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-body-padding-sm",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-cover-aspect-ratio",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-cover-block-min-size",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-cover-height",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-cover-inline-min-size",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-cover-inline-size",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-cover-min-height",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-cover-object-fit",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-cover-object-position",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-footer-actions-gap",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-footer-padding",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-footer-padding-lg",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-footer-padding-sm",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-header-actions-gap",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-header-copy-max-width",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-header-extra-padding",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-header-gap",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-header-min-height",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-header-padding",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-header-padding-bottom",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-header-padding-lg",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-header-padding-sm",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-image-aspect-ratio",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-image-loading-size",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-instance-padding",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-lg-padding",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-md-padding",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-media-aspect-ratio",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-media-object-fit",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-padding-lg",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-padding-md",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-padding-sm",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-skeleton-gap",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-skeleton-min-height",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-sm-padding",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-spinner-size",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-premium-card-min-height",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-carousel-dot-selected-inline-size",
+      "familyId": "primitive/display/carousel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-carousel-dot-size",
+      "familyId": "primitive/display/carousel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-carousel-dot-touch-size",
+      "familyId": "primitive/display/carousel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-carousel-dots-gap",
+      "familyId": "primitive/display/carousel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-code-block-header-padding",
+      "familyId": "primitive/display/code-block",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-code-block-line-min-height",
+      "familyId": "primitive/display/code-block",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-code-block-padding",
+      "familyId": "primitive/display/code-block",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-code-block-scroll-max-block-size",
+      "familyId": "primitive/display/code-block",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-crop-marks-body-padding",
+      "familyId": "primitive/display/crop-marks",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-crop-marks-tick-length",
+      "familyId": "primitive/display/crop-marks",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-crop-marks-tick-offset",
+      "familyId": "primitive/display/crop-marks",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-descriptions-column-count",
+      "familyId": "primitive/display/descriptions",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-descriptions-column-gap",
+      "familyId": "primitive/display/descriptions",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-descriptions-extra-padding",
+      "familyId": "primitive/display/descriptions",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-descriptions-grid-gap",
+      "familyId": "primitive/display/descriptions",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-descriptions-grid-padding",
+      "familyId": "primitive/display/descriptions",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-descriptions-header-min-height",
+      "familyId": "primitive/display/descriptions",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-descriptions-header-padding",
+      "familyId": "primitive/display/descriptions",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-descriptions-item-span",
+      "familyId": "primitive/display/descriptions",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-descriptions-label-gap",
+      "familyId": "primitive/display/descriptions",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-descriptions-row-padding",
+      "familyId": "primitive/display/descriptions",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-descriptions-row-padding-md",
+      "familyId": "primitive/display/descriptions",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-descriptions-row-padding-sm",
+      "familyId": "primitive/display/descriptions",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-empty-description-size",
+      "familyId": "primitive/display/empty",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-empty-description-width",
+      "familyId": "primitive/display/empty",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-empty-footer-gap",
+      "familyId": "primitive/display/empty",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-empty-footer-padding",
+      "familyId": "primitive/display/empty",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-empty-gap",
+      "familyId": "primitive/display/empty",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-empty-min-height",
+      "familyId": "primitive/display/empty",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-empty-padding",
+      "familyId": "primitive/display/empty",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-empty-simple-min-height",
+      "familyId": "primitive/display/empty",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-empty-simple-padding",
+      "familyId": "primitive/display/empty",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-icon-frame-badge-size",
+      "familyId": "primitive/display/icon-frame",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-icon-frame-padding",
+      "familyId": "primitive/display/icon-frame",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-icon-frame-size",
+      "familyId": "primitive/display/icon-frame",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-image-zoom-indicator-padding",
+      "familyId": "primitive/display/image",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-kbd-lg-min-height",
+      "familyId": "primitive/display/kbd",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-kbd-lg-min-width",
+      "familyId": "primitive/display/kbd",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-kbd-lg-padding-block",
+      "familyId": "primitive/display/kbd",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-kbd-lg-padding-inline",
+      "familyId": "primitive/display/kbd",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-kbd-md-min-height",
+      "familyId": "primitive/display/kbd",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-kbd-md-min-width",
+      "familyId": "primitive/display/kbd",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-kbd-md-padding-block",
+      "familyId": "primitive/display/kbd",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-kbd-md-padding-inline",
+      "familyId": "primitive/display/kbd",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-kbd-sm-min-height",
+      "familyId": "primitive/display/kbd",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-kbd-sm-min-width",
+      "familyId": "primitive/display/kbd",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-kbd-sm-padding-block",
+      "familyId": "primitive/display/kbd",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-kbd-sm-padding-inline",
+      "familyId": "primitive/display/kbd",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-list-actions-gap",
+      "familyId": "primitive/display/list",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-list-default-padding-horizontal",
+      "familyId": "primitive/display/list",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-list-default-padding-vertical",
+      "familyId": "primitive/display/list",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-list-footer-padding-horizontal",
+      "familyId": "primitive/display/list",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-list-footer-padding-vertical",
+      "familyId": "primitive/display/list",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-list-header-padding-horizontal",
+      "familyId": "primitive/display/list",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-list-header-padding-vertical",
+      "familyId": "primitive/display/list",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-list-lg-padding-horizontal",
+      "familyId": "primitive/display/list",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-list-lg-padding-vertical",
+      "familyId": "primitive/display/list",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-list-skeleton-avatar-size",
+      "familyId": "primitive/display/list",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-list-skeleton-line-gap",
+      "familyId": "primitive/display/list",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-list-skeleton-line-height",
+      "familyId": "primitive/display/list",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-list-skeleton-line-height-sm",
+      "familyId": "primitive/display/list",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-list-skeleton-row-gap",
+      "familyId": "primitive/display/list",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-list-skeleton-row-padding-block",
+      "familyId": "primitive/display/list",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-list-sm-padding-horizontal",
+      "familyId": "primitive/display/list",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-list-sm-padding-vertical",
+      "familyId": "primitive/display/list",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-list-split-inset-inline",
+      "familyId": "primitive/display/list",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-markdown-view-code-block-padding",
+      "familyId": "primitive/display/markdown-view",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-markdown-view-content-gap",
+      "familyId": "primitive/display/markdown-view",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-markdown-view-table-cell-padding",
+      "familyId": "primitive/display/markdown-view",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-meter-gap",
+      "familyId": "primitive/display/meter",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-meter-track-height",
+      "familyId": "primitive/display/meter",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-qrcode-icon-padding",
+      "familyId": "primitive/display/qr-code",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-qrcode-refresh-button-padding-x",
+      "familyId": "primitive/display/qr-code",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-qrcode-refresh-button-size",
+      "familyId": "primitive/display/qr-code",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-qrcode-root-padding",
+      "familyId": "primitive/display/qr-code",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-statistic-affix-height",
+      "familyId": "primitive/display/statistic",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-statistic-affix-padding-x",
+      "familyId": "primitive/display/statistic",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-selection-control-coarse-size",
+      "familyId": "primitive/display/table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tag-close-gap",
+      "familyId": "primitive/display/tag",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tag-close-size",
+      "familyId": "primitive/display/tag",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tag-default-height",
+      "familyId": "primitive/display/tag",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tag-icon-gap",
+      "familyId": "primitive/display/tag",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tag-lg-height",
+      "familyId": "primitive/display/tag",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tag-lg-padding-inline",
+      "familyId": "primitive/display/tag",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tag-max-inline-size",
+      "familyId": "primitive/display/tag",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tag-md-height",
+      "familyId": "primitive/display/tag",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tag-md-padding-inline",
+      "familyId": "primitive/display/tag",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tag-sm-height",
+      "familyId": "primitive/display/tag",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tag-sm-padding-inline",
+      "familyId": "primitive/display/tag",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tag-xl-height",
+      "familyId": "primitive/display/tag",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tag-xl-padding-inline",
+      "familyId": "primitive/display/tag",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tag-xs-height",
+      "familyId": "primitive/display/tag",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tag-xs-padding-inline",
+      "familyId": "primitive/display/tag",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-timeline-custom-dot-size",
+      "familyId": "primitive/display/timeline",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-timeline-dot-size",
+      "familyId": "primitive/display/timeline",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-timeline-item-density-factor",
+      "familyId": "primitive/display/timeline",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tooltip-instance-max-width",
+      "familyId": "primitive/display/tooltip",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tooltip-inverse-max-width",
+      "familyId": "primitive/display/tooltip",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tooltip-max-width",
+      "familyId": "primitive/display/tooltip",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tooltip-minimal-max-width",
+      "familyId": "primitive/display/tooltip",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tooltip-rich-max-width",
+      "familyId": "primitive/display/tooltip",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tooltip-shortcut-chip-gap",
+      "familyId": "primitive/display/tooltip",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tooltip-shortcut-gap",
+      "familyId": "primitive/display/tooltip",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tooltip-shortcut-key-min-size",
+      "familyId": "primitive/display/tooltip",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tooltip-shortcut-key-padding-block",
+      "familyId": "primitive/display/tooltip",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tooltip-shortcut-key-padding-inline",
+      "familyId": "primitive/display/tooltip",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tooltip-viewport-gap",
+      "familyId": "primitive/display/tooltip",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tree-checkbox-margin",
+      "familyId": "primitive/display/tree",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tree-checkbox-size",
+      "familyId": "primitive/display/tree",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tree-switcher-size",
+      "familyId": "primitive/display/tree",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-alert-compact-padding",
+      "familyId": "primitive/feedback/alert",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-alert-description-width",
+      "familyId": "primitive/feedback/alert",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-alert-gap",
+      "familyId": "primitive/feedback/alert",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-alert-icon-well-size",
+      "familyId": "primitive/feedback/alert",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-alert-padding",
+      "familyId": "primitive/feedback/alert",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-loading-indicator-label-gap",
+      "familyId": "primitive/feedback/loading-indicator",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-loading-indicator-size",
+      "familyId": "primitive/feedback/loading-indicator",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-modal-action-padding-block",
+      "familyId": "primitive/feedback/modal",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-modal-action-padding-inline",
+      "familyId": "primitive/feedback/modal",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-modal-close-size",
+      "familyId": "primitive/feedback/modal",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-modal-footer-gap",
+      "familyId": "primitive/feedback/modal",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-modal-footer-justify",
+      "familyId": "primitive/feedback/modal",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-modal-max-block-size",
+      "familyId": "primitive/feedback/modal",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-modal-max-inline-size",
+      "familyId": "primitive/feedback/modal",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-modal-section-padding-block",
+      "familyId": "primitive/feedback/modal",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-modal-section-padding-inline",
+      "familyId": "primitive/feedback/modal",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-modal-width-2xl",
+      "familyId": "primitive/feedback/modal",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-modal-width-3xl",
+      "familyId": "primitive/feedback/modal",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-modal-width-4xl",
+      "familyId": "primitive/feedback/modal",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-modal-width-5xl",
+      "familyId": "primitive/feedback/modal",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-modal-width-full",
+      "familyId": "primitive/feedback/modal",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-modal-width-lg",
+      "familyId": "primitive/feedback/modal",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-modal-width-md",
+      "familyId": "primitive/feedback/modal",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-modal-width-sm",
+      "familyId": "primitive/feedback/modal",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-modal-width-xl",
+      "familyId": "primitive/feedback/modal",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-modal-width-xs",
+      "familyId": "primitive/feedback/modal",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-progress-circle-size",
+      "familyId": "primitive/feedback/progress",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-progress-height",
+      "familyId": "primitive/feedback/progress",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-progress-label-gap",
+      "familyId": "primitive/feedback/progress",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-rate-gap",
+      "familyId": "primitive/feedback/rate",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-rate-lg-size",
+      "familyId": "primitive/feedback/rate",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-rate-md-size",
+      "familyId": "primitive/feedback/rate",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-rate-sm-size",
+      "familyId": "primitive/feedback/rate",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-rate-xl-size",
+      "familyId": "primitive/feedback/rate",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-rate-xs-size",
+      "familyId": "primitive/feedback/rate",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-result-content-width",
+      "familyId": "primitive/feedback/result",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-result-description-width",
+      "familyId": "primitive/feedback/result",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-result-gap",
+      "familyId": "primitive/feedback/result",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-result-icon-well-size",
+      "familyId": "primitive/feedback/result",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-result-min-height",
+      "familyId": "primitive/feedback/result",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-result-padding",
+      "familyId": "primitive/feedback/result",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-result-padding-inline",
+      "familyId": "primitive/feedback/result",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-skeleton-gap",
+      "familyId": "primitive/feedback/skeleton",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-skeleton-line-gap",
+      "familyId": "primitive/feedback/skeleton",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-skeleton-title-height",
+      "familyId": "primitive/feedback/skeleton",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-spinner-label-gap",
+      "familyId": "primitive/feedback/spinner",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-spinner-lg-size",
+      "familyId": "primitive/feedback/spinner",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-spinner-md-size",
+      "familyId": "primitive/feedback/spinner",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-spinner-sm-size",
+      "familyId": "primitive/feedback/spinner",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-spinner-xl-size",
+      "familyId": "primitive/feedback/spinner",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-autocomplete-clear-reserve",
+      "familyId": "primitive/inputs/auto-complete",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-autocomplete-clear-size",
+      "familyId": "primitive/inputs/auto-complete",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-autocomplete-density-factor",
+      "familyId": "primitive/inputs/auto-complete",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-autocomplete-dropdown-max-height",
+      "familyId": "primitive/inputs/auto-complete",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-autocomplete-dropdown-scrollbar-width",
+      "familyId": "primitive/inputs/auto-complete",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-gap",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-label-offset-y",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-lg-gap",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-lg-height",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-lg-padding-x",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-lg-padding-y",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-link-underline-offset",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-md-gap",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-md-height",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-md-padding-x",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-md-padding-y",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-sm-gap",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-sm-height",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-sm-padding-x",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-sm-padding-y",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-xl-gap",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-xl-height",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-xl-padding-x",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-xl-padding-y",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-xs-gap",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-xs-height",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-xs-padding-x",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-button-xs-padding-y",
+      "familyId": "primitive/inputs/button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-cascader-clear-gap",
+      "familyId": "primitive/inputs/cascader",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-cascader-clear-inset-inline-end",
+      "familyId": "primitive/inputs/cascader",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-cascader-clear-size",
+      "familyId": "primitive/inputs/cascader",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-cascader-column-max-height",
+      "familyId": "primitive/inputs/cascader",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-cascader-column-width",
+      "familyId": "primitive/inputs/cascader",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-cascader-density-factor",
+      "familyId": "primitive/inputs/cascader",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-checkbox-label-gap",
+      "familyId": "primitive/inputs/checkbox",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-checkbox-md-size",
+      "familyId": "primitive/inputs/checkbox",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-checkbox-row-padding-block",
+      "familyId": "primitive/inputs/checkbox",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-checkbox-size-lg",
+      "familyId": "primitive/inputs/checkbox",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-checkbox-size-xl",
+      "familyId": "primitive/inputs/checkbox",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-checkbox-sm-size",
+      "familyId": "primitive/inputs/checkbox",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-checkbox-text-gap",
+      "familyId": "primitive/inputs/checkbox",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-checkbox-xs-size",
+      "familyId": "primitive/inputs/checkbox",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-color-picker-density-factor",
+      "familyId": "primitive/inputs/color-picker",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-color-picker-height",
+      "familyId": "primitive/inputs/color-picker",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-colorpicker-dropdown-min-width",
+      "familyId": "primitive/inputs/color-picker",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-colorpicker-preset-swatch-size",
+      "familyId": "primitive/inputs/color-picker",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-colorpicker-swatch-size-lg",
+      "familyId": "primitive/inputs/color-picker",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-colorpicker-swatch-size-md",
+      "familyId": "primitive/inputs/color-picker",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-colorpicker-swatch-size-sm",
+      "familyId": "primitive/inputs/color-picker",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-datepicker-cell-size",
+      "familyId": "primitive/inputs/date-picker",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-datepicker-grid-gap",
+      "familyId": "primitive/inputs/date-picker",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-datepicker-panel-width",
+      "familyId": "primitive/inputs/date-picker",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-datepicker-panel-width-compact",
+      "familyId": "primitive/inputs/date-picker",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-datepicker-trigger-height",
+      "familyId": "primitive/inputs/date-picker",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-density-factor",
+      "familyId": "primitive/inputs/form",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-gap",
+      "familyId": "primitive/inputs/form",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-item-gap",
+      "familyId": "primitive/inputs/form",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-label-gap",
+      "familyId": "primitive/inputs/form",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-label-width",
+      "familyId": "primitive/inputs/form",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-message-gap",
+      "familyId": "primitive/inputs/form",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-message-min-height",
+      "familyId": "primitive/inputs/form",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-field-error-icon-gap",
+      "familyId": "primitive/inputs/form-field",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-field-gap",
+      "familyId": "primitive/inputs/form-field",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-field-horizontal-gap",
+      "familyId": "primitive/inputs/form-field",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-field-label-offset-y",
+      "familyId": "primitive/inputs/form-field",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-field-label-width",
+      "familyId": "primitive/inputs/form-field",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-field-required-gap",
+      "familyId": "primitive/inputs/form-field",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-action-size",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-affix-gap",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-affix-padding-x",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-affix-size",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-affix-size-compact",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-compact-gap",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-gap",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-lg-gap",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-lg-height",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-lg-padding-x",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-loading-size",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-md-gap",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-md-height",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-md-padding-x",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-message-gap",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-sm-gap",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-sm-height",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-sm-padding-x",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-xl-gap",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-xl-height",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-xl-padding-x",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-xs-gap",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-xs-height",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-xs-padding-x",
+      "familyId": "primitive/inputs/input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-number-lg-height",
+      "familyId": "primitive/inputs/input-number",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-number-lg-padding-x",
+      "familyId": "primitive/inputs/input-number",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-number-lg-padding-y",
+      "familyId": "primitive/inputs/input-number",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-number-md-height",
+      "familyId": "primitive/inputs/input-number",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-number-md-padding-x",
+      "familyId": "primitive/inputs/input-number",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-number-md-padding-y",
+      "familyId": "primitive/inputs/input-number",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-number-prefix-inset",
+      "familyId": "primitive/inputs/input-number",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-number-prefix-space",
+      "familyId": "primitive/inputs/input-number",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-number-sm-height",
+      "familyId": "primitive/inputs/input-number",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-number-sm-padding-x",
+      "familyId": "primitive/inputs/input-number",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-number-sm-padding-y",
+      "familyId": "primitive/inputs/input-number",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-number-stepper-height",
+      "familyId": "primitive/inputs/input-number",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-number-stepper-padding-x",
+      "familyId": "primitive/inputs/input-number",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-number-trailing-inset",
+      "familyId": "primitive/inputs/input-number",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-input-number-trailing-space",
+      "familyId": "primitive/inputs/input-number",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-dropdown-max-height",
+      "familyId": "primitive/inputs/mentions",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-mentions-density-factor",
+      "familyId": "primitive/inputs/mentions",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-mentions-option-padding",
+      "familyId": "primitive/inputs/mentions",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-otp-error-gap",
+      "familyId": "primitive/inputs/otp-input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-otp-input-density-factor",
+      "familyId": "primitive/inputs/otp-input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-otp-slot-gap",
+      "familyId": "primitive/inputs/otp-input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-otp-slot-lg-size",
+      "familyId": "primitive/inputs/otp-input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-otp-slot-md-size",
+      "familyId": "primitive/inputs/otp-input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-otp-slot-sm-size",
+      "familyId": "primitive/inputs/otp-input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-password-action-size",
+      "familyId": "primitive/inputs/password-input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-password-gap",
+      "familyId": "primitive/inputs/password-input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-password-message-gap",
+      "familyId": "primitive/inputs/password-input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-password-strength-track-height",
+      "familyId": "primitive/inputs/password-input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-radio-label-gap",
+      "familyId": "primitive/inputs/radio",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-radio-md-size",
+      "familyId": "primitive/inputs/radio",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-radio-row-padding-block",
+      "familyId": "primitive/inputs/radio",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-radio-size-lg",
+      "familyId": "primitive/inputs/radio",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-radio-size-xl",
+      "familyId": "primitive/inputs/radio",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-radio-sm-size",
+      "familyId": "primitive/inputs/radio",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-radio-text-gap",
+      "familyId": "primitive/inputs/radio",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-radio-xs-size",
+      "familyId": "primitive/inputs/radio",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-action-size",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-dropdown-max-width",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-dropdown-min-width",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-dropdown-padding",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-loading-inset",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-loading-size",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-max-height",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-native-arrow-clearance",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-native-arrow-inset",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-option-height",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-option-icon-well-size",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-option-padding-x",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-option-padding-y",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-tag-max-width",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-trigger-gap",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-trigger-height",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-trigger-lg-height",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-trigger-lg-padding-x",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-trigger-md-height",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-trigger-md-padding-x",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-trigger-padding-x",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-trigger-responsive-height",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-trigger-sm-height",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-trigger-sm-padding-x",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-trigger-xl-height",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-trigger-xl-padding-x",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-trigger-xs-height",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-select-trigger-xs-padding-x",
+      "familyId": "primitive/inputs/select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-slider-mark-gap",
+      "familyId": "primitive/inputs/slider",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-slider-thumb-size",
+      "familyId": "primitive/inputs/slider",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-slider-tooltip-gap",
+      "familyId": "primitive/inputs/slider",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-slider-track-size",
+      "familyId": "primitive/inputs/slider",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-switch-label-gap",
+      "familyId": "primitive/inputs/switch",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-switch-lg-height",
+      "familyId": "primitive/inputs/switch",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-switch-lg-thumb",
+      "familyId": "primitive/inputs/switch",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-switch-lg-width",
+      "familyId": "primitive/inputs/switch",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-switch-md-height",
+      "familyId": "primitive/inputs/switch",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-switch-md-thumb",
+      "familyId": "primitive/inputs/switch",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-switch-md-width",
+      "familyId": "primitive/inputs/switch",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-switch-sm-height",
+      "familyId": "primitive/inputs/switch",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-switch-sm-thumb",
+      "familyId": "primitive/inputs/switch",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-switch-sm-width",
+      "familyId": "primitive/inputs/switch",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tag-input-chip-gap",
+      "familyId": "primitive/inputs/tag-input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tag-input-chip-padding-x",
+      "familyId": "primitive/inputs/tag-input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tag-input-error-gap",
+      "familyId": "primitive/inputs/tag-input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tag-input-gap",
+      "familyId": "primitive/inputs/tag-input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tag-input-input-min-width",
+      "familyId": "primitive/inputs/tag-input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tag-input-lg-height",
+      "familyId": "primitive/inputs/tag-input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tag-input-md-height",
+      "familyId": "primitive/inputs/tag-input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tag-input-padding-x",
+      "familyId": "primitive/inputs/tag-input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tag-input-padding-y",
+      "familyId": "primitive/inputs/tag-input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tag-input-sm-height",
+      "familyId": "primitive/inputs/tag-input",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-textarea-clear-clearance",
+      "familyId": "primitive/inputs/textarea",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-textarea-clear-offset",
+      "familyId": "primitive/inputs/textarea",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-textarea-lg-padding",
+      "familyId": "primitive/inputs/textarea",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-textarea-md-padding",
+      "familyId": "primitive/inputs/textarea",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-textarea-message-gap",
+      "familyId": "primitive/inputs/textarea",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-textarea-min-block-size",
+      "familyId": "primitive/inputs/textarea",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-textarea-resize-grip-size",
+      "familyId": "primitive/inputs/textarea",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-textarea-sm-padding",
+      "familyId": "primitive/inputs/textarea",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-time-column-height",
+      "familyId": "primitive/inputs/time-picker",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-timepicker-column-scrollbar-width",
+      "familyId": "primitive/inputs/time-picker",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-timepicker-column-width",
+      "familyId": "primitive/inputs/time-picker",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-timepicker-footer-gap",
+      "familyId": "primitive/inputs/time-picker",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-timepicker-option-height",
+      "familyId": "primitive/inputs/time-picker",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-timepicker-panel-padding",
+      "familyId": "primitive/inputs/time-picker",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toggle-label-gap",
+      "familyId": "primitive/inputs/toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toggle-lg-dot",
+      "familyId": "primitive/inputs/toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toggle-lg-height",
+      "familyId": "primitive/inputs/toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toggle-lg-width",
+      "familyId": "primitive/inputs/toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toggle-md-dot",
+      "familyId": "primitive/inputs/toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toggle-md-height",
+      "familyId": "primitive/inputs/toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toggle-md-width",
+      "familyId": "primitive/inputs/toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toggle-message-gap",
+      "familyId": "primitive/inputs/toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toggle-sm-dot",
+      "familyId": "primitive/inputs/toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toggle-sm-height",
+      "familyId": "primitive/inputs/toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toggle-sm-width",
+      "familyId": "primitive/inputs/toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toggle-state-icon-size",
+      "familyId": "primitive/inputs/toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toggle-text-gap",
+      "familyId": "primitive/inputs/toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toggle-xl-dot",
+      "familyId": "primitive/inputs/toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toggle-xl-height",
+      "familyId": "primitive/inputs/toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toggle-xl-width",
+      "familyId": "primitive/inputs/toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toggle-xs-dot",
+      "familyId": "primitive/inputs/toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toggle-xs-height",
+      "familyId": "primitive/inputs/toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toggle-xs-width",
+      "familyId": "primitive/inputs/toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-transfer-gap",
+      "familyId": "primitive/inputs/transfer",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-transfer-item-height",
+      "familyId": "primitive/inputs/transfer",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-transfer-list-max-height",
+      "familyId": "primitive/inputs/transfer",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-transfer-list-width",
+      "familyId": "primitive/inputs/transfer",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-transfer-operations-gap",
+      "familyId": "primitive/inputs/transfer",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-transfer-panel-padding",
+      "familyId": "primitive/inputs/transfer",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tree-select-clear-gap",
+      "familyId": "primitive/inputs/tree-select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tree-select-clear-inset-inline-end",
+      "familyId": "primitive/inputs/tree-select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tree-select-clear-size",
+      "familyId": "primitive/inputs/tree-select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tree-select-dropdown-max-height",
+      "familyId": "primitive/inputs/tree-select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tree-select-dropdown-padding",
+      "familyId": "primitive/inputs/tree-select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tree-select-indent",
+      "familyId": "primitive/inputs/tree-select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tree-select-option-height",
+      "familyId": "primitive/inputs/tree-select",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-upload-card-size",
+      "familyId": "primitive/inputs/upload",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-upload-dropzone-height",
+      "familyId": "primitive/inputs/upload",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-upload-dropzone-padding",
+      "familyId": "primitive/inputs/upload",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-upload-file-item-height",
+      "familyId": "primitive/inputs/upload",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-upload-file-list-gap",
+      "familyId": "primitive/inputs/upload",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-voice-input-button-size",
+      "familyId": "primitive/inputs/voice-input-button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-aspect-ratio-object-fit",
+      "familyId": "primitive/layout/aspect-ratio",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-aspect-ratio-object-position",
+      "familyId": "primitive/layout/aspect-ratio",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-collapse-content-default-idle-padding-x",
+      "familyId": "primitive/layout/collapse",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-collapse-content-default-idle-padding-y",
+      "familyId": "primitive/layout/collapse",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-collapse-content-lg-idle-padding-x",
+      "familyId": "primitive/layout/collapse",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-collapse-content-lg-idle-padding-y",
+      "familyId": "primitive/layout/collapse",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-collapse-content-sm-idle-padding-x",
+      "familyId": "primitive/layout/collapse",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-collapse-content-sm-idle-padding-y",
+      "familyId": "primitive/layout/collapse",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-collapse-header-default-idle-padding-x",
+      "familyId": "primitive/layout/collapse",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-collapse-header-default-idle-padding-y",
+      "familyId": "primitive/layout/collapse",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-collapse-header-ghost-idle-padding-x",
+      "familyId": "primitive/layout/collapse",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-collapse-header-ghost-idle-padding-y",
+      "familyId": "primitive/layout/collapse",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-collapse-header-lg-idle-padding-x",
+      "familyId": "primitive/layout/collapse",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-collapse-header-lg-idle-padding-y",
+      "familyId": "primitive/layout/collapse",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-collapse-header-sm-idle-padding-x",
+      "familyId": "primitive/layout/collapse",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-collapse-header-sm-idle-padding-y",
+      "familyId": "primitive/layout/collapse",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-divider-label-max-width",
+      "familyId": "primitive/layout/divider",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-layout-content-min-basis",
+      "familyId": "primitive/layout/layout",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-layout-content-padding",
+      "familyId": "primitive/layout/layout",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-layout-footer-padding-block",
+      "familyId": "primitive/layout/layout",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-layout-footer-padding-inline",
+      "familyId": "primitive/layout/layout",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-layout-header-padding-inline",
+      "familyId": "primitive/layout/layout",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-layout-root-min-block-size",
+      "familyId": "primitive/layout/layout",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-layout-sider-trigger-block-size",
+      "familyId": "primitive/layout/layout",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-resize-handle-grip-length",
+      "familyId": "primitive/layout/resize-handle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-resize-handle-size",
+      "familyId": "primitive/layout/resize-handle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-semantic-surface-gap",
+      "familyId": "primitive/layout/semantic-surface",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-semantic-surface-padding",
+      "familyId": "primitive/layout/semantic-surface",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-space-small-size",
+      "familyId": "primitive/layout/space",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-splitter-gutter-size",
+      "familyId": "primitive/layout/splitter",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-affix-density-factor",
+      "familyId": "primitive/navigation/affix",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-anchor-density-factor",
+      "familyId": "primitive/navigation/anchor",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-anchor-horizontal-gap",
+      "familyId": "primitive/navigation/anchor",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-anchor-item-padding-block",
+      "familyId": "primitive/navigation/anchor",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-anchor-item-padding-inline",
+      "familyId": "primitive/navigation/anchor",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-anchor-list-max-block-size",
+      "familyId": "primitive/navigation/anchor",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-anchor-nested-indent",
+      "familyId": "primitive/navigation/anchor",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-back-top-density-factor",
+      "familyId": "primitive/navigation/back-top",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-backtop-inset-block-end",
+      "familyId": "primitive/navigation/back-top",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-backtop-inset-inline-end",
+      "familyId": "primitive/navigation/back-top",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-backtop-size",
+      "familyId": "primitive/navigation/back-top",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-breadcrumb-density-factor",
+      "familyId": "primitive/navigation/breadcrumb",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-breadcrumb-item-height",
+      "familyId": "primitive/navigation/breadcrumb",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-breadcrumb-item-padding-inline",
+      "familyId": "primitive/navigation/breadcrumb",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-breadcrumb-label-max-width",
+      "familyId": "primitive/navigation/breadcrumb",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-breadcrumb-padding",
+      "familyId": "primitive/navigation/breadcrumb",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-float-button-density-factor",
+      "familyId": "primitive/navigation/float-button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-floatbutton-badge-offset-block",
+      "familyId": "primitive/navigation/float-button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-floatbutton-badge-offset-inline",
+      "familyId": "primitive/navigation/float-button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-floatbutton-badge-padding-block",
+      "familyId": "primitive/navigation/float-button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-floatbutton-badge-padding-inline",
+      "familyId": "primitive/navigation/float-button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-floatbutton-dot-offset-block",
+      "familyId": "primitive/navigation/float-button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-floatbutton-dot-offset-inline",
+      "familyId": "primitive/navigation/float-button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-floatbutton-dot-size",
+      "familyId": "primitive/navigation/float-button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-floatbutton-offset-block-end",
+      "familyId": "primitive/navigation/float-button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-floatbutton-padding-block",
+      "familyId": "primitive/navigation/float-button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-floatbutton-padding-inline",
+      "familyId": "primitive/navigation/float-button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-floatbutton-size",
+      "familyId": "primitive/navigation/float-button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-floatbutton-size-coarse",
+      "familyId": "primitive/navigation/float-button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-link-density-factor",
+      "familyId": "primitive/navigation/link",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-link-external-icon-gap",
+      "familyId": "primitive/navigation/link",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-link-external-icon-offset",
+      "familyId": "primitive/navigation/link",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-link-underline-offset",
+      "familyId": "primitive/navigation/link",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-link-underline-offset-hover",
+      "familyId": "primitive/navigation/link",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-menu-child-padding-inline",
+      "familyId": "primitive/navigation/menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-menu-density-factor",
+      "familyId": "primitive/navigation/menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-menu-icon-column-size",
+      "familyId": "primitive/navigation/menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-menu-item-child-height",
+      "familyId": "primitive/navigation/menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-menu-item-gap",
+      "familyId": "primitive/navigation/menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-menu-item-padding-inline",
+      "familyId": "primitive/navigation/menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-pagination-density-factor",
+      "familyId": "primitive/navigation/pagination",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-pagination-lg-height",
+      "familyId": "primitive/navigation/pagination",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-pagination-lg-padding-x",
+      "familyId": "primitive/navigation/pagination",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-pagination-md-height",
+      "familyId": "primitive/navigation/pagination",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-pagination-md-padding-x",
+      "familyId": "primitive/navigation/pagination",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-pagination-sm-height",
+      "familyId": "primitive/navigation/pagination",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-pagination-sm-padding-x",
+      "familyId": "primitive/navigation/pagination",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-segmented-density-factor",
+      "familyId": "primitive/navigation/segmented",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-segmented-gap",
+      "familyId": "primitive/navigation/segmented",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-segmented-item-max-inline-size",
+      "familyId": "primitive/navigation/segmented",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-segmented-lg-gap",
+      "familyId": "primitive/navigation/segmented",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-segmented-lg-height",
+      "familyId": "primitive/navigation/segmented",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-segmented-lg-padding-x",
+      "familyId": "primitive/navigation/segmented",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-segmented-md-gap",
+      "familyId": "primitive/navigation/segmented",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-segmented-md-height",
+      "familyId": "primitive/navigation/segmented",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-segmented-md-padding-x",
+      "familyId": "primitive/navigation/segmented",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-segmented-padding",
+      "familyId": "primitive/navigation/segmented",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-segmented-sm-gap",
+      "familyId": "primitive/navigation/segmented",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-segmented-sm-height",
+      "familyId": "primitive/navigation/segmented",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-segmented-sm-padding-x",
+      "familyId": "primitive/navigation/segmented",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stepper-circles-ring-width",
+      "familyId": "primitive/navigation/stepper",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stepper-connector-width",
+      "familyId": "primitive/navigation/stepper",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stepper-density-factor",
+      "familyId": "primitive/navigation/stepper",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stepper-item-size-lg",
+      "familyId": "primitive/navigation/stepper",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stepper-item-size-md",
+      "familyId": "primitive/navigation/stepper",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stepper-item-size-sm",
+      "familyId": "primitive/navigation/stepper",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stepper-process-ring-width",
+      "familyId": "primitive/navigation/stepper",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stepper-text-gap",
+      "familyId": "primitive/navigation/stepper",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stepper-vertical-gap",
+      "familyId": "primitive/navigation/stepper",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stepper-vertical-item-gap",
+      "familyId": "primitive/navigation/stepper",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-steps-connector-width",
+      "familyId": "primitive/navigation/steps",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-steps-density-factor",
+      "familyId": "primitive/navigation/steps",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-steps-dot-size",
+      "familyId": "primitive/navigation/steps",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-steps-item-size",
+      "familyId": "primitive/navigation/steps",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-steps-item-size-sm",
+      "familyId": "primitive/navigation/steps",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-steps-process-ring-width",
+      "familyId": "primitive/navigation/steps",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-steps-text-gap",
+      "familyId": "primitive/navigation/steps",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-steps-vertical-gap",
+      "familyId": "primitive/navigation/steps",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-steps-vertical-item-gap",
+      "familyId": "primitive/navigation/steps",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-badge-height",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-badge-min-width",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-badge-padding",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-density-factor",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-gap",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-icon-padding",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-indicator-height",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-item-gap",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-item-max-width",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-lg-height",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-lg-padding",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-list-max-width",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-list-padding",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-list-width",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-loading-size",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-md-height",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-md-padding",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-overflow-control-size",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-overflow-fade-width",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-panel-gap",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-panel-motion-distance",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-panel-padding",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-responsive-height",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-responsive-padding",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-sm-height",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-sm-padding",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tabs-underline-list-width",
+      "familyId": "primitive/navigation/tabs",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-confirm-dialog-padding",
+      "familyId": "primitive/overlay/confirm-dialog",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-context-menu-group-padding",
+      "familyId": "primitive/overlay/context-menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-context-menu-item-padding",
+      "familyId": "primitive/overlay/context-menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-context-menu-padding",
+      "familyId": "primitive/overlay/context-menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-dropdown-item-gap",
+      "familyId": "primitive/overlay/dropdown",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-dropdown-item-padding-x",
+      "familyId": "primitive/overlay/dropdown",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-dropdown-item-padding-y",
+      "familyId": "primitive/overlay/dropdown",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-dropdown-padding",
+      "familyId": "primitive/overlay/dropdown",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-hover-card-padding",
+      "familyId": "primitive/overlay/hover-card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-popconfirm-padding",
+      "familyId": "primitive/overlay/popconfirm",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-popover-title-gap",
+      "familyId": "primitive/overlay/popover",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-popover-title-padding-block",
+      "familyId": "primitive/overlay/popover",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-sheet-body-padding",
+      "familyId": "primitive/overlay/sheet",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-sheet-header-padding",
+      "familyId": "primitive/overlay/sheet",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tour-action-padding-inline",
+      "familyId": "primitive/overlay/tour",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tour-surface-padding",
+      "familyId": "primitive/overlay/tour",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-metric-card-gap",
+      "familyId": "structure/dashboard/dashboard-insights",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-metric-card-grid-size",
+      "familyId": "structure/dashboard/dashboard-insights",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-metric-card-meter-height",
+      "familyId": "structure/dashboard/dashboard-insights",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stats-density-factor",
+      "familyId": "structure/dashboard/stats-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stats-header-card-min-height",
+      "familyId": "structure/dashboard/stats-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stats-header-card-padding",
+      "familyId": "structure/dashboard/stats-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-detail-header-avatar-initials-size",
+      "familyId": "structure/headers/detail-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-detail-header-avatar-size",
+      "familyId": "structure/headers/detail-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-detail-header-back-button-padding",
+      "familyId": "structure/headers/detail-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-detail-header-tab-count-padding",
+      "familyId": "structure/headers/detail-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-detail-header-tab-padding",
+      "familyId": "structure/headers/detail-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-edit-header-context-gap",
+      "familyId": "structure/headers/edit-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-edit-header-hero-padding",
+      "familyId": "structure/headers/edit-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-edit-header-icon-badge-glyph-size",
+      "familyId": "structure/headers/edit-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-edit-header-icon-badge-size",
+      "familyId": "structure/headers/edit-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-edit-header-top-bar-padding-block",
+      "familyId": "structure/headers/edit-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-edit-header-top-bar-padding-inline",
+      "familyId": "structure/headers/edit-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-header-context-gap",
+      "familyId": "structure/headers/form-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-header-hero-padding",
+      "familyId": "structure/headers/form-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-header-icon-badge-glyph-size",
+      "familyId": "structure/headers/form-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-header-icon-badge-size",
+      "familyId": "structure/headers/form-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-header-top-bar-padding-block",
+      "familyId": "structure/headers/form-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-header-top-bar-padding-inline",
+      "familyId": "structure/headers/form-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-edit-fields-density-factor",
+      "familyId": "structure/record/edit-fields",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-edit-fields-grid-gap",
+      "familyId": "structure/record/edit-fields",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-sections-density-factor",
+      "familyId": "structure/record/form-sections",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-sections-grid-size",
+      "familyId": "structure/record/form-sections",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-action-bar-density-factor",
+      "familyId": "structure/record/record-action-bar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-field-density-factor",
+      "familyId": "structure/record/record-field",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-field-grid-density-factor",
+      "familyId": "structure/record/record-field-grid",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-panel-density-factor",
+      "familyId": "structure/record/record-panel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-summary-strip-density-factor",
+      "familyId": "structure/record/record-summary-strip",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-action-dock-density-factor",
+      "familyId": "structure/workspace/action-dock",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-action-dock-gap",
+      "familyId": "structure/workspace/action-dock",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-action-dock-padding-block",
+      "familyId": "structure/workspace/action-dock",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-action-dock-padding-inline",
+      "familyId": "structure/workspace/action-dock",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-active-filters-bar-count-block-size",
+      "familyId": "structure/workspace/active-filters-bar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-active-filters-bar-density-factor",
+      "familyId": "structure/workspace/active-filters-bar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-active-filters-bar-embedded-padding-block",
+      "familyId": "structure/workspace/active-filters-bar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-active-filters-bar-padding-block",
+      "familyId": "structure/workspace/active-filters-bar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-active-filters-bar-padding-inline",
+      "familyId": "structure/workspace/active-filters-bar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-column-menu-body-max-block-size",
+      "familyId": "structure/workspace/column-menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-column-menu-body-padding",
+      "familyId": "structure/workspace/column-menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-column-menu-count-block-size",
+      "familyId": "structure/workspace/column-menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-column-menu-count-min-inline-size",
+      "familyId": "structure/workspace/column-menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-column-menu-count-padding-inline",
+      "familyId": "structure/workspace/column-menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-column-menu-density-factor",
+      "familyId": "structure/workspace/column-menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-column-menu-footer-padding",
+      "familyId": "structure/workspace/column-menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-column-menu-header-padding",
+      "familyId": "structure/workspace/column-menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-column-menu-panel-inline-size",
+      "familyId": "structure/workspace/column-menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-column-menu-row-padding",
+      "familyId": "structure/workspace/column-menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-column-menu-section-gap",
+      "familyId": "structure/workspace/column-menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-column-menu-section-padding-block-start",
+      "familyId": "structure/workspace/column-menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-connected-command-palette-density-factor",
+      "familyId": "structure/workspace/connected-command-palette",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-export-button-density-factor",
+      "familyId": "structure/workspace/export-button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-export-button-panel-min-width",
+      "familyId": "structure/workspace/export-button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-field-filters-panel-density-factor",
+      "familyId": "structure/workspace/field-filters-panel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-saved-views-menu-density-factor",
+      "familyId": "structure/workspace/saved-views-menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-saved-views-menu-list-max-block-size",
+      "familyId": "structure/workspace/saved-views-menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-scope-switcher-density-factor",
+      "familyId": "structure/workspace/scope-switcher",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-search-command-bar-density-factor",
+      "familyId": "structure/workspace/search-command-bar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-selection-preview-rail-density-factor",
+      "familyId": "structure/workspace/selection-preview-rail",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-icon-sm-size",
+      "familyId": "structure/workspace/table-toolbar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-toolbar-density-factor",
+      "familyId": "structure/workspace/table-toolbar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-view-mode-switcher-density-factor",
+      "familyId": "structure/workspace/view-mode-switcher",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-profile-row-density-factor",
+      "familyId": "surface/admin/profile",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-compare-section-padding",
+      "familyId": "surface/data/compare",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-dashboard-skeleton-line-height",
+      "familyId": "surface/data/dashboard",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-dashboard-skeleton-stat-height",
+      "familyId": "surface/data/dashboard",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-dashboard-skeleton-title-height",
+      "familyId": "surface/data/dashboard",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-dashboard-skeleton-title-width",
+      "familyId": "surface/data/dashboard",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-detail-state-gap",
+      "familyId": "surface/data/detail",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-auth-density-factor",
+      "familyId": "surface/experience/auth",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-chat-density-factor",
+      "familyId": "surface/experience/chat",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-editor-density-factor",
+      "familyId": "surface/experience/editor",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-empty-state-density-factor",
+      "familyId": "surface/experience/empty-state",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-marketing-density-factor",
+      "familyId": "surface/experience/marketing",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-media-density-factor",
+      "familyId": "surface/experience/media",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-notification-density-factor",
+      "familyId": "surface/experience/notification",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-oauth-transition-density-factor",
+      "familyId": "surface/experience/oauth-transition",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-pricing-density-factor",
+      "familyId": "surface/experience/pricing",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-detail-form-density-factor",
+      "familyId": "surface/forms/detail-form",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-guided-draft-form-density-factor",
+      "familyId": "surface/forms/guided-draft-form",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-wizard-density-factor",
+      "familyId": "surface/forms/wizard",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-activity-density-factor",
+      "familyId": "surface/operations/activity",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-kanban-density-factor",
+      "familyId": "surface/operations/kanban",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-operational-density-factor",
+      "familyId": "surface/operations/operational",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-scheduler-density-factor",
+      "familyId": "surface/operations/scheduler",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-collection-workspace-density-factor",
+      "familyId": "surface/workspace/collection-workspace",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-command-center-density-factor",
+      "familyId": "surface/workspace/command-center",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-decision-inbox-density-factor",
+      "familyId": "surface/workspace/decision-inbox",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-workbench-density-factor",
+      "familyId": "surface/workspace/record-workbench",
+      "state": "PRESCRIPCION"
+    }
+  ],
+  "variants": [
+    {
+      "id": "compact",
+      "value": 0.85,
+      "effects": {
+        "--ds-density-mode-factor": "0.85"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "normal",
+      "value": 1,
+      "effects": {
+        "--ds-density-mode-factor": "1"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "spacious",
+      "value": 1.15,
+      "effects": {
+        "--ds-density-mode-factor": "1.15"
+      },
+      "pinned": {}
+    }
+  ],
+  "overlaps": [],
+  "terminalReachLaw": "state = alcance en la cascada; deteccion de UN SALTO en sitio de lectura = COTA INFERIOR. El alcance transitivo es de la capa GENERADA (cascade-extract/materialized, ley R1); el diff con estas prescripciones ES el backlog de fase 3."
+}

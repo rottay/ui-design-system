@@ -39,7 +39,21 @@
   },
   "calibration": {
     "assessmentState": "UNKNOWN",
-    "normalizedStops": [],
+    "normalizedStops": [
+      {
+        "id": "mate",
+        "value": 0
+      },
+      {
+        "id": "sobrio",
+        "value": 0.6
+      },
+      {
+        "id": "estandar",
+        "value": 1,
+        "law": "autoria vertical POR CONSTRUCCION (quietPremiumOwnership): el sobre tenant es {0,0.65}/{0,0.75} con RECHAZO (composition/tenant-theme:128-174,:1206-1217); el tema espejo de fase 2 ES vertical y puede nombrarla; un editor tenant la muestra no-alcanzable. Precedente bithire=mate(0) en el README de modern"
+      }
+    ],
     "staticDbParityEvidenceIds": [],
     "exactRestoreEvidenceIds": [],
     "negativeControls": [],

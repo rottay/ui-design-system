@@ -12033,162 +12033,6 @@
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "color.seeds",
-            "socketPattern": "--_ds-<comp>-accent-bg / --_ds-<comp>-accent-color",
-            "prop": "background/color de la accion primaria y el estado checked/activo",
-            "tier": "standard",
-            "examples": [
-              "--_ds-button-primary-bg",
-              "--_ds-checkbox-checked-bg",
-              "--_ds-switch-on-bg",
-              "--_ds-slider-track-active"
-            ],
-            "sockets": [
-              "--_ds-button-primary-bg",
-              "--_ds-button-primary-bg-hover",
-              "--_ds-button-primary-bg-active",
-              "--_ds-button-primary-color",
-              "--_ds-button-primary-color-hover",
-              "--_ds-button-primary-color-active",
-              "--_ds-button-primary-border",
-              "--_ds-button-primary-border-hover",
-              "--_ds-button-primary-border-active",
-              "--_ds-button-secondary-bg",
-              "--_ds-button-secondary-bg-hover",
-              "--_ds-button-secondary-bg-active",
-              "--_ds-button-secondary-color",
-              "--_ds-button-secondary-color-hover",
-              "--_ds-button-secondary-color-active",
-              "--_ds-button-secondary-border",
-              "--_ds-button-secondary-border-hover",
-              "--_ds-button-secondary-border-active",
-              "--_ds-button-default-bg",
-              "--_ds-button-default-bg-hover",
-              "--_ds-button-default-bg-active",
-              "--_ds-button-default-color",
-              "--_ds-button-default-color-hover",
-              "--_ds-button-default-color-active",
-              "--_ds-button-default-border",
-              "--_ds-button-default-border-hover",
-              "--_ds-button-default-border-active",
-              "--_ds-button-ghost-bg",
-              "--_ds-button-ghost-bg-hover",
-              "--_ds-button-ghost-bg-active",
-              "--_ds-button-ghost-color",
-              "--_ds-button-ghost-color-hover",
-              "--_ds-button-ghost-color-active",
-              "--_ds-button-ghost-border",
-              "--_ds-button-ghost-border-hover",
-              "--_ds-button-ghost-border-active",
-              "--_ds-button-text-bg",
-              "--_ds-button-text-bg-hover",
-              "--_ds-button-text-bg-active",
-              "--_ds-button-text-color",
-              "--_ds-button-text-color-hover",
-              "--_ds-button-text-color-active",
-              "--_ds-button-text-border",
-              "--_ds-button-text-border-hover",
-              "--_ds-button-text-border-active",
-              "--_ds-button-link-bg",
-              "--_ds-button-link-bg-hover",
-              "--_ds-button-link-bg-active",
-              "--_ds-button-link-color",
-              "--_ds-button-link-color-hover",
-              "--_ds-button-link-color-active",
-              "--_ds-button-link-border",
-              "--_ds-button-link-border-hover",
-              "--_ds-button-link-border-active",
-              "--_ds-button-dashed-bg",
-              "--_ds-button-dashed-bg-hover",
-              "--_ds-button-dashed-bg-active",
-              "--_ds-button-dashed-color",
-              "--_ds-button-dashed-color-hover",
-              "--_ds-button-dashed-color-active",
-              "--_ds-button-dashed-border",
-              "--_ds-button-dashed-border-hover",
-              "--_ds-button-dashed-border-active",
-              "--_ds-button-ai-bg",
-              "--_ds-button-ai-bg-hover",
-              "--_ds-button-ai-bg-active",
-              "--_ds-button-ai-color",
-              "--_ds-button-ai-color-hover",
-              "--_ds-button-ai-color-active",
-              "--_ds-button-ai-border",
-              "--_ds-button-ai-border-hover",
-              "--_ds-button-ai-border-active",
-              "--_ds-button-selected-bg",
-              "--_ds-button-disabled-bg",
-              "--_ds-button-disabled-color",
-              "--_ds-button-disabled-border-color",
-              "--_ds-button-link-text-decoration",
-              "--_ds-button-link-text-decoration-hover"
-            ],
-            "socketsResolved": true
-          },
-          {
-            "root": "color.status",
-            "socketPattern": "--_ds-<comp>-error-border / --_ds-<comp>-error-color",
-            "prop": "borde y texto de validacion invalida",
-            "tier": "standard",
-            "examples": [
-              "--_ds-input-error-border",
-              "--_ds-select-error-border"
-            ],
-            "sockets": [
-              "--_ds-button-success-bg",
-              "--_ds-button-success-bg-hover",
-              "--_ds-button-success-bg-active",
-              "--_ds-button-success-color",
-              "--_ds-button-success-color-hover",
-              "--_ds-button-success-color-active",
-              "--_ds-button-success-border",
-              "--_ds-button-success-border-hover",
-              "--_ds-button-success-border-active",
-              "--_ds-button-warning-bg",
-              "--_ds-button-warning-bg-hover",
-              "--_ds-button-warning-bg-active",
-              "--_ds-button-warning-color",
-              "--_ds-button-warning-color-hover",
-              "--_ds-button-warning-color-active",
-              "--_ds-button-warning-border",
-              "--_ds-button-warning-border-hover",
-              "--_ds-button-warning-border-active",
-              "--_ds-button-error-bg",
-              "--_ds-button-error-bg-hover",
-              "--_ds-button-error-bg-active",
-              "--_ds-button-error-color",
-              "--_ds-button-error-color-hover",
-              "--_ds-button-error-color-active",
-              "--_ds-button-error-border",
-              "--_ds-button-error-border-hover",
-              "--_ds-button-error-border-active",
-              "--_ds-button-info-bg",
-              "--_ds-button-info-bg-hover",
-              "--_ds-button-info-bg-active",
-              "--_ds-button-info-color",
-              "--_ds-button-info-color-hover",
-              "--_ds-button-info-color-active",
-              "--_ds-button-info-border",
-              "--_ds-button-info-border-hover",
-              "--_ds-button-info-border-active"
-            ],
-            "socketsResolved": true
-          },
-          {
-            "root": "color.mode",
-            "socketPattern": null,
-            "prop": "background/color/border via los canales de color re-derivados por overlay",
-            "tier": "standard",
-            "examples": [],
-            "noSocketReason": "SIN socket propio: el modo viaja por los overlays de los canales compartidos --ds-color-*/--ds-surface-*",
-            "socketsResolved": true,
-            "carrier": "shared-channel"
-          }
-        ],
-        "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
             "--ds-button-touch-target-min",
@@ -12279,8 +12123,1724 @@
           "EXCEPCION ARGUMENTADA - Piso de accesibilidad (touch-target): clase propia de exclusion, JAMAS socket - encoger el area tactil bajo el piso WCAG produce mis-taps; el propio mensaje del adjudicador la declara clase aparte y el archivo la contradecia": [
             "--ds-button-touch-target-min"
           ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-button-primary-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-primary-bg-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-primary-bg-active",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-primary-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-primary-color-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-primary-color-active",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-primary-border",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-primary-border-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-primary-border-active",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-secondary-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-secondary-bg-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-secondary-bg-active",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-secondary-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-secondary-color-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-secondary-color-active",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-secondary-border",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-secondary-border-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-secondary-border-active",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-default-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-default-bg-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-default-bg-active",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-default-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-default-color-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-default-color-active",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-default-border",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-default-border-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-default-border-active",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-ghost-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/field-filters-panel.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-ghost-bg-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/field-filters-panel.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-ghost-bg-active",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/field-filters-panel.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-ghost-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-ghost-color-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/field-filters-panel.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-ghost-color-active",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-ghost-border",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/field-filters-panel.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-ghost-border-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/field-filters-panel.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-ghost-border-active",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-text-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-text-bg-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-text-bg-active",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-text-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-text-color-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-text-color-active",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-text-border",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-text-border-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-text-border-active",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-link-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-link-bg-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-link-bg-active",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-link-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-link-color-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-link-color-active",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-link-border",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-link-border-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-link-border-active",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-dashed-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-dashed-bg-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-dashed-bg-active",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-dashed-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-dashed-color-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-dashed-color-active",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-dashed-border",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-dashed-border-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-dashed-border-active",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-ai-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-ai-bg-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-ai-bg-active",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-ai-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-ai-color-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-ai-color-active",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-ai-border",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-ai-border-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-ai-border-active",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-selected-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/button-group.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/button-icon.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-button-disabled-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-disabled-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-disabled-border-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-link-text-decoration",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-link-text-decoration-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-success-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-success-bg-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-success-bg-active",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-success-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-success-color-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-success-color-active",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-success-border",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-success-border-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-success-border-active",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-warning-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-warning-bg-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-warning-bg-active",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-warning-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-warning-color-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-warning-color-active",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-warning-border",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-warning-border-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-warning-border-active",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-error-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-error-bg-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-error-bg-active",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-error-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-error-color-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-error-color-active",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-error-border",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-error-border-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-error-border-active",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-info-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-info-bg-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-info-bg-active",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-info-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-info-color-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-info-color-active",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-info-border",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-info-border-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-info-border-active",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
         }
-      }
+      ]
     },
     {
       "controlId": "typography.pairing",
@@ -12325,36 +13885,158 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "type.scale",
-            "socketPattern": "--_ds-<comp>-font-size (cayendo a los pasos de la rampa multiplicada, ej. var(--ds-text-sm))",
-            "prop": "font-size de todo texto de componente",
-            "tier": "standard",
-            "examples": [
-              "--_ds-card-title-size",
-              "--_ds-input-font-size",
-              "--_ds-menu-item-font-size"
-            ],
-            "sockets": [
-              "--_ds-button-xs-font-size",
-              "--_ds-button-xs-line-height",
-              "--_ds-button-sm-font-size",
-              "--_ds-button-sm-line-height",
-              "--_ds-button-md-font-size",
-              "--_ds-button-md-line-height",
-              "--_ds-button-lg-font-size",
-              "--_ds-button-lg-line-height",
-              "--_ds-button-xl-font-size",
-              "--_ds-button-xl-line-height"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-button-xs-font-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
           }
-        ],
-        "reviewedFrom": "anatomy"
-      }
+        },
+        {
+          "channelId": "--_ds-button-xs-line-height",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-sm-font-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-sm-line-height",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-md-font-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-md-line-height",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-lg-font-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-lg-line-height",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-xl-font-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-xl-line-height",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
     },
     {
       "controlId": "shape.radius-scale",
@@ -12381,32 +14063,101 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "shape.control-silhouette",
-            "socketPattern": "--_ds-<comp>-radius",
-            "prop": "border-radius del control",
-            "tier": "standard",
-            "examples": [
-              "--_ds-button-radius",
-              "--_ds-segmented-radius",
-              "--_ds-pagination-item-radius"
-            ],
-            "sockets": [
-              "--_ds-button-xs-radius",
-              "--_ds-button-sm-radius",
-              "--_ds-button-md-radius",
-              "--_ds-button-lg-radius",
-              "--_ds-button-xl-radius",
-              "--_ds-button-icon-plate-radius"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-button-xs-radius",
+          "semanticOwner": "shape.button-style",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
           }
-        ],
-        "reviewedFrom": "anatomy"
-      }
+        },
+        {
+          "channelId": "--_ds-button-sm-radius",
+          "semanticOwner": "shape.button-style",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/guided-draft-form.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-md-radius",
+          "semanticOwner": "shape.button-style",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-lg-radius",
+          "semanticOwner": "shape.button-style",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-xl-radius",
+          "semanticOwner": "shape.button-style",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-icon-plate-radius",
+          "semanticOwner": "shape.button-style",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/button-group.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/button-icon.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
     },
     {
       "controlId": "density.mode",
@@ -12415,48 +14166,353 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "density.mode",
-            "socketPattern": "--_ds-<comp>-density-factor (multiplicador local que compone SOBRE var(--ds-density-effective-scale) - patron canonico existente, replicar, no inventar)",
-            "prop": "padding-y, altura y gap del control via calc(base * effective)",
-            "tier": "standard",
-            "examples": [
-              "--_ds-input-density-factor",
-              "--_ds-button-density-factor"
-            ],
-            "sockets": [
-              "--_ds-button-xs-height",
-              "--_ds-button-xs-padding-x",
-              "--_ds-button-xs-padding-y",
-              "--_ds-button-xs-gap",
-              "--_ds-button-sm-height",
-              "--_ds-button-sm-padding-x",
-              "--_ds-button-sm-padding-y",
-              "--_ds-button-sm-gap",
-              "--_ds-button-md-height",
-              "--_ds-button-md-padding-x",
-              "--_ds-button-md-padding-y",
-              "--_ds-button-md-gap",
-              "--_ds-button-lg-height",
-              "--_ds-button-lg-padding-x",
-              "--_ds-button-lg-padding-y",
-              "--_ds-button-lg-gap",
-              "--_ds-button-xl-height",
-              "--_ds-button-xl-padding-x",
-              "--_ds-button-xl-padding-y",
-              "--_ds-button-xl-gap",
-              "--_ds-button-gap",
-              "--_ds-button-label-offset-y",
-              "--_ds-button-link-underline-offset"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-button-xs-height",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
           }
-        ],
-        "reviewedFrom": "anatomy"
-      }
+        },
+        {
+          "channelId": "--_ds-button-xs-padding-x",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-xs-padding-y",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-xs-gap",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-sm-height",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/guided-draft-form.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-sm-padding-x",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-sm-padding-y",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-sm-gap",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-md-height",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/guided-draft-form.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-md-padding-x",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-md-padding-y",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-md-gap",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-lg-height",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-lg-padding-x",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-lg-padding-y",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-lg-gap",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-xl-height",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-xl-padding-x",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-xl-padding-y",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-xl-gap",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-gap",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-label-offset-y",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-link-underline-offset",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
     },
     {
       "controlId": "spacing.rhythm",
@@ -12482,36 +14538,173 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "motion.character",
-            "socketPattern": "--_ds-<comp>-transition-duration",
-            "prop": "transition-duration",
-            "tier": "standard",
-            "examples": [
-              "--_ds-button-transition-duration",
-              "--_ds-checkbox-transition-duration"
-            ],
-            "sockets": [
-              "--_ds-button-transition-duration",
-              "--_ds-button-transition-timing",
-              "--_ds-button-hover-transform",
-              "--_ds-button-active-transform",
-              "--_ds-button-hover-filter",
-              "--_ds-button-active-filter",
-              "--_ds-button-icon-hover-transform",
-              "--_ds-button-icon-active-transform",
-              "--_ds-button-spinner-duration",
-              "--_ds-button-attention-iteration-count",
-              "--_ds-button-spinner-color"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-button-transition-duration",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
           }
-        ],
-        "reviewedFrom": "anatomy"
-      }
+        },
+        {
+          "channelId": "--_ds-button-transition-timing",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-hover-transform",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-active-transform",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-hover-filter",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-active-filter",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-icon-hover-transform",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-icon-active-transform",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-spinner-duration",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-attention-iteration-count",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-spinner-color",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -12607,46 +14800,101 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "shape.edge",
-            "socketPattern": "--_ds-<comp>-border-style / --_ds-<comp>-border-width",
-            "prop": "trazo del campo",
-            "tier": "standard",
-            "examples": [
-              "--_ds-input-border-style",
-              "--_ds-select-border-style",
-              "--_ds-textarea-border-style"
-            ],
-            "sockets": [
-              "--_ds-button-border-width",
-              "--_ds-button-border-width-focus",
-              "--_ds-button-dashed-border-style",
-              "--_ds-button-bordered-border"
-            ],
-            "socketsResolved": true
-          },
-          {
-            "root": "focus.ring",
-            "socketPattern": "--_ds-<comp>-focus-ring-color",
-            "prop": "outline-color / box-shadow",
-            "tier": "standard",
-            "examples": [
-              "--_ds-button-focus-ring-color",
-              "--_ds-input-focus-ring-color",
-              "--_ds-select-focus-ring-color"
-            ],
-            "sockets": [
-              "--_ds-button-focus-ring",
-              "--_ds-button-focus-ring-offset"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-button-border-width",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/button-group.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
           }
-        ],
-        "reviewedFrom": "anatomy"
-      }
+        },
+        {
+          "channelId": "--_ds-button-border-width-focus",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/button-group.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-dashed-border-style",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-bordered-border",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-focus-ring",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/field-filters-panel.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-focus-ring-offset",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/button-group.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
     },
     {
       "controlId": "token-overrides",
@@ -12729,31 +14977,116 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "bindings": [
-          {
-            "root": "icon.posture",
-            "socketPattern": "--_ds-<comp>-icon-stroke-width",
-            "prop": "stroke-width",
-            "tier": "standard",
-            "examples": [
-              "--_ds-button-icon-stroke-width"
-            ],
-            "sockets": [
-              "--_ds-button-icon-stroke-width",
-              "--_ds-button-spinner-stroke-width",
-              "--_ds-button-lg-icon-size",
-              "--_ds-button-md-icon-size",
-              "--_ds-button-sm-icon-size",
-              "--_ds-button-xl-icon-size",
-              "--_ds-button-xs-icon-size"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-button-icon-stroke-width",
+          "semanticOwner": "profiles.icon",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/button-group.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/button-icon.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ],
-        "reviewedFrom": "anatomy"
-      }
+        },
+        {
+          "channelId": "--_ds-button-spinner-stroke-width",
+          "semanticOwner": "profiles.icon",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-lg-icon-size",
+          "semanticOwner": "profiles.icon",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-md-icon-size",
+          "semanticOwner": "profiles.icon",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-sm-icon-size",
+          "semanticOwner": "profiles.icon",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-xl-icon-size",
+          "semanticOwner": "profiles.icon",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-button-xs-icon-size",
+          "semanticOwner": "profiles.icon",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/button"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
     },
     {
       "controlId": "responsive.posture",

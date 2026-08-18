@@ -269,25 +269,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "why": "socket heredado --_ds-terminal-block-char-cadence: la coreografia obedece al dial",
-        "source": "huecos-kimi",
-        "reviewedFrom": "anatomy",
-        "bindings": [
-          {
-            "root": null,
-            "socketPattern": null,
-            "prop": "transition-duration de entrada/salida",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-adaptive-overlay-transition-duration"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-adaptive-overlay-transition-duration",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/adaptive-overlay.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/feedback/adaptive-overlay"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/adaptive-overlay.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "surfaces.elevation-posture",
@@ -296,25 +295,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "why": "adaptive-overlay flota; empty-state y terminal-block componen en flujo, sin plano propio",
-        "source": "huecos-kimi",
-        "reviewedFrom": "anatomy",
-        "bindings": [
-          {
-            "root": null,
-            "socketPattern": null,
-            "prop": "box-shadow del overlay",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-adaptive-overlay-elevation"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-adaptive-overlay-elevation",
+          "semanticOwner": "surfaces.elevation-posture",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/adaptive-overlay.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/feedback/adaptive-overlay"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/adaptive-overlay.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "surfaces.effect-intensity",
@@ -323,25 +321,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "why": "backdrop de overlay: de los pocos lugares sancionados para glass",
-        "source": "huecos-kimi",
-        "reviewedFrom": "anatomy",
-        "bindings": [
-          {
-            "root": null,
-            "socketPattern": null,
-            "prop": "backdrop-filter del scrim (glass sancionado en backdrops de overlay)",
-            "tier": "premium",
-            "examples": [],
-            "sockets": [
-              "--_ds-adaptive-overlay-scrim-backdrop-filter"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-adaptive-overlay-scrim-backdrop-filter",
+          "semanticOwner": "surfaces.effect-intensity",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/adaptive-overlay.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/feedback/adaptive-overlay"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/adaptive-overlay.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "navigation.sidebar-tone",
@@ -390,25 +387,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "why": "regiones pintadas por familia; precedente vivo --_ds-terminal-block-body-*",
-        "source": "huecos-kimi",
-        "reviewedFrom": "anatomy",
-        "bindings": [
-          {
-            "root": null,
-            "socketPattern": null,
-            "prop": "z-index dentro del canal derivado --ds-z-overlay",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-adaptive-overlay-z-index"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-adaptive-overlay-z-index",
+          "semanticOwner": "chrome.families",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/adaptive-overlay.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/feedback/adaptive-overlay"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/adaptive-overlay.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "chrome.anatomy",
@@ -417,25 +413,24 @@
       "unknownReason": "NOT_ASSESSED",
       "evidenceIds": [],
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
-      "targetBinding": {
-        "status": "MUST_REACH",
-        "source": "huecos-fable",
-        "remediatedFrom": "fam11-dup-sweep",
-        "reviewedFrom": "anatomy",
-        "bindings": [
-          {
-            "root": null,
-            "socketPattern": null,
-            "prop": "anillo de foco de las acciones del overlay",
-            "tier": "standard",
-            "examples": [],
-            "sockets": [
-              "--_ds-adaptive-overlay-focus-ring-color"
-            ],
-            "socketsResolved": true
+      "internalChannels": [
+        {
+          "channelId": "--_ds-adaptive-overlay-focus-ring-color",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/adaptive-overlay.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "pattern/feedback/adaptive-overlay"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/adaptive-overlay.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
           }
-        ]
-      }
+        }
+      ]
     },
     {
       "controlId": "token-overrides",

@@ -1,0 +1,2759 @@
+{
+  "schemaVersion": 1,
+  "catalogId": "cascade.root-catalog",
+  "title": "Catalogo de raices internas de cascada (fase 1, textual)",
+  "status": "MEDIDO -- inventario de lectura, no artefacto generado",
+  "producedOn": "2026-08-18",
+  "purpose": "Los tres temas de marca de primera parte escriben identidad canal por canal. Este catalogo nombra las 63 RAICES INTERNAS de las que esos canales pueden volver a salir, y las reconcilia contra los 20 controles de tenant que el programa ya gobierna en manifest/controls/ y manifest/cascade/roots/. Es un checklist: cada raiz que falta en fuente es trabajo declarado, no una opinion.",
+  "layerLaw": "ESTAS 63 RAICES NO SON LOS 20 ROOTS GOBERNADOS Y NO HAY QUE FINGIR QUE SI. Los 20 de manifest/cascade/roots/ son los DIALES EXPUESTOS AL TENANT: lo que un cliente puede mover. Las 63 de aqui son las CABEZAS INTERNAS DE LA CASCADA: los puntos desde los que el sistema puede regenerar la pintura, tenga o no perilla encima. La relacion entre las dos capas es de muchos a muchos y esta explicitada fila por fila en governedBy/exposure, y agregada en la seccion reconciliation. El repo ya tenia la palabra para el caso sin perilla y la dice en una linea: \"foundation authorities (FOUNDATION_AUTHORITIES) are deliberately NOT tenant capabilities: tenants move seeds; derivations follow\" (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:21-22).",
+  "method": {
+    "denominator": "Cada tema se compilo con esbuild y se recorrio el objeto EVALUADO, no el texto fuente: 3738 hojas (rottay 1819, bithire 1496, evnto 423). Se restaron 45 hojas de metadato/prosa, quedando 3693 CANALES DE PINTURA (rottay 1804, bithire 1482, evnto 407).",
+    "classes": "Cada canal se clasifico en A DERIVABLE (sale de otro canal por referencia, duplicado, mezcla o calc), B VARIANTE (pertenece a un vocabulario cerrado o a un pin sobre una derivacion disponible), C SEMILLA (decision de marca irreductible) y D IRREDUCIBLE POR FAMILIA (literal sin hermano ni escalera). Resultado: A 2473 (67,0%), B 802 (21,7%), C 262 (7,1%), D 156 (4,2%). A+B = 3275 = 88,7%.",
+    "roots": "Las 63 raices cubren el 100% de A+B: 3275 canales asignados, cero sin asignar. La verificacion de cobertura es constructiva -- el clasificador falla si un solo canal A o B queda sin raiz.",
+    "assignments": "Una ASIGNACION es un par raiz x modo por tema. Rottay tiene modo base y superposicion light; bithire y evnto base y dark. Total 263 (rottay 99, bithire 95, evnto 69). Es la medida de cuantas veces un tema tiene que TOMAR POSICION sobre una raiz, distinta de cuantos canales esa posicion regenera.",
+    "channelStatus": "existe = hay al menos una declaracion \"--ds-nombre:\" en la base DS de packages/core/src (se cita el primer productor). solo-artefacto = cero declaraciones en la base DS; el canal solo nace al compilar un tenant y el lector lo consume con var(x, fallback). por-crear = cero declaraciones en todo src/: la raiz no tiene cabeza hoy. El detector se ancla en los DOS PUNTOS de la declaracion, porque var(--ds-x) y var(--ds-x, fallback) nunca llevan dos puntos despues del nombre.",
+    "notMeasured": "Este catalogo NO mide adopcion en la capa de componente ni cobertura de productores; esos numeros viven en los encargos de cobertura y materializacion. Aqui solo se afirma: cuantos canales de tema regenera cada raiz, y quien la gobierna."
+  },
+  "vocabulary": {
+    "exposure": {
+      "tenant-dial": "Existe un control de los 20 que nombra el canal cabeza de esta raiz entre sus declaredOutputs, o cuyo dominio la cubre explicitamente. governanceScope dice cuanto alcanza.",
+      "internal-head": "Raiz real de la cascada SIN perilla de tenant, y esta bien que no la tenga: es derivacion de fundacion o ley del sistema (contraste, geometria, accesibilidad, escalera de alfa). Un tenant mueve semillas; las derivaciones siguen.",
+      "gap": "Ningun control la nombra Y deberia haber uno. Es el backlog real de perillas faltantes."
+    },
+    "governanceScope": {
+      "total": "El control cubre la raiz entera.",
+      "parcial": "El control alcanza un tramo nombrado de la raiz; el resto no tiene puerta.",
+      "canal-por-canal": "Solo alcanzable por la allowlist pro de token-overrides, un canal a la vez. Es escape hatch, no dial semantico.",
+      "ninguna": "Ningun control la nombra."
+    },
+    "derivationDebt": "true cuando la raiz TIENE una ley de derivacion disponible (o una autoridad de fundacion que la declara) y aun asi los temas escriben sus canales a mano. Es la contraparte de gap: gap = falta perilla; derivationDebt = falta cascada. Las dos listas son backlogs distintos y no se solapan por construccion."
+  },
+  "roots": [
+    {
+      "rootId": "tier.control.fg",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-text-primary",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 267,
+        "rottay": 167,
+        "bithire": 80,
+        "evnto": 20
+      },
+      "assignments": {
+        "total": 6,
+        "rottay": 2,
+        "bithire": 2,
+        "evnto": 2,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [
+            "base",
+            "dark"
+          ],
+          "evnto": [
+            "base",
+            "dark"
+          ]
+        }
+      },
+      "derivation": "Tinta sobre controles. Sobre relleno de marca la tinta ya tiene canal derivado (--ds-color-text-on-primary, packages/core/src/foundation/tokens/css/foundation/themes/default.css:225); sobre relleno neutro cae en la tinta general.",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:56",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "ES LA RAIZ MAS GRANDE DEL CATALOGO (267 canales) Y NO DEBE SER UN DIAL: la tinta sigue al fondo por contraste. La deuda no es de perilla sino de derivacion: la autoridad on-tone-ink cubre 5 canales (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:593-606) mientras 267 se escriben a mano.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "state.delta.hover",
+      "group": "estados",
+      "channel": null,
+      "channelStatus": "por-crear",
+      "collapses": {
+        "total": 241,
+        "rottay": 128,
+        "bithire": 85,
+        "evnto": 28
+      },
+      "assignments": {
+        "total": 6,
+        "rottay": 2,
+        "bithire": 2,
+        "evnto": 2,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [
+            "base",
+            "dark"
+          ],
+          "evnto": [
+            "base",
+            "dark"
+          ]
+        }
+      },
+      "derivation": "DELTA, no valor: hover = mezcla del fondo de reposo hacia la tinta (o hacia la marca) en un porcentaje fijo. La forma correcta ya existe en fundacion para otro eje -- la autoridad interaction-wash define --ds-wash-band como \"color-mix ramp over --ds-color-primary\" (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:620-626). Censo medido: de 579 canales con sufijo de estado en los tres temas, 478 (82,6%) tienen hermano base en el mismo objeto, y 296 ya estan escritos como mezcla o alfa.",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:207",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "NO DEBE SER PERILLA (el delta es ley de interaccion, no identidad) PERO NO TIENE CABEZA: --ds-color-bg-hover existe (packages/core/src/foundation/tokens/css/foundation/themes/default.css:207) y es un VALOR, no un delta; --ds-state-hover-mix y --ds-interactive-bg-hover tienen cero declaraciones en src/. Es la mayor deuda de derivacion del catalogo despues de tier.control.fg.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.control.bg",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-surface-control",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 200,
+        "rottay": 125,
+        "bithire": 59,
+        "evnto": 16
+      },
+      "assignments": {
+        "total": 6,
+        "rottay": 2,
+        "bithire": 2,
+        "evnto": 2,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [
+            "base",
+            "dark"
+          ],
+          "evnto": [
+            "base",
+            "dark"
+          ]
+        }
+      },
+      "derivation": "Fondo de controles (boton, tabs, segmented, paginacion, toolbar, breadcrumb, progress, skeleton): un escalon de la escalera de superficies. La variante de marca vive en --ds-button-primary-bg (packages/core/src/foundation/tokens/css/presentation/components/button.css:93).",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:267",
+      "governedBy": "chrome.families",
+      "governanceScope": "parcial",
+      "exposure": "tenant-dial",
+      "exposureNote": "chrome.families declara --ds-button-primary-bg, --ds-table-header-bg y --ds-modal-bg: 3 canales nombrados para una raiz de 200. Es la bolsa de literales que la decision de owner (2026-08-18, decision 1) mandata convertir en mapa de formulas sobre raices.",
+      "derivationDebt": true,
+      "coGovernedBy": [
+        "palette.seeds"
+      ]
+    },
+    {
+      "rootId": "elevation.ladder",
+      "group": "elevacion-forma-efectos",
+      "channel": "--ds-elevation-1",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 191,
+        "rottay": 90,
+        "bithire": 76,
+        "evnto": 25
+      },
+      "assignments": {
+        "total": 6,
+        "rottay": 2,
+        "bithire": 2,
+        "evnto": 2,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [
+            "base",
+            "dark"
+          ],
+          "evnto": [
+            "base",
+            "dark"
+          ]
+        }
+      },
+      "derivation": "CINCO PELDAÑOS CON LEY ARITMETICA MEDIDA. El overlay de bithire la exhibe pura: y duplica 1 -> 4 -> 8 -> 16 px, blur 2 -> 12 -> 24 -> 48 px y el alfa sube +0,02 por peldaño (packages/core/src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts:226-229). Rottay ya COLAPSO su bloque entero a referencias -- los seis tamaños son var(--ds-elevation-1..5) (packages/core/src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts:1300-1308), prueba viva de que la raiz alcanza. La escalera completa esta en packages/core/src/foundation/tokens/css/foundation/themes/default.css:800-804.",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:800",
+      "governedBy": "surfaces.elevation-posture",
+      "governanceScope": "total",
+      "exposure": "tenant-dial",
+      "exposureNote": "El control declara --ds-elevation-1, -2 y -3 como salidas. Perilla completa y peldaños existentes: los 191 canales de esta raiz son deuda de adopcion pura.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.control.border",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-border",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 165,
+        "rottay": 97,
+        "bithire": 53,
+        "evnto": 15
+      },
+      "assignments": {
+        "total": 6,
+        "rottay": 2,
+        "bithire": 2,
+        "evnto": 2,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [
+            "base",
+            "dark"
+          ],
+          "evnto": [
+            "base",
+            "dark"
+          ]
+        }
+      },
+      "derivation": "Borde de control = mezcla sobre su propio fondo a una parada de alfa.",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:62",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "Derivacion, no dial. 165 canales autorados hoy.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "ramp.seed.neutral",
+      "group": "color",
+      "channel": "--ds-color-neutral-500",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 132,
+        "rottay": 62,
+        "bithire": 34,
+        "evnto": 36
+      },
+      "assignments": {
+        "total": 6,
+        "rottay": 2,
+        "bithire": 2,
+        "evnto": 2,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [
+            "base",
+            "dark"
+          ],
+          "evnto": [
+            "base",
+            "dark"
+          ]
+        }
+      },
+      "derivation": "NO HAY DERIVACION: el compilador dice literal que neutral es autorado-solamente y no tiene semilla de la que derivar -- packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:353-356 (\"A role that is authored-only (`neutral` has no seed to derive from) emits nothing until authored\"). Por eso es la raiz de color mas cara del catalogo: 132 canales escritos paso por paso en los tres temas.",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:58",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "gap",
+      "exposureNote": "ES LA MAYOR PERILLA FALTANTE DEL GRUPO COLOR. Ningun control de los 20 nombra un canal neutral, y el propio compilador certifica que sin semilla no hay derivacion. Un tenant que quiere mover su gris no tiene puerta: tiene que escribir 10 pasos por la allowlist pro de token-overrides.",
+      "derivationDebt": false
+    },
+    {
+      "rootId": "state.delta.active",
+      "group": "estados",
+      "channel": null,
+      "channelStatus": "por-crear",
+      "collapses": {
+        "total": 118,
+        "rottay": 80,
+        "bithire": 23,
+        "evnto": 15
+      },
+      "assignments": {
+        "total": 5,
+        "rottay": 2,
+        "bithire": 2,
+        "evnto": 1,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [
+            "base",
+            "dark"
+          ],
+          "evnto": [
+            "base"
+          ]
+        }
+      },
+      "derivation": "Mismo delta que hover, una parada mas de la escalera de alfa.",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:207",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "VERIFICADO: --ds-color-bg-active tiene cero declaraciones en packages/core/src. 118 canales a mano.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.raised.fg",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-text-primary",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 93,
+        "rottay": 20,
+        "bithire": 73,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 4,
+        "rottay": 2,
+        "bithire": 2,
+        "evnto": 0,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [
+            "base",
+            "dark"
+          ],
+          "evnto": []
+        }
+      },
+      "derivation": "Tinta sobre el nivel elevado: comparte cabeza con tier.base.fg porque el contraste se calcula contra el fondo del nivel, no contra la marca.",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:56",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "Autoridad on-tone-ink (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:593-606). Bithire autora 73 de estos 93 canales a mano: es la deuda de derivacion mas concentrada del nivel elevado.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.base.bg",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-bg-primary",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 88,
+        "rottay": 12,
+        "bithire": 69,
+        "evnto": 7
+      },
+      "assignments": {
+        "total": 6,
+        "rottay": 2,
+        "bithire": 2,
+        "evnto": 2,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [
+            "base",
+            "dark"
+          ],
+          "evnto": [
+            "base",
+            "dark"
+          ]
+        }
+      },
+      "derivation": "Nivel 0 del suelo. Los demas niveles (page/raised/control/overlay) son mezclas declaradas sobre este: --ds-color-bg-secondary :199, --ds-color-bg-elevated :209, --ds-color-bg-surface :213, --ds-color-bg-overlay :212.",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:198",
+      "governedBy": "palette.seeds",
+      "governanceScope": "parcial",
+      "exposure": "tenant-dial",
+      "exposureNote": "El documento acepta appearance.general.palette.background (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:90-103), pero declaredOutputs del control NO nombra ningun --ds-color-bg-*: el fondo se puede autorar y no esta declarado como salida. Defecto de declaracion, no de alcance.",
+      "derivationDebt": false
+    },
+    {
+      "rootId": "tier.page.bg",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-sidebar-bg",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 80,
+        "rottay": 34,
+        "bithire": 38,
+        "evnto": 8
+      },
+      "assignments": {
+        "total": 6,
+        "rottay": 2,
+        "bithire": 2,
+        "evnto": 2,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [
+            "base",
+            "dark"
+          ],
+          "evnto": [
+            "base",
+            "dark"
+          ]
+        }
+      },
+      "derivation": "Chrome de pagina (shell, layout, sidebar, detail, list, feed, calendar, timeline, tree): fondo = suelo base desplazado un escalon. El unico tramo con cabeza propia es el sidebar.",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:998",
+      "governedBy": "navigation.sidebar-tone",
+      "governanceScope": "parcial",
+      "exposure": "tenant-dial",
+      "exposureNote": "El control alcanza la franja sidebar (declara --ds-sidebar-bg y --ds-sidebar-item-color). Los otros 12 dominios del nivel pagina no tienen cabeza propia: de los 80 canales de esta raiz el control toca la minoria.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.raised.bg",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-surface-card",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 75,
+        "rottay": 18,
+        "bithire": 49,
+        "evnto": 8
+      },
+      "assignments": {
+        "total": 6,
+        "rottay": 2,
+        "bithire": 2,
+        "evnto": 2,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [
+            "base",
+            "dark"
+          ],
+          "evnto": [
+            "base",
+            "dark"
+          ]
+        }
+      },
+      "derivation": "Nivel elevado (card, panel, metric, signal, workspace, collection, stats): fondo = suelo base + un escalon de la escalera de superficies, hermano de --ds-surface-raised (packages/core/src/foundation/tokens/css/foundation/themes/default.css:268).",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:265",
+      "governedBy": "token-overrides",
+      "governanceScope": "canal-por-canal",
+      "exposure": "tenant-dial",
+      "exposureNote": "Solo por la allowlist pro: token-overrides declara --ds-surface-card entre sus salidas. Es escape hatch, no dial semantico -- 75 canales gobernados de a uno.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.page.fg",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-sidebar-item-color",
+      "channelStatus": "solo-artefacto",
+      "collapses": {
+        "total": 75,
+        "rottay": 60,
+        "bithire": 10,
+        "evnto": 5
+      },
+      "assignments": {
+        "total": 6,
+        "rottay": 2,
+        "bithire": 2,
+        "evnto": 2,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [
+            "base",
+            "dark"
+          ],
+          "evnto": [
+            "base",
+            "dark"
+          ]
+        }
+      },
+      "derivation": "Tinta del chrome de pagina; el lector la resuelve en cascada con fallback: color: var(--ds-menu-item-color, var(--ds-sidebar-item-color, var(--ds-color-text-secondary))) (packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css:198).",
+      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css:198",
+      "governedBy": "navigation.sidebar-tone",
+      "governanceScope": "parcial",
+      "exposure": "tenant-dial",
+      "exposureNote": "CABEZA SOLO-ARTEFACTO: navigation.sidebar-tone DECLARA --ds-sidebar-item-color como salida, pero la base DS no lo declara en ningun lado -- solo aparece en el artefacto compilado y en tests. El lector trae fallback, asi que no pinta mal; pero la \"cabeza\" del control no existe sin tenant.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.accent.fg",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-info-ink",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 74,
+        "rottay": 59,
+        "bithire": 14,
+        "evnto": 1
+      },
+      "assignments": {
+        "total": 5,
+        "rottay": 2,
+        "bithire": 2,
+        "evnto": 1,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [
+            "base",
+            "dark"
+          ],
+          "evnto": [
+            "base"
+          ]
+        }
+      },
+      "derivation": "Tinta sobre pozo teñido, con autoridad propia y razonada: tinted-well-tone-ink (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:607-619) explica que NO es duplicado de on-tone-ink -- aquel es tinta sobre relleno solido y se queda neutro oscuro en ambos temas, este se apoya en un pozo que voltea, asi que cada valor mezcla hacia --ds-color-neutral-900 y hereda el volteo por construccion.",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:473",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "Autoridad de fundacion con derivacion escrita. Correcto que no sea dial.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "spacing.step",
+      "group": "geometria-de-controles",
+      "channel": "--ds-spacing-2",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 73,
+        "rottay": 22,
+        "bithire": 47,
+        "evnto": 4
+      },
+      "assignments": {
+        "total": 5,
+        "rottay": 2,
+        "bithire": 2,
+        "evnto": 1,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [
+            "base",
+            "dark"
+          ],
+          "evnto": [
+            "base"
+          ]
+        }
+      },
+      "derivation": "Escalera de espaciado por pasos multiplicada por el ritmo; --ds-rhythm-scale es la cabeza del multiplicador (packages/core/src/foundation/tokens/css/foundation/themes/default.css:681) y --ds-density-effective-scale el producto ya derivado (packages/core/src/foundation/tokens/css/foundation/base/density.css:69).",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/base/density.css:79",
+      "governedBy": "spacing.rhythm",
+      "governanceScope": "total",
+      "exposure": "tenant-dial",
+      "exposureNote": "spacing.rhythm declara --ds-rhythm-scale y --ds-rhythm-effective-scale. Perilla completa; los 73 canales son pasos que deberian salir de la escalera.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.overlay.fg",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-text-primary",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 72,
+        "rottay": 46,
+        "bithire": 26,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 4,
+        "rottay": 2,
+        "bithire": 2,
+        "evnto": 0,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [
+            "base",
+            "dark"
+          ],
+          "evnto": []
+        }
+      },
+      "derivation": "Tinta sobre panel flotante: mismo contraste-sobre-fondo que los demas niveles.",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:56",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "Autoridad on-tone-ink (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:593-606).",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "type.scale",
+      "group": "tipografia",
+      "channel": "--ds-type-scale",
+      "channelStatus": "solo-artefacto",
+      "collapses": {
+        "total": 68,
+        "rottay": 28,
+        "bithire": 34,
+        "evnto": 6
+      },
+      "assignments": {
+        "total": 4,
+        "rottay": 2,
+        "bithire": 1,
+        "evnto": 1,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [
+            "base"
+          ],
+          "evnto": [
+            "base"
+          ]
+        }
+      },
+      "derivation": "Escalar unico que multiplica toda la rampa de tamaños. Los lectores lo consumen con fallback declarado: calc(var(--ds-saved-views-pill-font-size, 13px) * var(--ds-type-scale, 1)) (packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/saved-views.css:125).",
+      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css:40",
+      "governedBy": "typography.scale",
+      "governanceScope": "total",
+      "exposure": "tenant-dial",
+      "exposureNote": "CABEZA SOLO-ARTEFACTO: cero declaraciones en la base DS; nace al compilar un tenant y el lector trae el 1 por defecto. Legitimo por contrato de fallback.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "control.height",
+      "group": "geometria-de-controles",
+      "channel": "--ds-input-md-height",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 67,
+        "rottay": 26,
+        "bithire": 39,
+        "evnto": 2
+      },
+      "assignments": {
+        "total": 5,
+        "rottay": 2,
+        "bithire": 2,
+        "evnto": 1,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [
+            "base",
+            "dark"
+          ],
+          "evnto": [
+            "base"
+          ]
+        }
+      },
+      "derivation": "UNA raiz md y cuatro offsets. Rottay lo escribe literal: md = 2.25rem (packages/core/src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts:1585) y los otros cuatro son calc sobre esa misma raiz -- xs = md - 0.5rem (:1569), sm = md - 0.25rem (:1577), lg = md + 0.375rem (:1593), xl = md + 0.875rem (:1601). Bithire escribe la misma escalera como literales (26/32/36/40/46 px en botones, packages/core/src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts:1351-1400; 28/32/36/40/46 px en campos, :1402-1460). El hermano de boton existe aparte (--ds-button-md-height, packages/core/src/foundation/tokens/css/presentation/components/button.css:39).",
+      "evidence": "packages/core/src/foundation/tokens/css/presentation/components/input.css:33",
+      "governedBy": "density.mode",
+      "governanceScope": "parcial",
+      "exposure": "tenant-dial",
+      "exposureNote": "density.mode declara --ds-density-mode-factor (packages/core/src/foundation/tokens/css/foundation/base/density.css:176) y --ds-density-scale. El factor multiplica el ritmo; la altura md como tal no es perilla y no deberia serlo: es la raiz sobre la que corre la densidad.",
+      "derivationDebt": false
+    },
+    {
+      "rootId": "tier.accent.bg",
+      "group": "superficie-por-nivel",
+      "channel": null,
+      "channelStatus": "por-crear",
+      "collapses": {
+        "total": 63,
+        "rottay": 46,
+        "bithire": 17,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 4,
+        "rottay": 2,
+        "bithire": 2,
+        "evnto": 0,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [
+            "base",
+            "dark"
+          ],
+          "evnto": []
+        }
+      },
+      "derivation": "Relleno de acento (badge, tag, alert, avatar, statistic) = tono de estado a una parada de alfa sobre el suelo. La rampa de tono ya existe; el pozo teñido no tiene canal.",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:175-179",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "gap",
+      "exposureNote": "VERIFICADO EN FUENTE: --ds-badge-bg, --ds-tag-bg y --ds-alert-bg tienen CERO declaraciones en todo packages/core/src. El nivel acento no tiene ni cabeza ni perilla: 63 canales escritos uno por uno.",
+      "derivationDebt": false
+    },
+    {
+      "rootId": "ramp.seed.primary",
+      "group": "color",
+      "channel": "--ds-color-primary",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 60,
+        "rottay": 31,
+        "bithire": 14,
+        "evnto": 15
+      },
+      "assignments": {
+        "total": 6,
+        "rottay": 2,
+        "bithire": 2,
+        "evnto": 2,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [
+            "base",
+            "dark"
+          ],
+          "evnto": [
+            "base",
+            "dark"
+          ]
+        }
+      },
+      "derivation": "Semilla unica -> rampa OKLCH de 10 pasos (50..900). El compilador deriva la rampa entera y los pasos autorados PISAN a los derivados: packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:350-356. Rottay usa ese derecho de pisar y fija los 10 pasos a mano contra su lienzo oscuro, y lo dice: packages/core/src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts:1056-1061.",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:156",
+      "governedBy": "palette.seeds",
+      "governanceScope": "total",
+      "exposure": "tenant-dial",
+      "exposureNote": "El control declara --ds-color-primary y --ds-color-primary-500 como salidas (manifest/controls/palette.seeds.json) y el documento lo expone en appearance.general.palette.primary (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:90-103).",
+      "derivationDebt": false
+    },
+    {
+      "rootId": "ramp.seed.secondary",
+      "group": "color",
+      "channel": "--ds-color-secondary",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 57,
+        "rottay": 31,
+        "bithire": 15,
+        "evnto": 11
+      },
+      "assignments": {
+        "total": 6,
+        "rottay": 2,
+        "bithire": 2,
+        "evnto": 2,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [
+            "base",
+            "dark"
+          ],
+          "evnto": [
+            "base",
+            "dark"
+          ]
+        }
+      },
+      "derivation": "Misma ley de rampa que primary: una semilla, 10 pasos derivados, pasos autorados que pisan (packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:350-356).",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:162",
+      "governedBy": "palette.seeds",
+      "governanceScope": "parcial",
+      "exposure": "tenant-dial",
+      "exposureNote": "El documento acepta appearance.general.palette.secondary (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:90-103) pero declaredOutputs del control NO nombra --ds-color-secondary: el canal existe y es alcanzable, la declaracion de salidas se quedo corta.",
+      "derivationDebt": false
+    },
+    {
+      "rootId": "tier.raised.border",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-border",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 56,
+        "rottay": 13,
+        "bithire": 38,
+        "evnto": 5
+      },
+      "assignments": {
+        "total": 6,
+        "rottay": 2,
+        "bithire": 2,
+        "evnto": 2,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [
+            "base",
+            "dark"
+          ],
+          "evnto": [
+            "base",
+            "dark"
+          ]
+        }
+      },
+      "derivation": "Borde del nivel elevado; bithire lo usa como arquitectura de informacion explicita y lo dice: \"Borders keep the information architecture explicit; elevation only explains nesting\" (packages/core/src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts:912-913).",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:62",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "gap",
+      "exposureNote": "La eleccion borde-fuerte contra elevacion-fuerte ES identidad de marca declarada en fuente, y no hay perilla que la exprese. Deberia haberla: es el eje que separa visualmente bithire de rottay.",
+      "derivationDebt": false
+    },
+    {
+      "rootId": "tier.overlay.bg",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-surface-overlay",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 55,
+        "rottay": 41,
+        "bithire": 14,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 4,
+        "rottay": 2,
+        "bithire": 2,
+        "evnto": 0,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [
+            "base",
+            "dark"
+          ],
+          "evnto": []
+        }
+      },
+      "derivation": "La autoridad overlay-panel-scrim-split lo declara textual (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:627-634): \"overlay ROLE is a floating panel derived from the elevated ground; the veil is --ds-overlay-scrim over --ds-color-bg-overlay; reduced-transparency collapses to the opaque pair\".",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:278",
+      "governedBy": "token-overrides",
+      "governanceScope": "canal-por-canal",
+      "exposure": "tenant-dial",
+      "exposureNote": "token-overrides declara --ds-color-bg-overlay. El panel en si es autoridad de fundacion; el velo tiene su propia raiz (scrim.opacity).",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "state.delta.focus",
+      "group": "estados",
+      "channel": "--ds-focus-ring",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 53,
+        "rottay": 38,
+        "bithire": 12,
+        "evnto": 3
+      },
+      "assignments": {
+        "total": 5,
+        "rottay": 2,
+        "bithire": 2,
+        "evnto": 1,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [
+            "base",
+            "dark"
+          ],
+          "evnto": [
+            "base"
+          ]
+        }
+      },
+      "derivation": "Plantilla de anillo con dos anchos medidos: \"0 0 0 2px COLOR\" aparece 27 veces y \"0 0 0 3px COLOR\" 15 veces en el corpus de los tres temas; el ancho ya tiene canal (--ds-focus-ring-width, packages/core/src/foundation/tokens/css/foundation/themes/default.css:872) y el color tambien (--ds-focus-ring-color, :879).",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:880",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "Ley de accesibilidad, no identidad de marca. La cabeza existe y esta bien puesta; lo que falta es que los 53 canales la usen en vez de reescribir la plantilla.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.base.border",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-border",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 51,
+        "rottay": 5,
+        "bithire": 44,
+        "evnto": 2
+      },
+      "assignments": {
+        "total": 6,
+        "rottay": 2,
+        "bithire": 2,
+        "evnto": 2,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [
+            "base",
+            "dark"
+          ],
+          "evnto": [
+            "base",
+            "dark"
+          ]
+        }
+      },
+      "derivation": "Borde = mezcla de la tinta sobre el fondo a una parada de alfa de la escalera; el par sutil ya existe (--ds-color-border-subtle, packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:65).",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:62",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "Derivacion de fundacion, no dial de tenant.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "ramp.seed.info",
+      "group": "color",
+      "channel": "--ds-color-info",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 50,
+        "rottay": 25,
+        "bithire": 14,
+        "evnto": 11
+      },
+      "assignments": {
+        "total": 6,
+        "rottay": 2,
+        "bithire": 2,
+        "evnto": 2,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [
+            "base",
+            "dark"
+          ],
+          "evnto": [
+            "base",
+            "dark"
+          ]
+        }
+      },
+      "derivation": "Misma ley que success.",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:179",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "gap",
+      "exposureNote": "Mismo frontier palette.status-seeds (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:507).",
+      "derivationDebt": false
+    },
+    {
+      "rootId": "tier.page.border",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-border-subtle",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 50,
+        "rottay": 24,
+        "bithire": 21,
+        "evnto": 5
+      },
+      "assignments": {
+        "total": 6,
+        "rottay": 2,
+        "bithire": 2,
+        "evnto": 2,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [
+            "base",
+            "dark"
+          ],
+          "evnto": [
+            "base",
+            "dark"
+          ]
+        }
+      },
+      "derivation": "Borde del chrome de pagina: el par sutil de la escalera de bordes.",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:65",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "gap",
+      "exposureNote": "Ningun control nombra un borde de chrome de pagina. 50 canales autorados a mano y el tenant que quiere una separacion mas o menos marcada en el shell no tiene perilla: hoy solo llega por la allowlist pro, canal por canal.",
+      "derivationDebt": false
+    },
+    {
+      "rootId": "ramp.seed.accent",
+      "group": "color",
+      "channel": "--ds-color-accent",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 47,
+        "rottay": 24,
+        "bithire": 9,
+        "evnto": 14
+      },
+      "assignments": {
+        "total": 5,
+        "rottay": 2,
+        "bithire": 1,
+        "evnto": 2,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [
+            "dark"
+          ],
+          "evnto": [
+            "base",
+            "dark"
+          ]
+        }
+      },
+      "derivation": "Semilla -> rampa de 10 pasos, misma ley (packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:350-356).",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:182",
+      "governedBy": "palette.seeds",
+      "governanceScope": "parcial",
+      "exposure": "tenant-dial",
+      "exposureNote": "Igual que secondary: documentPath lo cubre (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:90-103), declaredOutputs no lo nombra.",
+      "derivationDebt": false
+    },
+    {
+      "rootId": "ramp.seed.success",
+      "group": "color",
+      "channel": "--ds-color-success",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 47,
+        "rottay": 25,
+        "bithire": 11,
+        "evnto": 11
+      },
+      "assignments": {
+        "total": 5,
+        "rottay": 2,
+        "bithire": 1,
+        "evnto": 2,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [
+            "dark"
+          ],
+          "evnto": [
+            "base",
+            "dark"
+          ]
+        }
+      },
+      "derivation": "Semilla de estado -> rampa de 10 pasos + tinta legible derivada por la autoridad on-tone-ink (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:593-606).",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:175",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "gap",
+      "exposureNote": "GAP YA REGISTRADO EN FUENTE: la capability palette.status-seeds existe con status frontier (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:507) y su defaultBehavior dice textual \"DB General cannot author status tones today; Advanced tokenOverrides is the only DB route, while BrandTheme authors them directly -- the recorded static/DB asymmetry this frontier closes\". Una frontier es contrato declarado que el schema TODAVIA rechaza (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:18-20).",
+      "derivationDebt": false
+    },
+    {
+      "rootId": "ramp.seed.error",
+      "group": "color",
+      "channel": "--ds-color-error",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 47,
+        "rottay": 25,
+        "bithire": 11,
+        "evnto": 11
+      },
+      "assignments": {
+        "total": 5,
+        "rottay": 2,
+        "bithire": 1,
+        "evnto": 2,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [
+            "dark"
+          ],
+          "evnto": [
+            "base",
+            "dark"
+          ]
+        }
+      },
+      "derivation": "Misma ley que success.",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:177",
+      "governedBy": null,
+      "governanceScope": "canal-por-canal",
+      "exposure": "gap",
+      "exposureNote": "token-overrides declara --ds-color-error entre sus salidas, pero eso es la allowlist pro canal por canal, NO una semilla: mover el tono de error completo sigue exigiendo escribir la rampa a mano. El frontier palette.status-seeds (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:507) es la puerta correcta y aun no existe.",
+      "derivationDebt": false
+    },
+    {
+      "rootId": "ramp.seed.warning",
+      "group": "color",
+      "channel": "--ds-color-warning",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 45,
+        "rottay": 23,
+        "bithire": 11,
+        "evnto": 11
+      },
+      "assignments": {
+        "total": 5,
+        "rottay": 2,
+        "bithire": 1,
+        "evnto": 2,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [
+            "dark"
+          ],
+          "evnto": [
+            "base",
+            "dark"
+          ]
+        }
+      },
+      "derivation": "Misma ley que success.",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:176",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "gap",
+      "exposureNote": "Mismo frontier palette.status-seeds (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:507).",
+      "derivationDebt": false
+    },
+    {
+      "rootId": "state.delta.disabled",
+      "group": "estados",
+      "channel": null,
+      "channelStatus": "por-crear",
+      "collapses": {
+        "total": 43,
+        "rottay": 32,
+        "bithire": 5,
+        "evnto": 6
+      },
+      "assignments": {
+        "total": 6,
+        "rottay": 2,
+        "bithire": 2,
+        "evnto": 2,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [
+            "base",
+            "dark"
+          ],
+          "evnto": [
+            "base",
+            "dark"
+          ]
+        }
+      },
+      "derivation": "Delta unico: opacidad y desaturacion sobre el reposo. Una parada, no una tabla.",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:198",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "VERIFICADO: --ds-opacity-disabled y --ds-color-bg-disabled tienen cero declaraciones en packages/core/src. 43 canales a mano para expresar una sola constante.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.accent.border",
+      "group": "superficie-por-nivel",
+      "channel": null,
+      "channelStatus": "por-crear",
+      "collapses": {
+        "total": 38,
+        "rottay": 31,
+        "bithire": 6,
+        "evnto": 1
+      },
+      "assignments": {
+        "total": 4,
+        "rottay": 2,
+        "bithire": 1,
+        "evnto": 1,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [
+            "base"
+          ],
+          "evnto": [
+            "base"
+          ]
+        }
+      },
+      "derivation": "Borde de acento = mismo tono que el relleno, una parada de alfa mas arriba.",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:473",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "Deberia derivar de tier.accent.bg. Como esa raiz tampoco tiene cabeza, esta hereda el hueco: 38 canales a mano.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "radius.base",
+      "group": "elevacion-forma-efectos",
+      "channel": "--ds-radius-md",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 38,
+        "rottay": 5,
+        "bithire": 27,
+        "evnto": 6
+      },
+      "assignments": {
+        "total": 4,
+        "rottay": 1,
+        "bithire": 2,
+        "evnto": 1,
+        "modes": {
+          "rottay": [
+            "base"
+          ],
+          "bithire": [
+            "base",
+            "dark"
+          ],
+          "evnto": [
+            "base"
+          ]
+        }
+      },
+      "derivation": "UNA BASE Y CUATRO OFFSETS: base-4 / base / base+4 / base+8 / 9999. La escalera ya multiplica por la perilla en fuente -- \"--ds-radius-sm: calc(var(--ds-radius-sm-base) * var(--ds-radius-scale, 1))\" (packages/core/src/foundation/tokens/css/foundation/themes/default.css:769, con la ley escrita en el comentario :760). Rottay {6,10,14,18,9999} (packages/core/src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts:1299) y bithire {7,10,14,18,9999} (packages/core/src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts:912) comparten CUATRO de los cinco valores: la identidad de radio entre dos marcas es un pixel en sm.",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
+      "governedBy": "shape.radius-scale",
+      "governanceScope": "total",
+      "exposure": "tenant-dial",
+      "exposureNote": "shape.radius-scale declara --ds-radius-scale y --ds-radius-md. Hay ademas autoridad de anidado: nested-radius, \"inner radius = max(0, outer - inset)\" (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:642-648). Evnto ya escribio la doctrina completa de por que NO se copia el bloque (packages/core/src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts:444-452).",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "motion.intensity",
+      "group": "movimiento-perfil",
+      "channel": "--ds-motion-intensity",
+      "channelStatus": "solo-artefacto",
+      "collapses": {
+        "total": 36,
+        "rottay": 12,
+        "bithire": 12,
+        "evnto": 12
+      },
+      "assignments": {
+        "total": 3,
+        "rottay": 1,
+        "bithire": 1,
+        "evnto": 1,
+        "modes": {
+          "rottay": [
+            "base"
+          ],
+          "bithire": [
+            "base"
+          ],
+          "evnto": [
+            "base"
+          ]
+        }
+      },
+      "derivation": "Escalar que modula desplazamiento y escala de cada entrada: transform: translateY(calc(var(--ds-motion-offset-in) * var(--ds-motion-intensity, 1))) scale(calc(1 - 0.01 * var(--ds-motion-intensity, 1))) (packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:16-17).",
+      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:16",
+      "governedBy": "motion.dial",
+      "governanceScope": "total",
+      "exposure": "tenant-dial",
+      "exposureNote": "CABEZA SOLO-ARTEFACTO con fallback 1 en el lector. Perilla completa: motion.dial declara --ds-motion-intensity y --ds-motion-duration-scale.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "control.ratio.padding",
+      "group": "geometria-de-controles",
+      "channel": null,
+      "channelStatus": "por-crear",
+      "collapses": {
+        "total": 33,
+        "rottay": 15,
+        "bithire": 18,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 2,
+        "rottay": 1,
+        "bithire": 1,
+        "evnto": 0,
+        "modes": {
+          "rottay": [
+            "base"
+          ],
+          "bithire": [
+            "base"
+          ],
+          "evnto": []
+        }
+      },
+      "derivation": "DOS RAZONES, TODA LA GEOMETRIA HORIZONTAL. paddingX de boton = altura * 0.42 (packages/core/src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts:1622, :1630, :1638, :1646, :1654); paddingX de campo = altura * 0.35 (:1570, :1578, :1586, :1594, :1602); paddingY = altura * 0.20 en las cinco filas de campo (:1571, :1579, :1587, :1595, :1603). La fuente razona el split y lo declara ley del sistema, no de marca: \"Buttons take more horizontal room than fields (0.42 of the height against 0.35) because a label needs shoulders where a value does not\" (:1611-1615).",
+      "evidence": "packages/core/src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts:1611-1615",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "NO ES PERILLA POR DISENO: la razon es geometria, no identidad. Falta la cabeza -- no existe ningun --ds-*-padding-ratio en src/. Rottay ya heredo la ley escribiendo calc(); bithire la reimplementa como 10 literales por familia.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "scrim.opacity",
+      "group": "elevacion-forma-efectos",
+      "channel": "--ds-overlay-scrim",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 29,
+        "rottay": 14,
+        "bithire": 9,
+        "evnto": 6
+      },
+      "assignments": {
+        "total": 4,
+        "rottay": 2,
+        "bithire": 1,
+        "evnto": 1,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [
+            "base"
+          ],
+          "evnto": [
+            "base"
+          ]
+        }
+      },
+      "derivation": "Velo = una opacidad sobre --ds-color-bg-overlay, con colapso declarado a par opaco cuando el usuario pide transparencia reducida (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:627-634).",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:282",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "Autoridad de fundacion overlay-panel-scrim-split, con consumidores nombrados (popover.css, tooltip.css, semantic-surface.css, slider.css). No es dial y esta bien que no lo sea.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.overlay.border",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-border",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 28,
+        "rottay": 18,
+        "bithire": 10,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 4,
+        "rottay": 2,
+        "bithire": 2,
+        "evnto": 0,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [
+            "base",
+            "dark"
+          ],
+          "evnto": []
+        }
+      },
+      "derivation": "Borde del panel flotante; en modo opaco colapsa junto con el par de la autoridad (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:627-634).",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:62",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "Derivacion de fundacion.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "state.delta.selected",
+      "group": "estados",
+      "channel": null,
+      "channelStatus": "por-crear",
+      "collapses": {
+        "total": 26,
+        "rottay": 14,
+        "bithire": 10,
+        "evnto": 2
+      },
+      "assignments": {
+        "total": 5,
+        "rottay": 2,
+        "bithire": 2,
+        "evnto": 1,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [
+            "base",
+            "dark"
+          ],
+          "evnto": [
+            "base"
+          ]
+        }
+      },
+      "derivation": "Delta de seleccion: mezcla hacia la marca. Misma figura que interaction-wash (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:620-626).",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:207",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "VERIFICADO: --ds-color-bg-selected tiene cero declaraciones en src/.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "control.ratio.fontSize",
+      "group": "geometria-de-controles",
+      "channel": "--ds-input-md-font-size",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 23,
+        "rottay": 10,
+        "bithire": 13,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 2,
+        "rottay": 1,
+        "bithire": 1,
+        "evnto": 0,
+        "modes": {
+          "rottay": [
+            "base"
+          ],
+          "bithire": [
+            "base"
+          ],
+          "evnto": []
+        }
+      },
+      "derivation": "fontSize ~ altura * 0.36. La cabeza existe pero es PIN LITERAL: --ds-input-md-font-size vale 0.875rem fijo (packages/core/src/foundation/tokens/css/presentation/components/input.css:36) mientras la rampa --ds-font-size-md ya se calcula en packages/core/src/foundation/tokens/css/foundation/base/typography.css:65.",
+      "evidence": "packages/core/src/foundation/tokens/css/presentation/components/input.css:36",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "La perilla correcta es typography.scale y ya existe; el defecto es que el nivel 2 no lee la rampa. Una linea por canal nivel-2, no 23 literales.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "control.ratio.lineHeight",
+      "group": "geometria-de-controles",
+      "channel": "--ds-input-md-line-height",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 23,
+        "rottay": 10,
+        "bithire": 13,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 2,
+        "rottay": 1,
+        "bithire": 1,
+        "evnto": 0,
+        "modes": {
+          "rottay": [
+            "base"
+          ],
+          "bithire": [
+            "base"
+          ],
+          "evnto": []
+        }
+      },
+      "derivation": "lineHeight ~ altura * 0.55. Rottay ya lo resolvio por referencia: las cinco filas de campo apuntan a --ds-line-height-tight (packages/core/src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts:1572, :1580, :1588, :1596, :1604).",
+      "evidence": "packages/core/src/foundation/tokens/css/presentation/components/input.css:37",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "Razon del sistema. Rottay 10 canales, bithire 13 literales.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "control.ratio.iconSize",
+      "group": "geometria-de-controles",
+      "channel": "--ds-icon-md-size",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 23,
+        "rottay": 10,
+        "bithire": 13,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 2,
+        "rottay": 1,
+        "bithire": 1,
+        "evnto": 0,
+        "modes": {
+          "rottay": [
+            "base"
+          ],
+          "bithire": [
+            "base"
+          ],
+          "evnto": []
+        }
+      },
+      "derivation": "iconSize ~ altura * 0.42. La autoridad icon-size-roles ya declara la figura para pozos de icono recurrentes: --ds-icon-size-status, --ds-icon-size-well, --ds-icon-size-feature, con la nota \"a future icon profile modulates them\" (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:635-641).",
+      "evidence": "packages/core/src/foundation/tokens/css/presentation/components/icon.css:21",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "Autoridad de fundacion existente. El control profiles.icon es pro y declara CERO canales (manifest/controls/profiles.icon.json declaredOutputs.channels []), asi que el perfil futuro que la autoridad anticipa todavia no baja a canal.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "motion.duration",
+      "group": "movimiento-perfil",
+      "channel": "--ds-motion-duration-scale",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 22,
+        "rottay": 5,
+        "bithire": 14,
+        "evnto": 3
+      },
+      "assignments": {
+        "total": 3,
+        "rottay": 1,
+        "bithire": 1,
+        "evnto": 1,
+        "modes": {
+          "rottay": [
+            "base"
+          ],
+          "bithire": [
+            "base"
+          ],
+          "evnto": [
+            "base"
+          ]
+        }
+      },
+      "derivation": "Escalar sobre los pasos de duracion; el paso rapido ya existe (--ds-motion-fast, packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:94) y rottay lo usa por referencia (packages/core/src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts:1565).",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:98",
+      "governedBy": "motion.dial",
+      "governanceScope": "total",
+      "exposure": "tenant-dial",
+      "exposureNote": "Perilla y cabeza en su sitio.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.base.fg",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-text-primary",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 19,
+        "rottay": 9,
+        "bithire": 7,
+        "evnto": 3
+      },
+      "assignments": {
+        "total": 6,
+        "rottay": 2,
+        "bithire": 2,
+        "evnto": 2,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [
+            "base",
+            "dark"
+          ],
+          "evnto": [
+            "base",
+            "dark"
+          ]
+        }
+      },
+      "derivation": "Tinta sobre el suelo: se DERIVA por contraste del fondo, no se autora. Es exactamente la figura de la autoridad on-tone-ink (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:593-606): \"shared WCAG readable-ink over each status seed\".",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:56",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "Cabeza interna correcta. El contrato dice la ley en una linea: \"foundation authorities are deliberately NOT tenant capabilities: tenants move seeds; derivations follow\" (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:21-22).",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "type.leading",
+      "group": "tipografia",
+      "channel": "--ds-line-height-normal",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 16,
+        "rottay": 5,
+        "bithire": 6,
+        "evnto": 5
+      },
+      "assignments": {
+        "total": 4,
+        "rottay": 1,
+        "bithire": 2,
+        "evnto": 1,
+        "modes": {
+          "rottay": [
+            "base"
+          ],
+          "bithire": [
+            "base",
+            "dark"
+          ],
+          "evnto": [
+            "base"
+          ]
+        }
+      },
+      "derivation": "Dos o tres pasos de interlineado (tight / normal / relaxed) sobre la misma rampa (packages/core/src/foundation/tokens/css/foundation/themes/default.css:631, :633).",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:633",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "Derivacion tipografica, no dial. Rottay ya la usa por referencia en las cinco filas de campo.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "experience.profile",
+      "group": "movimiento-perfil",
+      "channel": "--ds-experience-profile",
+      "channelStatus": "solo-artefacto",
+      "collapses": {
+        "total": 16,
+        "rottay": 5,
+        "bithire": 8,
+        "evnto": 3
+      },
+      "assignments": {
+        "total": 3,
+        "rottay": 1,
+        "bithire": 1,
+        "evnto": 1,
+        "modes": {
+          "rottay": [
+            "base"
+          ],
+          "bithire": [
+            "base"
+          ],
+          "evnto": [
+            "base"
+          ]
+        }
+      },
+      "derivation": "Perfil nombrado que reparte varios canales a la vez: --ds-letter-spacing-heading, --ds-edge-standard-width, --ds-material-canvas-texture y --ds-elevation-lift-strength (declaredOutputs de manifest/controls/experience.profile.json). El ancho de borde enfatico ya existe (--ds-edge-emphasis-width, packages/core/src/foundation/tokens/css/foundation/themes/default.css:729).",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:729",
+      "governedBy": "experience.profile",
+      "governanceScope": "total",
+      "exposure": "tenant-dial",
+      "exposureNote": "MARCADOR SIN LECTORES: --ds-experience-profile tiene cero declaraciones en la base DS y CERO lecturas var() fuera de artefactos en todo packages/core/src -- verificado, no asumido. El owner ya lo adjudico como deuda y no como precedente (decision de owner 2026-08-18, punto 4). Los canales que SI trabajan son los cuatro repartidos, no el marcador.",
+      "derivationDebt": true,
+      "coGovernedBy": [
+        "recipe-profile",
+        "profiles.expressive"
+      ]
+    },
+    {
+      "rootId": "gradient.recipe",
+      "group": "elevacion-forma-efectos",
+      "channel": "--ds-gradient-primary",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 14,
+        "rottay": 6,
+        "bithire": 4,
+        "evnto": 4
+      },
+      "assignments": {
+        "total": 5,
+        "rottay": 2,
+        "bithire": 2,
+        "evnto": 1,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [
+            "base",
+            "dark"
+          ],
+          "evnto": [
+            "base"
+          ]
+        }
+      },
+      "derivation": "Receta de tres paradas sobre dos tonos, no una lista de gradientes. Forma canonica medida: \"linear-gradient(90deg, TONO_A 25%, TONO_B 50%, TONO_A 75%)\" (packages/core/src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts:2364). El hermano de superficie ya existe (--ds-gradient-surface, packages/core/src/foundation/tokens/css/foundation/animations/premium.css:65).",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/animations/premium.css:72",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "La receta es del sistema; lo que cambia por marca son los dos tonos, que ya son raices de color. 14 canales autorados que deberian ser dos argumentos.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "control.ratio.gap",
+      "group": "geometria-de-controles",
+      "channel": null,
+      "channelStatus": "por-crear",
+      "collapses": {
+        "total": 13,
+        "rottay": 5,
+        "bithire": 8,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 2,
+        "rottay": 1,
+        "bithire": 1,
+        "evnto": 0,
+        "modes": {
+          "rottay": [
+            "base"
+          ],
+          "bithire": [
+            "base"
+          ],
+          "evnto": []
+        }
+      },
+      "derivation": "gap = altura * 0.18, seis veces seguidas en rottay (packages/core/src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts:1619, :1623, :1631, :1639, :1647, :1655).",
+      "evidence": "packages/core/src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts:1619",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "Misma familia que control.ratio.padding: razon del sistema sin cabeza.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "control.ratio.radius",
+      "group": "geometria-de-controles",
+      "channel": "--ds-button-md-radius",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 13,
+        "rottay": 0,
+        "bithire": 13,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 1,
+        "rottay": 0,
+        "bithire": 1,
+        "evnto": 0,
+        "modes": {
+          "rottay": [],
+          "bithire": [
+            "base"
+          ],
+          "evnto": []
+        }
+      },
+      "derivation": "LA RAZON MAS LIMPIA MEDIDA: radio = redondeo(altura / 4). Bithire la cumple EXACTA en 8 de 10 filas -- botones 26/7, 32/8, 36/9, 40/10, 46/11 (packages/core/src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts:1351-1400) y campos 28/7, 32/8, 36/9, 40/10, 46/11 (:1402-1460); el cociente da 0,250 exacto en sm/md/lg de ambas familias.",
+      "evidence": "packages/core/src/foundation/tokens/css/presentation/components/button.css:48",
+      "governedBy": "shape.button-style",
+      "governanceScope": "total",
+      "exposure": "tenant-dial",
+      "exposureNote": "shape.button-style declara --ds-radius-button, que ya existe y ya deriva: --ds-radius-button: var(--ds-radius-md) en packages/core/src/foundation/tokens/css/foundation/base/borders.css:27. La perilla esta bien puesta; los 13 literales de bithire son deuda de adopcion, no de contrato.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "glass.recipe",
+      "group": "elevacion-forma-efectos",
+      "channel": "--ds-glass-blur",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 12,
+        "rottay": 7,
+        "bithire": 2,
+        "evnto": 3
+      },
+      "assignments": {
+        "total": 4,
+        "rottay": 2,
+        "bithire": 1,
+        "evnto": 1,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [
+            "base"
+          ],
+          "evnto": [
+            "base"
+          ]
+        }
+      },
+      "derivation": "Trio acoplado blur + fondo + borde (packages/core/src/foundation/tokens/css/foundation/animations/premium.css:37, :41, :44), modulado por la intensidad de efecto.",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/animations/premium.css:37",
+      "governedBy": "surfaces.effect-intensity",
+      "governanceScope": "total",
+      "exposure": "tenant-dial",
+      "exposureNote": "El control declara --ds-effect-intensity, que es el modulador del trio.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "motion.spring",
+      "group": "movimiento-perfil",
+      "channel": "--ds-motion-spring",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 9,
+        "rottay": 3,
+        "bithire": 3,
+        "evnto": 3
+      },
+      "assignments": {
+        "total": 3,
+        "rottay": 1,
+        "bithire": 1,
+        "evnto": 1,
+        "modes": {
+          "rottay": [
+            "base"
+          ],
+          "bithire": [
+            "base"
+          ],
+          "evnto": [
+            "base"
+          ]
+        }
+      },
+      "derivation": "Curva de resorte; el par tension/friction que autoran los temas no tiene canal propio.",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:133",
+      "governedBy": "motion.dial",
+      "governanceScope": "parcial",
+      "exposure": "tenant-dial",
+      "exposureNote": "La curva tiene cabeza; --ds-motion-spring-tension tiene cero declaraciones en src/. Los 9 canales son tres tripletes (uno por tema) que hoy no bajan.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "type.tracking",
+      "group": "tipografia",
+      "channel": "--ds-letter-spacing-body",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 6,
+        "rottay": 2,
+        "bithire": 2,
+        "evnto": 2
+      },
+      "assignments": {
+        "total": 3,
+        "rottay": 1,
+        "bithire": 1,
+        "evnto": 1,
+        "modes": {
+          "rottay": [
+            "base"
+          ],
+          "bithire": [
+            "base"
+          ],
+          "evnto": [
+            "base"
+          ]
+        }
+      },
+      "derivation": "Par cuerpo / titulo; el hermano tight existe en el mismo archivo (:33).",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root.css:48",
+      "governedBy": "experience.profile",
+      "governanceScope": "parcial",
+      "exposure": "tenant-dial",
+      "exposureNote": "experience.profile declara --ds-letter-spacing-heading entre sus salidas; el tracking de cuerpo no esta declarado.",
+      "derivationDebt": false,
+      "coGovernedBy": [
+        "profiles.expressive"
+      ]
+    },
+    {
+      "rootId": "type.weight",
+      "group": "tipografia",
+      "channel": "--ds-font-weight-medium",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 6,
+        "rottay": 2,
+        "bithire": 2,
+        "evnto": 2
+      },
+      "assignments": {
+        "total": 3,
+        "rottay": 1,
+        "bithire": 1,
+        "evnto": 1,
+        "modes": {
+          "rottay": [
+            "base"
+          ],
+          "bithire": [
+            "base"
+          ],
+          "evnto": [
+            "base"
+          ]
+        }
+      },
+      "derivation": "Escalera de pesos con hermano semibold en la linea siguiente (packages/core/src/foundation/tokens/css/foundation/themes/default.css:624).",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:623",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "Vocabulario cerrado de fundacion.",
+      "derivationDebt": false
+    },
+    {
+      "rootId": "chart.palette",
+      "group": "color",
+      "channel": "--ds-chart-series-1",
+      "channelStatus": "solo-artefacto",
+      "collapses": {
+        "total": 4,
+        "rottay": 1,
+        "bithire": 2,
+        "evnto": 1
+      },
+      "assignments": {
+        "total": 3,
+        "rottay": 1,
+        "bithire": 1,
+        "evnto": 1,
+        "modes": {
+          "rottay": [
+            "base"
+          ],
+          "bithire": [
+            "base"
+          ],
+          "evnto": [
+            "base"
+          ]
+        }
+      },
+      "derivation": "Un esquema nombrado (default / pastel / vibrant / monochrome / accessible) resuelve las 10 series. La cadena de lectura declara el fallback en tres niveles: --ds-chart-paint-1 = var(--ds-chart-category-1, var(--ds-chart-series-1, var(--ds-chart-default-1, #0f766e))).",
+      "evidence": "packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation.css:628",
+      "governedBy": "palette.seeds",
+      "governanceScope": "total",
+      "exposure": "tenant-dial",
+      "exposureNote": "palette.seeds declara --ds-chart-series-1 como salida derivada. CABEZA SOLO-ARTEFACTO: cero declaraciones en la base DS; el canal solo nace cuando compila un tenant, y el lector trae fallback. Legitimo, pero conviene saberlo: sin tenant el esquema es el literal de chart-foundation.css.",
+      "derivationDebt": false
+    },
+    {
+      "rootId": "type.family.base",
+      "group": "tipografia",
+      "channel": "--ds-font-family-base",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 3,
+        "rottay": 1,
+        "bithire": 1,
+        "evnto": 1
+      },
+      "assignments": {
+        "total": 3,
+        "rottay": 1,
+        "bithire": 1,
+        "evnto": 1,
+        "modes": {
+          "rottay": [
+            "base"
+          ],
+          "bithire": [
+            "base"
+          ],
+          "evnto": [
+            "base"
+          ]
+        }
+      },
+      "derivation": "Una familia, un canal. Sin derivacion: es semilla pura.",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:506",
+      "governedBy": "typography.families",
+      "governanceScope": "total",
+      "exposure": "tenant-dial",
+      "exposureNote": "Declarado por typography.families y por typography.pairing.",
+      "derivationDebt": false,
+      "coGovernedBy": [
+        "typography.pairing"
+      ]
+    },
+    {
+      "rootId": "type.family.heading",
+      "group": "tipografia",
+      "channel": "--ds-font-family-heading",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 3,
+        "rottay": 1,
+        "bithire": 1,
+        "evnto": 1
+      },
+      "assignments": {
+        "total": 3,
+        "rottay": 1,
+        "bithire": 1,
+        "evnto": 1,
+        "modes": {
+          "rottay": [
+            "base"
+          ],
+          "bithire": [
+            "base"
+          ],
+          "evnto": [
+            "base"
+          ]
+        }
+      },
+      "derivation": "Semilla pura, hermana de base.",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:507",
+      "governedBy": "typography.pairing",
+      "governanceScope": "total",
+      "exposure": "tenant-dial",
+      "exposureNote": "Declarado por typography.pairing y por typography.families.",
+      "derivationDebt": false,
+      "coGovernedBy": [
+        "typography.families"
+      ]
+    },
+    {
+      "rootId": "type.family.mono",
+      "group": "tipografia",
+      "channel": "--ds-font-family-mono",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 3,
+        "rottay": 1,
+        "bithire": 1,
+        "evnto": 1
+      },
+      "assignments": {
+        "total": 3,
+        "rottay": 1,
+        "bithire": 1,
+        "evnto": 1,
+        "modes": {
+          "rottay": [
+            "base"
+          ],
+          "bithire": [
+            "base"
+          ],
+          "evnto": [
+            "base"
+          ]
+        }
+      },
+      "derivation": "Semilla pura.",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:508",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "gap",
+      "exposureNote": "Ni typography.families ni typography.pairing declaran --ds-font-family-mono: los dos controles nombran solo base y heading. El canal existe y los tres temas lo autoran; la perilla no llega. Perilla faltante barata (1 canal por tema).",
+      "derivationDebt": false
+    },
+    {
+      "rootId": "type.family.display",
+      "group": "tipografia",
+      "channel": "--ds-font-family-display",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 3,
+        "rottay": 1,
+        "bithire": 1,
+        "evnto": 1
+      },
+      "assignments": {
+        "total": 3,
+        "rottay": 1,
+        "bithire": 1,
+        "evnto": 1,
+        "modes": {
+          "rottay": [
+            "base"
+          ],
+          "bithire": [
+            "base"
+          ],
+          "evnto": [
+            "base"
+          ]
+        }
+      },
+      "derivation": "Semilla pura.",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/base/typography.css:16",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "gap",
+      "exposureNote": "Mismo hueco que mono: canal existente, dos controles de tipografia que no lo nombran.",
+      "derivationDebt": false
+    },
+    {
+      "rootId": "density.scale",
+      "group": "elevacion-forma-efectos",
+      "channel": "--ds-density-effective-scale",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 3,
+        "rottay": 1,
+        "bithire": 1,
+        "evnto": 1
+      },
+      "assignments": {
+        "total": 3,
+        "rottay": 1,
+        "bithire": 1,
+        "evnto": 1,
+        "modes": {
+          "rottay": [
+            "base"
+          ],
+          "bithire": [
+            "base"
+          ],
+          "evnto": [
+            "base"
+          ]
+        }
+      },
+      "derivation": "Escalar de densidad ya DERIVADO: el efectivo es producto del modo (--ds-density-mode-factor, packages/core/src/foundation/tokens/css/foundation/base/density.css:176) por la eleccion del tema.",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/base/density.css:69",
+      "governedBy": "density.mode",
+      "governanceScope": "total",
+      "exposure": "tenant-dial",
+      "exposureNote": "Perilla completa y cascada real: es el unico eje numerico del sistema que ya baja bien hasta la capa de componente. 3 canales autorados (uno por tema).",
+      "derivationDebt": false
+    },
+    {
+      "rootId": "state.delta.pressed",
+      "group": "estados",
+      "channel": null,
+      "channelStatus": "por-crear",
+      "collapses": {
+        "total": 3,
+        "rottay": 0,
+        "bithire": 3,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 2,
+        "rottay": 0,
+        "bithire": 2,
+        "evnto": 0,
+        "modes": {
+          "rottay": [],
+          "bithire": [
+            "base",
+            "dark"
+          ],
+          "evnto": []
+        }
+      },
+      "derivation": "Delta de presion: una parada mas alla de active.",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:207",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "Solo bithire lo autora (3 canales). Sin cabeza.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "alpha.ladder",
+      "group": "elevacion-forma-efectos",
+      "channel": null,
+      "channelStatus": "por-crear",
+      "collapses": {
+        "total": 2,
+        "rottay": 2,
+        "bithire": 0,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 2,
+        "rottay": 2,
+        "bithire": 0,
+        "evnto": 0,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [],
+          "evnto": []
+        }
+      },
+      "derivation": "ESCALERA DE 28 PARADAS medida sobre las 730 apariciones de alfa del corpus: cubre 534 (73,2%); las 196 restantes son ruido fuera de escalera. Las paradas mas frecuentes: 0,08 (75 veces), 0,04 (65), 0,10 (63), 0,06 (61), 0,12 (41), 0,20 (30), 0,14 (27), 0,40 (26), 0,05 (26), 0,82 (22), 0,22 (22), 0,30 (21). La union de valores distintos es 57.",
+      "evidence": "packages/core/src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts:1308",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "VERIFICADO: --ds-alpha-8 y familia tienen cero declaraciones en src/. No es perilla (un tenant no elige paradas de alfa) pero es la primitiva que hace baratos a los siete deltas de estado y a los tres bordes de nivel.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "state.delta.checked",
+      "group": "estados",
+      "channel": null,
+      "channelStatus": "por-crear",
+      "collapses": {
+        "total": 2,
+        "rottay": 2,
+        "bithire": 0,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 2,
+        "rottay": 2,
+        "bithire": 0,
+        "evnto": 0,
+        "modes": {
+          "rottay": [
+            "base",
+            "light"
+          ],
+          "bithire": [],
+          "evnto": []
+        }
+      },
+      "derivation": "Delta de marcado: relleno de marca sobre el control.",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:156",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "Solo rottay lo autora (2 canales). Sin cabeza.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "state.delta.expanded",
+      "group": "estados",
+      "channel": null,
+      "channelStatus": "por-crear",
+      "collapses": {
+        "total": 2,
+        "rottay": 0,
+        "bithire": 2,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 2,
+        "rottay": 0,
+        "bithire": 2,
+        "evnto": 0,
+        "modes": {
+          "rottay": [],
+          "bithire": [
+            "base",
+            "dark"
+          ],
+          "evnto": []
+        }
+      },
+      "derivation": "Delta de expansion: mismo tratamiento que selected en superficies plegables.",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:207",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "Solo bithire lo autora (2 canales). Sin cabeza.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "effect.intensity",
+      "group": "elevacion-forma-efectos",
+      "channel": "--ds-effect-intensity",
+      "channelStatus": "existe",
+      "collapses": {
+        "total": 1,
+        "rottay": 0,
+        "bithire": 1,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 1,
+        "rottay": 0,
+        "bithire": 1,
+        "evnto": 0,
+        "modes": {
+          "rottay": [],
+          "bithire": [
+            "base"
+          ],
+          "evnto": []
+        }
+      },
+      "derivation": "Escalar unico que multiplica brillos, glass y elevacion.",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/animations/premium.css:27",
+      "governedBy": "surfaces.effect-intensity",
+      "governanceScope": "total",
+      "exposure": "tenant-dial",
+      "exposureNote": "Perilla y cabeza en su sitio; 1 canal autorado en todo el corpus. Es el ejemplo de como se ve una raiz sana.",
+      "derivationDebt": false
+    }
+  ],
+  "reconciliation": {
+    "statement": "Las 63 cabezas internas contra los 20 controles de tenant. Ninguna de las dos capas se subordina a la otra: se cruzan.",
+    "byExposure": {
+      "counts": {
+        "internal-head": 27,
+        "tenant-dial": 26,
+        "gap": 10
+      },
+      "channels": {
+        "internal-head": 1477,
+        "tenant-dial": 1302,
+        "gap": 496
+      },
+      "reading": "De las 63 raices, 26 tienen control (1302 canales), 27 son cabezas internas correctas sin perilla (1477 canales) y 10 son huecos de perilla (496 canales). El grueso de la pintura, 1477 canales, NO deberia ser perilla nunca: deberia ser cascada. Ese es el hallazgo estructural, no el numero de gaps."
+    },
+    "byGroup": {
+      "superficie-por-nivel": 18,
+      "estados": 8,
+      "elevacion-forma-efectos": 8,
+      "color": 9,
+      "geometria-de-controles": 8,
+      "tipografia": 8,
+      "movimiento-perfil": 4
+    },
+    "controlsGoverningNoRoot": {
+      "ids": [
+        "chrome.anatomy",
+        "profiles.icon",
+        "responsive.posture"
+      ],
+      "law": "LOS TRES CONTROLES QUE NO GOBIERNAN NINGUNA RAIZ SON EXACTAMENTE LOS TRES QUE DECLARAN CERO CANALES CSS. Verificado sobre manifest/controls/: chrome.anatomy, profiles.icon y responsive.posture son los unicos con declaredOutputs.channels vacio. La coincidencia no es casual: este catalogo enumera cabezas de CANAL, asi que un control que no baja a canal no puede aparecer como governedBy. No es un hueco del catalogo ni de los controles.",
+      "perControl": [
+        {
+          "id": "chrome.anatomy",
+          "reason": "Emite ATRIBUTOS DE RAIZ, no canales: declaredOutputs.rootAttributes = data-anatomy-card / -table / -sidebar / -layout, con channels vacio. Su root de cascada declara como cabeza data-anatomy-card, que es atributo. Correcto por diseno."
+        },
+        {
+          "id": "profiles.icon",
+          "reason": "declaredOutputs vacio en canales Y en atributos. La autoridad de fundacion icon-size-roles (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:635-641) ya anticipa el eje con la nota \"a future icon profile modulates them\", pero ese perfil todavia no baja a canal. Ademas el corpus lo respalda: en las 3738 hojas de los tres temas no hay ninguna que autore un grosor de trazo de icono -- la unica hoja con \"stroke\" es chrome.controls.fieldGeometry.loadingStroke (packages/core/src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts:1565 y bithire/index.ts:1432), que es un spinner de campo, no un perfil de icono."
+        },
+        {
+          "id": "responsive.posture",
+          "reason": "SIN CABEZA POR DISENO: el eje viaja como DATO y no emite canal. Lo dice la fuente (packages/core/src/foundation/tokens/ts/presentation/responsive-postures/index.ts:26-28, \"DATA, NOT CSS\") y lo espeja manifest/cascade/roots/responsive.posture.json. Ninguna hoja de tema lo toca."
+        }
+      ]
+    },
+    "gapBacklog": {
+      "statement": "EL BACKLOG REAL DE PERILLAS FALTANTES. 10 raices, 496 canales de tema.",
+      "items": [
+        {
+          "rootId": "ramp.seed.neutral",
+          "channels": 132,
+          "channelStatus": "--ds-color-neutral-500",
+          "why": "ES LA MAYOR PERILLA FALTANTE DEL GRUPO COLOR. Ningun control de los 20 nombra un canal neutral, y el propio compilador certifica que sin semilla no hay derivacion. Un tenant que quiere mover su gris no tiene puerta: tiene que escribir 10 pasos por la allowlist pro de token-overrides."
+        },
+        {
+          "rootId": "tier.accent.bg",
+          "channels": 63,
+          "channelStatus": null,
+          "why": "VERIFICADO EN FUENTE: --ds-badge-bg, --ds-tag-bg y --ds-alert-bg tienen CERO declaraciones en todo packages/core/src. El nivel acento no tiene ni cabeza ni perilla: 63 canales escritos uno por uno."
+        },
+        {
+          "rootId": "tier.raised.border",
+          "channels": 56,
+          "channelStatus": "--ds-color-border",
+          "why": "La eleccion borde-fuerte contra elevacion-fuerte ES identidad de marca declarada en fuente, y no hay perilla que la exprese. Deberia haberla: es el eje que separa visualmente bithire de rottay."
+        },
+        {
+          "rootId": "ramp.seed.info",
+          "channels": 50,
+          "channelStatus": "--ds-color-info",
+          "why": "Mismo frontier palette.status-seeds (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:507)."
+        },
+        {
+          "rootId": "tier.page.border",
+          "channels": 50,
+          "channelStatus": "--ds-color-border-subtle",
+          "why": "Ningun control nombra un borde de chrome de pagina. 50 canales autorados a mano y el tenant que quiere una separacion mas o menos marcada en el shell no tiene perilla: hoy solo llega por la allowlist pro, canal por canal."
+        },
+        {
+          "rootId": "ramp.seed.success",
+          "channels": 47,
+          "channelStatus": "--ds-color-success",
+          "why": "GAP YA REGISTRADO EN FUENTE: la capability palette.status-seeds existe con status frontier (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:507) y su defaultBehavior dice textual \"DB General cannot author status tones today; Advanced tokenOverrides is the only DB route, while BrandTheme authors them directly -- the recorded static/DB asymmetry this frontier closes\". Una frontier es contrato declarado que el schema TODAVIA rechaza (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:18-20)."
+        },
+        {
+          "rootId": "ramp.seed.error",
+          "channels": 47,
+          "channelStatus": "--ds-color-error",
+          "why": "token-overrides declara --ds-color-error entre sus salidas, pero eso es la allowlist pro canal por canal, NO una semilla: mover el tono de error completo sigue exigiendo escribir la rampa a mano. El frontier palette.status-seeds (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:507) es la puerta correcta y aun no existe."
+        },
+        {
+          "rootId": "ramp.seed.warning",
+          "channels": 45,
+          "channelStatus": "--ds-color-warning",
+          "why": "Mismo frontier palette.status-seeds (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:507)."
+        },
+        {
+          "rootId": "type.family.mono",
+          "channels": 3,
+          "channelStatus": "--ds-font-family-mono",
+          "why": "Ni typography.families ni typography.pairing declaran --ds-font-family-mono: los dos controles nombran solo base y heading. El canal existe y los tres temas lo autoran; la perilla no llega. Perilla faltante barata (1 canal por tema)."
+        },
+        {
+          "rootId": "type.family.display",
+          "channels": 3,
+          "channelStatus": "--ds-font-family-display",
+          "why": "Mismo hueco que mono: canal existente, dos controles de tipografia que no lo nombran."
+        }
+      ],
+      "priority": [
+        "PRIMERO ramp.seed.neutral (132 canales, el mayor). Certificado en fuente: el compilador dice que neutral no tiene semilla de la que derivar (packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:353-356). Sin semilla no hay rampa, y sin rampa cada tema escribe 10 pasos por rol.",
+        "SEGUNDO las cuatro semillas de estado (success/warning/error/info, 189 canales juntos). NO ES UN HALLAZGO NUEVO: el repo YA lo tiene registrado como frontier palette.status-seeds (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:507-522), con el defaultBehavior que nombra la asimetria estatico/DB. Este catalogo solo lo cuantifica.",
+        "TERCERO el nivel acento sin cabeza (tier.accent.bg, 63 canales): --ds-badge-bg, --ds-tag-bg y --ds-alert-bg tienen cero declaraciones en todo src/.",
+        "CUARTO los dos bordes sin gobierno (tier.raised.border 56 + tier.page.border 50 = 106 canales). El de nivel elevado es especialmente caro porque bithire declara EN FUENTE que su identidad es borde-fuerte contra elevacion-fuerte (packages/core/src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts:912-913) y no hay perilla que exprese esa eleccion.",
+        "ULTIMO los dos huecos baratos de tipografia (mono y display, 3 canales cada uno): el canal existe y los tres temas lo autoran; los dos controles de tipografia nombran solo base y heading."
+      ]
+    },
+    "derivationDebtBacklog": {
+      "statement": "EL OTRO BACKLOG, EL DE CASCADA. 41 raices tienen ley de derivacion disponible y aun asi se autoran a mano: 2434 canales de tema.",
+      "top": [
+        {
+          "rootId": "tier.control.fg",
+          "channels": 267,
+          "exposure": "internal-head"
+        },
+        {
+          "rootId": "state.delta.hover",
+          "channels": 241,
+          "exposure": "internal-head"
+        },
+        {
+          "rootId": "tier.control.bg",
+          "channels": 200,
+          "exposure": "tenant-dial"
+        },
+        {
+          "rootId": "elevation.ladder",
+          "channels": 191,
+          "exposure": "tenant-dial"
+        },
+        {
+          "rootId": "tier.control.border",
+          "channels": 165,
+          "exposure": "internal-head"
+        },
+        {
+          "rootId": "state.delta.active",
+          "channels": 118,
+          "exposure": "internal-head"
+        },
+        {
+          "rootId": "tier.raised.fg",
+          "channels": 93,
+          "exposure": "internal-head"
+        },
+        {
+          "rootId": "tier.page.bg",
+          "channels": 80,
+          "exposure": "tenant-dial"
+        },
+        {
+          "rootId": "tier.raised.bg",
+          "channels": 75,
+          "exposure": "tenant-dial"
+        },
+        {
+          "rootId": "tier.page.fg",
+          "channels": 75,
+          "exposure": "tenant-dial"
+        },
+        {
+          "rootId": "tier.accent.fg",
+          "channels": 74,
+          "exposure": "internal-head"
+        },
+        {
+          "rootId": "spacing.step",
+          "channels": 73,
+          "exposure": "tenant-dial"
+        }
+      ],
+      "reading": "Las dos deudas mas concentradas no son huecos de perilla sino de cascada: tier.control.fg (267 canales, la mayor raiz del catalogo, tinta que deberia seguir al fondo por contraste) y state.delta.hover (241 canales, un delta que deberia ser una mezcla y hoy es un valor por familia). Juntas son 508 canales -- mas que todos los gaps sumados. Censo de apoyo, medido sobre los tres temas: de 579 canales con sufijo de estado, 478 (82,6%) ya tienen hermano base en el mismo objeto, y 296 ya estan escritos como mezcla o alfa. La ley existe; falta la cabeza."
+    },
+    "declaredOutputDefects": {
+      "statement": "Defectos de DECLARACION detectados al cruzar: no cambian que canal pinta, cambian que promete el control.",
+      "items": [
+        "palette.seeds acepta appearance.general.palette.{secondary,accent,background} en documentPath (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:90-103) pero declaredOutputs no nombra --ds-color-secondary, --ds-color-accent ni ningun --ds-color-bg-*.",
+        "navigation.sidebar-tone declara --ds-sidebar-item-color, que tiene CERO declaraciones en la base DS (solo artefacto y tests). El lector trae fallback (packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css:198), asi que no pinta mal; pero la cabeza declarada no existe sin tenant.",
+        "Cinco cabezas mas son solo-artefacto: --ds-chart-series-1, --ds-radius-scale, --ds-type-scale, --ds-motion-intensity y --ds-experience-profile. Las cuatro primeras son legitimas (lector con fallback declarado y verificado). La quinta no tiene NINGUN lector var() fuera de artefactos en todo packages/core/src -- verificado, no asumido -- y el owner ya la adjudico como deuda y no como precedente (decision de owner 2026-08-18, punto 4).",
+        "chrome.families declara 3 canales (--ds-button-primary-bg, --ds-table-header-bg, --ds-modal-bg) para una raiz de 200 (tier.control.bg). Es la bolsa de literales que la decision de owner del 2026-08-18 (punto 1) mandata convertir en mapa de formulas sobre raices, no en mas literales gobernados."
+      ]
+    }
+  },
+  "ratchet": {
+    "statement": "RESIDUO IRREDUCIBLE, TRINQUETE DECRECIENTE. Es lo que queda cuando toda la derivacion y toda la variante ya colapsaron: las semillas de marca mas los literales verdaderamente por familia. Desde aqui solo puede bajar.",
+    "method": "residuo = clase C (semilla) + clase D (irreducible por familia), medido sobre los 3693 canales de pintura con el clasificador constructivo descrito en method. No incluye A ni B por definicion: esos ya tienen raiz asignada en este catalogo.",
+    "baselineToday": {
+      "value": 418,
+      "seeds": 262,
+      "perFamily": 156,
+      "perTheme": {
+        "rottay": 149,
+        "bithire": 224,
+        "evnto": 45
+      },
+      "status": "MEDIDO"
+    },
+    "classDCensus": {
+      "note": "Reparto por cubeta de la clase D. LA SUBCLASIFICACION ES HEURISTICA Y DEPENDE DEL ORDEN DE LAS REGLAS; lo estable y auditable es el total 156 y el residuo 418.",
+      "buckets": [
+        {
+          "bucket": "sidebar-singleton",
+          "total": 38,
+          "rottay": 23,
+          "bithire": 10,
+          "evnto": 5
+        },
+        {
+          "bucket": "color-oneoff",
+          "total": 18,
+          "rottay": 1,
+          "bithire": 17,
+          "evnto": 0
+        },
+        {
+          "bucket": "gradient-textura",
+          "total": 17,
+          "rottay": 13,
+          "bithire": 4,
+          "evnto": 0
+        },
+        {
+          "bucket": "page-shell-measure",
+          "total": 16,
+          "rottay": 2,
+          "bithire": 12,
+          "evnto": 2
+        },
+        {
+          "bucket": "metrica-tipografica",
+          "total": 16,
+          "rottay": 3,
+          "bithire": 12,
+          "evnto": 1
+        },
+        {
+          "bucket": "par-espaciado",
+          "total": 15,
+          "rottay": 2,
+          "bithire": 13,
+          "evnto": 0
+        },
+        {
+          "bucket": "sombra-ring-oneoff",
+          "total": 12,
+          "rottay": 1,
+          "bithire": 10,
+          "evnto": 1
+        },
+        {
+          "bucket": "medida",
+          "total": 10,
+          "rottay": 1,
+          "bithire": 9,
+          "evnto": 0
+        },
+        {
+          "bucket": "otro",
+          "total": 7,
+          "rottay": 2,
+          "bithire": 5,
+          "evnto": 0
+        },
+        {
+          "bucket": "duracion",
+          "total": 4,
+          "rottay": 0,
+          "bithire": 4,
+          "evnto": 0
+        },
+        {
+          "bucket": "efecto-transform",
+          "total": 3,
+          "rottay": 1,
+          "bithire": 2,
+          "evnto": 0
+        }
+      ]
+    },
+    "projectedAfterAdjudication": {
+      "value": 275,
+      "seeds": 262,
+      "perFamilySurvivors": 13,
+      "status": "PROYECTADO -- no medido; depende de que se creen las cabezas que este catalogo marca por-crear",
+      "rule": "Sobrevive a la adjudicacion solo el literal que es ANATOMIA SINGULAR de la marca o RECETA propia: geometria de sidebar (width, collapsedWidth, itemHeight, headerHeight), reticula de shell (gridSize), gradiente de esqueleto (waveGradient) y trazo de carga del campo (loadingStroke). Todo lo demas de la clase D es singleton POR AUSENCIA DE CABEZA, no por identidad: el bloque de sidebar colapsa bajo navigation.sidebar-tone y los niveles de superficie, las medidas de shell bajo spacing.step y control.height, los colores sueltos bajo las raices de nivel, y los pares de espaciado bajo spacing.step.",
+      "survivors": [
+        {
+          "theme": "rottay",
+          "path": "chrome.skeleton.waveGradient",
+          "value": "linear-gradient(90deg, #EDEDEC 25%, #F4F4F3 50%, #EDEDEC 75%"
+        },
+        {
+          "theme": "rottay",
+          "path": "chrome.sidebar.width",
+          "value": "296px"
+        },
+        {
+          "theme": "rottay",
+          "path": "chrome.sidebar.collapsedWidth",
+          "value": "96px"
+        },
+        {
+          "theme": "rottay",
+          "path": "chrome.sidebar.headerHeight",
+          "value": "104px"
+        },
+        {
+          "theme": "rottay",
+          "path": "chrome.sidebar.itemHeight",
+          "value": "62px"
+        },
+        {
+          "theme": "rottay",
+          "path": "chrome.shell.gridSize",
+          "value": "28px"
+        },
+        {
+          "theme": "rottay",
+          "path": "chrome.controls.fieldGeometry.loadingStroke",
+          "value": "1.5"
+        },
+        {
+          "theme": "rottay",
+          "path": "chrome.skeleton.waveGradient",
+          "value": "linear-gradient(90deg, #1A1A1E 25%, #2A2A2F 50%, #1A1A1E 75%"
+        },
+        {
+          "theme": "bithire",
+          "path": "chrome.sidebar.width",
+          "value": "256px"
+        },
+        {
+          "theme": "bithire",
+          "path": "chrome.sidebar.collapsedWidth",
+          "value": "64px"
+        },
+        {
+          "theme": "bithire",
+          "path": "chrome.layout.headerHeight",
+          "value": "56px"
+        },
+        {
+          "theme": "bithire",
+          "path": "chrome.controls.fieldGeometry.loadingStroke",
+          "value": "1.75"
+        },
+        {
+          "theme": "evnto",
+          "path": "chrome.shell.gridSize",
+          "value": "0px"
+        }
+      ]
+    },
+    "law": "DECREASE-ONLY. El residuo puede bajar cuando una cabeza nueva absorbe literales; no puede subir. Si sube, alguien autoro identidad nueva a mano en vez de elegir una variante, y eso es exactamente lo que el programa existe para impedir. Cualquier re-medicion debe reproducir el denominador (3693 canales de pintura) antes de comparar residuos."
+  },
+  "corrections": {
+    "statement": "Correcciones a mi propio informe previo (/private/tmp/mr-COLAPSABILIDAD.md), verificadas contra fuente al escribir este catalogo. Se declaran porque la regla es que un dato que no se sostiene se corrige y se dice.",
+    "items": [
+      "DETECCION DE CANALES: una verificacion intermedia mia filtro las declaraciones con grep -v \"var(\", lo que descarta toda declaracion cuyo VALOR es un var. Eso reporto como inexistentes dos canales que SI existen: --ds-radius-button (packages/core/src/foundation/tokens/css/foundation/base/borders.css:27, \"--ds-radius-button: var(--ds-radius-md);\") y --ds-shadow-button-rest (packages/core/src/foundation/tokens/css/foundation/base/shadows.css:89). El metodo correcto se ancla en los dos puntos de la declaracion y es el usado en todo este catalogo. Ningun dato del informe entregado dependia de aquella verificacion fallida.",
+      "SUPERVIVIENTES DE CLASE D: el informe estimo \"unos 22 sobreviven\" y proyecto un residuo de ~284 a ojo sobre la tabla de cubetas. Aplicada una regla mecanica y citada (anatomia singular + receta propia), los supervivientes medidos son 13 y el residuo proyectado 275. Este catalogo usa la cifra mecanica; la estimacion previa queda superada.",
+      "CUBETAS DE CLASE D: el reparto por cubeta publicado en el informe difiere en unas pocas unidades del de aqui porque el orden de evaluacion de las reglas cambia a que cubeta cae un literal ambiguo. Los totales estables (C 262, D 156, residuo 418) no cambian; la subclasificacion se declara explicitamente como heuristica.",
+      "CONTEO DE OCURRENCIAS --ds-*: la cifra de partida del encargo (278 / 639 / 141) es reproducible pero mide otra cosa. De esas ocurrencias, 263 / 626 / 133 estan dentro de var(--ds-...): son LECTURAS de la cascada, es decir canales ya colapsados, no autoria. El residuo (15 / 13 / 8) es prosa en comentarios. El denominador honesto de autoria son las hojas evaluadas: 3693 canales de pintura."
+    ]
+  },
+  "provenance": {
+    "sources": [
+      "packages/core/src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
+      "packages/core/src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
+      "packages/core/src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts",
+      "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+      "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+      "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+      "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css",
+      "manifest/controls/*.json",
+      "manifest/cascade/roots/*.json"
+    ],
+    "verification": "Toda cita archivo:linea de este documento se abrio en fuente al escribirlo. Los conteos de canal (collapses) y de asignacion salen del recorrido del objeto evaluado, no de expresiones regulares sobre el texto.",
+    "writeFence": "Este archivo es un inventario de lectura. No lo valida program-check.mjs (que solo recorre manifest/cascade/roots/), no lo genera generator.mjs y no participa de ningun gate. Si algun dia se convierte en entrada de un gate, primero hay que fijar su schema en manifest/rules.mjs."
+  }
+}

@@ -1,0 +1,1097 @@
+{
+  "generated": true,
+  "generator": "cascade-backlog.mjs",
+  "schemaVersion": 1,
+  "controlId": "spacing.rhythm",
+  "tier": "standard",
+  "rootChannel": "--ds-rhythm-scale",
+  "homonymLaw": "stem = channelId sin el prefijo --ds-/--_ds-. El diff literal por channelId compara dos vocabularios distintos de frente (prescripcion 100% --_ds-*, alcance generado mayoria --ds-*) y da desalineacion total que no significa nada; la regla correcta es por homonimo.",
+  "planeVocabulary": [
+    "css",
+    "ts-compilers",
+    "ts-chrome-variables"
+  ],
+  "planeLaw": "El alcance transitivo sale del plano CSS unicamente. El vocabulario de planos es CERRADO y tiene TRES nombres (planeVocabulary: css, ts-compilers, ts-chrome-variables); planesNotScanned: ts-compilers, ts-chrome-variables. Una CLASE B puede ser en realidad CLASE A por cualquiera de los dos planos TS no escaneados; se declara, no se calla. CRITERIO FUNCIONAL, no postal: un archivo cuenta como productor cuando la compilacion en ejecucion emite el canal a traves de el. ts-compilers = escrituras explicitas vars[\"--ds-X\"] en el cuerpo del compilador (108 ocurrencias, 97 canales distintos en brand-theme 92 / appearance 6 / appearance-posture 10, mas 46 sitios de escritura templada; censo por ENUMERACION de fuente: 552 canales distintos = 183 literales + 378 interpolados). ts-chrome-variables = la tabla de mapeo de chrome-variables/index.ts, cuyos VALORES son los nombres de canal (censo por grep 1477: 477 como valor de tabla -- 352 derivados por 28 llamadas chromeVariableMap mas 125 literales -- y 1000 como clave de escritura directa; censo por ENUMERACION 1671 = 1154 literales + 546 interpolados, que es el que se usa para cobertura). Solape entre los dos planos TS: 8 canales, no 1 -- el 1 salia de comparar censos por grep. Union de semillas TS: 2215. Entra POR NOMBRE PROPIO y no diluido dentro de ts-compilers porque son figuras distintas y mezclarlas hace la cifra agregada no auditable por partes. Que chrome-variables viva fuera de las carpetas del compilador es DEUDA DE FASE 3 de ubicacion, no razon para descontarlo. radius-dial no es un plano: es una raiz de ts-compilers. COBERTURA (denominador 4547 canales leidos en el arbol de skin del motor modern, sembrando las 18 raices del manifiesto, variante generosa): solo-css 1490 = 32,8%; +ts-compilers 2438 = 53,6%; +ts-chrome-variables 2344 = 51,6%; UNION 2894 = 63,6%. Variante estricta: 25,9 / 47,4 / 47,7 / 60,8%. 1653 canales de U no tienen productor en NINGUN plano. Cifras y metodo completos en cascade-extract.mjs -> stats.coverage; son COTA INFERIOR por 3 emisiones interpoladas sin enumerador.",
+  "classLaw": {
+    "A": "el dial YA alcanza el homonimo --ds-X; falta solo abrir el socket en el sitio de lectura del skin: var(--_ds-X, var(--ds-X, literal)). Trabajo mecanico, una linea por sitio.",
+    "B": "el dial NO alcanza ni el homonimo; hacen falta el socket Y cablear el canal a la raiz. Trabajo de diseno."
+  },
+  "seedLaw": "alcance = BFS desde rootChannel MAS los 'to' de las derivations LIVE del root autorado (primer salto por seleccion de atributo, p.ej. chrome.anatomy: el grafo extraido clavea esas aristas por la var() leida, no por el atributo). Se excluyen literal-pin (fuera del dial, R8) y toIsPattern (pliegue a nivel de mapa, no canal literal).",
+  "inputs": {
+    "prescription": "manifest/cascade/roots/spacing.rhythm.json (terminalReach, autorado)",
+    "reach": "manifest/cascade/extracted/css-edges.json (cascade-extract.mjs, plano CSS)"
+  },
+  "reach": {
+    "channels": 42,
+    "sockets": 9,
+    "bare": 0
+  },
+  "totals": {
+    "prescribed": 87,
+    "classA": 3,
+    "classB": 84
+  },
+  "families": [
+    {
+      "familyId": "pattern/communication/comment-thread",
+      "sockets": [
+        {
+          "socket": "--_ds-comment-thread-rail-offset",
+          "state": "PRESCRIPCION",
+          "stem": "comment-thread-rail-offset",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/communication/live-feed",
+      "sockets": [
+        {
+          "socket": "--_ds-live-feed-banner-margin-block-end",
+          "state": "PRESCRIPCION",
+          "stem": "live-feed-banner-margin-block-end",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-live-feed-footer-margin-block-start",
+          "state": "PRESCRIPCION",
+          "stem": "live-feed-footer-margin-block-start",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-live-feed-header-margin-block-end",
+          "state": "PRESCRIPCION",
+          "stem": "live-feed-header-margin-block-end",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/data/record-facts",
+      "sockets": [
+        {
+          "socket": "--_ds-record-facts-section-gap",
+          "state": "PRESCRIPCION",
+          "stem": "record-facts-section-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/forms/filter-builder",
+      "sockets": [
+        {
+          "socket": "--_ds-filter-builder-group-gap",
+          "state": "PRESCRIPCION",
+          "stem": "filter-builder-group-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/forms/filter-panel",
+      "sockets": [
+        {
+          "socket": "--_ds-filter-panel-group-gap",
+          "state": "PRESCRIPCION",
+          "stem": "filter-panel-group-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/forms/invoice-template",
+      "sockets": [
+        {
+          "socket": "--_ds-invoice-template-group-gap",
+          "state": "PRESCRIPCION",
+          "stem": "invoice-template-group-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/forms/pattern-form-builder",
+      "sockets": [
+        {
+          "socket": "--_ds-form-builder-group-gap",
+          "state": "PRESCRIPCION",
+          "stem": "form-builder-group-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/forms/step-wizard",
+      "sockets": [
+        {
+          "socket": "--_ds-step-wizard-group-gap",
+          "state": "PRESCRIPCION",
+          "stem": "step-wizard-group-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/shell/cockpit-header",
+      "sockets": [
+        {
+          "socket": "--_ds-cockpit-header-section-gap",
+          "state": "PRESCRIPCION",
+          "stem": "cockpit-header-section-gap",
+          "class": "A",
+          "homonym": "--ds-cockpit-header-section-gap",
+          "homonymReaders": [
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+              "line": 320,
+              "via": "gap",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+              "line": 419,
+              "via": "gap",
+              "kind": "leaf-read"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/shell/feature-workspace-frame",
+      "sockets": [
+        {
+          "socket": "--_ds-feature-workspace-frame-section-gap",
+          "state": "PRESCRIPCION",
+          "stem": "feature-workspace-frame-section-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/shell/pattern-page-shell",
+      "sockets": [
+        {
+          "socket": "--_ds-page-shell-section-gap",
+          "state": "PRESCRIPCION",
+          "stem": "page-shell-section-gap",
+          "class": "A",
+          "homonym": "--ds-page-shell-section-gap",
+          "homonymReaders": [
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
+              "line": 323,
+              "via": "padding-top",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
+              "line": 555,
+              "via": "margin-top",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
+              "line": 567,
+              "via": "margin-top",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
+              "line": 577,
+              "via": "gap",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
+              "line": 608,
+              "via": "margin-top",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
+              "line": 629,
+              "via": "gap",
+              "kind": "leaf-read"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/shell/workbench-header",
+      "sockets": [
+        {
+          "socket": "--_ds-workbench-header-section-gap",
+          "state": "PRESCRIPCION",
+          "stem": "workbench-header-section-gap",
+          "class": "A",
+          "homonym": "--ds-workbench-header-section-gap",
+          "homonymReaders": [
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+              "line": 260,
+              "via": "gap",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+              "line": 357,
+              "via": "margin-block-start",
+              "kind": "leaf-read"
+            },
+            {
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
+              "line": 421,
+              "via": "margin-block-start",
+              "kind": "leaf-read"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/visualization/pattern-tree-view",
+      "sockets": [
+        {
+          "socket": "--_ds-tree-view-search-margin-block-end",
+          "state": "PRESCRIPCION",
+          "stem": "tree-view-search-margin-block-end",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/workflow/approval-inbox",
+      "sockets": [
+        {
+          "socket": "--_ds-approval-inbox-item-gap",
+          "state": "PRESCRIPCION",
+          "stem": "approval-inbox-item-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/workflow/approval-workflow",
+      "sockets": [
+        {
+          "socket": "--_ds-approval-workflow-item-gap",
+          "state": "PRESCRIPCION",
+          "stem": "approval-workflow-item-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/workflow/moderation-gallery",
+      "sockets": [
+        {
+          "socket": "--_ds-moderation-gallery-item-gap",
+          "state": "PRESCRIPCION",
+          "stem": "moderation-gallery-item-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/workflow/operational-ledger",
+      "sockets": [
+        {
+          "socket": "--_ds-operational-ledger-item-gap",
+          "state": "PRESCRIPCION",
+          "stem": "operational-ledger-item-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "pattern/workflow/shift-matrix",
+      "sockets": [
+        {
+          "socket": "--_ds-shift-matrix-item-gap",
+          "state": "PRESCRIPCION",
+          "stem": "shift-matrix-item-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/display/calendar",
+      "sockets": [
+        {
+          "socket": "--_ds-calendar-header-margin-block-end",
+          "state": "PRESCRIPCION",
+          "stem": "calendar-header-margin-block-end",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/display/card",
+      "sockets": [
+        {
+          "socket": "--_ds-card-actions-margin-top",
+          "state": "PRESCRIPCION",
+          "stem": "card-actions-margin-top",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-card-skeleton-stack-gap",
+          "state": "PRESCRIPCION",
+          "stem": "card-skeleton-stack-gap",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-card-skeleton-stack-margin-top",
+          "state": "PRESCRIPCION",
+          "stem": "card-skeleton-stack-margin-top",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-card-subtitle-margin-top",
+          "state": "PRESCRIPCION",
+          "stem": "card-subtitle-margin-top",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/display/descriptions",
+      "sockets": [
+        {
+          "socket": "--_ds-descriptions-section-gap",
+          "state": "PRESCRIPCION",
+          "stem": "descriptions-section-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/feedback/message",
+      "sockets": [
+        {
+          "socket": "--_ds-message-stack-offset",
+          "state": "PRESCRIPCION",
+          "stem": "message-stack-offset",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/feedback/notification",
+      "sockets": [
+        {
+          "socket": "--_ds-notification-stack-inline-gutter",
+          "state": "PRESCRIPCION",
+          "stem": "notification-stack-inline-gutter",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-notification-stack-offset",
+          "state": "PRESCRIPCION",
+          "stem": "notification-stack-offset",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/feedback/toast",
+      "sockets": [
+        {
+          "socket": "--_ds-toast-viewport-gutter",
+          "state": "PRESCRIPCION",
+          "stem": "toast-viewport-gutter",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "primitive/layout/collapse",
+      "sockets": [
+        {
+          "socket": "--_ds-collapse-extra-margin-inline-start",
+          "state": "PRESCRIPCION",
+          "stem": "collapse-extra-margin-inline-start",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/dashboard/dashboard-insights",
+      "sockets": [
+        {
+          "socket": "--_ds-dashboard-insights-grid-gap",
+          "state": "PRESCRIPCION",
+          "stem": "dashboard-insights-grid-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/dashboard/data-terminal-card",
+      "sockets": [
+        {
+          "socket": "--_ds-data-terminal-card-grid-gap",
+          "state": "PRESCRIPCION",
+          "stem": "data-terminal-card-grid-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/dashboard/stats-header",
+      "sockets": [
+        {
+          "socket": "--_ds-stats-header-grid-gap",
+          "state": "PRESCRIPCION",
+          "stem": "stats-header-grid-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/collection-header",
+      "sockets": [
+        {
+          "socket": "--_ds-collection-header-below-gap",
+          "state": "PRESCRIPCION",
+          "stem": "collection-header-below-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/dashboard-header",
+      "sockets": [
+        {
+          "socket": "--_ds-dashboard-header-below-gap",
+          "state": "PRESCRIPCION",
+          "stem": "dashboard-header-below-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/detail-header",
+      "sockets": [
+        {
+          "socket": "--_ds-detail-header-below-gap",
+          "state": "PRESCRIPCION",
+          "stem": "detail-header-below-gap",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-detail-header-context-rail-margin-block-start",
+          "state": "PRESCRIPCION",
+          "stem": "detail-header-context-rail-margin-block-start",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-detail-header-metadata-card-children-margin-block-start",
+          "state": "PRESCRIPCION",
+          "stem": "detail-header-metadata-card-children-margin-block-start",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-detail-header-metadata-card-margin-block-start",
+          "state": "PRESCRIPCION",
+          "stem": "detail-header-metadata-card-margin-block-start",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-detail-header-root-margin-block-end",
+          "state": "PRESCRIPCION",
+          "stem": "detail-header-root-margin-block-end",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/edit-header",
+      "sockets": [
+        {
+          "socket": "--_ds-edit-header-below-gap",
+          "state": "PRESCRIPCION",
+          "stem": "edit-header-below-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/form-header",
+      "sockets": [
+        {
+          "socket": "--_ds-form-header-below-gap",
+          "state": "PRESCRIPCION",
+          "stem": "form-header-below-gap",
+          "class": "B",
+          "homonym": null
+        },
+        {
+          "socket": "--_ds-form-header-root-margin",
+          "state": "PRESCRIPCION",
+          "stem": "form-header-root-margin",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/header-surface",
+      "sockets": [
+        {
+          "socket": "--_ds-header-surface-below-gap",
+          "state": "PRESCRIPCION",
+          "stem": "header-surface-below-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/mobile-header",
+      "sockets": [
+        {
+          "socket": "--_ds-mobile-header-below-gap",
+          "state": "PRESCRIPCION",
+          "stem": "mobile-header-below-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/headers/section-frame",
+      "sockets": [
+        {
+          "socket": "--_ds-section-frame-below-gap",
+          "state": "PRESCRIPCION",
+          "stem": "section-frame-below-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/shell/app-shell",
+      "sockets": [
+        {
+          "socket": "--_ds-app-shell-section-gap",
+          "state": "PRESCRIPCION",
+          "stem": "app-shell-section-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/shell/bottom-tab-bar",
+      "sockets": [
+        {
+          "socket": "--_ds-bottom-tab-bar-section-gap",
+          "state": "PRESCRIPCION",
+          "stem": "bottom-tab-bar-section-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/shell/page-shell-surface",
+      "sockets": [
+        {
+          "socket": "--_ds-page-shell-surface-section-gap",
+          "state": "PRESCRIPCION",
+          "stem": "page-shell-surface-section-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/shell/surface-chrome",
+      "sockets": [
+        {
+          "socket": "--_ds-surface-chrome-section-gap",
+          "state": "PRESCRIPCION",
+          "stem": "surface-chrome-section-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/shell/workspace-shell",
+      "sockets": [
+        {
+          "socket": "--_ds-workspace-shell-section-gap",
+          "state": "PRESCRIPCION",
+          "stem": "workspace-shell-section-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/action-dock",
+      "sockets": [
+        {
+          "socket": "--_ds-action-dock-grid-gap",
+          "state": "PRESCRIPCION",
+          "stem": "action-dock-grid-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/active-filters-bar",
+      "sockets": [
+        {
+          "socket": "--_ds-active-filters-bar-grid-gap",
+          "state": "PRESCRIPCION",
+          "stem": "active-filters-bar-grid-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/column-menu",
+      "sockets": [
+        {
+          "socket": "--_ds-column-menu-grid-gap",
+          "state": "PRESCRIPCION",
+          "stem": "column-menu-grid-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/connected-command-palette",
+      "sockets": [
+        {
+          "socket": "--_ds-connected-command-palette-grid-gap",
+          "state": "PRESCRIPCION",
+          "stem": "connected-command-palette-grid-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/export-button",
+      "sockets": [
+        {
+          "socket": "--_ds-export-button-grid-gap",
+          "state": "PRESCRIPCION",
+          "stem": "export-button-grid-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/field-filters-panel",
+      "sockets": [
+        {
+          "socket": "--_ds-field-filters-panel-grid-gap",
+          "state": "PRESCRIPCION",
+          "stem": "field-filters-panel-grid-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/saved-views-menu",
+      "sockets": [
+        {
+          "socket": "--_ds-saved-views-menu-grid-gap",
+          "state": "PRESCRIPCION",
+          "stem": "saved-views-menu-grid-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/scope-switcher",
+      "sockets": [
+        {
+          "socket": "--_ds-scope-switcher-grid-gap",
+          "state": "PRESCRIPCION",
+          "stem": "scope-switcher-grid-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/search-command-bar",
+      "sockets": [
+        {
+          "socket": "--_ds-search-command-bar-grid-gap",
+          "state": "PRESCRIPCION",
+          "stem": "search-command-bar-grid-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/selection-preview-rail",
+      "sockets": [
+        {
+          "socket": "--_ds-selection-preview-rail-grid-gap",
+          "state": "PRESCRIPCION",
+          "stem": "selection-preview-rail-grid-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/table-toolbar",
+      "sockets": [
+        {
+          "socket": "--_ds-table-toolbar-grid-gap",
+          "state": "PRESCRIPCION",
+          "stem": "table-toolbar-grid-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "structure/workspace/view-mode-switcher",
+      "sockets": [
+        {
+          "socket": "--_ds-view-mode-switcher-grid-gap",
+          "state": "PRESCRIPCION",
+          "stem": "view-mode-switcher-grid-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "surface/admin/profile",
+      "sockets": [
+        {
+          "socket": "--_ds-profile-section-gap",
+          "state": "PRESCRIPCION",
+          "stem": "profile-section-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "surface/data/list",
+      "sockets": [
+        {
+          "socket": "--_ds-list-card-label-spacing",
+          "state": "PRESCRIPCION",
+          "stem": "list-card-label-spacing",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "surface/experience/auth",
+      "sockets": [
+        {
+          "socket": "--_ds-auth-section-gap",
+          "state": "PRESCRIPCION",
+          "stem": "auth-section-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "surface/experience/chat",
+      "sockets": [
+        {
+          "socket": "--_ds-chat-section-gap",
+          "state": "PRESCRIPCION",
+          "stem": "chat-section-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "surface/experience/editor",
+      "sockets": [
+        {
+          "socket": "--_ds-editor-section-gap",
+          "state": "PRESCRIPCION",
+          "stem": "editor-section-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "surface/experience/empty-state",
+      "sockets": [
+        {
+          "socket": "--_ds-empty-state-section-gap",
+          "state": "PRESCRIPCION",
+          "stem": "empty-state-section-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "surface/experience/marketing",
+      "sockets": [
+        {
+          "socket": "--_ds-marketing-section-gap",
+          "state": "PRESCRIPCION",
+          "stem": "marketing-section-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "surface/experience/media",
+      "sockets": [
+        {
+          "socket": "--_ds-media-section-gap",
+          "state": "PRESCRIPCION",
+          "stem": "media-section-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "surface/experience/notification",
+      "sockets": [
+        {
+          "socket": "--_ds-notification-section-gap",
+          "state": "PRESCRIPCION",
+          "stem": "notification-section-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "surface/experience/oauth-transition",
+      "sockets": [
+        {
+          "socket": "--_ds-oauth-transition-section-gap",
+          "state": "PRESCRIPCION",
+          "stem": "oauth-transition-section-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "surface/experience/pricing",
+      "sockets": [
+        {
+          "socket": "--_ds-pricing-section-gap",
+          "state": "PRESCRIPCION",
+          "stem": "pricing-section-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "surface/forms/detail-form",
+      "sockets": [
+        {
+          "socket": "--_ds-detail-form-section-gap",
+          "state": "PRESCRIPCION",
+          "stem": "detail-form-section-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "surface/forms/form",
+      "sockets": [
+        {
+          "socket": "--_ds-form-section-gap",
+          "state": "PRESCRIPCION",
+          "stem": "form-section-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "surface/forms/guided-draft-form",
+      "sockets": [
+        {
+          "socket": "--_ds-guided-draft-form-section-gap",
+          "state": "PRESCRIPCION",
+          "stem": "guided-draft-form-section-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "surface/forms/wizard",
+      "sockets": [
+        {
+          "socket": "--_ds-wizard-section-gap",
+          "state": "PRESCRIPCION",
+          "stem": "wizard-section-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "surface/operations/activity",
+      "sockets": [
+        {
+          "socket": "--_ds-activity-section-gap",
+          "state": "PRESCRIPCION",
+          "stem": "activity-section-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "surface/operations/kanban",
+      "sockets": [
+        {
+          "socket": "--_ds-kanban-section-gap",
+          "state": "PRESCRIPCION",
+          "stem": "kanban-section-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "surface/operations/operational",
+      "sockets": [
+        {
+          "socket": "--_ds-operational-section-gap",
+          "state": "PRESCRIPCION",
+          "stem": "operational-section-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "surface/operations/scheduler",
+      "sockets": [
+        {
+          "socket": "--_ds-scheduler-section-gap",
+          "state": "PRESCRIPCION",
+          "stem": "scheduler-section-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "surface/workspace/collection-workspace",
+      "sockets": [
+        {
+          "socket": "--_ds-collection-workspace-section-gap",
+          "state": "PRESCRIPCION",
+          "stem": "collection-workspace-section-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "surface/workspace/command-center",
+      "sockets": [
+        {
+          "socket": "--_ds-command-center-section-gap",
+          "state": "PRESCRIPCION",
+          "stem": "command-center-section-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "surface/workspace/decision-inbox",
+      "sockets": [
+        {
+          "socket": "--_ds-decision-inbox-section-gap",
+          "state": "PRESCRIPCION",
+          "stem": "decision-inbox-section-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    },
+    {
+      "familyId": "surface/workspace/record-workbench",
+      "sockets": [
+        {
+          "socket": "--_ds-record-workbench-section-gap",
+          "state": "PRESCRIPCION",
+          "stem": "record-workbench-section-gap",
+          "class": "B",
+          "homonym": null
+        }
+      ]
+    }
+  ]
+}

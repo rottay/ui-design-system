@@ -39,11 +39,25 @@
   },
   "calibration": {
     "assessmentState": "UNKNOWN",
-    "normalizedStops": [],
+    "normalizedStops": [
+      {
+        "id": "compacta",
+        "value": 0.94
+      },
+      {
+        "id": "normal",
+        "value": 1
+      },
+      {
+        "id": "amplia",
+        "value": 1.06
+      }
+    ],
     "staticDbParityEvidenceIds": [],
     "exactRestoreEvidenceIds": [],
     "negativeControls": [],
-    "nextAction": "CALIBRATE_LOWERERS_COMPUTED_DELTAS_NEGATIVES_AND_EXACT_RESTORE"
+    "nextAction": "CALIBRATE_LOWERERS_COMPUTED_DELTAS_NEGATIVES_AND_EXACT_RESTORE",
+    "boundsNote": "las tres paradas viven dentro de bounds {0.9,1.1} y del techo vinculante tenant T3 {0.92,1.08}: validas en todos los mundos"
   },
   "retiredAliases": []
 }

@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "rootId": "recipe-profile",
+  "tier": "pro",
+  "rootChannel": {
+    "channel": "--ds-recipe-profile",
+    "emission": [
+      {
+        "kind": "runtime-select",
+        "site": "packages/core/src/infrastructure/runtime/foundation/recipes/profiles/index.ts",
+        "note": "seleccion gobernada DS-S001: el tenant elige un id del registro first-party cerrado (foundation/tokens/ts/presentation/recipe-profiles); el compilador valida fail-closed y descarta ids desconocidos (contracts tenants/themes/tenant-theme/index.ts, docstring TenantVisualFoundation :585-589). Sin perfil: aplican los defaults de receta de familia."
+      }
+    ]
+  },
+  "dependsOn": [],
+  "derivations": [],
+  "derivationsEmptyReason": "CERO descendientes: el grafo css extraido no registra ni una arista inbound ni outbound de --ds-recipe-profile. La receta seleccionada actua sobre la maquinaria --ds-recipe-* de cada familia (defaults de receta), no sobre una cadena canal->canal propia. Declarado, no tapado.",
+  "terminalReach": [],
+  "variantDisposition": "by-registry",
+  "variants": [],
+  "overlaps": [],
+  "terminalReachLaw": "terminalReach es el cross-ref mecanico de internalChannels (semanticOwner = esta raiz), bidireccional fail-closed por validateCascadeRoot. Estado PRESCRIPCION: fase 1 es spec objetivo; la verdad transitiva la emite la capa GENERADA (cascade-extract/materialized), no se mantiene a mano (R1)."
+}

@@ -1,0 +1,327 @@
+{
+  "schemaVersion": 1,
+  "rootId": "navigation.sidebar-tone",
+  "tier": "standard",
+  "rootChannel": {
+    "channel": "--ds-sidebar-bg",
+    "emission": [
+      {
+        "kind": "compiler-emit",
+        "site": "packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
+        "note": "la raiz es un enum SIN canal propio: la emision es el contest de tono (sidebarToneToChrome) que escribe las 6 hojas SIDEBAR_TONE_LEAF_FIELDS (chrome-variables:184-191: bg, text, text-muted, item-bg-hover, item-bg-active, item-color-active) arbitrado por procedencia (:107-111, club de dos con la semilla primaria); el campo Theme es chrome.sidebar.tone (:193-194)"
+      }
+    ]
+  },
+  "dependsOn": [
+    "palette.seeds"
+  ],
+  "derivations": [
+    {
+      "from": "--ds-sidebar-bg",
+      "to": "--ds-sidebar-text",
+      "rule": {
+        "kind": "contest-rank",
+        "operand": "receta del tono (contest)"
+      },
+      "site": "packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
+      "line": 184,
+      "state": "LIVE",
+      "note": "las 6 hojas son co-salidas del contest, no derivadas entre si; se modela el grupo bajo la primera hoja"
+    },
+    {
+      "from": "--ds-sidebar-bg",
+      "to": "--ds-sidebar-text-muted",
+      "rule": {
+        "kind": "contest-rank"
+      },
+      "site": "packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
+      "line": 184,
+      "state": "LIVE"
+    },
+    {
+      "from": "--ds-sidebar-bg",
+      "to": "--ds-sidebar-item-bg-hover",
+      "rule": {
+        "kind": "contest-rank"
+      },
+      "site": "packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
+      "line": 184,
+      "state": "LIVE"
+    },
+    {
+      "from": "--ds-sidebar-bg",
+      "to": "--ds-sidebar-item-bg-active",
+      "rule": {
+        "kind": "contest-rank"
+      },
+      "site": "packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
+      "line": 184,
+      "state": "LIVE"
+    },
+    {
+      "from": "--ds-sidebar-bg",
+      "to": "--ds-sidebar-item-color-active",
+      "rule": {
+        "kind": "contest-rank"
+      },
+      "site": "packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
+      "line": 184,
+      "state": "LIVE"
+    }
+  ],
+  "terminalReach": [
+    {
+      "channelId": "--_ds-command-palette-sidebar-bg",
+      "familyId": "pattern/navigation/command-palette",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-command-palette-sidebar-item-bg-active",
+      "familyId": "pattern/navigation/command-palette",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-command-palette-sidebar-item-bg-hover",
+      "familyId": "pattern/navigation/command-palette",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-command-palette-sidebar-item-color-active",
+      "familyId": "pattern/navigation/command-palette",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-command-palette-sidebar-text",
+      "familyId": "pattern/navigation/command-palette",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-command-palette-sidebar-text-muted",
+      "familyId": "pattern/navigation/command-palette",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-environment-toggle-sidebar-bg",
+      "familyId": "pattern/navigation/environment-toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-environment-toggle-sidebar-item-bg-active",
+      "familyId": "pattern/navigation/environment-toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-environment-toggle-sidebar-item-bg-hover",
+      "familyId": "pattern/navigation/environment-toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-environment-toggle-sidebar-item-color-active",
+      "familyId": "pattern/navigation/environment-toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-environment-toggle-sidebar-text",
+      "familyId": "pattern/navigation/environment-toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-environment-toggle-sidebar-text-muted",
+      "familyId": "pattern/navigation/environment-toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-locale-switcher-sidebar-bg",
+      "familyId": "pattern/navigation/pattern-locale-switcher",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-locale-switcher-sidebar-item-bg-active",
+      "familyId": "pattern/navigation/pattern-locale-switcher",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-locale-switcher-sidebar-item-bg-hover",
+      "familyId": "pattern/navigation/pattern-locale-switcher",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-locale-switcher-sidebar-item-color-active",
+      "familyId": "pattern/navigation/pattern-locale-switcher",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-locale-switcher-sidebar-text",
+      "familyId": "pattern/navigation/pattern-locale-switcher",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-locale-switcher-sidebar-text-muted",
+      "familyId": "pattern/navigation/pattern-locale-switcher",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-shortcuts-overlay-sidebar-bg",
+      "familyId": "pattern/navigation/shortcuts-overlay",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-shortcuts-overlay-sidebar-item-bg-active",
+      "familyId": "pattern/navigation/shortcuts-overlay",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-shortcuts-overlay-sidebar-item-bg-hover",
+      "familyId": "pattern/navigation/shortcuts-overlay",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-shortcuts-overlay-sidebar-item-color-active",
+      "familyId": "pattern/navigation/shortcuts-overlay",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-shortcuts-overlay-sidebar-text",
+      "familyId": "pattern/navigation/shortcuts-overlay",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-shortcuts-overlay-sidebar-text-muted",
+      "familyId": "pattern/navigation/shortcuts-overlay",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-workspace-switcher-sidebar-bg",
+      "familyId": "pattern/navigation/workspace-switcher",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-workspace-switcher-sidebar-item-bg-active",
+      "familyId": "pattern/navigation/workspace-switcher",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-workspace-switcher-sidebar-item-bg-hover",
+      "familyId": "pattern/navigation/workspace-switcher",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-workspace-switcher-sidebar-item-color-active",
+      "familyId": "pattern/navigation/workspace-switcher",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-workspace-switcher-sidebar-text",
+      "familyId": "pattern/navigation/workspace-switcher",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-workspace-switcher-sidebar-text-muted",
+      "familyId": "pattern/navigation/workspace-switcher",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-cockpit-header-sidebar-bg",
+      "familyId": "pattern/shell/cockpit-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-feature-workspace-frame-sidebar-bg",
+      "familyId": "pattern/shell/feature-workspace-frame",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-page-shell-sidebar-bg",
+      "familyId": "pattern/shell/pattern-page-shell",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-workbench-header-sidebar-bg",
+      "familyId": "pattern/shell/workbench-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-sidebar-item-color",
+      "familyId": "primitive/navigation/menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-sidebar-item-color-active",
+      "familyId": "primitive/navigation/menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-sidebar-text",
+      "familyId": "primitive/navigation/menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-app-shell-sidebar-bg",
+      "familyId": "structure/shell/app-shell",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-bottom-tab-bar-sidebar-bg",
+      "familyId": "structure/shell/bottom-tab-bar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-page-shell-surface-sidebar-bg",
+      "familyId": "structure/shell/page-shell-surface",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-sidebar-item-bg-active",
+      "familyId": "structure/shell/sidebar-surface",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-sidebar-item-bg-hover",
+      "familyId": "structure/shell/sidebar-surface",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-sidebar-surface-sidebar-bg",
+      "familyId": "structure/shell/sidebar-surface",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-surface-chrome-sidebar-bg",
+      "familyId": "structure/shell/surface-chrome",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-workspace-shell-sidebar-bg",
+      "familyId": "structure/shell/workspace-shell",
+      "state": "PRESCRIPCION"
+    }
+  ],
+  "variants": [
+    {
+      "id": "subtle",
+      "value": "subtle",
+      "effects": {
+        "(6 hojas)": "receta subtle del contest"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "strong",
+      "value": "strong",
+      "effects": {
+        "(6 hojas)": "receta strong del contest"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "inverse",
+      "value": "inverse",
+      "effects": {
+        "(6 hojas)": "receta inverse + tintas on-tone"
+      },
+      "pinned": {}
+    }
+  ],
+  "overlaps": [],
+  "terminalReachLaw": "state = alcance en la cascada; deteccion de UN SALTO en sitio de lectura = COTA INFERIOR. El alcance transitivo es de la capa GENERADA (cascade-extract/materialized, ley R1); el diff con estas prescripciones ES el backlog de fase 3."
+}

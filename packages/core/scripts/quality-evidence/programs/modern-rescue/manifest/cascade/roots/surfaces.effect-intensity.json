@@ -1,0 +1,377 @@
+{
+  "schemaVersion": 1,
+  "rootId": "surfaces.effect-intensity",
+  "tier": "standard",
+  "rootChannel": {
+    "channel": "--ds-effect-intensity",
+    "emission": [
+      {
+        "kind": "compiler-emit",
+        "site": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+        "tenantRejectSite": "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
+        "note": "T1-LIBRE: brand-theme:1004 emite String(su.effectIntensity ?? 1) SIN clamp (unico dial asi de seis); ruta tenant RECHAZA fuera del sobre {0,0.65}/{0,0.75} con invalid_value (tenant-theme ~:1206-1217); doctrina themes/index.ts:649-655"
+      }
+    ]
+  },
+  "dependsOn": [],
+  "derivations": [
+    {
+      "from": "--ds-effect-intensity",
+      "to": "--ds-*",
+      "rule": {
+        "kind": "calc-multiply",
+        "formula": "toda la familia premium escala por el dial"
+      },
+      "site": "packages/core/src/foundation/tokens/css/foundation/animations/premium.css",
+      "line": 5,
+      "state": "LIVE",
+      "toIsPattern": true,
+      "note": "premium.css:5 verbatim \"Every effect below is scaled by --ds-effect-intensity\"; pliegue a nivel de familia (gradientes/glass/glow); los canales concretos son de la capa generada | subfamilia: familia glass (backdrop-filter/scrim-tint/blur vivos; recetas bg/border pendientes)"
+    },
+    {
+      "from": "--ds-effect-intensity",
+      "to": "--ds-gradient-*",
+      "rule": {
+        "kind": "calc-multiply",
+        "formula": "toda la familia premium escala por el dial"
+      },
+      "site": "packages/core/src/foundation/tokens/css/foundation/animations/premium.css",
+      "line": 5,
+      "state": "LIVE",
+      "toIsPattern": true,
+      "note": "premium.css:5 verbatim \"Every effect below is scaled by --ds-effect-intensity\"; pliegue a nivel de familia (gradientes/glass/glow); los canales concretos son de la capa generada | subfamilia: gradientes (surface 5 lectores, primary 1, mesh 0)"
+    },
+    {
+      "from": "--ds-effect-intensity",
+      "to": "--ds-shadow-glow-*",
+      "rule": {
+        "kind": "calc-multiply",
+        "formula": "toda la familia premium escala por el dial"
+      },
+      "site": "packages/core/src/foundation/tokens/css/foundation/animations/premium.css",
+      "line": 5,
+      "state": "LIVE",
+      "toIsPattern": true,
+      "note": "premium.css:5 verbatim \"Every effect below is scaled by --ds-effect-intensity\"; pliegue a nivel de familia (gradientes/glass/glow); los canales concretos son de la capa generada | subfamilia: glow (0 lectores modern hoy)"
+    },
+    {
+      "from": "--ds-effect-intensity",
+      "to": "--ds-overlay-*",
+      "rule": {
+        "kind": "calc-multiply",
+        "formula": "toda la familia premium escala por el dial"
+      },
+      "site": "packages/core/src/foundation/tokens/css/foundation/animations/premium.css",
+      "line": 5,
+      "state": "LIVE",
+      "toIsPattern": true,
+      "note": "premium.css:5 verbatim \"Every effect below is scaled by --ds-effect-intensity\"; pliegue a nivel de familia (gradientes/glass/glow); los canales concretos son de la capa generada | subfamilia: overlays de intensidad"
+    }
+  ],
+  "terminalReach": [
+    {
+      "channelId": "--_ds-glass-background",
+      "familyId": "pattern/customization/pattern-brand-studio",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-adaptive-overlay-scrim-backdrop-filter",
+      "familyId": "pattern/feedback/adaptive-overlay",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-empty-scrim-backdrop-filter",
+      "familyId": "pattern/feedback/empty-state",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-highlight",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-highlight-hover",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-loading-backdrop-blur",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-skeleton-highlight",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-surface-gradient",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-icon-frame-glass-bg",
+      "familyId": "primitive/display/icon-frame",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-icon-frame-subtle-strength",
+      "familyId": "primitive/display/icon-frame",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-list-glass-bg",
+      "familyId": "primitive/display/list",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-markdown-view-glass-bg",
+      "familyId": "primitive/display/markdown-view",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-meter-glass-bg",
+      "familyId": "primitive/display/meter",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-qrcode-glass-bg",
+      "familyId": "primitive/display/qr-code",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-statistic-glass-bg",
+      "familyId": "primitive/display/statistic",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-glass-bg",
+      "familyId": "primitive/display/table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tag-glass-bg",
+      "familyId": "primitive/display/tag",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-texture-backdrop-glass-bg",
+      "familyId": "primitive/display/texture-backdrop",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-timeline-glass-bg",
+      "familyId": "primitive/display/timeline",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tooltip-glass-bg",
+      "familyId": "primitive/display/tooltip",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tree-glass-bg",
+      "familyId": "primitive/display/tree",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-typewriter-glass-bg",
+      "familyId": "primitive/display/typewriter",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-typography-glass-bg",
+      "familyId": "primitive/display/typography",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-drawer-overlay-opacity",
+      "familyId": "primitive/feedback/drawer",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-gradient-primary",
+      "familyId": "primitive/feedback/modal",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-modal-action-disabled-opacity",
+      "familyId": "primitive/feedback/modal",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-modal-overlay-backdrop",
+      "familyId": "primitive/feedback/modal",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-overlay-backdrop-filter",
+      "familyId": "primitive/feedback/modal",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-skeleton-highlight",
+      "familyId": "primitive/feedback/skeleton",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-skeleton-wave-gradient",
+      "familyId": "primitive/feedback/skeleton",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toast-gradient-color",
+      "familyId": "primitive/feedback/toast",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-collapse-header-default-disabled-opacity",
+      "familyId": "primitive/layout/collapse",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-alert-dialog-backdrop-filter",
+      "familyId": "primitive/overlay/alert-dialog",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-confirm-dialog-backdrop-filter",
+      "familyId": "primitive/overlay/confirm-dialog",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-context-menu-backdrop-filter",
+      "familyId": "primitive/overlay/context-menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-dropdown-backdrop-filter",
+      "familyId": "primitive/overlay/dropdown",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-hover-card-backdrop-filter",
+      "familyId": "primitive/overlay/hover-card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-popconfirm-backdrop-filter",
+      "familyId": "primitive/overlay/popconfirm",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-popover-backdrop-filter",
+      "familyId": "primitive/overlay/popover",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-sheet-backdrop-filter",
+      "familyId": "primitive/overlay/sheet",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tour-backdrop-filter",
+      "familyId": "primitive/overlay/tour",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-watermark-backdrop-filter",
+      "familyId": "primitive/overlay/watermark",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-capability-disabled-opacity",
+      "familyId": "structure/feedback/capability-anatomy",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-capability-opacity",
+      "familyId": "structure/feedback/capability-anatomy",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-loading-overlay-backdrop",
+      "familyId": "structure/feedback/loading-overlay",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-loading-overlay-scrim-opacity",
+      "familyId": "structure/feedback/loading-overlay",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-auth-surface-gradient-mesh",
+      "familyId": "surface/experience/auth",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-chat-surface-gradient-mesh",
+      "familyId": "surface/experience/chat",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-editor-surface-gradient-mesh",
+      "familyId": "surface/experience/editor",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-empty-state-surface-gradient-mesh",
+      "familyId": "surface/experience/empty-state",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-gradient-mesh",
+      "familyId": "surface/experience/marketing",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-media-surface-gradient-mesh",
+      "familyId": "surface/experience/media",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-notification-surface-gradient-mesh",
+      "familyId": "surface/experience/notification",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-oauth-transition-screen-gradient-mesh",
+      "familyId": "surface/experience/oauth-transition",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-pricing-surface-gradient-mesh",
+      "familyId": "surface/experience/pricing",
+      "state": "PRESCRIPCION"
+    }
+  ],
+  "variants": [
+    {
+      "id": "mate",
+      "value": 0,
+      "effects": {
+        "--ds-effect-intensity": "0"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "sobrio",
+      "value": 0.6,
+      "effects": {
+        "--ds-effect-intensity": "0.6"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "estandar",
+      "value": 1,
+      "effects": {
+        "--ds-effect-intensity": "1"
+      },
+      "pinned": {},
+      "law": "quietPremiumOwnership: 1.0 EXCEDE todo techo tenant (rechazo) - autoria vertical POR CONSTRUCCION; el tenant hereda 1 y solo desciende"
+    }
+  ],
+  "overlaps": [],
+  "terminalReachLaw": "state = alcance en la cascada; deteccion de UN SALTO en sitio de lectura = COTA INFERIOR. El alcance transitivo es de la capa GENERADA (cascade-extract/materialized, ley R1); el diff con estas prescripciones ES el backlog de fase 3."
+}

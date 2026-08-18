@@ -1,0 +1,609 @@
+{
+  "schemaVersion": 1,
+  "rootId": "surfaces.elevation-posture",
+  "tier": "standard",
+  "rootChannel": {
+    "channel": "--ds-elevation-1",
+    "emission": [
+      {
+        "kind": "compiler-emit",
+        "site": "packages/core/src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts",
+        "note": "ELEVATION_PRESET escribe solo --ds-elevation-{1,2,3}; LEY floor/ceiling (brand-theme:963-973, comentario :964-966): la postura es el PISO que el tenant elige, la escalera autoral es el TECHO y siempre gana"
+      }
+    ]
+  },
+  "dependsOn": [],
+  "derivations": [
+    {
+      "from": "--ds-elevation-1",
+      "to": "--ds-elevation-2",
+      "rule": {
+        "kind": "table-lookup",
+        "operand": "ELEVATION_PRESET"
+      },
+      "site": "packages/core/src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts",
+      "line": 88,
+      "state": "LIVE",
+      "note": "co-salidas del preset, no derivadas entre si; modeladas bajo la primera; primera escritura del canal (preset flat, junto a --ds-elevation-1 en :87); el preset elevated lo reescribe en :94 y el volcado del preset ocurre en :197"
+    },
+    {
+      "from": "--ds-elevation-1",
+      "to": "--ds-elevation-3",
+      "rule": {
+        "kind": "table-lookup"
+      },
+      "site": "packages/core/src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts",
+      "line": 89,
+      "state": "LIVE",
+      "note": "primera escritura del canal (preset flat, junto a --ds-elevation-1 en :87); el preset elevated lo reescribe en :95 y el volcado del preset ocurre en :197"
+    }
+  ],
+  "terminalReach": [
+    {
+      "channelId": "--_ds-bulk-select-toggle-elevation",
+      "familyId": "pattern/data/bulk-select-toggle",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-column-settings-elevation",
+      "familyId": "pattern/data/column-settings",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-decision-comparison-elevation",
+      "familyId": "pattern/data/decision-comparison",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-decision-panorama-elevation",
+      "familyId": "pattern/data/decision-panorama",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-detail-panel-elevation",
+      "familyId": "pattern/data/detail-panel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-file-manager-elevation",
+      "familyId": "pattern/data/file-manager",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-list-toolbar-elevation",
+      "familyId": "pattern/data/list-toolbar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-search-shadow",
+      "familyId": "pattern/data/list-toolbar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-toolbar-controls-shadow",
+      "familyId": "pattern/data/list-toolbar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-mono-stat-elevation",
+      "familyId": "pattern/data/mono-stat",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-data-table-elevation",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-action-shadow",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-editorial-row-shadow",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-minimal-shadow",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-ruled-mobile-shadow",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-shadow",
+      "familyId": "pattern/data/pattern-data-table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-gallery-view-elevation",
+      "familyId": "pattern/data/pattern-gallery-view",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-collection-card-depth",
+      "familyId": "pattern/data/pattern-grid-view",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-grid-view-elevation",
+      "familyId": "pattern/data/pattern-grid-view",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stats-grid-elevation",
+      "familyId": "pattern/data/pattern-stats-grid",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-facts-elevation",
+      "familyId": "pattern/data/record-facts",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-facts-shadow",
+      "familyId": "pattern/data/record-facts",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-saved-views-elevation",
+      "familyId": "pattern/data/saved-views",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-status-filter-pills-elevation",
+      "familyId": "pattern/data/status-filter-pills",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-virtual-list-elevation",
+      "familyId": "pattern/data/virtual-list",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-widget-board-elevation",
+      "familyId": "pattern/data/widget-board",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-adaptive-overlay-elevation",
+      "familyId": "pattern/feedback/adaptive-overlay",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-empty-shadow",
+      "familyId": "pattern/feedback/empty-state",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-empty-state-shadow",
+      "familyId": "pattern/feedback/empty-state",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-cockpit-header-elevation",
+      "familyId": "pattern/shell/cockpit-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-feature-workspace-frame-elevation",
+      "familyId": "pattern/shell/feature-workspace-frame",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-page-header-shadow-hover",
+      "familyId": "pattern/shell/pattern-page-shell",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-page-shell-elevation",
+      "familyId": "pattern/shell/pattern-page-shell",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-workbench-header-elevation",
+      "familyId": "pattern/shell/workbench-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-avatar-hover-shadow",
+      "familyId": "primitive/display/avatar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-avatar-shadow",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-dot-shadow",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-ghost-shadow",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-icon-shadow",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-outline-shadow",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-shadow",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-shadow-hover",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-badge-shadow-pressed",
+      "familyId": "primitive/display/badge",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-callout-shadow",
+      "familyId": "primitive/display/callout",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-bordered-shadow",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-elevated-shadow",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-elevated-shadow-hover",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-elevation-surface",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-flat-shadow",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-ghost-shadow",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-nested-shadow",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-shadow",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-shadow-active",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-shadow-hover",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-card-shadow-selected",
+      "familyId": "primitive/display/card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-descriptions-header-shadow",
+      "familyId": "primitive/display/descriptions",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-descriptions-header-shadow-hover",
+      "familyId": "primitive/display/descriptions",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-descriptions-shadow",
+      "familyId": "primitive/display/descriptions",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-header-shadow",
+      "familyId": "primitive/display/table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-page-button-hover-shadow",
+      "familyId": "primitive/display/table",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tag-shadow",
+      "familyId": "primitive/display/tag",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-alert-shadow",
+      "familyId": "primitive/feedback/alert",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-modal-shadow",
+      "familyId": "primitive/feedback/modal",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-result-icon-well-shadow",
+      "familyId": "primitive/feedback/result",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-aspect-ratio-shadow",
+      "familyId": "primitive/layout/aspect-ratio",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-collapse-root-default-idle-shadow",
+      "familyId": "primitive/layout/collapse",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-collapse-root-ghost-idle-shadow",
+      "familyId": "primitive/layout/collapse",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-container-shadow",
+      "familyId": "primitive/layout/container",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-alert-dialog-elevation",
+      "familyId": "primitive/overlay/alert-dialog",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-confirm-dialog-elevation",
+      "familyId": "primitive/overlay/confirm-dialog",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-context-menu-elevation",
+      "familyId": "primitive/overlay/context-menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-dropdown-elevation",
+      "familyId": "primitive/overlay/dropdown",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-hover-card-elevation",
+      "familyId": "primitive/overlay/hover-card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-popconfirm-elevation",
+      "familyId": "primitive/overlay/popconfirm",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-popover-elevation",
+      "familyId": "primitive/overlay/popover",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-sheet-elevation",
+      "familyId": "primitive/overlay/sheet",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tour-elevation",
+      "familyId": "primitive/overlay/tour",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-watermark-elevation",
+      "familyId": "primitive/overlay/watermark",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-compact-card-shadow",
+      "familyId": "structure/dashboard/dashboard-insights",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-dashboard-insights-elevation",
+      "familyId": "structure/dashboard/dashboard-insights",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-metric-card-shadow",
+      "familyId": "structure/dashboard/dashboard-insights",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-metric-card-shadow-hover",
+      "familyId": "structure/dashboard/dashboard-insights",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-signal-card-shadow",
+      "familyId": "structure/dashboard/dashboard-insights",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-signal-card-shadow-hover",
+      "familyId": "structure/dashboard/dashboard-insights",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-data-terminal-card-elevation",
+      "familyId": "structure/dashboard/data-terminal-card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stats-header-elevation",
+      "familyId": "structure/dashboard/stats-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-collection-header-shadow",
+      "familyId": "structure/headers/collection-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-collection-header-shadow-hover",
+      "familyId": "structure/headers/collection-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-dashboard-header-shadow",
+      "familyId": "structure/headers/dashboard-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-detail-control-shadow",
+      "familyId": "structure/headers/detail-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-edit-header-stuck-shadow",
+      "familyId": "structure/headers/edit-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-header-stuck-shadow",
+      "familyId": "structure/headers/form-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-header-surface-stuck-shadow",
+      "familyId": "structure/headers/header-surface",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-mobile-header-stuck-shadow",
+      "familyId": "structure/headers/mobile-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-section-frame-stuck-shadow",
+      "familyId": "structure/headers/section-frame",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-app-shell-elevation",
+      "familyId": "structure/shell/app-shell",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-shell-footer-shadow",
+      "familyId": "structure/shell/app-shell",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-shell-header-shadow",
+      "familyId": "structure/shell/app-shell",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-shell-main-shadow",
+      "familyId": "structure/shell/app-shell",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-shell-navigation-shadow",
+      "familyId": "structure/shell/app-shell",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-shell-skip-link-shadow",
+      "familyId": "structure/shell/app-shell",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-bottom-tab-bar-elevation",
+      "familyId": "structure/shell/bottom-tab-bar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-bottom-tab-bar-shadow",
+      "familyId": "structure/shell/bottom-tab-bar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-page-shell-surface-elevation",
+      "familyId": "structure/shell/page-shell-surface",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-surface-chrome-elevation",
+      "familyId": "structure/shell/surface-chrome",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-workspace-shell-elevation",
+      "familyId": "structure/shell/workspace-shell",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-search-result-shadow",
+      "familyId": "surface/data/search",
+      "state": "PRESCRIPCION"
+    }
+  ],
+  "variants": [
+    {
+      "id": "flat",
+      "value": "flat",
+      "effects": {
+        "--ds-elevation-1": "none",
+        "--ds-elevation-2": "none",
+        "--ds-elevation-3": "minimal"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "soft",
+      "value": "soft",
+      "effects": {},
+      "pinned": {},
+      "law": "DEFECTO CONOCIDO declarado (C3/F1 adjudicado): soft emite {} (appearance-posture:91) - variante vacia prohibida; debe declarar escalera 0..5 explicita. Registrado, no maquillado"
+    },
+    {
+      "id": "elevated",
+      "value": "elevated",
+      "effects": {
+        "--ds-elevation-1": "preset.elevated[1]",
+        "--ds-elevation-2": "preset.elevated[2]",
+        "--ds-elevation-3": "preset.elevated[3]"
+      },
+      "pinned": {}
+    }
+  ],
+  "overlaps": [],
+  "terminalReachLaw": "state = alcance en la cascada; deteccion de UN SALTO en sitio de lectura = COTA INFERIOR. El alcance transitivo es de la capa GENERADA (cascade-extract/materialized, ley R1); el diff con estas prescripciones ES el backlog de fase 3."
+}

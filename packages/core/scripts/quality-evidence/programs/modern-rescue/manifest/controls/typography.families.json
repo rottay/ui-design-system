@@ -41,7 +41,16 @@
     "staticDbParityEvidenceIds": [],
     "exactRestoreEvidenceIds": [],
     "negativeControls": [],
-    "nextAction": "CALIBRATE_LOWERERS_COMPUTED_DELTAS_NEGATIVES_AND_EXACT_RESTORE"
+    "nextAction": "CALIBRATE_LOWERERS_COMPUTED_DELTAS_NEGATIVES_AND_EXACT_RESTORE",
+    "catalog": [
+      "editorial-display",
+      "editorial-text",
+      "grotesk-display",
+      "humanist-text",
+      "geometric-display",
+      "plex-mono"
+    ],
+    "catalogLaw": "catalogo en calibration, NO en enumValues: domain se regenera desde el registro (manifest/generator.mjs:171-206), que hoy no declara enumValues para este control; y el kind derivado saltaria a `closed-enum` (generator.mjs:186), que seria FALSO aqui. Copia literal de TENANT_THEME_FONT_PACK_IDS (packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts:473-480). ALCANCE: no son stacks completos ni el dominio total del control. El valor autorado sigue siendo una lista font-family libre; lo CERRADO es el allowlist de packs code-owned que esa lista puede referenciar como `var(--ds-font-pack-<id>)`, y cualquier otro `var()` o fallback queda rechazado por isSafeFontFamily (packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts:605-631, allowlist en :625). Los ids llevan sufijo de rol porque un slot var() carga UNA lista de familias: un pack que cambia display y body son dos variables (misma fuente, :467-472)."
   },
   "retiredAliases": []
 }
